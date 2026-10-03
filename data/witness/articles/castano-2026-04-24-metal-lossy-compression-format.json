@@ -1,0 +1,596 @@
+{
+  "id": "castano-2026-04-24-metal-lossy-compression-format",
+  "title": {
+    "zh": "Metal 的有损压缩格式",
+    "en": "Metal Lossy Compression Format"
+  },
+  "subtitle": {
+    "zh": "逆向 Apple 那个没有文档的 1:2 有损纹理格式：8×4 的块、逐块元数据、互不相同的块大小，以及七种块模式的比特级细节。",
+    "en": ""
+  },
+  "translator": {
+    "note": "本篇归档损伤最多，全部对照原始 HTML（`archive/raw/castano/html/1790-metal-lossy-compression-format.json`）核对并修复：(1) 源文第 37 行原本是「11 个块被粘成一行」——六段正文、一张表、两段正文、一个 `### R8 Lossy Format` 小标题和一段正文，译文按原文拆回 11 个 block；其中 `Mode / Meta / Description` 表格被压成 `ModeMetaDescription00x05, 0x09, 0x0D…` 这样一串，译文还原为一个 `list` 块、**一行一个 item**（`Mode 0 — Meta \\`0x05, 0x09, 0x0D\\` — Flat deltas (1/2/3 bpp)` 这种形式），模式号、元数据、描述逐字对应原文三列。(2) 源文第 46 行同样是 5 段正文加两行粗体小标题粘成一行，译文按原文拆回；吸在行尾的那个列表项 `0x05: 1 bpp (48 bits – 6 Bytes).` 也还原回它所属的三项列表。(3) 源文第 160 行被归档截断在 `…represented exactly: \\`(n`，后半句整段丢失，译文用原始 HTML 里的完整句子补回（`\\`(n << 4) | n\\`，that is, 0 maps to 0 … nearly uniform quantization interval.`）。(4) 「Fine Step / Large Steps」那张表在归档 md 里被拆成 14 行「一行一个单元格」，译文还原为一个 `code` 块（`lang: \"text\"`）、空格对齐列并保留表头行。(5) 内存布局示意图在原始 HTML 里是一段 SVG，归档把它的 `<title>`、`<desc>` 和框内文字压成 6 行，译文按源文保持 6 个 `p` 块，未做合并。(6) 源文里 `[The True Size of ASTC Textures](https://…)` 这一处链接，原始 HTML 的 `href` 是 `[link](https://…)`（WordPress 侧的转换残留），归档 md 已解析成干净的 URL，译文采用该干净 URL。(7) 四行 `**Mode N – …**` 粗体小标题按规范提升为 `h2`。(8) 所有代码围栏在源文里都没有语言标注：位域说明与 C 风格代码标为 `cpp`，两行反量化公式标为 `text`，围栏内容逐字保留、注释也未译。术语：`block` 作「块」、`tile` 作「图块」、`Morton order` 作「Morton 序」、`prefix sum` 作「前缀和」、`endpoint` 作「端点」、`quantization` 作「量化」、`anchor pixel` 作「锚点像素」、`two’s complement` 作「二进制补码」、`delta` 作「增量」、`bpp` 保留英文；`macro-tile`、`placement MTLHeap`、`planar mode`、`ETC2`、`R8`/`RG8`/`RGBA8`、`Metal`、`MTLTexture`、`MTLBuffer`、`API`、`GPU`、`Spark`、`tile shader` 保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The Apple Lossy compression format was introduced in the A15 and M2 chipsets (which share the same GPU generation) and it enables sampling and rendering to textures with a 1:2 compression ratio. The format is transparent to the application: the GPU handles compression and decompression automatically, and the block layout is never exposed through the API.",
+      "zh": "Apple 的有损压缩格式随 A15 和 M2 芯片（它们属于同一代 GPU）引入，能以 1:2 的压缩比采样纹理、也能渲染到纹理。这个格式对应用完全透明：GPU 自动处理压缩与解压，块的布局也从不通过 API 暴露出来。"
+    },
+    {
+      "type": "p",
+      "en": "A few weeks ago I wrote about it in [Hardware Image Compression](https://www.ludicon.com/castano/blog/2026/03/hardware-image-compression/) and gave a brief overview of how it’s enabled at the API level and how the results compare to other hardware compression implementations. In this blog post I’ll take a deeper look at the underlying block format and how the hardware decoder is implemented.",
+      "zh": "几周前我在[硬件图像压缩](https://www.ludicon.com/castano/blog/2026/03/hardware-image-compression/)那篇文章里写过它，简要介绍了它在 API 层面如何启用，以及结果与其他硬件压缩实现相比如何。这篇博客文章里，我会更深入地看看底层的块格式，以及硬件解码器是怎么实现的。"
+    },
+    {
+      "type": "p",
+      "en": "Unlike traditional GPU compression formats, the lossy format is not documented. There’s no spec that you can read to understand how the format works. In order to do that I employed the same technique I described in [Writing to Compressed Textures in Metal](https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/).",
+      "zh": "与传统 GPU 压缩格式不同，这个有损格式没有文档。没有规范可读，也就无从理解它是怎么运作的。为了搞清楚，我用了和[在 Metal 里写入压缩纹理](https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/)那篇里一样的技巧。"
+    },
+    {
+      "type": "p",
+      "en": "Metal heaps provide a useful tool to inspect how textures are laid out in memory. Raw compressed bytes can be read by creating a placement MTLHeap and placing both a lossy MTLTexture and an MTLBuffer at offset 0, so they alias the same memory. After blitting data into the lossy texture, the raw compressed bytes can be read from the aliased buffer. The reverse also works: writing raw bytes into the buffer and then reading the aliased texture gives GPU-decompressed pixels.",
+      "zh": "Metal 的 heap 提供了一件有用的工具，可以考察纹理在内存里如何排布。要读到原始的压缩字节，可以创建一个 placement `MTLHeap`，把一张有损 `MTLTexture` 和一个 `MTLBuffer` 都放在偏移 0 处，让它们别名同一块内存。把数据 blit 进有损纹理之后，就能从别名的缓冲区里读到原始压缩字节。反过来也行：把原始字节写进缓冲区，再读别名的纹理，得到的就是 GPU 解压后的像素。"
+    },
+    {
+      "type": "p",
+      "en": "This provides a powerful tool to reverse engineer the format. We can upload simple textures and read back the compressed bits to try to understand how the format works. I started with single channel images (R8 format), first with flat colors, then smooth gradients, simple patterns, random noise, etc. Once I noticed a pattern in the block that would explain the behavior of the output, I would poke at the bits in the block to validate the theory.",
+      "zh": "这为逆向工程这个格式提供了强有力的工具。我们可以上传一些简单的纹理、把压缩后的比特读回来，试着理解格式是怎么运作的。我从单通道图像（R8 格式）开始，先是纯色，然后是平滑渐变、简单图案、随机噪声等等。一旦我注意到块里有某种模式能解释输出的行为，我就会去拨动块里的比特来验证这个猜想。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/04/metal-lossy-explorer-700x374.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Following this procedure I quickly discovered some basic facts about the format. The image is broken up into 8×4 blocks and the size of each block is 128 bits. Each block has 1 byte of metadata allocated after the block data.",
+      "zh": "沿着这个流程，我很快发现了这个格式的一些基本事实。图像被切成 8×4 的块，每个块的大小是 128 位。每个块在块数据之后还分配有 1 字节的元数据。"
+    },
+    {
+      "type": "p",
+      "en": "Studying the encoded output for different images it became clear the format supports multiple modes. In some modes there is a base color and per-pixel deltas are applied to it. In others the block is divided into four 4×2 quadrants with a base color for each one. In others the base color is a gradient, similar to ETC2 planar mode, but with deltas applied to it.",
+      "zh": "研究不同图像的编码输出后可以清楚地看到，这个格式支持多种模式。有些模式里有一个基础颜色，并对其施加逐像素增量；另一些模式把块划成四个 4×2 象限，每个象限一个基础颜色；还有一些模式里基础颜色是一个渐变，类似 ETC2 的 planar 模式，但会在这个渐变上施加增量。"
+    },
+    {
+      "type": "p",
+      "en": "I discovered all these features by just poking at an 8×4 image using the tool pictured above. When I thought I had most of the details of the format figured out, I tried to decode entire pictures, but to my surprise the results were all wrong. I was clearly missing something.",
+      "zh": "所有这些特征，都是我拿上面图中那个工具在一个 8×4 的图像上拨弄出来的。当我以为已经摸清这个格式的大部分细节时，我试着解码完整的图片，结果出乎意料，全都错了。显然我漏掉了什么。"
+    },
+    {
+      "type": "p",
+      "en": "It turned out that blocks aren’t strictly 128 bits. Blocks can use fewer bytes, and they are packed sequentially within a tile. I was assuming blocks were at fixed 16-byte strides to support random access, so I was sampling uninitialized data or bits corresponding to a different block.",
+      "zh": "原来块并不严格是 128 位。块可以用更少的字节，而且它们在一个图块内是顺序紧挨着排列的。我一直假定块以固定的 16 字节步长排布以支持随机访问，所以我采到的其实是未初始化的数据，或者属于另一个块的比特。"
+    },
+    {
+      "type": "h2",
+      "id": "memory-layout",
+      "en": "Memory Layout",
+      "zh": "内存布局"
+    },
+    {
+      "type": "p",
+      "en": "While Apple advertises that lossy formats provide 1:2 compression, the memory use is actually a little higher, because there’s one additional byte of metadata allocated for every 8×4 block (32 pixels). Each of these bytes describes the format of its corresponding block.",
+      "zh": "虽然 Apple 宣传有损格式提供 1:2 的压缩，实际内存占用其实略高一点，因为每 8×4 个块（32 像素）还要额外分配 1 字节的元数据。这些字节各自描述对应块的格式。"
+    },
+    {
+      "type": "p",
+      "en": "A compressed texture is laid out in two sections: first the block data, followed by the per-block metadata:",
+      "zh": "一张压缩纹理的布局分为两个区段：先是块数据，随后是逐块的元数据："
+    },
+    {
+      "type": "p",
+      "en": "Compressed texture memory layout",
+      "zh": "压缩纹理的内存布局"
+    },
+    {
+      "type": "p",
+      "en": "Two stacked sections: a block data section sized at pixel_count times bpp divided by 2, followed by a metadata section sized at max of 128 or num_blocks bytes.",
+      "zh": "两个上下堆叠的区段：块数据区，大小为 pixel_count 乘以 bpp 再除以 2；随后是元数据区，大小为 128 与 num_blocks 中的较大者，单位为字节。"
+    },
+    {
+      "type": "p",
+      "en": "Block data section",
+      "zh": "块数据区"
+    },
+    {
+      "type": "p",
+      "en": "pixel_count · bpp / 2 bytes",
+      "zh": "pixel_count · bpp / 2 字节"
+    },
+    {
+      "type": "p",
+      "en": "Metadata section",
+      "zh": "元数据区"
+    },
+    {
+      "type": "p",
+      "en": "max(128, num_blocks) bytes",
+      "zh": "max(128, num_blocks) 字节"
+    },
+    {
+      "type": "p",
+      "en": "Within the data section, blocks are grouped into tiles of 2×4 blocks (16×16 pixels, 8 blocks per tile). Each tile is 128 bytes, exactly one cache line, and the 8 blocks inside it are packed sequentially in Y-first Morton order.",
+      "zh": "在数据区内部，块被组织成 2×4 个块的图块（16×16 像素，每个图块 8 个块）。每个图块是 128 字节，正好一条缓存行，里面的 8 个块按 Y 优先的 Morton 序顺序紧挨排列。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s the interesting part: the blocks inside a tile are not all the same size. A flat block might use just 1 byte while a complex block takes the full 16. So how do you find block N within a tile without parsing the whole stream? One of the most important properties of a hardware texture format is random access, and walking a variable-length stream to find a block would defeat that.",
+      "zh": "有意思的地方在这里：一个图块内的块并不都一样大。一个平坦的块可能只用 1 个字节，而一个复杂的块要用满 16 个字节。那么，在不解析整个流的前提下，你怎么在一个图块里找到第 N 个块？硬件纹理格式最重要的性质之一就是随机访问，而沿着变长流逐个走过去找块，恰恰会毁掉这一点。"
+    },
+    {
+      "type": "p",
+      "en": "The answer lies in the metadata. The size of each block is fully determined by its metadata byte, so locating a block is a two-step process: load the 16 metadata bytes for the tile, then compute a prefix sum of the block sizes to get the offset. The metadata doubles as an index.",
+      "zh": "答案就在元数据里。每个块的大小完全由它的元数据字节决定，所以定位一个块分两步：先加载该图块的 16 个元数据字节，再对块大小做一次前缀和，得到偏移。元数据同时充当索引。"
+    },
+    {
+      "type": "p",
+      "en": "Above the tile level, blocks are grouped into macro-tiles of 128×128 pixels (8×8 tiles, or 512 blocks). I covered the motivation for this structure in [The True Size of ASTC Textures](https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/): aligning texture dimensions to the block grid would normally round up to the next power of two, which wastes a lot of memory. Macro-tiles let the texture round up to the macro-tile boundary instead, which is a much finer granularity. Macro-tiles are arranged in row-major order, and tiles within a macro-tile are in Y-first Morton order.",
+      "zh": "在图块之上，块又被组织成 128×128 像素的 macro-tile（8×8 个图块，也就是 512 个块）。我在 [ASTC 纹理的真实大小](https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/)那篇里讲过这种结构的动机：把纹理尺寸对齐到块的网格，通常会被向上取整到下一个 2 的幂，浪费大量内存。macro-tile 让纹理只需向上取整到 macro-tile 边界，粒度细得多。macro-tile 按行主序排列，而一个 macro-tile 内部的图块按 Y 优先的 Morton 序排列。"
+    },
+    {
+      "type": "p",
+      "en": "The metadata section doesn’t follow this hierarchy. It uses a single Y-first Morton ordering over the entire block grid, with no macro-tile grouping. It was a bit surprising to discover that the metadata didn’t match the data layout, but since the metadata is much smaller, the waste from power-of-two alignment is less objectionable.",
+      "zh": "元数据区并不遵循这套层级。它对整个块网格采用单一的 Y 优先 Morton 序，没有 macro-tile 分组。发现元数据的布局与数据布局并不一致，多少有些意外；不过元数据小得多，2 的幂对齐带来的浪费也就不那么刺眼。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s a brief description of all the block types I identified in the R8 Lossy format with their corresponding meta data:",
+      "zh": "下面简要描述我在 R8 有损格式里识别出的所有块类型，以及它们对应的元数据："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Mode 0 — Meta `0x05, 0x09, 0x0D` — Flat deltas (1/2/3 bpp)",
+          "zh": "模式 0 —— Meta `0x05, 0x09, 0x0D` —— 扁平增量（1/2/3 bpp）"
+        },
+        {
+          "en": "Mode 1 — Meta `0x25, 0x29, 0x2D` — Masked deltas (1/2/3 bpp)",
+          "zh": "模式 1 —— Meta `0x25, 0x29, 0x2D` —— 掩码增量（1/2/3 bpp）"
+        },
+        {
+          "en": "Mode 2 — Meta `0x46, 0x4A, 0x4E` — Gradient + deltas (1/2/3 bpp)",
+          "zh": "模式 2 —— Meta `0x46, 0x4A, 0x4E` —— 渐变 + 增量（1/2/3 bpp）"
+        },
+        {
+          "en": "Mode 3 — Meta `0x60, 0x61` — Constant block",
+          "zh": "模式 3 —— Meta `0x60, 0x61` —— 常量块"
+        },
+        {
+          "en": "Mode 4 — Meta `0x82..0x8F` — Flat deltas with per-quadrant bit allocation",
+          "zh": "模式 4 —— Meta `0x82..0x8F` —— 扁平增量 + 逐象限比特分配"
+        },
+        {
+          "en": "Mode 5 — Meta `0xA2..0xAF` — Masked deltas with per-quadrant bit allocation",
+          "zh": "模式 5 —— Meta `0xA2..0xAF` —— 掩码增量 + 逐象限比特分配"
+        },
+        {
+          "en": "Mode 6 — Meta `0xC3..0xCF` — Gradient + deltas with per-quadrant bit allocation",
+          "zh": "模式 6 —— Meta `0xC3..0xCF` —— 渐变 + 增量 + 逐象限比特分配"
+        },
+        {
+          "en": "Mode 7 — Meta `0xF0..0xFF` — Quantized with per-quadrant sub-mode selection",
+          "zh": "模式 7 —— Meta `0xF0..0xFF` —— 量化 + 逐象限子模式选择"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "As shown in the table, the mode family is determined by the upper 3 bits. The block size is determined as follows: Mode 7 blocks are always 128 bits (16 bytes), for all other modes, the block size is 8 * ((meta & 0x1F) + 1) bits.",
+      "zh": "如表所示，模式家族由高 3 位决定。块大小则按下面的方式确定：模式 7 的块永远是 128 位（16 字节）；对其他所有模式，块大小是 `8 * ((meta & 0x1F) + 1)` 位。"
+    },
+    {
+      "type": "p",
+      "en": "Now that we have a high level overview, let’s take a closer view of the block format.",
+      "zh": "现在我们有了高层次的概览，接下来更仔细地看看块格式。"
+    },
+    {
+      "type": "h2",
+      "id": "r8-lossy-format",
+      "en": "R8 Lossy Format",
+      "zh": "R8 有损格式"
+    },
+    {
+      "type": "p",
+      "en": "With the exception of the blocks with meta data 0x60 and 0xF0..0xFF, all other blocks share a common header:",
+      "zh": "除了元数据为 `0x60` 和 `0xF0..0xFF` 的块之外，其他所有块都共享一个公共头："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bits[0]    = has_global\nbits[1:3]  = bpp - 1\nbits[4:11] = 8-bit base color\nbits[12+]  = mode-specific payload"
+    },
+    {
+      "type": "p",
+      "en": "When the common header is present, these fields always have the same meaning: a flag indicating whether a global offset is applied to the deltas, the number of bits per delta (bpp), and the 8-bit base color that the deltas are applied to.",
+      "zh": "当公共头存在时，这些字段的含义始终一致：一个标志，表示是否对增量施加全局偏移；每个增量的比特数（`bpp`）；以及增量所作用的 8 位基础颜色。"
+    },
+    {
+      "type": "h2",
+      "id": "mode-3-constant",
+      "en": "Mode 3 – Constant",
+      "zh": "模式 3 —— 常量"
+    },
+    {
+      "type": "p",
+      "en": "The simplest block is a flat block with a single color. There are two variants of this mode with meta data 0x60 and 0x61. Blocks with meta 0x61 use the common header layout and provide an 8-bit base color in bits[4:11], but the has_global flag and bpp fields are unused and must be 0. This results in a block size of 2 bytes. Blocks with meta 0x60 are more compact. The base color is provided in bits[0:7] so that the entire block only uses 1 byte.",
+      "zh": "最简单的块是只有一种颜色的平坦块。这个模式有两个变体，元数据分别是 `0x60` 和 `0x61`。元数据为 `0x61` 的块使用公共头布局，在 `bits[4:11]` 里给出 8 位基础颜色，但 `has_global` 标志和 `bpp` 字段没有使用，必须为 0。这导致块大小为 2 字节。元数据为 `0x60` 的块更紧凑：基础颜色放在 `bits[0:7]` 里，于是整个块只占 1 字节。"
+    },
+    {
+      "type": "h2",
+      "id": "mode-0-per-pixel-deltas",
+      "en": "Mode 0 – Per-Pixel Deltas",
+      "zh": "模式 0 —— 逐像素增量"
+    },
+    {
+      "type": "p",
+      "en": "This is when things start to get interesting. When you have a nearly flat block, with small variations, you can represent that block exactly with a base color and small deltas. This is what this block does. The base color is provided in the common header and bits[1:3] specify the number of bits allocated for each per pixel delta. This leads to 3 variants of this block format depending on the total size, each one with a different metadata:",
+      "zh": "从这里开始事情变得有意思了。当你有一个近乎平坦、只有小幅变化的块时，可以用一个基础颜色加一些小的增量来精确表示它。这个块做的就是这件事。基础颜色在公共头里给出，`bits[1:3]` 指定每个逐像素增量分配多少比特。于是按总大小不同，这个块格式有三种变体，各自的元数据不同："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "0x05: 1 bpp (48 bits – 6 Bytes).",
+          "zh": "`0x05`：1 bpp（48 位 —— 6 字节）。"
+        },
+        {
+          "en": "0x09: 2 bpp (80 bits – 10 Bytes).",
+          "zh": "`0x09`：2 bpp（80 位 —— 10 字节）。"
+        },
+        {
+          "en": "0x0D: 3 bpp (112 bits – 14 Bytes).",
+          "zh": "`0x0D`：3 bpp（112 位 —— 14 字节）。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Only 31 deltas are provided, the first pixel of the block is the anchor and it always takes the value of the base color. When the `has_global` flag is set, there’s an additional entry before the deltas that acts as a global offset subtracted from the per-pixel deltas. To make things more interesting, the deltas are stored in Y-first Morton order. Both deltas and offset are signed values stored in two’s complement, so when only one bit is present the values are either -1 or 0.",
+      "zh": "只提供 31 个增量：块里第一个像素是锚点，它始终取基础颜色的值。当 `has_global` 标志置位时，增量之前还有一个额外的条目，充当从逐像素增量里减掉的全局偏移。更有意思的是，增量按 Y 优先的 Morton 序存放。增量和偏移都是二进制补码表示的有符号值，所以只有一位时取值只能是 -1 或 0。"
+    },
+    {
+      "type": "p",
+      "en": "The final pixel color is given by the following formula:",
+      "zh": "最终的像素颜色由下面的公式给出："
+    },
+    {
+      "type": "p",
+      "en": "`color = (base + delta - global_offset) & 0xFF`",
+      "zh": "`color = (base + delta - global_offset) & 0xFF`"
+    },
+    {
+      "type": "p",
+      "en": "Note that the colors overflow, they wrap around instead of clamping to 0 or 255. This is the case in all modes unless noted otherwise.",
+      "zh": "注意颜色会溢出——它们会回绕，而不是被钳制到 0 或 255。除非另有说明，所有模式都是如此。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/04/metal_lossy_mode0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "While this mode sort of makes sense, some of the decisions still baffle me. Why is there a global offset when you can just modify the base color? Why 31 deltas instead of 32? My guess is that the encoder simply reads the first pixel and then compares the remaining pixels against it instead of making an effort to find the optimal base color that could represent a wider range. Would that have been much more expensive?",
+      "zh": "虽然这个模式多少还算说得通，但其中有些决定仍然让我困惑。既然改基础颜色就行，为什么还要有全局偏移？为什么是 31 个增量而不是 32 个？我猜编码器只是简单地读第一个像素，然后把其余像素与它比较，而不是努力去找一个能覆盖更大范围的最优基础颜色。真去找的话会贵很多吗？"
+    },
+    {
+      "type": "h2",
+      "id": "mode-1-bit-mask-deltas",
+      "en": "Mode 1 – Bit-Mask Deltas",
+      "zh": "模式 1 —— 位掩码增量"
+    },
+    {
+      "type": "p",
+      "en": "This mode is just like mode 0, but the deltas do not affect the corresponding Y-first Morton pixel. Instead, each delta affects a group of up to 8 pixels. The mask values in raster order are as follows:",
+      "zh": "这个模式跟模式 0 一样，只是增量作用的不是它对应的那个 Y 优先 Morton 像素。相反，每个增量影响一组最多 8 个像素。掩码值按光栅顺序排列如下："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static const uint32_t kDeltaMaskRaster[31] = {\n                0x00000003, 0x00000100, 0x00000300,\n    0x00000007, 0x00000008, 0x00000700, 0x00000001,\n    0x00010000, 0x00030000, 0x01000000, 0x03000000,\n    0x07070000, 0x08080000, 0x04000000, 0x08000000,\n    0x000000f0, 0x000000e0, 0x0000f000, 0x0000e000,\n    0x000000c0, 0x00000080, 0x0000c000, 0x00008000,\n    0xf0f00000, 0x00e00000, 0x10000000, 0xe0000000,\n    0x00c00000, 0x00800000, 0xc0000000, 0x80000000,\n};"
+    },
+    {
+      "type": "p",
+      "en": "This is again quite puzzling. Deltas in one quadrant only affect pixels in the same quadrant. The masks in each quadrant are similar, but not exactly the same, and they lack any kind of symmetry or orthogonality, so it’s unclear to me what’s the best procedure to compute the optimal delta values for a given block.",
+      "zh": "这同样相当费解。一个象限里的增量只影响同一象限里的像素。各象限的掩码彼此相似但并不完全相同，而且它们缺乏任何对称性或正交性，所以对一个给定的块来说，怎样算出最优的增量取值，我并不清楚。"
+    },
+    {
+      "type": "p",
+      "en": "Since individual pixels are affected by multiple deltas, the range of values that can be represented in this mode is higher than the range of a single delta, but it’s not possible to represent all values block within that range. My guess is that the hardware uses a heuristic to choose the deltas and ranks the resulting block against the other options.",
+      "zh": "由于单个像素会受多个增量影响，这个模式能表示的取值范围大于单个增量的范围，但在那个范围内并不能表示所有取值。我猜硬件是用某种启发式来选择增量，再把得到的块与其他选项放在一起排序。"
+    },
+    {
+      "type": "p",
+      "en": "Like Mode 0, this mode has the following variants:",
+      "zh": "和模式 0 一样，这个模式有以下变体："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "0x25: 1 bpp (48 bits – 6 Bytes).",
+          "zh": "`0x25`：1 bpp（48 位 —— 6 字节）。"
+        },
+        {
+          "en": "0x29: 2 bpp (80 bits – 10 Bytes).",
+          "zh": "`0x29`：2 bpp（80 位 —— 10 字节）。"
+        },
+        {
+          "en": "0x2D: 3 bpp (112 bits – 14 Bytes).",
+          "zh": "`0x2D`：3 bpp（112 位 —— 14 字节）。"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "mode-2-gradient-per-pixel-deltas",
+      "en": "Mode 2 – Gradient + Per-Pixel Deltas",
+      "zh": "模式 2 —— 渐变 + 逐像素增量"
+    },
+    {
+      "type": "p",
+      "en": "One of the most useful blocks in the ETC2 format is the planar mode, but often the resulting gradients are too smooth. Our eyes are very sensitive to small variations in smooth regions, when the grain and or small details are missing, that stands out. Mode 2 solves that by combining smooth gradients with per pixel offsets.",
+      "zh": "ETC2 格式里最有用的块之一是 planar 模式，但它产生的渐变往往过于平滑。我们的眼睛对平滑区域里的小幅变化非常敏感，当颗粒感或细小细节缺失时，那一点就会很扎眼。模式 2 通过把平滑渐变与逐像素偏移结合起来解决了这个问题。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/04/metal_lossy_mode4.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The slopes are stored in two 4 bit fields using two’s complement. The way the interpolated color is computed is straightforward:",
+      "zh": "斜率用两个 4 位字段以二进制补码存储。插值颜色的计算方式很直接："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "for (int y = 0; y < 4; y++) {\n    for (int x = 0; x < 8; x++) {\n        pixels[y * 8 + x] = base + x_slope * x + y_slope * y;\n    }\n}"
+    },
+    {
+      "type": "p",
+      "en": "The deltas are then applied on top of that.",
+      "zh": "然后在这个基础上施加增量。"
+    },
+    {
+      "type": "p",
+      "en": "Like in previous modes, there are three variants, for 1, 2 and 3 bpp:",
+      "zh": "和前几个模式一样，它有 1、2、3 bpp 三种变体："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "0x46: 1 bpp (7 Bytes)",
+          "zh": "`0x46`：1 bpp（7 字节）"
+        },
+        {
+          "en": "0x4A: 2 bpp (11 Bytes)",
+          "zh": "`0x4A`：2 bpp（11 字节）"
+        },
+        {
+          "en": "0x4E: 3 bpp (15 Bytes)",
+          "zh": "`0x4E`：3 bpp（15 字节）"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "mode-4-flat-deltas-with-per-quadrant-bit-allocation",
+      "en": "Mode 4 – Flat deltas with per-quadrant bit allocation",
+      "zh": "模式 4 —— 扁平增量 + 逐象限比特分配"
+    },
+    {
+      "type": "p",
+      "en": "This mode is similar to mode 0, but divided into 4 sub-blocks (LT, LB, RT, RB), each covering a 4×2 pixel region. The mode has the standard header, with the addition of 4 2-bit codes in `bits[12:19]`. These encode the bpp of each of the sub-blocks as follows: `sub-block bpp = bpp - code`. Sub-blocks with zero or negative bpp are skipped, meaning the all the base color without deltas.",
+      "zh": "这个模式与模式 0 类似，但被划分成 4 个子块（LT、LB、RT、RB），每个覆盖一个 4×2 的像素区域。该模式使用标准头，另外在 `bits[12:19]` 里有 4 个 2 位编码。它们按下面的方式编码各子块的 bpp：`sub-block bpp = bpp - code`。bpp 为零或负的子块会被跳过，也就是整体使用基础颜色、没有增量。"
+    },
+    {
+      "type": "p",
+      "en": "The remaining bits provide the per-pixel deltas in y-first Morton order, which is also the sub-block order. Like in previous modes, the delta for the first pixel is skipped (LT has 7 deltas; LB, RT, RB have 8 each). If a global offset is present, it’s applied to the deltas of all sub-blocks.",
+      "zh": "剩下的比特以 Y 优先的 Morton 序提供逐像素增量，这也正是子块的顺序。和前几个模式一样，第一个像素的增量被跳过（LT 有 7 个增量；LB、RT、RB 各有 8 个）。如果存在全局偏移，它会施加到所有子块的增量上。"
+    },
+    {
+      "type": "p",
+      "en": "The nibble of the meta-data depends on the size of the block, which is dependent on both, the first 4 header bits and the sub-block codes. These need to match exactly. If the block size is larger than the allocated size, or if it uses fewer bytes than the allocated size, then the block is considered invalid and the output is all 255.",
+      "zh": "元数据的低 4 位取决于块的大小，而块大小又同时取决于头 4 位和子块的编码。两者必须精确匹配。如果块大小大于分配的大小，或者用的字节数少于分配的大小，那么这个块被视为非法，输出全为 255。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/04/metal_lossy_mode8.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "h2",
+      "id": "mode-5-masked-deltas-with-per-quadrant-bit-allocation",
+      "en": "Mode 5 – Masked deltas with per-quadrant bit allocation",
+      "zh": "模式 5 —— 掩码增量 + 逐象限比特分配"
+    },
+    {
+      "type": "p",
+      "en": "This mode is like mode 1, but also using per-quadrant bit allocation. The bit layout is exactly the same as mode 4, but the deltas are applied using the same mask scheme of mode 1.",
+      "zh": "这个模式与模式 1 类似，但也使用逐象限比特分配。比特布局与模式 4 完全相同，只是增量按模式 1 的同一套掩码方案来施加。"
+    },
+    {
+      "type": "h2",
+      "id": "mode-6-planar-deltas-with-per-quadrant-bit-allocation",
+      "en": "Mode 6 – Planar + deltas with per-quadrant bit allocation",
+      "zh": "模式 6 —— Planar + 增量 + 逐象限比特分配"
+    },
+    {
+      "type": "p",
+      "en": "This mode is just like mode 2, but using per-quadrant bit allocation. The bit layout is exactly the same as mode 4 and 5, but with the 2 slope fields prior to the per pixel deltas.",
+      "zh": "这个模式与模式 2 一模一样，只是使用逐象限比特分配。比特布局与模式 4、5 完全相同，只是那两个斜率字段位于逐像素增量之前。"
+    },
+    {
+      "type": "h2",
+      "id": "putting-it-all-together",
+      "en": "Putting it all together.",
+      "zh": "把它们拼起来"
+    },
+    {
+      "type": "p",
+      "en": "In practice, modes 0, 1, 2, 4, 5 & 6 are all one mode with certain bitfields and features turned on or off. After the standard header you just have the following optional fields:",
+      "zh": "实践中，模式 0、1、2、4、5 和 6 其实是同一个模式，只是某些位域和特性被打开或关闭。在标准头之后，你只会看到下面这些可选字段："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if (mode == 4 || mode == 5 || mode == 6) {\n    qbpp = read_bits(8);\n}\nif (has_global) {\n    global = read_bits(bpp);\n}\nif (mode == 2 || mode == 6) {\n    x_slope = read_bits(4);\n    y_slope = read_bits(4);\n}"
+    },
+    {
+      "type": "p",
+      "en": "All modes have a base color and deltas applied to it. In modes 2 and 6 the base color is modified by the slopes, while the remaining modes have a flat color. The modes with uniform deltas are just special cases of the modes with per-quadrant deltas. When all deltas have the same bpp, the encoder picks the uniform-delta mode family (0, 1, or 2) which omits the per-quadrant field entirely.",
+      "zh": "所有模式都有一个基础颜色，并在其上施加增量。在模式 2 和 6 里，基础颜色会被斜率修改；其余模式则是平坦颜色。采用统一增量的模式，不过是采用逐象限增量模式的特例。当所有增量的 bpp 都相同时，编码器会选择统一增量模式家族（0、1 或 2），它把逐象限字段整个省掉。"
+    },
+    {
+      "type": "h2",
+      "id": "mode-7-quantized-with-per-quadrant-mode-selection",
+      "en": "Mode 7 – Quantized with per-quadrant mode selection",
+      "zh": "模式 7 —— 量化 + 逐象限子模式选择"
+    },
+    {
+      "type": "p",
+      "en": "In this mode the standard header is not present, instead the layout is determined by the meta data bits. Like the previous modes, this one also divides the block in 4 quadrants. The format of each of these quadrants is determined by the lower 4 bits of the meta data in the usual Y-first Morton order (0->LT, 1->LB, 2->RT, 3->RB). When the corresponding bit is 1, the sub-block is stored using absolute values with 4-bit quantization, otherwise it uses a more complex sub-block delta format.",
+      "zh": "这个模式里没有标准头，布局改由元数据的比特决定。和前几个模式一样，它把块划分成 4 个象限。每个象限的格式由元数据的低 4 位按通常的 Y 优先 Morton 序决定（0->LT，1->LB，2->RT，3->RB）。当对应位为 1 时，该子块以 4 位量化的绝对值存储；否则它使用一种更复杂的子块增量格式。"
+    },
+    {
+      "type": "p",
+      "en": "The quantized mode is straightforward: 8 pixels × 4 bits = 32 bits per quadrant, but the 4-bit dequantization is a bit unusual. The most common approach is to replicate the top bits so that the extremes are represented exactly: `(n << 4) | n`, that is, 0 maps to 0 and `0xF` (15) maps to `0xFF` (255). However, the lossy format achieves that by handling the extremes as special cases and then using a nearly uniform quantization interval.",
+      "zh": "量化模式很直接：8 像素 × 4 位 = 每个象限 32 位，但 4 位反量化的做法有点不寻常。最常见的做法是复制高位，让两个极端值被精确表示：`(n << 4) | n`，也就是 0 映射到 0，`0xF`（15）映射到 `0xFF`（255）。然而这个有损格式是通过把两个极端值当特例处理、再使用一个近乎均匀的量化区间来达到同样效果。"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "inline uint8_t lossy_dequantize(uint8_t n) {\n    if (n == 0) return 0;\n    if (n == 15) return 255;\n    return (n << 4) | (n & 1 ? 7 : 8);\n}"
+    },
+    {
+      "type": "p",
+      "en": "This results in the following possible values:",
+      "zh": "这样得到的可能取值如下："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "n:   0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15\nq:   0  23  40  55  72  87 104 119 136 151 168 183 200 215 232 255"
+    },
+    {
+      "type": "p",
+      "en": "Why this choice? I have no idea. I would understand the use of uniform quantization intervals, since that makes quantization easier, and snapping the endpoints to the extremes makes sense, but the alternating 17-15 interval is a curious choice.",
+      "zh": "为什么这么选？我完全不知道。用均匀的量化区间我能理解，因为那样量化更简单；把两个极端值吸附到端点上也有道理，但这个 17-15 交替的区间是个奇怪的选择。"
+    },
+    {
+      "type": "p",
+      "en": "The sub-block delta format encodes 8 pixels (4×2 region) using a base value plus per-pixel deltas encoded in 32 bits. The first 3 bits encode a header that selects the step size and the way the deltas are applied. The following 5 bits provide the base color, and the remaining data is mode-dependent.",
+      "zh": "子块增量格式用 32 位编码 8 个像素（4×2 区域），包含一个基础值加逐像素增量。前 3 位编码一个头，用来选择步长和增量的施加方式。接下来的 5 位给出基础颜色，剩下的数据则与模式有关。"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bits[0:2]   3-bit header\nbits[3:7]   5-bit base color\nbits[8:31]  24-bit per-pixel data"
+    },
+    {
+      "type": "p",
+      "en": "This provides 8 different modes, but with the exception of mode 0, all have the same structure: A base value, an anchor pixel selector, and 7 per-pixel deltas, but pack them differently into the remaining 24 bits:",
+      "zh": "这提供了 8 种不同的模式，但除模式 0 之外，它们的结构都一样：一个基础值、一个锚点像素选择器，以及 7 个逐像素增量，只是把它们以不同方式打包进剩下的 24 位里："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "                        Fine Step (`bit2==0`)   Large Steps (`bit2==1`)\nBits per delta          2 bits                  3 bits\nGlobal offset           3 bits                  —\nBase value              `base5`                 `base5 * 8 + round`\nStep sizes              1, 2, 4                 4, 8, 16, 32"
+    },
+    {
+      "type": "p",
+      "en": "The fine step mode trades delta precision (2 bpp) for a 3-bit global offset (value × 32), giving coarse block-wide shifts. The large step mode uses those same bits for an extra delta bit per pixel (3 bpp) that combined with the larger step sizes allows addressing a larger range of values.",
+      "zh": "精细步长模式用增量精度（2 bpp）换来了一个 3 位的全局偏移（取值 × 32），提供粗粒度的全块平移。大步长模式则把这几位用来给每个像素多一位增量（3 bpp），再结合更大的步长，从而覆盖更大的取值范围。"
+    },
+    {
+      "type": "p",
+      "en": "The anchor pixel selector uses 3 bits to specify the pixel that does not have deltas applied to it.",
+      "zh": "锚点像素选择器用 3 位指定哪个像素不施加增量。"
+    },
+    {
+      "type": "p",
+      "en": "The dequantization procedure is also interesting. The anchor pixel is simply:",
+      "zh": "反量化的流程也很有意思。锚点像素很简单："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "pixel[anchor] = base + global + round"
+    },
+    {
+      "type": "p",
+      "en": "where the round is mode-dependent and annoyingly not `step/2`. The non-anchor pixels are:",
+      "zh": "其中 round 与模式有关，而且恼人的是它并不等于 `step/2`。非锚点像素则是："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "pixel[i] = base + global + delta * step + step/2;"
+    },
+    {
+      "type": "p",
+      "en": "where step is mode dependent and delta is the per-pixel delta.",
+      "zh": "其中 step 与模式相关，delta 是逐像素增量。"
+    },
+    {
+      "type": "p",
+      "en": "As in the absolute quantization mode, special attention is paid to reproduce the extremes exactly by snapping them to the endpoints. When the delta is 0 and the resulting pixel value is within `step/2` of 0, it snaps to 0. When delta is 255 and the pixel value is within `step/2` of 255, it snaps to 255. Additionally, unlike all the other modes, when values overflow the 8-bit range, the values do not wrap, but are clamped to 0 and 255.",
+      "zh": "与绝对量化模式一样，这里也特别注意把两个极端值吸附到端点上，以精确复现它们。当 delta 为 0 且得到的像素值落在 0 的 `step/2` 范围内时，它吸附到 0。当 delta 为 255 且像素值落在 255 的 `step/2` 范围内时，它吸附到 255。此外，与所有其他模式不同，当取值溢出 8 位范围时，它们不回绕，而是被钳制到 0 和 255。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, when the 3-bit sub-block header is 0 the data encodes a constant or near-constant block using 1 bit per pixel offsets.",
+      "zh": "最后，当 3 位的子块头为 0 时，数据编码的是一个常量或近乎常量的块，使用每像素 1 位的偏移。"
+    },
+    {
+      "type": "p",
+      "en": "This description is not a full specification. I’ve glossed over some of the details in order to make the text more tolerable. I’d be happy to provide a reference decoder if anyone is interested.",
+      "zh": "这份描述不是完整的规范。为了让文字更易读，我省略了一些细节。如果谁有兴趣，我很乐意提供一个参考解码器。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结语"
+    },
+    {
+      "type": "p",
+      "en": "It’s clear that some of the features of the format are designed not just to save memory, but to save bandwidth. When a tile has a flat color, the entire tile is represented in just 8 bytes, while more complex tiles can take up to 128 bytes.",
+      "zh": "显然，这个格式的某些特性不只是为了省内存，也是为了省带宽。当一个图块只有平坦颜色时，整个图块只用 8 个字节表示；而更复杂的图块最多要占 128 字节。"
+    },
+    {
+      "type": "p",
+      "en": "I suspect the lossless format has a similar structure, but with a larger tile size to allow for blocks stored without compression or quantization while still providing bandwidth savings in common scenarios. My guess is that modes 0-6 behave the same way, with a limit of 256 bits instead of 128, and that mode 7 encodes a fully decompressed block instead of using quantization.",
+      "zh": "我猜想无损格式有类似的结构，但图块更大，以便允许一些块不做压缩或量化地存储，同时在常见场景下仍然省带宽。我猜模式 0-6 的行为类似，只是上限从 128 位变成 256 位；而模式 7 编码的是一个完全解压后的块，而不是做量化。"
+    },
+    {
+      "type": "p",
+      "en": "While I think I have a good understanding of the underlying format, I still have some open questions. Some of the choices in the format are puzzling and perhaps that’s a sign that I still don’t have a complete understanding. How would one write a fast, efficient encoder for this format?",
+      "zh": "虽然我认为自己对这个底层格式已经有不错的理解，但仍有一些悬而未决的问题。格式里的某些选择令人费解，也许这正说明我的理解还不完整。要怎么写一个快速、高效的编码器呢？"
+    },
+    {
+      "type": "p",
+      "en": "Initially I thought the encoder would be implemented in software, in a way not too different to what I’ve done for *[Spark](https://ludicon.com/spark/)*. Apple even has support for tile shaders, which seem particularly well suited for this task. However, my attempts to use tile shaders for this purpose haven’t produced satisfactory outcomes.",
+      "zh": "起初我以为编码器是用软件实现的，方式和我为 *[Spark](https://ludicon.com/spark/)* 做的差不太多。Apple 甚至支持 tile shader（一种图块着色器），看起来特别适合这项任务。然而我尝试用 tile shader 来做这件事，并没有得到令人满意的结果。"
+    },
+    {
+      "type": "p",
+      "en": "My conclusion is that the encoder is fully implemented in hardware. An encoder for this format should not require the use of floating point math, so the implementation could be fairly compact. A hardware encoder could target multiple modes in parallel and select the best match.",
+      "zh": "我的结论是：编码器完全是硬件实现的。针对这个格式的编码器不应该需要浮点运算，所以实现可以相当紧凑。硬件编码器可以并行地针对多个模式，然后挑出最匹配的一个。"
+    },
+    {
+      "type": "p",
+      "en": "Beyond R8, I’ve also fully decoded the RG8 format. It follows the same principles and has many similarities, but it’s significantly more complex. Bit allocation for each of the two components is variable, and the sub-block delta format is convoluted enough that I had to rely on a 256-element table to map the header bits to all the possible bit allocations. I could not find a formula or pattern that worked for all cases. I find it unlikely that this is how the format was actually designed, so I hope I’m just missing something.",
+      "zh": "除了 R8，我也完整解码了 RG8 格式。它遵循同样的原则，有很多相似之处，但复杂得多。两个分量的比特分配都是可变的，子块增量格式也绕得厉害，我不得不靠一张 256 项的查找表，把头的比特映射到所有可能的比特分配上。我找不到一个对所有情况都成立的公式或规律。我不太相信这个格式真的是这么设计的，所以我希望只是我漏掉了什么。"
+    },
+    {
+      "type": "p",
+      "en": "The RGBA8 format is likely to be even more intricate, and my effort to fully decode it is on pause. Partly because I’m losing steam, and partly because this work doesn’t have any immediate practical application. It’s been a fun and intriguing exercise, and I’ve learned a few things along the way, but whether any of this knowledge turns out to be useful elsewhere remains to be seen.",
+      "zh": "RGBA8 格式很可能更加错综复杂，我把它完整解码的工作暂时搁置了。一部分是因为我有点后劲不足，一部分是因为这项工作没有直接的实用价值。这是一次有趣而引人入胜的练习，一路上我也学到了一些东西，但这些知识在别处是否派得上用场，还有待观察。"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "official-2014-04-16-working-on-the-witness-parts-5-and-6",
+  "title": { "zh": "《Working on The Witness》第五、第六篇", "en": "Working on The Witness, Parts 5 and 6." },
+  "subtitle": {
+    "en": "Two new postings from Casey Muratori about his work on the game.",
+    "zh": "Casey Muratori 又发了两篇关于他在这个项目上所做工作的文章。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Casey Muratori has made new postings about the work he has done on The Witness:",
+      "zh": "Casey Muratori 又发了新文章，讲他在《The Witness》上做的工作："
+    },
+    {
+      "type": "p",
+      "en": "[Working on The Witness, Part 5](http://mollyrocket.com/casey/stream_0013.html)",
+      "zh": "[Working on The Witness 第五篇](http://mollyrocket.com/casey/stream_0013.html)"
+    },
+    {
+      "type": "p",
+      "en": "[Working on The Witness, Part 6](http://mollyrocket.com/casey/stream_0014.html)",
+      "zh": "[Working on The Witness 第六篇](http://mollyrocket.com/casey/stream_0014.html)"
+    },
+    {
+      "type": "p",
+      "en": "In this one he talks about how to distribute grass. Legally. As well as the different colors of noise one might want to be familiar with in order to do this well.",
+      "zh": "这一篇里他讲的是怎么分布草。合法地分布。以及想把这件事做好，需要熟悉哪几种不同颜色的噪声。",
+      "noteZh": "grass 在英文里既是「草」，也是大麻的俚语；「Legally.」就是拿这一点开玩笑。"
+    }
+  ]
+}

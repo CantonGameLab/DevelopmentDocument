@@ -1,0 +1,20 @@
+{
+  "id": "official-2016-11-18-the-ps4-patch-is-out",
+  "title": { "zh": "PS4 补丁上线了！", "en": "The PS4 patch is out!" },
+  "subtitle": {
+    "en": "The PS4 patch, with PS4 Pro and HDR support, is now live.",
+    "zh": "带 PS4 Pro 与 HDR 支持的 PS4 补丁已经上线。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "With PS4 Pro and HDR support!",
+      "zh": "带 PS4 Pro 和 HDR 支持！"
+    },
+    {
+      "type": "p",
+      "en": "(That is all!)",
+      "zh": "（就这些！）"
+    }
+  ]
+}

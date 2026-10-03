@@ -1,0 +1,38 @@
+{
+  "id": "official-2016-02-09-ill-be-having-a-reddit-ama-on-friday-the-12th-of-february",
+  "title": { "zh": "我将在 2 月 12 日星期五开一场 reddit AMA", "en": "I’ll be having a reddit AMA on Friday the 12th of February" },
+  "subtitle": {
+    "en": "An AMA on reddit on Friday, February 12th, starting at 1pm Eastern.",
+    "zh": "2 月 12 日星期五在 reddit 上的 AMA，东部时间下午 1 点开始。"
+  },
+  "translator": {
+    "note": "原文里的账号名 “Jonathan_Blow” 按原文保留，下划线的提醒也照译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "If you don't know what that is, it means people can ask a bunch of questions and I type furiously to answer them in the time allotted.",
+      "zh": "如果你不知道那是什么：就是大家可以问一堆问题，我在规定的时间里拼命打字来回答。"
+    },
+    {
+      "type": "p",
+      "en": "This will be Friday, February 12th, starting at 1pm Eastern (10am Pacific) and going for ...  a while?",
+      "zh": "时间是 2 月 12 日星期五，从东部时间下午 1 点（太平洋时间上午 10 点）开始，持续……一阵子？"
+    },
+    {
+      "type": "p",
+      "en": "I have made a new reddit account with the fabulous name of \"Jonathan_Blow\" for these purposes. (Note the underscore! There are some other accounts with similar names!)",
+      "zh": "为此我注册了一个新的 reddit 账号，名字极其华丽，叫「Jonathan_Blow」。（注意那个下划线！还有几个名字差不多的其他账号！）"
+    },
+    {
+      "type": "p",
+      "en": "Maybe we can also get some other people from the team in there answering questions.",
+      "zh": "说不定我们还能拉几个团队里的其他人也进来回答问题。"
+    },
+    {
+      "type": "p",
+      "en": "[The thread is now up.](https://www.reddit.com/r/IAmA/comments/45fu74/i_am_jonathan_blow_game_development_person_ask_me/)",
+      "zh": "[帖子现在已经开出来了。](https://www.reddit.com/r/IAmA/comments/45fu74/i_am_jonathan_blow_game_development_person_ask_me/)"
+    }
+  ]
+}

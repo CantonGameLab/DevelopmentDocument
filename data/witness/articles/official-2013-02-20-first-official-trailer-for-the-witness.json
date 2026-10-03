@@ -1,0 +1,25 @@
+{
+  "id": "official-2013-02-20-first-official-trailer-for-the-witness",
+  "title": { "zh": "《The Witness》首支官方预告片", "en": "First official trailer for The Witness" },
+  "subtitle": {
+    "en": "The first official trailer, as shown in the PlayStation 4 announcement.",
+    "zh": "首支官方预告片，随 PlayStation 4 发布会一同亮相。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "as seen in today's PlayStation 4 announcement:",
+      "zh": "如今天 PlayStation 4 发布会上所见："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](http://www.youtube.com/embed/i7h7AleSCF4?feature=oembed)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "(Watch it in HD + fullscreen if you have the bandwidth!)",
+      "zh": "（带宽够的话，请用高清 + 全屏看！）"
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "id": "official-2013-09-23-shadow-mapping-summary-part-1",
+  "title": { "zh": "阴影贴图总结（第一部分）", "en": "Shadow Mapping Summary – Part 1" },
+  "subtitle": {
+    "en": "What I tried, what failed, and what we settled on while optimizing The Witness's shadow filtering, acne avoidance and depth biases.",
+    "zh": "在优化《The Witness》的阴影过滤、痤疮消除与各项深度偏移的过程中，我试过什么、什么没用，以及最后选定了什么。"
+  },
+  "translator": {
+    "note": "归档源码里每个代码块外面多包了一层单个反引号、块内首行还是空行，都属于归档格式噪音，已去除；原代码块没有语言标注，按内容把 Mathematica 推导标为 mathematica、着色器代码标为 hlsl；原文插图未收录，按出现顺序以「（原文此处有一张图）」占位。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "During the last several weeks I've been polishing and optimizing the shadowing system and I think that at this point it won't undergo any more significant changes. In the process I've been reading a bit and looking up references and I'm appalled by how inaccessible is all the shadow mapping knowledge. For the most part it is scattered in obscure power point presentations, random some blog posts, SDK examples [from Microsoft](http://social.msdn.microsoft.com/Search/en-US/windows/desktop?query=shadow%20maps) and hardware vendors ([NVIDIA](https://developer.nvidia.com/search/google_cse_adv/shadow), [AMD](http://developer.amd.com/tools-and-sdks/graphics-development/amd-radeon-sdk/), [Intel](http://software.intel.com/en-us/search/site/language/en?query=shadow)), and numerous [ShaderX / GPU Gems / GPU Pro books](http://www.introgamedev.com/graphics_shadows.html).",
+      "zh": "过去几周我一直在打磨和优化阴影系统，我想它到这一步不会再有什么大的改动了。在这个过程中我读了些资料、查了些文献，结果被「阴影贴图的知识竟然这么难以获取」震惊到了。它们大多散落在晦涩的 PowerPoint 演示、零散的博客文章、[Microsoft](http://social.msdn.microsoft.com/Search/en-US/windows/desktop?query=shadow%20maps) 和硬件厂商（[NVIDIA](https://developer.nvidia.com/search/google_cse_adv/shadow)、[AMD](http://developer.amd.com/tools-and-sdks/graphics-development/amd-radeon-sdk/)、[Intel](http://software.intel.com/en-us/search/site/language/en?query=shadow)）的 SDK 示例，以及众多的 [ShaderX / GPU Gems / GPU Pro 书籍](http://www.introgamedev.com/graphics_shadows.html)里。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/shot_2013.09.18__time_14_11_n09.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I'm not going to try to address that here, but just as I was writting this [Matt Pettineo released a good overview](http://mynameismjp.wordpress.com/2013/09/10/shadow-maps/) of some of the different techniques available that is a good starting point. Instead, I'll describe some of the problems that I faced when implementing and optimizing our shadow mapping implementation, some of the techniques that I tried and the solutions that worked best for us in the end.",
+      "zh": "我不打算在这里去解决那个问题；不过就在我写这篇的时候，[Matt Pettineo 发布了一篇不错的综述](http://mynameismjp.wordpress.com/2013/09/10/shadow-maps/)，介绍了现有的若干不同技术，是个很好的起点。我要讲的是我们在实现和优化阴影贴图时遇到的一些问题、我试过的一些技术，以及最终对我们最有效的方案。"
+    },
+    {
+      "type": "p",
+      "en": "While there are many techniques that I haven't tried and I'm sure our solution could be improved further, for this game I'm pretty comfortable with our implementation in terms of quality and performance.",
+      "zh": "虽然还有很多技术我没试过，我也确信我们的方案还能进一步改进，但就这个游戏而言，我对我们实现在画质和性能两方面都相当满意。"
+    },
+    {
+      "type": "p",
+      "en": "Jon wrote our initial shadow mapping system a few years ago and with the exception of some small improvements I made early on, it had remained pretty much unchanged until very recently, when it became obvious that shadow map rendering and sampling was too slow and needed to be improved drastically.",
+      "zh": "我们最初的阴影贴图系统是 Jon 几年前写的；除了我早期做过的一些小改进之外，它一直基本没变，直到最近才明显暴露出阴影贴图的渲染和采样太慢、必须大幅改进。"
+    },
+    {
+      "type": "p",
+      "en": "The posts where Jon describes our old shadow mapping system are [here](http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/) and [here](http://the-witness.net/news/2010/04/graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more/), but to summarize, we were using stable cascade shadow maps, with 4 partitions, distance based selection, and some innovative tricks to reduce unused shadow map space. For filtering we used randomized PCF sampling and a combination of gradient, slope and constant biases to prevent acne artifacts.",
+      "zh": "Jon 介绍我们旧阴影贴图系统的文章在[这里](http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/)和[这里](http://the-witness.net/news/2010/04/graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more/)。简单总结一下：我们用的是稳定的级联阴影贴图（stable cascade shadow maps），带 4 个分区、基于距离的选择，以及一些用来减少阴影贴图空间浪费的创新技巧。过滤方面，我们用了带随机化的 PCF 采样，并组合使用梯度偏移、斜率偏移和常数偏移来避免阴影痤疮（shadow acne）瑕疵。"
+    },
+    { "type": "h2", "id": "filtering", "zh": "过滤", "en": "Filtering" },
+    {
+      "type": "p",
+      "en": "One of the first thing I changed in the original implementation was the filtering method. Initially we used a Poisson distribution of PCF samples that was rotated randomly, similar to what is used in the Crysis engines. This approach has many advantages: it scales well reducing the number of samples, the kernel radius can be adjusted easily, but it often resulted in noise artifacts.",
+      "zh": "我在原实现里最先改动的东西之一就是过滤方法。最初我们用的是按泊松分布的 PCF 采样点，并做随机旋转，和 Crysis 系列引擎里的做法类似。这种做法有很多优点：减少采样数量时它的表现依然不错，核半径也很容易调整；但它经常产生噪声瑕疵。"
+    },
+    {
+      "type": "p",
+      "en": "In many games, these artifacts would not be very noticeable in the presence of detailed textures and normal maps, but in The Witness the artifacts really stood off in contrast with our stylized geometry and smooth precomputed lighting.",
+      "zh": "在很多游戏里，有细致的纹理和法线贴图在，这些瑕疵不会太明显；但在《The Witness》里，它们和我们风格化的几何体、平滑的预计算光照一对比，就格外扎眼。"
+    },
+    {
+      "type": "p",
+      "en": "We experimented with higher number of samples, but in our case the number of samples required to obtain smooth results defeated the purpose of using a sparse distribution. We were able to obtain much higher quality results with a compact box filter such as the one described by Bunnell and Pellacini in [Shadow Map Antialiasing](http://http.developer.nvidia.com/GPUGems/gpugems_ch11.html). The box filter produced smooth results, but didn't do a good job smoothing out the stair stepping artifacts resulting from the limited resolution of the shadow maps. A straightforward extension of their method that looked considerably better is to weight each of the samples using a Gaussian curve.",
+      "zh": "我们试过提高采样数量，但在我们这里，要得到平滑结果所需的采样数已经让「使用稀疏分布」这件事失去了意义。用紧凑的盒式滤波器（比如 Bunnell 和 Pellacini 在 [Shadow Map Antialiasing](http://http.developer.nvidia.com/GPUGems/gpugems_ch11.html) 里描述的那个），我们得到了质量高得多的结果。盒式滤波器能产生平滑的结果，但在抹平「阴影贴图分辨率有限所导致的阶梯状瑕疵」方面做得不够好。对他们方法的一个直接扩展——用高斯曲线给每个采样加权——看起来明显更好。"
+    },
+    {
+      "type": "p",
+      "en": "The naive implementation of this filter uses (N-1)x(N-1) PCF texture samples. In \"Fast Conventional Shadow Filtering\", Holger Grün shows how to reduce the box filter to (N/2)x(N/2) samples, but argues that separable filters require (N-1)x(N/2), and proposes to use Gather4 in order to reduce the number of samples down to (N/2)x(N/2). I think Grün was trying too hard to sell the Gather4 feature and didn't fully explore the bilinear PCF sampling approach. His approach to bilinear PCF sampling is too complicated and does not result in the lowest possible number of samples. Here I'll show how to compute the filter weights in a more efficient and much more simple way.",
+      "zh": "这个滤波器最朴素的实现要用 (N-1)x(N-1) 次 PCF 纹理采样。在《Fast Conventional Shadow Filtering》里，Holger Grün 展示了如何把盒式滤波器缩减到 (N/2)x(N/2) 次采样，但他认为可分离滤波需要 (N-1)x(N/2) 次，并提议用 Gather4 把采样数降到 (N/2)x(N/2)。我觉得 Grün 太用力推销 Gather4 这个特性了，没有把双线性 PCF 采样这条路走透。他处理双线性 PCF 采样的方式太复杂，而且并没有得到可能的最低采样数。下面我来展示一种更高效、也简单得多的滤波器权重计算方式。"
+    },
+    {
+      "type": "p",
+      "en": "Let's first imagine a symmetric horizontal kernel q with 5 taps:",
+      "zh": "先想象一个对称的水平卷积核 q，它有 5 个抽头："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  q = {0, a, b, c, b, a, 0}"
+    },
+    {
+      "type": "p",
+      "en": "Each of these kernel weights corresponds to a bilinear PCF sample, that is, the actual footprint of the kernel is 6 shadow map texels and each of the kernel weights is a linear combination of our original kernel:",
+      "zh": "这些核权重中的每一个都对应一次双线性 PCF 采样，也就是说，这个核实际覆盖的范围是 6 个阴影贴图纹素（texel），而每个核权重都是原核的一个线性组合："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  k[x_] := s*q[[x]] + (1 - s)*q[[x + 1]]"
+    },
+    {
+      "type": "p",
+      "en": "where x is the integer texel coordinate and s is the fractional part.",
+      "zh": "其中 x 是整数纹素坐标，s 是小数部分。"
+    },
+    {
+      "type": "p",
+      "en": "The traditional way to apply this kernel is by simply taking 5 bilinear samples and weighting each one by the weights in q. However, you could achieve the same result taking 6 point samples and weighting each of them by the factors in k.",
+      "zh": "应用这个核的传统做法，是简单地取 5 次双线性采样，然后按 q 里的权重给每一次加权。不过，你也可以取 6 次点采样、按 k 里的系数给每一次加权，从而得到同样的结果。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "The important observation is that we can reduce the number of samples to a half (just 3 in this case) by spacing out the PCF samples so that their footprints do not overlap and adjusting the subtexel location of the samples and the corresponding weighting factors. That is, for every sample we want to find a new subpixel coordinate 'u' and a new weight 'w' that meets these constrains:",
+      "zh": "关键的一点观察是：只要把 PCF 采样点拉开，让它们的覆盖范围互不重叠，并相应调整采样的子纹素位置以及对应的权重系数，我们就能把采样数减半（在这个例子里只剩 3 次）。也就是说，对每一个采样点，我们要找一个满足下面这些约束的新子像素坐标 u 和一个新权重 w："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  eq[1, x_] := (k[x] == (1 - u) w)\n  eq[2, x_] := (k[x + 1] == u*w)"
+    },
+    {
+      "type": "p",
+      "en": "Solving this equation system in Mathematica gives us the following result for each of the 3 samples:",
+      "zh": "在 Mathematica 里解这个方程组，就得到下面这 3 个采样点各自的结果："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  Simplify[Solve[{eq[1, 1], eq[2, 1]}, {u, w}]]\n\n    u -> (b + a s - b s)/(a + b - b s)\n    w -> a + b - b s\n\n  Simplify[Solve[{eq[1, 3], eq[2, 3]}, {u, w}]]\n\n    u -> (b - b s + c s)/(b + c)\n    w -> b + c\n\n  Simplify[Solve[{eq[1, 5], eq[2, 5]}, {u, w}]]\n\n    u -> (a s)/(a + b s)\n    w -> a + b s"
+    },
+    {
+      "type": "p",
+      "en": "This may be equivalent to what Grün does to half the number of samples in each of the rows in the kernel, but contrary to his method, this can be extended to separable 2D kernels.",
+      "zh": "这可能等价于 Grün 在核的每一行里把采样数减半的做法；但与他的方法不同，这个做法可以推广到可分离的二维核。"
+    },
+    {
+      "type": "p",
+      "en": "Let's say we have a separable 5x5 filter like this:",
+      "zh": "假设我们有一个这样的可分离 5x5 滤波器："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  q = {{0, 0, 0, 0, 0, 0, 0},\n    {0, a*a, a*b, a*c, a*b, a*a, 0},\n    {0, b*a, b*b, b*c, b*b, b*a, 0},\n    {0, c*a, c*b, c*c, c*b, c*a, 0},\n    {0, b*a, b*b, b*c, b*b, b*a, 0},\n    {0, a*a, a*b, a*c, a*b, a*a, 0},\n    {0, 0, 0, 0, 0, 0, 0}}"
+    },
+    {
+      "type": "p",
+      "en": "In this case, the filter touches a 6x6 range of texels and each of the weights is a bilinear combination of the 4 nearest factors:",
+      "zh": "在这种情况下，这个滤波器触及 6x6 的纹素范围，而每个权重都是最近 4 个系数的双线性组合："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  k[x_, y_] := s*t*q[[x, y]] +\n    (1 - s)*t*q[[x + 1, y]] +\n    s*(1 - t)*q[[x, y + 1]] +\n    (1 - s)*(1 - t)*q[[x + 1, y + 1]]"
+    },
+    {
+      "type": "p",
+      "en": "To find the new subpixel coordinates 'u' and 'v' and the corresponding weight 'w' we have the following equations:",
+      "zh": "要找出新的子像素坐标 u、v 以及对应的权重 w，我们有下面这些方程："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "  eq[1, x_, y_] := (k[x, y] == (1 - u) (1 - v) w)\n  eq[2, x_, y_] := (k[x + 1, y] == u (1 - v)*w)\n  eq[3, x_, y_] := (k[x, y + 1] == (1 - u) v*w)\n  eq[4, x_, y_] := (k[x + 1, y + 1] == u*v*w)"
+    },
+    {
+      "type": "p",
+      "en": "Solving this equation system for the left-top sample gives us the following result:",
+      "zh": "对这个方程组求解左上角那个采样点，就得到如下结果："
+    },
+    {
+      "type": "code",
+      "lang": "mathematica",
+      "code": "Solve[{eq[1, 1, 1], eq[2, 1, 1], eq[3, 1, 1], eq[4, 1, 1]}, {u, v, w}]\n\n    u -> (b + a s - b s)/(a + b - b s) \n    v -> (b + a t - b t)/(a + b - b t) \n    w -> (a + b - b s) (a + b - b t)"
+    },
+    {
+      "type": "p",
+      "en": "We can repeat this for the remaining 8 PCF samples to compute the corresponding uv coordinates and weights. Looking at the results we can notice some common terms that appear due to the symmetries in the kernel. Once we factor the common sub-expressions and replace the a,b,c constants with scalars we can simplify the formulas and end up with fairly simple expressions. For example, in our case, in the 5x5 kernel we set the constants to 1, 3 and 4 to achieve a crude approximation to a Gaussian filter and this is the resulting code:",
+      "zh": "对其余 8 个 PCF 采样点重复这一过程，就能算出各自对应的 uv 坐标和权重。看这些结果会发现，由于核具有对称性，其中出现了一些公共项。一旦把公共子表达式提取出来、并把 a、b、c 常数替换成具体的标量，公式就能化简，最终得到相当简单的表达式。比如在我们的例子里，5x5 核中把常数取为 1、3、4，就得到了对高斯滤波器的一个粗略近似，而这是最终得到的代码："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "    float uw0 = (4 - 3 * s);\n    float uw1 = 7;\n    float uw2 = (1 + 3 * s);\n\n    float u0 = (3 - 2 * s) / uw0 - 2;\n    float u1 = (3 + s) / uw1;\n    float u2 = s / uw2 + 2;\n\n    float vw0 = (4 - 3 * t);\n    float vw1 = 7;\n    float vw2 = (1 + 3 * t);\n\n    float v0 = (3 - 2 * t) / vw0 - 2;\n    float v1 = (3 + t) / vw1;\n    float v2 = t / vw2 + 2;\n\n    float sum = 0;\n\n    sum += uw0 * vw0 * do_pcf_sample(base_uv, u0, v0, z, dz_duv);\n    sum += uw1 * vw0 * do_pcf_sample(base_uv, u1, v0, z, dz_duv);\n    sum += uw2 * vw0 * do_pcf_sample(base_uv, u2, v0, z, dz_duv);\n\n    sum += uw0 * vw1 * do_pcf_sample(base_uv, u0, v1, z, dz_duv);\n    sum += uw1 * vw1 * do_pcf_sample(base_uv, u1, v1, z, dz_duv);\n    sum += uw2 * vw1 * do_pcf_sample(base_uv, u2, v1, z, dz_duv);\n\n    sum += uw0 * vw2 * do_pcf_sample(base_uv, u0, v2, z, dz_duv);\n    sum += uw1 * vw2 * do_pcf_sample(base_uv, u1, v2, z, dz_duv);\n    sum += uw2 * vw2 * do_pcf_sample(base_uv, u2, v2, z, dz_duv);\n\n    sum *= 1.0f / 144;"
+    },
+    {
+      "type": "p",
+      "en": "The main advantage of the PCF separable sampling approach over Gather4 is not just that it works in a wider range of hardware, but that is also more efficient. With PCF sampling we need to compute the new sampling coordinates and weights, while with Gather4 we have to perform depth comparisons and filtering in the shader. The latter uses a lower number of instructions, but consumes more bandwidth between the ALUs and texture units and more importantly, it requires more registers to hold the results of the texture samples. That said, despite the lower performance, the use of Gather4 has some advantages that we will discuss in the next section.",
+      "zh": "PCF 可分离采样相较于 Gather4 的主要优势，不只是在更广的硬件范围内都能用，还在于它更高效。用 PCF 采样，我们需要计算新的采样坐标和权重；而用 Gather4，我们必须在着色器里做深度比较和过滤。后者指令数更少，但在 ALU 与纹理单元之间消耗的带宽更多，更重要的是，它需要更多寄存器来存放纹理采样的结果。话虽如此，尽管性能更低，使用 Gather4 也有它的一些优势，我们会在下一节里讨论。"
+    },
+    {
+      "type": "p",
+      "en": "For those that simply want to use our shadow sampling code without deriving formulas for their own weights, you can find our implementation integrated in [Matt's shadow mapping example](http://mynameismjp.wordpress.com/2013/09/10/shadow-maps/) under the \"OptimizedPCF\" option. Running his demo in the two GPUs that I have available, a NVIDIA GTX 480 and an Intel HD 4000, I've measured that our technique is between 10 and 20% faster than the Gather4 method.",
+      "zh": "如果有人只是想直接用我们的阴影采样代码、不想自己推导权重公式，可以在 [Matt 的阴影贴图示例](http://mynameismjp.wordpress.com/2013/09/10/shadow-maps/)里的「OptimizedPCF」选项中找到我们集成进去的实现。在我手头能用的两块 GPU（一块 NVIDIA GTX 480 和一块 Intel HD 4000）上跑他的 demo，我测出我们的技术比 Gather4 方法快 10% 到 20%。"
+    },
+    { "type": "h2", "id": "acne", "zh": "阴影痤疮", "en": "Acne" },
+    {
+      "type": "p",
+      "en": "Shadow acne is one of the major issues of most shadow mapping implementations. Eliminating shadow acne is such a pain, that I wonder why it's not received much more attention.",
+      "zh": "阴影痤疮是大多数阴影贴图实现的主要问题之一。消除阴影痤疮这么麻烦，我很奇怪它为什么没有得到多得多的关注。"
+    },
+    {
+      "type": "p",
+      "en": "In our case I ended up employing what I believe is the most common solution: A combination of constant, slope-scale, [normal](http://c0de517e.blogspot.com/2011/05/shadowmap-bias-notes.html) and receiver plane depth biases. Finding the right magnitudes for each of these offsets is complicated. If the offsets are too big, that results in *peter panning* or light leaking artifacts, if the offsets are too small, they don't eliminate acne entirely.",
+      "zh": "在我们的例子里，我最终采用的应该是最常见的方案：把常数偏移、斜率缩放偏移、[法线](http://c0de517e.blogspot.com/2011/05/shadowmap-bias-notes.html)偏移和接收面深度偏移（receiver plane depth bias）组合起来用。要为每一种偏移找到合适的量级很麻烦。偏移太大，会导致*彼得潘现象*（peter panning）或漏光瑕疵；偏移太小，又无法完全消除痤疮。"
+    },
+    {
+      "type": "p",
+      "en": "In [Eliminating Surface Acne with Gradient Shadow Mapping](http://www.shaderx4.com/TOC.html) Christian Schuler proposes the use of linearly filtered depth values and fuzzy depth comparisons to mitigate the acne artifacts. However, these techniques are not possible when using PCF sampling.",
+      "zh": "在 [Eliminating Surface Acne with Gradient Shadow Mapping](http://www.shaderx4.com/TOC.html) 中，Christian Schuler 提出使用线性过滤的深度值和模糊深度比较来减轻痤疮瑕疵。不过，这些技术在采用 PCF 采样时派不上用场。"
+    },
+    {
+      "type": "p",
+      "en": "Another alternative is to render backfaces to the shadow maps, but this approach is more prone to light leaking and does not really solve the acne problems on thin walls. Dual or midpoint shadow maps are interesting, but it seems like they would be more expensive, do not entirely solve the problem near silhouettes or with very thin objects, and impose additional modeling constrains.",
+      "zh": "另一个替代做法是把背面渲染进阴影贴图，但这种方式更容易漏光，也没有真正解决薄墙上的痤疮问题。双重阴影贴图或中点阴影贴图挺有意思，但它们看起来开销更大，既不能完全解决轮廓线附近或极薄物体上的问题，还会给建模加上额外的约束。"
+    },
+    {
+      "type": "p",
+      "en": "The magnitude of the offsets is proportional to the size of the texels and the filtering radius, so a simple way of reducing them is using higher resolution shadows, but larger shadow maps also reduce performance. In the end we just try to find the best compromise between the two forms of artifacts and as a last resort constrain the modelling to prevent the most egregious artifacts.",
+      "zh": "偏移的量级与纹素尺寸和过滤半径成正比，所以减小它们的一个简单办法是使用更高分辨率的阴影，但更大的阴影贴图也会降低性能。最后我们只能在两类瑕疵之间寻找最好的折中，实在没办法时再通过给建模加约束来避免最严重的瑕疵。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "One of the unfortunate disadvantages of our shadow filtering method is that we rely on the hardware texture units to sample 4 shadow texels simultaneously and perform the depth comparison. When using receiver plane depth bias we would like to use a different bias for each of the texels, but there's no way we can provide a depth gradient to the texture unit. As a result, the receiver plane depth bias is not very effective with our method. In fact, it's so ineffective, that we chose to disable it entirely and compensate with a larger normal and slope-scale bias.",
+      "zh": "我们的阴影过滤方法有一个不幸的缺点：我们依赖硬件纹理单元同时采样 4 个阴影纹素并完成深度比较。使用接收面深度偏移时，我们本希望给每个纹素用不同的偏移，但没办法把深度梯度提供给纹理单元。结果就是，接收面深度偏移在我们的方法里效果不佳。事实上它太没效果了，我们干脆把它完全关掉，改用更大的法线偏移和斜率缩放偏移来补偿。"
+    },
+    {
+      "type": "p",
+      "en": "For these biases to work well it's important to scale their magnitude correctly based on the surface normal and light direction. In particular, the slope-scale bias should be proportional to the tangent of the angle between the normal (N) and the light direction (L), and the normal bias should be proportional to the sine:",
+      "zh": "要让这些偏移效果好，关键在于根据表面法线和光照方向正确地缩放它们的量级。具体来说，斜率缩放偏移应当与法线（N）和光照方向（L）之间夹角的正切成正比，而法线偏移应当与正弦成正比："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/shadow_offsets.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "float2 get_shadow_offsets(float3 N, float3 L) {\n    float cos_alpha = saturate(dot(N, L));\n    float offset_scale_N = sqrt(1 - cos_alpha*cos_alpha); // sin(acos(L·N))\n    float offset_scale_L = offset_scale_N / cos_alpha;    // tan(acos(L·N))\n    return float2(offset_scale_N, min(2, offset_scale_L));\n}"
+    },
+    {
+      "type": "p",
+      "en": "Finally, one of the disadvantages of the normal bias is that it does not only bias the depth, it also offsets the shadow. On its own this offset is not very noticeable, but the offset amount is different for each of the cascades and that results in an obvious shift between cascades. Blending the cascades helps, but to reduce the problem further we also interpolate the magnitude of the bias from one cascade to the next, so that the shift is barely noticeable.",
+      "zh": "最后，法线偏移的一个缺点是：它不只偏移深度，还让阴影本身发生位移。单看这个位移并不明显，但每个级联的偏移量各不相同，于是级联之间会出现明显的错位。对级联做混合会有帮助，但为了进一步减轻问题，我们还把偏移的量级在相邻级联之间做插值，让错位几乎看不出来。"
+    },
+    { "type": "h2", "id": "coming-next", "zh": "接下来", "en": "Coming Next" },
+    {
+      "type": "p",
+      "en": "In part 2, I'll describe our cascade placement algorithm and finish with the optimizations that we use in order to speed up shadow map rendering.",
+      "zh": "在第二部分里，我会讲我们的级联布置算法，最后再讲我们为加速阴影贴图渲染所用的那些优化。"
+    }
+  ]
+}

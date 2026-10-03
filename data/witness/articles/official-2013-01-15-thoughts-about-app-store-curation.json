@@ -1,0 +1,65 @@
+{
+  "id": "official-2013-01-15-thoughts-about-app-store-curation",
+  "title": { "zh": "关于 App Store「策展」的几点想法", "en": "Thoughts about App Store ‘Curation’" },
+  "subtitle": {
+    "en": "Why Apple can get away with treating games as shallow entertainment, and why the blame lies with game developers.",
+    "zh": "Apple 为什么能把游戏当成浅薄的娱乐——以及为什么这笔账该算在游戏开发者自己头上。"
+  },
+  "translator": {
+    "note": "原文归在 Blow 的「Ill-Advised Rants」（不合时宜的牢骚）栏目下。文中的 App Store 指 iOS App Store。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last week, Jeff Grubb from VentureBeat emailed me a question for [an article he was writing](http://venturebeat.com/2013/01/15/apple-want-to-criticize-religion-write-a-book-dont-make-a-game/), prompted by Apple's rejection of *[Endgame: Syria](http://gamethenews.net/index.php/endgame-syria/)*. Sometimes questions like this are good excuses for me to figure out what I really think.",
+      "zh": "上周，VentureBeat 的 Jeff Grubb 为[他当时正在写的一篇文章](http://venturebeat.com/2013/01/15/apple-want-to-criticize-religion-write-a-book-dont-make-a-game/)发邮件问了我一个问题，起因是 Apple 拒绝了《[Endgame: Syria](http://gamethenews.net/index.php/endgame-syria/)》。有时候，这种问题正好是个不错的借口，让我搞清楚自己究竟是怎么想的。"
+    },
+    {
+      "type": "p",
+      "en": "Jeff asked me about this part of the iOS App Store's Developer Terms of Service:",
+      "zh": "Jeff 问的是我对 iOS App Store 开发者服务条款里这一段的看法："
+    },
+    {
+      "type": "quote",
+      "en": "We view Apps different than books or songs, which we do not curate. If you want to criticize a religion, write a book. If you want to describe sex, write a book or a song, or create a medical app. It can get complicated, but we have decided to not allow certain kinds of content in the App Store.",
+      "zh": "我们把 App 和书或歌曲看得不一样，书和歌曲我们是不做策展的。如果你想批评某种宗教，那就去写本书。如果你想描写性，那就去写本书、写首歌，或者做一个医疗类 App。事情可能会变复杂，但我们已决定：不在 App Store 里允许某些类型的内容。",
+      "noteZh": "这一段引自 iOS App Store 开发者服务条款。"
+    },
+    {
+      "type": "p",
+      "en": "And here is what I said:",
+      "zh": "以下是我当时说的话："
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "I think this is the wrong attitude about games, but look, ultimately it is game developers' fault, not Apple's. Apple is treating games as shallow commercial entertainment experiences because they have been taught by game developers that that is what games are.",
+      "zh": "我认为这是对待游戏的错误态度，但你看，归根到底这是游戏开发者的错，不是 Apple 的错。Apple 之所以把游戏当成浅薄的商业娱乐体验，是因为游戏开发者教会了他们：游戏就是这么个东西。"
+    },
+    {
+      "type": "p",
+      "en": "If we had built a world where games routinely work with serious issues in ways that people care about, Apple would not be able to take this stance, because it would not make any sense.",
+      "zh": "假如我们当初建成的是那样一个世界：游戏经常以人们在意的方式去处理严肃议题，那么 Apple 就没法摆出这种立场，因为那根本说不通。"
+    },
+    {
+      "type": "p",
+      "en": "Why do they say \"If you want to criticize a religion, write a book\"? It's because it's obvious that banning books is bad, because there have been a lot of books that people find important (and we have had many cultural cycles involving people attempting to ban books, and culture has worked out ultimately that this is not a good thing). Games do not have this history. Right now Apple thinks a game is Angry Birds or maybe Infinity Blade. So who can blame them?",
+      "zh": "他们为什么说「如果你想批评某种宗教，去写本书」？因为禁止书籍显然是坏事——这一点明摆着，因为有过很多人们认为重要的书（而且我们已经经历过好几轮有人试图禁书的文化循环，文化最终得出的结论是：这不是件好事）。游戏没有这样的历史。眼下在 Apple 眼里，游戏就是 Angry Birds，或者也许是 Infinity Blade。所以这能怪谁呢？"
+    },
+    {
+      "type": "p",
+      "en": "Apple may be badgered enough to change their policy someday, or they may not. But that doesn't matter very much because really it is just a reflection of the general cultural idea about what games are. The only way that idea will change is if a lot of developers make a lot of serious/deep/honest/touching/intrepid games for a long time. I don't know if that will ever happen. How many games can you think of to which you can seriously apply these adjectives? Certainly to none of the top-selling games on the App Store, and certainly certainly to none of those big free-to-play games that are raking in all the cash.",
+      "zh": "Apple 也许有一天会被烦到改掉这条政策，也许不会。但这并不要紧，因为它其实只是关于「游戏是什么」的普遍文化观念的一个反映。这个观念要改变，唯一的办法是很多开发者长年做出很多严肃／深刻／诚实／动人／无畏的游戏。我不知道这件事会不会发生。你能想出多少款游戏，是你真能认真套上这些形容词的？App Store 上那些最畅销的游戏，肯定一款都不是；而那些正在大把捞钱的免费游戏，肯定肯定一款都不是。"
+    },
+    {
+      "type": "p",
+      "en": "So, game developers are just sort of reaping what they have sown. What else would you expect?",
+      "zh": "所以，游戏开发者多少就是在自食其果。你还想指望什么呢？"
+    },
+    {
+      "type": "p",
+      "en": "I have not played Endgame: Syria but maybe it is a step in this direction. But to change these attitudes we need a lot of steps, consistently, not just a token step now and again.",
+      "zh": "我没有玩过《Endgame: Syria》，但也许它是朝这个方向迈出的一步。不过要改变这些态度，我们需要很多步，而且要持续地走，不只是偶尔来一次象征性的迈步。"
+    }
+  ]
+}

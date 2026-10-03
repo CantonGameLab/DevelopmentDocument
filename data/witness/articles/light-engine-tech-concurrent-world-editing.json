@@ -1,0 +1,496 @@
+{
+  "id": "light-engine-tech-concurrent-world-editing",
+  "title": {
+    "zh": "引擎技术：并发编辑世界",
+    "en": "Engine Tech: Concurrent world editing"
+  },
+  "subtitle": {
+    "en": "Storing every entity as its own text file, so plain old Subversion can merge the world edits of seven people across 18 machines.",
+    "zh": "把每个实体各存成一个文本文件，好让老掉牙的 Subversion 也能合并七个人、18 台机器对世界的并发编辑。"
+  },
+  "translator": {
+    "note": "`entity` 按术语表译「实体」；`serial number` 译「序列号」；`revision control`／`source control` 统一译「版本控制」；`Subversion`／`svn`／`TortoiseSVN`、`JSON`、`XML`、`IEEE 754`、`MFT`、`NTFS`、`SSD` 保留英文；`mount` 系列属性名（`mount_parent_id`、`mount_position`、`mount_orientation`）与文件名（`6555.entity_text`、`id_ranges`）保留英文。三处代码块（`os_get_newest_file_modification_time`、`get_file_modification_time`、文件格式片段）、实体文件清单、`id_ranges` 内容与两段引用块（Chris Hecker、Charles Bloom）**逐字保留英文原文，未做任何翻译或改动**，包括原文里代码的空行与缩进、清单里的行首空格。原文的三处拼写错误（`particpant`、`appricative`、`coccoon`）以及 `The Witness` 未加书名号的地方，都按原文照旧，不做「更正」。译文里「high」一词按原文用直角引号包裹，因为那一句在讨论这个词本身的定义。"
+  },
+  "blocks": [
+    {
+      "type": "h2",
+      "id": "summary",
+      "zh": "摘要",
+      "en": "Summary"
+    },
+    {
+      "type": "p",
+      "en": "A small team with limited manpower, we wanted a low-effort way to use our existing version control system (svn) to facilitate concurrent world editing for our open-world 3D game (i.e. we desire that multiple users can edit the world at the same time and merge their changes).  We developed a system wherein the data for each entity is stored as an individual text file.  This sounds crazy, but it works well: the use of individual files gives us robustness in the face of merge conflicts, and despite the large number of files, the game starts up quickly.  Entities are identified using integer serial numbers.  We have a scheme for allocating ranges of these numbers to individual users so there is no overlap (though this scheme could certainly be better).  The system seems now to be robust enough to last us through shipping the game, with seven people and one automated build process concurrently editing the world across 18 different computers.",
+      "zh": "我们是一支人手有限的小团队，想要一种省力的办法，用我们已经有的版本控制系统（svn）来支持这款开放世界 3D 游戏的并发编辑世界（也就是说，我们希望多个用户可以同时编辑世界并合并各自的改动）。我们做出了一套系统，其中每个实体的数据都存成一个单独的文本文件。这听起来很疯，但它运行得很好：用单独文件让我们在面对合并冲突时足够稳健，而且尽管文件数量庞大，游戏启动依然很快。实体用整数序列号来标识。我们有一套把这些号码的区间分配给各个用户的方案，因此不会重叠（不过这个方案当然还能做得更好）。这套系统现在看来已经足够稳健，足以撑到我们把游戏做完出货——七个人加一个自动化构建流程，在 18 台不同的机器上并发编辑这个世界。"
+    },
+    {
+      "type": "p",
+      "en": "We don't know whether this method would work for AAA-sized teams, though it seems that it might with some straightforward extensions.  But for us the method works surprisingly well, given how low-tech it is.",
+      "zh": "我们不知道这套方法对 AAA 规模的团队是否可行，不过看起来配上一些直接的扩展也许就行。但对我们来说，考虑到它有多低技术，这套方法效果好得出奇。"
+    },
+    {
+      "type": "h2",
+      "id": "about-the-game",
+      "zh": "关于这个游戏",
+      "en": "About the Game"
+    },
+    {
+      "type": "p",
+      "en": "We have been developing a 3D open-world game called [The Witness](http://the-witness.net) since late 2008.  For much of that time, development happened in a preproduction kind of way, where not many people were working on the game.  Recently, though, we went into more of a shipping mode, so the number of developers has grown: we're up to about 10 or 11 people now (pretty big for a non-high-budget, independent game).  Not all of these people directly touch the game data, but about 7 do now, and this number will rise to 9 in the near future.",
+      "zh": "我们从 2008 年底开始开发一款叫 [The Witness](http://the-witness.net) 的 3D 开放世界游戏。在那段时期的大部分时间里，开发都是以「前期制作」的方式进行的，参与的人不多。不过最近我们进入了更接近出货的状态，开发者的数量也涨了上来：现在我们有大约 10 到 11 个人（对一个非高预算的独立游戏来说算相当多了）。这些人并不是都直接碰游戏数据，但目前大约有 7 个人会碰，而且这个数字不久会升到 9。"
+    },
+    {
+      "type": "p",
+      "en": "The design of the game requires the world to be spatially compact, relative to other open-world games, so it is far from Skyrim-esque in terms of area or number of entities.  At the time of this writing, there are 10,422 entities in the game world.  I expect this number to grow before the game is done, but probably not by more than 2x or 3x the current amount.",
+      "zh": "游戏的设计要求这个世界在空间上比较紧凑——相对于其他开放世界游戏而言——所以无论面积还是实体数量，它都远远谈不上「上古卷轴 5 那种」。截至本文写作时，游戏世界里共有 10,422 个实体。我预计这个数字在游戏做完之前还会增长，但大概不会超过现在的两三倍。"
+    },
+    {
+      "type": "p",
+      "en": "Because the world is not too big, and some game-level events require entities to coordinate across the length of the world, it makes sense to keep all the entities in one space, that is to say, there is no zoning of the world or partitioning of it into separate sets of data.  This makes the engine simpler, and it reduces the number of implementation details that we need to think about when editing the world.  It also introduces a bit of a challenge, because it requires us to support concurrent editing of the world without an explicit control structure governing who can edit what.  One such control structure might be: if you imagine the world were divided into a 10x10 grid; so there are 100 different zones; and where anyone editing the world must lock whatever zones they want to edit, make their changes, check them in, then unlock those zones; this would provide a very clear method of ordering world edits.  (Because of the locking mechanism, two people would not be able to change the same world entity at the same time, so there doesn't have to be any resolution process to decide whose changes are authoritative). However, the straightforward implementation of such a control scheme would make for inconvenient workflow, as it is tedious to lock and unlock things.  Even with further implementation work and a well-streamlined UI, there would still be big inconveniences (I really want to finish building a particular puzzle right now, but a corner of that puzzle just borders on some region that a different user has locked, and he is sick this week so he probably won't finish his work and unlock it until next week.  Or, if my network connection is flaky then I may not be able to edit; if I am off the net then I definitely could not edit.)",
+      "zh": "因为这个世界不算太大，而某些游戏层面的事件又要求实体横跨世界的两端互相协调，所以把所有实体放在一个空间里是合理的——也就是说，这个世界不做分区，也不被拆成几组彼此独立的数据。这让引擎更简单，也减少了我们在编辑世界时需要操心的实现细节。它也带来了一点挑战，因为它要求我们在没有一套明确的「谁能改什么」控制结构的前提下支持并发编辑。这样的控制结构可以是：设想把世界划成 10x10 的网格，于是有 100 个不同的区；任何要编辑世界的人都必须先把自己想编辑的区锁上，改完、提交，再解锁那些区；这会提供一种非常清晰的编辑排序方式。（因为有锁机制，两个人不可能同时改动同一个世界实体，所以也就不需要有仲裁流程来判定谁的改动算数。）然而，这种控制方案的直接实现会让工作流变得不方便，因为锁上、解锁很烦人。即便再做更多实现工作、做出一套很顺的 UI，仍然会有很大的不便（我现在真的很想把某个谜题做完，可那个谜题的一个角恰好挨着另一个用户锁住的某个区域，而他这周生病了，大概要到下周才能做完他的活儿、解锁那个区。又或者，我的网络连接不稳，那我就没法编辑；如果我压根不在网上，那肯定就没法编辑。）"
+    },
+    {
+      "type": "p",
+      "en": "Thus, rather than implementing some kind of manual locking, I found it preferable to envision a system that Just Magically Works.  Since we already used the Subversion source-control system to manage source code and binary source assets such as texture maps and meshes, it didn't seem like too big of a stretch for Subversion to handle entity data as well.",
+      "zh": "因此，与其实现某种手动加锁，我更愿意去设想一套「就这么神奇地能用」的系统。既然我们已经在用 Subversion 版本控制系统管理源代码，以及纹理贴图和网格这类二进制源资产，那么让 Subversion 连实体数据也一并管起来，似乎并不算多大的跨越。"
+    },
+    {
+      "type": "h2",
+      "id": "the-world-editor-and-entity-data",
+      "zh": "世界编辑器与实体数据",
+      "en": "The World Editor and Entity Data"
+    },
+    {
+      "type": "p",
+      "en": "Our world editor is built into the game; you press a key to open it at any time.  Here's what it looks like:",
+      "zh": "我们的世界编辑器是做在游戏里的；随时按一个键就能打开它。它长这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/12/editor_shot-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The editor view is rendered in exactly the same way as the gameplay view, but you fly the camera around and select entities (I have selected the red metal door at the center of the scene, so it is surrounded by a violet wireframe).  In the upper right, I have a panel where I can edit all the relevant properties of this Door; the properties are organized into four tabs and here you can see only one, the \"Common\" properties.",
+      "zh": "编辑器视图的渲染方式与游戏视图完全相同，只不过你可以让相机飞着到处走并选中实体（我选中了场景中央那扇红色的金属门，所以它被一圈紫罗兰色的线框围住）。右上角有一个面板，我可以在其中编辑这扇 Door 的所有相关属性；这些属性被分到四个标签页里，而这里你只能看到其中一个：「Common」属性。"
+    },
+    {
+      "type": "p",
+      "en": "These properties, which you can edit by typing into the fields of this Entity panel, are all that the game needs to instantiate and render this particular entity (apart from heavier-weight shared assets like meshes and texture maps).  If you serialize all these fields, then you can unserialize them and generate a duplicate of this Door.  That's how the editor saves the world state: serialize every entity, and for each entity, serialize all fields.",
+      "zh": "这些属性——你可以通过在这个 Entity 面板的字段里输入来编辑它们——就是游戏实例化并渲染这个特定实体所需要的全部东西（网格和纹理贴图这类更重的共享资产除外）。如果你把所有这些字段序列化，那么就能把它们反序列化，从而生成这扇 Door 的一个副本。编辑器就是这样保存世界状态的：序列化每一个实体，并且对每个实体序列化所有字段。"
+    },
+    {
+      "type": "p",
+      "en": "Originally, the game saved all entities into one file in a binary format.  This is most efficient, CPU-performance-wise, and the natural thing that most performance-minded programmers would do first.  Unfortunately, though, svn can't make sense of such a file, so if two people make edits, even to disjoint parts of the world, svn is likely to produce a conflict; once that happens, it's basically impossible to resolve the situation without throwing away someone's changes or taking drastic data recovery steps.",
+      "zh": "最初，游戏把所有实体存进一个二进制格式的文件里。就 CPU 性能而言这是最高效的，也是大多数在意性能的程序员会最先想到的自然做法。可惜 svn 读不懂这种文件，所以只要两个人做了编辑——哪怕改的是世界里互不相干的部分——svn 也很有可能报出冲突；而一旦出现冲突，基本上就不可能在不扔掉某人的改动、或不采取极端的数据恢复手段的情况下把事情解决掉。"
+    },
+    {
+      "type": "p",
+      "en": "Our natural first step was to change this file from binary into a textual format.  Originally I had worries about the load-time performance of parsing a textual file, but this turned out not to be an issue.  I decided to use a custom file format, because the demands in this case are very simple, and we have maximum control over the format and can modify it to suit our tastes.",
+      "zh": "我们自然而然的第一步，是把这个文件从二进制改成文本格式。我原本担心解析文本文件的加载性能，但结果发现这根本不是问题。我决定用一种自定义的文件格式，因为这种情况下需求非常简单，而且我们对格式有最大的控制权，可以按自己的喜好去改它。"
+    },
+    {
+      "type": "p",
+      "en": "Many modern programmers seem to have some kind of knee-jerk inclination to use XML whenever a textual format is desired, but I think XML is one of the worst file formats ever created, and I have no idea why anyone uses it for anything at all, except that perhaps they drank the XML Kool-Aid or have XML Stockholm Syndrome.  Yes, there are XML-specific tools out there in the world, and whatever, but I didn't see how any such tool would be of practical use to us.  One of our primary concerns is human-readability, so that people can make intelligent decisions when attempting to resolve revision control conflicts.  XML is not particularly readable, but we can modify our own format to be as readable as it needs to be in response to whatever real-world problems arise.  You'll see a snippet below of the format we use.",
+      "zh": "很多现代程序员似乎有一种膝跳反射式的倾向：只要想要文本格式，就用 XML。但我认为 XML 是有史以来最糟糕的文件格式之一，我完全不明白为什么会有人拿它做任何事——除非他们是喝了 XML 的迷魂汤，或者得了 XML 斯德哥尔摩综合征。是的，世界上确实有专门针对 XML 的工具，随便吧，但我看不出这类工具对我们有什么实际用处。我们最关心的事情之一是「人能读」，这样人们在试图解决版本控制冲突时才能做出明智的判断。XML 并不特别好读，而我们自己的格式可以按需要随实际出现的问题改成足够好读。下面你会看到我们所用格式的一小段。"
+    },
+    {
+      "type": "h2",
+      "id": "evolution-of-the-textual-format",
+      "zh": "文本格式的演变",
+      "en": "Evolution of the Textual Format"
+    },
+    {
+      "type": "p",
+      "en": "The first version of our textual format was a straightforward adaptation of our binary format.  The gameplay-level code that saves and loads entities is the same for either format; the only difference is just a boolean parameter, choosing textual or binary, which is passed to the lower-level buffering code.  After the buffer is done being packed, it's written to a file.",
+      "zh": "我们文本格式的第一个版本，是把二进制格式直接改写过来的。负责保存和加载实体的玩法层代码对两种格式是同一套；唯一的区别只是一个布尔参数，用来选文本还是二进制，它被传给底层的缓冲代码。缓冲区打包完成之后，就被写进文件。"
+    },
+    {
+      "type": "p",
+      "en": "In our engine, entities are generally referenced using integer serial numbers (that act as handles).  These numbers are the same when serialized as they are at runtime.  Originally, in the binary file, the order in which the entities were written didn't matter.  But if we want to handle concurrent edits, we want to make merging as easy as possible for the source control system, so we sort entities by serial number, writing them into the file in increasing order.  Thus we didn't generate any spurious file changes due to haphazardly-changing serialization order.",
+      "zh": "在我们的引擎里，实体一般用整数序列号（充当句柄）来引用。这些号码在序列化时和运行期是一样的。最初在二进制文件里，实体写入的顺序无关紧要。但如果我们想处理并发编辑，就要让版本控制系统的合并尽可能容易，所以我们按序列号给实体排序，以递增顺序写入文件。这样我们就不会因为序列化顺序乱变而制造出任何虚假的文件改动。"
+    },
+    {
+      "type": "p",
+      "en": "In theory, Subversion could now handle simultaneous world edits and just merge them, the same way it does with our source code.  Unsurprisingly, though, this initial attempt was not sufficient.  Though the file was now textual, it contained a bare minimum of annotations and concessions to readability.  Though I knew I would eventually want to add more annotations, I didn't want to go overboard if it wasn't necessary, because these inflate the file size and the time required to parse the files (though I never measured by how much, so it's likely the increases are negligible performance-wise and I was engaging in classic premature optimization).  As it happens, the kind of redundant information that increases human-readability also helps the source control system understand file changes unambiguously, so as we made the format more-readable, the number of conflicts fell.",
+      "zh": "理论上，Subversion 现在应该能处理同时发生的世界编辑，直接把它们合并，就像对我们的源代码那样。但不出所料，这最初的尝试还不够。虽然文件现在已经是文本了，但它包含的注释、以及为可读性做的让步都是最低限度的。虽然我知道自己最终会想加上更多注释，但我不愿意在没必要的时候做过头，因为这些东西会撑大文件体积、也拖长解析文件所需的时间（不过我从未测过到底增加多少，所以很可能在性能上这些增加可以忽略不计，而我是在搞典型的过早优化）。碰巧的是，这类提升人可读性的冗余信息，同时也帮助版本控制系统无歧义地理解文件改动，所以随着我们把格式做得更好读，冲突的数量下降了。"
+    },
+    {
+      "type": "p",
+      "en": "Here's what our file format currently looks like, for entity #6555 (the Door we had selected in the editor screenshot).",
+      "zh": "我们目前的文件格式长这样，这里是实体 #6555（就是我们在编辑器截图里选中的那扇 Door）。"
+    },
+    {
+      "type": "code",
+      "code": "Door\n72\n6555\n; position\n    46.103531 : 42386a04\n    108.079681 : 42d828cc\n    8.694907 : 410b1e57\n; orientation\n    0.000000 : 0\n    0.000000 : 0\n    -0.069125 : bd8d9184\n    0.997608 : 3f7f633d\n; entity_flags\n    160\n; entity_name\n    !\n; group_id\n    4059\n; mount_parent_id\n    6554\n; mount_position\n    0.035274 : 3d107ba5\n    0.006069 : 3bc6e19c\n    0.000038 : 381ffffc\n; mount_orientation\n    0.000000 : 0\n    0.000000 : 0\n    0.000027 : 37e5f004\n    1.000000 : 3f800000"
+    },
+    {
+      "type": "p",
+      "en": "(The first line, \"Door\", is the type name; 72 is the entity data version, which is used to load older versions of entities as their properties change over time; 6555 is the entity's ID.  root_z and cluster_id (seen in the screenshot) are not saved into the file, because these properties have metadata that say they are only saved or loaded under certain conditions which are not true here.  For the sake of making the listing short, I've shown only the properties listed on that first tab in the screenshot.)",
+      "zh": "（第一行「Door」是类型名；72 是实体数据版本，用来在实体属性随时间变化后加载旧版本的实体；6555 是实体的 ID。root_z 和 cluster_id（截图里能看到）没有被存进文件，因为这些属性带有元数据，指明它们只在某些条件下才保存或加载，而这里那些条件不成立。为了让清单短一些，我只列了截图里第一个标签页上的那些属性。）"
+    },
+    {
+      "type": "p",
+      "en": "You'll note that the floating-point numbers are written out a bit oddly, as in this first line under 'position':",
+      "zh": "你会注意到这些浮点数写出来有点古怪，就像 'position' 下面的第一行这样："
+    },
+    {
+      "type": "code",
+      "code": "    46.103531 : 42386a04"
+    },
+    {
+      "type": "p",
+      "en": "This is how we preserve the exact values of floating-point numbers despite saving and loading them in a text file.  If you do not take some kind of precaution, and use naive string formatting and parsing, your floating-point values are likely to change by an LSB or two, which can be troublesome.",
+      "zh": "我们就是这样在把浮点数存进文本文件、再从文本文件加载的同时，保住它们的精确值的。如果你不采取某种预防措施，而是用天真的字符串格式化与解析，你的浮点值很可能会变上一两个 LSB，这会带来麻烦。"
+    },
+    {
+      "type": "p",
+      "en": "The number on the left is a straightforward decimal representation of the value, written with a reasonable number of digits.  The : tells us that we have another representation to look at; the number on the right, which the : introduces, is the hexadecimal representation of the same number.  The IEEE 754 floating-point standard defines this representation very specifically, so we can use this hexadecimal representation to reproduce the number exactly, even across different hardware platforms.  The decimal representation is mostly just here to aid readability.  However, if we decide we want to hand-edit the file, we can just delete the : and everything after it, changing that first number to a 47.5 or something; seeing no :, the game will parse the decimal representation and use that instead.",
+      "zh": "左边那个数是这个值的直接十进制表示，写出的位数算合理。那个 : 告诉我们还有另一种表示可以看；由这个 : 引出的右边那个数，是同一个数的十六进制表示。IEEE 754 浮点标准对这种表示做了非常明确的规定，所以我们可以用这个十六进制表示把数值精确重现出来，甚至跨不同的硬件平台也没问题。十进制表示在这里主要只是为了好读。不过，如果我们决定手工编辑这个文件，只要把 : 及其后面的所有内容删掉，把那第一个数改成 47.5 之类的值就行；游戏看到没有 :，就会去解析十进制表示、改用那个值。"
+    },
+    {
+      "type": "p",
+      "en": "There are other ways to solve this floating-point exactness problem; for example, you can implement an algorithm that reads and writes the decimal representation in a manner that carefully preserves the values.  This is complicated, but if you're interested in that kind of thing, here's what Chris Hecker says:",
+      "zh": "解决这个浮点精确性问题还有别的办法；比如你可以实现一种算法，让它以仔细保值的读写十进制表示。这很复杂，但如果你对这类东西感兴趣，下面是 Chris Hecker 的说法："
+    },
+    {
+      "type": "quote",
+      "en": "Everybody just uses David Gay's code: [http://www.netlib.org/fp/dtoa.c](http://www.netlib.org/fp/dtoa.c)[http://www.netlib.org/fp/g_fmt.c](http://www.netlib.org/fp/g_fmt.c) You need to get the flags set right on the compiler for it to work. /fp:precise at least, I also do #pragma optimize (\"p\",on), and make sure you write a test program for it with your compiler settings.",
+      "zh": "Everybody just uses David Gay's code: [http://www.netlib.org/fp/dtoa.c](http://www.netlib.org/fp/dtoa.c)[http://www.netlib.org/fp/g_fmt.c](http://www.netlib.org/fp/g_fmt.c) You need to get the flags set right on the compiler for it to work. /fp:precise at least, I also do #pragma optimize (\"p\",on), and make sure you write a test program for it with your compiler settings.",
+      "noteZh": "这段引用是 Chris Hecker 的原话，其中编译器开关与 pragma 必须逐字保留才能用，故整段保留英文不译。"
+    },
+    {
+      "type": "p",
+      "en": "(Twitchy, and look at how much code that is!  What we did is a couple of lines.) In [a document](http://cbloom.com/3d/game_tech_04.zip) on his [web site](http://www.cbloom.com/3d/), Charles Bloom discusses a scheme that was in use at Oddworld Inhabitants, similar to what we're doing in The Witness but involving a comparison between the two representations:",
+      "zh": "（真够神经质的，而且看看那是多少代码！我们做的只是两行。）在他[网站](http://www.cbloom.com/3d/)上的[一份文档](http://cbloom.com/3d/game_tech_04.zip)里，Charles Bloom 讨论了一套在 Oddworld Inhabitants 用过的方案，和我们正在 The Witness 里做的类似，但多了一步两种表示之间的比较："
+    },
+    {
+      "type": "quote",
+      "en": "... Plain text extraction of floats drifts because of the ASCII conversions; to prevent this, we simply store the binary version in the text file in addition to the human readable version; if they are reasonably close to each other, we use the binary version instead so that floats can be persisted exactly.",
+      "zh": "... Plain text extraction of floats drifts because of the ASCII conversions; to prevent this, we simply store the binary version in the text file in addition to the human readable version; if they are reasonably close to each other, we use the binary version instead so that floats can be persisted exactly.",
+      "noteZh": "同上，这是 Charles Bloom 原文引用，涉及 float 持久化的具体做法，保留英文。"
+    },
+    {
+      "type": "h2",
+      "id": "subversion-confusion",
+      "zh": "Subversion 的困惑",
+      "en": "Subversion Confusion"
+    },
+    {
+      "type": "p",
+      "en": "After switching to this format, conflicts still happened.  I categorize conflicts into two types: \"legitimate\", where two people edit the same entity in contradictory ways and the source control system doesn't know who to believe; and \"illegitimate\", where Subversion was just getting confused.  We did have a number of legitimate conflicts for a while, yet which were not the users' fault, because our world editor tended to do things that are bad in a concurrent-editing environment.  (See the Logistics section at the end of this article for some examples).  But even after we ironed these out, we still found that Subversion was still getting confused.",
+      "zh": "换成这种格式之后，冲突仍然会发生。我把冲突分成两类：「正当的」——两个人以相互矛盾的方式编辑同一个实体，版本控制系统不知道该信谁；以及「不正当的」——就是 Subversion 自己糊涂了。有一阵子我们确实有不少正当冲突，但那并不是用户的错，因为我们的世界编辑器老爱干一些在并发编辑环境下很糟糕的事。（例子见本文末尾的「后勤问题」一节。）可即便把这些都熨平之后，我们仍然发现 Subversion 还是会糊涂。"
+    },
+    {
+      "type": "p",
+      "en": "Here's an example of a common problem: suppose we start with a world containing data on entities A, B, and D, so our file contains: ABD.  You edit the file and delete entity B.  I edit the file and also delete entity B, but add another entity C.  (That we both deleted B may be a very common use-case, especially if this is due to some automatic editor function).  So, you want to check in a file that just says: ABD - B = AD, so the new result is AD.  I want to check in a file that says: ABD - B + C = ACD (the C goes in the middle, because remember, the entities are sorted!)  In theory this is an easy merge: the correct result is just ACD.  But Subversion would get confused in cases like this, requiring the user to hand-merge the file.",
+      "zh": "下面是一个常见问题的例子：假设一开始世界里含有实体 A、B、D 的数据，所以我们的文件里是：ABD。你编辑这个文件，删掉了实体 B。我编辑这个文件，也删掉了实体 B，但加上了另一个实体 C。（我们俩都删掉 B 可能是极其常见的用例，尤其是当这件事源于某个自动化的编辑器功能时。）于是你想提交的文件是：ABD - B = AD，新结果是 AD。我想提交的文件是：ABD - B + C = ACD（C 放在中间，因为记住，实体是排过序的！）理论上这是一次很容易的合并：正确结果就是 ACD。但 Subversion 在这种情况下会糊涂，需要用户手工合并文件。"
+    },
+    {
+      "type": "p",
+      "en": "This is a disaster, because even with a visual merge tool such as the one that comes with TortoiseSVN, you don't want non-engine-programmers trying to merge your entity data file.  Even if that file is extremely readable, at some point someone will make a mistake; the file will fail to parse, and then you have a data recovery problem that requires the attention of an engine programmer.  When this happens it kills the productivity of two people (the engine guy, because he has to merge the data, and also the guy who generated the conflict, because until it gets resolved his game is in an un-runnable state, and anyway, the engine guy has probably commandeered the other guy's computer to fix this).",
+      "zh": "这是一场灾难，因为即便有 TortoiseSVN 自带的那种可视化合并工具，你也不希望让非引擎程序员去尝试合并你的实体数据文件。哪怕那个文件极其好读，也总会在某个时刻有人犯错；文件会解析失败，然后你就有了一个需要引擎程序员来处理的数据恢复问题。发生这种事会同时废掉两个人的生产力（引擎那位，因为他得去合并数据；还有制造出冲突的那位，因为在冲突解决之前他的游戏处于跑不起来的状态，而且反正引擎那位很可能已经把他的电脑征用过去修这个问题了）。"
+    },
+    {
+      "type": "p",
+      "en": "After we had this problem a few times too many, Ignacio suggested moving to a more-structured file format like JSON, which, in theory, source-control systems would handle more solidly.  But I thought that this would only reduce the frequency of the problem, but not solve anything fundamental; even if we achieved a situation of only generating legitimate conflicts, each conflict would still be a potential game-crippling disaster.",
+      "zh": "在这个问题发生得实在太多之后，Ignacio 建议改用像 JSON 这样更有结构的文件格式——理论上版本控制系统处理起来会更稳。但我觉得那只会降低问题出现的频率，并不能从根上解决什么；即使我们做到只产生正当冲突，每一次冲突仍然可能是一场让游戏残废的灾难。"
+    },
+    {
+      "type": "h2",
+      "id": "splitting-the-file",
+      "zh": "把文件拆开",
+      "en": "Splitting the File"
+    },
+    {
+      "type": "p",
+      "en": "It occurred to me, finally, that it could hardly get cleaner than to store each entity in its own file.  This initial thought might cause a performance-oriented programmer to recoil in horror; we have 10,422 entities right now, and it must be very slow to parse and load 10,000 text files every time the game starts up!",
+      "zh": "最后我想通了：再怎么弄，也不如把每个实体各存进自己的文件来得干净。这个初步想法可能会让在意性能的程序员惊恐地后退：我们现在有 10,422 个实体，那每次游戏启动都要解析并加载 10,000 个文本文件，一定慢得不行！"
+    },
+    {
+      "type": "p",
+      "en": "But I knew that we already had over 4,000 individual files laying around for assets like meshes and texture maps, currently loaded individually, the idea being that at ship time we would combine these into one package so as to avoid extra disk seeks and the like.  But on our development machines, these files still loaded quickly.  I figured that if we can already load 4,000 big files, why not try loading an extra 10,000 small files?  If loading all these files turned out to be slow, we could resort to this only when entity data has changed via a source control update; after loading all the text files, we can save out a single binary file containing all the entity data, which would be much faster to load, just like we used to do before we supported concurrent editing.",
+      "zh": "但我知道我们手边已经有 4,000 多个单独的文件了，用于网格和纹理贴图这类资产，目前也是一个个单独加载的；当时的想法是出货时把它们合并成一个包，以免多出额外的磁盘寻道之类的开销。而在我们的开发机上，这些文件加载起来仍然很快。我琢磨着：既然我们本来就能加载 4,000 个大文件，那再多加载 10,000 个小文件又何妨？如果加载所有这些文件最终确实慢，我们可以只在实体数据因版本控制更新而发生变化时才走这条路；加载完所有文本文件之后，我们可以另存出一个包含全部实体数据的二进制文件，那个加载起来会快得多，就跟我们支持并发编辑之前的老做法一样。"
+    },
+    {
+      "type": "p",
+      "en": "I tried this and it worked great.  So, now we have a data folder called 'entities', which holds one file per serialized entity.  The Door selected in the editor screenshot is stored in a file named after its entity ID, \"6555.entity_text\", which contains the text you see in the listing above.",
+      "zh": "我试了一下，效果很好。所以现在我们有数据文件夹叫 'entities'，里面每个序列化实体各占一个文件。编辑器截图里选中的那扇 Door 存在以它的实体 ID 命名的文件里，即 \"6555.entity_text\"，内容就是你在上面那份清单里看到的文本。"
+    },
+    {
+      "type": "p",
+      "en": "As mentioned, there are currently 10422 entity files; the text files take up about 8MB of space, whereas the binary file is 1.4MB.  We're not making any effort to compress either of these formats; they are very small compared to the rest of our data.",
+      "zh": "如前所述，目前有 10422 个实体文件；文本文件约占 8MB 空间，而那个二进制文件是 1.4MB。我们没有为这两种格式做任何压缩上的努力；和我们其余的数据比起来，它们都非常小。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/12/dos_box_file_list-512x333.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "h2",
+      "id": "benefits-of-using-individual-files",
+      "zh": "使用单独文件的好处",
+      "en": "Benefits of Using Individual Files"
+    },
+    {
+      "type": "p",
+      "en": "Storing each entity in a separate file solved our problems with merging: both the illegitimate source control confusions as well as the problems due to hand-guided file merging.",
+      "zh": "把每个实体存进单独的文件，解决了我们在合并上的问题：既包括那些不正当的版本控制困惑，也包括手工引导合并文件带来的问题。"
+    },
+    {
+      "type": "p",
+      "en": "The illegitimate conflicts go away because transactions become very clear.  If I delete an entity, and you delete an entity, then we both just issue a file delete command, and it's very easy for the source control system to see that we agree on the action.  Furthermore, if we both delete B but I add C, because the change to C is happening in a completely separate file, there is no way for the system to get confused about what happened.",
+      "zh": "不正当冲突之所以消失，是因为事务变得非常清晰。如果我删掉一个实体，你也删掉一个实体，那我们俩都只是发出了一条删除文件的命令，版本控制系统很容易看出我们在这个操作上是一致的。此外，如果我们都删掉了 B 而我加上了 C，那么对 C 的改动是发生在一个完全独立的文件里的，系统没有任何办法在这一团乱里搞糊涂。"
+    },
+    {
+      "type": "p",
+      "en": "Legitimate conflicts do still happen, as multiple people edit the same entities, but these cases are much easier to handle than they were before.  The usual response is to either revert one whole entity or stomp it with your own.  Because we usually want to treat individual entities atomically -- using either one person's version of that entity or the other's -- individual files are a great match, because now the usual actions we want to perform are top-level source control commands (usually from the TortoiseSVN pulldown menu); before, this wasn't true, and merging a single entity in an atomic way required careful use of the merge tool.  If an entity ever gets corrupted somehow, for whatever reason, we can just revert that one file, knowing the damage is very limited in scope; before we've reverted it, the worst that can happen is that that single entity will not load; it won't prevent the rest of the entities in the world from loading.",
+      "zh": "正当冲突仍然会发生，因为多人会编辑同一个实体，但这些情况处理起来比以前容易得多。通常的应对是：要么把整个实体回退掉，要么用你自己的版本把它盖掉。因为我们通常想以原子方式对待单个实体——要么用这个人那一版的实体，要么用另一个人那一版——单独文件非常契合这一点，因为现在我们要做的常见操作都是一级的版本控制命令（一般从 TortoiseSVN 的下拉菜单里点）；以前并非如此，要以原子方式合并单个实体，得小心翼翼地使用合并工具。如果某个实体因为任何原因坏掉了，我们只要回退那一个文件就行，并且知道损害范围非常有限；在我们回退它之前，最坏的情况也就是那一个实体加载不了；它不会妨碍世界里其余实体的加载。"
+    },
+    {
+      "type": "p",
+      "en": "It would be difficult to overemphasize the robustness gained.  I feel that these sentences do not quite convey the subtle magic; it feels a little like the state change when a material transitions from a liquid to a solid.",
+      "zh": "由此获得的稳健程度，再怎么强调都不为过。我觉得这些句子没能完全传达出那种微妙的魔力；感觉有点像某种材料从液态转变为固态时的那种状态变化。"
+    },
+    {
+      "type": "p",
+      "en": "Sometimes, someone will update their game data in a non-vigilant way; not noticing that a conflict happened, so they won't resolve it; and then they will run the game.  Before, this would have been a disaster; Subversion inserts annotations into text files to try to help humans manually resolve conflicts (this is an unfortunate throwback to programs like SCCS), which would have caused much of the world to fail to parse.  Now, though, the damage from these annotations is constrained to individual entities. It's also easier to detect: if there is a conflict in the file for our Door #6555, then in addition to writing these annotations into 6555.entity_text (making it unparseable by the game), Subversion will also write out files 6555.entity_text.mine and 6555.entity_text.theirs, which contain the two intact but conflicting versions of the file.  The game can detect these very straightforwardly, put an error message on the HUD, and even choose one to load by default.  It is all very clean.",
+      "zh": "有时候，有人会疏于警觉地更新自己的游戏数据；没注意到发生了冲突，于是也就不会去解决它；然后他就去跑游戏。以前这会是场灾难；Subversion 会往文本文件里插入注释，试图帮助人类手工解决冲突（这是对 SCCS 那类程序的不幸返祖），而这会导致世界里很大一部分解析失败。但现在，这些注释造成的损害被限制在单个实体上。检测起来也更容易：如果我们的 Door #6555 那个文件里有冲突，那么除了把这些注释写进 6555.entity_text（让它无法被游戏解析）之外，Subversion 还会写出 6555.entity_text.mine 和 6555.entity_text.theirs 这两个文件，里面是该文件两个完好但相互冲突的版本。游戏可以直接了当地检测到这些，在 HUD 上打一条错误信息，甚至可以默认选一个来加载。一切都很干净。"
+    },
+    {
+      "type": "p",
+      "en": "This is one of those interesting cases where reality-in-practice is starkly different from computer-science-in-theory.  In theory, a directory is just a data structure organizing a bunch of black-box data, and we happen to view this organization in a way that looks like a list of files; we could just do the same thing interior to our own file format, and it would be no big deal.  In practice, due to the way our tools work, these two arrangements are tremendously different.  The individual files just feel solid and reliable to work with, whereas one big structured file is always going to be precarious.",
+      "zh": "这是那种有意思的情形之一：实践中的现实与理论上的计算机科学截然不同。理论上，目录只是一个组织一堆黑箱数据的数据结构，我们恰好用一种看起来像文件列表的方式来查看这种组织；我们完全可以在自己的文件格式内部做同样的事，那也没什么大不了。但在实践中，由于我们这些工具的工作方式，这两种安排天差地别。跟单独的文件打交道就是感觉扎实可靠，而一个大号的结构化文件永远都会岌岌可危。"
+    },
+    {
+      "type": "h2",
+      "id": "startup-procedure",
+      "zh": "启动流程",
+      "en": "Startup Procedure"
+    },
+    {
+      "type": "p",
+      "en": "When the game starts up, we need to load all the entities from disk.  In the simplest case, this is straightforward: we just iterate through every file in the entities directory and load it.  However, as I mentioned, we wanted to keep a binary version of the entities that is preferred by the game if it exists and is up to date; partly, this might help startup speed a little (we don't have to parse all these strings), but mainly, that is the file format and code path we are going to use when the game ships, and we don't want that code to rot in the meantime.  Using it every day is the best way to prevent it from rotting.",
+      "zh": "游戏启动时，我们需要从磁盘加载所有实体。最简单的情况下这很直接：遍历 entities 目录里的每个文件并加载它。不过，正如我提到的，我们想保留一份实体的二进制版本，只要它存在而且是最新的，游戏就优先用它；这一部分原因也许能稍微帮到启动速度（我们不必解析所有这些字符串），但主要还是因为：那才是游戏出货时会用的文件格式和代码路径，我们不希望那段代码在这期间烂掉。每天都用它，是防止它烂掉的最好办法。"
+    },
+    {
+      "type": "p",
+      "en": "So: when the game first starts up, we check for the binary entity package.  If it's not there, we load all the individual entities files, then immediately save out the binary package.  (This binary package is a private, local file; if we were to add it to source control, everyone would always conflict with everyone else.)  But suppose we start up and the binary package is already there (which it usually will be).  We need then to determine if any of the textual entities have changed since the binary package was built.  The most-general way to do this is just by looking at the file timestamps; if we were to rely on some other signal being written to the disk that says \"hey, entity data has changed,\" then we would only be allowed to modify the entity files using sanctioned and customized tools; that would be annoying and would cause all kinds of robustness issues.",
+      "zh": "所以：游戏第一次启动时，我们先去找二进制实体包。如果它不在，就加载所有单独的实体文件，然后立刻存出这个二进制包。（这个二进制包是私有的本地文件；要是把它纳入版本控制，那所有人都会永远和所有人冲突。）但假设我们启动时二进制包已经在那儿了（通常都会在）。这时我们要判断自二进制包构建以来有没有文本实体发生过变化。最通用的做法就是看文件时间戳；如果我们改成依赖某种写到磁盘上的其他信号、说「嘿，实体数据变了」，那我们就只能通过受认可的自定义工具来修改实体文件；那会很烦人，也会造成各种各样的稳健性问题。"
+    },
+    {
+      "type": "p",
+      "en": "In concrete terms: we want to know the timestamp of the newest .entity_text file, inclusive of the directory containing these files (if we just did a Subversion update that only deleted entities, then all the .entity_text timestamps will be old, but the directory timestamp will be new; we want to ensure we properly rebuild the binary file in this case!)  To find the newest timestamp, we just iterate through all the timestamps in a brute-force way:",
+      "zh": "具体来说：我们想知道最新的 .entity_text 文件的时间戳，并且把存放这些文件的目录也算进去（如果我们刚做了一次只删除实体的 Subversion 更新，那么所有 .entity_text 的时间戳都是旧的，但目录的时间戳会是新的；我们要确保在这种情况下正确地重建二进制文件！）要找出最新的时间戳，我们就用蛮力遍历所有时间戳："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool os_get_newest_file_modification_time(char *input_dir_name, Gamelib_Int64 *file_time_return) {\n    //\n    // We include the modification time of the directory as well.\n    //\n\n    char *dir_name = mprintf(\"%s/*\", input_dir_name);\n    Free_On_Return(dir_name);\n    if (strlen(dir_name) >= MY_MAX_PATH - 5) return false;\n\n    //\n    // best_time starts as the time for the directory (if it exists!)\n    //\n    Gamelib_Int64 best_time = 0;\n    bool success = get_file_modification_time(input_dir_name, &best_time);\n    if (!success) {\n        Log::print(\"Unable to get modification time for directory '%s'!\\n\", input_dir_name);\n    }\n\n    //\n    // Now consider the file timestamps.\n    //\n    WIN32_FIND_DATA find_data;\n    HANDLE handle = FindFirstFile(dir_name, &find_data);\n    if (handle == INVALID_HANDLE_VALUE) return false;\n\n    while (1) {\n        if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {\n        } else {\n            Gamelib_Int64 file_time = to64(find_data.ftLastWriteTime);\n            if (file_time > best_time) best_time = file_time;\n        }\n\n        BOOL success = FindNextFile(handle, &find_data);\n        if (!success) break;\n    }\n\n    FindClose(handle);\n\n    if (file_time_return) *file_time_return = best_time;\n\n    return true;\n}\n\nbool get_file_modification_time(const char *name, Gamelib_Int64 *result_return) {\n    HANDLE h = CreateFile(name, 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,\n                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS,\n                          NULL);\n    if (h == INVALID_HANDLE_VALUE) return false;\n\n    FILETIME write_time;\n    GetFileTime(h, NULL, NULL, &write_time);\n    CloseHandle(h);\n\n    if (result_return) *result_return = to64(write_time);\n    return true;\n}"
+    },
+    {
+      "type": "p",
+      "en": "You'll notice that this is Windows-specific code, but we don't have to worry about porting it, because we only run the world editor on Windows.  Fortunately, in Windows, the file timestamp is right there in the directory data, so we don't have to open each file.  (At least in NTFS this is true, rather than being an API illusion; the timestamps are stored in the Master File Table [MFT].)",
+      "zh": "你会注意到这是 Windows 专有的代码，但我们不必操心移植，因为我们的世界编辑器只在 Windows 上跑。幸运的是，在 Windows 里文件时间戳就在目录数据中，所以我们不必打开每一个文件。（至少在 NTFS 上这是真的，而不是 API 制造的假象；时间戳存在主文件表［MFT］里。）"
+    },
+    {
+      "type": "p",
+      "en": "What's the performance like?  I typically run the game on two different machines: a high-performance Tower PC (CPU: Intel Core i7-970, hard drive: OCZ Vertex 3 SSD, RAM: 12GB) and a gaming Laptop (CPU: Intel Core i7-2820QM, hard drive: Intel SSD 500 [SSDSC2MH250A2], RAM: 12GB).",
+      "zh": "性能怎么样？我一般在两台不同的机器上跑这个游戏：一台高性能台式机（CPU：Intel Core i7-970，硬盘：OCZ Vertex 3 SSD，内存：12GB）和一台游戏笔记本（CPU：Intel Core i7-2820QM，硬盘：Intel SSD 500 [SSDSC2MH250A2]，内存：12GB）。"
+    },
+    {
+      "type": "p",
+      "en": "The time spent in os_get_newest_file_modification_time is:  Tower:**.0095 sec, +/- .0015 sec**; Laptop: **.039 sec, +/- .005 sec**.  (Timings were computed by averaging six trials, after a discarded warm-up run.)  This is definitely one of those cases where I'm glad I didn't prematurely optimize, as I would have expected this to be much slower!",
+      "zh": "花在 os_get_newest_file_modification_time 里的时间是：台式机：**.0095 秒，± .0015 秒**；笔记本：**.039 秒，± .005 秒**。（计时是把一次预热运行丢弃后，对六次试验取平均得到的。）这绝对是那种「幸好我没有过早优化」的情形，因为我本以为这会慢得多！"
+    },
+    {
+      "type": "p",
+      "en": "We typically install SSDs in all our work machines, but even when people have home machines that use spinning-platter hard drives, startup times are not much slower (likely due to the MFT data staying in cache).",
+      "zh": "我们的工作机通常都装 SSD，但即便有人家里的机器用的是传统机械硬盘，启动时间也不会慢多少（大概是因为 MFT 数据一直留在缓存里）。"
+    },
+    {
+      "type": "p",
+      "en": "If for a large enough number of entities this timestamp-gathering process becomes too slow, we can always write some code to read the timestamps out of the MFT directly, avoiding all the API call overhead, as in [this forum posting](http://www.autoitscript.com/forum/topic/94269-mft-access-reading-parsing-the-master-file-table-on-ntfs-filesystems/).  To date we've had no need to do this.",
+      "zh": "如果实体数量足够多、导致这个收集时间戳的过程变得太慢，我们随时可以写点代码直接从 MFT 里读时间戳，避开所有 API 调用的开销，就像[这个论坛帖子](http://www.autoitscript.com/forum/topic/94269-mft-access-reading-parsing-the-master-file-table-on-ntfs-filesystems/)里那样。到目前为止我们还没这个需要。"
+    },
+    {
+      "type": "p",
+      "en": "Some people have reported performance problems when Windows has more than 100,000 files in one directory, but this can be worked around: just make 10 directories, with IDs ending with each digit from 0-9 grouped in common directories.  (Why use the least-significant \"ending\" digit, rather than the most-significant \"starting\" digit, which might be the impulsive choice?  Because if you do it that way, [Benford's Law](http://en.wikipedia.org/wiki/Benford) says your entities are likely to be unevenly distributed across the directories.  Why not just hash them into a folder?  Because it's useful to be able to manually navigate to the entity you want, without searching.  (However, partitioning by least-significant digit may be inconvenient if you want to manually edit a sequential range of entities for some reason, because that range will span many directories.  If this is an important use case, perhaps there's a good compromise like using the tens digit or hundreds digit -- though I have the itching feeling that a clearly superior solution would exist.))",
+      "zh": "有人报告过当 Windows 的单个目录里文件超过 100,000 个时会有性能问题，但这可以绕开：干脆建 10 个目录，把 ID 以 0-9 各个数字结尾的分到同一个目录里。（为什么用最低位的「结尾」数字，而不用最高位的「开头」数字呢——后者可能才是直觉选择？因为如果你那样做，[本福特定律](http://en.wikipedia.org/wiki/Benford)说你的实体很可能会在各个目录之间分布不均。那为什么不干脆把它们哈希到某个文件夹里？因为能够手工导航到你要的那个实体、而不用搜索，是很有用的。（不过，如果你想因为某种原因手工编辑一段连续的实体，按最低位数字分区可能就不方便了，因为那段范围会跨越很多目录。如果这是个重要的用例，也许有个不错的折中，比如用十位或百位数字——虽然我总觉得应该存在一个明显更优的解法。））"
+    },
+    {
+      "type": "p",
+      "en": "As things stand in terms of editing the game world, we are probably not yet at the peak entity count, but there's unlikely to be more than 3x the number of entities we have now.  Given how low the timing measurements are now, it's clear that performance will not be a factor in the ability to use this system up until shipping the game.",
+      "zh": "就编辑游戏世界这件事目前的状况而言，我们大概还没到实体数量的峰值，但也不太可能超过现在的三倍。鉴于现在的计时数据这么低，很清楚：直到游戏出货为止，性能都不会成为能不能用这套系统的因素。"
+    },
+    {
+      "type": "h2",
+      "id": "partitioning-the-id-space",
+      "zh": "切分 ID 空间",
+      "en": "Partitioning the ID Space"
+    },
+    {
+      "type": "p",
+      "en": "As I mentioned, in our engine, entity IDs are integer serial numbers.  We like this because they are easy to type (we have to type them in the editor sometimes) and at runtime, looking up an entity compiles to a fast indexing of a flat array, with a bounds check.",
+      "zh": "正如我提到的，在我们的引擎里，实体 ID 是整数序列号。我们喜欢这样，因为它们好输入（有时候我们得在编辑器里敲它们），而且运行期查找一个实体会编译成对扁平数组的一次快速索引，外加一次边界检查。"
+    },
+    {
+      "type": "p",
+      "en": "This introduces another problem for us to deal with in world editing, though: we need to ensure that two users, who are both creating new entities, do not both try to use the same number.  This would result in both users attempting to add completely incompatible .entity_text files with the same name.",
+      "zh": "不过，这在编辑世界这件事上又给我们引出了另一个要处理的问题：我们得确保两个都在创建新实体的用户不会同时想用同一个号码。否则两个用户就会试图添加同名、却完全互不兼容的 .entity_text 文件。"
+    },
+    {
+      "type": "p",
+      "en": "One obvious and bulletproof solution is to have the editor connect to the network and atomically grab an ID from a central server each time one is needed.  But again, we don't want to require users to be on the network in order to edit.",
+      "zh": "一个显而易见且万无一失的办法是让编辑器联网，每次需要 ID 时就以原子方式从中心服务器取一个。但再说一次，我们不希望把「联网」变成编辑的前提条件。"
+    },
+    {
+      "type": "p",
+      "en": "My solution was a somewhat lazy one: we allocate a range of IDs to each computer that edits the world.  These are kept in a file called \"id_ranges\"; at startup time, the game queries its machine's MAC address, then looks in the file for the corresponding ID range; if not found, it claims a new range and adds a new line to the file:",
+      "zh": "我的解决办法有点偷懒：我们给每一台会编辑世界的电脑分配一个 ID 区间。这些记录保存在一个叫 \"id_ranges\" 的文件里；启动时，游戏查询本机的 MAC 地址，然后在文件里找对应的 ID 区间；如果找不到，它就占下一个新区间，并往文件里加一行："
+    },
+    {
+      "type": "code",
+      "code": " 6000 10000 BC-AE-C5-66-28-E9 #Jonathan_office\n10000 13000 BC-AE-C5-66-28-48 #Ignacio_office\n13000 16000 00-1C-7B-75-00-D8 #Jonathan_laptop\n16000 19000 BC-AE-C5-66-28-93 #Shannon_office\n19000 22000 BC-AE-C5-56-42-51 #Jonathan_home\n22000 25000 C0-3F-0E-AA-F3-F2 #icastano_home\n25000 28000 F4-6D-04-1F-D4-36 #Shannon_home\n28000 31000 Baker #Baker\n31000 34000 BC-AE-C5-56-43-FE #Misc_PC_office\n34000 37000 00-E0-81-B0-7A-A9 #eaa\n37000 40000 00-21-00-A0-8F-E3 #Orsi\n40000 43000 64-99-5D-FD-97-64 #Jonathan\n43000 46000 08-86-3B-42-0B-8D #Misc\n46000 49000 90-E6-BA-88-9B-B7 #andrewlackey\n49000 52000 48-5B-39-8C-80-5E #eaa\n52000 55000 50-E5-49-55-64-BF #facaelectrica\n55000 58000 00-FF-D4-C7-15-A3 #facaelectrica\n58000 70000 Clusters #Clusters\n71000 75000 Overflow #Overflow\n75000 78000 F4-6D-04-1F-CC-77 #Nacho\n78000 81000 BC-AE-C5-74-7B-A3 #Thekla"
+    },
+    {
+      "type": "p",
+      "en": "On each line, everything after the # is just a comment telling us in a human-readable way whose machine is responsible for that range (it defaults to the Windows username, but we can hand-edit that if we want).",
+      "zh": "每一行里，# 之后的所有内容都只是注释，用人类可读的方式告诉我们那个区间归谁的机器管（默认取 Windows 用户名，但我们想的话可以手工改）。"
+    },
+    {
+      "type": "p",
+      "en": "(\"Baker\" is for an automated process, so I made a special case that uses the string \"Baker\" instead of the MAC address, just to minimize the potential for the build machine to claim a new range without us noticing and failing to check that in; see below.  \"Clusters\" is for an editor operation that is also run in an automated process, but which can also be done manually by anyone; cluster generation removes all previous clusters from the world, so if clusters didn't have their own space, you would end up frequently deleting entities in other peoples' ranges; this seems like it might be a bad idea, though maybe, in reality, it's fine and there would be no problem.  But as it stands we know that anything in the Clusters range is completely disposable, so if a conflict ever arises there we can just revert or delete those entities without a second thought.)",
+      "zh": "（\"Baker\" 是给一个自动化流程用的，所以我做了一个特例：用字符串 \"Baker\" 而不是 MAC 地址，只是为了尽量降低「构建机悄悄占了一个新区间、而我们没注意到、也没把它提交进去」的可能性；详见下文。\"Clusters\" 是给一项编辑器操作用的，那项操作同样在自动化流程里跑，但任何人也能手工执行；生成 cluster 会把世界里此前所有的 cluster 都删掉，所以如果 cluster 没有自己的空间，你就会频繁删掉别人区间里的实体；这看起来可能不是个好主意，虽然也许实际上没事、不会出问题。但照现在的样子，我们知道 Clusters 区间里的任何东西都完全可以扔掉，所以一旦那里出现冲突，我们可以毫不犹豫地回退或删掉那些实体。）"
+    },
+    {
+      "type": "p",
+      "en": "This ID space is naturally going to have a lot of big holes in it, but before we ship we will renumber the entities so that we can pack them tightly into an array.  In the meantime, it is sparse but not pathologically so; we can still get away with using a linear array to index the entities, though it will use more memory now than at ship.",
+      "zh": "这个 ID 空间自然会有很多大洞，但在出货之前我们会把实体重新编号，好把它们紧凑地塞进一个数组。在那之前，它是稀疏的，但还没稀疏到病态的程度；我们仍然可以用一个线性数组来索引实体，只不过现在比出货时会多用一些内存。"
+    },
+    {
+      "type": "p",
+      "en": "This id_ranges file is a bit of a lazy solution, and it causes a few annoyances.  The most annoying thing is that, any time someone runs the editor for the first time on a new machine, they need to immediately check in the id_ranges file to publish their allocation to the rest of the team; and they need to coordinate so that nobody else is trying to do the same thing.  Because the editor just allocates the next 3000 IDs starting with the highest ID in the file, if two people try to allocate IDs simultaneously, they will both claim the same range.  We could solve this by requiring the editor to hold a source control lock to modify the id_ranges file, but I just haven't gotten around to it, because this hasn't been a big-enough problem.  Furthermore, we could have the editor automatically commit the changes to the file; but currently, nothing is ever published to the rest of the team automatically -- publishing always requires manual action, and this seems like it may be a good thing to preserve.",
+      "zh": "这个 id_ranges 文件有点偷懒，也带来了一些烦人之处。最烦的是：每当有人在新的机器上第一次运行编辑器，他们就得立刻把 id_ranges 文件提交上去，把自己占的区间公布给团队其他人；而且他们得协调好，确保没有别人正在做同样的事。因为编辑器只是在文件里最大的 ID 之上再分配 3000 个 ID，如果两个人同时想分配，他们就会占下同一个区间。我们可以通过要求编辑器在修改 id_ranges 文件时持有版本控制锁来解决这个问题，但我一直没顾上去做，因为这问题还不够大。此外，我们也可以让编辑器自动提交对这个文件的改动；但目前，任何东西都不会自动发布给团队其他人——发布总是需要手工操作，而这似乎可能是件值得保留的好事。"
+    },
+    {
+      "type": "p",
+      "en": "But, not having implemented these solutions, we have been taken by surprise a couple of times by interactions with a second lazy choice of this system: the fact that we file only records one MAC address per computer.",
+      "zh": "但是，由于没有实现这些解决方案，我们已经被这套系统的第二个偷懒选择连带坑到过几次：那就是我们的文件对每台电脑只记录一个 MAC 地址。"
+    },
+    {
+      "type": "p",
+      "en": "Most modern computers have multiple MAC addresses (for example: if your computer has a Wifi adapter and two Ethernet ports, it's probably got at least 3 MAC addresses).  My lazy code just asks Windows to iterate the MAC addresses and reports the first one for use in the file.  Sometimes, though, the reported address will change, which causes someone's machine to modify the id_ranges file when they didn't expect it; we had this problem once when an audio contractor, who works offsite, installed some VPN software.  If that user is not vigilant about source control (which non-technical people often aren't), it can be a while before this problem is discovered; meanwhile, that user has been creating entities that may conflict with someone else's.",
+      "zh": "大多数现代电脑都有多个 MAC 地址（举例来说：如果你的电脑有一块无线网卡和两个以太网口，那它很可能至少有 3 个 MAC 地址）。我那偷懒的代码只是让 Windows 枚举这些 MAC 地址，然后报出第一个来写进文件。可是有时候，报出来的地址会变，于是某人的机器就在他意料之外地修改了 id_ranges 文件；我们碰到过一次这个问题，起因是一位在外地工作的音频外包人员装了些 VPN 软件。如果那个用户对版本控制不够警觉（非技术人员常常如此），这个问题可能过一阵子才会被发现；与此同时，那个用户一直在创建可能和别人冲突的实体。"
+    },
+    {
+      "type": "p",
+      "en": "Most or all occurrences of this problem could be solved by recording all of the user's MAC addresses in the file, instead of one; I just haven't done so.",
+      "zh": "只要在文件里记录用户的所有 MAC 地址（而不是一个），这个问题的大部分、甚至全部出现情形都能解决；我只是还没这么做。"
+    },
+    {
+      "type": "p",
+      "en": "If we weren't using integer serial numbers, we wouldn't really need id_ranges at all.  For example, if we looked up entities at runtime by hashing unique string identifiers, then we would only need to ensure that each user has a unique string prefix.  We take a slight overkill approach, where each entity ID is a somewhat long string starting with the user's MAC address; or we could even generate a Windows GUID for each entity.  MAC addresses are 48 bits wide.  If you concatenate the MAC address with a 4-byte integer, that's just 10 bytes per entity ID, which isn't much (we currently use 4, already!).  Of course encoding these as strings and storing them in a hash table is going to require more space, but it isn't ridiculous.  Looking things up in a hash table all the time is slower than indexing a flat array, so we are sticking with the way we do things for now; but this would solve some problems and simplify the overall system, so it sounds like the kind of decision I would change my mind on later, as computers get even faster than they currently are.  So if you implement a scheme like this, you can ignore everything I said about id_ranges.  The biggest problem becomes making it easy to type longer entity IDs into the in-game editor.",
+      "zh": "如果我们不用整数序列号，那就根本不需要 id_ranges 了。举例来说，假如我们在运行期通过对唯一字符串标识符做哈希来查找实体，那我们只需要保证每个用户有一个唯一的字符串前缀。我们的做法有点过头：每个实体 ID 是一个以用户 MAC 地址开头的、稍长的字符串；甚至可以给每个实体生成一个 Windows GUID。MAC 地址是 48 位宽。把 MAC 地址和一个 4 字节整数拼起来，每个实体 ID 也就 10 字节，并不多（我们现在就已经用 4 字节了！）。当然，把它们编码成字符串、存进哈希表会占更多空间，但这不算离谱。一直往哈希表里查找比索引一个扁平数组要慢，所以我们现在还是沿用原来的做法；但那样做能解决一些问题、也能简化整个系统，所以这听起来像是那种我以后会改主意的决定——等电脑比现在更快之后。所以，如果你实现了这样一套方案，我讲的关于 id_ranges 的一切你都可以无视。届时最大的问题就变成：怎么让更长实体 ID 在游戏内编辑器里好输入。"
+    },
+    {
+      "type": "h2",
+      "id": "logistical-issues-in-editor-and-file-format-design",
+      "zh": "编辑器与文件格式设计中的后勤问题",
+      "en": "Logistical Issues in Editor and File Format Design"
+    },
+    {
+      "type": "p",
+      "en": "In closing, I want to discuss changes we made to the editor and file format, in order to make them compatible with the paradigm of concurrent editing.",
+      "zh": "最后，我想谈谈为了让编辑器和文件格式与并发编辑这个范式兼容，我们所做的一些改动。"
+    },
+    {
+      "type": "h2",
+      "id": "arrays",
+      "zh": "数组",
+      "en": "Arrays"
+    },
+    {
+      "type": "p",
+      "en": "Just about every game wants to serialize arrays into files.  When transitioning from a binary format, the most natural thing for a performance-minded programmer is to write the array length out first, then write each member of the array.  That way, when reading the file back, we know how much memory to allocate, and we avoid all the slow things one has to do when reading an array of unknown length.  However, encoding arrays in this way results in a textual format that always conflicts, because even when people are making compatible edits to an array, nobody is going to agree on what that array count should be; also, it becomes impossible to manually edit conflicts without typing the count in: if two people add elements to an array, the merged array will contain all the items, but neither version of the file will contain the correct count!",
+      "zh": "几乎每个游戏都想把数组序列化进文件。从二进制格式转过来时，在意性能的程序员最自然的做法是先写出数组长度，再写数组的每个成员。这样在读回文件时，我们就知道该分配多少内存，也避开了读取未知长度数组时必须做的那些慢操作。可是用这种方式编码数组，得到的文本格式会永远冲突，因为即便人们做的编辑对数组来说是兼容的，也没有人会就「数组计数应该是多少」达成一致；而且，如果不把计数敲进去，就根本没办法手工编辑冲突：如果两个人往一个数组里加了元素，合并后的数组会包含所有条目，但两个版本的文件里都不包含正确的计数！"
+    },
+    {
+      "type": "p",
+      "en": "To solve this, of course, we go to the common text-file convention of using a syntactic designation that an array is now over, rather than pre-declaring how many elements there are.  This is obvious, but I mention it here because it is a relatively universal concern.",
+      "zh": "要解决这个问题，我们当然就采用文本文件常见的约定：用一个语法上的标记来表示「数组到此结束」，而不是预先声明有多少个元素。这是显而易见的，我在这里提它是因为这是个相当普遍的关切。"
+    },
+    {
+      "type": "h2",
+      "id": "automatic-changes",
+      "zh": "自动改动",
+      "en": "Automatic Changes"
+    },
+    {
+      "type": "p",
+      "en": "You will also want to minimize or work around cases where the editor automatically changes entity properties without user intervention, because often these will lead to conflicts.  A simple example from our game world: the sun is represented by a few entities that are instantiated in the world, a glowing disc and a couple of particle systems.  Every frame, the gameplay code positions these entities with respect to the current camera transform so that, when the player moves around the world, the sun will seem to be infinitely far away.  This happens in the editor too, because when editing we want to see the world exactly the way it will look in-game.  So, as soon as we enabled concurrent editing, everyone was checking in different coordinates for the sun (depending on where the camera happened to be when they saved!) and this caused a lot of conflicts.  My first solution was to add a hack that zeroes the position of sun entities when saving, but upon loading, this interacted badly with the way particle systems interpolate their positions.  Instead, I added an entity flag that signifies that an entity's pose doesn't matter, with respect to thinking about whether it has changed or not, so we will only modify the sun's .entity_text files if some more-important properties are modified.  (This article is already long, but I'll say that in general, we detect differences between an entity's current state and its state when it was loaded, and we only write out .entity_text files when properties have changed.)",
+      "zh": "你还会想要尽量减少、或者绕开「编辑器在没有用户介入的情况下自动改动实体属性」的情况，因为这类情况往往会引发冲突。我们游戏世界里有个简单的例子：太阳是由几个在世界里实例化的实体表示的——一个发光的圆盘和两套粒子系统。每一帧，玩法代码都根据当前相机变换来摆放这些实体，这样当玩家在世界上走动时，太阳看起来就像是无限远。这件事在编辑器里也会发生，因为编辑时我们希望看到的正是它在游戏里的样子。所以，我们刚一启用并发编辑，所有人就都在提交各不相同的太阳坐标（取决于他们保存时相机恰好在哪里！），这造成了很多冲突。我的第一个解决办法是加一个 hack：保存时把太阳实体的位置清零，但加载时这和粒子系统对其位置做插值的方式产生严重冲突。于是我改成一个实体标志位，用来表示「在判断这个实体是否发生变化时，不必在意它的姿态」，这样只有当某些更要紧的属性被修改时，我们才会去改太阳的 .entity_text 文件。（这篇文章已经很长了，但我还是说一下：总的来说，我们会检测实体的当前状态与它被加载时的状态之间的差异，只有当属性确实变了，才写出 .entity_text 文件。）"
+    },
+    {
+      "type": "h2",
+      "id": "relative-transforms",
+      "zh": "相对变换",
+      "en": "Relative Transforms"
+    },
+    {
+      "type": "p",
+      "en": "In our engine, all entities have 'position' and 'orientation' properties, which always represent the entity's frame in worldspace, flat and non-hierarchically.  If we want an entity to be attached to another entity's transform, we set the properties 'mount_parent_id', 'mount_position', and 'mount_orientation' (you can see all these properties in the listing for Door #6555 above); once per frame, the game engine computes the entity's new worldspace transform based on its mount information, properly handling long dependency chains.  Once we started using textual entity files, we found that entities' worldspace coordinates would often differ by an LSB or two, even when their parents had not moved (differences especially happening, for example, between Debug and Release builds of the game).  Even without concurrent editing, it's good to clean this up as a matter of basic hygiene, because otherwise you're checking in spurious changes all the time, increasing load on the source control system and making it harder for a human to see useful information in the change list.  I chose to solve this problem by making the mount-update code more complex: it detects whether an entity has moved of its own accord, and only updates child entities' worldspace positions if the parent entity really moved (or if the child entity really moved!).",
+      "zh": "在我们的引擎里，所有实体都有 'position' 和 'orientation' 属性，它们始终表示该实体在世界空间中的坐标系，是平铺的、非层级的。如果我们想把一个实体附着到另一个实体的变换上，就设置 'mount_parent_id'、'mount_position' 和 'mount_orientation' 这几个属性（你可以在上面 Door #6555 的清单里看到它们）；每一帧一次，游戏引擎会根据挂载信息算出该实体新的世界空间变换，并妥善处理很长的依赖链。我们一开始使用文本实体文件就发现，实体的世界空间坐标经常会差上一两个 LSB，即便它们的父实体并没有移动（这种差异尤其会出现在比如游戏的 Debug 版和 Release 版之间）。即便没有并发编辑，把这件事清理掉也是良好的基本卫生习惯，否则你就不停地提交虚假改动，加重版本控制系统的负担，也让人更难在改动列表里看出有用的信息。我选择这样解决：把挂载更新代码变得更复杂——它检测一个实体是否因自身原因移动过，只有当父实体真的移动了（或者子实体真的移动了！），才更新子实体的世界空间位置。"
+    },
+    {
+      "type": "h2",
+      "id": "terrain-editing",
+      "zh": "地形编辑",
+      "en": "Terrain Editing"
+    },
+    {
+      "type": "p",
+      "en": "There is one piece of editing workflow that used to make sense before concurrent editing, but which now does not.  We have a terrain system wherein we can move control points around in worldspace, then select a terrain entity, which has a height-field mesh, and press a key to recompute that height field with respect to the new control points.  I originally made this recomputation happen only on manually-selected entities, rather than automatically on the entire world, for UI smoothness purposes: the recomputation takes some time.  But when you only recompute one block of terrain and not its neighbors, you get discontinuities in the terrain; the longer things go on, the more discontinuities you get.  Once in a while I would fix this by selecting all terrain entities in the world, recomputing them simultaneously.",
+      "zh": "有一段编辑工作流在并发编辑之前是合理的，但现在不再合理了。我们有一套地形系统，可以在世界空间里挪动控制点，然后选中一个带有高度场网格的地形实体，按一个键，就按新的控制点重算那个高度场。我最初把这个重算做成只对手工选中的实体生效，而不是自动作用于整个世界，这是为了 UI 的流畅：重算要花一些时间。但当你只重算一块地形、而不算它的邻居时，地形里就会出现不连续；拖得越久，不连续就越多。我偶尔会这样修：选中世界里的所有地形实体，一次性同时重算它们。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/12/discontinuity-512x322.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A terrain discontinuity",
+      "zh": "一处地形不连续"
+    },
+    {
+      "type": "p",
+      "en": "The catch is that when terrain changes, it affects other entities.  We re-plant grass, so that the grass matches the new elevations; we change the positions of trees and rocks and other objects that are rooted to the terrain at a predetermined height.  Whenever you recompute some terrain, we collect all grass/trees/rocks within a conservative bounding radius, as these are all the things that might possibly change.  When dealing with small groups of terrain blocks, this already is a bit of a recipe for trouble (it is not too hard to overlap someone else's edits this way); but it also means that if I recompute the entire terrain to eliminate those discontinuities, I am in turn editing all grass, trees, and rocks in the world, and will inevitably conflict with anyone else who has moved any of them. For now, we simply shy away from this kind of global operation; when you get a conflict in some entity that you probably didn't care about, like grass, it is easy just to accept the remote version of the file.  Long-term, I expect some kind of heavier-weight solution would have to happen here, though I hope it does not involve much locking.",
+      "zh": "麻烦在于地形一变，就会影响其他实体。我们要重新种一遍草，让草与新高程匹配；还要改动树、石头以及其他那些以预定高度扎根在地形上的物体的位置。每当你重算某片地形，我们就会在一个保守的包围半径内收集所有的草／树／石头，因为这些就是有可能变化的东西。处理小规模的地形块时，这已经有点像是在给麻烦写食谱了（用这种方式压到别人的编辑上并不难）；但它还意味着：如果我为了消掉那些不连续而重算整片地形，我就等于在编辑世界里所有的草、树和石头，必然会和任何挪动过其中任何一个东西的人冲突。眼下我们干脆避开这类全局操作；当你碰上一个你大概并不在意的实体（比如草）出了冲突时，直接接受远端的那个文件版本就行。长期来看，我预计这里终究得有个更重的解决方案，虽然我希望它不要牵扯太多加锁。"
+    },
+    {
+      "type": "h2",
+      "id": "issuing-source-control-commands",
+      "zh": "发出版本控制命令",
+      "en": "Issuing Source Control Commands"
+    },
+    {
+      "type": "p",
+      "en": "Our editor automatically issues source control commands when entities are created or destroyed, because it would be extremely tedious and error-prone to expect users to do this.  Initially we had some problems with source control commands unexpectedly failing, which quickly leads to chaos.  After some work, issuing source control commands seems to work with full consistency, but we are still a little wary of it; so we don't, for example, want to issue the commands via a background process, adding more complexity to the system.  The problem with this is that svn commands are a bit slow.  Sometimes when I have been editing the world for a while, it can take 15 to 30 seconds to save my changes, which would have happened instantaneously without the svn commands.",
+      "zh": "我们的编辑器在实体被创建或销毁时会自动发出版本控制命令，因为指望用户自己去做这件事既极其烦人又容易出错。最初我们碰到过版本控制命令意外失败的一些问题，而那很快就会导致混乱。经过一番功夫，发出版本控制命令似乎已经能完全一致地工作了，但我们仍然对它有点戒备；所以我们比如说不愿意通过后台进程去发这些命令，那会给系统增加更多复杂度。这么做的问题是 svn 命令有点慢。有时候我编辑世界编辑了一阵子之后，保存改动要花 15 到 30 秒，而不带 svn 命令的话这本来是瞬间完成的。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusion",
+      "zh": "结论",
+      "en": "Conclusion"
+    },
+    {
+      "type": "p",
+      "en": "We've put together a system that lets us concurrently edit an open world, using source control to manage our world edits.  It works well enough for us to ship the game, so I am happy with it.  If the scheme ever fails in some way, or requires heavy modification, I will post an update!",
+      "zh": "我们拼出了一套系统，让我们能并发编辑一个开放世界，并用版本控制来管理我们对世界的编辑。它好用得足以让我们把游戏做出来出货，所以我对它挺满意。如果这套方案哪天在某个方面失灵，或者需要大改，我会发一篇更新！"
+    }
+  ]
+}

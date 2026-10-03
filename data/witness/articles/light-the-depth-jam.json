@@ -1,0 +1,341 @@
+{
+  "id": "light-the-depth-jam",
+  "title": {
+    "zh": "Depth Jam",
+    "en": "The Depth Jam"
+  },
+  "subtitle": {
+    "en": "A four-day design retreat for four designer-programmers, each bringing a game with a deep problem to solve — a reaction to the shortcomings of conferences and game jams.",
+    "zh": "一场为期四天、四名设计者兼程序员的闭门设计聚会，每人带一个有着深层待解问题的游戏来——这是对会议和 game jam 这些活动种种不足的回应。"
+  },
+  "translator": {
+    "note": "`Depth Jam` 是这场活动的专名，保留英文；`game jam` 作为活动类型保留英文（`Indie Game Jam`／`IGJ` 也保留）。语气按 Casey/Blow 那种直率的博客腔处理，原文里的刻薄话与自嘲都照译。人名与游戏名保留英文，游戏名在中文里按全站口径加书名号（《Miegakure》《Storyteller》《Spy Party》《The Witness》）。`coccoon` 是原文的拼写错误，译文不做更正。插图行按全站口径归一化为 `![图](原图URL)`（丢掉缩略图与外层链接），正文里紧跟其后的图注行按原文顺序保留为独立段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/DSCN0920-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Last week, I got together with three other designers for a four-day intensive design retreat known as the Depth Jam.  The other attendees were: [Chris Hecker of Spy Party](http://chrishecker.com), [Marc ten Bosch of Miegakure](http://marctenbosch.com/), and [Daniel Benmergui of Storyteller](http://www.ludomancy.com/blog/).",
+      "zh": "上周，我和另外三位设计者聚在一起，参加了为期四天的密集设计聚会，名叫 Depth Jam。另外三位参加者是：[《Spy Party》的 Chris Hecker](http://chrishecker.com)、[《Miegakure》的 Marc ten Bosch](http://marctenbosch.com/)，以及 [《Storyteller》的 Daniel Benmergui](http://www.ludomancy.com/blog/)。"
+    },
+    {
+      "type": "p",
+      "en": "This event was an experiment.  Chris and I had been discussing the idea for a while, but it took us a couple of years to get around to it.  One of my personal goals in setting up this event was to find a new way to stimulate my professional development, because the old ways were not cutting it any more.",
+      "zh": "这次活动是一次实验。Chris 和我讨论这个想法已经有一阵子了，但拖了两年才真正办起来。我筹办这次活动的个人目标之一，是找到一种新办法来刺激自己的职业成长，因为老办法已经不管用了。"
+    },
+    {
+      "type": "p",
+      "en": "The Depth Jam was designed in reaction to shortcomings of other game-related events.  *In order to explain the design choices behind the Depth Jam, I will speak critically of these other events, in order to highlight the problems that the Depth Jam is meant to address.*  If you are a fan of these events, organize some of them, or otherwise identify closely with them, then this will be uncomfortable.  The best I can do here is to assure you that this isn't attack-style negativity; it is criticism that comes from years of carefully considering these situations and thinking hard about how to make things better.",
+      "zh": "Depth Jam 的设计是对其他游戏相关活动的种种不足的回应。*为了说明 Depth Jam 背后的设计取舍，我会批判地谈论这些活动，以便凸显 Depth Jam 想要解决的问题。* 如果你是这些活动的粉丝、是它们的组织者，或者在其他方面与它们认同很深，那这些内容会让你不舒服。我在这里能做的，也就是向你保证这不是攻击式的负能量；这些批评来自多年来对这些情形的仔细考量，以及为「怎么把它做得更好」花的苦思。"
+    },
+    {
+      "type": "h2",
+      "id": "conferences",
+      "zh": "会议",
+      "en": "Conferences"
+    },
+    {
+      "type": "p",
+      "en": "When I first started working in video games I learned a lot from conferences and lectures.  The few days I spent at the Computer Game Developers' Conference in 1996 were eye-opening, even though I wasn't comfortable enough as a game developer to know how to make effective use of that time.  As years go by and we get better at what we do, a natural shift occurs: in the beginning, we are mostly deriving benefit from other attendees and presenters; later on, we are mostly providing benefit to other attendees, getting little out of it ourselves.  I have been to the Game Developers Conference 17 times now.  I find that I still do get something from attending, but it really takes a lot of work and there are very few people I can expect to learn from.",
+      "zh": "刚入行做电子游戏时，我从会议和讲座里学到了很多。1996 年我在 Computer Game Developers' Conference 上度过的那几天让我大开眼界，尽管那时我作为游戏开发者还太嫩，不知道该怎么有效利用那段时间。随着年岁过去、我们越做越好，一个自然的转变会发生：一开始，我们主要是从其他参会者和讲者那里获益；到后来，我们主要是在向其他参会者提供价值，自己却所得甚少。到现在我已经去过 17 次 Game Developers Conference 了。我发现参会仍然能有所收获，但那真的很费功夫，而且能让我指望学到东西的人寥寥无几。"
+    },
+    {
+      "type": "p",
+      "en": "All the smart programmers I know complain about conferences and consider them basically useless (except for the smart programmers who are also on conference advisory boards).  I certainly developed this kind of frustrated \"there's nothing good here to see\" attitude in the early 2000s, but to mitigate this situation I shifted into being much more of a conference presenter than an attendee.  A lot of creative energy went into planning new conference sessions and making them good.  This helped extend the useful life of conferences, because I was learning a great deal by running sessions.  After about eight years, though, this ran its course and I had gotten the bulk of what I was going to get from this arrangement.",
+      "zh": "我认识的聪明程序员都在抱怨会议，认为它们基本没用（除了那些同时在会议顾问委员会里的聪明程序员）。我在 2000 年代初当然也养成了这种「这里没什么好看」的沮丧态度，但为了缓解这种状况，我转变成了远多于参会者的讲者。我投入了大量创作精力去策划新的会议场次、把它们做好。这延长了会议对我的有效期，因为我从主持场次里学到了非常多。不过大约八年之后，这条路也走到了尽头，我从这套安排里能得到的东西大体上都拿到了。"
+    },
+    {
+      "type": "h2",
+      "id": "game-jams",
+      "zh": "Game Jam",
+      "en": "Game Jams"
+    },
+    {
+      "type": "p",
+      "en": "In a typical game jam, developers gather for 2-4 days to do a working sprint, the goal being to produce a finished game entirely during the event.  I was lucky enough to be around for the [Indie Game Jam](http://www.indiegamejam.com/), which probably started the game jam trend (though I was often too busy working on last-minute GDC lectures to make jam games, sadly!)",
+      "zh": "在典型的 game jam 上，开发者聚在一起做 2 到 4 天的冲刺，目标是在活动期间完整做出一个游戏。我很幸运地赶上了 [Indie Game Jam](http://www.indiegamejam.com/)，大概就是它开创了 game jam 这股风潮（可惜我常常忙于赶 GDC 讲座的最后一刻，没时间做 jam 游戏！）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/IMG_1940-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "From the first Indie Game Jam.  Pictured: Brian Jacobson, Sean Barrett, Ken Demarest, Charles Bloom, Jonathan Blow, Brian Sharp, Doug Church.",
+      "zh": "来自第一届 Indie Game Jam。图中是：Brian Jacobson、Sean Barrett、Ken Demarest、Charles Bloom、Jonathan Blow、Brian Sharp、Doug Church。"
+    },
+    {
+      "type": "p",
+      "en": "The Indie Game Jams were very different from the jams we see today.  The IGJ was founded on the idea of exploring the design ramifications of a crazy technical question; we would provide attendees with some code to accomplish some technical feat, then they would see where that would lead in terms of design.  For example, the question for the first IGJ was \"Graphics hardware is pretty fast now; what will people design if we give them an engine that can draw 100,000 little sprite guys on the screen at once?\"  We were picky about who we invited: attendees had to be designer-programmers who were actually good at programming, because dealing with new technology on a short timeframe can be very challenging.",
+      "zh": "Indie Game Jam 和今天看到的 jam 很不一样。IGJ 的立足点是探索一个疯狂技术问题的设计后果；我们会给参会者一些代码去实现某项技术壮举，然后看它在设计上会通向哪里。比如第一届 IGJ 的问题是：「图形硬件现在挺快了；如果我们给他们一个能在屏幕上一次画 10 万个小精灵小人的引擎，人们会设计出什么？」我们对邀请谁很挑剔：参会者必须是真正擅长编程的设计者兼程序员，因为在很短的时间里对付新技术可能非常吃力。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/IMG_1955-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Also from the first Indie Game Jam.  Pictured: Art Min, Charles Bloom, Robin Walker, Thatcher Ulrich, Brian Jacobson, Zack Booth Simpson, and ... I don't know, Justin Hall?  Charles Bloom again?",
+      "zh": "同样来自第一届 Indie Game Jam。图中是：Art Min、Charles Bloom、Robin Walker、Thatcher Ulrich、Brian Jacobson、Zack Booth Simpson，还有……我也不知道，Justin Hall？还是 Charles Bloom？"
+    },
+    {
+      "type": "p",
+      "en": "In contrast, contemporary game jams are more open.  The idea is that it's great to make a game, any game, and that even if you don't manage to finish, you were still part of a community.  This community spirit is often upheld as the best part of a game jam.",
+      "zh": "相比之下，当代的 game jam 更开放。它的理念是：做个游戏就很棒，什么游戏都行；就算你没做完，你也仍然属于一个社群。这种社群精神常常被推崇为 game jam 最美好的部分。"
+    },
+    {
+      "type": "p",
+      "en": "I think these jams can be really nice for beginners, to show people that making a game is something within reach, and to help them meet other people interested in making games.  For experienced developers, though, I think these jams are not so good, because the jams are part of an overall social context that supports stagnation.",
+      "zh": "我觉得这类 jam 对新手来说真的很不错：它让人看到做游戏是够得着的事，也帮他们认识其他对做游戏感兴趣的人。但对有经验的开发者来说，我认为这类 jam 就不太好了，因为它们是那种纵容停滞的整体社交氛围的一部分。"
+    },
+    {
+      "type": "p",
+      "en": "Experienced developers would do well to continually hone their craft and push beyond their comfort zone, but jams celebrate low expectations and provide Warm Community Feelings that create a comfort coccoon.  \"You made a game that is not very interesting?  You didn't finish a game at all?  Well, you are still part of a community that likes you because you are participating in a game jam, and that is what is truly important.\"",
+      "zh": "有经验的开发者本该不断磨练手艺、把自己推出舒适区，但 jam 歌颂的是低期待，提供的是「温暖的社群感」，织成一个舒适的茧。「你做的游戏不太有意思？你压根没做完？没关系，你仍然属于一个喜欢你的社群，因为你参加了 game jam，这才是真正重要的。」"
+    },
+    {
+      "type": "p",
+      "en": "I don't think there is anything inherently wrong with desiring a feeling of community, but we must take care to separate the notion of participating in the community from the notion of success.  Participating in a game jam is not an indicator of success at game development -- nor is attending the Independent Game Summit or Indiecade.  I think that nice feelings are nice, but you want to build an ecosystem where the nice feelings coincide with behavior that will make developers robust and powerful and interesting in the long term.  You don't want nice feelings to act as a soporific.  Activities that are good for beginners are often stagnant for intermediate developers.",
+      "zh": "我不认为渴望社群归属感本身有什么错，但我们必须小心把「参与社群」和「成功」这两个概念分开。参加 game jam 并不是游戏开发上成功的标志——参加 Independent Game Summit 或 Indiecade 也不是。我觉得好感觉当然是好的，但你要建的生态应该是：这些好感觉恰好和那些能让开发者在长期变得强健、有力、有意思的行为重合。你不希望好感觉起催眠药的作用。对新手有益的活动，对中间阶段的开发者往往是让人停滞的。"
+    },
+    {
+      "type": "p",
+      "en": "What to do about this?  I think if there were a category of game jams with higher expectations, so that advanced jams were differentiated from beginner jams, that would be a nice start.  The IGJ model definitely asked more of participants, but I don't think the IGJ is the right thing going into the future, because even if you are playing with challenging technology, the time-limited format prevents you from going deep.  IGJ was nice in 2002, but today it would just contribute further to the problem outlined in Chris Hecker's rant [Please Finish Your Game](http://chrishecker.com/Please_Finish_Your_Game).  We see lots of wacky but shallow game designs all over the web, and it feels like a problem, or at least a vast sea of potential unreached.",
+      "zh": "那该怎么办？我想，如果存在一类期待值更高的 game jam，让进阶的 jam 和入门级的 jam 区分开来，那会是个不错的开始。IGJ 的模式确实对参加者要求更高，但我觉得 IGJ 不适合往未来走，因为即使你在玩很有挑战性的技术，限时的形式也让你没法深入。IGJ 在 2002 年很好，但放到今天，它只会进一步加剧 Chris Hecker 那篇檄文[《Please Finish Your Game》](http://chrishecker.com/Please_Finish_Your_Game)里指出的问题。我们在网上到处都能看到大量古怪却浅薄的设计，这感觉像个问题，或者至少是一片广阔而未被触及的潜能之海。"
+    },
+    {
+      "type": "p",
+      "en": "As Chris says in his [write-up about the Depth Jam](http://chrishecker.com/The_Depth_Jam), \"game jams are shallow by design.\"  Because they are shallow, I don't feel they are the right place for me to develop as a game design practitioner.",
+      "zh": "正如 Chris 在他[关于 Depth Jam 的文章](http://chrishecker.com/The_Depth_Jam)里所说：「game jam 在设计上就是浅的。」正因为它们浅，我不觉得它们是我作为游戏设计实践者成长的合适场所。"
+    },
+    {
+      "type": "h2",
+      "id": "retreat-like-gatherings",
+      "zh": "静修式的聚会",
+      "en": "Retreat-Like Gatherings"
+    },
+    {
+      "type": "p",
+      "en": "There have been a few retreat-like gatherings for forward-thinking game designers: see for example [Project Horseshoe](http://www.projecthorseshoe.com/) and [Phrontisterion](http://www.erasmatazz.com/TheLibrary/Phrontisterion/Phrontisterion.html).  I have never been to these.  I like the basic idea behind these kinds of events, but the execution seems to have endemic problems. I know people who have been to both of these events, but when I ask, they do not recommend attending the events.  Certainly I have found [Project Horseshoe's written reports](http://www.projecthorseshoe.com/reports.htm) unhelpful.",
+      "zh": "面向有前瞻思维的游戏设计者，曾有过一些静修式的聚会：比如 [Project Horseshoe](http://www.projecthorseshoe.com/) 和 [Phrontisterion](http://www.erasmatazz.com/TheLibrary/Phrontisterion/Phrontisterion.html)。这两个我都没去过。这类活动背后的基本想法我喜欢，但执行上似乎有根深蒂固的毛病。我认识去过这两个活动的人，可我问起时，他们都不推荐参加。至少我读过 [Project Horseshoe 的书面报告](http://www.projecthorseshoe.com/reports.htm)，觉得没什么用。"
+    },
+    {
+      "type": "p",
+      "en": "The obvious problem with these events is that they are mostly just a bunch of talking.  When people get together for a bunch of talking, most of them just say a bunch of bullshit (here I mean bullshit [in the Harry G. Frankfurt sense](http://press.princeton.edu/titles/7929.html)) that is unfocused and untethered to reality.  If it is not of critical importance whether what people say is right, then most of it is not going to be right.",
+      "zh": "这些活动显而易见的问题是：它们基本上就是一堆人在一起说话。当人们聚在一起说话时，大多数人只是在说一堆废话（这里我指的是 [Harry G. Frankfurt 意义上](http://press.princeton.edu/titles/7929.html)的那种 bullshit），既不聚焦，也不着现实的地。如果人们说的话对不对并不关乎要害，那其中大部分就不会对。"
+    },
+    {
+      "type": "p",
+      "en": "I really like the retreat model as a basic template.  Over the past few years I've been to a number of retreats, mostly for things like meditation or silent existential contemplation.  There's a lot good about going to a far-away place where you are not bothered by the concerns of everyday life.  But looking at Phrontisterion and Horseshoe, the question arises: how does one design a retreat like this that is not just a bunch of talking?",
+      "zh": "我真的很喜欢把静修当作基本模板。过去几年我去过不少静修活动，大多是关于冥想或沉默的存在性沉思这类事。去一个偏远的地方、不被日常生活的操心打扰，这本身有很多好处。但看看 Phrontisterion 和 Horseshoe，问题就来了：怎么设计一场这样的静修，让它不只是一堆人在一起说话？"
+    },
+    {
+      "type": "p",
+      "en": "I knew some of the answer, because I've seen success in dealing with a similar question in a neighboring realm:",
+      "zh": "答案的一部分我是知道的，因为我在相邻的一个领域里见过处理类似问题的成功例子："
+    },
+    {
+      "type": "h2",
+      "id": "local-developer-meet-ups",
+      "zh": "本地开发者聚会",
+      "en": "Local Developer Meet-Ups"
+    },
+    {
+      "type": "p",
+      "en": "Many cities around the world have regular meet-ups; once a month or so, game developers get together at a bar or something, and just chat and be social.  I generally don't go to these because bars are antagonistic to interesting conversations and because attendees tend toward the neophyte side, which means we have the same problem as at conferences: there's little benefit to be had for an experienced developer.  But these events also have the Horseshoe problem, in that the conversation is not focused and doesn't really matter, so people just say a bunch of nonsense.  If all you want is to get drunk and be social, these events are fine, but they don't do much for professional development.",
+      "zh": "世界上很多城市都有定期的聚会；大约每月一次，游戏开发者们聚在酒吧之类的地方，单纯聊天社交。我一般不去，因为酒吧对有意思的对话是不利的，也因为参加者往往偏新手，于是我们碰上和会议上一样的问题：对有经验的开发者来说没什么收益。而且这类活动还有 Horseshoe 那个毛病：谈话不聚焦、也无关紧要，于是大家只是说一堆胡话。如果你只想喝醉和社交，这些活动挺好，但它们对职业成长没什么帮助。"
+    },
+    {
+      "type": "p",
+      "en": "Two years ago I started a series of monthly developer meetups in the San Francisco Bay Area; the idea was to keep discussion quality high by (a) holding the meetings in quiet places conducive to good discussion, like someone's house  (b) inviting only active game designers [this was not a \"game industry\" meeting, it was a \"thoughtful game designer\" meeting], and  (c) starting each meeting with one of the attendees presenting their own work.  After the presentation, we discuss that work specifically for a while; then at some point, the discussion naturally dissolves into separate, more-general discussions.",
+      "zh": "两年前，我在旧金山湾区发起了一系列每月一次的开发者聚会；想法是通过这几点来保持讨论质量：（a）在有利于好讨论的安静场所举行，比如某人的家里；（b）只邀请活跃的游戏设计者［这不是「游戏行业」聚会，而是「有想法的游戏设计者」聚会］；（c）每次聚会都以某位参加者展示自己的作品开场。展示之后，我们针对那份作品讨论一段时间；然后到某个时刻，讨论自然地散成若干组更宽泛的对话。"
+    },
+    {
+      "type": "p",
+      "en": "(I have been to some developer meet-ups that also began with presentations, but which to me did not manage to establish a culture of quality.  One example was the Austin IGDA meetings back in 2002-2003.  I think there were many subtle things preventing quality from rising, mostly having to do with intention of the event: the goal of the meeting was to drive attendance, not to be deeply interesting; also, they were \"game industry\" meetings, with all the associated issues.  Also, scale matters: the Austin IGDA meetings were bigger, and they occurred in offices or at places like Dave & Buster's, which did not encourage a personal connection to the presentation or the other attendees).",
+      "zh": "（我去过一些同样以展示开场的开发者聚会，但在我看来它们没能建立起一种讲究质量的文化。一个例子是 2002–2003 年奥斯汀的 IGDA 聚会。我想有很多微妙的东西在阻止质量提升，大多与活动的意图有关：那场聚会的目标是拉人头，而不是要真的有意思；另外，它们是「游戏行业」聚会，上述那些问题一个不少。还有，规模也有影响：奥斯汀的 IGDA 聚会更大，而且是在办公室里或 Dave & Buster's 这类地方办的，这不利于让人对展示或对其他参加者产生个人的连结。）"
+    },
+    {
+      "type": "p",
+      "en": "The meetings in the Bay Area were very successful at keeping discussion quality relatively high.  The situation wasn't perfect, but it was much better than your typical bar meeting.  (I would have attended these regularly even if I were not involved in organizing them).   Other attendees really enjoyed the meetings as well.  After about a year, though, I stopped arranging the meetings because we seemed to have exhausted the supply of people willing to present, and I didn't want to start having meetings that were not kicked off by solid presentations.  Because everyone had a good time, there's a reasonable probability that in the future we will pick these up again.  I think we might be able to improve the discussions further by reducing the presenter-vs-audience asymmetry somehow (see the Depth Jam section below).",
+      "zh": "湾区的这些聚会在把讨论质量保持得相对较高这一点上非常成功。情况并不完美，但比你那种典型的酒吧聚会好得多。（即使我没有参与组织，我也会定期参加这些聚会。）其他参加者也真的很喜欢这些聚会。不过大约一年之后，我就不再张罗了，因为我们似乎已经把愿意做展示的人用光了，而我不想开始办那种没有扎实展示开场的聚会。因为大家都玩得开心，将来我们重新把它拾起来的可能性不小。我觉得我们也许还能进一步改善讨论，办法是设法削弱「讲者 vs 听众」的不对称（见下面的 Depth Jam 一节）。"
+    },
+    {
+      "type": "p",
+      "en": "Key to the success of these events was having specific, concrete issues to talk about: a specific game being presented, so that discussion could be anchored to the details of that specific game.  It's also important that the game was being presented by its author; if the session is just someone talking about someone else's game that they liked or didn't like or just want to say something about, it is too easy for the discussion to be useless bullshit.",
+      "zh": "这类活动成功的关键在于有具体、实在的议题可谈：有一款具体的游戏被展示出来，讨论就能锚定在那个游戏的细节上。同样重要的是，游戏是由它的作者来展示的；如果一场交流只是某个人在谈别人的游戏、说他喜欢或不喜欢、或者只是想讲点什么，那讨论太容易变成没用的废话。"
+    },
+    {
+      "type": "p",
+      "en": "It seemed like this model could be applied to ground a retreat so that it would not just be a bunch of talking.",
+      "zh": "看来这个模式可以拿来给静修打底，让它不只是一堆人在一起说话。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/DSCN0958-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "h2",
+      "id": "the-depth-jam-idea",
+      "zh": "Depth Jam 的构想",
+      "en": "The Depth Jam idea"
+    },
+    {
+      "type": "p",
+      "en": "Now, we come to the actual Depth Jam.  We settled on the basic idea very quickly: the jam would occur in a relaxing retreat-like environment.  There would be a limited number of participants; four seemed like a good number.  Each participant would have a good game that he has already been working on for a while, and which presents some deep and interesting problem he would like to solve; this problem serves as a focus for discussion.  The fact that every particpant has a game under discussion means that every participant has \"skin in the game\", which keeps discussion tethered and unfrivolous.",
+      "zh": "现在说到真正的 Depth Jam。我们很快就定下了基本构想：这场 jam 要在一个放松的、静修式的环境里进行。参加人数有限；四个人似乎是个好数目。每位参加者都要有一款已经做了一阵子的好游戏，而这款游戏呈现出一个他想解决的、有深度的有意思的问题；这个问题就作为讨论的焦点。每位参加者都有一款游戏在讨论之中，这意味着每个人都有「切身利害」（skin in the game），这会让讨论紧紧贴住地面、不至于轻浮。"
+    },
+    {
+      "type": "p",
+      "en": "I'd like to emphasize this last point because it can be subtle but it is crucial.  Suppose some people are showing their games and being criticized and generally having a rough time due to all the stress that happens naturally when having one's creation dissected; and meanwhile, the people who are criticizing do not have any obligations, and they are just tossing in comments from the peanut gallery.  This situation creates a weird imbalance.  The comments and criticism will not be as thoughtful as they could be, yet they will be taken very hard by the people showing the games.",
+      "zh": "我想强调这最后一点，因为它可能很微妙，但至关重要。假设有些人正在展示自己的游戏、接受批评，并且普遍不好过——因为当自己的创作被解剖时，压力是自然而然会有的；而与此同时，批评的人没有任何义务，他们只是站在旁边看热闹、随口插几句话。这种局面会造成一种古怪的失衡。这些评论和批评不会像它们本可以做到的那样深思熟虑，但展示游戏的人却会把它看得非常重。"
+    },
+    {
+      "type": "p",
+      "en": "If everyone is having their creations dissected, there's only one class of attendee instead of two.  It is easier to empathize and avoid unnecessary harshness.  People are going to be more careful that their ideas and criticisms are thoughtful, because they are acutely aware of wanting careful input when it comes to their own game.",
+      "zh": "如果每个人的创作都要被解剖，参加者就只有一类，而不是两类。共情更容易，也能避免不必要的尖刻。人们会更小心地让自己的意见和批评更有分寸，因为他们切身地知道：轮到自己那款游戏时，他们多么想要认真的反馈。"
+    },
+    {
+      "type": "h2",
+      "id": "the-format",
+      "zh": "形式",
+      "en": "The Format"
+    },
+    {
+      "type": "p",
+      "en": "Our first proposal for the Depth Jam had us spending one entire day on each game, so that we could dive into each game at maximum depth without context-switching.  However, as the idea churned, we decided it would be beneficial to allow some iteration.  Why not split the day into two time slots, so that each game gets half a day and we cycle through the four games twice?  This would allow time to modify the games based on the discussion, which would give the discussion even more teeth: now we're not just talking about a particular problem in a particular game (with some kind of tendency to wax philosophical), we're actually figuring out how the author will address the problem here at the retreat, with the results of that approach to be plainly visible in the next session.",
+      "zh": "我们最初对 Depth Jam 的提案是每款游戏花整整一天，这样我们可以不切换上下文、以最大深度钻进每一款游戏。但随着想法不断翻搅，我们觉得允许一些迭代会更有益。为什么不把一天切成两个时段，让每款游戏分到半天、四款游戏循环两轮？这样就有时间根据讨论去改游戏，而这也让讨论更有杀伤力：现在我们不只是在谈某款游戏里的某个特定问题（还容易滑向空谈哲理），我们实际上是在当场弄清作者打算怎么解决这个问题，而那个做法的结果在下一场交流里就能看得一清二楚。"
+    },
+    {
+      "type": "p",
+      "en": "In our pre-jam planning meeting, we decided to go even further this way, breaking each day into four slots, cycling through all the games four times (so that each game had a two-hour slot each day).  This seemed to work pretty well and it allowed a lot of iteration, but it might have been excessive.  Daniel thinks there was too much context-switching and he might have been able to think more effectively if given more stability.  My impression is that the talking was great for the first couple of days and degraded in quality toward the end (but was still worthwhile even then).  At least two attendees did not have a problem with this, though, and found that the final discussions were very valuable for them.",
+      "zh": "在 jam 前的筹划会上，我们决定在这条路上走得更远：把每天切成四个时段，所有游戏循环四轮（这样每款游戏每天都有两小时的时段）。这似乎效果相当不错，也允许了大量迭代，但可能有点过头了。Daniel 认为上下文切换太多，如果给他更多稳定性，他也许能思考得更有效。我的印象是前一两天的谈话很棒，越到后面质量越下降（但即便如此仍然值得）。不过至少有两位参加者不觉得这有问题，反而觉得最后的讨论对他们很有价值。"
+    },
+    {
+      "type": "p",
+      "en": "For the next jam I would propose a mixed format: we'd start with two 4-slot days, just like we did this time, followed by a day with no-talking, all-working-and-quiet-and-taking-a-walk, followed by a final 4-slot day.  (Or, perhaps I would lengthen the retreat to 5 days and put the rest day in the middle.)",
+      "zh": "下一次 jam 我会提议一种混合形式：先像这次一样来两个「每天四时段」的日子，接着一天完全不谈、只干活、安安静静、出门散散步，最后再来一个「四时段」的日子。（或者，也许我会把静修拉长到 5 天，把休息日放在中间。）"
+    },
+    {
+      "type": "p",
+      "en": "The nice thing about the 4-slot-per-day format, which would not have been true of the 2-slot-per-day format, is that it gives us the maximum amount of calendar time for ideas to stew between iterations.  I have long been appricative of the role of calendar time in good design. Sometimes it doesn't matter how many hours you pack in trying to get things done; the good ideas will arrive unpredictably, and maybe you just need to allow time for this to happen.  I was curious whether this principle would also be true on the timescale of a 4-day retreat.  For me, at least, it was; I got my best idea in the shower on the morning of day 3, in response to discussions we'd had on day 2.  During my session on day 3 we discussed and refined the idea, and on day 4 I showed an implementation of it.",
+      "zh": "「每天四时段」这个形式有一个好处（「每天两时段」就不会有）：它给了我们最大量的日历时间，让想法在两次迭代之间慢慢炖。我早就很看重日历时间在好设计里的作用。有时候你塞进去多少个小时去赶工都不重要；好想法会在不可预料的时候到来，也许你只需要给它留出时间。我很好奇这个原则在为期四天的静修这个时间尺度上是否也同样成立。至少对我来说是成立的：我最好的想法是第 3 天早上洗澡时冒出来的，那是对第 2 天讨论的回应。在第 3 天我的场次里我们讨论并完善了这个想法，第 4 天我就展示了一个实现。"
+    },
+    {
+      "type": "h2",
+      "id": "creature-comforts",
+      "zh": "物质上的舒适",
+      "en": "Creature Comforts"
+    },
+    {
+      "type": "p",
+      "en": "We spent some money renting a nice beach house and ordering catered food; the cost for the event was around $5000.  Chris goes into more detail about this in his write-up.  You don't need to spend any money on an event like this, but if you can afford it I recommend spending some money to help create a nice environment that minimizes stress and factors away concerns like \"what are we going to eat for dinner\" and \"who is going to do the dishes\".  The purpose is twofold: first, it helps you focus on the subject at hand; second, the minimization of external stresses helps you deal with the potential added stresses of working really hard and disagreeing with people all the time.",
+      "zh": "我们花了些钱租了一栋不错的海滨房子，还订了外送的餐食；这次活动的花费大约 5000 美元。Chris 在他的文章里写得更详细。办这样的活动你并不需要花钱，但如果负担得起，我建议花点钱去营造一个良好的环境，把压力降到最低，把「晚饭吃什么」「谁来洗碗」这类操心的事从等式里消掉。目的有两重：第一，它帮你专注于眼前的题目；第二，把外部压力降到最低，有助于你应对「极其拼命地工作」和「一直在跟人意见不合」可能带来的额外压力。"
+    },
+    {
+      "type": "p",
+      "en": "If you think that the Depth Jam will help you make more headway on even one deep problem than you would have otherwise, and thus make your game better, it's easy to think that the game will also sell a little better and that costs in the neighborhood of $1250 per attendee are easily justified.",
+      "zh": "如果你认为 Depth Jam 能让你哪怕在一个深层问题上取得比原先更多的进展、从而让游戏更好，那就不难推出：游戏也会卖得稍好一点，因此每位参加者 1250 美元上下的花费是很容易说得过去的。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/DSCN0965-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "h2",
+      "id": "attitude",
+      "zh": "心态",
+      "en": "Attitude"
+    },
+    {
+      "type": "p",
+      "en": "Discussions can easily turn into arguments, or at least energy-sucking disagreements.  As peoples' energy gets drained, they become more irritable, so there's a feedback loop lurking here.  A little bit of this happened at our Depth Jam, but we saw it happening and course-corrected, so that the final day's discussion was reasonable.",
+      "zh": "讨论很容易变成争吵，或者至少变成消耗精力的意见不合。随着人们的精力被抽干，他们会变得更易怒，所以这里潜藏着一个反馈回路。我们的 Depth Jam 上也发生了一点这种情况，但我们看到它在发生，并及时纠偏，所以最后一天的讨论还算合理。"
+    },
+    {
+      "type": "p",
+      "en": "Prior to the jam, though, we had not thought much about this.  I think it would be helpful in future for the attendees to go in knowing that irritability is likely to happen; the mere fact of this awareness probably helps the situation, and anyway, a little bit of psychologically-aware pacing at the beginning would have gone a long way.",
+      "zh": "不过，在 jam 之前我们没怎么想过这件事。我觉得以后让参加者在开始前就知道「易怒很可能会发生」会有帮助；光是意识到这一点大概就能改善局面，而且不管怎么说，一开始做一点顾及心理的节奏安排，会大有用处。"
+    },
+    {
+      "type": "h2",
+      "id": "games-and-attendees",
+      "zh": "游戏与参加者",
+      "en": "Games and Attendees"
+    },
+    {
+      "type": "p",
+      "en": "It's very important the attendees be capable both of participating in good discussions and acting on the discussions to improve their games within a short timeframe.  This latter requirement basically limits attendees to being competent designer/programmers.  If someone can't program, it's hard to see how he can participate meaningfully in this style of depth jam, because it would be very hard to iterate.  Possibly if someone is a level/world/puzzle designer who can build scenarios quickly in UDK or Unity or whatever, it can be made to work, but I still think that person would be feeling the limitations of being unable to make algorithmic changes.",
+      "zh": "很重要的是，参加者既要有能力参与好讨论，也要有能力把讨论落实成行动、在很短时间内改进自己的游戏。后一个要求基本上把参加者限定为能胜任的设计者兼程序员。如果一个人不会编程，很难看出他怎么能有意义地参与这种风格的 depth jam，因为迭代会非常困难。如果某人是关卡／世界／谜题设计者，能在 UDK 或 Unity 之类的工具里快速搭出场景，那也许能行得通，但我还是觉得那个人会感到「无法做算法层面的改动」带来的限制。"
+    },
+    {
+      "type": "p",
+      "en": "I don't think that having teams of people would work, at least not for the format described here, because it would dilute the energy and bog down the iteration process.  If you have one designer and one programmer trying to do the job that the other people are doing as single designer/programmers, your duo is probably going to have a hard time keeping up.  If the jam is made up entirely of duos, it's going to make discussions a lot messier and lower-energy (twice as many people talking about the same number of games).  At least one of us felt that four people was already too many for high-quality discussions, because you keep having interesting ideas but have to wait for other people to stop talking in order to say them, and by that time the discussion may have moved on to a different topic.",
+      "zh": "我不认为成队参加的团队能行得通，至少对这里描述的形式不行，因为那会稀释能量、拖慢迭代过程。如果你的一位设计者加一位程序员，要去做别人一个人以「设计者兼程序员」身份做的事，你们这对大概会跟不上。如果整个 jam 全由两人组组成，讨论会乱得多、能量也低得多（谈同样数量的游戏，说话的人却多了一倍）。我们当中至少有一个人觉得，四个人对高质量讨论来说已经太多了，因为你不断有有意思的想法，却得等别人说完才能讲，而到那时讨论可能已经转到别的话题上了。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/DSCN0883-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We have tossed around some ideas about how to scale the jam to larger groups, but haven't come up with anything that is fully convincing yet.",
+      "zh": "我们讨论过一些把 jam 扩展到更大规模的办法，但还没想出任何完全令人信服的方案。"
+    },
+    {
+      "type": "p",
+      "en": "It's important that the games be high-quality efforts that pose problems that everyone will be interested in.  We were fortunate to have four very interesting games: [Miegakure](http://marctenbosch.com/miegakure/), a puzzle-platformer in four dimensions; [Storyteller](http://www.ludomancy.com/storyteller.php), a game about building stories through character interactions; [Spy Party](http://www.spyparty.com/), a heavily player-skill-oriented game about subtlety and deception in human behavior; and [The Witness](http://the-witness.net), a first-person puzzle game with a heavy emphasis on nonverbal communication.",
+      "zh": "游戏本身得是高质量的用功之作，而且提出的问题要大家都感兴趣，这一点很重要。我们很幸运有四款非常有意思的游戏：[《Miegakure》](http://marctenbosch.com/miegakure/)，一款四维的解谜平台游戏；[《Storyteller》](http://www.ludomancy.com/storyteller.php)，一款关于通过角色互动来构造故事的游戏；[《Spy Party》](http://www.spyparty.com/)，一款极度依赖玩家技巧、关于人际行为中的微妙与欺骗的游戏；以及[《The Witness》](http://the-witness.net)，一款非常强调非语言沟通的第一人称解谜游戏。"
+    },
+    {
+      "type": "p",
+      "en": "If time permits I may do a detailed write-up of the issues we discussed for each game and the resolutions we reached (though care must be taken here, as we don't want to disclose aspects of these games that the designers would rather keep secret).",
+      "zh": "如果时间允许，我也许会详细写一写我们为每款游戏讨论的问题以及达成的解决方案（不过这里得小心，因为我们不想泄露设计者们宁愿保密的那部分内容）。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "zh": "结论",
+      "en": "Conclusions"
+    },
+    {
+      "type": "p",
+      "en": "I am happy with the way this first Depth Jam went.  I think we can certainly tweak the format to improve it, but already it is a useful tool in my further development as a game designer.  I got much more out of this four-person, four-day event than I do from attending a conference.  It seems appropriate to me to do a Depth Jam every six months.  Provided we are organized enough to get the next one together, we'll adjust the format and see how it goes!",
+      "zh": "第一次 Depth Jam 的进行方式让我满意。我认为我们肯定还能调整形式把它做得更好，但它已经是我作为游戏设计者继续成长的一件有用工具了。这场四人、四天的活动带给我的收获，比参加一场会议多得多。在我看来，每六个月办一次 Depth Jam 是合适的。只要我们能组织得起来办下一场，就会调整形式再看效果！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/05/DSCN0908-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "See also:",
+      "zh": "另见："
+    },
+    {
+      "type": "p",
+      "en": "[Chris Hecker's write-up](http://chrishecker.com/The_Depth_Jam)",
+      "zh": "[Chris Hecker 的文章](http://chrishecker.com/The_Depth_Jam)"
+    },
+    {
+      "type": "p",
+      "en": "[Daniel Benmergui's write-up](http://www.ludomancy.com/blog/2012/05/25/depth-jam/)",
+      "zh": "[Daniel Benmergui 的文章](http://www.ludomancy.com/blog/2012/05/25/depth-jam/)"
+    },
+    {
+      "type": "p",
+      "en": "[Miegakure web site](http://marctenbosch.com/miegakure/)",
+      "zh": "[Miegakure 网站](http://marctenbosch.com/miegakure/)"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "castano-2008-12-10-the-foie-gras-parable",
+  "title": { "zh": "鹅肝的寓言", "en": "The foie gras parable" },
+  "subtitle": {
+    "en": "A TED talk from chef Dan Barber sets off thoughts about how food is produced, and a dream of going back to Spain to farm.",
+    "zh": "主厨 Dan Barber 的一场 TED 演讲，引出他对食物生产方式的思考，以及回西班牙务农的幻想。"
+  },
+  "translator": {
+    "note": "原文用了葡萄牙语词 saudades（那种带着怀念的怅惘），这里按原文保留不译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I loved [this talk](http://www.ted.com/index.php/talks/dan_barber_s_surprising_foie_gras_parable.html) from Blue Hill’s Chef Dan Barber.",
+      "zh": "我很喜欢 Blue Hill 的主厨 Dan Barber 的[这场演讲](http://www.ted.com/index.php/talks/dan_barber_s_surprising_foie_gras_parable.html)。"
+    },
+    {
+      "type": "p",
+      "en": "I’m not convinced that what the organic/ethical/slow food movement advocates is the most sustainable way of producing food and feed the world. For example, I’m not necessarily opposed to the use of technology to produce food, as long as it’s done responsibly. It’s the use of technology by profit driven food corporations what I’m concerned about.",
+      "zh": "我不认为有机、伦理、慢食这一运动所主张的，就是生产食物、养活全世界最可持续的方式。比如，我并不反对用技术来生产食物，只要做得负责任就行。我担心的是唯利是图的食品公司拿技术去干什么。"
+    },
+    {
+      "type": "p",
+      "en": "Anyway, the talk made me feel saudades. I have this fantasy that one day I’d go back to Spain, buy a small farm, and live in a rural home raising pigs, hens, and sheeps. I’d then spend the rest of my days working in the farm, cooking, hiking in the area, and coding in my spare time.",
+      "zh": "总之，这场演讲让我生出一种 saudades。我总幻想有一天能回西班牙，买一小块农场，住在乡下的房子里，养几头猪、几只母鸡、几只羊。然后余生就在农场里干活、做饭、在附近徒步，空闲时写写代码。"
+    }
+  ]
+}

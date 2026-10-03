@@ -1,0 +1,475 @@
+{
+  "id": "casey-0011",
+  "title": { "zh": "内布拉斯加问题", "en": "The Nebraska Problem" },
+  "subtitle": {
+    "en": "The search for a “random” distribution with the most favorable qualities for ground cover.",
+    "zh": "寻找一种对地面覆盖最有利的「随机」分布。"
+  },
+  "translator": {
+    "note": "原文插图未收录（共 20 张：两种分布的对比截图、各种采样方式的示意图等），按出现顺序以「（原文此处有一张图）」占位；本篇没有代码块。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "If there's one thing I can say has been true throughout my entire programming career, it's that it has always paid to ask why I was doing things the way I was doing them.  This has been true at every level, from simple programming constructs to high-level algorithms.  Even thoroughly entrenched ideas are often wrong, and questioning those ideas leads to surprising and important insights.",
+      "zh": "如果说我的整个编程生涯里有哪件事一直成立，那就是：问自己「我为什么要这么做」，总是有回报的。从简单的编程构造到高层算法，每一个层面上都是如此。即便是根深蒂固的想法，也常常是错的，而质疑它们会带来出人意料的重要洞见。"
+    },
+    {
+      "type": "p",
+      "en": "So these days, whenever I am working on something, no matter how insignificant, I reflexively start considering the reasons behind it.  Planting grass was no different.",
+      "zh": "所以如今，不管我在做多微不足道的事，都会条件反射地开始琢磨它背后的理由。种草的代码也不例外。"
+    },
+    {
+      "type": "p",
+      "en": "The code I described last week was what I checked into [The Witness](http://the-witness.net/news/)'s source tree, along with a bunch of other unrelated modifications to the grass system that I'll cover next week.  It was a reasonable solution to the apparent problem, and I believed time to be of the essence, so I knew it was not a good time to ask deeper questions.  But in my mind, I made the mental note that the next time I was working on pattern generation, I needed to ask \"why\".  Setting aside time for this article series gave me that opportunity.",
+      "zh": "我上周讲的那段代码，就是那次提交进 [The Witness](http://the-witness.net/news/) 源码树的版本，同时提交的还有一堆和它无关的草系统改动，那些我下周再讲。对当时表面上看到的那个问题来说，它是个合理的解法；我认为时间紧迫，所以清楚那不是问更深层问题的好时机。但我在心里记了一笔：下次再做图案生成时，必须问一句「为什么」。而这个系列文章给我留出的时间，正好就是那个机会。"
+    },
+    {
+      "type": "p",
+      "en": "The \"why\" question in this case is straightforward: \"Why are we using blue noise to plant grass?\"",
+      "zh": "在这个例子里，「为什么」这个问题很直白：「我们为什么用蓝噪声来种草？」"
+    },
+    {
+      "type": "p",
+      "en": "Blue noise is a great noise pattern.  As I mentioned in the first grass article, it has some visually pleasing properties.  But when I modified [The Witness](http://the-witness.net/news/)'s grass system to create blue noise more efficiently, all I did was follow the lead of the person who originally wrote the code.  Who's to say that they made a good decision when choosing blue noise?  What were they trying to accomplish, exactly, and was blue noise the best way to accomplish it?  I'd used blue noise in the past for things like grass, but was I really sure it was the optimal placement strategy for the circumstance?",
+      "zh": "蓝噪声是一种很棒的噪声图案。正如我在第一篇讲草的文章里提到的，它在视觉上有一些讨人喜欢的性质。但当我改造 [The Witness](http://the-witness.net/news/) 的草系统、让它更高效地生成蓝噪声时，我做的不过是跟着最初写这段代码的人走而已。凭什么说他们当初选蓝噪声就是个好决定？他们究竟想达成什么？而蓝噪声是不是达成它的最佳方式？我过去在草这类东西上确实用过蓝噪声，但我真的确定它是这种情形下的最优布点策略吗？"
+    },
+    {
+      "type": "p",
+      "en": "As I was writing the previous two articles and the code that I used to generate the diagrams, I soon realized that the answers to these questions was probably \"no\".  I hinted at it in the previous article when I said there was a theoretical problem with our approach, and now I will state explicitly what the problem is before I recount my attempts to solve it.",
+      "zh": "在写前两篇文章、以及那些用来生成示意图的代码时，我很快意识到这些问题的答案很可能是「不是」。我在上一篇文章里已经暗示过——当时我说我们的做法存在一个理论上的问题——现在，在讲述我的解决尝试之前，我要明确说出这个问题是什么。"
+    },
+    { "type": "h2", "id": "corn-rows", "zh": "玉米行", "en": "Corn Rows" },
+    {
+      "type": "p",
+      "en": "Here are some screenshots of the patterns produced by the original brute force and the neighborhood sampling techniques I talked about last time:",
+      "zh": "下面是几张截图，展示的是上次讲过的原始暴力算法与邻域采样两种技术所产生的图案："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_01_6383b26fd600b298.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Here's what these patterns look like from a typical player perspective:",
+      "zh": "从典型的玩家视角看，这些图案是这样的："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_02_52ca66c12a2e2e69.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Finally, here's what the patterns look like when there's a set of ground flora billboards placed on each one:",
+      "zh": "最后，在每种图案上放一组地面植被的公告板（billboard）之后，它们看起来是这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_03_a35d44ef796b4ed2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, there's not a lot of difference between the two, so, good job us, we did a reasonable job last week matching the brute force algorithm so it could run fast enough to be effective in [The Witness](http://the-witness.net/news/).  But if you look at these screenshots for a while, you can see that it's a bit difficult to tell how good the blue noise is in general.  In fact, at first, I really had no idea how good or bad these patterns were.  I had no real baseline to which I could compare images like these.  Without some known scheme that produces better results, who's to say how good this pattern is?",
+      "zh": "如你所见，两者差别不大，所以，给我们点个赞吧——上周我们干得还算不错，把邻域采样做得和暴力算法相当接近，快到能在 [The Witness](http://the-witness.net/news/) 里真正用起来。但如果你盯着这些截图看一会儿就会发现，其实很难判断蓝噪声总体上到底有多好。事实上，一开始我完全不知道这些图案是好是坏。我没有一个真正的基准，可以拿它来跟这类图像做比较。没有一个已知更好的方案摆在那里，谁能说这个图案好不好？"
+    },
+    {
+      "type": "p",
+      "en": "Intuitively, it did look to me like the blue noise covered the space fairly effectively.  At a high level, the grass distribution problem could be stated as \"use the fewest number of points to produce a visually pleasing covering of a specified area\".  I say \"fewest number of points\" because, as with any real-time rendering problem, the fewer the number of points used to adequately cover the space visually, the less cost there is to rendering the grass every frame.  The less cost, the more graphics horsepower there is to render other things.  And [The Witness](http://the-witness.net/news/) has plenty of other things that need rendering every frame, believe me.",
+      "zh": "凭直觉，蓝噪声确实让我觉得它相当有效地覆盖了空间。从高层来说，草的分布问题可以表述成「用最少的点数，在指定区域上做出视觉上好看的覆盖」。我说「最少的点数」，是因为和任何实时渲染问题一样：用来在视觉上充分覆盖空间所需的点越少，每帧渲染这些草的开销就越小。开销越小，能用来渲染其他东西的图形性能就越多。而 [The Witness](http://the-witness.net/news/) 里需要每帧渲染的其他东西多得很，相信我。"
+    },
+    {
+      "type": "p",
+      "en": "So, yes, if I was concerned about the patchiness in some places, I could always increase the density of the blue noise, spending more rendering budget but getting very dense coverage:",
+      "zh": "所以，是的，如果我担心某些地方太稀，我随时可以提高蓝噪声的密度，多花些渲染预算，换来非常密的覆盖："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_04_a2014b7001a72f56.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "But obviously I want to keep the density as low as I can and still have reasonable coverage, so I felt like the appropriate level was probably something like first set of shots.  Without using excessively many points, you can't possibly prevent gaps very near to the player, but a little ways out, an ideal pattern would make the grass look nice and full.",
+      "zh": "但显然，我想在还能保持合理覆盖的前提下把密度压到尽可能低，所以我觉得合适的程度大概就是第一组截图那样。在不使用过多点数的前提下，你不可能避免玩家近处的空隙；但稍微远一点的地方，理想的图案应该能让草看起来又好看又饱满。"
+    },
+    {
+      "type": "p",
+      "en": "However, as I played with patterns like this one last week, I began to notice something very unfortunate.  In that same pattern, if you move the camera to certain places, parts of the pattern form nearly colinear rows, such that a noticeable gap is visible even relatively far from the camera, where ideally there should have been enough overlapping grass to look solid:",
+      "zh": "然而，上周在摆弄这个图案时，我开始注意到一件非常不幸的事。就在同一个图案里，如果把相机移到某些位置，图案的一部分会形成近乎共线的行列，以至于即便离相机相当远的地方也能看到明显的缝隙——而那些地方按理说本该有足够多相互重叠的草，看起来是实的："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_06_37309d6996064b73.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This was present in both techniques, so it seemed to be a property of blue noise in general, or at least any sort of blue noise generated via the poisson disk method.",
+      "zh": "两种技术里都有这个现象，所以它似乎是蓝噪声的普遍性质，至少是通过泊松磁盘法生成的任何蓝噪声都有。"
+    },
+    {
+      "type": "p",
+      "en": "For reasons I won't go into at the moment, I've had to spend some time sitting in the back seat of a car in Nebraska while it drove down the world's most boring highway, which as far as I can tell is every highway in Nebraska.  If you look out the window at the cornfields while you drive by, you'll notice that the rows of corn have exactly this same properly: from many angles, they just look like a field of corn, but as you hit just the right angle, they suddenly look very regular and you can see the long, narrow gap between rows.  Fine for a cornfield, but not so good if you're trying to give the illusion of dense coverage.",
+      "zh": "由于一些我此刻不想细说的原因，我曾经不得不坐在内布拉斯加州一辆汽车的后座上，沿着世界上最无聊的高速公路前行——据我所知，内布拉斯加的每条公路都是这样。开车经过时，如果你从车窗望出去看那些玉米地，你会发现玉米的行列恰好有同样的特性：从很多角度看，它们就只是一片玉米地；可一旦你撞上那个刚刚好的角度，它们突然显得极其规整，你能看见行与行之间又长又窄的空隙。这对玉米地来说没问题，但如果你想制造「覆盖得很密」的错觉，就不太妙了。"
+    },
+    {
+      "type": "p",
+      "en": "Due to its resemblance of this cornfield property, I took to calling the problem with blue noise \"The Nebraska Problem\".",
+      "zh": "因为它和玉米地的这个特性很像，我就把蓝噪声的这个毛病叫作「内布拉斯加问题」（The Nebraska Problem）。"
+    },
+    {
+      "type": "p",
+      "en": "I didn't like having the Nebraska problem in my grass distribution any more than I liked having to ride around Nebraska.  As I alluded to last week, it's a theoretical problem because as far as I know, there's nothing inherently wrong with these blue noise algorithms that causes this occurrence.  There's nothing wrong with our practice, in this case.  It's our theory that is apparently inadequate.",
+      "zh": "我对草分布里的内布拉斯加问题的不喜欢程度，和我不喜欢在内布拉斯加到处坐车是一样的。正如我上周暗示的，这是个理论层面的问题：据我所知，这些蓝噪声算法本身并没有任何固有的缺陷会导致这种情形。在这件事上，我们的实践没有问题。不够用的是我们的理论。"
+    },
+    {
+      "type": "p",
+      "en": "Since I did not know of any noise theory that purported to address this problem, nor even any papers that mention it existing, I decided to experiment with breaking the rules of blue noise to see if I could solve the Nebraska problem myself.",
+      "zh": "既然我不知道有哪种噪声理论声称能解决这个问题，甚至连提到它存在的论文都没见过，我决定试着一路打破蓝噪声的规则，看自己能不能把内布拉斯加问题解决掉。"
+    },
+    { "type": "h2", "id": "packing-ratio", "zh": "折腾填充率", "en": "Playing with the Packing Ratio" },
+    {
+      "type": "p",
+      "en": "As is the case whenever I start tackling a new problem, I didn't really have my bearings yet.  I could see that there was this problem, but I hadn't really specifically defined it yet, so I randomly tried some obvious things.",
+      "zh": "和每次刚开始处理一个新问题时一样，我其实还没摸清方向。我能看到问题存在，但还没有真正具体地定义它，于是我就随便试了些显而易见的东西。"
+    },
+    {
+      "type": "p",
+      "en": "The first thing I tried was changing how the neighborhood algorithm chose its points.  Last week, since the article was quite long, I didn't go into detail about how the neighborhood algorithm specifically chooses points to try.  I simply said to pick a random point \"between r and 2r\" away from the base point in a random direction.",
+      "zh": "我试的第一件事，是改变邻域算法选点的方式。上周由于文章已经很长，我没有细讲邻域算法具体是怎么挑候选点的，只说从基点出发，沿随机方向、在「r 到 2r 之间」的距离上随机取一个点。"
+    },
+    {
+      "type": "p",
+      "en": "But there's a number of ways that you could do this.  The most straightforward would be to uniformly pick an angle and distance between r and 2r, and use them directly.  But if you plot points chosen this way, you will find that they have a very distinct bias toward the center of the circle:",
+      "zh": "但做法有很多种。最直接的一种是均匀地取一个角度、均匀地在 r 到 2r 之间取一个距离，直接用它们。可如果你把这样选出来的点画出来，会发现它们明显偏向圆心："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_08_594ebb4be897840c.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "What's going on here?  Well, if you think about it, the larger the radius of a circle, the further a point on the circle moves as the angle changes.  This means that, to cover the circumference of large circles with the same euclidean density of random points, you'd have to pick more random angles than if you were covering small ones.  So, if you uniformly pick a random angle and a random radius, you will always end up covering the smaller radii more densely than the larger radii.  To actually pick uniformly dense points inside a circle, you have to either pick the angle and radius non-uniformly, to account for the changing effect of the angle as the radius grows, or more simply, you can just pick points uniformly in a square and throw out ones that lie outside the circle.",
+      "zh": "这是怎么回事？嗯，想一下就知道：圆的半径越大，角度变化时圆上一点移动的距离就越远。这意味着，要用同样的欧氏密度去覆盖大圆周，你取的随机角度就得比覆盖小圆周时更多。所以，如果你均匀地取一个随机角度、再均匀地取一个随机半径，结果永远是半径小的地方比半径大的地方覆盖得更密。要想真正在一个圆内取出密度均匀的点，要么角度和半径都得非均匀地取，以补偿半径增大时角度效果的变化；要么更简单：在一个正方形里均匀取点，把落在圆外的丢掉。"
+    },
+    {
+      "type": "p",
+      "en": "OK, why am I bringing this up?  Well, when I implement the neighborhood algorithm, I typically leave in the bias toward the center.  It's faster this way, and I find that it doesn't actually affect the output pattern in any visible way.  But, since my goal now was to modify the pattern, I got to thinking, what if I force the selection of points to be even more biased than it already was?",
+      "zh": "好，我为什么提这个？因为我在实现邻域算法时，通常会把那份偏向圆心的偏差留着。这样更快，而且我发现它实际上不会以任何看得见的方式影响输出图案。但既然现在的目标是修改图案，我就琢磨起来：要是我强行让选点比原来偏得更厉害，会怎么样？"
+    },
+    {
+      "type": "p",
+      "en": "So I tried introducing the concept of a \"packing ratio\".  Instead of picking points between r and 2r away from the base point, I made the 2 a parameter.  This way, I could force all the chosen points to be closer to their base points, theoretically shrinking the average distance of the pattern and producing a tighter packing:",
+      "zh": "于是我试着引入了「填充率」（packing ratio）这个概念。原本是在离基点 r 到 2r 之间取点，我干脆把那个 2 变成了参数。这样一来，我就能强行让所有选中的点都更靠近它们的基点，理论上会缩小图案的平均间距，得到更紧的填充："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_09_48b55e3e8b6ad305.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, this quickly proved to be fruitless, as packing more tightly only exacerbated the Nebraska problem.  If you look at the patterns, you can see why:  As the packing becomes tighter, the chances become greater that two \"branches\" of the neighborhood algorithm will run parallel to each other, without the opportunity to create more stochastic patterns that would break up the empty space in between.",
+      "zh": "可惜，这很快就被证明是白费力气：填得越紧，内布拉斯加问题反而越严重。看看那些图案就明白为什么了：填充越紧，邻域算法的两条「分支」彼此平行延伸的概率就越大，它们也就没有机会长出更随机的形状，去把中间那块空白打散。"
+    },
+    { "type": "h2", "id": "targeting-gaps", "zh": "瞄准缝隙", "en": "Targeting Gaps" },
+    {
+      "type": "p",
+      "en": "So playing with the packing was counter-productive, and it makes sense why.  I started to think, well, maybe all I really need is to allow points to be placed more flexibly into spaces that aren't densely covered.  Maybe if I do a second pass over the initial blue noise pattern with a more permissive placement radius, I can just \"fill in\" the places where aligning rows created visible gaps:",
+      "zh": "所以折腾填充率是适得其反的，而且原因说得通。我开始想：也许我真正需要的，只是允许把点更灵活地放进那些覆盖不密的地方。也许我在初始蓝噪声图案上做第二遍处理、用一个更宽松的布点半径，就能把「行列对齐造成可见缝隙」的地方「补」上："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_10_38087d9aff02ac32.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It turns out this actually works, or so it seems at first.  But when I checked the point count, I realized that if I had simply generated a blue noise pattern with the same number of points as I ended up with after gap filling, it, too, was dense enough to not evince the problem:",
+      "zh": "结果这办法居然真的管用，至少乍看如此。但当我查了一下点数，我意识到：如果我一开始就直接生成一个蓝噪声图案、点数和补缝之后一样多，那它同样密到不会暴露出这个问题："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_11_524ef08b27bfcc65.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "So, while targeting the gaps in the initial pattern might be fruitful, it didn't seem immediately obvious how that could ever work effectively given that it would end up proliferating the number of points rather than fixing the problem with the distribution of the existing points.",
+      "zh": "所以，瞄准初始图案里的缝隙这件事也许有前景，但考虑到它最终会让点数不断膨胀，而不是去修正「已有点的分布」本身的问题，我看不出它怎样才能真正有效。"
+    },
+    { "type": "h2", "id": "planting-along-lines", "zh": "沿直线种植", "en": "Planting Along Lines" },
+    {
+      "type": "p",
+      "en": "Having failed at a few blue noise modifications, I started to try more ridiculous approaches that had no blue noise properties at all, just to see if anything stuck.  Going back to first principles, I thought, well, if my goal is to prevent lines of sight where there are gaps, maybe I should just generate the pattern based on that.  So I wrote an algorithm which picked random lines of sight across the region.  It would step along each line and look for lengths of the line that went a certain distance without encountering a point:",
+      "zh": "在几次改造蓝噪声失败之后，我开始尝试一些更荒唐的做法——完全不具备蓝噪声的任何性质，只看看有没有哪一招能奏效。回到最根本的出发点，我想：既然我的目标是别让视线方向上出现缝隙，那也许我干脆就按这个来生成图案。于是我写了一个算法，在整片区域里随机挑出一些视线。它会沿着每条线走，找出线上那些走了一段距离都没碰到点的区段："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_12_c3c189e38bdae062.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, because the algorithm picks random lines, there's really no reason why it can't sometimes pick two lines right next to each other, which leads right back to the Nebraska problem.  In some parts of the pattern, it works just fine, but in those parts where lines happen to be roughly parallel early on in the process, the Nebraska problem ran rampant.",
+      "zh": "可惜，由于算法是随机挑线的，完全没有理由阻止它偶尔挑出两条紧挨着的线，而这又直接回到了内布拉斯加问题。图案的某些部分效果很好，但在那些过程中碰巧早早出现大致平行线的部分，内布拉斯加问题就泛滥成灾。"
+    },
+    { "type": "h2", "id": "selective-removal", "zh": "选择性移除", "en": "Selective Removal" },
+    {
+      "type": "p",
+      "en": "Along the same lines (pun intended) as the previous method, I thought perhaps I could try the reverse approach: start with a dense covering of the region, generated by white noise, and then remove only those points which I could verify did not create long continuous lines of empty space.  For each point, I would check a large number of directions, and see where the first \"hit\" along those lines was, backwards and forwards.  If the distance was small enough along all lines I checked, I would remove the point.  If the resulting distance along any of the lines would have been too great, I would leave the point:",
+      "zh": "沿着和上一种方法相同的思路（这个双关是有意的），我想也许可以反过来做：先用白噪声生成一片密集覆盖，然后只移除那些我能确认「不会造成长长的连续空白带」的点。对每个点，我会检查大量方向，看看这些方向的线上、向前和向后第一个「命中」落在哪里。如果检查的所有方向上距离都足够小，我就把这个点删掉。如果任何一条方向上算出来的距离会太大，我就保留这个点："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_14_31a71ba99d124162.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, this yielded similar results to the previous attempt: tune the parameters one way, no Nebraska problem, but the sampling was too dense.  Tune them another way, and the sampling was too sparse and you get visible gaps everywhere, even if you happened to avoid the Nebraska problem specifically.",
+      "zh": "可惜，它得到的结果和上一次尝试差不多：参数往一个方向调，内布拉斯加问题没了，但采样太密；往另一个方向调，采样又太稀，到处都是可见的缝隙，即便你碰巧专门躲开了内布拉斯加问题也一样。"
+    },
+    {
+      "type": "p",
+      "en": "At this point, I probably should have realized what was going on, but I didn't.  Bear in mind that this is probably midday Wednesday, and I'm realizing I'm never going to make my *Witness Wednesday* deadline, so I'm starting to freak out a little bit.  I'm not thinking as clearly as I should be.  What do I do?  Do I press forward, or do I call it and say, \"Well, there's a problem with this algorithm, but I'll be damned if I know how to solve it.  Have a great Wednesday.  CHRISTMAS IS CANCELED!\"",
+      "zh": "到这一步，我本该意识到问题出在哪儿了，可我没有。要知道，这时候大概是周三中午，而我意识到自己绝无可能赶上 *Witness Wednesday* 的截稿时间，于是开始有点抓狂。我的思考也没那么清楚了。我该怎么办？是硬着头皮往前推，还是就此收手、来一句「好吧，这个算法是有问题，但我要知道怎么解决它才见鬼。祝你周三愉快。圣诞节取消！」？"
+    },
+    {
+      "type": "p",
+      "en": "I know how important Santa Claus is to all of you.  It's not every day that an obese, elderly, perpetually smiling bearded man surreptitiously enters your house without permission and leaves \"presents\" for your children whom he has been \"watching\" all year.  Do I really want to be the person who cancels Christmas?  Do I want to be that guy?",
+      "zh": "我知道圣诞老人对你们所有人来说有多重要。毕竟，不是每天都会有一个胖乎乎、上了年纪、永远笑呵呵的大胡子，未经许可偷偷溜进你家，给你那些被他「盯」了整整一年的孩子留下「礼物」。我真的想当那个取消圣诞节的人吗？我想当那种人吗？"
+    },
+    {
+      "type": "p",
+      "en": "No, of course not, so I decide no, Christmas cannot be canceled.  Christmas isn't canceled.  CHRISTMAS IS MERELY DELAYED…",
+      "zh": "不，当然不想。所以我决定：不行，圣诞节不能取消。圣诞节没有取消。圣诞节只是推迟了……"
+    },
+    { "type": "h2", "id": "relaxation", "zh": "松弛", "en": "Relaxation" },
+    {
+      "type": "p",
+      "en": "OK, it's fine, no problem, Christmas is delayed.  It was on a Wednesday, now it's on a Thursday.  Or a Friday.  Back to work.",
+      "zh": "好，没事，没问题，圣诞节推迟了。它本来在周三，现在改到周四。或者周五。回去干活。"
+    },
+    {
+      "type": "p",
+      "en": "Now, if you've read a lot of graphics research papers, I think you'll agree with me when I say, whenever people reach a place in an algorithm where it just plain doesn't work, relaxation is the go-to fix.  Can't get those points quite where you need them?  Relax!  If you can't come up with a way to put the points where they need to be, let the points figure it out themselves.",
+      "zh": "如果你读过很多图形学的研究论文，我想你会同意我这句话：每当人们在算法里走到「它就是不管用」的地方，松弛就是那个顺手就来的修法。那些点没法待在你想要的位置上？松弛一下！如果你想不出办法把点放到它们该在的地方，那就让点自己想办法。"
+    },
+    {
+      "type": "p",
+      "en": "So I added a relaxation step.  And I tried two different \"energy functions\" for the relaxation, the first being a standard \"repel other points\" version:",
+      "zh": "于是我加了一步松弛。针对松弛我试了两种不同的「能量函数」，第一种是标准的「相互排斥」版本："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_15_d32c6b165412886.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And the second being a \"break up contiguous lines version\", which looked for sets of three or more points which lay roughly in a line and tried to move one of the interior points toward whichever side appeared to have more open space:",
+      "zh": "第二种是「打散连续直线」版本：它寻找三个或更多大致排在一条直线上的点，然后试着把其中一个位于中间的点，朝看起来更空旷的那一侧挪："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_16_d23a3f4cd76370a6.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "As you can see from the images, neither of these relaxation strategies seemed to show any promise.  Although they were both completely ad hoc and could be tuned for much better results, I didn't see anything in the preliminary results that indicated to me there'd be much benefit to a relaxation strategy.  It seemed that no matter how I tried to move the points, they'd always end up accidentally forming new corn rows even if I was breaking up old ones, or spacing themselves out too much and forming non-Nebraska gaps, which are even worse.",
+      "zh": "从图里可以看出，这两种松弛策略看起来都没什么前途。虽然它们都完全是临时拼出来的、调一调参数可以得到好得多的结果，但初步结果里没有任何东西让我觉得松弛策略能带来多少好处。似乎不管我怎么挪这些点，它们最后总会不小心形成新的玉米行——哪怕我正在拆掉旧的——或者彼此散得太开，形成「非内布拉斯加式」的缝隙，而那更糟。"
+    },
+    {
+      "type": "p",
+      "en": "At this point it was Wednesday night, and it was time for dinner.  But as it happened, it was not just any old Wednesday, so it would not be just any old dinner.  In fact, it was a Wild Wednesday, which meant it was time for a Wild Wednesday dinner…",
+      "zh": "这时候已经是周三晚上，该吃晚饭了。但碰巧，这可不是随便哪个周三，所以这也不会是随便哪顿晚饭。事实上，这是一个 Wild Wednesday，也就是说，该去吃一顿 Wild Wednesday 的晚饭了……"
+    },
+    { "type": "h2", "id": "directional-constraints", "zh": "方向约束", "en": "Directional Constraints" },
+    {
+      "type": "p",
+      "en": "Wild Wednesday is a very special type of day (often not on actual Wednesdays, for reasons I will leave unexplained) where [Sean Barrett](http://nothings.org/), [Fabian Giesen](https://fgiesen.wordpress.com/), [Jeff Roberts](https://mollyrocket.com/news_0007), and myself get together for some absolutely crazy wild times.  Imagine one of those \"Gone Wild\" videos that they film at Spring Break in Florida, only instead of Florida, it's Seattle, and instead of a bunch of inebriated college kids, it's four programmers sitting around a restaurant table for an hour discussing the minutia of a particular technical issue.  And if all that doesn't sound wild enough for you, this particular Wild Wednesday even had a special guest, [Tommy Refenes](http://tommyrefenes.tumblr.com/), so I knew it would be even more Wild than normal.",
+      "zh": "Wild Wednesday 是一种非常特别的日子（往往并不在真正的周三，原因我就不解释了）：这一天 [Sean Barrett](http://nothings.org/)、[Fabian Giesen](https://fgiesen.wordpress.com/)、[Jeff Roberts](https://mollyrocket.com/news_0007) 和我凑到一起，度过一段绝对疯狂狂野的时光。想象一下那种在佛罗里达春假期间拍的「Gone Wild」视频，只不过地点不是佛罗里达而是西雅图，主角也不是一群喝醉的大学生，而是四个程序员围着一家餐馆的桌子坐上一小时，讨论某个技术问题的细枝末节。如果这些都还不够狂野，那么这一次的 Wild Wednesday 甚至还请来了特别来宾 [Tommy Refenes](http://tommyrefenes.tumblr.com/)，所以我知道它会比平时更 Wild。"
+    },
+    {
+      "type": "p",
+      "en": "Going to Wild Wednesday will be helpful, I thought to myself, because I can discuss the problem with the Wild Wednesday crowd, and maybe get some fresh perspective.  Which I do.",
+      "zh": "我心想，去参加 Wild Wednesday 会很有帮助，因为我可以把这个问题拿出来和这帮人聊聊，说不定能听到些新鲜的角度。我确实这么做了。"
+    },
+    {
+      "type": "p",
+      "en": "After I explained the problem to them, both Fabian and Sean came to the conclusion that the best thing to do would be to try to prevent the original neighborhood algorithm from producing lines in the first place, thereby avoiding the problem of having to fix the pattern after the fact.  If the initial random generation didn't produce rows, this might yield better patterns than trying to fix the rows afterward, because fixing the rows afterward is a global problem  —  it requires pushing points around in ways that might imply large changes in the pattern to accommodate the movement.  If you never generate rows in the first place, then the whole pattern will be adapted to be rowless, thereby getting that global consideration for free.",
+      "zh": "我把问题讲给他们听完之后，Fabian 和 Sean 都得出结论：最好的做法是从一开始就不让原来的邻域算法产生直线，这样也就免去了事后修图案的麻烦。如果初始的随机生成就不产生行列，得到的图案可能会比事后修补更好——因为事后修行列是个全局问题：它需要通过推挤点来调整，而那些推挤可能意味着图案要大范围变动才能配合。如果一开始就从不产生行列，那么整个图案自然会是「无行」的，那份全局考量就白捡了。"
+    },
+    {
+      "type": "p",
+      "en": "So I tried some heuristics to prevent lines, such as ensuring that each new point would never be along the same line as the previous point:",
+      "zh": "于是我试了几种防止成直线的启发式做法，比如保证新产生的点永远不会和前一个点落在同一条直线上："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_17_e6ac39302f3e3207.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, you still get the Nebraska problem.  Even though no direct branch of the neighborhood algorithm produces rows, nearby branches seem to conspire to produce rows all the same!",
+      "zh": "可惜，内布拉斯加问题还是会出现。虽说邻域算法的任何一条直接分支都没有产生行列，可附近的分支们似乎还是串通一气地把行列造了出来！"
+    },
+    {
+      "type": "p",
+      "en": "This was starting to get ridiculous.  How is it that every single algorithm produces the same artifact?  What is going on here?",
+      "zh": "这开始变得荒谬了。怎么每一个算法都会产出同样的瑕疵？这里到底发生了什么？"
+    },
+    { "type": "h2", "id": "curved-hexagonal-packing", "zh": "弯曲的六边形填充", "en": "Curved Hexagonal Packing" },
+    {
+      "type": "p",
+      "en": "Although I still hadn't quite arrived at the key insight yet, I started to realize what was wrong.  I took a step back, and really thought about what would be necessary to produce a pattern that had no corn rows, but also didn't use excessively many points.  I started coming to the conclusion that what you really want are curves.  You want to guarantee that anything you generate is always going to have nice curves to the points, because two curved rows of points is the one pattern that you know will never show linear gaps.  Anything that's random, really, might produce some confluence of points that forms neighboring lines, even if its only for three points on either side  —  enough to cause the Nebraska problem.  So the thing that produces a guaranteed lack of gaps probably isn't random at all, it's probably regular.",
+      "zh": "虽然我还没真正抓住那个关键洞见，但已经开始意识到哪里不对了。我退后一步，认真想了想要做出一个既没有玉米行、又不用过多点数的图案，究竟需要什么。我渐渐得出结论：你真正需要的是弧线。你要保证自己生成的东西，其点位总是构成漂亮的弧线，因为两排弯曲的点，是唯一一种你确知永远不会有直线缝隙的图案。而任何随机的东西，都可能产生某种点的汇聚、形成相邻的直线——哪怕两边各自只有三个点——那也足以引发内布拉斯加问题。所以，能保证没有缝隙的东西大概根本不是随机的，而是规则的。"
+    },
+    {
+      "type": "p",
+      "en": "This totally changed my thinking about the problem.  The whole time, I'd been thinking that randomness was an asset to creating a good covering.  But now it seemed like, if you really think about the problem, randomness may actually be bad.",
+      "zh": "这彻底改变了我对这个问题的看法。一直以来，我都认为随机性对做出好的覆盖是件好事。但现在看来，如果你真的认真思考这个问题，随机性可能反而是坏的。"
+    },
+    {
+      "type": "p",
+      "en": "So I started to think about regular patterns that might have the properties I wanted.  It needed to not look obviously regular when viewed from the typical player's perspective (standing among the grass).  It needed to never have continuous straight lines of points.  It needed to efficiently cover the space.",
+      "zh": "于是我开始思考可能具备我想要的那些性质的规则图案。从典型玩家视角看（也就是站在草丛中看）时，它不能显得明显规则。它必须永远不出现连续成直线的点。它必须高效地覆盖空间。"
+    },
+    {
+      "type": "p",
+      "en": "I knew that hexagonal packings were the densest possible packings for circles:",
+      "zh": "我知道六边形填充是圆的最密填充："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_18_4d9c43fb6b67a915.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "So I figured, well, if you're going to efficiently cover the space, then a hexagonal packing is probably the best thing to start with, because it could keep each point at exactly the distance that would be visually optimal for coverage while minimizing the number of points used.",
+      "zh": "所以我想：如果要高效覆盖空间，那从六边形填充起步大概是最好的，因为它能让每个点都恰好保持在视觉上最优的覆盖距离上，同时把用到的点数降到最少。"
+    },
+    {
+      "type": "p",
+      "en": "But hexagonal packings are obviously terrible by themselves, because they have cornrows in several directions, which is the opposite of what I wanted.  So I thought, well, what if I bent the hexagonal packing?  I tried interpreting the hexagonal packing in polar coordinates, to give the rows a bent shape",
+      "zh": "但六边形填充本身显然很糟糕，因为它在好几个方向上都有玉米行，而这恰恰与我的目标相反。于是我想：要是我把六边形填充掰弯了呢？我试着用极坐标去解释六边形填充，好让那些行列弯起来"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_19_d4ee942993efce08.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I also tried various rotational schemes, similar to the original neighborhood algorithm where I would branch out to new points in a hexagonal pattern that was rotated either randomly or consistently.",
+      "zh": "我还试了各种旋转方案，类似于原来的邻域算法：从一个点向新点分支出去，而分支所用的六边形格局要么随机旋转、要么固定旋转。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, the hexagonal packings didn't seem to be working.  Either they left gaps, produced clumps, or made lines in one direction or another.  But thankfully, that's when it finally dawned on me what the actual objective was.",
+      "zh": "可惜，六边形填充似乎都不管用。它们要么留下缝隙，要么聚成团块，要么在某个方向上排出直线。但幸运的是，就在那时我终于想明白了真正的目标是什么。"
+    },
+    {
+      "type": "p",
+      "en": "See, this distribution is in a plane.  There are always two orthogonal bases to a plane.  So ensuring one axis of curvature, as I was doing by trying to curve the hexagonal packing with polar coordinates, was never going to work: I'd warped one of the axes along which lines could form, but not the other.  What I needed was a distribution of points with two axes of curvature, so that there would literally be no way to form lines through the space at any periodicity at all.",
+      "zh": "你看，这个分布是在一个平面上的。而平面永远有两个正交的基。所以只保证一个轴向的弯曲——也就是我用极坐标去掰弯六边形填充时的做法——永远不会成功：我只把「可能成线」的其中一个轴掰弯了，另一个没有。我需要的是一种在两个轴向都弯曲的点分布，这样才能真正让空间中无论如何、以任何周期都无法形成直线。"
+    },
+    { "type": "h2", "id": "staggered-concentric-packing", "zh": "交错的同心圆交点填充", "en": "Staggered Concentric Intersection Packing" },
+    {
+      "type": "p",
+      "en": "OK, two axes of curvature, no problem.  I'll just take two circles, and I'll place the points of my pattern where concentric rings of those circles intersect:",
+      "zh": "好，两个轴向的弯曲，没问题。那我就取两个圆，把图案的点放在这两个圆的同心环相交的位置："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_20_f820938e07b686ca.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This was looking good.  I felt like I might be close.  Looking at the distribution from a variety of angles, the main problem was just that the curvature was still visible, since it was a bit too subtle to completely visually obscure the space between points.  I thought about trying to increase the curvature, but then I thought, well, what if I just staggered every, say, third concentric circle ring?  Instead of evenly spaced concentric rings, every third ring I'd offset the radius a little bit to add some apparent jitter, helping the gaps, but also reducing the apparent regularity of the pattern a bit in the process.  Mind you, it's a completely deterministic offset, so there's no real randomness:",
+      "zh": "这看起来不错。我感觉自己可能接近了。从各种角度观察这个分布，主要问题只是弯曲仍然看得出来——它太轻微了，没法在视觉上完全遮住点与点之间的空间。我想过加大弯曲程度，但后来又想：要是我只是把每三个同心环交错一下呢？不再用等间距的同心环，而是每隔三环就把半径偏移一点，加上一些看得出来的抖动，既对缝隙有帮助，同时也让图案在视觉上没那么规则。注意，这是完全确定性的偏移，并没有真正的随机性："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_22_268fb6b7abf6a78a.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Bingo.  This covering was exactly what I had been looking for!  Dense visible coverage, and absolutely no way to see gaps anywhere except right where you're standing (which, of course, is not fixable by any pattern that doesn't use a huge number of points and literally cover the space completely).  The pathological viewpoints from the unstaggered case were completely fixed:",
+      "zh": "就是它了。这种覆盖正是我一直在找的！视觉上覆盖得密，而且除了你脚下站的那一处之外，任何地方都绝对看不出缝隙（当然，那一处是任何图案都修不好的，除非用上巨量的点、把空间真真正正填满）。未交错版本那些病态视角的问题被彻底解决了："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_21_d670fbddf5a4211f.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And the bonus surprise?  It can use significantly less points than I'd been using for the gappy blue noise while still producing better visual coverage:",
+      "zh": "还有一个意外的惊喜？它用的点数可以明显少于我之前那个有缝隙的蓝噪声，却能做出更好的视觉覆盖："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_03_23_ed7730b5c2a99080.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "abundant-failure", "zh": "为什么失败得如此彻底？", "en": "Why Such Abundant Failure?" },
+    {
+      "type": "p",
+      "en": "As with most tricky problems, when you're in the thick of it, you often can't see the right way to look at things.  That's usually why you're in the thick of it and not… uh, in the thin of it?  Whatever the opposite is.  Either way, looking back over the past few days, with the benefit of hindsight I can see the fundamental mistake in my approach.",
+      "zh": "和大多数棘手的问题一样，当你深陷其中时，往往看不清该用什么方式去看它。这通常也正是你会陷在里面的原因，而不是陷在……呃，浅处？随它怎么说吧。总之，回头看看过去这几天，事后诸葛亮地说，我能看出自己做法里的根本错误。"
+    },
+    {
+      "type": "p",
+      "en": "I had started with a pretty good random covering, blue noise, and had wanted to improve upon it.  But if you think about what randomness is and how it works, you realize a rather obvious truth: randomness is never optimal.  For any set of criteria, the chances that you will pick a set of optimal inputs in a randomized way, no matter how you constrain them, are extremely low.  If you take 100 dice and roll them, you won't roll 600.  Probably ever (unless they're d20's, but I'm trying to keep these metaphors accessible to non-D&D people).  You can't constraint your way out of it, either.  Even if you take all the dice and change the 1's, 2's, 3's, and 4's to 6's, so that there's literally just 5's and 6's on the dice, you will still almost never roll 600.  Even if you did that then took all the 5's and re-rolled them, you could even do that seven times before you got all 6's.",
+      "zh": "我的起点已经是一个相当不错的随机覆盖——蓝噪声——而我想在此基础上做得更好。但如果你想一想随机性是什么、它是怎么运作的，就会意识到一个相当明显的道理：随机永远不是最优。对任何一组评价标准来说，无论你怎样约束，靠随机的方式恰好选到一组最优输入的概率都极低。你拿 100 颗骰子来掷，掷不出 600 点。大概永远也掷不出（除非那是 d20，但我在努力让这些比喻对不玩《龙与地下城》的人也说得通）。你也没法靠加约束绕过去。就算你把所有骰子上的 1、2、3、4 都改成 6，让骰子上就只剩 5 和 6，你依然几乎永远掷不出 600。就算你这么改了，再把所有的 5 挑出来重掷，你可能要这么做上七轮才能全变成 6。"
+    },
+    {
+      "type": "p",
+      "en": "So when you have it in your head that you want to try to make something optimal, chances are, you're going to have to look beyond randomized algorithms.  I kept looking for schemes that would produce optimality out of randomness, but that's simply too unlikely.  Because blue noise is a pretty good random pattern for my purposes, I was dancing around the breaking point of randomness, and every scheme I tried was destined for failure, because there simply was no better random scheme.  In order to make that leap, I had to switch from chaos to order, and drive at the optimum directly.",
+      "zh": "所以，当你脑子里想的是「要把某个东西做到最优」时，多半就得跳出随机算法去找办法。我一直在找那些能从随机性里挤出最优性的方案，可那实在太不可能了。由于蓝噪声对我来说已经是个相当好的随机图案，我其实是在随机性的极限边缘打转，而我试的每一个方案都注定失败，因为根本不存在更好的随机方案。要迈过那道坎，我必须从混沌切换到秩序，直接朝着最优点去。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "This is really the crucial insight to take away from this experience.  The pattern itself is not so important.  What's important is to know whether the thing you're trying to accomplish is about optimization, and if it is, do you need randomness for other reasons?  If you do, you will need to plan on hitting something less than optimal.  If you don't, you may well need to jettison the randomness in order to make progress.",
+      "zh": "这其实就是这次经历里最该带走的关键洞见。图案本身并没有那么重要。重要的是搞清楚：你要做成的事是不是一件「求最优」的事；如果是，你又是否出于别的原因需要随机性？如果需要，那你就得接受结果达不到最优。如果不需要，那你很可能必须丢掉随机性，才能取得进展。"
+    },
+    {
+      "type": "p",
+      "en": "As with most realizations, it's very straightforward when you think about it, and almost explains itself.  But it often takes an actual experience with it to make it sink into your brain in a way that will let you instinctively reason about it and think to apply it to new circumstances where it can be useful.",
+      "zh": "和大多数「想通了」的时刻一样，真去想它的话，道理非常直白，几乎不用解释。但往往得亲身经历一次，它才能真正沉进你脑子里，让你能凭直觉去推理它，并想到把它用到新的、能派上用场的地方。"
+    },
+    { "type": "h2", "id": "worm-catching-ninja", "zh": "抓虫子的忍者", "en": "The Worm-Catching Ninja" },
+    {
+      "type": "p",
+      "en": "So what have we learned, coding ninjas?  Well, I think we've learned that, as the saying goes, \"the persistent ninja always catches the worm\".  If that saying doesn't sound familiar to you, it's probably because you're not as well versed as I am in historical Japanese literature.  It's OK.  Summer's just around the corner, and you can put [The Cambridge History of Japan](https://www.cambridge.org/core/series/cambridge-history-of-japan/18F050C94D8B0E2BFAAF5CCAE19E87FE#) on your summer reading list.",
+      "zh": "那么，编程忍者们，我们学到了什么？我想，我们学到的是那句老话：「有耐心的忍者总能抓到虫子。」如果这话你听着不熟，那大概是因为你在日本古典文学上的造诣不如我。没关系。夏天就要到了，你可以把 [The Cambridge History of Japan](https://www.cambridge.org/core/series/cambridge-history-of-japan/18F050C94D8B0E2BFAAF5CCAE19E87FE#) 加进暑期书单。"
+    },
+    {
+      "type": "p",
+      "en": "In the case of this particular worm-catching ninja, I suppose this pattern situation was a bit of an obsession.  It's not clear to me that the new pattern is at all necessary to employ in games, nor am I sure it's worth it to go back and put it into [The Witness](http://the-witness.net/news/), due to the potential complexity of making it work with all the other grass planting features (more on that next week).  But as I explained in the previous section, I learned a lot from this experience, as I invariably do when I set out to solve a technical problem and refuse to take \"noh\" for an answer (continuing on the ninja theme, [Noh](https://en.wikipedia.org/wiki/Noh) is a traditional form of Japanese theater that is incredibly long and supposedly quite boring, but I'm sure most ninjas of class and distinction would have partaken from time to time).",
+      "zh": "对我这个抓虫子的忍者来说，我承认这个图案的事有点成了执念。我说不准这种新图案在游戏里到底有没有必要用，也不确定值不值得回头把它塞进 [The Witness](http://the-witness.net/news/)——因为它要和草系统的其他所有功能配合起来，可能会很复杂（下周再细说）。但正如上一节所讲的，我从这段经历里学到了很多；每次我着手解决一个技术问题、并且拒绝接受「能剧」这个答案时，都必定会如此（接着忍者这个话题说，[能剧](https://en.wikipedia.org/wiki/Noh)是一种日本传统戏剧，长得难以置信，据说还相当无聊，但我相信大多数有品位、有身份的忍者时不时也会去看上一场）。"
+    },
+    {
+      "type": "p",
+      "en": "So for me, working on problems like this is rarely about whether or not I really need the solution.  I knew going into it that blue noise was \"good enough\".  But if I have an inkling that there is a \"better\" lurking behind the \"good enough\", I usually find it's worth it to push.  In this case, I'm very glad I did, because it opened up a new way of thinking about patterns for me, and I strongly suspect that, even if I don't use this particular pattern in the future, my deeper appreciation for regular vs. randomized approaches in general will likely pay dividends in a number of other contexts.",
+      "zh": "所以对我来说，做这类问题很少是「我到底需不需要这个解法」的问题。动手之前我就知道，蓝噪声已经「足够好」了。可只要我隐约觉得「足够好」背后还躲着一个「更好」，我通常会觉得值得去推一把。这一次我很庆幸自己推了，因为它为我打开了一种思考图案的新方式；而且我强烈怀疑，即便将来用不上这个具体的图案，我对「规则做法 vs. 随机做法」更深入的理解，也会在其他不少场合带来回报。"
+    },
+    {
+      "type": "p",
+      "en": "That's it for this Witness Wednesday.  Come back next week for a look at the various other features I implemented in The Witness grass planting system, complete with a surprise video, narrated by none other than your esteemed author!",
+      "zh": "这周的 Witness Wednesday 就到这里。下周请再回来，看看我在《The Witness》草系统里实现的其他各项功能——还有一段惊喜视频，旁白不是别人，正是你们尊敬的本作者！"
+    }
+  ]
+}

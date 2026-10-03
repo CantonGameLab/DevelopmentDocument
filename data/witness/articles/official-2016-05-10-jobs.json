@@ -1,0 +1,43 @@
+{
+  "id": "official-2016-05-10-jobs",
+  "title": { "zh": "招聘！", "en": "Jobs!" },
+  "subtitle": {
+    "en": "We're looking for a senior character artist, full time or contract, ideally based around San Francisco.",
+    "zh": "我们在找一位资深角色美术，全职或合同皆可，最好在旧金山一带。"
+  },
+  "translator": {
+    "note": "原文首尾各有一行事务性内容：开头是斜体的编辑备注，结尾是招聘邮箱。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "*Edit: We found our animator! Job post changed to reflect our current needs*",
+      "zh": "*编辑：我们找到动画师了！招聘帖已按我们目前的需求做了修改*"
+    },
+    {
+      "type": "p",
+      "en": "We are looking for a senior character artist, full time or contract, who excels at both designing and modeling intriguing characters in any style, and can also help out with environment art if the need arises.",
+      "zh": "我们在找一位资深角色美术，全职或合同皆可，要同时擅长设计和建模各种风格的、有吸引力的角色，并且在有需要时也能帮忙做场景美术。"
+    },
+    {
+      "type": "p",
+      "en": "We would prefer applicants who are very comfortable making 3D games from white box to polished product, in Maya/Max and in-engine. If you apply, you should be someone who can work in interesting, creative styles, and have the imagination and self motivation to take an abstract mockup and turn it into something stunning and meaningful, while also paying close attention to gameplay limitations.",
+      "zh": "我们更希望应聘者能很从容地把 3D 游戏从白模一路做到成品，不论是在 Maya/Max 里还是在引擎里。如果你来应聘，你应该是那种能驾驭有趣、有创意的风格的人，有想象力和自我驱动力，能把一张抽象的草图变成惊艳而有意义的东西，同时又非常留意玩法的各种限制。"
+    },
+    {
+      "type": "p",
+      "en": "Good communication skills and the ability to take and incorporate critique is a must, a generally pleasant and chill nature is a plus.",
+      "zh": "良好的沟通能力、以及接受并吸收批评意见的能力是必须的；性格总体上随和好相处则是加分项。"
+    },
+    {
+      "type": "p",
+      "en": "We would prefer someone who is based around San Francisco and can work in the office.",
+      "zh": "我们更希望应聘者人在旧金山一带、能到办公室上班。"
+    },
+    {
+      "type": "p",
+      "en": "Please send portfolios to [jobs@thekla.com](mailto:jobs@thekla.com)",
+      "zh": "请把作品集发到 [jobs@thekla.com](mailto:jobs@thekla.com)"
+    }
+  ]
+}

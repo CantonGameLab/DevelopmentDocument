@@ -1,0 +1,111 @@
+{
+  "id": "castano-2026-01-26-choosing-texture-formats-for-webgpu-applications",
+  "title": { "zh": "为 WebGPU 应用选择纹理格式", "en": "Choosing Texture Formats for WebGPU applications" },
+  "subtitle": {
+    "en": "Textures can be shipped as standard web images while still ending up with efficient block compressed textures in GPU memory.",
+    "zh": "把纹理作为标准 Web 图像分发，同时最终在 GPU 内存里得到高效的块压缩纹理。"
+  },
+  "translator": {
+    "note": "原文的五个标题在归档里是三级标题（`###`），译文按本 schema 一律映射成 `h2`。这篇文章没有插图，也没有代码块。术语按全站口径：`compressionType`、`MTLTextureCompressionTypeLossy`、`VK_EXT_image_compression_control` 等 API 名保留英文，BC7、ASTC、KTX2、AVIF、WebP 等格式名保留英文；`swizzle`、`channel` 一类术语本篇未出现。原文里的笔误（`real time GPU texture compression  library` 中间多了一个空格、`Prior the arrival`、`best of both worlds` 缺连字符）在 `en` 字段中一律原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This is a supplement to Don McCurdy’s excellent article, [Choosing texture formats for WebGL and WebGPU applications](https://www.donmccurdy.com/2024/02/11/web-texture-formats/). Don covers the tradeoffs between modern image formats like WebP and AVIF, and GPU optimized container formats like KTX2, with practical guidance on when each makes sense.",
+      "zh": "这是对 Don McCurdy 那篇出色的文章 [Choosing texture formats for WebGL and WebGPU applications](https://www.donmccurdy.com/2024/02/11/web-texture-formats/) 的补充。Don 讲了 WebP、AVIF 这类现代图像格式与 KTX2 这类为 GPU 优化的容器格式之间的取舍，并给出了实用指导，说明各自适合什么场合。"
+    },
+    {
+      "type": "p",
+      "en": "Since that article was published, a new option has emerged: **[spark.js](https://ludicon.com/sparkjs/)**, a real time GPU texture compression  library for WebGPU, which makes it possible to ship textures as standard web images while still ending up with efficient block compressed textures in GPU memory.",
+      "zh": "那篇文章发表之后，出现了一个新选择：**[spark.js](https://ludicon.com/sparkjs/)**——一个面向 WebGPU 的实时 GPU 纹理压缩库，它让你可以把纹理作为标准 Web 图像分发，同时最终在 GPU 内存里得到高效的块压缩纹理。"
+    },
+    {
+      "type": "p",
+      "en": "Prior the arrival of [spark.js](https://ludicon.com/sparkjs/), developers wanting to load textures in their applications effectively had three options:",
+      "zh": "在 [spark.js](https://ludicon.com/sparkjs/) 出现之前，想在应用里加载纹理的开发者实际上只有三种选择："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "use traditional image formats like PNG, JPEG, WebP, or AVIF,", "zh": "使用 PNG、JPEG、WebP 或 AVIF 这类传统图像格式，" },
+        { "en": "use GPU-specialized block compression formats like BC7 or ASTC, or", "zh": "使用 BC7 或 ASTC 这类 GPU 专用的块压缩格式，或者" },
+        { "en": "use universal GPU texture formats like KTX2.", "zh": "使用 KTX2 这类通用 GPU 纹理格式。" }
+      ]
+    },
+    { "type": "h2", "id": "traditional-image-formats", "zh": "传统图像格式", "en": "Traditional Image Formats" },
+    {
+      "type": "p",
+      "en": "Traditional image formats, and in particular modern formats like WebP and AVIF, are optimized to maximize image quality while minimizing file size. The main disadvantage is that these formats need to be decompressed on the CPU and uploaded to the GPU in an uncompressed format. This can result in high video memory consumption, potentially leading to oversubscription and poor performance. Additionally, sampling these textures generally has worse cache behavior, which can reduce rendering performance and increase power consumption.",
+      "zh": "传统图像格式，尤其是 WebP 和 AVIF 这类现代格式，是为在最小化文件体积的同时最大化图像质量而优化的。它们的主要缺点是：这些格式需要在 CPU 上解压，再以未压缩的形式上传到 GPU。这可能导致显存占用很高，进而可能造成超额分配和性能不佳。此外，采样这些纹理时的缓存行为通常更差，这会降低渲染性能并增加功耗。"
+    },
+    { "type": "h2", "id": "gpu-texture-formats", "zh": "GPU 纹理格式", "en": "GPU Texture Formats" },
+    {
+      "type": "p",
+      "en": "To avoid these issues, GPUs support specialized block-compressed texture formats that remain compressed in video memory. Because the GPU can sample these formats directly, they typically offer much better memory efficiency, bandwidth usage, and power consumption than uploading uncompressed RGBA textures.",
+      "zh": "为了避免这些问题，GPU 支持专门的块压缩纹理格式，它们在显存里始终保持压缩状态。由于 GPU 可以直接采样这些格式，相比上传未压缩的 RGBA 纹理，它们通常能带来好得多的内存效率、带宽占用和功耗表现。"
+    },
+    {
+      "type": "p",
+      "en": "The key constraint is that these formats must allow fast random access, so they use fixed-size blocks and therefore a fixed compression ratio. That makes their memory usage very predictable, but it also means the resulting files are often not as small as modern image formats like AVIF or WebP, and therefore are not so well suited for transmission.",
+      "zh": "关键的约束是：这些格式必须允许快速随机访问，所以它们使用固定大小的块，因而压缩比也是固定的。这让它们的内存占用非常好预测，但也意味着生成的文件往往不如 AVIF 或 WebP 这类现代图像格式那么小，因此不太适合用于传输。"
+    },
+    {
+      "type": "p",
+      "en": "Over the years there have been many attempts to make these formats more compressible by applying rate–distortion optimizations (accepting some loss in exchange for better results at a given bitrate), and by applying lossless transformations to reorganize the data and reduce its entropy. However, the underlying block structure still limits compression efficiency compared to modern image codecs.",
+      "zh": "多年来，人们做过很多尝试想让这些格式更易压缩：施加率失真优化（在给定码率下接受一些损失，以换取更好的结果），以及施加无损变换来重新组织数据、降低其熵。然而，与现代图像编解码器相比，底层的块结构仍然限制着压缩效率。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, GPU texture formats are not universally supported across devices and APIs. Desktop GPUs commonly support BC formats, while many mobile devices rely on ASTC or ETC, so supporting a broad set of platforms often requires shipping multiple versions of the same texture assets.",
+      "zh": "最后，GPU 纹理格式并非在所有设备和 API 上都通用。桌面 GPU 通常支持 BC 系列格式，而许多移动设备依赖 ASTC 或 ETC，所以要支持一大片平台，往往需要为同一批纹理资源分发多个版本。"
+    },
+    { "type": "h2", "id": "universal-gpu-texture-formats", "zh": "通用 GPU 纹理格式", "en": "Universal GPU texture formats" },
+    {
+      "type": "p",
+      "en": "Basis Universal has tried to address the portability issue and narrow the gap between transmission friendly image codecs and platform specific GPU texture formats. In practice, it offers a compromise between the two: it can significantly simplify cross platform delivery, but it rarely delivers the best outcome on both ends of the pipeline.",
+      "zh": "Basis Universal 试图解决可移植性问题，并缩小传输友好的图像编解码器与平台专属 GPU 纹理格式之间的差距。在实践中，它在两者之间提供了一个折中：能显著简化跨平台交付，但很少能在流水线的两端都给出最好的结果。"
+    },
+    {
+      "type": "p",
+      "en": "Compared to modern image formats optimized for the web, Basis Universal typically achieves lower compression ratios, which can increase download sizes. Transcoding into device specific block formats at runtime can introduce additional quality loss, and in order to make this process practical it relies on metadata or “transcoding hints”, which further inflate the bitstream.",
+      "zh": "与为 Web 优化的现代图像格式相比，Basis Universal 通常只能达到更低的压缩比，这会让下载体积变大。在运行期转码成设备专属的块格式还可能引入额外的画质损失；而为了让这个过程可行，它依赖元数据或「转码提示」（transcoding hints），这又进一步增大了码流。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, while decoding is relatively fast, transcoding into the device specific block format is often slower than simply decoding WebP or AVIF. Offline compression is also much slower than traditional image encoding, which increases iteration time and can have a significant impact during development.",
+      "zh": "最后，虽然解码相对较快，但转码成设备专属的块格式往往比单纯解码 WebP 或 AVIF 更慢。离线压缩也比传统图像编码慢得多，这会拉长迭代时间，在开发过程中影响很大。"
+    },
+    { "type": "h2", "id": "real-time-gpu-transcoding", "zh": "实时 GPU 转码", "en": "Real-Time GPU Transcoding" },
+    {
+      "type": "p",
+      "en": "Real-time GPU transcoding, as implemented in [spark.js](https://ludicon.com/sparkjs/), offers a new option that combines the advantages of both approaches. Textures can be shipped using transmission friendly formats like AVIF or WebP, keeping download sizes small and workflows simple, but are then transcoded at runtime into a block-compressed GPU texture format. The result is that the texture remains compressed in video memory, reducing VRAM usage and bandwidth while improving sampling performance and power efficiency.",
+      "zh": "[spark.js](https://ludicon.com/sparkjs/) 实现的实时 GPU 转码提供了一种新选择，把两种做法的优点结合起来。纹理可以用 AVIF 或 WebP 这类传输友好的格式分发，让下载体积小、工作流简单；然后在运行期转码成块压缩的 GPU 纹理格式。结果是纹理在显存里保持压缩，降低了 VRAM 占用和带宽，同时改善了采样性能和能效。"
+    },
+    {
+      "type": "p",
+      "en": "This approach does not require carrying a custom intermediate representation designed to be transcoded everywhere. Instead, it directly targets the optimal format for the current device at runtime, and employs the GPU for extremely efficient transcoding. In practice, this makes real-time GPU transcoding a best of both worlds solution: web native assets on the network, and GPU native textures in memory.",
+      "zh": "这种做法不需要携带一种为了到处都能转码而设计的自定义中间表示。它改为在运行期直接针对当前设备的最优格式，并利用 GPU 做极其高效的转码。在实践中，这让实时 GPU 转码成为一个两全其美的方案：网络上传输的是 Web 原生资源，内存里是 GPU 原生纹理。"
+    },
+    { "type": "h2", "id": "hardware-lossy-compression", "zh": "硬件有损压缩", "en": "Hardware Lossy Compression" },
+    {
+      "type": "p",
+      "en": "Hardware vendors have also recognized the importance of supporting an efficient path for loading and rendering web image formats, and have started to add native support for runtime texture compression.",
+      "zh": "硬件厂商也认识到了为加载和渲染 Web 图像格式提供高效路径的重要性，并开始加入对运行期纹理压缩的原生支持。"
+    },
+    {
+      "type": "p",
+      "en": "For example, on Apple platforms, A15-class devices introduced support for lossy texture compression through Metal, allowing a 50% memory reduction for otherwise uncompressed textures. This is easily enabled by setting the `compressionType` texture descriptor attribute to `MTLTextureCompressionTypeLossy`.",
+      "zh": "例如在 Apple 平台上，A15 级别的设备通过 Metal 引入了对有损纹理压缩的支持，让本来未压缩的纹理可以减少 50% 的内存占用。只要把纹理描述符的 `compressionType` 属性设成 `MTLTextureCompressionTypeLossy`，就能轻松启用。"
+    },
+    {
+      "type": "p",
+      "en": "On Vulkan, the `VK_EXT_image_compression_control` extension gives applications a way to request fixed-rate compression for images, and is already available on flagship devices from Arm and Imagination.",
+      "zh": "在 Vulkan 上，`VK_EXT_image_compression_control` 扩展让应用可以请求对图像做固定码率压缩，Arm 和 Imagination 的旗舰设备上已经有了。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, none of these vendor and API features are currently exposed through WebGPU. Until these capabilities become broadly accessible, or for devices that lack them, spark.js remains the most practical way to get transmission-friendly assets and block-compressed GPU textures at runtime in a portable WebGPU application.",
+      "zh": "遗憾的是，这些厂商和 API 特性目前都还没有通过 WebGPU 暴露出来。在这些能力普及之前，或者在缺少它们的设备上，对于一个可移植的 WebGPU 应用来说，spark.js 仍然是同时获得传输友好资源和运行期块压缩 GPU 纹理的最实用途径。"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "official-2013-04-09-island-snapshot",
+  "title": {
+    "zh": "岛屿快照",
+    "en": "Island Snapshot"
+  },
+  "subtitle": {
+    "en": "A new island snapshot; the biggest visible changes are in the forest and beach on the left.",
+    "zh": "一张新的岛屿快照；最明显的变化在左侧的森林和海滩。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "It's been a while since the previous post, so here's a new island snapshot.",
+      "zh": "距上一篇帖子已经有一阵子了，所以这里发一张新的岛屿快照。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/04/shot_2013.04.09__time_10_34_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Most of what we've been working on lately is not visible in this shot, though! The biggest obvious changes are probably in the forest and beach on the left-hand side.",
+      "zh": "不过，我们最近做的大部分工作在这张图里都看不到！最明显的变化大概是左侧的森林和海滩。"
+    }
+  ]
+}

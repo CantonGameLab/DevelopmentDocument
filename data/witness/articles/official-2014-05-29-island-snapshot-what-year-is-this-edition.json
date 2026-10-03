@@ -1,0 +1,33 @@
+{
+  "id": "official-2014-05-29-island-snapshot-what-year-is-this-edition",
+  "title": { "zh": "岛屿快照：今年是哪年版", "en": "Island Snapshot: What-year-is-this Edition" },
+  "subtitle": {
+    "en": "With E3 under two weeks away, the starting area everyone will play there is being torn up and rebuilt from scratch.",
+    "zh": "离 E3 不到两周，E3 上所有人都会玩到的起始区域正被推倒、从零重建。"
+  },
+  "translator": {
+    "note": "原文的 “What-year-is-this” 是在吐槽被拆光的起始区域看起来像很久以前的版本；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "E3 is happening in under two weeks, so what better thing to do than to completely destroy the part of the game everyone at E3 will play, and rebuild it from scratch in very limited time?",
+      "zh": "离 E3 开幕不到两周了，还有什么比这更好的事可做呢——把 E3 上所有人都会玩到的那部分游戏彻底毁掉，然后在极其有限的时间里从零重建？"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/05/shot_2014.05.28__time_15_49_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This is of course a very crude mockup of what the new starting area will be. It's smaller than the old one and should work a little better play-wise. We have yet to reshape the terrain around it, so there are huge holes. Our deadline to have this area fully rebuilt is the 6th of June!",
+      "zh": "这当然只是新起始区域的一个非常粗糙的草案。它比原来那个小，在玩法上应该会稍微好一些。我们还没改造它周围的地形，所以有巨大的空洞。把这个区域完全重建好的截止日期是 6 月 6 日！"
+    },
+    {
+      "type": "p",
+      "en": "Current puzzle count is 627.",
+      "zh": "目前的谜题数量是 627。"
+    }
+  ]
+}

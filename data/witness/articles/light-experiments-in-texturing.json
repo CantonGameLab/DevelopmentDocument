@@ -1,0 +1,101 @@
+{
+  "id": "light-experiments-in-texturing",
+  "title": {
+    "zh": "贴图实验",
+    "en": "Experiments in Texturing"
+  },
+  "subtitle": {
+    "en": "Blend shaders in a minimalist style, used to accent building shapes without falling into the Ugly Texturing trap.",
+    "zh": "用极简风格的混合着色器去衬托建筑的形体，同时不落进「丑陋贴图」的坑里。"
+  },
+  "translator": {
+    "note": "`blend shader` 译「混合着色器」；`tiling texture` 译「平铺纹理」；`radiosity` 按术语表译「辐射度」；`precomputed lighting` 译「预计算光照」。游戏名按项目专有口径处理：《Braid》《The Witness》中文用书名号、英文原样；Uncharted 2（英文正文里写作 Uncharted 2）保留英文。原文里 `[I'd like to include a screenshot of the boat here to illustrate it, but …]` 是作者自己加的方括号插话，照译成中文方括号。插图行按全站口径归一化为 `![图](原图URL)`（丢掉缩略图与外层链接）。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Something like a year and a half ago, when I was starting to get serious about making The Witness, I was talking to [Casey Muratori](http://mollyrocket.com/136) about 3D modeling and texturing.  Braid was a 2D game; The Witness being 3D meant that it would be much more expensive and difficult to make, so I was doing a bunch of thinking and seeking advice on the right way to do it.",
+      "zh": "大概一年半以前，我开始认真做《The Witness》的时候，和 [Casey Muratori](http://mollyrocket.com/136) 聊过 3D 建模和贴图的事。《Braid》是个 2D 游戏；《The Witness》是 3D 的，意味着做起来要贵得多、难得多，所以我在反复琢磨、也在四处请教正确的做法。"
+    },
+    {
+      "type": "p",
+      "en": "I had been viewing a bunch of online portfolios of 3D modelers (and lamenting the quality of these portfolios) with an eye to hiring someone. Sometimes these portfolios are shown in steps: here's the wireframe, here's the filled-in geometry, here it is with lighting, and here is the final thing after it's been textured.  Casey pointed out something interesting about these that I knew was true as soon as he said it: most of these portfolios look worse than they need to because the texturing ruins them.  When you run a radiosity algorithm on a scene full of unpainted geometry, it has an elegant, sophisticated, scent-of-the-real kind of thing going on; but it is very easy to spoil this sophistication through texturing.  And, it seems, in video games we have developed a tradition of \"bad\" texturing, whatever that means: unsubtle, unrefined, or just plain ugly.",
+      "zh": "为了招人，我看了不少 3D 建模师的在线作品集（同时也为这些作品集的质量哀叹）。有时候作品集是按步骤展示的：这是线框，这是填好的几何体，这是打了光的，这是贴完图的最终成品。Casey 指出了一件有意思的事，而他一说我就知道是对的：这些作品集里大多数之所以比它们本该有的样子更难看，是因为贴图把它们毁了。当一个满是未上色几何体的场景跑辐射度算法时，它自有一种优雅、讲究、带着「真实感」的气息；但这种讲究很容易被贴图毁掉。而且看起来，我们在电子游戏里已经形成了一种「糟糕」贴图的传统——不管这个词具体指什么：不细腻、不讲究，或者干脆就是丑。"
+    },
+    {
+      "type": "p",
+      "en": "We're on a low budget here, being an indie game; so not only was it an open question how to solve the Ugly Texturing problem, but we also needed to solve it with relatively little manpower.",
+      "zh": "我们是个独立游戏，预算很低；所以「丑陋贴图」这个问题怎么解不仅没有现成答案，我们还得以相当少的人力把它解掉。"
+    },
+    {
+      "type": "p",
+      "en": "I knew that, ultimately, we could just fall back on untextured geometry with lighting, if we had good precomputed lighting.  That's why we spent so much time and effort putting together our lighting system (as has been written about many times in this blog).  The question was, would we stick to vertex colors on most objects, or would we use some kind of texturing?",
+      "zh": "我知道，只要有好的预计算光照，我们最终总可以退回到「不上贴图、只靠光照」的几何体。这也是我们花那么多时间和精力去做光照系统的原因（这个博客里已经写过很多次了）。问题是：大多数物体我们是要坚持用顶点色，还是用某种形式的贴图？"
+    },
+    {
+      "type": "p",
+      "en": "Early on, we identified a texturing style that would work for human-sized objects and would gel with the gameplay of The Witness.  The style prioritizes color, and tries not to break up the geometry of the object by imposing conflicting details through the texture.  We did some objects like a 1-person boat in this style in order to refine it.  [I'd like to include a screenshot of the boat here to illustrate it, but the boat is messed up right now, so I'll just have to be vague.]",
+      "zh": "很早我们就定下了一种贴图风格，它适用于人体尺度的物体，也能和《The Witness》的玩法合拍。这种风格把颜色放在首位，并且尽量不通过贴图强加与之冲突的细节，以免把物体的形体打散。为了打磨这种风格，我们做了一些这个路子的物体，比如一条单人小船。[我本想在这里放一张小船的截图来说明，但这条船现在一团糟，所以只能含糊其辞了。]"
+    },
+    {
+      "type": "p",
+      "en": "Because that style tries to use the texture map to accentuate the object, the contents of the texture must change with the local neighborhood of the object, which means you can't use tiling textures very much.  This means it would be very expensive to texture something like a big building, since you'd need unique texels everywhere.",
+      "zh": "因为这种风格想用贴图去衬托物体，贴图的内容就必须随着物体所在的局部环境而变，也就是说你没法大量使用平铺纹理。这意味着给一栋大建筑这样的东西贴图会非常贵，因为到处都得用独一无二的纹素。"
+    },
+    {
+      "type": "p",
+      "en": "Thankfully, the Western game development world has a tradition of developers being very open with their techniques and processes, and communicating with other developers very honestly about what is effective.  (This is not something that one finds elsewhere in the world, and we should work hard to keep that spirit alive because it benefits everyone; but that's a totally separate rant.)  Here's one good example of this kind of information exchange: at the GDC this year, some guys from Naughty Dog gave a talk on the art direction for Uncharted 2 ([pdf link to their slides here](http://cmpmedia.vo.llnwd.net/o1/vault/gdc10/slides/Pangilinan_Erick_Uncharted2ArtDirection.pdf).)  Somewhere around page 220 of this very informative slideshow, they start talking about the blend shaders that they use in order to give more character to buildings and other geometry while still using tiling textures.  The idea is that you interpolate between two (or more) textures with a blend function that fits the shape of your building nicely.  You put some smarts into the interpolation so that it produces something that is visually interesting, rather than the blurry mess you would get via naive interpolation.",
+      "zh": "幸好，西方游戏开发圈有个传统：开发者对自己的技术和流程非常开放，也很坦诚地和其他开发者交流什么做法有效。（这在世界其他地方可不多见，我们应该努力让这种精神活下去，因为它对每个人都有好处；不过这通抱怨是另一个话题了。）这种信息交流有个很好的例子：今年 GDC 上，Naughty Dog 的几个人做了一场关于 Uncharted 2 美术方向的演讲（[他们幻灯片的 pdf 链接在这里](http://cmpmedia.vo.llnwd.net/o1/vault/gdc10/slides/Pangilinan_Erick_Uncharted2ArtDirection.pdf)）。在这份信息量很大的幻灯片大概第 220 页附近，他们开始讲他们用的混合着色器：目的是在继续使用平铺纹理的同时，让建筑和其他几何体更有性格。思路是用一个能很好地贴合建筑形体的混合函数，在两张（或更多）纹理之间插值。你在插值里加入一些聪明的处理，让结果在视觉上有意思，而不是天真插值得到的那团模糊。"
+    },
+    {
+      "type": "p",
+      "en": "For The Witness it seemed like a good idea to use this kind of technique, but in a minimalist way, to create patterns that accentuate the shapes of buildings, and help tie them together visually, without stumbling into the realm of Ugly Texturing.",
+      "zh": "对《The Witness》来说，用这类技术似乎是个好主意，但要以极简的方式用：造出一些图案来衬托建筑的形体，让它们在视觉上彼此联系起来，同时不跌进「丑陋贴图」的地界。"
+    },
+    {
+      "type": "p",
+      "en": "(There are a lot of reasons for the minimalism; one reason, though, is to provide clarity about what you can interact with, versus what is inert.  Interactive things are colored in a way that makes them stand out in an obvious way.  Think of it as something like what Mirror's Edge did, but in a different way.)",
+      "zh": "（走极简路线有很多原因；其中一个原因是让人一眼看清哪些东西可以交互、哪些是死的。可交互的东西在配色上会被处理得明显地跳出来。你可以把这想成有点像 Mirror's Edge 干的事，但方式不同。）"
+    },
+    {
+      "type": "p",
+      "en": "We've started experimenting with these blend shaders; here are some images:",
+      "zh": "我们已经开始试这些混合着色器了；下面是几张图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/11/one_vs_two_tones-512x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The upper-left shows a scene before we implemented the blend shader for buildings.  In the upper-right, we are using a blend shader that blends the original texture with an alternate one that is a bit darker and rougher (but the difference is a bit subtle, by game standards at least).  Below these images are the same scenes with precomputed lighting mixed in.",
+      "zh": "左上角是我们为建筑实现混合着色器之前的场景。右上角用了一个混合着色器，把原本的纹理和一张稍暗、稍粗糙的替代纹理混在一起（不过按游戏的标准，这点差别还是有点微妙）。这两张图下面是同样场景混入预计算光照后的样子。"
+    },
+    {
+      "type": "p",
+      "en": "It is pretty clear to me that the lighting is actually the biggest ingredient in tying the scene together, but the blend shader is, I think, a good extra kick.  It helps the area feel like there is a little bit of life and history to it (for example, the lighter-colored paths near the puzzle panels in the foreground, which imply that people have been walking that way).  What you see here is not of shipping quality, but I see how we can reach shipping quality by iterating on this style and putting production-level effort into the assets.",
+      "zh": "在我看来很清楚：真正把场景统合起来的最主要成分是光照，但我觉得混合着色器是一记很好的额外加成。它让这一带感觉上多了点生气和历史感（比如前景里谜题面板附近颜色更浅的小路，暗示着人们一直从那里走过）。你在这里看到的东西还达不到出货质量，但我看得出，只要在这个风格上不断迭代、并对资产投入生产级的功夫，我们就能达到出货质量。"
+    },
+    {
+      "type": "p",
+      "en": "Here's a close-up of what the stairway looks like:",
+      "zh": "这是楼梯近看的样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/11/closeups-256x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, the texture maps have some grain to them; from far away, the grain melts away and the structure is mostly a solid color, accented by lighting.",
+      "zh": "如你所见，这些贴图上带一些颗粒感；从远处看，颗粒会化开，建筑整体基本就是一片纯色，靠光照来点出层次。"
+    },
+    {
+      "type": "p",
+      "en": "These experiments are still early yet but I find them very promising.  The plan is that we will continue to hone the style and end up with something very special.",
+      "zh": "这些实验还很早期，但我觉得很有希望。计划是继续打磨这种风格，最后做出点非常特别的东西来。"
+    }
+  ]
+}

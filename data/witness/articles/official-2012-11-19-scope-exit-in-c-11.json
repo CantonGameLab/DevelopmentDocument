@@ -1,0 +1,73 @@
+{
+  "id": "official-2012-11-19-scope-exit-in-c-11",
+  "title": { "zh": "C++11 里的 scope(exit)", "en": "scope(exit) in C++11" },
+  "subtitle": {
+    "en": "Implementing D-style scope(exit) statements in C++11 by allocating a lambda wrapper on the stack.",
+    "zh": "依靠在栈上分配一个 lambda 包装对象，在 C++11 里实现 D 风格的 scope(exit) 语句。"
+  },
+  "translator": {
+    "note": "归档源码通篇没有小标题；原文中的 `***Update:***` 保留为强调段落。归档里的代码块没有语言标注，按内容标为 cpp。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I really like the [scope(exit) statements in D](http://dlang.org/statement.html#ScopeGuardStatement). They allow you to keep the cleanup code next to the initialization code making it much easier to maintain and understand. I wish we had them in C++.",
+      "zh": "我很喜欢 [D 语言里的 scope(exit) 语句](http://dlang.org/statement.html#ScopeGuardStatement)。它让你能把清理代码紧挨着初始化代码放，维护和理解都容易得多。真希望 C++ 里也有。"
+    },
+    {
+      "type": "p",
+      "en": "Turns out this can be implemented easily using some of the new C++ features. I'm not a big fan of C++11; for the most part I think it adds even more complexity to an already complex language. However, I have to admit that some of the features can be useful, when used with care and moderation.",
+      "zh": "事实证明，用一些新的 C++ 特性可以很容易把它实现出来。我不太喜欢 C++11；大体上说，我觉得它是给一门本来就很复杂的语言又添了更多复杂度。不过我得承认，其中一些特性只要用得克制、得当，还是很有用的。"
+    },
+    {
+      "type": "p",
+      "en": "I think this is one of such cases. If you can get past the weird syntax, lambdas can be very powerful. What I find most useful is to be able to define local functions (closures) that can access the local variables of the enclosing scope.",
+      "zh": "我觉得这就是其中一例。只要能接受那套古怪的语法，lambda 可以非常强大。我觉得最有用的地方，是能够定义可以访问外层作用域局部变量的局部函数（闭包）。"
+    },
+    {
+      "type": "p",
+      "en": "In our case, what we want to do is to define some code that is executed at the end of the scope to cleanup objects allocated in the current scope. This is easily achieved allocating an object on the stack that invokes a lambda function that wraps our custom cleanup code:",
+      "zh": "在我们的场景里，要做的是定义一段在作用域结束时执行的代码，用来清理当前作用域中分配的对象。要做到这一点很容易：在栈上分配一个对象，让它调用一个包装了我们自定义清理代码的 lambda 函数："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "#include <functional>\n\nstruct ScopeExit {\n    ScopeExit(std::function f) : f(f) {}\n    ~ScopeExit() { f(); }\n    std::function f;\n};\n\n#define STRING_JOIN2(arg1, arg2) DO_STRING_JOIN2(arg1, arg2)\n#define DO_STRING_JOIN2(arg1, arg2) arg1 ## arg2\n#define SCOPE_EXIT(code) \\\n    ScopeExit STRING_JOIN2(scope_exit_, __LINE__)([=](){code;})"
+    },
+    {
+      "type": "p",
+      "en": "Then you can write code like:",
+      "zh": "然后就可以这样写代码："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int * ip = new int[16];\nSCOPE_EXIT(delete [] ip);\n\nFILE * fp = fopen(\"test.out\", \"wb\");\nSCOPE_EXIT(fclose(fp));"
+    },
+    {
+      "type": "p",
+      "en": "I know you can go to greater lengths to mimic the D syntax, and that Boost also provides similar functionality, but this does all we need in less than 10 lines of code.",
+      "zh": "我知道你可以费更大的劲去模仿 D 的语法，也知道 Boost 提供了类似的功能，但这个方案用不到 10 行代码就做到了我们需要的一切。"
+    },
+    {
+      "type": "p",
+      "en": "Sadly we cannot really use this on The Witness, because I'm not sure we are yet ready to drop support for platforms and compilers that do not implement the required C++11 functionality.",
+      "zh": "遗憾的是，我们在《The Witness》上还用不了它，因为我不确定我们是否已经准备好放弃对「尚未实现所需 C++11 功能的平台和编译器」的支持。"
+    },
+    {
+      "type": "p",
+      "en": "***Update:***",
+      "zh": "***更新：***"
+    },
+    {
+      "type": "p",
+      "en": "As mentioned by Daniel in the comments, you don't really want to use std::function in this case. A quick look at the assembly output confirms that the generated code is horrible. It makes a lot more sense to wrap the closure explicitly and rely on type inference to allocate the wrapper object on the stack:",
+      "zh": "正如 Daniel 在评论里提到的，这种情况下你其实并不想用 std::function。看一眼汇编输出就能确认，生成的代码糟糕透顶。更合理的做法是显式地把闭包包装起来，并依靠类型推导把包装对象分配在栈上："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "template <typename F>\nstruct ScopeExit {\n    ScopeExit(F f) : f(f) {}\n    ~ScopeExit() { f(); }\n    F f;\n};\n\ntemplate <typename F>\nScopeExit<F> MakeScopeExit(F f) {\n    return ScopeExit<F>(f);\n};\n\n#define SCOPE_EXIT(code) \\\n    auto STRING_JOIN2(scope_exit_, __LINE__) = MakeScopeExit([=](){code;})"
+    }
+  ]
+}

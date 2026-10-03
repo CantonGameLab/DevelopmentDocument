@@ -1,0 +1,13 @@
+# Witness in Limbo
+
+- **作者**：Orsi Spanyol
+- **日期**：2015-07-11 00:00 UTC
+- **分类**：Uncategorized
+- **原文**：http://the-witness.net/news/2015/07/witness-in-limbo/
+- **来源**：the-witness.net 官方开发博客（文章页全文）
+
+---
+
+We have this depth mode in the editor, that I've never really used for anything other than taking neat screenshots for fun. It's been a while since the last post, so I thought it might be cool to share some. It's difficult to find interesting new screenshots to share lately, since we've already shown a lot of the game and don't want to ruin the exploration when it comes out!
+
+[![shot_2015.06.15__time_17_48_n01](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_48_n01-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_48_n01.png) [![shot_2015.06.15__time_17_49_n02](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n02-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n02.png) [![shot_2015.06.15__time_17_49_n03](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n03-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n03.png) [![shot_2015.06.15__time_17_49_n04](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n04-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n04.png) [![shot_2015.06.15__time_17_50_n05](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_50_n05-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_50_n05.png) [![shot_2015.06.15__time_17_51_n07](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_51_n07-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_51_n07.png) [![shot_2015.06.15__time_17_52_n09](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_52_n09-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_52_n09.png) [![shot_2015.06.15__time_17_53_n11](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_53_n11-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_53_n11.png) [![shot_2015.06.15__time_17_54_n12](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_54_n12-512x288.png)](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_54_n12.png)

@@ -1,0 +1,85 @@
+{
+  "id": "official-2018-06-27-congratulations-to-the-grant-recipients",
+  "title": {
+    "zh": "恭喜获得资助的开发者们！",
+    "en": "Congratulations to the grant recipients!"
+  },
+  "subtitle": {
+    "en": "The grant recipients have been selected.",
+    "zh": "资助的入选名单已经评出。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We are pleased to announce that the grant recipients have been selected!",
+      "zh": "我们很高兴地宣布，资助的入选名单已经评出来了！"
+    },
+    {
+      "type": "p",
+      "en": "Congratulations to the following creators:",
+      "zh": "恭喜以下这些创作者："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[Anastasia Kuznetsova](https://twitter.com/weaselcoin) - Raison",
+          "zh": "[Anastasia Kuznetsova](https://twitter.com/weaselcoin) - Raison"
+        },
+        {
+          "en": "AWK - [Harmon:i:c](https://awk.itch.io/harmonic)",
+          "zh": "AWK - [Harmon:i:c](https://awk.itch.io/harmonic)"
+        },
+        {
+          "en": "[Dario Zubović](https://twitter.com/dario_zubovic) - QBCO",
+          "zh": "[Dario Zubović](https://twitter.com/dario_zubovic) - QBCO"
+        },
+        {
+          "en": "29Games - RocketPuzzle",
+          "zh": "29Games - RocketPuzzle"
+        },
+        {
+          "en": "[Asriele Aestas](https://twitter.com/summerairfun) - Our Sky",
+          "zh": "[Asriele Aestas](https://twitter.com/summerairfun) - Our Sky"
+        },
+        {
+          "en": "[Cyathea Tree Team](https://twitter.com/cyatheatree) - [Out of Bounds Exception](http://cyatheatree.com/projects/outofboundsexception)",
+          "zh": "[Cyathea Tree Team](https://twitter.com/cyatheatree) - [Out of Bounds Exception](http://cyatheatree.com/projects/outofboundsexception)"
+        },
+        {
+          "en": "David Rhee - Sticky Blocks",
+          "zh": "David Rhee - Sticky Blocks"
+        },
+        {
+          "en": "[Nico Saraintaris](https://twitter.com/NicoSaraintaris) - [Trash Diamonds](http://beavl.com)",
+          "zh": "[Nico Saraintaris](https://twitter.com/NicoSaraintaris) - [Trash Diamonds](http://beavl.com)"
+        },
+        {
+          "en": "[Weird Sisters Interactive](http://weirdsistersinteractive.com/) - [It's a Zoo.](https://avalkyrie.itch.io/zoo-game)",
+          "zh": "[Weird Sisters Interactive](http://weirdsistersinteractive.com/) - [It’s a Zoo.](https://avalkyrie.itch.io/zoo-game)"
+        },
+        {
+          "en": "Ruby - [SokoBunny](https://dreams.itch.io/sokobunny-prototype)",
+          "zh": "Ruby - [SokoBunny](https://dreams.itch.io/sokobunny-prototype)"
+        },
+        {
+          "en": "Skalmantas Šimėnas - Magnecopter",
+          "zh": "Skalmantas Šimėnas - Magnecopter"
+        },
+        {
+          "en": "[Andrius Mitkus](https://twitter.com/amitkus) - [Rimtis (working title)](http://mitk.us)",
+          "zh": "[Andrius Mitkus](https://twitter.com/amitkus) - [Rimtis (working title)](http://mitk.us)"
+        },
+        {
+          "en": "Jose Hernandez - [Efficient Necromancy](https://josehzz.itch.io/efficient-necromancy)",
+          "zh": "Jose Hernandez - [Efficient Necromancy](https://josehzz.itch.io/efficient-necromancy)"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "We are excited to see how these games progress and we're looking forward to sharing updates.",
+      "zh": "我们很期待看到这些游戏后续的进展，也期待与大家分享更新。"
+    }
+  ]
+}

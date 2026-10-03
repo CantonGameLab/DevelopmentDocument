@@ -1,0 +1,41 @@
+{
+  "id": "official-2014-07-10-irradiance-caching-continued",
+  "title": {
+    "zh": "辐照度缓存（续）",
+    "en": "Irradiance Caching – Continued"
+  },
+  "subtitle": {
+    "en": "Ignacio has posted the conclusion of his irradiance-caching series and released the source code.",
+    "zh": "Ignacio 发完了他的辐照度缓存系列，并放出了源代码。"
+  },
+  "translator": {
+    "note": "归档里开头两段原文就是两行「...」，照原样保留为两个段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "...",
+      "zh": "……"
+    },
+    {
+      "type": "p",
+      "en": "...",
+      "zh": "……"
+    },
+    {
+      "type": "p",
+      "en": "Ignacio has posted [the conclusion of his series on irradiance caching](http://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/) -- at long last! -- and released the source code.",
+      "zh": "Ignacio 发出来了[他辐照度缓存系列的最后一篇](http://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/)——真是千呼万唤！——并且放出了源代码。"
+    },
+    {
+      "type": "p",
+      "en": "This code is a significant chunk of what makes lighting in The Witness as nice as it is.",
+      "zh": "这份代码是让《The Witness》的光照如此出色的重要组成部分。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

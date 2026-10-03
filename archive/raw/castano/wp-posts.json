@@ -1,0 +1,900 @@
+[
+  {
+    "id": 1964,
+    "date": "2026-09-25T10:44:39",
+    "slug": "encoding-render-targets-for-free-with-tile-shaders",
+    "link": "https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/",
+    "title": {
+      "rendered": "Encoding Render Targets for Free with Tile Shaders"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1871,
+    "date": "2026-09-17T12:17:03",
+    "slug": "spark-1-4",
+    "link": "https://www.ludicon.com/castano/blog/2026/09/spark-1-4/",
+    "title": {
+      "rendered": "Spark 1.4"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1837,
+    "date": "2026-06-04T08:46:59",
+    "slug": "spark-for-unity",
+    "link": "https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/",
+    "title": {
+      "rendered": "Spark for Unity"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1814,
+    "date": "2026-05-04T19:27:16",
+    "slug": "image-loading-on-the-web",
+    "link": "https://www.ludicon.com/castano/blog/2026/05/image-loading-on-the-web/",
+    "title": {
+      "rendered": "Image Loading on the Web"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1790,
+    "date": "2026-04-24T10:05:50",
+    "slug": "metal-lossy-compression-format",
+    "link": "https://www.ludicon.com/castano/blog/2026/04/metal-lossy-compression-format/",
+    "title": {
+      "rendered": "Metal Lossy Compression Format"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1777,
+    "date": "2026-04-15T01:26:50",
+    "slug": "the-true-size-of-astc-textures",
+    "link": "https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/",
+    "title": {
+      "rendered": "The True Size of ASTC Textures"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1768,
+    "date": "2026-04-10T18:17:40",
+    "slug": "writing-to-compressed-textures-in-metal",
+    "link": "https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/",
+    "title": {
+      "rendered": "Writing to Compressed Textures in Metal"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1744,
+    "date": "2026-03-28T00:44:11",
+    "slug": "hardware-image-compression",
+    "link": "https://www.ludicon.com/castano/blog/2026/03/hardware-image-compression/",
+    "title": {
+      "rendered": "Hardware Image Compression"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1713,
+    "date": "2026-03-05T00:59:15",
+    "slug": "announcing-spark-js-0-1",
+    "link": "https://www.ludicon.com/castano/blog/2026/03/announcing-spark-js-0-1/",
+    "title": {
+      "rendered": "Announcing spark.js 0.1"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1662,
+    "date": "2026-02-18T00:53:40",
+    "slug": "runtime-mipmap-generation",
+    "link": "https://www.ludicon.com/castano/blog/2026/02/runtime-mipmap-generation/",
+    "title": {
+      "rendered": "Runtime Mipmap Generation"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1614,
+    "date": "2026-02-09T15:47:37",
+    "slug": "an-updated-sponza-gltf",
+    "link": "https://www.ludicon.com/castano/blog/2026/02/an-updated-sponza-gltf/",
+    "title": {
+      "rendered": "An Updated Sponza glTF"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1602,
+    "date": "2026-02-04T18:49:13",
+    "slug": "normal-map-compression-revisited",
+    "link": "https://www.ludicon.com/castano/blog/2026/02/normal-map-compression-revisited/",
+    "title": {
+      "rendered": "Normal Map Compression Revisited"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1595,
+    "date": "2026-01-26T12:58:49",
+    "slug": "choosing-texture-formats-for-webgpu-applications",
+    "link": "https://www.ludicon.com/castano/blog/2026/01/choosing-texture-formats-for-webgpu-applications/",
+    "title": {
+      "rendered": "Choosing Texture Formats for WebGPU applications"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1570,
+    "date": "2025-09-08T23:06:21",
+    "slug": "three-js-spark-js",
+    "link": "https://www.ludicon.com/castano/blog/2025/09/three-js-spark-js/",
+    "title": {
+      "rendered": "three.js + spark.js"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1550,
+    "date": "2025-08-06T10:26:19",
+    "slug": "spark-1-3-and-spark-js",
+    "link": "https://www.ludicon.com/castano/blog/2025/08/spark-1-3-and-spark-js/",
+    "title": {
+      "rendered": "Spark 1.3 and spark.js"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1496,
+    "date": "2025-03-06T10:31:21",
+    "slug": "spark-1-2",
+    "link": "https://www.ludicon.com/castano/blog/2025/03/spark-1-2/",
+    "title": {
+      "rendered": "Spark 1.2"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1468,
+    "date": "2025-02-20T01:20:15",
+    "slug": "gpu-texture-compression-everywhere",
+    "link": "https://www.ludicon.com/castano/blog/2025/02/gpu-texture-compression-everywhere/",
+    "title": {
+      "rendered": "GPU Texture Compression Everywhere"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1410,
+    "date": "2024-12-31T16:02:52",
+    "slug": "tools-for-gpu-codec-development",
+    "link": "https://www.ludicon.com/castano/blog/2024/12/tools-for-gpu-codec-development/",
+    "title": {
+      "rendered": "Tools for GPU Codec Development"
+    },
+    "categories": [
+      9,
+      22
+    ],
+    "tags": []
+  },
+  {
+    "id": 1377,
+    "date": "2022-11-13T01:24:05",
+    "slug": "crossing-the-ludicon",
+    "link": "https://www.ludicon.com/castano/blog/2022/11/crossing-the-ludicon/",
+    "title": {
+      "rendered": "<strong>Crossing the Ludicon</strong>"
+    },
+    "categories": [
+      9,
+      7,
+      22
+    ],
+    "tags": [
+      21
+    ]
+  },
+  {
+    "id": 1359,
+    "date": "2022-11-08T23:52:08",
+    "slug": "bc1-compression-revisited",
+    "link": "https://www.ludicon.com/castano/blog/2022/11/bc1-compression-revisited/",
+    "title": {
+      "rendered": "BC1 Compression Revisited"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 1199,
+    "date": "2019-12-21T01:13:01",
+    "slug": "dmv",
+    "link": "https://www.ludicon.com/castano/blog/2019/12/dmv/",
+    "title": {
+      "rendered": "My DMV Experience"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 1148,
+    "date": "2019-04-25T23:50:50",
+    "slug": "climbing-a-big-mountain-is-hard",
+    "link": "https://www.ludicon.com/castano/blog/2019/04/climbing-a-big-mountain-is-hard/",
+    "title": {
+      "rendered": "“Climbing a big mountain is hard”"
+    },
+    "categories": [
+      8
+    ],
+    "tags": []
+  },
+  {
+    "id": 1122,
+    "date": "2019-03-13T00:10:30",
+    "slug": "ladybugs",
+    "link": "https://www.ludicon.com/castano/blog/2019/03/ladybugs/",
+    "title": {
+      "rendered": "Ladybugs"
+    },
+    "categories": [
+      8
+    ],
+    "tags": []
+  },
+  {
+    "id": 1102,
+    "date": "2019-01-28T00:43:20",
+    "slug": "castle-peak-2015-2019",
+    "link": "https://www.ludicon.com/castano/blog/2019/01/castle-peak-2015-2019/",
+    "title": {
+      "rendered": "Castle Peak 2015 &#8211; 2019"
+    },
+    "categories": [
+      8,
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 1027,
+    "date": "2019-01-19T19:51:53",
+    "slug": "2018-recap",
+    "link": "https://www.ludicon.com/castano/blog/2019/01/2018-recap/",
+    "title": {
+      "rendered": "2018 Recap"
+    },
+    "categories": [
+      8,
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 955,
+    "date": "2017-10-05T22:50:10",
+    "slug": "lightmap-optimizations-ios",
+    "link": "https://www.ludicon.com/castano/blog/2017/10/lightmap-optimizations-ios/",
+    "title": {
+      "rendered": "Lightmap optimizations for iOS"
+    },
+    "categories": [
+      9
+    ],
+    "tags": [
+      20
+    ]
+  },
+  {
+    "id": 827,
+    "date": "2016-09-30T16:35:16",
+    "slug": "lightmap-compression-in-the-witness",
+    "link": "https://www.ludicon.com/castano/blog/2016/09/lightmap-compression-in-the-witness/",
+    "title": {
+      "rendered": "Lightmap Compression in The Witness"
+    },
+    "categories": [
+      9
+    ],
+    "tags": [
+      20
+    ]
+  },
+  {
+    "id": 816,
+    "date": "2014-12-05T12:11:28",
+    "slug": "d3dx-uvatlas-released",
+    "link": "https://www.ludicon.com/castano/blog/2014/12/d3dx-uvatlas-released/",
+    "title": {
+      "rendered": "D3DX UVAtlas released"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 743,
+    "date": "2014-09-17T10:18:14",
+    "slug": "first-backpacking-trip",
+    "link": "https://www.ludicon.com/castano/blog/2014/09/first-backpacking-trip/",
+    "title": {
+      "rendered": "First Backpacking Trip"
+    },
+    "categories": [
+      8
+    ],
+    "tags": []
+  },
+  {
+    "id": 719,
+    "date": "2014-08-29T00:42:12",
+    "slug": "hlslparser",
+    "link": "https://www.ludicon.com/castano/blog/2014/08/hlslparser/",
+    "title": {
+      "rendered": "HLSLParser"
+    },
+    "categories": [
+      9
+    ],
+    "tags": [
+      20
+    ]
+  },
+  {
+    "id": 596,
+    "date": "2014-07-10T00:06:45",
+    "slug": "irradiance-caching-continued",
+    "link": "https://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/",
+    "title": {
+      "rendered": "Irradiance Caching &#8211; Continued"
+    },
+    "categories": [
+      9
+    ],
+    "tags": [
+      20
+    ]
+  },
+  {
+    "id": 551,
+    "date": "2011-07-14T00:41:19",
+    "slug": "irradiance-caching-part-1",
+    "link": "https://www.ludicon.com/castano/blog/2011/07/irradiance-caching-part-1/",
+    "title": {
+      "rendered": "Irradiance Caching &#8211; Part 1"
+    },
+    "categories": [
+      9
+    ],
+    "tags": [
+      20
+    ]
+  },
+  {
+    "id": 492,
+    "date": "2011-04-05T15:02:20",
+    "slug": "we-are-hiring",
+    "link": "https://www.ludicon.com/castano/blog/2011/04/we-are-hiring/",
+    "title": {
+      "rendered": "We are hiring!"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 409,
+    "date": "2010-11-30T00:56:43",
+    "slug": "software-patents-are-programmers-responsibility",
+    "link": "https://www.ludicon.com/castano/blog/2010/11/software-patents-are-programmers-responsibility/",
+    "title": {
+      "rendered": "Software Patents are Programmer&#8217;s Responsibility"
+    },
+    "categories": [
+      9,
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 390,
+    "date": "2010-10-18T14:54:59",
+    "slug": "matts-gregory-acc-tessellation-render",
+    "link": "https://www.ludicon.com/castano/blog/2010/10/matts-gregory-acc-tessellation-render/",
+    "title": {
+      "rendered": "Matt&#8217;s Gregory ACC Tessellation Render"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 304,
+    "date": "2010-09-29T17:31:18",
+    "slug": "hemicube-rendering-and-integration",
+    "link": "https://www.ludicon.com/castano/blog/2010/09/hemicube-rendering-and-integration/",
+    "title": {
+      "rendered": "Hemicube Rendering and Integration"
+    },
+    "categories": [
+      9
+    ],
+    "tags": [
+      13
+    ]
+  },
+  {
+    "id": 275,
+    "date": "2010-09-16T23:48:39",
+    "slug": "precise",
+    "link": "https://www.ludicon.com/castano/blog/2010/09/precise/",
+    "title": {
+      "rendered": "Watertight Tessellation: precise and fma"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 247,
+    "date": "2010-09-14T23:01:47",
+    "slug": "back-online",
+    "link": "https://www.ludicon.com/castano/blog/2010/09/back-online/",
+    "title": {
+      "rendered": "Back Online"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 68,
+    "date": "2010-05-04T23:51:34",
+    "slug": "life",
+    "link": "https://www.ludicon.com/castano/blog/2010/05/life/",
+    "title": {
+      "rendered": "Life"
+    },
+    "categories": [
+      7
+    ],
+    "tags": [
+      13
+    ]
+  },
+  {
+    "id": 66,
+    "date": "2010-03-05T23:51:25",
+    "slug": "the-witness",
+    "link": "https://www.ludicon.com/castano/blog/2010/03/the-witness/",
+    "title": {
+      "rendered": "The Witness"
+    },
+    "categories": [
+      9,
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 70,
+    "date": "2010-02-04T23:51:41",
+    "slug": "opennl-3-0",
+    "link": "https://www.ludicon.com/castano/blog/2010/02/opennl-3-0/",
+    "title": {
+      "rendered": "OpenNL 3.0"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 54,
+    "date": "2009-12-19T23:50:19",
+    "slug": "pate",
+    "link": "https://www.ludicon.com/castano/blog/2009/12/pate/",
+    "title": {
+      "rendered": "Pâté"
+    },
+    "categories": [
+      6
+    ],
+    "tags": []
+  },
+  {
+    "id": 122,
+    "date": "2009-11-15T16:30:54",
+    "slug": "biking",
+    "link": "https://www.ludicon.com/castano/blog/2009/11/biking/",
+    "title": {
+      "rendered": "Biking"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 106,
+    "date": "2009-11-09T00:16:57",
+    "slug": "new-job",
+    "link": "https://www.ludicon.com/castano/blog/2009/11/new-job/",
+    "title": {
+      "rendered": "New Job"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 125,
+    "date": "2009-09-30T16:33:21",
+    "slug": "continuity-mapping-for-multi-chart-textures",
+    "link": "https://www.ludicon.com/castano/blog/2009/09/continuity-mapping-for-multi-chart-textures/",
+    "title": {
+      "rendered": "Continuity Mapping for Multi-Chart Textures"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 120,
+    "date": "2009-09-30T16:28:42",
+    "slug": "davis-aquatic-masters",
+    "link": "https://www.ludicon.com/castano/blog/2009/09/davis-aquatic-masters/",
+    "title": {
+      "rendered": "Davis Aquatic Masters"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 52,
+    "date": "2009-09-12T23:50:09",
+    "slug": "camping-in-the-redwoods",
+    "link": "https://www.ludicon.com/castano/blog/2009/09/camping-in-the-redwoods/",
+    "title": {
+      "rendered": "Camping in the Redwoods"
+    },
+    "categories": [
+      8
+    ],
+    "tags": []
+  },
+  {
+    "id": 60,
+    "date": "2009-07-21T23:50:51",
+    "slug": "rice-with-milk",
+    "link": "https://www.ludicon.com/castano/blog/2009/07/rice-with-milk/",
+    "title": {
+      "rendered": "Rice with milk"
+    },
+    "categories": [
+      6
+    ],
+    "tags": []
+  },
+  {
+    "id": 50,
+    "date": "2009-07-10T23:50:02",
+    "slug": "salmorejo-means-food-in-summer",
+    "link": "https://www.ludicon.com/castano/blog/2009/07/salmorejo-means-food-in-summer/",
+    "title": {
+      "rendered": "Salmorejo means food in summer"
+    },
+    "categories": [
+      6
+    ],
+    "tags": []
+  },
+  {
+    "id": 252,
+    "date": "2009-05-12T16:50:27",
+    "slug": "efficient-substitutes-for-subdivision-surfaces",
+    "link": "https://www.ludicon.com/castano/blog/2009/05/efficient-substitutes-for-subdivision-surfaces/",
+    "title": {
+      "rendered": "Efficient Substitutes for Subdivision Surfaces"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 131,
+    "date": "2009-04-24T16:40:13",
+    "slug": "nvtt-quote",
+    "link": "https://www.ludicon.com/castano/blog/2009/04/nvtt-quote/",
+    "title": {
+      "rendered": "NVTT quote"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 127,
+    "date": "2009-04-24T16:37:09",
+    "slug": "standing-desk-2",
+    "link": "https://www.ludicon.com/castano/blog/2009/04/standing-desk-2/",
+    "title": {
+      "rendered": "Standing Desk 2"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 44,
+    "date": "2009-03-20T23:49:31",
+    "slug": "nvidia-texture-tools-2-0-6",
+    "link": "https://www.ludicon.com/castano/blog/2009/03/nvidia-texture-tools-2-0-6/",
+    "title": {
+      "rendered": "NVIDIA Texture Tools 2.0.6"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 40,
+    "date": "2009-03-19T23:49:12",
+    "slug": "gpu-dxt-decompression",
+    "link": "https://www.ludicon.com/castano/blog/2009/03/gpu-dxt-decompression/",
+    "title": {
+      "rendered": "GPU DXT Decompression"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 56,
+    "date": "2009-03-18T23:50:26",
+    "slug": "ham-and-beans",
+    "link": "https://www.ludicon.com/castano/blog/2009/03/ham-and-beans/",
+    "title": {
+      "rendered": "Ham and Beans"
+    },
+    "categories": [
+      6
+    ],
+    "tags": []
+  },
+  {
+    "id": 34,
+    "date": "2009-02-02T23:48:35",
+    "slug": "optimal-grid-rendering",
+    "link": "https://www.ludicon.com/castano/blog/2009/02/optimal-grid-rendering/",
+    "title": {
+      "rendered": "Optimal Grid Rendering"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 72,
+    "date": "2009-01-29T23:51:51",
+    "slug": "acmr-2",
+    "link": "https://www.ludicon.com/castano/blog/2009/01/acmr-2/",
+    "title": {
+      "rendered": "ACMR"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 38,
+    "date": "2009-01-27T23:48:57",
+    "slug": "real-time-creased-approximate-subdivision-surfaces",
+    "link": "https://www.ludicon.com/castano/blog/2009/01/real-time-creased-approximate-subdivision-surfaces/",
+    "title": {
+      "rendered": "Real-Time Creased Approximate Subdivision Surfaces"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 46,
+    "date": "2009-01-10T23:49:39",
+    "slug": "10-fun-things-to-do-with-tessellation",
+    "link": "https://www.ludicon.com/castano/blog/2009/01/10-fun-things-to-do-with-tessellation/",
+    "title": {
+      "rendered": "10 Fun Things to do with Tessellation"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 36,
+    "date": "2009-01-10T23:48:47",
+    "slug": "ownership-based-zippering",
+    "link": "https://www.ludicon.com/castano/blog/2009/01/ownership-based-zippering/",
+    "title": {
+      "rendered": "Ownership-based Zippering"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 328,
+    "date": "2009-01-07T10:55:18",
+    "slug": "approximate-subdivision-shading",
+    "link": "https://www.ludicon.com/castano/blog/2009/01/approximate-subdivision-shading/",
+    "title": {
+      "rendered": "Approximate Subdivision Shading"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 42,
+    "date": "2009-01-01T23:49:21",
+    "slug": "watertight-texture-sampling",
+    "link": "https://www.ludicon.com/castano/blog/2009/01/watertight-texture-sampling/",
+    "title": {
+      "rendered": "Watertight Texture Sampling"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 257,
+    "date": "2008-12-10T17:07:30",
+    "slug": "the-foie-gras-parable",
+    "link": "https://www.ludicon.com/castano/blog/2008/12/the-foie-gras-parable/",
+    "title": {
+      "rendered": "The foie gras parable"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  },
+  {
+    "id": 64,
+    "date": "2008-09-09T23:51:17",
+    "slug": "gamefest-presentations",
+    "link": "https://www.ludicon.com/castano/blog/2008/09/gamefest-presentations/",
+    "title": {
+      "rendered": "Gamefest Presentations"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 62,
+    "date": "2008-08-26T23:51:01",
+    "slug": "nvidia-widgets",
+    "link": "https://www.ludicon.com/castano/blog/2008/08/nvidia-widgets/",
+    "title": {
+      "rendered": "nvidia-widgets"
+    },
+    "categories": [
+      9
+    ],
+    "tags": []
+  },
+  {
+    "id": 230,
+    "date": "2008-08-25T00:37:04",
+    "slug": "moving",
+    "link": "https://www.ludicon.com/castano/blog/2008/08/moving/",
+    "title": {
+      "rendered": "Moving"
+    },
+    "categories": [
+      7
+    ],
+    "tags": []
+  }
+]

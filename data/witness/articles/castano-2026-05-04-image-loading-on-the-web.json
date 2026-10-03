@@ -1,0 +1,468 @@
+{
+  "id": "castano-2026-05-04-image-loading-on-the-web",
+  "title": {
+    "zh": "在 Web 上加载图像",
+    "en": "Image Loading on the Web"
+  },
+  "subtitle": {
+    "zh": "把图片喂给 WebGL/WebGPU 有多麻烦：createImageBitmap、HTMLImageElement、ImageDecoder 三条路径的实测、坑与绕行办法。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文有两处归档丢失，均对照原始 HTML（`archive/raw/castano/html/1814-image-loading-on-the-web.json`）修复：`HTMLImageElement` 那段里 `an HTML [](url) element` 的空链接标签、以及愿望清单里 `browsers in  elements` 的空缺，原文都是 `<code>&lt;img&gt;</code>`，译文按原文补回为 `` `<img>` ``。两张基准测试表（`Browser / \\`createImageBitmap\\` / \\`ImageDecoder.decode\\` 等）在归档 md 里被压成一行一个单元格，译文各还原为一个 `code` 块（`lang: \"text\"`）、空格对齐列并保留表头行，数值逐字未改。`### `、`#### ` 级小标题一律降级为 `h2`；四处 `Summary:` 小标题在同一篇内重复，`id` 依次加后缀区分。代码围栏在源文里都没有语言标注，内容均为 JavaScript/TS 片段或数据表，前者标为 `js`、表格标为 `text`，围栏内容逐字保留、注释也未译。源文的列表项在原始 HTML 里带 `<strong>` 强调、链接标签里带 `<code>`，归档 md 都已无这些标记，译文同样以 md 为准。术语：`endpoint`/`palette`/`texel` 未出现；`tone mapping` 作「色调映射」、`premultiplied alpha` 作「预乘 alpha」、`mipmap` 不译、`block compression` 作「块压缩」；API 与格式名（WebGL、WebGPU、WebCodecs、`createImageBitmap`、`ImageDecoder`、`HTMLImageElement`、`HTMLCanvasElement`、`HTMLVideoElement`、`ImageBitmap`、`ImageData`、`OffscreenCanvas`、`VideoFrame`、`SVGImageElement`、`TypedArray`、`Blob`、`GPUTexture`、`copyExternalImageToTexture`、`STORAGE_BINDING`、`bgra8unorm-storage`、`gl.texImage2D`、BGRA8、RGBA8、sRGB、YUV、AVIF、JPEG、HEIF、HDR、SSE2、NEON、`gfx::SwizzleData`、`gfx::SwizzleYFlipData`、`ConvertImage`、`WebGLImageConverter`、`spark.js`、`spark.encodeTexture`、Safari、Chrome、Firefox、Tahoe、iOS 26、`Uint16Array`）一律保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "You would think that loading images in the browser is a solved problem. After all, websites are basically composed of text and images.",
+      "zh": "你大概会以为，在浏览器里加载图片是个已经解决的问题。毕竟网站基本上就是由文字和图片构成的。"
+    },
+    {
+      "type": "p",
+      "en": "Turns out that loading images from JavaScript to use in WebGL/WebGPU applications is not nearly as simple or well supported as it should be. There are several APIs for it, and the right choice depends on which browser you are targeting. They each have different performance characteristics, and some have unexpected behaviors or outright bugs.",
+      "zh": "可事实是，从 JavaScript 里加载图片、拿去给 WebGL/WebGPU 应用使用，远没有它本该有的那么简单、支持得那么好。有好几个 API 可以做这件事，而选哪个取决于你要面向哪个浏览器。它们各有不同的性能特征，有些还有意外行为，甚至是明显的 bug。"
+    },
+    {
+      "type": "p",
+      "en": "This is surprising considering that loading images is one of the most fundamental things a browser does.",
+      "zh": "考虑到加载图片是浏览器最基础的功能之一，这实在令人意外。"
+    },
+    {
+      "type": "p",
+      "en": "Both WebGL and WebGPU make it fairly easy to create a texture from various image representations.",
+      "zh": "无论是 WebGL 还是 WebGPU，都能相当轻松地从各种图像表示形式创建纹理。"
+    },
+    {
+      "type": "p",
+      "en": "In WebGL the `gl.texImage2D` function accepts two types of sources, a `TypedArray` or a DOM pixel source. The latter includes any of these objects:",
+      "zh": "在 WebGL 里，`gl.texImage2D` 接受两类来源：`TypedArray` 或者 DOM 像素源。后者包括下面这些对象中的任意一种："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[ImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap)",
+          "zh": "[ImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap)"
+        },
+        {
+          "en": "[ImageData](https://developer.mozilla.org/en-US/docs/Web/API/ImageData)",
+          "zh": "[ImageData](https://developer.mozilla.org/en-US/docs/Web/API/ImageData)"
+        },
+        {
+          "en": "[HTMLImageElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement)",
+          "zh": "[HTMLImageElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement)"
+        },
+        {
+          "en": "[HTMLCanvasElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement)",
+          "zh": "[HTMLCanvasElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement)"
+        },
+        {
+          "en": "[HTMLVideoElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement)",
+          "zh": "[HTMLVideoElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement)"
+        },
+        {
+          "en": "[OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas)",
+          "zh": "[OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas)"
+        },
+        {
+          "en": "[VideoFrame](https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame)",
+          "zh": "[VideoFrame](https://developer.mozilla.org/en-US/docs/Web/API/VideoFrame)"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Similarly, in WebGPU we can populate `GPUTexture` objects using `queue.copyExternalImageToTexture` which accepts the same DOM pixel sources.",
+      "zh": "同样，在 WebGPU 里我们可以用 `queue.copyExternalImageToTexture` 填充 `GPUTexture` 对象，它接受相同的 DOM 像素源。"
+    },
+    {
+      "type": "p",
+      "en": "With all these options, it’s up to the developer to choose what pathway to use. Sometimes the image data is already in a particular form and the choice is made for you. But most of the time you’re fetching an image from a URL, and the question becomes: which API gets the pixels onto the GPU fastest?",
+      "zh": "有这么多选项，该走哪条路径就由开发者自己决定。有时图像数据已经是某种特定形式，选择也就定了。但大多数时候你是从 URL 拉取一张图片，问题就变成：哪个 API 能最快把像素送到 GPU 上？"
+    },
+    {
+      "type": "p",
+      "en": "As we will see, WebGPU is still a young API with immature implementations, and depending on the pathway you pick, you can also run into color space bugs or formats that simply don’t work.",
+      "zh": "我们后面会看到，WebGPU 还是个年轻的 API，实现也不成熟；而且根据你选的路径，还可能撞上颜色空间的 bug，或者干脆是某些根本不能用的格式。"
+    },
+    {
+      "type": "h2",
+      "id": "createimagebitmap",
+      "en": "`createImageBitmap`",
+      "zh": "`createImageBitmap`"
+    },
+    {
+      "type": "p",
+      "en": "The [createImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap) method returns a promise that resolves to an [ImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) and, in theory, it provides an asynchronous and resource-efficient pathway to prepare textures for rendering in WebGPU and WebGL that is widely supported across browsers.",
+      "zh": "[createImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap) 方法返回一个 promise，兑现为一个 [ImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap)。理论上它提供了一条异步、资源高效的途径，用来为 WebGPU 和 WebGL 的渲染准备纹理，而且在各浏览器上支持广泛。"
+    },
+    {
+      "type": "p",
+      "en": "Like the WebGL and WebGPU APIs, it accepts a variety of image sources, but the most useful input is a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). This gives us a clean separation between fetching the image and decoding it:",
+      "zh": "和 WebGL、WebGPU 的 API 一样，它接受多种图像源，但最有用的输入是 [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)。这样我们就能把「取图片」和「解码图片」干净地分开："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "export async function loadImageBitmap(url) {\n  const res = await fetch(url, { mode: \"cors\" })\n  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`)\n  const blob = await res.blob()\n\n  return createImageBitmap(blob, {\n    imageOrientation: \"none\",\n    colorSpaceConversion: \"none\",\n    premultiplyAlpha: \"none\"\n  })\n}"
+    },
+    {
+      "type": "p",
+      "en": "Additionally it provides fine grained control over the image orientation, color space conversion and alpha format, which are features missing from the other pathways.",
+      "zh": "此外，它还能细粒度地控制图像方向、色彩空间转换和 alpha 格式，这些都是其他路径所缺的功能。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, there are some issues:",
+      "zh": "遗憾的是，它有一些问题："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "SVG support is inconsistent. While the API promises support for SVG, the quality of the resulting images depends on the browser. Firefox produces the expected output, but in Safari and Chrome the resulting images are not antialiased. Additionally, if you provide an SVG file inside a blob (instead of an [SVGImageElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGImageElement)) Chrome does not produce valid output.",
+          "zh": "SVG 支持不一致。虽然 API 承诺支持 SVG，但结果图像的质量取决于浏览器。Firefox 产出符合预期的结果，而 Safari 和 Chrome 的结果没有抗锯齿。此外，如果你是通过 blob 提供 SVG 文件（而不是 [SVGImageElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGImageElement)），Chrome 产出的结果无效。"
+        },
+        {
+          "en": "Color space conversion bugs. Safari has known issues when passing ImageBitmap to copyExternalImageToTexture ([bug 296208](https://bugs.webkit.org/show_bug.cgi?id=296208), [and 295729](https://bugs.webkit.org/show_bug.cgi?id=295729)). These issues are fixed in Tahoe/iOS 26, but given the low adoption rate of this release they are worth keeping in mind.",
+          "zh": "色彩空间转换的 bug。Safari 在把 ImageBitmap 传给 copyExternalImageToTexture 时有已知问题（[bug 296208](https://bugs.webkit.org/show_bug.cgi?id=296208)，以及 [295729](https://bugs.webkit.org/show_bug.cgi?id=295729)）。这些问题在 Tahoe/iOS 26 里已经修好，但考虑到这个版本的采用率很低，还是值得留意。"
+        },
+        {
+          "en": "Asynchronous does not mean concurrent. The asynchronous nature of the API allows browser implementations to offload the decoding to a separate thread, but in practice the only browser that seems to do this is Chrome. In Firefox decoding is serial ([bug 1778394](https://bugzilla.mozilla.org/show_bug.cgi?id=1778394)) and Safari is slow, although I haven’t pinned down why.",
+          "zh": "异步不等于并发。API 的异步特性允许浏览器实现把解码放到另一个线程上，但实践中似乎只有 Chrome 这么做。Firefox 里解码是串行的（[bug 1778394](https://bugzilla.mozilla.org/show_bug.cgi?id=1778394)），Safari 很慢，不过我还没弄清原因。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Even though on paper `createImageBitmap` is the right API, in practice we have to look at the other alternatives to find more efficient solutions or work around deficiencies in the implementations.",
+      "zh": "尽管纸面上 `createImageBitmap` 才是正确的 API，实践中我们还是得看看其他替代方案，以找到更高效的解法，或者绕开实现里的缺陷。"
+    },
+    {
+      "type": "h2",
+      "id": "summary",
+      "en": "Summary:",
+      "zh": "小结："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Chrome: Poor SVG support.",
+          "zh": "Chrome：SVG 支持差。"
+        },
+        {
+          "en": "Safari: Poor SVG support. Color space conversion bugs.",
+          "zh": "Safari：SVG 支持差。有色彩空间转换的 bug。"
+        },
+        {
+          "en": "Firefox: Correct, but synchronous. Decoding in the main thread.",
+          "zh": "Firefox：结果正确，但是同步的。在主线程里解码。"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "htmlimageelement",
+      "en": "`HTMLImageElement`",
+      "zh": "`HTMLImageElement`"
+    },
+    {
+      "type": "p",
+      "en": "The `HTMLImageElement` interface represents an HTML [`<img>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img) element, which we can hand over to the WebGL and WebGPU APIs directly. To create an image element asynchronously we can wrap it in a promise that is fulfilled when the image finishes loading:",
+      "zh": "`HTMLImageElement` 接口表示一个 HTML [`<img>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img) 元素，我们可以直接把它交给 WebGL 和 WebGPU 的 API。要异步创建一个图像元素，可以把它包进一个 promise，在图片加载完成时兑现："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "export function loadImageElement(url) {\n  return new Promise((resolve, reject) => {\n    const img = new Image()\n    img.crossOrigin = \"anonymous\"\n    img.decoding = \"async\" // hint to decode off the main thread when possible\n    img.onload = () => resolve(img) // returns HTMLImageElement\n    img.onerror = reject\n    img.src = url\n  })\n}"
+    },
+    {
+      "type": "p",
+      "en": "The `decoding` attribute is an optional string representing a hint given to the browser on how to decode the image. `async` means to decode it asynchronously. In practice the hint doesn’t seem to make much of a difference. Firefox still decodes synchronously in the main thread, and Safari appears only slightly faster.",
+      "zh": "`decoding` 属性是一个可选字符串，向浏览器提示该如何解码这张图。`async` 表示异步解码。实践中这个提示似乎没什么差别。Firefox 仍然在主线程同步解码，Safari 看起来只是稍快一点。"
+    },
+    {
+      "type": "p",
+      "en": "One of the drawbacks of this API is that there’s no way to specify the intended color space conversion or alpha format. This is a problem when loading images that are not intended for display, for example, normal maps or other texture data stored in linear space. In those cases Chrome seems to apply an sRGB transform, and produces washed-out colors, while Safari and Firefox leave the data as is. It’s unclear which behavior is correct, but for texture loading, Chrome’s transform makes this method unusable.",
+      "zh": "这个 API 的缺点之一是，没有办法指定想要的色彩空间转换或 alpha 格式。加载那些并非用于显示的图像时这就成了问题，比如法线贴图或其他以线性空间存储的纹理数据。在这些情况下 Chrome 似乎会施加 sRGB 变换，产出褪色的颜色，而 Safari 和 Firefox 则把数据保持原样。哪种行为才算正确并不清楚，但对纹理加载来说，Chrome 的变换让这个方法没法用。"
+    },
+    {
+      "type": "p",
+      "en": "This code path also supports loading SVG files, and in most cases the quality of the results is much better. However, prior to Safari 26, loading of image elements referencing SVG files was broken. A workaround is to render the SVG to a canvas which both WebGL and WebGPU accept as an input:",
+      "zh": "这条代码路径也支持加载 SVG 文件，而且在多数情况下结果质量要好得多。不过在 Safari 26 之前，加载引用 SVG 文件的图像元素是坏的。一个绕行办法是把 SVG 渲染到 canvas 上，而 WebGL 和 WebGPU 都接受 canvas 作为输入："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "async function convertImageElementToCanvas(img) {\n  const canvas = document.createElement(\"canvas\")\n  canvas.width = img.naturalWidth || img.width\n  canvas.height = img.naturalHeight || img.height\n  const ctx = canvas.getContext(\"2d\")\n  ctx.drawImage(img, 0, 0)\n  return canvas\n}"
+    },
+    {
+      "type": "p",
+      "en": "With this fix, loading of SVG files through the `HTMLImageElement` code path produces correct results in all cases.",
+      "zh": "有了这个修复，通过 `HTMLImageElement` 这条路径加载 SVG 文件在所有情况下都能得到正确结果。"
+    },
+    {
+      "type": "h2",
+      "id": "summary-2",
+      "en": "Summary:",
+      "zh": "小结："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Chrome: Inconsistent color space conversion.",
+          "zh": "Chrome：色彩空间转换不一致。"
+        },
+        {
+          "en": "Safari: Fastest option. Issue with SVG.",
+          "zh": "Safari：最快的选项。SVG 有问题。"
+        },
+        {
+          "en": "Firefox: Still synchronous.",
+          "zh": "Firefox：仍然是同步的。"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "imagedecoder",
+      "en": "`ImageDecoder`",
+      "zh": "`ImageDecoder`"
+    },
+    {
+      "type": "p",
+      "en": "A third alternative is to use the new WebCodecs API. Adoption of this API has been limited, because it’s only available in Chrome and Firefox. I was excited to try it out, because I had heard rumors about it being hardware accelerated. Probably not true, but the rumor itself suggested it might at least be faster than the alternatives.",
+      "zh": "第三种选择是使用新的 WebCodecs API。这个 API 的采用率有限，因为它只在 Chrome 和 Firefox 里可用。我很兴奋地想试一试，因为我听过它硬件加速的传闻。多半不是真的，但传闻本身就意味着它至少可能比其他方案快。"
+    },
+    {
+      "type": "p",
+      "en": "The code to use the `ImageDecoder` API is fairly simple:",
+      "zh": "使用 `ImageDecoder` API 的代码相当简单："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "const decoder = new ImageDecoder({\n  data: blob.stream(),\n  type: blob.type,\n  colorSpaceConversion: \"none\",\n  preferAnimation: false\n})\n\ntry {\n  // Returns a VideoFrame; caller is responsible for calling .close() on it.\n  const { image } = await decoder.decode()\n  return image\n} finally {\n  decoder.close()\n}"
+    },
+    {
+      "type": "p",
+      "en": "`decoder.decode()` returns a promise to an object with an image attribute containing a `VideoFrame` and we can create a texture from this `VideoFrame` directly. Like `createImageBitmap`, this code path supports specifying the desired color space conversion, but unlike it, there’s no way to specify the expected alpha format.",
+      "zh": "`decoder.decode()` 返回一个 promise，兑现为一个带 image 属性的对象，其中包含一个 `VideoFrame`，我们可以直接从这个 `VideoFrame` 创建纹理。和 `createImageBitmap` 一样，这条路径支持指定想要的色彩空间转换；但与它不同的是，没有办法指定预期的 alpha 格式。"
+    },
+    {
+      "type": "p",
+      "en": "There’s another caveat, in Firefox `copyExternalImageToTexture` does not support `VideoFrame`. This is a known issue that has already been reported at: [bug 1975308](https://bugzilla.mozilla.org/show_bug.cgi?id=1975308), but the workaround is fairly simple. We just wrap the `VideoFrame` object in an `ImageBitmap`. This is something that `spark.encodeTexture` already handles in order to support arbitrary video sources:",
+      "zh": "还有另一个注意事项：在 Firefox 里 `copyExternalImageToTexture` 不支持 `VideoFrame`。这是一个已经报告过的已知问题：[bug 1975308](https://bugzilla.mozilla.org/show_bug.cgi?id=1975308)，但绕行办法相当简单——我们只要把 `VideoFrame` 对象包进一个 `ImageBitmap`。为了支持任意视频源，`spark.encodeTexture` 已经处理了这一点："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "if (getFirefoxVersion() && isVideoFrame) {\n  const bitmap = await createImageBitmap(source)\n  try {\n    return await this.encodeTexture(bitmap, options)\n  } finally {\n    bitmap.close()\n  }\n}"
+    },
+    {
+      "type": "p",
+      "en": "To benchmark this I used the [glTF Sponza scene](https://github.com/ludicon/sponza-gltf) I tested on a [previous blog post](https://www.ludicon.com/castano/blog/2026/02/an-updated-sponza-gltf/).",
+      "zh": "为了做基准测试，我用了我[上一篇博客文章](https://www.ludicon.com/castano/blog/2026/02/an-updated-sponza-gltf/)里测试过的那个 [glTF Sponza 场景](https://github.com/ludicon/sponza-gltf)。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/05/image-700x368.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Here are the results:",
+      "zh": "结果如下："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Browser  `createImageBitmap`  `ImageDecoder.decode`\nChrome   177 ms               163 ms\nFirefox  460 ms               196 ms"
+    },
+    {
+      "type": "p",
+      "en": "The improvements in Chrome are modest, but on Firefox the difference is dramatic, suggesting the texture decoding finally happens off the main thread. Here’s a flame graph of the version of the code using `createImageBitmap`, note how most of the time is spent in image decoding (in green):",
+      "zh": "Chrome 上的提升不大，但在 Firefox 上差别是戏剧性的，说明纹理解码终于不在主线程上做了。下面是使用 `createImageBitmap` 那版代码的火焰图，注意大部分时间花在图像解码上（绿色部分）："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/05/image-1-700x178.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "With `ImageDecoder`, the decoding time is gone entirely, and most of the time is spent on WebGPU’s `copyExternalImageToTexture` (in blue):",
+      "zh": "换成 `ImageDecoder` 之后，解码时间完全消失了，大部分时间花在 WebGPU 的 `copyExternalImageToTexture` 上（蓝色部分）："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/05/image-2-700x270.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "However, while the overall time is reduced, we are now spending a significant amount of time copying data, and in particular, doing pixel format conversions. Turns out that the `VideoFrame` internal format is BGRA8 and our WebGPU texture is RGBA8.",
+      "zh": "不过，虽然总时间降下来了，我们现在花了相当可观的时间在拷贝数据上，尤其是做像素格式转换。原来 `VideoFrame` 的内部格式是 BGRA8，而我们的 WebGPU 纹理是 RGBA8。"
+    },
+    {
+      "type": "p",
+      "en": "I spent some time looking at that code to understand what I could do about that.",
+      "zh": "我花了一些时间看那段代码，想搞清楚能怎么办。"
+    },
+    {
+      "type": "p",
+      "en": "The `ConvertImage` function has a fast path for no-pixel format conversion that just performs memory copies, and a slow path that uses a generic `WebGLImageConverter`. Firefox actually has some optimized pixel swizzling functions that have SSE2 and NEON implementations (`gfx::SwizzleData` and `gfx::SwizzleYFlipData`). I tried hooking them up and produced a noticeable improvement, but a better approach is to avoid the pixel conversion entirely.",
+      "zh": "`ConvertImage` 函数有一条「无需像素格式转换」的快路径，只是做内存拷贝；还有一条慢路径，用通用的 `WebGLImageConverter`。Firefox 其实有一些经过优化的像素重排函数，带 SSE2 和 NEON 实现（`gfx::SwizzleData` 和 `gfx::SwizzleYFlipData`）。我试着把它们接上，确实带来了明显的改善，但更好的做法是完全避免像素转换。"
+    },
+    {
+      "type": "p",
+      "en": "Changing the pixel format used by Firefox internally would be tricky. There’s a lot of code that expects that particular format. Instead it’s much easier to change the format of our destination texture. We only use this intermediate texture as a staging texture prior to block compression and it doesn’t matter whether it uses RGBA8 or BGRA8. Allocating a BGRA8 texture puts us in the optimized memory copy path.",
+      "zh": "要改 Firefox 内部使用的像素格式会很棘手，有大量代码依赖那个特定格式。反过来，改我们目标纹理的格式要容易得多。这张中间纹理只是在块压缩之前当暂存用，它用 RGBA8 还是 BGRA8 都无所谓。分配一张 BGRA8 纹理就能让我们走上那条优化过的内存拷贝路径。"
+    },
+    {
+      "type": "p",
+      "en": "The resulting timings are even better (note, I did not measure this change in Chrome):",
+      "zh": "得到的耗时还要更好（注意，这个改动我没在 Chrome 上测）："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Browser  `createImageBitmap`  `ImageDecoder` -> RGBA  `ImageDecoder` -> BGRA\nFirefox  460 ms               142 ms                  116 ms"
+    },
+    {
+      "type": "p",
+      "en": "This is a nice improvement, but I’m still not satisfied with this outcome. The remaining copy is necessary in Firefox, because WebGPU runs in a different process and in order to transfer the texture we have to place it in shared memory that is specifically allocated for this purpose. In an ideal world we would have the decoder thread output its result directly into shared memory, so that the main thread only has to hand it over to the GPU process without touching it.",
+      "zh": "这是个不错的改进，但我对结果仍不满意。在 Firefox 里剩下这次拷贝是必需的，因为 WebGPU 跑在另一个进程里，要传递纹理就必须把它放进专门为此分配的共享内存。理想情况下，我们会让解码线程直接把结果输出到共享内存，这样主线程只需把它交给 GPU 进程，完全不用碰它。"
+    },
+    {
+      "type": "p",
+      "en": "Another problem that still remains is that textures with alpha still go through a pixel format conversion. Turns out that the alpha channel in `VideoFrame` objects is always premultiplied. On the other hand `copyExternalImageToTexture` expects unpremultiplied alpha by default, so the pixel format converter has to divide the RGB by the alpha.",
+      "zh": "仍然存在的另一个问题是，带 alpha 的纹理依然要走一次像素格式转换。原来 `VideoFrame` 对象里的 alpha 通道总是预乘的。而 `copyExternalImageToTexture` 默认期望的是非预乘 alpha，所以像素格式转换器必须把 RGB 除以 alpha。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, there appears to be no way to specify that the alpha in the `VideoFrame` is not to be premultiplied. We can eliminate the un-premultiplication, by requesting premultiplied data in `copyExternalImageToTexture`, but that’s not what most applications want; often the alpha in game textures is used to encode data that’s not opacity.",
+      "zh": "遗憾的是，似乎没有办法指定 `VideoFrame` 里的 alpha 不要预乘。我们可以通过在 `copyExternalImageToTexture` 里要求预乘数据来省掉这次反预乘，但这不是大多数应用想要的；游戏纹理里的 alpha 常常用来编码并非不透明度的数据。"
+    },
+    {
+      "type": "p",
+      "en": "This is worrying not just because of the minor overhead, but because of potential quality issues. Premultiplication followed by unpremultiplication is a lossy transformation, it completely destroys RGB data in areas that are fully transparent, and when the alpha is close to zero the reconstruction is inaccurate and often leads to fireflies. You can see an example on the texture below:",
+      "zh": "这让人担心，不只是因为那点额外开销，还因为潜在的质量问题。预乘之后再反预乘是有损变换：它会彻底毁掉完全透明区域的 RGB 数据，而当 alpha 接近零时，重建并不准确，往往还会产生亮点。下面这张纹理就是一个例子："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/05/image-3-700x343.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The RGBA codecs in spark.js assume that alpha is used for opacity and handle input like this gracefully, but this is still an issue if you intend to use the alpha channel for other purposes and don’t want it to interfere with the color.",
+      "zh": "spark.js 里的 RGBA 编解码器假定 alpha 用来表示不透明度，对这样的输入能优雅处理；但如果你打算把 alpha 通道用于其他用途、不希望它干扰颜色，这仍然是个问题。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, another issue is that support for the BGRA8 format is intentionally limited in WebGPU. It does not support `STORAGE_BINDING` unless the `\"bgra8unorm-storage\"` feature is supported and enabled, and even then, this only enables write-only access. That puts some serious restrictions in how we can use these textures.",
+      "zh": "最后一个问题是，WebGPU 对 BGRA8 格式的支持是刻意受限的。除非支持并启用了 `\"bgra8unorm-storage\"` 特性，它不支持 `STORAGE_BINDING`；而且即便启用了，也只允许只写访问。这给我们使用这些纹理的方式加上了严重的限制。"
+    },
+    {
+      "type": "p",
+      "en": "For example, we cannot use our compute mipmap generation without adding an extra blit. Currently Firefox does not support the compute-based mipmap generation because support for views with different pixel formats is also broken, but once that’s fixed this will add some overhead and additional complexity to that code path.",
+      "zh": "比如，不加一次额外的 blit，我们就无法使用自己的计算式 mipmap 生成。目前 Firefox 不支持基于计算的 mipmap 生成，因为对不同像素格式视图的支持也是坏的；但等那个问题修好之后，这条路径会多出一些开销和额外的复杂度。"
+    },
+    {
+      "type": "h2",
+      "id": "summary-3",
+      "en": "Summary:",
+      "zh": "小结："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Chrome: Minor improvement. Possible alpha quality degradation.",
+          "zh": "Chrome：略有改善。可能有 alpha 质量下降。"
+        },
+        {
+          "en": "Safari: Not available.",
+          "zh": "Safari：不可用。"
+        },
+        {
+          "en": "Firefox: Asynchronous and concurrent. Still some copy overhead. Alpha quality degradation.",
+          "zh": "Firefox：异步且并发。仍有一些拷贝开销。alpha 质量下降。"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结语"
+    },
+    {
+      "type": "p",
+      "en": "I spent quite a bit of time looking at performance in Firefox because it’s my browser of choice and also because I feel it has much fewer engineering resources than Chrome or Safari. That said, some of the issues I identified probably apply to the other browsers; I suspect the BGRA staging texture trick is worth trying regardless of your target.",
+      "zh": "我在 Firefox 的性能上花了不少时间，因为它是我常用的浏览器，也因为我觉得它的工程资源比 Chrome 或 Safari 少得多。话虽如此，我发现的某些问题很可能也适用于其他浏览器；我怀疑那个 BGRA 暂存纹理的小技巧无论你面向哪个浏览器都值得一试。"
+    },
+    {
+      "type": "h2",
+      "id": "summary-4",
+      "en": "Summary:",
+      "zh": "小结："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "For raster images: Chrome: createImageBitmap works as advertised, concurrent decoding, correct color handling.",
+          "zh": "对光栅图像：Chrome 用 createImageBitmap，它名副其实——并发解码、颜色处理正确。"
+        },
+        {
+          "en": "Safari: use HTMLImageElement. It’s faster than createImageBitmap and avoids bugs in pre-Tahoe versions.",
+          "zh": "Safari 用 HTMLImageElement。它比 createImageBitmap 快，也避开了 Tahoe 之前版本里的 bug。"
+        },
+        {
+          "en": "Firefox: use ImageDecoder. It’s the only API on Firefox that decodes off the main thread.",
+          "zh": "Firefox 用 ImageDecoder。它是 Firefox 上唯一在主线程之外解码的 API。"
+        },
+        {
+          "en": "For vector images: use HTMLImageElement or render to canvas in Safari prior to version 26.",
+          "zh": "对矢量图像：用 HTMLImageElement，或者在 Safari 26 之前的版本里渲染到 canvas。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "So much for portability of web APIs! The nice thing is that at least you can use [spark.js](https://github.com/ludicon/spark.js) to abstract all that complexity.",
+      "zh": "Web API 的可移植性，也就这样了！好的一面是，至少你可以用 [spark.js](https://github.com/ludicon/spark.js) 把这些复杂度都抽象掉。"
+    },
+    {
+      "type": "p",
+      "en": "I intend to keep updating spark.js to enable the fastest texture upload path possible and to work around all the wrinkles in each of the browsers. It would be great if some of the issues I’ve identified were fixed over time, but in the meantime spark.js provides a practical solution that’s available today.",
+      "zh": "我打算持续更新 spark.js，尽可能提供最快的纹理上传路径，并把各浏览器里的各种褶皱都绕过去。如果我发现的这些问题能在将来被修好，那就太好了；但在此之前，spark.js 提供了一个今天就能用的实用方案。"
+    },
+    {
+      "type": "p",
+      "en": "On that note, here’s a wish list of things that would make this whole landscape simpler, both for spark.js and for anyone else trying to load images efficiently on the web:",
+      "zh": "说到这里，下面是一份愿望清单，能让整个局面简单一些——无论对 spark.js，还是对其他想在 Web 上高效加载图片的人："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "A simple way to upload image data without having to perform memory copies, pixel format conversions or alpha unpremultiplication in the main thread. createImageBitmap is probably the right API for this, it just needs consistent implementation across all browsers.",
+          "zh": "一种简单的方式来上传图像数据，而不必在主线程里做内存拷贝、像素格式转换或 alpha 反预乘。createImageBitmap 大概就是做这件事的正确 API，只是需要在所有浏览器上有一致的实现。"
+        },
+        {
+          "en": "Lower level access to raw pixel data in YUV format, as produced by the decoder. Since our primary goal is to upload the pixel data to the GPU, performing the color conversion there would make more sense than doing it in the CPU.",
+          "zh": "更低层地访问解码器产出的 YUV 格式原始像素数据。既然我们的首要目标是把像素数据上传到 GPU，在 GPU 上做颜色转换会比在 CPU 上做更合理。"
+        },
+        {
+          "en": "Support for HDR images. AVIF, JPEG and HEIF all have HDR variants, and some of them are supported by browsers in `<img>` elements, but the output is always tone mapped. 3D applications need access to untonemapped data in a Uint16Array / float buffer. Or direct access to the raw color and gain maps.",
+          "zh": "支持 HDR 图像。AVIF、JPEG 和 HEIF 都有 HDR 变体，其中一些已被浏览器在 `<img>` 元素里支持，但输出总是经过色调映射的。3D 应用需要访问未做色调映射的数据，形式是 Uint16Array / float 缓冲区，或者直接访问原始颜色和增益图。"
+        }
+      ]
+    }
+  ]
+}

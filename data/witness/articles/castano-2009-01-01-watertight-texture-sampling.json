@@ -1,0 +1,303 @@
+{
+  "id": "castano-2009-01-01-watertight-texture-sampling",
+  "title": {
+    "zh": "水密的纹理采样",
+    "en": "Watertight Texture Sampling"
+  },
+  "subtitle": {
+    "zh": "位移贴图在接缝处会裂开：从无缝参数化、浮点精度到拉链法与单位分解的一趟综述。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文有 7 处插图在归档时就已经丢失，原始 HTML 里同样只剩 `<p>[missing image]</p>` 这一行（图片文件已无从找回），所以译文把 `[missing image]` 逐字留在 `en` 里、`zh` 写「（原文此处有一张图）」，共 7 个段落，位置与源文一致。源文里的 `#### ` 级小标题按 schema 降级为 `h2`。代码块按源文围栏逐字保留（注释也未译），围栏原本没有语言标注，按内容标为 `cpp`。源文末尾的 5 条读者评论也在归档正文里，被拆成「作者 / Posted … | Permalink / 正文」多行，译文按原始 HTML 的段落划分合并回 5 个段落（其中两条评论各含多段）。术语：`displacement map` 作「位移贴图」、`chart` 作「图块」、`seam` 作「接缝」、`parameterization` 作「参数化」、`distortion` 作「畸变」、`texel` 作「纹素」、`zippering` 作「拉链法」、`partition of unity` 作「单位分解」、`fixed point` 作「定点」、`domain shader` 首次出现时括注「域着色器」；`ZBrush`、`Mudbox`、`xNormal`、`Gamefest`、`SIGGRAPH`、`Direct3D11`、`Permalink` 与论文名保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "One of the problems when implementing displacement mapping is dealing with texture seams.",
+      "zh": "实现位移贴图时遇到的问题之一，就是怎么处理纹理接缝。"
+    },
+    {
+      "type": "p",
+      "en": "Texture seams are discontinuities in the parameterization. These discontinuities are always necessary unless the mesh has the topology of a disk, but in general meshes need to be partitioned into charts that are then parameterized independently.",
+      "zh": "纹理接缝是参数化中的不连续处。除非网格的拓扑是圆盘，否则这些不连续处总是不可避免的；而一般来说，网格都需要划分成若干图块，再各自独立做参数化。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This problem is not new. When using color and normal maps, texture seams usually cause color and lighting discontinuities. Artists usually deal with these artifacts by placing the seams on areas of the model, where they are less visible, so that the artifacts become less noticeable. However, when using displacement maps, the seams cause holes in the mesh, which produce much more visible artifacts that are harder to hide.",
+      "zh": "这个问题并不新鲜。使用颜色贴图和法线贴图时，纹理接缝通常会造成颜色和光照上的不连续。美术一般会把接缝安排在模型上不太显眼的位置，让这些瑕疵不那么容易被注意到。然而使用位移贴图时，接缝会在网格上造成孔洞，由此产生的瑕疵要显眼得多，也更难藏起来。"
+    },
+    {
+      "type": "h2",
+      "id": "a-simple-solution",
+      "en": "A Simple Solution",
+      "zh": "一个简单的办法"
+    },
+    {
+      "type": "p",
+      "en": "A simple solution to this problem is to manually alter the geometry along the seams to make it self intersect. While that does not result in watertight surfaces, the resulting holes are not visible. The main problem of this approach is that it requires artist intervention, creates open meshes, and only works for opaque surfaces; it would be nice to have more robust solutions.",
+      "zh": "一个简单的解决办法是手动改动接缝处的几何体，让它自相交。这样得到的虽然不是水密表面，但产生的孔洞看不见。这个做法的主要问题在于：它需要美术介入、会造出开放网格，而且只对不透明表面有效；要是能有更稳健的方案就好了。"
+    },
+    {
+      "type": "h2",
+      "id": "seamless-parameterization-methods",
+      "en": "Seamless Parameterization Methods",
+      "zh": "无缝参数化方法"
+    },
+    {
+      "type": "p",
+      "en": "Fortunately this problem has been studied extensively and seamless parameterization methods have been developed. These are automatic parameterizations in which the chart texels are properly aligned across boundaries.",
+      "zh": "幸运的是，这个问题已经被广泛研究过，也发展出了无缝参数化方法。这类方法能自动完成参数化，让图块的纹素在边界两侧正确对齐。"
+    },
+    {
+      "type": "p",
+      "en": "Displacement maps are generally not painted using traditional image editing applications, but created in specialized sculpting tools (such us [ZBrush](http://www.zbrush.com/) and [Mudbox](http://www.mudbox.com/)) or generated procedurally in attribute capture tools like [xNormal](http://www.xnormal.net/1.aspx). That means that it’s possible to store displacements using automatic parameterizations, since the artist does not need to edit the texture manually.",
+      "zh": "位移贴图一般不是用传统图像编辑软件画出来的，而是在专门的雕刻工具（比如 [ZBrush](http://www.zbrush.com/) 和 [Mudbox](http://www.mudbox.com/)）里制作，或者由 [xNormal](http://www.xnormal.net/1.aspx) 这类属性采集工具程序化生成。也就是说，位移可以用自动参数化来存储，因为美术不需要手动编辑这张纹理。"
+    },
+    {
+      "type": "p",
+      "en": "The most straightforward seamless parameterization method is the one used by ZBrush, which is very similar to the ones proposed in [Meshed Atlases for Real-Time Procedural Solid Texturing](http://graphics.cs.uiuc.edu/~jch/papers/rtpst.pdf). ZBrush maps every face of the mesh to a quad in texture space, so that all edges are either vertical or horizontal, and have the same length.",
+      "zh": "最直接的无缝参数化方法就是 ZBrush 用的那种，它和 [Meshed Atlases for Real-Time Procedural Solid Texturing](http://graphics.cs.uiuc.edu/~jch/papers/rtpst.pdf) 里提出的方法非常相似。ZBrush 把网格的每个面都映射到纹理空间中的一个四边形，使所有边要么水平、要么垂直，而且长度相同。"
+    },
+    {
+      "type": "p",
+      "en": "This method is very easy to implement, but has several problems:",
+      "zh": "这个方法非常容易实现，但有几个问题："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "- It introduces a large number of seams in the mesh, which increments the number of vertex transforms.",
+          "zh": "它会在网格里引入大量接缝，从而增加顶点变换的次数。"
+        },
+        {
+          "en": "- It does not make efficient use of the texture space, because all faces, independently of their area, are mapped to quads of the same size.",
+          "zh": "它没有高效利用纹理空间，因为所有面不论面积大小，都被映射成同样尺寸的四边形。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "ZBrush provides an option to group faces into larger charts while preserving the edge length and orientation, which helps reducing the number of vertex transforms. It also has an option to scale the charts in proportion to their surface area, but that breaks the seamlessness.",
+      "zh": "ZBrush 提供了一个选项，可以在保持边长和方向的前提下把面合并成更大的图块，这有助于减少顶点变换的次数。它还有一个选项可以按表面积成比例地缩放图块，但那样就破坏了无缝性。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In order to alleviate these problems, another solution is to use rectangular charts (instead of single faces) to map them to texture-space quads.",
+      "zh": "为了缓解这些问题，另一个办法是使用矩形图块（而不是单个面），把它们映射到纹理空间中的四边形。"
+    },
+    {
+      "type": "p",
+      "en": "That was first proposed in [Seamless Texture Atlases](http://www.cs.jhu.edu/~bpurnomo/STA/index.html), where rectangular charts are created by first clustering polygons into arbitrary sided charts and then partitioning them into quadrilaterals using a Catmull-Clark-inspired scheme:",
+      "zh": "这最早是在 [Seamless Texture Atlases](http://www.cs.jhu.edu/~bpurnomo/STA/index.html) 里提出的：先把多边形聚成任意边数的图块，再用一套受 Catmull-Clark 启发的方案把它们划分成四边形："
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "An entirely different approach is described in [Spectral Surface Quadrangulation](http://graphics.cs.uiuc.edu/~garland/papers/ssq.pdf). In this paper a quadrangulation is constructed from the optimized Morse-Smale complex of the natural harmonics of the surface. The main limitation of this approach is that it only handles closed surfaces, and requires manual selection of the eigenfunction to produce charts of the desired size. [Spectral Quadrangulation with Orientation and Alignment Control](http://www.cad.zju.edu.cn/home/hj/Huang08SpectralQuad/Huang08SpectralQuad.pdf) solves these problems and also adds support for explicit constraints.",
+      "zh": "[Spectral Surface Quadrangulation](http://graphics.cs.uiuc.edu/~garland/papers/ssq.pdf) 里描述了完全不同的思路。那篇论文从曲面自然谐波的最优化 Morse-Smale 复形出发构造四边形网格。这种方法的主要局限是它只能处理封闭曲面，而且需要手动挑选特征函数才能得到期望尺寸的图块。[Spectral Quadrangulation with Orientation and Alignment Control](http://www.cad.zju.edu.cn/home/hj/Huang08SpectralQuad/Huang08SpectralQuad.pdf) 解决了这些问题，还加入了对手工约束的显式支持。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "These two methods create quadrangulations without T-Junctions. That seems like a nice property, but [Rectangular Multi-Chart Geometry Images](http://graphics.cs.uiuc.edu/~jch/papers/rmcgi.pdf) shows that it’s possible to remove that constraint and still achieve smooth parameterizations, resulting in better parameterizations with less distortion.",
+      "zh": "这两种方法生成的四边形网格都不含 T 型顶点。这看起来是个好性质，但 [Rectangular Multi-Chart Geometry Images](http://graphics.cs.uiuc.edu/~jch/papers/rmcgi.pdf) 表明，去掉这个约束仍然可以得到平滑的参数化，而且参数化质量更好、畸变更小。"
+    },
+    {
+      "type": "p",
+      "en": "The most interesting method is probably the one described in [Designing Quadrangulations with Discrete Harmonic Forms](http://www.geometry.caltech.edu/pubs/TACD06.pdf). This method is even more flexible; instead of defining charts before the parameterization, it introduces singularity points in the mesh and computes the parameterization globally. Then the mesh can be cut connecting the singularity points arbitrarily.",
+      "zh": "最有意思的大概是 [Designing Quadrangulations with Discrete Harmonic Forms](http://www.geometry.caltech.edu/pubs/TACD06.pdf) 里的方法。它更加灵活：不在参数化之前先划定图块，而是在网格中引入奇异点并全局计算参数化。之后就可以任意地把这些奇异点连起来切开网格。"
+    },
+    {
+      "type": "p",
+      "en": "Other methods try to achieve continuity between patches using constraints and parameterizing adjacent patches simultaneously. That’s for example the case of [Matchmaker: Constructing Constrained Texture Maps](http://www.cs.ubc.ca/~vlady/matchmaker/Matchmaker.pdf), but it only minimizes the discontinuities and does not fully remove them.",
+      "zh": "还有一些方法通过施加约束、同时参数化相邻面片来获得连续性。比如 [Matchmaker: Constructing Constrained Texture Maps](http://www.cs.ubc.ca/~vlady/matchmaker/Matchmaker.pdf) 就是如此，但它只是把不连续性最小化，并没有完全消除。"
+    },
+    {
+      "type": "p",
+      "en": "For more information about parameterization methods these two surveys are a great resource:",
+      "zh": "关于参数化方法的更多资料，这两篇综述是很好的参考："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "- [Surface Parameterization: a Tutorial and Survey](http://www2.in.tu-clausthal.de/~hormann/papers/Floater.2005.SPA.pdf) by Michael S. Floater and Kai Hormann",
+          "zh": "[Surface Parameterization: a Tutorial and Survey](http://www2.in.tu-clausthal.de/~hormann/papers/Floater.2005.SPA.pdf)，作者 Michael S. Floater 和 Kai Hormann"
+        },
+        {
+          "en": "- Mesh Parameterization Methods and Their Applications by Alla Sheffer, Emil Praun, and Kenneth Rose",
+          "zh": "Mesh Parameterization Methods and Their Applications，作者 Alla Sheffer、Emil Praun 和 Kenneth Rose"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "watertightness-and-floating-point-precision",
+      "en": "Watertightness and Floating Point Precision",
+      "zh": "水密性与浮点精度"
+    },
+    {
+      "type": "p",
+      "en": "Modern hardware uses a floating point representation to interpolate texture coordinates. However, when using programmable tessellation hardware as specified by Direct3D11, interpolation is performed explicitly in the domain shader (or in the vertex shader when using instanced tessellation on pre-Direct3D11 GPUs). This is done to enable the use of higher order interpolation, but also allows the use of fixed point interpolation.",
+      "zh": "现代硬件用浮点表示来插值纹理坐标。不过在使用 Direct3D11 规范的可编程曲面细分硬件时，插值是在 domain shader（域着色器）里显式执行的（在 Direct3D11 之前的 GPU 上使用实例化曲面细分时，则在顶点着色器里执行）。这样做是为了支持更高阶的插值，但同时也让定点插值成为可能。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That’s important, because the use of floating point for interpolation causes some problems. Floating point values have more precision closer to the origin than farther from it. As a result, interpolation of texture coordinates along an edge closer to the origin will produce a different set of samples than interpolation along an edge that is farther from it. This is exactly what happens on texture seams and will result in small cracks in the mesh even when using a seamless parameterization.",
+      "zh": "这一点很重要，因为用浮点做插值会带来一些问题。浮点数在靠近原点处的精度比远离原点处更高。结果就是，沿一条靠近原点的边插值纹理坐标，与沿一条远离原点的边插值，得到的采样点集合并不相同。纹理接缝上发生的正是这种情况，即使采用了无缝参数化，网格上仍会出现细小的裂缝。"
+    },
+    {
+      "type": "p",
+      "en": "If that seems surprising, then I’d recommend reading [What Every Computer Scientist Should Know About Floating-Point Arithmetic](http://docs.sun.com/source/806-3568/ncg_goldberg.html).",
+      "zh": "如果这让你觉得意外，那我建议读一读 [What Every Computer Scientist Should Know About Floating-Point Arithmetic](http://docs.sun.com/source/806-3568/ncg_goldberg.html)。"
+    },
+    {
+      "type": "p",
+      "en": "It’s also important to note that a seamless parameterization and fixed point interpolation are not sufficient conditions to achieve watertightness. It’s also necessary to generate the displacement maps appropriately so that the values of the texels along the chart boundaries match exactly along both sides of the seams.",
+      "zh": "同样值得注意的是，无缝参数化加上定点插值并不足以保证水密。还必须以恰当的方式生成位移贴图，让图块边界上的纹素取值在接缝两侧完全一致。"
+    },
+    {
+      "type": "h2",
+      "id": "zippering-methods",
+      "en": "Zippering Methods",
+      "zh": "拉链法"
+    },
+    {
+      "type": "p",
+      "en": "A different approach is to introduce a triangle strip connecting the vertices along the seam. These strips can be generated with the same tessellation unit used to generate the patches, by setting the tessellation level equal to 1 in one of the parametric directions. This solves the problem nicely, but requires rendering more patches, and introduces additional triangles that are almost degenerate.",
+      "zh": "另一种思路是在接缝处引入一条连接各顶点的三角形带。这些三角形带可以用生成面片的同一套曲面细分单元产生——把某一个参数方向的细分层级设为 1 即可。这能很漂亮地解决问题，但需要渲染更多面片，还会引入一些几乎退化的三角形。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Another interesting solution is the zippering method proposed in the [Multi-Chart Geometry Images](http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/) paper. The idea that the paper proposes is to sample the displacement (or the geometry image) on both sides of the seam and to use the average of the two samples.",
+      "zh": "另一个有意思的方案是 [Multi-Chart Geometry Images](http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/) 论文提出的拉链法。论文的思路是在接缝两侧分别采样位移（或几何图像），然后取两次采样的平均值。"
+    },
+    {
+      "type": "p",
+      "en": "The main problem of this approach is that it requires two texture samples along the seams, which means you have to take two samples in all cases, or use branching to take an extra sample on the seam vertices only.",
+      "zh": "这个做法的主要问题是接缝处需要两次纹理采样，也就是说你要么在所有情况下都采两次，要么用分支处理，只在接缝顶点上多采一次。"
+    },
+    {
+      "type": "p",
+      "en": "The averaging method does not work for corners. Along the edges there are only two possible displacement values, one for each side of the seam. However, on corners there are more than two. Storing an arbitrary number of texture coordinates, and taking an arbitrary number of texture samples would be too expensive. A simple solution is to snap the corner texture coordinates to the nearest texel, and make sure that the displacement value for that vertex is the same for all patches that meet at that corner.",
+      "zh": "取平均的做法在角点上行不通。沿边的位置只有两种可能的位移值，接缝每一侧各一种；但在角点上可能的取值多于两种。存储任意数量的纹理坐标、做任意次数的纹理采样，代价都太高。一个简单的办法是把角点的纹理坐标吸附到最近的纹素上，并保证在该角点相交的所有面片在这个顶点上取到相同的位移值。"
+    },
+    {
+      "type": "p",
+      "en": "A cheaper solution that only requires a single texture sample, and that handles corners more gracefully is to define patch ownership of the seams. This is what I have proposed at [Gamefest](http://developer.nvidia.com/object/gamefest-2008-subdiv.html) and [SIGGRAPH](http://developer.nvidia.com/object/siggraph-2008-Subdiv.html) last year.",
+      "zh": "还有个更省的做法，只做一次纹理采样，而且能更优雅地处理角点：给接缝定义面片归属。这正是我去年在 [Gamefest](http://developer.nvidia.com/object/gamefest-2008-subdiv.html) 和 [SIGGRAPH](http://developer.nvidia.com/object/siggraph-2008-Subdiv.html) 上提出的方案。"
+    },
+    {
+      "type": "p",
+      "en": "By designating the patch owner for every edge and corner, all patches can agree what texture coordinate to use when sampling the displacement at those locations. That means that for every edge and for every corner we need to store the texture coordinates of the owner of those features. That’s a total of 4 texture coordinates per vertex, (16 for quads and 12 for triangles).",
+      "zh": "为每条边和每个角点指定面片归属之后，所有面片都能就「在这些位置采样位移时该用哪个纹理坐标」达成一致。这意味着对每条边和每个角点，我们都要存下该特征归属者的纹理坐标。每个顶点总共 4 个纹理坐标（四边形是 16 个，三角形是 12 个）。"
+    },
+    {
+      "type": "p",
+      "en": "At runtime, only a single texture sample is needed; the corresponding texture coordinate can be selected with a simple calculation:",
+      "zh": "在运行时只需要一次纹理采样；对应的纹理坐标可以用一个简单的计算选出来："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// Compute texture coordinate indices (0: interior, 1,2: edges, 3: corner)\nint idx0 = 2 * (uv.x == 1) + (uv.y == 1);\nint idx1 = 2 * (uv.y == 1) + (uv.x == 0);\nint idx2 = 2 * (uv.x == 0) + (uv.y == 0);\nint idx3 = 2 * (uv.y == 0) + (uv.x == 1);\n\n// Barycentric interpolation of texture coordinates\nfloat2 tc = bar.x * texCoord[0][idx0] +\n            bar.y * texCoord[1][idx1] +\n            bar.z * texCoord[2][idx2] +\n            bar.w * texCoord[3][idx3];"
+    },
+    {
+      "type": "h2",
+      "id": "partition-of-unity",
+      "en": "Partition of Unity",
+      "zh": "单位分解"
+    },
+    {
+      "type": "p",
+      "en": "The zippering methods produce watertight results independently of the parameterization. However, if the parameterization is not seamless or if the features of the displacement map are different on each side of the seam, then that will result in sharp discontinuities, not holes, but undesirable creases along the seams.",
+      "zh": "拉链法与参数化无关，都能产生水密结果。不过，如果参数化不是无缝的，或者接缝两侧的位移贴图特征不同，那么结果会是尖锐的不连续——不是孔洞，而是沿接缝出现的、不该有的折痕。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "These problems can be avoided using a seamless parameterization and generating the displacement maps making sure that the displacements match along the seams. However, another solution is to use a [partition of unity](http://portal.acm.org/citation.cfm?id=344990).",
+      "zh": "使用无缝参数化，并确保位移在接缝处匹配来生成位移贴图，就能避免这些问题。不过还有一个办法：使用[单位分解](http://portal.acm.org/citation.cfm?id=344990)。"
+    },
+    {
+      "type": "p",
+      "en": "A partition unity is a method to combine multiple texture parameterizations to produce smooth transitions between them. The idea is to define transition regions around the seams, so that on those regions both parameterizations are used to sample the texture and the results are blended smoothly.",
+      "zh": "单位分解是一种把多套纹理参数化组合起来、在它们之间产生平滑过渡的方法。思路是在接缝周围定义过渡区域，在这些区域里同时用两套参数化来采样纹理，再把结果平滑地混合起来。"
+    },
+    {
+      "type": "p",
+      "en": "The zippering methods described before are just a special case of a partition of unity in which the blend function is just the [unit step function](http://portal.acm.org/citation.cfm?id=344990).",
+      "zh": "前面讲的拉链法只是单位分解的一个特例：它的混合函数就是[单位阶跃函数](http://portal.acm.org/citation.cfm?id=344990)。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结语"
+    },
+    {
+      "type": "p",
+      "en": "There are many different solutions to achieve watertightness when sampling of displacement maps. I personally prefer the zippering methods, since they don’t impose any restriction on the parameterization of the mesh, and work with arbitrary displacement maps. They are easy to implement, and do not add much overhead to the shaders, even though they increase the number of texture coordinates. Note that even when using zippering methods to guarantee watertightness, the use of seamless (or nearly seamless) parameterizations is still useful, because they eliminate any visible crease or discontinuity along the seams.",
+      "zh": "在对位移贴图采样时，实现水密有很多种不同的方案。我个人更喜欢拉链法，因为它不对网格的参数化施加任何限制，而且能配合任意位移贴图使用。它容易实现，给着色器增加的开销也不大，尽管它增加了纹理坐标的数量。注意，即便用拉链法来保证水密，采用无缝（或近乎无缝）的参数化仍然有用，因为它能消除接缝上任何可见的折痕或不连续。"
+    },
+    {
+      "type": "p",
+      "en": "cb Posted 1/1/2009 at 12:51 pm | Permalink Very awesome post !! It’s a shame that texture coordinates are true floats and not something like 16.16 fixed point. It basically forces you to use zippering. If you had fixed point you could make quadrilateral charts and put the corners exactly on pixels and make the edges the same length and I believe that would work.",
+      "zh": "cb 发表于 1/1/2009 12:51 pm | Permalink 非常棒的文章！！纹理坐标居然是真浮点，而不是 16.16 定点之类的东西，真是可惜。这基本上逼着你去用拉链法。如果用定点，你就可以做四边形图块，把角点精确地放在像素上、让各条边长度相同，我相信那样是可行的。"
+    },
+    {
+      "type": "p",
+      "en": "castano Posted 1/1/2009 at 4:07 pm | Permalink There’s actually nothing stopping you from representing texture coordinates using fixed point. The floating point precision problems only matter in the domain shader, where two instances of the same vertex at opposite sides of the seam must sample the same value from the texture. In the domain shader interpolation is done explicitly, and the math can be done in fixed point. However, the problem is a bit more complicated than what I’ve described in the article. Hardware bilinear interpolation of texels is not symmetric. Sampling at 0.7 between A and B is not the same as sampling at 0.3 between B and A. Nearest filtering is not symmetric either, the result of sampling at 0.5 is undefined. For this reason mapping the faces to equal-sized texture-space quads does not solve the problem entirely. It would also be necessary to make sure that seam edge vectors have the same sense. All that is doable, but the zippering method is so much more simple and robust that I think is in most cases preferable.",
+      "zh": "castano 发表于 1/1/2009 4:07 pm | Permalink 其实没有任何东西阻止你用定点来表示纹理坐标。浮点精度问题只在 domain shader 里才要紧——接缝两侧同一个顶点的两个实例必须从纹理里采到相同的值。而在 domain shader 里插值是显式做的，运算完全可以用定点完成。不过这个问题比我在文章里描述的还要复杂一些。硬件的纹素双线性插值并不对称：在 A 与 B 之间取 0.7 处采样，和在 B 与 A 之间取 0.3 处采样，结果并不相同。最近邻过滤同样不对称，在 0.5 处采样的结果是未定义的。正因为如此，把面映射成等大的纹理空间四边形并不能彻底解决问题，还必须保证接缝两侧的边向量取向一致。这些都能做到，但拉链法要简单、稳健得多，我认为在大多数情况下更可取。"
+    },
+    {
+      "type": "p",
+      "en": "castano Posted 1/1/2009 at 4:29 pm | Permalink BTW, all that becomes even more complicated if you take mipmapping into account.",
+      "zh": "castano 发表于 1/1/2009 4:29 pm | Permalink 顺便说一句，一旦把 mipmap 考虑进来，这一切还会变得更复杂。"
+    },
+    {
+      "type": "p",
+      "en": "cb Posted 2/1/2009 at 5:29 pm | Permalink Urg I wrote something but didn’t answer the challenge and when I hit back my comment was gone. >:|",
+      "zh": "cb 发表于 2/1/2009 5:29 pm | Permalink 唉，我写了点东西，但没答出验证题，按了后退评论就没了。>:|"
+    },
+    {
+      "type": "p",
+      "en": "castano Posted 2/1/2009 at 7:16 pm | Permalink Ouch, that sucks. Posts that fail the challenge are discarded and do not go to the moderation queue, so I have no way of recovering it…",
+      "zh": "castano 发表于 2/1/2009 7:16 pm | Permalink 哎，太惨了。没通过验证的帖子会被直接丢弃、也不会进审核队列，所以我没办法把它找回来……"
+    }
+  ]
+}

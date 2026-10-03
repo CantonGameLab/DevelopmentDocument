@@ -1,0 +1,32 @@
+{
+  "id": "castano-2009-05-12-efficient-substitutes-for-subdivision-surfaces",
+  "title": {
+    "zh": "细分曲面的高效替代方案",
+    "en": "Efficient Substitutes for Subdivision Surfaces"
+  },
+  "subtitle": {
+    "zh": "SIGGRAPH 课程被接受了——把游戏、电影、硬件厂商和学术界的人凑到一块儿，各讲各的实践经验。",
+    "en": "A SIGGRAPH course gets accepted: game, film, hardware and academic speakers each bringing their own experience."
+  },
+  "translator": {
+    "note": "源文中那段课程简介用的是引用块（`>`），译文按 schema 放进 `quote` 块。`SIGGRAPH`、`ISV`、`IHV`、`GPU` 保留英文；subdivision surface 作「细分曲面」；源文的 `Our siggraph course` 里 siggraph 是小写写法，译文统一按专名 `SIGGRAPH` 书写。",
+    "source": "archive/castano-blog/2009-05-12-efficient-substitutes-for-subdivision-surfaces.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Our siggraph course has been accepted and is finally up on the siggraph website! Here’s the brief description of the course:",
+      "zh": "我们的 SIGGRAPH 课程被接受了，终于挂到 SIGGRAPH 网站上了！下面是课程简介："
+    },
+    {
+      "type": "quote",
+      "en": "An overview of the most recent theoretical results and their implementations on the current and next-generation GPUs, and a demonstration of applications in the gaming and movie industry.",
+      "zh": "概览最新的理论成果及其在当前与下一代 GPU 上的实现，并演示它们在游戏与电影行业中的应用。"
+    },
+    {
+      "type": "p",
+      "en": "We will bring together participants with different backgrounds: ISV from the game and movie industry, IHVs and academia. Each one will provide their own point of view on the topic and describe their own experiences with these methods. I think that will be very valuable to understand the weaknesses and strengths of these techniques, and will hopefully encourage other developers to adopt them.",
+      "zh": "我们会把不同背景的讲者聚到一起：来自游戏与电影行业的 ISV、IHV，以及学术界。每个人都会给出自己对这个主题的看法，讲自己用这些方法的经验。我觉得这对理解这些技术的短板与长处会很有价值，也希望它能鼓励更多开发者用上它们。"
+    }
+  ]
+}

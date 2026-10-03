@@ -1,0 +1,512 @@
+{
+  "id": "light-irradiance-caching-part-1",
+  "title": {
+    "zh": "辐照度缓存（第一部分）",
+    "en": "Irradiance Caching – Part 1"
+  },
+  "subtitle": {
+    "zh": "把辐照度梯度的公式扩展到半立方体采样分布上：纹理空间方法为何失败，以及旋转梯度与平移梯度是怎么推导出来的。",
+    "en": "Extending the irradiance gradient equations to the hemicube sample distribution: why texture space approaches failed, and how the rotation and translation gradients were derived."
+  },
+  "translator": {
+    "note": "本篇的公式在原文里是 WordPress 的 LaTeX 图片，归档已把它们还原成 `$…$` 行内公式（37 条），但归档仍像原来那样在每个公式处把段落切开、让公式单独占一行。译文按原始 HTML（`archive/raw/witness-pages/irradiance-caching-part-1.html`）的段落结构把被切开的段落重新合并：原文里独立成段的展示式公式（每个都是一个 `<p>`）保留为独立的 `p` 块，行内公式则放回句子中间；公式一律照抄归档的 `$…$` LaTeX，未做任何改写（en 与 zh 两侧同一份公式文字）。原文插图共 4 张，按 schema 归一化为 `![图](原图URL)` 占位块；两张对比图的图注在归档里是独立行，译成独立段落。代码块按原文 `class=\"cpp\"` 标注为 cpp，内容逐字未改（块内只含空白的一行按空行保留，原文 HTML 里是 `&nbsp;`）。原文的笔误（`there are however a two main differences`、`the way the we compute`、`in wo categories`、`those that that are farther`、`I then tried follow the same approach`）在 en 字段中保持原样。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This is the first article I wanted to publish when I started writing about the technology behind [The Witness](http://the-witness.net). I had just spent a week or so implementing irradiance caching with rotation and translation gradients. Extending the equations of the gradient estimation to the hemicube sample distribution had proven to be tricky and had taken me a considerable amount of effort. So, I thought it would be cool to document my derivation, so that others would not have to do the same. However, for that article to make sense I first had to provide some background, hence the previous two articles:",
+      "zh": "这是我开始写《The Witness》背后的技术时，最想先发表的一篇文章。当时我刚花了一周左右实现带旋转梯度和平移梯度的辐照度缓存。把梯度估算的公式扩展到半立方体的采样分布上，被证明相当棘手，花了我不少力气。所以我想，把自己的推导过程记下来会挺不错，别人就不必再走一遍同样的路。不过要让那篇文章讲得通，我得先交代一些背景，于是就有了前面这两篇文章："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[Lightmap Parameterization](http://the-witness.net/news/?p=120)",
+          "zh": "[光照贴图参数化](http://the-witness.net/news/?p=120)"
+        },
+        {
+          "en": "[Hemicube Rendering and Integration](http://the-witness.net/news/?p=244)",
+          "zh": "[半立方体的渲染与积分](http://the-witness.net/news/?p=244)"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, by the time I was done with these, the work I had done on the gradients was not so fresh anymore, which is why it has taken me so long to complete this article.",
+      "zh": "可惜等我把那两篇写完，梯度那部分工作在我脑子里已经不那么新鲜了，这也是这篇文章拖了这么久才写完的原因。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/06/irradiance_gradients_0.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In [my previous post](http://the-witness.net/news/?p=244) I mentioned the need to find an algorithm that would allow us to extrapolate the irradiance to fill lightmap texels with invalid samples, to smooth the resulting lightmaps to reduce noise, and to sample the irradiance at a lower frequency to improve performance. As some avid readers suggested *Irradiance Caching* solves all these problems. However, at the time I didn't know that, and my initial attempts at a solution were misguided.",
+      "zh": "在[上一篇文章](http://the-witness.net/news/?p=244)里我提到，我们需要找到一个算法，既能外插辐照度来填补光照贴图里采样无效的纹素，又能对生成的光照贴图做平滑以降低噪声，还能以更低的频率采样辐照度来提升性能。当时有些热心读者就指出，*Irradiance Caching*（辐照度缓存）能一次性解决所有这些问题。可那时候我还不知道，我最初的几次尝试都走错了方向。"
+    },
+    {
+      "type": "h2",
+      "id": "texture-space-approaches",
+      "en": "Texture Space Approaches",
+      "zh": "纹理空间方法"
+    },
+    {
+      "type": "p",
+      "en": "I had some experience writing baker tools to capture normal and displacement maps from high resolution meshes. In that setting it is common to use various image filters to fill holes caused by sampling artifacts and extend sampled attributes beyond the boundaries of the mesh parameterization. [Hugo Elias' popular article](http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm) also proposes a texture space hierarchical sampling method, and that persuaded me that working in texture space would be a good idea.",
+      "zh": "我以前写过一些烘焙工具，用来从高分辨率网格上采集法线贴图和位移贴图。在那类场景里，常用各种图像滤波器来填补采样瑕疵造成的空洞，并把采样到的属性外延到网格参数化的边界之外。[Hugo Elias 那篇流传很广的文章](http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm)也提出了一种纹理空间下的层次式采样方法，这让我相信在纹理空间里做是个好主意。"
+    },
+    {
+      "type": "p",
+      "en": "However, in practice texture space methods had many problems. Extrapolation filters only provide accurate estimates close to chart boundaries, and even then, they only use information from one side of the boundary, which usually results in seams. Also, the effectiveness of irregular sampling and interpolation approaches in texture space is greatly reduced by texture discontinuities and did not reduce the number of samples as much as desired.",
+      "zh": "然而在实践中，纹理空间方法有很多问题。外插滤波器只在图块（chart）边界附近才能给出准确的估计，而且即便在边界附近，它们也只用到边界一侧的信息，结果通常会出现接缝（seam）。此外，纹理空间下不规则采样与插值方法的有效性会被纹理的不连续性大幅削弱，采样数量也降不到期望的那么少。"
+    },
+    {
+      "type": "p",
+      "en": "After trying various approaches, it became clear that the solution was to work in object space instead. I was about to implement my own solution, when I learned that this is what irradiance caching was about.",
+      "zh": "试过各种办法之后，事情就很清楚了：解决方案应该转到物体空间里去做。我正准备自己实现一套，这时才知道辐照度缓存做的正是这件事。"
+    },
+    {
+      "type": "h2",
+      "id": "irradiance-caching",
+      "en": "Irradiance Caching",
+      "zh": "辐照度缓存"
+    },
+    {
+      "type": "p",
+      "en": "This technique has such a terrible name that I would have never learned about it if it wasn't due to a friend's suggestion. I think that a much more appropriate name would be adaptive irradiance sampling or irradiance interpolation. In fact, in the [paper that introduced the technique for the first time](http://radsite.lbl.gov/radiance/papers/sg88/paper.html) Greg Ward referred to it as *lazy irradiance evaluation*, which seems to me a much more appropriate name.",
+      "zh": "这门技术的名字起得实在太糟，要不是朋友提起，我根本不会去了解它。我觉得更贴切的叫法应该是「自适应辐照度采样」或者「辐照度插值」。事实上，在[首次提出这门技术的论文](http://radsite.lbl.gov/radiance/papers/sg88/paper.html)里，Greg Ward 把它称作 *lazy irradiance evaluation*（惰性辐照度求值），在我看来这个名字合适得多。"
+    },
+    {
+      "type": "p",
+      "en": "There's plenty of literature on the subject and I don't want to repeat what you can learn elsewhere. So, in this article I'm only going to provide a brief overview, focus on the unique aspects of our implementation, and point you to other sources for further reference.",
+      "zh": "这个主题的文献已经很多，我不想重复别处能学到的东西。所以本文只做一个简短的概览，重点讲我们实现里比较独特的部分，其余资料我会指给你去看。"
+    },
+    {
+      "type": "p",
+      "en": "The basic idea behind irradiance caching is to sample the irradiance adaptively based on a metric that predicts changes in the irradiance due to proximity to occluders and reflectors. This metric is based on the split sphere model, which basically models the worst possible illumination conditions in order to predict the necessary distance between irradiance samples based on their distance to the surrounding geometry.",
+      "zh": "辐照度缓存的基本思想，是用一个度量来自适应地采样辐照度，这个度量预测的是「离遮挡物和反射物有多近」会怎样影响辐照度的变化。该度量基于分裂球模型（split sphere model）：它大致上是在模拟最坏情况下的光照条件，从而根据采样点到周围几何体的距离，预测辐照度采样之间需要多大的间距。"
+    },
+    {
+      "type": "p",
+      "en": "Interpolation between these samples is then performed using radial basis functions, the radius associated to each sample is also based on this distance. Whenever the contribution of the nearby samples falls below a certain threshold a new irradiance record needs to be generated, in our case this is done by rendering an hemicube at that location. In order to perform interpolation efficiently the irradiance records are inserted in an octree, which allows us to efficiently query the nearby records at any given point.",
+      "zh": "采样点之间的插值用径向基函数（radial basis function）来完成，每个采样点关联的半径同样取决于上述距离。一旦附近采样点的贡献低于某个阈值，就需要生成一条新的辐照度记录（irradiance record）——在我们的实现里，就是在该位置渲染一个半立方体。为了高效地做插值，辐照度记录会被插入八叉树（octree），这样就能在任意给定位置快速查询附近的记录。"
+    },
+    {
+      "type": "p",
+      "en": "For more details, the [Siggraph '08 course](http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm) on the topic is probably the most comprehensive reference. There's also a book based on the materials of the course; it's slightly augmented, but in my opinion it does not add much value to the freely available material.",
+      "zh": "要了解更多细节，这个主题的 [Siggraph '08 课程](http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm)大概是最全面的参考资料。基于该课程材料还有一本书，内容稍有增补，但在我看来，比起免费公开的材料并没有增加多少价值。"
+    },
+    {
+      "type": "p",
+      "en": "The [Physically Based Rendering book by Matt Pharr & Greg Humphreys](http://www.pbrt.org/) is an excellent resource and the [accompanying source code](https://github.com/mmp/pbrt-v2) contains a good, albeit basic implementation.",
+      "zh": "[Matt Pharr 与 Greg Humphreys 的 Physically Based Rendering 一书](http://www.pbrt.org/)是非常好的资料，[配套源码](https://github.com/mmp/pbrt-v2)里也有一个不错（虽然比较基础）的实现。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, Rory Driscoll provides a good introduction from a programmer's point of view: [part 1](http://www.rorydriscoll.com/2009/01/18/irradiance-caching-part-1/), [part 2](http://www.rorydriscoll.com/2009/01/24/irradiance-caching-part-2/).",
+      "zh": "最后，Rory Driscoll 从程序员的视角写了两篇很好的入门文章：[第 1 篇](http://www.rorydriscoll.com/2009/01/18/irradiance-caching-part-1/)、[第 2 篇](http://www.rorydriscoll.com/2009/01/24/irradiance-caching-part-2/)。"
+    },
+    {
+      "type": "p",
+      "en": "Our implementation is fairly standard, there are however a two main differences: First, we are sampling the irradiance using hemicubes instead of a stratified Montecarlo distribution. As a result, the way the we compute the irradiance gradients for interpolation is somewhat different. Second, we use a record placement strategy more suited to our setting. In part 1 I'll focus on the estimation of the irradiance gradients, while in part 2 I'll write about our record placement strategies.",
+      "zh": "我们的实现相当标准，不过有两个主要区别：第一，我们是用半立方体采样辐照度，而不是分层蒙特卡洛（stratified Montecarlo）分布。因此，我们为插值计算辐照度梯度的方式也略有不同。第二，我们用的记录放置策略更贴合自己的场景。第一部分我会集中讲辐照度梯度的估算，第二部分再写我们的记录放置策略。"
+    },
+    {
+      "type": "h2",
+      "id": "irradiance-gradients",
+      "en": "Irradiance Gradients",
+      "zh": "辐照度梯度"
+    },
+    {
+      "type": "p",
+      "en": "When interpolating our discrete irradiance samples using radial basis functions the resulting images usually have spotty or smudgy appearance. This can be mitigated by increasing the number of samples and increasing the interpolation threshold, which effectively makes them overlap and smoothes out the result. However, this also increases the number of samples significantly, which defeats the purpose of using irradiance caching.",
+      "zh": "用径向基函数对我们的离散辐照度采样做插值时，得到的图像通常看起来斑斑点点或者糊成一片。可以通过增加采样数量、提高插值阈值来缓解，这样做实际上会让采样彼此重叠，把结果抹平。但这也会让采样数量显著增加，从而让「使用辐照度缓存」本身失去意义。"
+    },
+    {
+      "type": "p",
+      "en": "One of the most effective approaches to improve the interpolation is estimating the irradiance gradients at the sampling points, which basically tell how the irradiance changes when the position and orientation of the surface changes. We cannot evaluate the irradiance gradients exactly, but we can find reasonable approximations with the information that we already have from rendering an hemicube.",
+      "zh": "改善插值最有效的办法之一，是估算采样点处的辐照度梯度，它说明的大体上是：当表面的位置和朝向发生变化时，辐照度会怎么变。我们没法精确求出辐照度梯度，但可以用渲染半立方体已经得到的信息，找到合理的近似。"
+    },
+    {
+      "type": "p",
+      "en": "In my previous article I explained that the irradiance integral was just a weighted sum over the radiance samples, where the contribution of each sample is the product of the radiance through each of the hemicube texels $L_i$, the solid angle of the texel $A_i$, and the cosine term $\\cos_{\\theta_i}$. That is, the irradiance $E(\\mathbf{x})$ at a point $\\mathbf{x}$ is approximated as:",
+      "zh": "在上一篇文章里我解释过，辐照度积分就是对辐射亮度采样做一次加权求和，每个采样的贡献是三者之积：穿过该半立方体纹素的辐射亮度 $L_i$、纹素的立体角 $A_i$，以及余弦项 $\\cos_{\\theta_i}$。也就是说，点 $\\mathbf{x}$ 处的辐照度 $E(\\mathbf{x})$ 近似为："
+    },
+    {
+      "type": "p",
+      "en": "$E(\\mathbf{x}) \\simeq \\sum_{i=0}^N A_i L_i \\cos\\theta_i$",
+      "zh": "$E(\\mathbf{x}) \\simeq \\sum_{i=0}^N A_i L_i \\cos\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "The irradiance gradients consider how each these terms change under infinitesimal rotations and translations and can be obtained by differentiating $E(\\mathbf{x})$.",
+      "zh": "辐照度梯度考察的是这些项在无穷小旋转和无穷小平移下各自如何变化，对 $E(\\mathbf{x})$ 求导即可得到。"
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla E(\\mathbf{x}) \\simeq \\sum_{i=0}^N \\nabla A_i L_i \\cos\\theta_i$",
+      "zh": "$\\nabla E(\\mathbf{x}) \\simeq \\sum_{i=0}^N \\nabla A_i L_i \\cos\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "The radiance term is considered to be constant, so the equation reduces to:",
+      "zh": "辐射亮度这一项被视为常量，于是式子简化为："
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla E(\\mathbf{x}) \\simeq \\sum_{i=0}^N L_i \\nabla A_i \\cos\\theta_i$",
+      "zh": "$\\nabla E(\\mathbf{x}) \\simeq \\sum_{i=0}^N L_i \\nabla A_i \\cos\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "In reality, the radiance is not really constant, but the goal is to estimate the gradients without using any information in addition to what we have already obtained by rendering the scene on a hemicube. So that we can improve the quality of the interpolation by only doing some additional computations while integrating the hemicube.",
+      "zh": "现实中辐射亮度并不是真的常量，但我们的目标是不借助任何超出「在半立方体上渲染场景」所获信息之外的东西来估算梯度。这样，只要在积分半立方体的同时多做一点计算，就能改善插值质量。"
+    },
+    {
+      "type": "h2",
+      "id": "rotation-gradient",
+      "en": "Rotation Gradient",
+      "zh": "旋转梯度"
+    },
+    {
+      "type": "p",
+      "en": "The rotation gradient expresses how the irradiance changes as the hemicube is rotated in any direction:",
+      "zh": "旋转梯度描述的是：当半立方体朝任意方向旋转时，辐照度如何变化："
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla_r E(\\mathbf{x}) \\simeq \\sum_{i=0}^N L_i \\nabla_r A_i \\cos\\theta_i$",
+      "zh": "$\\nabla_r E(\\mathbf{x}) \\simeq \\sum_{i=0}^N L_i \\nabla_r A_i \\cos\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "The most important observation is that as the hemicube rotates, the solid angle of the texels with respect to the origin remains constant. So, the only factor that influences the gradient is the cosine term:",
+      "zh": "最关键的一点是：半立方体旋转时，纹素相对于原点的立体角保持不变。所以唯一影响梯度的因子就是余弦项："
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla_r A_i \\cos\\theta_i = A_i \\nabla_r \\cos\\theta_i$",
+      "zh": "$\\nabla_r A_i \\cos\\theta_i = A_i \\nabla_r \\cos\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "With this in mind, the rotation gradient is simply the rotation axis scaled by the rate of change, that is, the angle gradient:",
+      "zh": "这样一来，旋转梯度不过就是「旋转轴」乘以「变化率」，也就是角度梯度："
+    },
+    {
+      "type": "p",
+      "en": "$\\frac{\\partial }{\\partial \\theta_i} \\cos\\theta_i = -\\sin\\theta_i$",
+      "zh": "$\\frac{\\partial }{\\partial \\theta_i} \\cos\\theta_i = -\\sin\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "And the rotation axis is given by the cross product of the z axis and the texel direction $\\mathbf{d}_i$:",
+      "zh": "而旋转轴由 z 轴与纹素方向 $\\mathbf{d}_i$ 的叉积给出："
+    },
+    {
+      "type": "p",
+      "en": "$\\mathbf{v}_i = \\left| \\mathbf{d}_i \\times (0, 0, 1) \\right|$",
+      "zh": "$\\mathbf{v}_i = \\left| \\mathbf{d}_i \\times (0, 0, 1) \\right|$"
+    },
+    {
+      "type": "p",
+      "en": "Therefore:",
+      "zh": "因此："
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla_r \\cos\\theta_i = -\\mathbf{v}_i \\sin\\theta_i$",
+      "zh": "$\\nabla_r \\cos\\theta_i = -\\mathbf{v}_i \\sin\\theta_i$"
+    },
+    {
+      "type": "p",
+      "en": "This can be simplified further by noting that $\\sin\\theta_i$ is the length of $\\mathbf{v}_i$ before normalization and that results in a very simple expression:",
+      "zh": "还能进一步简化：注意 $\\sin\\theta_i$ 正是 $\\mathbf{v}_i$ 归一化之前的长度，于是得到一个非常简洁的表达式："
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla_r \\cos\\theta_i = (\\mathbf{d}_{yi}, -\\mathbf{d}_{xi}, 0)$",
+      "zh": "$\\nabla_r \\cos\\theta_i = (\\mathbf{d}_{yi}, -\\mathbf{d}_{xi}, 0)$"
+    },
+    {
+      "type": "p",
+      "en": "Finally, the rotation gradient for the hemisphere is the sum of the gradients corresponding to each texel.",
+      "zh": "最后，整个半球的旋转梯度就是每个纹素对应梯度之和。"
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla E(\\mathbf{x}) \\simeq \\sum_{i=0}^N L_i A_i (\\mathbf{d}_{yi}, -\\mathbf{d}_{xi}, 0)$",
+      "zh": "$\\nabla E(\\mathbf{x}) \\simeq \\sum_{i=0}^N L_i A_i (\\mathbf{d}_{yi}, -\\mathbf{d}_{xi}, 0)$"
+    },
+    {
+      "type": "p",
+      "en": "The resulting code is trivial:",
+      "zh": "得到的代码非常简单："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "foreach texel, color in hemicube {\n    Vector2 v = texel.solid_angle * Vector2(texel.dir.y, -texel.dir.x);\n    rotation_gradient[0] += v * color.x;\n    rotation_gradient[1] += v * color.y;\n    rotation_gradient[2] += v * color.z;\n}"
+    },
+    {
+      "type": "h2",
+      "id": "translation-gradients",
+      "en": "Translation Gradients",
+      "zh": "平移梯度"
+    },
+    {
+      "type": "p",
+      "en": "The derivation of the translation gradients is a bit more complicated than the rotation gradients because the solid angle term is not invariant under translations anymore.",
+      "zh": "平移梯度的推导比旋转梯度麻烦一些，因为立体角这一项在平移下不再是不变量。"
+    },
+    {
+      "type": "p",
+      "en": "My first approach was to simplify the expression of the solid angle term by using an approximation that is easier to differentiate. Instead of using the exact texel solid angle like I had been doing so far, I approximated it by the differential solid angle scaled by the constant area of the texel, which is a reasonable approximation if the texels are sufficiently small.",
+      "zh": "我最初的思路，是用一个更容易求导的近似来简化立体角项的表达式。我不再像之前那样使用精确的纹素立体角，而是用微分立体角乘以纹素的常量面积来近似——只要纹素足够小，这就是个合理的近似。"
+    },
+    {
+      "type": "p",
+      "en": "In general, the differential solid angle in a given direction $\\Theta$ is given by:",
+      "zh": "一般来说，给定方向 $\\Theta$ 上的微分立体角为："
+    },
+    {
+      "type": "p",
+      "en": "$d\\omega_\\Theta = \\frac{\\mathbf{n}\\cdot\\Theta}{r^2} da$",
+      "zh": "$d\\omega_\\Theta = \\frac{\\mathbf{n}\\cdot\\Theta}{r^2} da$"
+    },
+    {
+      "type": "p",
+      "en": "For the particular case of the texels of the top face of the hemicube, **n** is equal to the z axis. So, the differential solid angle is:",
+      "zh": "对于半立方体顶面纹素这一特例，**n** 等于 z 轴。于是微分立体角为："
+    },
+    {
+      "type": "p",
+      "en": "$d\\omega_\\Theta = \\frac{\\cos\\theta}{r^2} da$",
+      "zh": "$d\\omega_\\Theta = \\frac{\\cos\\theta}{r^2} da$"
+    },
+    {
+      "type": "p",
+      "en": "We also know that:",
+      "zh": "我们还知道："
+    },
+    {
+      "type": "p",
+      "en": "$\\cos\\theta = 1/r$",
+      "zh": "$\\cos\\theta = 1/r$"
+    },
+    {
+      "type": "p",
+      "en": "which simplifies the expression further:",
+      "zh": "这让式子进一步简化："
+    },
+    {
+      "type": "p",
+      "en": "$d\\omega_\\Theta = (\\cos\\theta)^3 da$",
+      "zh": "$d\\omega_\\Theta = (\\cos\\theta)^3 da$"
+    },
+    {
+      "type": "p",
+      "en": "Using this result and factoring the area of the texels out of the sum we obtain the following expression for the gradient:",
+      "zh": "利用这个结果，并把纹素面积从求和式中提出来，就得到下面这个梯度表达式："
+    },
+    {
+      "type": "p",
+      "en": "$\\nabla_t E_z(\\mathbf{x}) \\simeq 4 \\sum_{i=0}^N L_i \\nabla_t (\\cos\\theta_i)^4$",
+      "zh": "$\\nabla_t E_z(\\mathbf{x}) \\simeq 4 \\sum_{i=0}^N L_i \\nabla_t (\\cos\\theta_i)^4$"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "The remaining faces have similar expressions, slightly more complex, but still easy to differentiate along the x and y directions. We could continue along this path and we would obtain closed formulas that can be used to estimate the translation gradients. However, this simple approach did not produce satisfactory results. The problem is that these gradients assume that the only thing that changes under translation is the projected solid angle of the texels, but that ignores the parallax effect and the occlusion between neighboring texels. That is, samples that correspond to objects that are close to the origin of the hemicube should move faster than those that that are farther, and as they move they may occlude nearby samples.",
+      "zh": "其余几个面的表达式类似，稍微复杂一些，但仍然容易沿 x、y 方向求导。我们本可以沿着这条路走下去，得到能用来估算平移梯度的闭式公式。可是这个简单的做法并没有给出令人满意的结果。问题在于：这些梯度假设平移下唯一变化的东西是纹素的投影立体角，而这忽略了视差效应以及相邻纹素之间的遮挡。也就是说，对应「离半立方体原点很近的物体」的那些采样，应该比远处的采样移动得更快；而且在移动过程中，它们可能会遮住附近的采样。"
+    },
+    {
+      "type": "p",
+      "en": "As you can see in the following lightmap, the use of these gradients resulted in smoother results in areas that are away from occluders, but produced incorrect results whenever the occluders are nearby.",
+      "zh": "从下面这张光照贴图可以看到，使用这些梯度之后，远离遮挡物的区域结果更平滑了，但只要遮挡物在近处，结果就是错的。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/01/translation_gradient_comparison_a.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Left: Reference. Middle: Irradiance caching without gradients. Right: Irradiance caching with flawed gradients",
+      "zh": "左：参考结果。中：不带梯度的辐照度缓存。右：带错误梯度的辐照度缓存"
+    },
+    {
+      "type": "p",
+      "en": "The hexagonal shape corresponds to the ceiling of a room that has walls along its sides and a window through which the light enters. The image on the left is a reference lightmap with one hemicube sample per pixel. The image on the middle is the same lightmap computed using irradiance caching taking only 2% of the samples. Note that the number of samples is artificially low to emphasize the artifacts. On the right side the same lightmap is computed using the proposed gradients. If you look closely you can notice that on the interior the lightmap looks smoother, but close to the walls the artifacts remain.",
+      "zh": "那个六边形是一间屋子的天花板，屋子四周有墙，光从一个窗户照进来。左图是参考光照贴图，每个像素一个半立方体采样。中图是用辐照度缓存、只取 2% 采样算出的同一张光照贴图——注意采样数是刻意压低的，以便突出瑕疵。右图是用上述梯度算出的同一张光照贴图。仔细看能发现，内部区域的光照贴图确实更平滑了，但靠近墙面的地方瑕疵依旧存在。"
+    },
+    {
+      "type": "p",
+      "en": "This is exactly the same flaw of the gradients that Krivanek et al proposed in [Radiance Caching for Efficient Global Illumination Computation](http://cgg.mff.cuni.cz/~jaroslav/papers/tvcg2005/krivanek05radiance_caching.pdf), but was later corrected in the followup paper [Improved Radiance Gradient Computation](http://cgg.mff.cuni.cz/~jaroslav/papers/sccg2005/sccg2005-krivanek.pdf) by approaching the problem the same way Greg Ward did in the original [original Irradiance Gradients paper](http://radsite.lbl.gov/radiance/papers/erw92/paper.pdf).",
+      "zh": "这正是 Krivanek 等人在 [Radiance Caching for Efficient Global Illumination Computation](http://cgg.mff.cuni.cz/~jaroslav/papers/tvcg2005/krivanek05radiance_caching.pdf) 里提出的梯度所带有的同一个缺陷；后来他们在后续论文 [Improved Radiance Gradient Computation](http://cgg.mff.cuni.cz/~jaroslav/papers/sccg2005/sccg2005-krivanek.pdf) 中修正了它，用的办法和 Greg Ward 最初在 [original Irradiance Gradients paper](http://radsite.lbl.gov/radiance/papers/erw92/paper.pdf) 里的思路一样。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "I then tried follow the same approach. The basic idea is to consider the cosine term invariant under translation so that only the area term needs to be differentiated, and to express the gradient of the cell area in terms of the marginal area changes between adjacent cells. The most important observation is that the motion of the boundary between cells is always determined by the closest sample, so this approach takes occlusion into account.",
+      "zh": "于是我试着沿用同样的思路。基本想法是：把余弦项视为平移下的不变量，这样只需要对面积项求导；并把单元面积的梯度表示为相邻单元之间边缘（marginal）面积的变化。最关键的一点是，单元之间边界的移动始终由最近的那个采样决定，所以这个做法把遮挡考虑进去了。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately we cannot directly use Greg Ward's gradients, because they are closely tied to the stratified Montecarlo distribution and we are using a hemicube sampling distribution. However, we can still apply the same methodology to arrive to a formulation of the gradients that we can use in our setting.",
+      "zh": "可惜我们不能直接套用 Greg Ward 的梯度，因为它们与分层蒙特卡洛采样分布紧密绑定，而我们用的是半立方体采样分布。不过我们仍然可以用同一套方法，推导出适用于我们场景的梯度公式。"
+    },
+    {
+      "type": "p",
+      "en": "In our case, the cells are the hemicube texels projected onto the hemisphere and the cell area is the texel solid angle. To determine the translation gradients of the texel's solid angle is equivalent to computing the sum of the marginal gradients corresponding to each of the texel walls.",
+      "zh": "在我们的场景里，单元就是投影到半球上的半立方体纹素，单元面积就是纹素立体角。求纹素立体角的平移梯度，等价于把纹素每一面「墙」对应的边缘梯度加起来。"
+    },
+    {
+      "type": "p",
+      "en": "These marginal gradients are the wall normals projected onto the translation plane, scaled by the length of the wall, and multiplied by the rate of motion of the wall in that direction.",
+      "zh": "这些边缘梯度是：把墙的法线投影到平移平面上，乘以墙的长度，再乘以墙在该方向上的移动速率。"
+    },
+    {
+      "type": "p",
+      "en": "Since the hemicube uses a gnomonic projection, where lines in the plane map to great circles in the sphere, the texel boundaries of the hemicubes map to great arcs in the hemisphere. So, the length of these arcs is very easy to compute. Given the direction of the two texel corners $\\mathbf{d}_0, \\mathbf{d}_1$, the length of their hemispherical projection is:",
+      "zh": "半立方体用的是日晷投影（gnomonic projection），平面上的直线映射为球面上的大圆，因此半立方体纹素的边界映射为半球上的大圆弧。这些弧长非常容易算：给定纹素两个角点的方向 $\\mathbf{d}_0, \\mathbf{d}_1$，它们在半球上投影的长度为："
+    },
+    {
+      "type": "p",
+      "en": "$arclength(\\mathbf{d}_0, \\mathbf{d}_1) = \\arccos{\\mathbf{d}_0 \\cdot \\mathbf{d}_1}$",
+      "zh": "$arclength(\\mathbf{d}_0, \\mathbf{d}_1) = \\arccos{\\mathbf{d}_0 \\cdot \\mathbf{d}_1}$"
+    },
+    {
+      "type": "p",
+      "en": "The remaining problem is to compute the rate of motion of the wall, which as Greg Ward noted has to be proportional to the minimum distance of the two samples.",
+      "zh": "剩下的问题是算出墙的移动速率。正如 Greg Ward 指出的，它必须与两个采样的最小距离成正比。"
+    },
+    {
+      "type": "p",
+      "en": "The key observation is that we can classify all the hemicube edges in wo categories: Edges with constant longitude ($\\theta$ is invariant), and edges with constant latitude ($\\phi$ is invariant).",
+      "zh": "关键的观察是：我们可以把半立方体的所有边分成两类——经度不变的边（$\\theta$ 不变）和纬度不变的边（$\\phi$ 不变）。"
+    },
+    {
+      "type": "p",
+      "en": "In each of these cases we can estimate the rate of change of edges with respect to the normal direction by considering the analogous problem in the [canonical hemispherical parametrization](http://mathworld.wolfram.com/SphericalCoordinates.html):",
+      "zh": "这两种情况下，我们都可以借助[标准球面参数化](http://mathworld.wolfram.com/SphericalCoordinates.html)里的同类问题，估算边相对于法线方向的变化率："
+    },
+    {
+      "type": "p",
+      "en": "$r = \\sqrt{x^2+y^2+z^2}$\n$\\phi = \\arctan\\frac{y}{x}$\n$\\theta = \\arccos\\frac{z}{r}$",
+      "zh": "$r = \\sqrt{x^2+y^2+z^2}$\n$\\phi = \\arctan\\frac{y}{x}$\n$\\theta = \\arccos\\frac{z}{r}$"
+    },
+    {
+      "type": "p",
+      "en": "For longitudinal edges we can consider how $\\theta$ changes with respect to motion along the x axis:",
+      "zh": "对于经线方向的边，我们可以考察 $\\theta$ 相对于沿 x 轴移动的变化："
+    },
+    {
+      "type": "p",
+      "en": "$\\frac{\\partial\\theta}{\\partial x} = \\frac{-\\cos\\theta}{r}$",
+      "zh": "$\\frac{\\partial\\theta}{\\partial x} = \\frac{-\\cos\\theta}{r}$"
+    },
+    {
+      "type": "p",
+      "en": "and for latitudinal edges we can consider how $\\phi$ changes with respect to motion along the y axis:",
+      "zh": "对于纬线方向的边，则是考察 $\\phi$ 相对于沿 y 轴移动的变化："
+    },
+    {
+      "type": "p",
+      "en": "$\\frac{\\partial\\phi}{\\partial y} = \\frac{-1}{r \\sin\\theta}$",
+      "zh": "$\\frac{\\partial\\phi}{\\partial y} = \\frac{-1}{r \\sin\\theta}$"
+    },
+    {
+      "type": "p",
+      "en": "As we noted before, the rate of the motion is dominated by the nearest edge, so $r$ takes the value of the minimum depth of the two samples adjacent to the edge.",
+      "zh": "如前面所说，移动速率由最近的那条边主导，所以 $r$ 取该边相邻两个采样深度中较小的那个值。"
+    },
+    {
+      "type": "p",
+      "en": "A detailed derivation for these formulas can be found in [Wojciech Jarosz's dissertation](http://zurich.disneyresearch.com/~wjarosz/publications/dissertation/), which is now publicly available online. His detailed explanation is very didactic and I highly recommend reading it to get a better understanding of how these formulas are obtained.",
+      "zh": "这些公式的详细推导可以在 [Wojciech Jarosz 的博士论文](http://zurich.disneyresearch.com/~wjarosz/publications/dissertation/)里找到，现在网上已经公开。他的讲解非常细致、也很适合教学，我强烈推荐读一读，能更好地理解这些公式是怎么来的。"
+    },
+    {
+      "type": "p",
+      "en": "Note that these are just the same formulas used by Greg Ward and others. In practice, the only thing that changes is the layout of the cells and the length of the walls between them.",
+      "zh": "注意，这些公式和 Greg Ward 等人用的完全一样。实践中不同的只是单元的排布方式，以及单元之间「墙」的长度。"
+    },
+    {
+      "type": "p",
+      "en": "As can be seen in the following picture, the new gradients produce much better results. Note that the appearance on the interior of the lightmap is practically the same, but closer to the walls the results are now much smoother. Keep in mind that artifacts are still present, because the number of samples is artificially low.",
+      "zh": "从下面这张图可以看到，新的梯度效果要好得多。注意光照贴图内部看起来几乎没有变化，但靠近墙面的地方平滑了很多。也要记住，瑕疵依然存在，因为采样数是人为压低的。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/06/translation_gradient_comparison.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Left: No gradients. Middle: Flawed translation gradients. Right: Improved translation gradients.",
+      "zh": "左：不带梯度。中：有缺陷的平移梯度。右：改进后的平移梯度。"
+    },
+    {
+      "type": "p",
+      "en": "In order to estimate the translation gradients efficiently we precompute the direction and magnitude of the marginal gradients corresponding to each texel edge without taking the distance to the edge into account:",
+      "zh": "为了高效地估算平移梯度，我们先把每个纹素边对应的边缘梯度的方向和大小预计算出来，此时还不考虑与该边的距离："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// Compute the length of the edge walls multiplied by the rate of motion\n// with respect to motion in the normal direction\nforeach edge in hemicube {\n    float wall_length = acos(dot(d0, d1));\n    Vector2 projected_wall_normal = normalize(cross(d0, d1).xy);\n    float motion_rate = (constant_altitude(d0,d1) ?\n        -cos_theta(d0,d1) :      // d(theta)/dx = -cos(theta) / depth\n        -1 / sin_theta(d0,d1);   // d(phi)/dy = -1 / (sin(theta) * depth)\n\n    edge.translation_gradient = projected_wall_normal * wall_length * motion_rate;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Then, during integration we split the computations in two steps. First, we accumulate the marginal gradients of each of the edges scaled by the minimum edge distance:",
+      "zh": "然后在积分过程中，我们把计算分成两步。第一步，把每条边的边缘梯度按该边的最小距离缩放后累加起来："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "foreach edge in hemicube {\n    float depth0 = depth(edge.x0, edge.y0);\n    float depth1 = depth(edge.x1, edge.y1);\n    float min_depth = min(depth0, depth1);\n\n    texel[edge.x0, edge.y0].translation_gradient -= edge.gradient / min_depth;\n    texel[edge.x1, edge.y1].translation_gradient += edge.gradient / min_depth;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Once we have the per texel gradient, we compute the final irradiance gradient as the sum of the texel gradients weighted by the texel colors:",
+      "zh": "拿到每个纹素的梯度之后，我们把纹素梯度按纹素颜色加权求和，就得到最终的辐照度梯度："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "foreach texel, color in hemicube {\n    Vector2 translation_gradient = texel.translation_gradient * texel.clamped_cosine;\n    translation_gradient_sum[0] += translation_gradient * color.x;\n    translation_gradient_sum[1] += translation_gradient * color.y;\n    translation_gradient_sum[2] += translation_gradient * color.z;\n}"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结论"
+    },
+    {
+      "type": "p",
+      "en": "Irradiance Caching provides a very significant speedup to our lightmap baker. On typical meshes we only need to render about 10 to 20% of the samples to approximate the irradiance at very high quality, and for lower quality results or fast previews we can get away with as few as 3% of the samples.",
+      "zh": "辐照度缓存给我们的光照贴图烘焙器带来了非常显著的加速。在典型网格上，只要渲染大约 10% 到 20% 的采样，就能以很高的质量逼近辐照度；如果只要求较低质量或者快速预览，用 3% 的采样也就够了。"
+    },
+    {
+      "type": "p",
+      "en": "The use of irradiance gradients for interpolation allows reducing the number of samples significantly, or for the same number of samples produces much higher quality results. The following picture compares the results without irradiance gradients and with them, in both cases the number of samples and their location is the same, note how the picture at the bottom has much smoother lightmaps.",
+      "zh": "在插值中使用辐照度梯度，可以大幅减少采样数量；或者在采样数相同时给出质量高得多的结果。下面这张图对比了不用辐照度梯度和使用它们的结果——两种情况下采样数量和位置完全相同，注意下面那张图的光照贴图平滑得多。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/06/ic_comparison_1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I think that without irradiance caching the hemicube rendering approach to global illumination would have not been practical. That said, implementing irradiance caching robustly is tricky and a lot of tuning and tweaking is required in order to obtain good results.",
+      "zh": "我认为，如果没有辐照度缓存，用渲染半立方体来做全局光照根本不可能实用。话虽如此，把辐照度缓存实现得足够稳健相当棘手，要得到好结果需要大量的调参与微调。"
+    },
+    {
+      "type": "p",
+      "en": "*Note: This article is also published on [#AltDevBlogADay](http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/).*",
+      "zh": "*注：本文也发表在 [#AltDevBlogADay](http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/) 上。*"
+    }
+  ]
+}

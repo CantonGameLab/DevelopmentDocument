@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-09-10T12:45:27.999Z",
+  "witness": {
+    "count": 100,
+    "chars": 287583,
+    "range": [
+      "2012-10-14",
+      "2022-02-10"
+    ],
+    "authors": {
+      "Jonathan Blow": 61,
+      "Ignacio Castaño": 3,
+      "Casey Muratori": 4,
+      "Andrew Lackey": 1,
+      "Orsi Spanyol": 20,
+      "Eric A. Anderson": 1,
+      "Luis Antonio": 7,
+      "admin": 1,
+      "Abner Coimbre": 1,
+      "kenzie": 1
+    }
+  },
+  "casey": {
+    "count": 19,
+    "chars": 403408,
+    "range": [
+      "2012-12-12",
+      "2014-07-23"
+    ],
+    "codeBlocks": 214
+  }
+}

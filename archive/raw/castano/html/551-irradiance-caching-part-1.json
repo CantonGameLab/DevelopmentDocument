@@ -1,0 +1,16 @@
+{
+  "id": 551,
+  "slug": "irradiance-caching-part-1",
+  "date": "2011-07-14T00:41:19",
+  "modified": "2022-08-23T14:44:55",
+  "link": "https://www.ludicon.com/castano/blog/2011/07/irradiance-caching-part-1/",
+  "title": "Irradiance Caching &#8211; Part 1",
+  "excerpt": "<p>I finally finished writing the next article about the lightmap rendering tech that I did for The Witness. This one is about irradiance caching, and in particular I describe how to estimate irradiance gradients when the irradiance is sampled using a hemicube distribution. I&#8217;m afraid the article is a bit too specialized and I suspect&#8230;</p>\n",
+  "content": "<p>I finally finished writing the <a href=\"http://the-witness.net/news/2011/07/irradiance-caching-part-1/\">next article about the lightmap rendering tech</a> that I did for The Witness. This one is about irradiance caching, and in particular I describe how to estimate irradiance gradients when the irradiance is sampled using a hemicube distribution. I&#8217;m afraid the article is a bit too specialized and I suspect it will only be useful to those that are trying to solve this particular problem, but I think it&#8217;s good to have this documented anyway.</p>\n<p>This time around we are trying something new and we are cross-posting it on <a href=\"http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/\">#AltDevBlogADay</a>. It seems to me that most of the subscribers to The Witness blog are non-programmers, so this way it may reach a wider audience. Hopefully this will also encourage me to post more regularly!</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": [
+    20
+  ]
+}

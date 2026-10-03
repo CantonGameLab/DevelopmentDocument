@@ -1,0 +1,81 @@
+{
+  "id": "official-2015-12-22-entering-the-home-stretch",
+  "title": { "zh": "进入最后冲刺", "en": "Entering the Home Stretch" },
+  "subtitle": {
+    "en": "Final voiceover recording, the plan for a physical box release, and how Arabic and Russian localization are coming along.",
+    "zh": "最终旁白录制、实体盒装版的打算，以及阿拉伯语和俄语本地化的进展。"
+  },
+  "translator": {
+    "note": "原文里 “Voiceover”“Physical Box Release”“What Else is Going On” 都是单独一行的粗体小标题，译文按小标题（h2）处理。原文此处第一段是一个内嵌的 YouTube 视频，归档只剩占位链接，视频地址见该段的链接。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We've been averaging about a blog post a month -- not by design, it just works out that way -- which means if we stick to that pace, then in just one more posting, the launch of the game will be imminent.",
+      "zh": "我们平均下来差不多一个月一篇博客——不是刻意安排，就是这么凑巧——也就是说，如果保持这个节奏，那么再发一篇，游戏发售就近在眼前了。"
+    },
+    {
+      "type": "p",
+      "en": "Well, I think we will post a little more frequently, because we'll have increasing amounts to say about the game as we get closer to release. In the meantime, here's:",
+      "zh": "不过我想我们会发得稍微勤一些，因为越接近发售，关于游戏要说的东西就越多。在那之前，先看这个："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/xzNh-hdceiU?feature=oembed)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "(It is longer than Long Screenshot #1!)",
+      "zh": "（它比 Long Screenshot #1 还要长！）"
+    },
+    { "type": "h2", "id": "voiceover", "zh": "旁白录音", "en": "Voiceover" },
+    {
+      "type": "p",
+      "en": "This week we just finished recording the majority of the final voiceover. We're going to do a little more in early January, but most of it is in the can. After New Year's we'll make some postings where we announce who the voice actors are (you may know some of them from other recent games!)",
+      "zh": "这周我们刚刚录完了最终旁白的绝大部分。1 月初还会再补录一点，但大头已经完成了。新年之后我们会发几篇帖子，公布配音演员都是谁（其中几位你可能在最近的其他游戏里见过！）"
+    },
+    { "type": "h2", "id": "physical-box-release", "zh": "实体盒装版", "en": "Physical Box Release" },
+    {
+      "type": "p",
+      "en": "We've had some people asking us whether there will be a physical retail release of The Witness. It's seeming likely, as we have been in talks with a couple of parties for a while about that possibility. *However*, it looks like if there is a retail release, it won't happen until a little bit after the digital release. The reason is just that we need all the time we can get up until the release date in order to get all the finishing touches into the game; but because of the lead-time involved in physical manufacturing and distribution, we would have to freeze the game right about now in order to have it on store shelves for the release date. *Or* we could delay the digital release date in order to wait for the physical. But I don't see a good reason to do either of those things. I would rather just focus our energy on making the game as good as we can make it, and a retail version can lag behind by a little bit.",
+      "zh": "有人问过我们，《The Witness》会不会有实体零售版。看起来很有可能——关于这种可能，我们和几方已经谈了一阵子了。*不过*，就算有零售版，它大概也要比数字版晚上一小段时间。原因很简单：到发售日为止，我们需要每一分能挤出来的时间，把最后的打磨都做进游戏里；而实体制造和发行是有前置周期的，要想让游戏在发售日就摆上货架，我们现在就得把游戏定版冻结。*或者*，我们也可以推迟数字版的发售日去等实体版。但我觉得这两件事都没有什么值得做的理由。我更愿意把精力集中在把游戏做到我们能做到的最好，零售版稍微晚一点没关系。"
+    },
+    { "type": "h2", "id": "what-else-is-going-on", "zh": "其他进展", "en": "What Else is Going On" },
+    {
+      "type": "p",
+      "en": "We've gotten the bulk of the translations into the game for all the languages mentioned in the previous blog posting. There is a small percentage of text that will come in a little later, but for the most part those languages are in. Also, we will be adding Hungarian to the list of languages suppoorted at release.",
+      "zh": "上一篇博客里提到的所有语言，其翻译的主体部分都已经进游戏了。还有很小一部分文本会稍晚一点进来，但大体上这些语言都已经就位。另外，我们会在发售支持的语言列表里再加上匈牙利语。"
+    },
+    {
+      "type": "p",
+      "en": "Here are some screenshots of Arabic and Russian:",
+      "zh": "下面是阿拉伯语和俄语的两张截图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/12/Arabic.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/12/Russian.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Of all the languages, supporting Arabic took by far the most programming work, and as you can see from some gaps between the letters, and a couple of cases where letters are too close to each other, it's not quite done yet. I will be working on that as soon as I finish with this blog posting! But I think even with these issues it is starting to look nice.",
+      "zh": "在所有语言里，支持阿拉伯语花掉的编程工作量远远最多；从字母之间的一些空隙、以及几处字母挨得过近的情况可以看出，它还没完全搞定。这篇博客一发完我就会接着弄！不过我觉得，即便有这些问题，它也开始像样了。"
+    },
+    {
+      "type": "p",
+      "en": "We're doing *lots* of little gameplay fixes all around the island, like, what does collision feel like in this area when you bump into things, what happens if you are standing in this doorway and the door tries to close on top of you, all that kind of thing.",
+      "zh": "我们正在岛上各处做*大量*细小的玩法修正，比如：在这片区域撞到东西时，碰撞的手感如何；如果你正站在门口而门要关上，会发生什么——诸如此类。"
+    },
+    {
+      "type": "p",
+      "en": "Visuals are mostly locked down at the moment; we are no longer changing big things about how the game looks, we're more making spot-fixes here and there every time we see something we don't totally like.",
+      "zh": "目前画面基本已经定下来了；我们不再改动游戏外观上的大东西，更多是看到哪里不完全满意，就在哪里做点局部修正。"
+    }
+  ]
+}

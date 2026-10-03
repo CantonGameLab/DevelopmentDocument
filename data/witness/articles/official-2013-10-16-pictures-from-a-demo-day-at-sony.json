@@ -1,0 +1,63 @@
+{
+  "id": "official-2013-10-16-pictures-from-a-demo-day-at-sony",
+  "title": { "zh": "Sony 试玩日的照片", "en": "Pictures from a Demo Day at Sony" },
+  "subtitle": {
+    "en": "Photos from a Sony event in Foster City where the press got hands-on time with upcoming PS4 games.",
+    "zh": "Sony 在 Foster City 办的活动现场照片，媒体在那里试玩了即将上市的 PS4 游戏。"
+  },
+  "translator": {
+    "note": "原文第一段里游戏名的斜体标记有错位（`*The W**itness*`），en 字段原样保留；另有一行把两张照片和一句关于《Flower》的文字混排在一起，按规范保留为一个段落、图片标记内联在前；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Sony had an event today at their offices in Foster City to give the press some hands-on time with upcoming games running on the PlayStation 4.",
+      "zh": "Sony 今天在他们位于 Foster City 的办公室办了一场活动，让媒体亲手试玩即将登陆 PlayStation 4 的游戏。"
+    },
+    {
+      "type": "p",
+      "en": "*The W**itness* was among the games being shown! We were the only third-party game there. Also shown were a whole lot of Killzone: Shadow Fall, Knack, PS4 versions of Sound Shapes and Flower, and Resogun.",
+      "zh": "《The Witness》也在展示的游戏之列！我们是现场唯一的第三方游戏。同时展出的还有一大堆《Killzone: Shadow Fall》、《Knack》、PS4 版的《Sound Shapes》和《Flower》，以及《Resogun》。"
+    },
+    {
+      "type": "p",
+      "en": "I did some interviews and talked to a number of press people who are very interested in *The Witness*. I also took some photos.",
+      "zh": "我做了几个采访，和不少对《The Witness》非常感兴趣的媒体人士聊了聊。我还拍了一些照片。"
+    },
+    {
+      "type": "p",
+      "en": "Brad from Giant Bomb playing *The Witness*:",
+      "zh": "来自 Giant Bomb 的 Brad 在玩《The Witness》："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/10/IMG_0233.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The room we were in:",
+      "zh": "我们当时所在的房间："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/10/IMG_0236.jpg) ![图](http://the-witness.net/news/wp-content/uploads/2013/10/IMG_0237.jpg) *Flower* at 1080p and 60Hz, with the new, more-sensitive controller, feels nice to play:",
+      "zh": "（原文此处有两张图）《Flower》以 1080p 和 60Hz 运行，配上新的、更灵敏的手柄，玩起来很舒服："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/10/IMG_0238.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "*Sound Shapes*:",
+      "zh": "《Sound Shapes》："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/10/IMG_0240.jpg)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "id": "official-2012-12-30-what-i-did-on-my-christmas-vacation",
+  "title": { "zh": "我圣诞假期干了什么", "en": "What I Did on My Christmas Vacation" },
+  "subtitle": {
+    "en": "A long, rambling post about burnout, why holidays are when Jon does his best work, and the optional area he rebuilt over Christmas.",
+    "zh": "一篇又长又散的随笔：关于倦怠、为什么假期是 Jon 状态最好的时候，以及他在圣诞假期里重做的那片可选区域。"
+  },
+  "translator": {
+    "note": "原文的小标题是单独一行的粗体文字（如 **The Background**），译文按小标题（h2）处理，去掉粗体标记；原文插图未收录，按出现顺序以「（原文此处有一张图）」占位。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I apologize in advance that this posting is a rambling mess.",
+      "zh": "先说声抱歉，这篇东西是一团东拉西扯的乱麻。"
+    },
+    { "type": "h2", "id": "background", "zh": "背景", "en": "The Background" },
+    {
+      "type": "p",
+      "en": "Way back in 2008 when I came upon the core idea of this game, the design was the exciting part. Though I started in games mainly as a technical person who was excited about technical challenges, I have shifted into a mode of thought where, when I program, it's mainly just to get the design done in the most straightforward way.",
+      "zh": "早在 2008 年我撞上这个游戏的核心构想时，真正让我兴奋的是设计部分。虽然我进入游戏行业时主要是个对技术挑战感到兴奋的技术人，但我的思维方式已经转变了：现在我写程序，主要是为了用最直白的方式把设计做出来。"
+    },
+    {
+      "type": "p",
+      "en": "Since Braid I have viewed programming as mostly pragmatic: I know what I want to do, and I know what kinds of things I have to type in to make it happen, but for the most part, the interesting mental challenges are in design, and programming is rote execution. Once you have enough programming experience, I think 95% of writing a big program is like this. There have been a few times during *The Witness* when I spent significant effort solving technical problems where I had no idea what the answer would be in advance, [like with the terrain manipulation,](http://the-witness.net/news/2010/05/kriging-is-cool/) but even in these cases I treated the technical development in a very pragmatic way: the goal was to get something that is good enough for current needs, not to design a shining jewel of an amazing technical system (back when I was a younger game programmer, I was trying to make amazing technical systems all the time, and it came at the cost of actually getting games done).",
+      "zh": "从《Braid》之后，我基本上把编程看成一件务实的事：我知道自己想做什么，也知道为了让它实现我得敲进哪些东西；但大部分时候，真正有意思的智力挑战都在设计里，编程只是按部就班的执行。等你编程经验足够多，我认为写一个大程序有 95% 都是这样。在《The Witness》的开发过程中，有几次我花了很大力气去解一些我事先完全不知道答案的技术问题，[比如地形操控那次](http://the-witness.net/news/2010/05/kriging-is-cool/)，但即便在这些情况下，我也是以非常务实的态度对待技术开发：目标是做出一个足够满足当下需求的东西，而不是设计一件闪亮夺目的技术系统杰作（我年轻时当游戏程序员那会儿，无时无刻不在试图做出惊人的技术系统，代价就是游戏根本做不完）。"
+    },
+    {
+      "type": "p",
+      "en": "Despite the fact that I am trying to focus on design, in order to make this game a reality, I had to start a company, bring people onto the project to build the game, etc. This means that nowadays I am not just wearing the programmer and designer and business development hats, I also wear the producer hat and the (admittedly small at present) HR hat. Maybe if The Witness does well, we can expand the team a little bit so that I don't have to do these things, but for now, that's the reality.",
+      "zh": "尽管我努力把重心放在设计上，但为了让这个游戏成为现实，我必须开一家公司、把人拉进项目里来做这个游戏，等等。这意味着如今我不只戴着程序员、设计师和商务拓展这几顶帽子，还戴着制作人的帽子，以及（目前确实还很小）的 HR 帽子。也许如果《The Witness》表现不错，我们可以把团队稍微扩大一点，让我不用再做这些事；但就目前而言，现实就是这样。"
+    },
+    {
+      "type": "p",
+      "en": "We are very laid back and unstructured in the way we do things, but even so, I feel there's a heavy subconscious load involving running the company, making sure nobody's work is blocked, dealing with money all the time, etc. I often find it hard to do deep design thinking when I am in the office, if only because all these issues are just ambiently around. So, in terms of design, my most productive days tend to be work-from-home days (which for me includes most weekends).",
+      "zh": "我们做事的方式非常松散、没有章法，但即便如此，我也能感觉到一种沉重的潜意识负担：经营公司、确保没有人的工作被卡住、时时刻刻处理钱的问题，等等。我常常发现自己在办公室里很难做深入的设计思考，哪怕只是因为这些问题就弥漫在四周。所以从设计的角度说，我效率最高的日子往往是居家办公日（对我来说，这包括大部分周末）。"
+    },
+    {
+      "type": "p",
+      "en": "All this up til now is just to explain that if I take a vacation seriously, it can be very relaxing, because that subliminal load is gone, or at least mitigated for a while. The activity of the rest of the company is mostly paused, which removes urgency from my own activities.",
+      "zh": "上面说这么多，只是为了说明：如果我真把假期当假期过，它会非常放松，因为那份潜意识里的负担消失了，至少暂时减轻了。公司其他部分的活动基本都暂停了，我自己手头事情的紧迫感也就随之消失。"
+    },
+    {
+      "type": "p",
+      "en": "At first I didn't know how I would spend vacation; at first I thought maybe I would actually treat it the way most people treat vacation, and not work. Then I thought, hmm, there is a certain sector of the game that I might like to work on, that is definitely very important, and I should get a bunch of that done while everyone is gone, so that when they come back it will be figured out. (I don't want to go into detail about what that section of the game is, because I am avoiding spoilers).",
+      "zh": "一开始我不知道假期该怎么过；起初我想，也许我真该像大多数人那样对待假期——不工作。然后我又想，嗯，游戏里有某个部分我挺想动手做的，它肯定非常重要，我应该趁大家都不在的时候把它做掉一大块，这样等他们回来时它就已经定型了。（我不想细说那是游戏的哪个部分，因为我要避免剧透。）"
+    },
+    { "type": "h2", "id": "vacation", "zh": "假期", "en": "The Vacation" },
+    {
+      "type": "p",
+      "en": "But, inspiration is a funny thing. I worked a little bit on the issues I had planned to work on, but for the first bit of the vacation, up through the 25th, I found myself most motivated by cleaning up old nagging issues on my to-do list, and shipping this improved version of the game to our very few beta players. This involved stuff like improving the feel of tracing lines on the puzzle panels.",
+      "zh": "不过，灵感这东西很奇妙。我确实按计划做了一点原本打算做的事，但假期刚开始的那一段、一直到 25 号，最能驱动我的其实是清理待办清单上那些积压已久、一直烦人的老问题，然后把这个改进过的版本发给极少数几位 beta 玩家。这包括改善谜题面板上描线的手感之类的活儿。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/export.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A peek at the export script, used to package the game for end-users.",
+      "zh": "看一眼导出脚本，它用来把游戏打包给最终用户。"
+    },
+    {
+      "type": "p",
+      "en": "After shipping that beta, I found my attention most strongly drawn toward an unexpected part of the game: an optional area, one that we could completely cut from the game and nobody would know, yet at the same time, it's an area that adds to the overall conceptual arc of the game in a strong way, and would be very rewarding for the small percentage of players who get deeply into the game. (Again, I apologize for the vagueness, but let's avoid spoilers).",
+      "zh": "发完那个 beta 之后，我发现自己最强烈的注意力被游戏里一个意想不到的部分吸引过去了：一片可选区域——我们完全可以把这片区域从游戏里整个砍掉而无人察觉，但与此同时，它又以很强的方式加厚了整个游戏的概念弧线，对那些真正深入玩进去的少数玩家来说会非常有回报。（再次为含糊其辞道歉，但咱们还是别剧透。）"
+    },
+    {
+      "type": "p",
+      "en": "I had roughed out a version of this area a long time ago -- maybe a year or two ago -- and had always found the basic idea very exciting. But back then the area wasn't done enough to prove the concept, and over time it decayed while the rest of the game was being worked on (which is natural on a big project like this). But, perhaps because it's an area of the game that nobody else on the team really knows about or understands yet, I had a great motivation to spend vacation time on making this area good. Now that I think about this again it makes a strange kind of sense: when development is pretty much paused, it is somehow appropriate to work on something that nobody else really knows about.",
+      "zh": "很久以前——大概一两年前——我草草搭出过这片区域的一个版本，而且一直觉得这个基本构想非常令人兴奋。但那时候它做得还不够，没法证明这个构想；随着时间推移，在游戏其他部分继续推进的同时，它慢慢荒废了（对这种大项目来说这很正常）。不过，也许正因为这是团队里其他人还不了解、也不理解的区域，我才有极强的动力把假期时间花在把它做好上。现在回头再想，这有种奇怪的合理性：当开发基本停摆时，去做一件别人都不了解的事，反倒显得格外合适。"
+    },
+    {
+      "type": "p",
+      "en": "At first I thought the task would just be to make the old stuff work again and then do a straightforward job of the extra functionality I needed to complete the area. Thinking about the programming I would have to do to complete the area, I saw it as a necessary bummer (\"I want to be done with this game, but ugh, there is more programming I have to do that isn't even on the mainline to all the things that really need to be done.\")",
+      "zh": "起初我以为，任务无非是让旧东西重新跑起来，然后直截了当地补上完成这片区域所需的额外功能。一想到为此要写的程序，我就觉得这是一件不得不受的罪（「我就想把这游戏做完，可唉，还有更多程序要写，而且这些甚至不在那些真正必须完成的事情的主线上。」）"
+    },
+    {
+      "type": "p",
+      "en": "But I started programming that extra functionality, and 10 minutes into it, realized I was not so excited about the design part -- it seemed like a very rote execution, like anyone could do in any game, and The Witness ought to have something better than that. Because there was no pressure, and because I was free to do whatever I wanted, my mind was open enough to instantly see an alternative that would be much truer to the essence of the game. The chance to do this better thing was very exciting. (We'll come back to this subject of being able to see ideas, later).",
+      "zh": "但我还是开始写那部分额外功能，写了 10 分钟就意识到，我对这个设计部分并不怎么兴奋——它看起来只是按部就班的实现，任何游戏里谁都能做出来，而《The Witness》该有比这更好的东西。因为没有任何压力，也因为我爱怎么做就怎么做，我的脑子足够开放，立刻就看到了一种替代方案，它要贴近游戏本质得多。有机会去做这件更好的事，太令人兴奋了。（关于「能看到想法」这个话题，我们后面还会回到。）"
+    },
+    {
+      "type": "p",
+      "en": "So I started programming this more-exciting version of the functionality. Then I saw how I could make it even more interesting, and I would start doing that. Then I would see how to make it even *more* interesting, though that would introduce a lot more programming work. If I were feeling the regular pressure of the game schedule, at this time years in when it is time to be finishing the game, I might have said, \"naah, we don't have time add that extra work\". But because it was vacation the work was free, so I said screw it.",
+      "zh": "于是我着手写这个更令人兴奋的版本。接着我又看到怎么让它更有意思，就又开始动手。然后我又看到怎么让它*更*有意思——尽管那会引入多得多的编程工作。如果我当时感受到的是游戏日程上那种惯常的压力——毕竟此时已经做了好几年、正是该收尾的时候——我可能会说：「算了，我们没时间加那些额外工作。」但因为这是假期，这些工作是「免费」的，所以我说，管他呢。"
+    },
+    {
+      "type": "p",
+      "en": "I worked in a fiercely productive way for a couple of days. New ideas would come. They would raise new issues. I would program some things, and in that way that programming often goes, new problems would come to light that I hadn't thought of, and those problems introduced even smaller 2nd-order problems when confronted. But by this time I was fully energized and just had dogged determination and was fully enjoying the whole process. In the end I programmed at least 5 times as much functionality as I had planned, but rather than being bummed about it, I enjoyed the whole excursion.",
+      "zh": "接下来几天，我以极其高产的方式工作。新想法会冒出来，它们又会带出新问题。我写一些代码，然后就像编程常常发生的那样，一些我没想过的新问题浮出水面，而当你去面对这些问题时，它们又会引出更细枝末节的二阶问题。但到这个时候我已经精力充沛，只有一股死磕到底的决心，并且完全享受整个过程。最后我写出的功能至少是原计划量的 5 倍，但我丝毫没为此郁闷，反而很享受这整趟远足。"
+    },
+    {
+      "type": "p",
+      "en": "Those who know me will tell you that I am not predisposed toward painting things in an unduly positive light -- but I will tell you that these past four days or so have been amazing and wonderful. Here's a shot from what I did (the visuals are 'programmer art', as usual):",
+      "zh": "认识我的人会告诉你，我天生不倾向于把事情说得过分光明——但我要告诉你，过去这四天左右真是无比精彩、无比美妙。这是我做出来的东西的一张截图（视觉效果一如既往是「程序员美术」）："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.29__time_20_51_n06.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It is hard to tell you why this is so cool without huge spoilers.",
+      "zh": "要想不剧透得很严重就跟你说清楚它为什么这么酷，实在很难。"
+    },
+    { "type": "h2", "id": "amazing-and-wonderful", "zh": "为什么它如此精彩美妙", "en": "It's so amazing and wonderful because" },
+    {
+      "type": "p",
+      "en": "it's been a long time since I worked this hard and this effectively. Keeping in mind that memory is sometimes not as reliable as we think, I would tell you that the last time I worked this hard and this well was when starting my first, ultimately doomed, company (with a friend from college and a 3D artist we recruited from that same school and unfortunately put through years of meager-wage toil).",
+      "zh": "我已经很久没有这么拼命、这么高效地工作过了。考虑到记忆有时并不像我们以为的那么可靠，我还是要说：上一次我如此拼命、如此出色地工作，是在创办我第一家（最终注定失败的）公司的时候（和一位大学同学，以及我们从同一所学校招来的一位 3D 美术——可惜让他拿了好几年微薄薪水苦干）。"
+    },
+    {
+      "type": "p",
+      "en": "Here are some shots from the first professional game I ever worked on, back before we had a concept of 'indie development'. Software rendered, subpixel-accurate texture mapping, assembly-language inner loop that commandeers ebp in order to utilize a precious extra register, a la Mike Abrash, and oh yeah, it was multiplayer-only, 32-player, over 9600 baud modems:",
+      "zh": "这是我参与过的第一款商业游戏的一些截图，那还是在「独立开发」这个概念出现之前。软件渲染、亚像素精度的纹理映射、用汇编写的内层循环——它征用了 ebp，只为多用一个宝贵的寄存器，走的是 Mike Abrash 那一派的路子；哦对，它还只支持多人游戏，32 名玩家，跑在 9600 波特的调制解调器上："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/wulfram.2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/Wulfram-2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We were working on this game from 1996 to 1999 or so. 1996 was the year I got into professional game development, and in hindsight, it appears to have been the hardest possible time in the history of video games. Indies of today, y'all have *no idea* how much easier it is to make games now than it was in 1996. (I hate to be an old fogey who's all \"back in my day, we had to walk to school in the snow, barefoot, uphill both ways,\" but in this case it is absolutely true.)",
+      "zh": "我们做这个游戏大概是 1996 到 1999 年。1996 是我进入职业游戏开发的那一年，回过头看，那大概是电子游戏史上最艰难的时期。今天的独立开发者们，你们*完全不知道*现在做游戏比 1996 年容易了多少。（我不想当那种「想当年我们光着脚在雪地里上学，来回都是上坡」的老古板，但这一回我说的绝对是实话。）"
+    },
+    {
+      "type": "p",
+      "en": "That game was never very successful. It had design problems, but also, we didn't really know how to talk about or promote a game; lastly, this was before many people played games over the internet, so the potential audience was pretty small. (Trivia Tidbit: [There was another online game being supported by the same publishing service as our game](http://en.wikipedia.org/wiki/Attack_Retrieve_Capture), and this other game was more popular, despite being relatively simple in a technical sense, which annoyed the hell out of us on a subliminal level that we wouldn't totally admit. The guys making this game were John Vechey and Brian Fiete; our producer at the publisher was Jason Kapalka, who later went off with these guys to start a company called PopCap, which last I heard had done okay.)",
+      "zh": "那款游戏从来算不上成功。它有设计上的问题，但另外，我们也根本不知道该怎么谈论和推广一款游戏；最后一点，那时还没多少人通过互联网玩游戏，所以潜在受众很小。（冷知识：[当时有另一款网络游戏和我们的游戏由同一家发行服务商支持](http://en.wikipedia.org/wiki/Attack_Retrieve_Capture)，那款游戏比我们更受欢迎——尽管从技术上说它相对简单。这事在潜意识层面把我们气得够呛，只是我们不会完全承认。做那款游戏的人是 John Vechey 和 Brian Fiete；我们在发行商那边的制作人是 Jason Kapalka，他后来和这几个人一起创办了一家叫 PopCap 的公司，我上次听说它做得还不错。）"
+    },
+    {
+      "type": "p",
+      "en": "Back in those days I worked very hard. When we started the company I knew nothing about building 3D games; we learned very quickly. I would long hours, late into the night, intensively. At some point we all burned ourselves out, I think.",
+      "zh": "那阵子我工作得非常拼。我们开公司的时候，我对做 3D 游戏一无所知；我们学得很快。我会一干就是很长时间，干到深夜，强度极高。我想，到某个时候我们全都把自己烧尽了。"
+    },
+    {
+      "type": "p",
+      "en": "After we closed down that company, I went on to do a number of contractor things, game industry lecture things, magazine article things, and working on various independent projects that I never finished. Through that time, I was still very burned out. If you have never experienced burnout, it's hard to explain. Burnout is not just \"I don't feel like working right now\"; it is about your mind refusing to permit you to work, because it has seen what happens when it lets you work.",
+      "zh": "我们关掉那家公司之后，我做过不少外包的活、游戏业的讲座、杂志文章，也做过各种独立项目——一个都没做完。那段时间里，我依然处在严重的倦怠之中。如果你从没经历过倦怠，这很难解释。倦怠不只是「我现在不想干活」；它关乎你的大脑拒绝允许你工作，因为它已经见过一旦让你工作会发生什么。"
+    },
+    {
+      "type": "p",
+      "en": "Eventually, I swore that I would design a very good game and finish it and release it to people, and the result is a game that was successful and that many people like:",
+      "zh": "最终，我发誓要设计一款非常好的游戏，把它做完，并发布给大家；结果就是这款成功的、被很多人喜欢的游戏："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/Braid_screenshot2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A main part of the reason this game exists was that I instilled a certain discipline in myself: I wasn't going to do this game because I was excited about a technical thing, or excited about programming; I was going to minimize the amount of programming, firstly so that the game would get finished at all (I had plenty of experience by this point at not-finishing-projects, as did many of my friends; it was an endemic problem), but also so that I could focus appropriately on the design and build something very special.",
+      "zh": "这款游戏之所以存在，主要原因之一是我给自己灌输了某种纪律：我不会因为对某项技术感到兴奋、或对编程感到兴奋而去做这个游戏；我要把编程量压到最低——首先是为了让游戏好歹能做完（到那时我在「项目做不完」这件事上已经经验丰富，我很多朋友也是；这是个普遍性的问题），其次是为了能恰当地把精力集中在设计上，做出某种非常特别的东西。"
+    },
+    {
+      "type": "p",
+      "en": "Despite the fact that I kept the game technically simple, there was still a huge amount of programming to do. But thankfully, the strategy worked and the game was completed. Eventually.",
+      "zh": "尽管我在技术上把这款游戏保持得很简单，要写的程序仍然多得吓人。但幸好这个策略奏效了，游戏完成了。最终。"
+    },
+    {
+      "type": "p",
+      "en": "Even though I'd made a successful game, I was still burned out to some degree. In 1996-1997 I was working at full capacity and was very productive, at least inasmuch as one might expect for a programmer of that age who was first starting to get real-world large-project experience. But after being burned out at that time, I never again worked at full capacity.",
+      "zh": "尽管我做出一款成功的游戏，我在某种程度上依然倦怠。1996 到 1997 年间，我以满负荷的状态工作，产出很高——至少对一个刚开始积累真实世界大项目经验、那个年纪的程序员来说，该有的产出都有了。但在那段时间烧尽之后，我再也没有以满负荷的状态工作过。"
+    },
+    { "type": "h2", "id": "what-i-am-getting-at", "zh": "我想说的是", "en": "What I am getting at" },
+    {
+      "type": "p",
+      "en": "I am saying all these things just as a way to get around to explaining that, during this Christmas vacation, I finally recovered fully from burnout. For about 3 days, I was working at 100% capacity, which I have not done in 15 years. It felt wonderful to have that back, to not succumb to the story that maybe game design and programming are like math of physics where you peak at 25. These few days were way better than when I was 25, because now I am substantially better at programming, and I am good at design also, and games are so much easier to make than they used to be; so the design cylinders are firing and then they turn it over to the programming cylinders, etc, and very quickly a lot of high-quality work gets banged out. And it's not just arbitrary good work, but work that helps to round out the game that I already feel is the best thing I have ever worked on, that helps put grace notes in just the right places, in the [manner of exploratory game design](http://www.youtube.com/watch?v=OGSeLSmOALU) that Marc ten Bosch and I spoke about at Indiecade 2011. So this period of intensive work was seasoned and tempered in a way that was not possible when I was 25.",
+      "zh": "我说这些，只是为了绕到这件事上：这个圣诞假期里，我终于从倦怠中彻底恢复了过来。大约有 3 天时间，我以 100% 的负荷工作，而这是我 15 年来没有过的。能把那种状态找回来，能不屈服于「游戏设计和编程也许像数学或物理那样，25 岁就到巅峰」这种说法，感觉太好了。这几天远比我 25 岁时好，因为现在我的编程水平高出一大截，设计也在行，而做游戏比过去容易太多了；于是设计的汽缸先点火，再把动力交给编程的汽缸，等等，很快一大批高质量的工作就被敲了出来。而且这些不是随便什么好活儿，而是能帮我完善这款游戏的活儿——我已经觉得它是我做过的最好的东西；它们帮我在恰到好处的地方点上装饰音，用的正是 Marc ten Bosch 和我在 2011 年 Indiecade 上谈到的[探索式游戏设计](http://www.youtube.com/watch?v=OGSeLSmOALU)的路子。所以这段高强度工作的时期，被以一种 25 岁时不可能有的方式调过味、淬过火。"
+    },
+    {
+      "type": "p",
+      "en": "It has been a wonderful time and I look forward to doing more of it. Part of what allowed it to happen this way was that lack of pressure that I have mentioned, due to being on vacation. When a design idea would come to mind, and I would see that it might be cool but would lead to a lot of work, well, this week I was able to let it happen, and I was able to enjoy the challenge of going off on a minor programming rathole in order to do something really good in the design. This is to some degree a reversal of the discipline I instilled to get Braid done; you can think of it as a correction term to the equation. The 0th order term is knowing how to program and design; the 1st order term is having discipline to be able to execute efficiently without being carried away with ideas that will scuttle production; but the 2nd order term is that it is joyful and interesting to have some wiggle room in there, sometimes eroding away a bit of the 1st order term.",
+      "zh": "这是一段美妙的时光，我期待以后能多来几次。让这一切得以如此发生的部分原因，正是我提到的那份因为休假而消失的压力。当某个设计想法浮上心头，而我看得出它可能很酷、但会带来大量工作时，这周我能够放手让它发生；我也能够享受这种挑战：为了一处真正出色的设计，钻进一条不太要紧的编程死胡同。这在某种程度上是对我为了做完《Braid》而给自己灌输的那套纪律的反转；你可以把它看作方程里的一个修正项。零阶项是懂得怎么编程和设计；一阶项是有纪律，能够高效执行而不被那些会拖垮产能的想法带跑；而二阶项是：在这中间留一点回旋余地，有时侵蚀掉一阶项的一小部分，是令人愉快且有意思的。"
+    },
+    {
+      "type": "p",
+      "en": "There is a kind of open curiosity about programming that I haven't had in a long time, that I allowed myself to re-discover this week in the freedom of exploring that 2nd-order term.",
+      "zh": "对编程有一种开放的好奇心，我已经很久没有过了；这一周，在探索那个二阶项的自由里，我让自己重新找回了它。"
+    },
+    {
+      "type": "p",
+      "en": "([Richard Feynman has an anecdote about how he was burned out on physics](http://www.physics.ohio-state.edu/~kilcup/262/feynman.html), and how he started to get over it, which I think bears some similarity).",
+      "zh": "（[Richard Feynman 有一个段子，讲他如何对物理倦怠](http://www.physics.ohio-state.edu/~kilcup/262/feynman.html)、又如何开始走出来，我觉得这和我的情况有几分相似。）"
+    },
+    {
+      "type": "p",
+      "en": "I am not explaining any of this very well. But I am doing the best work of my life, right now, and it feels great, and for the first time I could see myself working in this same fashion for the rest of my life and feeling happy that I am operating at something like my full potential. So there you have it.",
+      "zh": "这些事我一件都没解释好。但我此刻正在做我这辈子最好的工作，感觉棒极了；而且这是我第一次能想象自己在余生里都用这种方式工作，并且为自己大致发挥出了全部潜力而感到高兴。事情就是这样。"
+    },
+    {
+      "type": "p",
+      "en": "I mentioned earlier that I would talk further about the ability to see ideas, but I guess I was lying, because this is already too long and rambling. I'll save that for a future post.",
+      "zh": "我前面说过要再谈谈「能看到想法」这件事，但看来我是在骗人，因为这篇已经又长又散了。这个留到以后的文章里写吧。"
+    },
+    {
+      "type": "p",
+      "en": "*It's worth pointing out that I started Braid while working on what was supposed to be a vacation. And back when I got the impulse to start the Experimental Gameplay Workshop, I was on a plane back from a vacation to Africa. So apparently vacations are good times for me, even if I don't treat them the way Normal People do.*",
+      "zh": "*值得一提的一点是，我开始做《Braid》的时候，正在做一件本该是假期的事。而当年我萌生发起 Experimental Gameplay Workshop 的冲动时，正坐在从非洲度假回来的飞机上。所以显然，假期对我来说是好时候，哪怕我并没有像「正常人」那样对待假期。*"
+    }
+  ]
+}

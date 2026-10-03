@@ -1,0 +1,370 @@
+{
+  "id": "castano-2026-02-18-runtime-mipmap-generation",
+  "title": { "zh": "运行期生成 mipmap", "en": "Runtime Mipmap Generation" },
+  "subtitle": {
+    "en": "One of the advantages of runtime texture compression is that mipmaps can also be computed at runtime and do not need to be transmitted.",
+    "zh": "运行期纹理压缩的好处之一是：mipmap 也可以在运行期算出来，不需要传输。"
+  },
+  "translator": {
+    "note": "`mipmap` 按全站口径不译。原文的五个标题在归档里是三级/四级标题，译文按本 schema 一律映射成 `h2`；`**Separate alpha channels**` 这类加粗小标题在源文里就是加粗段落（不是 markdown 标题），所以保留为 `p` 块。归档把几张对比图的列标签单独排成缩进行（`Box Filter`、`Magic Kernel Sharp`、`Three.js`、`Basis`、`spark.js`），译文按源文行结构保留为独立 `p` 块。插图按全站口径归一化成「（原文此处有一张图）」占位，其中两张的 alt 原文是「Texture filter comparison」「Alpha coverage comparison」，也一并压平成「图」。代码块逐字保留英文，语言标注按内容标为 `wgsl` / `js`。术语：`premultiplied alpha` 译「预乘 alpha」，`channel` 译「通道」，`fragment shader` 译「片元着色器」，`compute shader` 译「计算着色器」，`mipmap` / WGSL 标识符 / `glTF` / `PBR` / BC / sRGB 一律保留英文。原文里的笔误（`all he threads`、`encodeTexture` 示例末尾少一个右括号、`three.js` 的大小写混用）在 `en` 字段中原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "One of the advantages of runtime texture compression is that mipmaps can also be computed at runtime and do not need to be transmitted. In contrast, offline codecs must precompute mipmaps so they can be compressed and transmitted alongside the base image.",
+      "zh": "运行期纹理压缩的好处之一是：mipmap 也可以在运行期算出来，不需要传输。相比之下，离线编解码器必须预先算好 mipmap，才能把它们压缩后和基础图像一起传输。"
+    },
+    {
+      "type": "p",
+      "en": "Each mip level requires one quarter of the memory of its parent, so a full mipmap chain increases the total texture size by approximately 33%. In principle, offline codecs could attempt to exploit correlation between mip levels, but in practice they rarely do. In fact, rate-distortion optimized codecs often exceed the theoretical 33% overhead, because lower-resolution mip levels tend to have higher entropy and compress less efficiently.",
+      "zh": "每一级 mip 所需的内存是上一级的四分之一，所以一条完整的 mipmap 链会把纹理总大小增加大约 33%。理论上，离线编解码器可以尝试利用 mip 各级之间的相关性，但实践中很少这么做。事实上，经过率失真优化的编解码器常常超出 33% 这个理论开销，因为分辨率更低的 mip 级别往往熵更高，压缩效率更低。"
+    },
+    {
+      "type": "p",
+      "en": "By generating mipmaps on the device, we eliminate the need to transmit them entirely, reducing the total transmitted texture data by 25%. This is a dramatic reduction by image codec standards, and can be achieved without any loss of quality. The tradeoff is that mipmaps must be generated at runtime, but fortunately this is a task that GPUs excel at.",
+      "zh": "在设备上生成 mipmap，我们就完全不需要传输它们，从而把传输的纹理数据总量减少 25%。按图像编解码器的标准，这是相当可观的缩减，而且可以做到没有任何画质损失。代价是 mipmap 必须在运行期生成，不过幸运的是，这恰好是 GPU 擅长的任务。"
+    },
+    {
+      "type": "p",
+      "en": "In offline pipelines, mipmap generation is usually performed on the CPU. An efficient implementation requires SIMD optimizations and tiling for parallelization, which add significant complexity.",
+      "zh": "在离线流水线里，mipmap 生成通常在 CPU 上完成。要做到高效，需要 SIMD 优化和分块并行化，这会显著增加复杂度。"
+    },
+    {
+      "type": "p",
+      "en": "On the other hand, mipmap generation maps naturally to the compute programming model and benefits from the hardware filtering, color space conversion, and built-in border handling of the texture units. As a result a basic implementation is relatively trivial.",
+      "zh": "另一方面，mipmap 生成天然契合计算编程模型，还能受益于纹理单元的硬件过滤、色彩空间转换和内置的边界处理。因此，一个基本的实现相对来说是小事一桩。"
+    },
+    {
+      "type": "p",
+      "en": "For the implementation in [spark.js](https://ludicon.com/sparkjs/) I decided to keep it simple, aim for adequate performance, and focus on the following features:",
+      "zh": "[spark.js](https://ludicon.com/sparkjs/) 里的这个实现，我决定保持简单、以够用的性能为目标，并把重点放在以下几个特性上："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "Linear-space filtering.", "zh": "线性空间过滤。" },
+        { "en": "A high quality low-pass filter.", "zh": "高质量的低通滤波器。" },
+        { "en": "Alpha weighting and coverage preservation.", "zh": "alpha 加权与覆盖率保持。" }
+      ]
+    },
+    { "type": "h2", "id": "linear-space-filtering", "zh": "线性空间过滤", "en": "Linear-space filtering" },
+    {
+      "type": "p",
+      "en": "Color textures are typically stored in gamma space or sRGB because this allocates more precision to dark values, where human vision is more sensitive. This reduces visible banding and allows textures to be stored accurately using 8-bit per component formats, as well as block-compressed formats with limited precision.",
+      "zh": "彩色纹理通常存在伽马空间或 sRGB 里，因为这样能把更多精度分配给暗部取值，而人眼对暗部更敏感。这能减少可见的条带，也让纹理可以用每分量 8 位的格式精确存储，包括精度有限的块压缩格式。"
+    },
+    {
+      "type": "p",
+      "en": "Filtering, however, is a linear operation and must be performed in linear radiometric space. Averaging gamma-encoded values is *not* equivalent to averaging intensities. This is not merely a mathematical formality: gamma-space filtering introduces systematic bias, leading to incorrect brightness, inconsistent energy across mip levels, and a general darkening that causes fine details to fade out too quickly.",
+      "zh": "然而，过滤是一个线性运算，必须在线性的辐射度量空间里进行。对伽马编码后的值取平均，*并不*等价于对强度取平均。这可不只是数学上的形式问题：在伽马空间里过滤会引入系统性偏差，导致亮度不正确、各级 mip 之间能量不一致，以及整体变暗，使精细细节过快地消失。"
+    },
+    {
+      "type": "p",
+      "en": "Preserving energy across mip levels is one of the most important factors in the visual quality of mipmaps. This principle is well understood in the computer graphics community, and was widely disseminated among game developers through Jonathan Blow’s *Inner Product* articles on mipmapping:",
+      "zh": "在各级 mip 之间保持能量，是决定 mipmap 视觉质量最重要的因素之一。这个原则在计算机图形学界早已被充分理解，并通过 Jonathan Blow 在 *Inner Product* 上关于 mipmapping 的文章在游戏开发者中广泛传播："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "[Mipmapping, Part 1](http://number-none.com/product/Mipmapping,%20Part%201/index.html)", "zh": "[Mipmapping, Part 1](http://number-none.com/product/Mipmapping,%20Part%201/index.html)" },
+        { "en": "[Mipmapping, Part 2](http://number-none.com/product/Mipmapping,%20Part%202/index.html)", "zh": "[Mipmapping, Part 2](http://number-none.com/product/Mipmapping,%20Part%202/index.html)" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Modern graphics hardware supports sRGB textures natively. When an sRGB texture is sampled, the texture unit returns colors in linear space that the shader can operate on directly. Achieving correct linear filtering is then as simple as choosing the right texture format.",
+      "zh": "现代图形硬件原生支持 sRGB 纹理。采样一张 sRGB 纹理时，纹理单元返回的是线性空间中的颜色，着色器可以直接在上面运算。于是，要做到正确的线性过滤就只是选对纹理格式这么简单。"
+    },
+    {
+      "type": "p",
+      "en": "However, there are some caveats. When loading texture values for compression, we want to access the raw values without conversion, while during filtering we want linear values. Also, when using a texture as storage from a compute shader, we are not allowed to provide linear values and have them converted to sRGB format. In fact, binding an sRGB texture for storage is not allowed at all.",
+      "zh": "不过，这里有一些需要注意的地方。在为压缩而读取纹理值时，我们希望拿到未经转换的原始值；而在过滤时，我们想要线性值。另外，在计算着色器里把纹理当作存储目标时，不允许我们提供线性值再让系统转换成 sRGB 格式。事实上，把一张 sRGB 纹理绑定为存储目标根本就不被允许。"
+    },
+    {
+      "type": "p",
+      "en": "WebGPU supports these two use cases by allowing different views of the same texture with compatible formats. For this to work, the supported view formats must be provided in advance at texture creation time, as shown below:",
+      "zh": "WebGPU 通过允许对同一张纹理创建格式兼容的不同视图，来支持这两种用法。要让这生效，必须在创建纹理时事先提供所支持的视图格式，如下所示："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "texture = device.createTexture({\n    size: [width, height, 1],\n    format: \"rgba8unorm\",\n    viewFormats: [\"rgba8unorm\", \"rgba8unorm-srgb\"]\n})"
+    },
+    {
+      "type": "p",
+      "en": "By default, views use the primary format of the texture, but a different format can be specified explicitly. For example:",
+      "zh": "默认情况下，视图使用纹理的主格式，但也可以显式指定另一种格式。例如："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "view = texture.createView({ \n    format: \"rgba8unorm-srgb\",\n    usage: GPUTextureUsage.TEXTURE_BINDING\n})"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, even though this feature is required by WebGPU, it is currently not supported in Firefox (see [Bugzilla issue #1977241](https://bugzilla.mozilla.org/show_bug.cgi?id=1977241)). To work around this limitation, [spark.js](https://ludicon.com/sparkjs/) also implements its downsampling filters using fragment shaders instead of compute shaders.",
+      "zh": "遗憾的是，尽管这个特性是 WebGPU 规范要求的，Firefox 目前却不支持它（见 [Bugzilla 上的 #1977241](https://bugzilla.mozilla.org/show_bug.cgi?id=1977241)）。为了绕过这个限制，[spark.js](https://ludicon.com/sparkjs/) 还实现了用片元着色器做的降采样滤波器，作为计算着色器版本的替代。"
+    },
+    {
+      "type": "p",
+      "en": "When using a fragment shader, we can render directly to an sRGB render target and rely on the hardware to perform the conversion. This removes the need for multiple views of the same texture with different formats, and allows [spark.js](https://ludicon.com/sparkjs/) to work around the current implementation gaps in Firefox. However, this comes with a performance penalty, as the fragment shader implementation cannot take advantage of compute features that enable more efficient convolutions.",
+      "zh": "使用片元着色器时，我们可以直接渲染到一个 sRGB 渲染目标上，让硬件去完成转换。这样就不需要为同一张纹理创建多种不同格式的视图，也让 [spark.js](https://ludicon.com/sparkjs/) 能绕开 Firefox 目前的实现缺口。不过这要付出性能代价，因为片元着色器的实现无法利用那些能让卷积更高效的计算特性。"
+    },
+    { "type": "h2", "id": "a-high-quality-low-pass-filter", "zh": "高质量的低通滤波器", "en": "A high quality low-pass filter" },
+    {
+      "type": "p",
+      "en": "From a signal-processing perspective, generating mipmaps is a resampling problem: as resolution decreases, high spatial frequencies must be suppressed to avoid aliasing. In continuous signal processing, the ideal reconstruction filter for this is the sinc function, which perfectly preserves frequencies below the cutoff while removing those above it.",
+      "zh": "从信号处理的角度看，生成 mipmap 是一个重采样问题：随着分辨率下降，必须抑制高空间频率以避免混叠。在连续信号处理里，用于此的理想重建滤波器是 sinc 函数——它完美保留截止频率以下的成分，同时移除其上的成分。"
+    },
+    {
+      "type": "p",
+      "en": "In practice, however, the sinc filter is not directly usable in a discrete setting. It has infinite spatial support, which makes it impractical and truncating it naively leads to strong ringing artifacts. To address this, the sinc is multiplied by a window function that limits its support and controls ringing, trading off frequency response for better spatial behavior. Common choices include Lanczos and Kaiser windows, which produce filters with finite support and more acceptable visual characteristics.",
+      "zh": "但在实践中，sinc 滤波器无法直接用于离散的情形。它的空间支撑是无限的，因而不实用；而粗暴地截断它又会带来强烈的振铃瑕疵。为了解决这一点，人们把 sinc 乘以一个窗函数，用它来限制支撑范围、控制振铃，用频率响应换取更好的空间行为。常见的选择包括 Lanczos 窗和 Kaiser 窗，它们产生的滤波器支撑有限，视觉特性也更可接受。"
+    },
+    {
+      "type": "p",
+      "en": "This was my choice in the NVIDIA Texture Tools, and it is also what most production pipelines still use today. More recently, however, other approaches have come to my attention. In particular, [Bart Wronski](https://bartwronski.com/2021/07/20/processing-aware-image-filtering-compensating-for-the-upsampling/) and [Charles Bloom](https://cbloomrants.blogspot.com/2009/06/06-17-09-inverse-box-sampling-part-2.html) suggest designing filter weights with the knowledge that mipmaps will be reconstructed using bilinear filtering. One of my clients also reported great results using the [magic kernel sharp](https://johncostella.com/magic/) filter. This piqued my curiosity and led me to experiment with it in [spark.js](https://ludicon.com/sparkjs/).",
+      "zh": "这是我在 NVIDIA Texture Tools 里的选择，如今大多数生产流水线也仍然在用。不过更近期，另一些做法引起了我的注意。特别是 [Bart Wronski](https://bartwronski.com/2021/07/20/processing-aware-image-filtering-compensating-for-the-upsampling/) 和 [Charles Bloom](https://cbloomrants.blogspot.com/2009/06/06-17-09-inverse-box-sampling-part-2.html) 提出，在设计滤波器权重时应当把「mipmap 会用双线性过滤来重建」这件事考虑进去。我的一位客户也反馈说，用 [magic kernel sharp](https://johncostella.com/magic/) 滤波器取得了很好的效果。这勾起了我的好奇心，促使我在 [spark.js](https://ludicon.com/sparkjs/) 里试了试。"
+    },
+    {
+      "type": "p",
+      "en": "I haven’t done a formal evaluation yet, but the initial results look promising. A more thorough comparison will be needed in the future.",
+      "zh": "我还没有做正式的评估，但初步结果看起来很有希望。将来需要做一次更彻底的比较。"
+    },
+    { "type": "p", "en": "Box Filter", "zh": "盒式滤波" },
+    { "type": "p", "en": "Magic Kernel Sharp", "zh": "Magic Kernel Sharp" },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/box-1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "Box Filter", "zh": "盒式滤波" },
+    {
+      "type": "p",
+      "en": "And on actual models you can also see that the results make a significant difference:",
+      "zh": "在真实模型上也能看出，结果差别很明显："
+    },
+    { "type": "p", "en": "Three.js", "zh": "Three.js" },
+    { "type": "p", "en": "Basis", "zh": "Basis" },
+    { "type": "p", "en": "spark.js", "zh": "spark.js" },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/three.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "Three.js", "zh": "Three.js" },
+    {
+      "type": "p",
+      "en": "Note how [spark.js](https://ludicon.com/sparkjs/) preserves the brightness of the stitching in the helmet without loss in the high frequency details.",
+      "zh": "注意 [spark.js](https://ludicon.com/sparkjs/) 是如何保住头盔上缝线的亮度，同时又不损失高频细节的。"
+    },
+    {
+      "type": "p",
+      "en": "One technique often used to improve the performance of convolution filters is to rely on bilinear filtering to load and combine two or four neighboring texels with a single texture sample. For this to be possible, the weights of the linear combination must all have the same sign. Unfortunately, most of the weights in the *magic kernel* alternate in signs, which prevents this optimization. It should still be possible to combine the central tap, but the potential gains are relatively small.",
+      "zh": "提高卷积滤波器性能常用的一种技巧，是借助双线性过滤，用一次纹理采样就取到并合并相邻的两个或四个纹素。要做到这一点，线性组合的权重必须全部同号。可惜 *magic kernel* 的大多数权重是正负交替的，这就挡住了这项优化。合并中心抽头（central tap）应该还是可以的，但潜在的收益相对较小。"
+    },
+    {
+      "type": "p",
+      "en": "Another common approach is to implement the filter in two separable passes, a vertical and a horizontal downsampling pass. However, for small convolutions like this it’s more critical to perform them in a single pass, using shared memory to amortize the texture loads and reduce memory traffic.",
+      "zh": "另一种常见做法是把滤波器拆成两个可分离的 pass：一个垂直降采样 pass、一个水平降采样 pass。不过对于这么小的卷积来说，更关键的是用单个 pass 完成，并借助共享内存来摊薄纹理读取、减少内存流量。"
+    },
+    {
+      "type": "p",
+      "en": "A naive implementation like this would require 36 texture samples per thread (or 25 relying on bilinear filtering for the central taps):",
+      "zh": "这样朴素的实现每个线程需要 36 次纹理采样（如果对中心抽头借助双线性过滤，则是 25 次）："
+    },
+    {
+      "type": "code",
+      "lang": "wgsl",
+      "code": "var accum = vec4<f32>(0.0);\n\n// 4x4 taps around (base.x, base.y):\nfor (var j = 0; j < 6; j = j + 1) {\n    let v = base.y + f32(j) * sizeRcp.y;\n\n    var row = vec4<f32>(0.0);\n    for (var i = 0; i < 6; i = i + 1) {\n        let u = base.x + f32(i) * sizeRcp.x;\n\n        row = row + w[i] * textureSampleLevel(src, smp, vec2f(u, v), 0);\n    }\n\n    accum = accum + w[j] * row;\n}"
+    },
+    {
+      "type": "p",
+      "en": "The tiled implementation, on the other hand, requires fewer samples. For a 8×8 workgroup and a 6×6 kernel, the tile size would need to be 20×20, which results in just 6.25 samples per thread.",
+      "zh": "而分块的实现需要的采样次数更少。对于 8×8 的工作组和 6×6 的卷积核，瓦片尺寸需要是 20×20，这样每个线程只需要 6.25 次采样。"
+    },
+    {
+      "type": "p",
+      "en": "First, we use all he threads in the workgroup to sample the texture cooperatively:",
+      "zh": "首先，我们用工作组里的所有线程协作采样纹理："
+    },
+    {
+      "type": "code",
+      "lang": "wgsl",
+      "code": "const samplesPerThread = (N + W - 1u) / W;\nlet threadIdx = local_id.y * WORKGROUP_SIZE + local_id.x;\n\nfor (var s = 0u; s < samplesPerThread; s = s + 1u) {\n    let flatIdx = threadIdx + s * W;\n    if (flatIdx < N) {\n        let sharedY = flatIdx / TILE_SIZE;\n        let sharedX = flatIdx % TILE_SIZE;\n\n        let uv = base + vec2f(f32(sharedX), f32(sharedY)) * sizeRcp;\n\n        let color = textureSampleLevel(src, smp, uv, 0);\n        sharedData[0 * N + flatIdx] = color.r;\n        sharedData[1 * N + flatIdx] = color.g;\n        sharedData[2 * N + flatIdx] = color.b;\n        sharedData[3 * N + flatIdx] = color.a;\n    }\n}"
+    },
+    {
+      "type": "p",
+      "en": "We then issue a workgroup barrier and perform the convolution, just like we did before:",
+      "zh": "然后我们设置一个工作组屏障，再像之前那样做卷积："
+    },
+    {
+      "type": "code",
+      "lang": "wgsl",
+      "code": "for (var j: 0; j < 6; j = j + 1) {\n  var row = 0.0;\n  for (var i = 0; i < 6; i = i + 1) {\n    let idx = (sharedBaseY + j) * TILE_SIZE + (sharedBaseX + i);\n    row = row + w[i] * sharedData[idx];\n  }\n  accum = accum + w[j] * row;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Ideally, we want to perform the separable convolution in two passes: one to filter the rows and another to filter the columns. For best results, shared-memory addressing must be handled carefully to minimize bank conflicts. This is left as an exercise for the reader, or perhaps the subject of a future blog post.",
+      "zh": "理想情况下，我们希望把可分离卷积拆成两个 pass：一个过滤行，另一个过滤列。为取得最好的效果，必须小心处理共享内存的寻址，以尽量减少 bank 冲突。这部分就留给读者当练习了，或者也许会成为以后某篇博客的主题。"
+    },
+    { "type": "h2", "id": "alpha-weighting-and-coverage-preservation", "zh": "alpha 加权与覆盖率保持", "en": "Alpha weighting and coverage preservation" },
+    {
+      "type": "p",
+      "en": "Lastly, my final goal was to correctly handle images with alpha. The first problem I wanted to address is color bleeding around alpha silhouettes.",
+      "zh": "最后，我的一个目标是正确处理带 alpha 的图像。我想解决的第一个问题是 alpha 轮廓边缘的颜色渗漏。"
+    },
+    {
+      "type": "p",
+      "en": "One common response to this problem is to suggest premultiplied alpha. However, in most cases I don’t have control over the source assets. The majority of color textures found in publicly available models are authored with straight (un-premultiplied) alpha.",
+      "zh": "对这个问题，一种常见的回应是建议使用预乘 alpha。然而在大多数情况下，我无法控制源资源。公开模型里的彩色纹理，绝大多数都是用直通（非预乘）alpha 制作的。"
+    },
+    {
+      "type": "p",
+      "en": "Alpha-weighted filtering addresses this issue elegantly without requiring changes to the source assets. The idea is simple: multiply the color with the alpha before filtering, and divide the filtered colors by the filtered alpha afterward to bring them back to the un-premultiplied state. Conveniently, this can be done when copying the colors into shared memory, and before writing the result to the output texture, so the performance and complexity impact is minimal.",
+      "zh": "alpha 加权过滤很优雅地解决了这个问题，而且不需要改动源资源。思路很简单：过滤前把颜色乘以 alpha，过滤后再把过滤后的颜色除以过滤后的 alpha，把它们还原回非预乘的状态。方便的是，这一步可以在把颜色拷进共享内存时做，也可以在把结果写入输出纹理之前做，所以对性能和复杂度的影响极小。"
+    },
+    {
+      "type": "p",
+      "en": "The following image shows the dramatic quality improvements achieved with this approach:",
+      "zh": "下面这张图展示了这种做法带来的巨大画质提升："
+    },
+    { "type": "p", "en": "three.js", "zh": "three.js" },
+    { "type": "p", "en": "spark.js", "zh": "spark.js" },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/alpha-three.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "three.js", "zh": "three.js" },
+    {
+      "type": "p",
+      "en": "Another problem I wanted to solve is the coverage loss caused by traditional alpha filtering, an issue [I ran into while working on The Witness](https://www.ludicon.com/castano/blog/articles/computing-alpha-mipmaps/).",
+      "zh": "我还想解决另一个问题：传统 alpha 过滤造成的覆盖率损失。这个问题[我在做《The Witness》时也遇到过](https://www.ludicon.com/castano/blog/articles/computing-alpha-mipmaps/)。"
+    },
+    {
+      "type": "p",
+      "en": "Standard mipmap generation algorithms tend to produce progressively lower alpha coverage on textures that use alpha testing. As the mip levels get smaller, the percentage of texels that pass the alpha test decreases, causing foliage to thin out and even disappear at a distance.",
+      "zh": "在使用 alpha 测试的纹理上，标准的 mipmap 生成算法往往会给出越来越低的 alpha 覆盖率。随着 mip 级别变小，能通过 alpha 测试的纹素比例会下降，导致植被变稀疏，甚至在远处完全消失。"
+    },
+    {
+      "type": "p",
+      "en": "The solution I proposed back then worked well in practice and has since become a de facto standard across the industry, but at first glance it seemed too expensive to apply at runtime.",
+      "zh": "我当年提出的那个方案在实践中效果很好，后来也成了业界事实上的标准；但乍看起来，它的开销太大，不适合在运行期使用。"
+    },
+    {
+      "type": "p",
+      "en": "Computing the alpha coverage for each mip level requires a parallel reduction, and this reduction must be repeated multiple times until the algorithm converges and a suitable alpha scale factor is found.",
+      "zh": "计算每一级 mip 的 alpha 覆盖率需要一次并行归约，而且这个归约必须重复多次，直到算法收敛、找到一个合适的 alpha 缩放因子。"
+    },
+    {
+      "type": "p",
+      "en": "The key observation is that textures are often known in advance, which allows these alpha scale factors to be precomputed and provided to the runtime as encoder parameters:",
+      "zh": "关键的观察是：纹理往往是事先已知的，因此这些 alpha 缩放因子可以预先算好，作为编码器参数提供给运行期："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "spark.encodeTexture(url, { mipsAlphaScale: [1.04, 1.12, 1.18, 1.09, 1.2 ] }"
+    },
+    {
+      "type": "p",
+      "en": "To make this more practical I’d like to propose a way to provide encoding parameters through glTF files. A tool like [gltf-tex](https://github.com/ludicon/gltf-tex) could then be used not just to encode textures in the desired delivery format, but also to determine the optimal filtering parameters for efficient runtime processing.",
+      "zh": "为了让这件事更实用，我想提议一种通过 glTF 文件提供编码参数的方式。这样 [gltf-tex](https://github.com/ludicon/gltf-tex) 这类工具就不只能按期望的交付格式编码纹理，还能确定最优的过滤参数，以便运行期高效处理。"
+    },
+    { "type": "p", "en": "three.js", "zh": "three.js" },
+    { "type": "p", "en": "spark.js", "zh": "spark.js" },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/alpha-mips-three.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "three.js", "zh": "three.js" },
+    { "type": "h2", "id": "future-improvements", "zh": "未来的改进", "en": "Future improvements" },
+    { "type": "p", "en": "**Separate alpha channels**", "zh": "**分离的 alpha 通道**" },
+    {
+      "type": "p",
+      "en": "Currently the alpha weighting is applied to the color maps when the opacity is stored in the alpha channel. Ideally it should be possible to store the opacity in a separate texture, and apply the weighting to other textures of the same material (normal maps, and other PBR attributes).",
+      "zh": "目前，当不透明度存在 alpha 通道里时，alpha 加权是施加在颜色贴图上的。理想情况下，应该可以把不透明度存在一张单独的纹理里，并把加权施加到同一个材质的其它纹理上（法线贴图以及其它 PBR 属性）。"
+    },
+    { "type": "p", "en": "**Normal map filtering**", "zh": "**法线贴图过滤**" },
+    {
+      "type": "p",
+      "en": "Filtering normals in isolation from other material parameters does not produce the best results. Currently [spark.js](https://ludicon.com/sparkjs/) filters normals independently and renormalizes the result. This often leads to specular aliasing.",
+      "zh": "把法线和其他材质参数隔离开来单独过滤，并不能得到最好的结果。目前 [spark.js](https://ludicon.com/sparkjs/) 会独立地过滤法线，再把结果重新归一化。这常常导致高光混叠。"
+    },
+    {
+      "type": "p",
+      "en": "In [Mipmapping Normal Maps](https://developer.download.nvidia.com/whitepapers/2006/Mipmapping_Normal_Maps.pdf) Toksvig made the clever observation that if normals are not renormalized after filtering, their length becomes inversely proportional to the variance of the normal distribution. This information can be exploited to adjust other parameters of the shading model, such as the roughness or the specular exponent, to reduce the aliasing of specular highlights.",
+      "zh": "在 [Mipmapping Normal Maps](https://developer.download.nvidia.com/whitepapers/2006/Mipmapping_Normal_Maps.pdf) 里，Toksvig 提出了一个聪明的观察：如果法线在过滤后不重新归一化，它的长度会与法线分布的方差成反比。这个信息可以被利用来调整着色模型的其它参数，比如粗糙度或高光指数，从而减少高光的混叠。"
+    },
+    {
+      "type": "p",
+      "en": "However, when using this technique, normal maps need to remain uncompressed, because [compressed representations are implicitly normalized](https://www.ludicon.com/castano/blog/2026/02/normal-map-compression-revisited/).",
+      "zh": "不过，使用这项技术时，法线贴图必须保持未压缩，因为[压缩表示是隐式归一化的](https://www.ludicon.com/castano/blog/2026/02/normal-map-compression-revisited/)。"
+    },
+    {
+      "type": "p",
+      "en": "A more practical approach that was popularized by [Stephen Hill](https://advances.realtimerendering.com/s2012/Ubisoft/Rock-Solid%20Shading.pdf), is to extract the normal variance (or Toksvig factor) and use it to compute a new roughness factor and combine it with the existing roughness texture (if present).",
+      "zh": "一个更实用的做法由 [Stephen Hill](https://advances.realtimerendering.com/s2012/Ubisoft/Rock-Solid%20Shading.pdf) 推广开来：提取法线方差（也就是 Toksvig 因子），用它算出一个新的粗糙度因子，再和已有的粗糙度纹理（如果有的话）组合起来。"
+    },
+    {
+      "type": "p",
+      "en": "I think it would be very interesting to implement this technique as it would work seamlessly with existing glTF assets and would reduce the aliasing without any additional changes to the rendering pipeline. One approach would be to provide a normal map texture when encoding the corresponding roughness map, but perhaps it would be more valuable to have an API that encodes multiple textures at a time and associates a role or usage to each one of them.",
+      "zh": "我觉得实现这项技术会很有意思，因为它能和现有的 glTF 资源无缝配合，并且在不改动渲染流水线的前提下减少混叠。一种做法是在编码对应的粗糙度贴图时顺带提供法线贴图纹理；不过也许更有价值的是提供一个 API，可以一次编码多张纹理，并为每一张关联一个角色或用途。"
+    },
+    { "type": "p", "en": "**Polyphase filtering**", "zh": "**多相滤波**" },
+    {
+      "type": "p",
+      "en": "Typically mipmap textures have exactly 1/2 the number of texels than the parent mipmaps. This allows us to employ exactly the same kernel across all texels. However, when the extents of one mipmap are not multiples of two, the extents of the following mipmap will be rounded down. Note, whenever the size of a texture is not a power of two, this will necessarily happen at least at some mip levels!",
+      "zh": "通常，一张 mipmap 纹理的纹素数量正好是上一级 mipmap 的一半。这让我们可以在所有纹素上使用完全相同的卷积核。然而，当某一级 mipmap 的尺寸不是二的倍数时，下一级 mipmap 的尺寸会被向下取整。注意：只要纹理尺寸不是 2 的幂，这一点在至少某些 mip 级别上必然会发生！"
+    },
+    {
+      "type": "p",
+      "en": "If you use the same kernel that would result in a phase shift, as the texels in the upper and lower mip do not align exactly. In order to avoid that you have to adjust the kernel weights for every pixel.",
+      "zh": "如果沿用同一个卷积核，就会产生相位偏移，因为上下两级 mip 的纹素并不精确对齐。要避免这一点，你必须为每个像素调整卷积核的权重。"
+    },
+    {
+      "type": "p",
+      "en": "For simple kernels like a box filter this can be done analytically as in [NVIDIA’s technical report](https://download.nvidia.com/developer/Papers/2005/NP2_Mipmapping/NP2_Mipmap_Creation.pdf), but otherwise the kernel function needs to be evaluated multiple times. What CPU implementations usually do is to apply the filter in two passes, one for each dimension, and precompute these kernels for every column or row, so that the evaluation of the filter weights is amortized. I’m not sure what’s the best way to do this in the GPU and I would not be surprised if evaluating the weights, approximating them, or applying the phase shift analytically ended up being more efficient than precomputing them.",
+      "zh": "对于盒式滤波这样的简单卷积核，可以像 [NVIDIA 的技术报告](https://download.nvidia.com/developer/Papers/2005/NP2_Mipmapping/NP2_Mipmap_Creation.pdf) 里那样解析地处理；否则卷积核函数就需要被多次求值。CPU 实现通常的做法是把滤波拆成两个 pass，每个维度一个，并为每一列或每一行预先算好卷积核，从而摊薄滤波权重的求值成本。我不确定在 GPU 上最好的做法是什么；如果最终发现直接求权重、近似权重，或者解析地施加相位偏移比预先算好更高效，我一点也不会意外。"
+    },
+    { "type": "p", "en": "**Optimizations**", "zh": "**优化**" },
+    {
+      "type": "p",
+      "en": "Numerous optimizations are possible. We currently issue a compute dispatch for every mipmap, but it’s possible to generate an entire mipmap chain with a single kernel. This is the approach taken by the very efficient [AMD’s single pass downsampler (SPD)](https://gpuopen.com/fidelityfx-spd/). Recently this library was also [ported to the Metal API](https://syllogi-graphikon.vercel.app/posts/metal-single-pass-downsampler/).",
+      "zh": "还有很多优化可以做。我们目前为每一级 mipmap 派发一次计算，但其实可以用单个内核生成整条 mipmap 链。非常高效的 [AMD 单遍降采样器（SPD）](https://gpuopen.com/fidelityfx-spd/) 走的就是这条路。最近这个库还被[移植到了 Metal API](https://syllogi-graphikon.vercel.app/posts/metal-single-pass-downsampler/)。"
+    },
+    {
+      "type": "p",
+      "en": "The BC encoders from Microsoft’s Advanced Technology Group use a similar approach. They combine the mipmap generation with the encoder in the same kernel to save bandwidth by not having to load the input texture twice. Additionally they compute and encode the tail of the mipmap chain in a single dispatch.",
+      "zh": "Microsoft Advanced Technology Group 的 BC 编码器用了类似的做法。它们把 mipmap 生成和编码器合并在同一个内核里，从而不必两次加载输入纹理，节省了带宽。此外，它们还在一次派发里计算并编码 mipmap 链的尾部。"
+    },
+    {
+      "type": "p",
+      "en": "None of these implementations support more than simple 2×2 reductions, but these ideas would be applicable when using a single-phase box kernel and it may make sense to do so when performance is a critical factor.",
+      "zh": "这些实现都只支持简单的 2×2 降采样，不过在使用单相盒式卷积核时，这些思路是可以套用的；当性能是关键因素时，这么做也许是有道理的。"
+    },
+    {
+      "type": "p",
+      "en": "Once I settle on the ideal downsampling filter, I plan to spend more cycles profiling and optimizing it. Beyond that, the WebGPU API imposes limitations that do not exist in native APIs, leaving substantial room for improvement. This will be a topic for a future post.",
+      "zh": "等我定下理想的降采样滤波器之后，我打算花更多时间做性能剖析和优化。除此之外，WebGPU API 还带来了一些原生 API 里不存在的限制，改进空间相当大。这会是将来的一个话题。"
+    },
+    { "type": "h2", "id": "conclusions", "zh": "结论", "en": "Conclusions" },
+    {
+      "type": "p",
+      "en": "The mipmap generation functionality in [spark.js](https://ludicon.com/sparkjs/) is intentionally minimal, but already produces higher quality results than what’s available in popular frameworks like three.js, and in some cases even surpasses the quality of offline tools.",
+      "zh": "[spark.js](https://ludicon.com/sparkjs/) 里的 mipmap 生成功能是刻意做得极简的，但它给出的结果已经比 three.js 这类流行框架里的实现质量更高，有些情况下甚至超过了离线工具的质量。"
+    },
+    {
+      "type": "p",
+      "en": "This functionality has proven useful enough, that I think it’s worth using [spark.js](https://ludicon.com/sparkjs/) as a general texture loader. I’m considering adding an option to output uncompressed textures, for users who want to leverage the image processing functionality without using the [Spark](https://ludicon.com/spark/) codecs.",
+      "zh": "这个功能已经被证明足够有用，所以我认为值得把 [spark.js](https://ludicon.com/sparkjs/) 当作通用的纹理加载器来用。我正在考虑加一个输出未压缩纹理的选项，方便那些想用它的图像处理功能、但不想用 [Spark](https://ludicon.com/spark/) 编解码器的用户。"
+    },
+    {
+      "type": "p",
+      "en": "There are many possible areas for improvement, but future work will largely be driven by user demand. If you have custom needs or specific requirements, feel free to [get in touch](https://www.ludicon.com/#about). I’m happy to help with any of your texture processing needs.",
+      "zh": "可以改进的地方有很多，但未来的工作很大程度上会由用户需求驱动。如果你有定制需求或特定要求，欢迎[联系我](https://www.ludicon.com/#about)。我很乐意帮你解决任何纹理处理方面的问题。"
+    }
+  ]
+}

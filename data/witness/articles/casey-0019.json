@@ -1,0 +1,389 @@
+{
+  "id": "casey-0019",
+  "title": { "zh": "特殊过滤器", "en": "Special Filters" },
+  "subtitle": {
+    "en": "Implementing lister panel filtering for arbitrary entity characteristics.",
+    "zh": "为 Lister Panel 实现按任意实体属性进行过滤的功能。"
+  },
+  "translator": {
+    "note": "归档源码里有多行代码被拆出了 cpp 代码块（已并回各自的代码块），另有一段正文被误放进 cpp 代码块（已按正文段落译出）；代码一律保留英文原样，原文没有配图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Suppose that you are the star of a 1980s-era murder mystery show.  You have just spent the last forty-five minutes, minus commercials, unraveling the murderous plot of a certain language architect.  In the ensuing climactic scene, with a grand flourish, you emphatically point your finger at a certain bearded fellow and yell, \"So, ladies and gentleman, the person who killed the productivity of modern programmers is in fact *[BJARNE STROUSTRUP](https://en.wikipedia.org/wiki/Bjarne_Stroustrup)*!\"",
+      "zh": "假设你是一部 1980 年代谋杀悬疑剧的主角。你刚刚花了四十五分钟（扣掉广告），理清了某位语言架构师的杀人阴谋。在接下来的高潮戏里，你潇洒地一甩手，斩钉截铁地指着一位留胡子的家伙大喊：「女士们先生们，害死现代程序员生产力的凶手，就是 *[BJARNE STROUSTRUP](https://en.wikipedia.org/wiki/Bjarne_Stroustrup)*！」"
+    },
+    {
+      "type": "p",
+      "en": "A hush befalls the crowd.  All eyes are on Stroustrup.  He knows he is guilty.  He knows you know he is guilty.  What is he going to do?  Will he try to deflect blame toward [Andrew Koenig](https://en.wikipedia.org/wiki/Andrew_Koenig_(programmer))?  Will he attempt to flee to Mexico, where the authorities do not come down very hard on coding abuses?",
+      "zh": "人群陷入一片寂静。所有目光都落在 Stroustrup 身上。他知道自己有罪。他知道你知道他有罪。他会怎么办？他会试着把责任推给 [Andrew Koenig](https://en.wikipedia.org/wiki/Andrew_Koenig_(programmer)) 吗？他会企图逃到墨西哥去吗——那里的当局对「滥用编程」这类事情并不怎么较真？"
+    },
+    {
+      "type": "p",
+      "en": "For our purposes, it doesn't matter, because that is not the important part of the story.  As the keen readers among you have already detected, the important thing here isn't Stroustrup's murderous trail of language modifications, but the pointing.",
+      "zh": "对我们来说这都无所谓，因为那不是这个故事的重点。敏锐的读者已经发现，这里重要的不是 Stroustrup 那一路谋害般的语言改动，而是「指」这个动作。"
+    },
+    {
+      "type": "p",
+      "en": "And pointing, as it turns out, was also critical to the next piece of code I wrote for The Witness's Lister Panel.",
+      "zh": "而事实证明，「指」对我为《The Witness》的 Lister Panel 写的下一段代码来说，也至关重要。"
+    },
+    { "type": "h2", "id": "special-filters", "zh": "特殊过滤器", "en": "Special Filters" },
+    {
+      "type": "p",
+      "en": "In The Witness, there are entities called \"groups\" which are just collections of other entities.  Normally, groups can be nested inside other groups, and can exist for all sorts of purposes.  But in special circumstances, a group is designated as a \"layer\".",
+      "zh": "在《The Witness》里，有一类实体叫「group」，它们只是其他实体的集合。通常 group 可以嵌套在别的 group 里面，也可以出于各种目的存在。但在特殊情况下，某个 group 会被指定为一个「图层」（layer）。"
+    },
+    {
+      "type": "p",
+      "en": "In the implementation, this is almost meaningless.  It is simply a boolean that is set on the group which says \"hey, by the way, I am a layer\".  But in the UI, these layers are important because they are things which are supposed to show up in a special, easy-to-access view in the lister panel where they can be quickly hidden, shown, and selected.",
+      "zh": "在实现层面，这几乎毫无意义。它不过是在 group 上设了一个布尔值，意思是「顺便说一句，我是个图层」。但在 UI 里，这些图层很重要：它们本应出现在 Lister Panel 中一个专门的、易于访问的视图里，在那里可以快速隐藏、显示和选中。"
+    },
+    {
+      "type": "p",
+      "en": "Last week, I showed how to get the lister to a point where it was listing entities with a type filter, but that doesn't help when the criteria for filtering is based on data inside the actual entities, as opposed to their type.  So I needed to add something different.",
+      "zh": "上周我演示了怎么让 Lister 做到用类型过滤器列出实体，但当过滤条件依据的是实体内部的数据、而不是实体的类型时，这就不管用了。所以我得加点不一样的东西。"
+    },
+    {
+      "type": "p",
+      "en": "As always, the first thing I did was to take a look at the sorts of things I actually wanted to do when filtering.  I wrote the code I'd need to use to filter an entity \"e\" by whether or not it was a layer:",
+      "zh": "和往常一样，我做的第一件事是先看看自己过滤时究竟想干什么。我写下了按「是不是图层」来过滤实体 e 时需要用到的代码："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if(e->portable_type == &ptype_Group)\n{\n Entity_Group *group = (Entity_Group *)e;\n result = group->is_a_layer;\n}"
+    },
+    {
+      "type": "p",
+      "en": "The code checks to see if the entity is a group, and if it is, it casts down to the actual type and looks at its data.  This is generally the kind of place where object-oriented peoples would be very uncomfortable, and would instead want to introduce a virtual function call like \"is_layer()\" that no entities respond to except for the group entity.  In The Witness codebase, that is not generally the way things are implemented, but even if it were, I would probably still use this method and not the virtual function call method.",
+      "zh": "这段代码先检查实体是不是 group，如果是，就向下转型成实际类型、去看它的数据。一般说来，搞面向对象的人非常受不了这种写法，他们会想引入一个像 `is_layer()` 这样的虚函数调用，除 group 实体之外没有实体会响应它。在《The Witness》的代码库里，事情一般不是这么实现的；但就算是，我大概也还是会用这种方式，而不用虚函数调用。"
+    },
+    {
+      "type": "p",
+      "en": "The reason is because the Lister Panel is a place that is all about intrusively looking at things and making decisions about them, and it is clear and understandable to put the code that does this determination all in one place.  If instead these tests are scattered throughout the entity classes as a suite of virtual functions, suddenly it becomes very complicated for someone reading the code to know, say, what constitutes a layer, or even how they would go about modifying what that meant if they needed to.",
+      "zh": "原因在于，Lister Panel 本来就是一个「侵入式地查看东西、并对它们做决定」的地方，把做这类判定的代码集中放在一处，既清晰又好懂。反过来说，如果把这些测试散布到各个实体类里、变成一整套虚函数，那么读代码的人一下子就会很难搞清楚：到底什么才算图层？万一要改「图层」的含义，又该从哪儿下手？"
+    },
+    {
+      "type": "p",
+      "en": "Moving on, I didn't want just one test case for filtering, I wanted a few.  So I looked for some other things that one might to filter on, like whether or not an entity was \"animated\" using The Witness's animation system:",
+      "zh": "接着往下说。我不想要只有一个过滤测试用例，我想要几个。于是我又找了些别人可能会拿来过滤的东西，比如某个实体是否用《The Witness》的动画系统「动」了起来："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "result = (e->animator && e->mesh && e->mesh->name);"
+    },
+    {
+      "type": "p",
+      "en": "I also tried another specific-to-only-one-type-of-entity filter, which was whether or not something was a door that \"slid\" open, as opposed to \"swung\" open:",
+      "zh": "我还试了另一个只针对单一实体类型的过滤器：某个东西是不是「滑开」的门，而不是「转开」的门："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if(e->portable_type == &ptype_Door)\n{\n Entity_Door *door = (Entity_Door *)e;\n result = (door->slides_open != 0);\n}"
+    },
+    {
+      "type": "p",
+      "en": "All three of these tests looked nice and straightforward and only involved an entity pointer, so it seemed to me that I should be able to treat them all the same way.  The only question was, do I do that with a switch statement, or with a table?",
+      "zh": "这三个测试看着都很干净直接，也只涉及一个实体指针，所以我觉得应该能用同一套办法处理它们。唯一的疑问是：该用 switch 语句，还是用表？"
+    },
+    {
+      "type": "p",
+      "en": "Switch statement vs. table is always a milquetoast decision, because the two are extremely similar and most of the time it's not clear that there's a right answer.  One looks like this:",
+      "zh": "「switch 语句还是表」永远是个温吞的决定，因为两者极其相似，大多数时候根本说不清哪个才是对的。一种长这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "switch(the_test_to_do)\n{\ncase test_id:\n{\n // perform the test\n} break;\n\n// ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "and the other looks like this:",
+      "zh": "另一种长这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void test_function()\n{\n // perform the test\n}\n\ntest_array_entry test_table[] =\n{\n{test_function},\n};"
+    },
+    {
+      "type": "p",
+      "en": "In this particular case, I decided to go with the table-based approach, largely because I felt like I might be iterating over the table and dispatching to it in more than one way and in more than one place.  While you can still do that with switch statements, it tends to be more difficult to keep the code clean because there isn't really a place to \"attach\" data to the various cases of the switch  —  such as what the name of the test is  —  whereas the table gives you a convenient place to do that.",
+      "zh": "在这个具体场景里，我决定走基于表的路线，主要是因为我感觉自己可能要在不止一个地方、用不止一种方式遍历这张表并分发。用 switch 语句当然也能做，但代码往往更难保持干净，因为 switch 的各个 case 并没有一个真正能「挂」数据的地方——比如这个测试叫什么名字——而表恰好提供了这么一个方便的位置。"
+    },
+    {
+      "type": "p",
+      "en": "But, really, it's a six of one, half-dozen of the other kind of a scenario and either option is fine.",
+      "zh": "但说真的，这属于「半斤八两」的情形，两种做法都行。"
+    },
+    {
+      "type": "p",
+      "en": "So, I began implementing the table scheme by writing the code that would use it, but I quickly noticed something important about the way the filter results needed to be processed.  Since each filter typically handles only a small subset of entity types, such as \"doors\" in the case of \"doors that slide open\", presumably you don't really want them to apply to things that aren't doors.  There's already a type filtering system, so if the user wanted to filter out things that weren't doors, they could just do that directly.  So really, this special filtering system has to be able to deal with three types of results: passes, doesn't pass, and not applicable.  In the case where the filter isn't applicable, it should just be ignored, rather than treating that case as if the entity should be filtered out, which is what would happen in a straight boolean system.",
+      "zh": "于是我开始实现这套表方案，先写使用它的代码，但很快就注意到一件关于「过滤结果要怎么处理」的重要事情。每个过滤器通常只处理实体类型中的一小部分——比如「会滑开的门」只处理 door——那么你大概并不希望它们作用于不是门的东西。类型过滤系统本来就有，用户想滤掉不是门的东西，直接那么做就行。所以，这个特殊过滤系统实际上必须处理三类结果：通过、不通过、不适用。当过滤器不适用时，就应该直接忽略它，而不是把这种情况当成「该实体应被滤掉」——而后者正是纯布尔系统会做的事。"
+    },
+    {
+      "type": "p",
+      "en": "So, it turns out that the code that calls these special filters is more intricate than you might otherwise assume:",
+      "zh": "所以，调用这些特殊过滤器的代码，其实比你原本可能以为的要更绕一些："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "switch(filter_mode)\n{\ncase LISTER_FILTER_MODE_OFF:\n{\n // NOTE(casey): Ignored\n} break;\n\ncase LISTER_FILTER_MODE_POSITIVE:\n{\n int handler_result = NOT_APPLICABLE;\n special.handler(e, &handler_result);\n if(handler_result != NOT_APPLICABLE)\n{\n passes_special = (handler_result != 0);\n}\n} break;\n\ncase LISTER_FILTER_MODE_NEGATIVE:\n{\n int handler_result = NOT_APPLICABLE;\n special.handler(e, &handler_result);\n if(handler_result != NOT_APPLICABLE)\n{\n passes_special = (handler_result == 0);\n}\n} break;\n\ndefault:\n{\n assert(!\"Unrecognized special filter mode\");\n} break;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Basically, each filter can have two modes where it is active: filtering for a positive match (\"this door slides open\"), and filtering for a negative match (\"this door does not slide open\").  Each of those cases then needs to make sure that it only affects the result if the filter itself reported an actual true or false value, not a NOT_APPLICABLE value.  This leads directly to a usable prototype for special filters:",
+      "zh": "基本上，每个过滤器都有两种生效模式：正向匹配过滤（「这扇门是滑开的」）和反向匹配过滤（「这扇门不是滑开的」）。这两种情况都必须保证：只有当过滤器自己报出的是真正的真或假、而不是 NOT_APPLICABLE 时，才去影响结果。这就直接引出了特殊过滤器的一个可用原型："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static void filter_door_slides_open(Entity *e, int *result)\n{\n if(e->portable_type == &ptype_Door)\n{\n Entity_Door *door = (Entity_Door *)e;\n *result = (door->slides_open != 0);\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "This way, the filter is a nice, isolated routine, and it only touches the result when it actually pertains to the entity in question.  If the checks for the filter don't pass, the result is never touched and the default NOT_APPLICABLE is passed through.",
+      "zh": "这样一来，过滤器就是一个干净、独立的例程，只在确实与当前实体相关时才去碰结果。如果过滤器的检查没通过，结果就完全不会被改动，默认的 NOT_APPLICABLE 会原样传出去。"
+    },
+    {
+      "type": "p",
+      "en": "Now, there is a bit of a snafu here, however, which is that there needs to be some value for NOT_APPLICABLE that makes sense.  I used",
+      "zh": "不过这里有个小麻烦：总得给 NOT_APPLICABLE 定一个说得通的值。我用的是"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "#define NOT_APPLICABLE -1"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "but really this is not the safest thing to do.  The reason is because the result value that the filters return is an integer, which is often set to the result of a comparison, as with (door->slides_open != 0) above.  While most of the time there is no risk of these operations producing -1, thus appearing to report NOT_APPLICABLE when really they were trying to report \"true\", it is not entirely out of the question that someone working with the code might do this by accident.  For example, the line:",
+      "zh": "但说实话，这不是最保险的做法。原因在于，过滤器返回的结果值是个整数，而这个整数常常被设成某次比较的结果（就像上面那句拿 door->slides_open 和 0 做比较的写法）。绝大多数时候，这些运算不会产生 -1，也就不会出现「本想报「真」，却看起来像是在报 NOT_APPLICABLE」这种情况；但写这段代码的人一不小心踩上去，也不是完全不可能。比如这么一行："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "*result = flags;"
+    },
+    {
+      "type": "p",
+      "en": "might plausibly be written by someone trying to filter for \"are there any flags set on an entity\", which will work fine right up until all flags are set, at which point perhaps its value actually could be -1, etc., etc.  But this was not an eventuality I was particularly concerned about, and since this was a quick-and-dirty piece of editor code, I did not spend a lot of time worrying about how to prevent something like that.",
+      "zh": "很可能是某个想过滤「实体上有没有设任何 flags」的人写出来的。它会一直工作得很好，直到所有 flag 都被设上——到那时它的值说不定真的会是 -1，等等等等。但这并不是我特别担心的情况；既然这只是一段快速拼凑的编辑器代码，我也就没花多少时间操心该怎么防住这类事。"
+    },
+    { "type": "h2", "id": "filter-tables", "zh": "过滤器表", "en": "Filter Tables" },
+    {
+      "type": "p",
+      "en": "Constructing a table of these is straightforward:",
+      "zh": "把这些做成一张表很简单："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "typedef void Special_Filter(Entity *e, int *result);\n\nstruct Special_Filter_Entry\n{\n char *positive_name;\n char *negated_name;\n Special_Filter *handler;\n};\n\nSpecial_Filter_Entry special_filters[] =\n{\n{\"group is layer\", \"group is not layer\", filter_groups_must_be_layers},\n{\"door slides open\", \"door swings open\", filter_door_slides_open},\n};"
+    },
+    {
+      "type": "p",
+      "en": "And then using them is a simple matter of looping over all the filters, once during passes_filter() to combine it with the type filtering and produce the actual entity list, and once during the UI display, to actually show all the filters that are available and allow the user to click on them.",
+      "zh": "接下来使用它们也很简单：把所有过滤器循环一遍就行。一次是在 passes_filter() 里，把它们和类型过滤组合起来、产出真正的实体列表；另一次是在 UI 显示时，把可用的过滤器全都展示出来，并让用户可以点击它们。"
+    },
+    {
+      "type": "p",
+      "en": "Before adding a bunch of special filters, however, there's something I always like to do in these scenarios that often saves a lot of typing later on.  It's a trivial macro construction that I use whenever i know I'm going to be defining a bunch of functions with the same function signature:",
+      "zh": "不过在添加一大堆特殊过滤器之前，有件事我在这种场景下总喜欢先做，它往往能在后面省下大量敲键盘的功夫。这是一个很不起眼的宏构造，只要我知道自己要定义一批函数签名相同的函数，我就会用它："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "#define SPECIAL_FILTER(name) void name(Entity *e, int *result)"
+    },
+    {
+      "type": "p",
+      "en": "This is one of my favorite types of macros, because it saves a ton of typing while not really costing much in terms of legibility or debugging clarity.  With this macro, you can do this:",
+      "zh": "这是我最喜欢的一类宏：省下大量打字，而在可读性和调试清晰度上几乎不吃亏。有了这个宏，你可以这么写："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "typedef SPECIAL_FILTER(Special_Filter);"
+    },
+    {
+      "type": "p",
+      "en": "to replace the function pointer typedef, so it will always be properly synchronized with the prototype, and then you can do this:",
+      "zh": "用它替换掉函数指针的 typedef，这样它就会永远和函数原型保持同步；然后你还可以这么写："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static SPECIAL_FILTER(filter_groups_must_be_layers)\n{\n // ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "for every actual filter.  This is really convenient, because it allows you to define the function prototype in one place and one place only, and automatically have all your functions and the function pointer type automatically conform with no fussing.",
+      "zh": "每个真正的过滤器都这样写。这真的很方便：函数原型只需要在一个地方定义，而且所有函数和函数指针类型都会自动保持一致，完全不用操心。"
+    },
+    { "type": "h2", "id": "parametric-filters", "zh": "带参数的过滤器", "en": "Parametric Filters" },
+    {
+      "type": "p",
+      "en": "With the table-driven system in place, it was easy to implement new filters.  But eventually I implemented an entity flags filter that really wasn't working the way I wanted:",
+      "zh": "有了这套表驱动的系统，实现新过滤器很容易。但后来我实现了一个实体 flags 过滤器，它完全不按我想要的方式工作："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static SPECIAL_FILTER(filter_entity_flag_xxx)\n{\n *result = (e->entity_flags & xxx);\n}"
+    },
+    {
+      "type": "p",
+      "en": "The \"xxx\", in this case, might be any entity flag, and in order to support all the entity flags, I would have to keep writing new functions, one for each flag that needed testing.  That seemed unnecessarily verbose, so I decided to add a parameter to the filter call that could be set per entry in the table:",
+      "zh": "这里的 xxx 可以是任何一个实体 flag；而要想支持所有实体 flag，我就得不停地写新函数，每个需要测试的 flag 一个。这显得冗长得没有必要，于是我决定给过滤器调用加一个参数，它可以按表里的每一项单独设置："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "#define SPECIAL_FILTER(name) void name(int param, Entity *e, int *result)\n\nstruct Special_Filter_Entry\n{\n char *positive_name;\n char *negated_name;\n Special_Filter *handler;\n int param;\n};"
+    },
+    {
+      "type": "p",
+      "en": "By adding it last, I wouldn't have to do any typing to ignore it on filters that didn't need it.  But now, I could write a generic version of the flag tester:",
+      "zh": "把它加在最后，那些不需要这个参数的过滤器就完全不用多写任何东西去忽略它。而这样一来，我就可以写一个通用的 flag 测试器："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static SPECIAL_FILTER(filter_entity_flag)\n{\n *result = (e->entity_flags & param);\n}"
+    },
+    {
+      "type": "p",
+      "en": "and all I had to do was append the actual flag I wanted to test to the end of the table entry for the flag testing filter:",
+      "zh": "而我要做的，只是把想测试的那个具体 flag 追加到 flag 测试过滤器对应的表项末尾："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{\"doesn't collide\", \"collides\", filter_entity_flag, ENTITY_DO_NOT_COLLIDE},\n{\"doesn't cluster\", \"clusters\", filter_entity_flag, ENTITY_DO_NOT_CLUSTER},\n{\"doesn't reflect\", \"reflects\", filter_entity_flag, ENTITY_DO_NOT_REFLECT}, // ..."
+    },
+    {
+      "type": "p",
+      "en": "Technically, the parameter could be used for anything, and I could even expand it to a union if I wanted to support passing an arbitrarily typed parameter.  But in practice I did not end up needing anything other than a spare int for all the filters I ended up implementing.",
+      "zh": "严格来说，这个参数可以用来传任何东西；如果我想支持传任意类型的参数，甚至可以把它扩展成 union。但实际上，我最终实现的那些过滤器，除了一个空闲的 int 之外，什么参数都没用上。"
+    },
+    { "type": "h2", "id": "filter-based-editing", "zh": "基于过滤器的编辑", "en": "Filter-based Editing" },
+    {
+      "type": "p",
+      "en": "After I had special filters implemented, it occurred to me that it would be quite easy to add the ability to generically edit the properties that were being filtered.  In addition to turning a filter on for positive and negative cases, there could also be another filter option which would be \"allow me to edit this directly from the entity list\".  This is easy to add in the UI, obviously, but to actually implement the editing I needed to add something to the special filters themselves.",
+      "zh": "特殊过滤器做完之后，我意识到：再加一个「通用地编辑被过滤的那些属性」的能力会相当容易。除了把过滤器按正向、反向打开之外，还可以多一个过滤器选项：「允许我直接从实体列表里编辑这个」。在 UI 里加上它显然很容易，但要真正实现编辑，我得往特殊过滤器本身里加点东西。"
+    },
+    {
+      "type": "p",
+      "en": "It turned out to be very easy to piggy-back editing on top of filtering, just by passing more arguments to the filters.  Since the filter code knows how to deal with whatever it is filtering, it is usually quite easy to add code for changing whatever it is filtering when necessary:",
+      "zh": "结果是，把编辑搭在过滤之上非常容易，只要给过滤器多传几个参数就行。因为过滤器代码本来就知道该怎么处理它过滤的那个东西，所以要顺手加上「必要时修改它」的代码，通常也相当容易："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static SPECIAL_FILTER(filter_entity_flag)\n{\n if(op)\n{\n if(new_value)\n{\n e->entity_flags |= param;\n}\nelse\n{\n e->entity_flags &= ~param;\n}\n note_change(e);\n}\n\n*result = (e->entity_flags & param);\n}"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, the result is still produced the same way as it was before, but now there is an if() that checks whether the value should be operated on.  If so, then it uses the boolean new_value to determine whether it should switch to a positive or negative value relative to the filter.  The note_change() call is just something that The Witness editor uses to mark entities that have changed for more optimal undo processing (ie., to prevent diffing all the entities every frame).",
+      "zh": "如你所见，结果仍然和以前一样产生，只是现在多了一个 if()，先检查这次调用要不要真的动手改值。要改的话，它就用布尔值 new_value 来决定该把这个值切到相对于过滤器的正向还是反向。note_change() 这个调用只是《The Witness》编辑器用来标记「哪些实体变了」的，好让撤销处理更高效（也就是说，避免每帧对所有实体做一遍差异比较）。"
+    },
+    {
+      "type": "p",
+      "en": "Similarly, filters like the one for whether or not a group is a layer can use the operation to toggle that as well, even though it is a different type of modification:",
+      "zh": "类似地，像「某个 group 是不是图层」这种过滤器，也可以用这个操作来切换，尽管它属于另一种类型的修改："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static SPECIAL_FILTER(filter_groups_must_be_layers)\n{\n if(e->portable_type == &ptype_Group)\n{\n Entity_Group *group = (Entity_Group *)e;\n\nif(op)\n{\n group->is_a_layer = new_value;\n note_change(e);\n}\n\n*result = group->is_a_layer;\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "Both are nice and concise, and have the added benefit of reusing the checks for entity type if they were already necessary for performing the filtering.",
+      "zh": "两者都简洁紧凑，还有一个额外好处：如果为了做过滤本来就需要检查实体类型，这里的检查可以直接复用。"
+    },
+    {
+      "type": "p",
+      "en": "Since the filters still work exactly the same way, the code that runs the filters doesn't need to be touched, other than to pass \"false\" as the new op parameter.  In the interface code, editing can then be enabled trivially like this:",
+      "zh": "由于过滤器的工作方式完全没变，运行过滤器的代码除了要把新的 op 参数传成 false 之外，完全不用动。而在界面代码里，启用编辑就变得非常轻松："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "for(int special_index = 0;\n special_index < NV_ARRAY_SIZE(special_filters);\n++special_index)\n{\n if(current_settings.special_button[special_index])\n{\n Special_Filter_Entry &entry = special_filters[special_index];\n\nint handler_result = NOT_APPLICABLE;\n entry.handler(entry.param, e, false, false, &handler_result);\n\nif(handler_result == NOT_APPLICABLE)\n{\n layout.nub(entry.positive_name);\n}\nelse\n{\n if(layout.push_button(entry.positive_name, handler_result))\n{\n note_operation_name(handler_result ? entry.negated_name : entry.positive_name);\n\nint ignored;\n entry.handler(entry.param, e, true, !handler_result, &ignored);\n}\n}\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "I first called the filter without asking to perform any operation so that it can retrieve the result of the filter for the entity being listed.  I couldn't assume that it was positive (or negative, in the case of a negative filter), because I wanted to allow you to configure the Lister Panel so that it could optionally use a different set of filters for picking the entities to list vs. the \"filters\" that would be used to perform operations.",
+      "zh": "我先在「不要求执行任何操作」的情况下调用过滤器，好取到正在列出的这个实体在该过滤器下的结果。我不能假定它是正向的（对反向过滤器来说就是反向的），因为我想让你能配置 Lister Panel：让它可以选择用另一组过滤器来挑选要列出的实体，把它们和「用来执行操作的过滤器」分开。"
+    },
+    {
+      "type": "p",
+      "en": "Once I had the existing value of the entity for the filter, I checked to see whether or not it was a filter applicable to the entity.  If it wasn't, I drew a \"nub\" in the interface, which is basically a little thing that shows you that you cannot click on it because it is not relevant.  But if the filter was relevant, I drew an actual push_button, which the user could press to toggle the state of that entity.  If they did, I would re-call the filter, asking it to perform its operation using the opposite value as what it has just returned as the current one.",
+      "zh": "拿到实体在该过滤器下的当前值之后，我就检查这个过滤器是否适用于该实体。如果不适用，我就在界面里画一个「nub」——差不多就是一个小东西，告诉你这里点不了，因为它与此实体无关。而如果过滤器适用，我就画一个真正的 push_button，用户可以按下它来切换该实体的状态。用户一按，我就重新调用这个过滤器，让它在执行操作时，使用「它刚刚作为当前值返回的那个值」的反面。"
+    },
+    {
+      "type": "p",
+      "en": "So, with very little code, I now had an entity list with configurable filters and configurable buttons for editing any of the filterable parameters where that made sense.  But, it seemed logical that the user might also want to edit these values en masse for everything listed.  This combines the filtering with the editing in a nice way, so that you can trivially do an operation like \"find all the doors that slide open and mark them all as invisible\".  So I added another row of buttons, before the listing, that were basically column headers, but if you clicked on them, it would edit the value for all of the entities:",
+      "zh": "于是，只用了很少的代码，我就得到了一个实体列表：过滤器可配置，按钮也可配置，能对任何「可过滤」的参数在合理之处做编辑。但很自然地，用户可能还想对列出来的所有东西批量修改这些值。这就把过滤和编辑漂亮地结合起来了，你可以轻松做类似「找出所有滑开的门，把它们统统标记为不可见」这样的操作。所以我在列表之前又加了一行按钮，它们本质上就是列头，但只要你点击它们，就会对所有实体的该值做修改："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "for(int special_index = 0;\n special_index < NV_ARRAY_SIZE(special_filters);\n++special_index)\n{\n if(current_settings.special_button[special_index])\n{\n Special_Filter_Entry &entry = special_filters[special_index];\n\nbool current_state = xxx;\n if(layout.push_button(entry.positive_name, current_state))\n{\n note_operation_name(current_state ? entry.negated_name : entry.positive_name);\n Foreach(int id, viewing_ids)\n{\n Entity *e = manager->find(id);\n if(e)\n{\n int ignored;\n entry.handler(entry.param, e, true, !current_state, &ignored);\n}\n}\n}\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "Typing in the code, it was very straightforward except for the xxx part.  I wanted to know what the state of the global edit button should be, but how could I determine that?  It seemed like it wanted to be some amalgam of the state of all the entities with respect to that filter, where if any of them were positive, it the button would appear as if it were on, and if none of them were, then it would appear off.",
+      "zh": "敲这段代码的时候，除了 xxx 那一处，其他都很直截了当。我想知道这个全局编辑按钮应该处于什么状态，可这该怎么确定？它似乎应该是「所有实体在该过滤器下的状态」的某种混合体：只要有任何一个实体是正向的，按钮就显示成打开；一个都没有，就显示成关闭。"
+    },
+    {
+      "type": "p",
+      "en": "Since there didn't seem to be any particularly clever solution to this problem, I just did the obvious thing and actually used the filter results from iterating over the entities that were being listed, and stored that in an array, one for each filter:",
+      "zh": "既然这个问题看上去没有什么特别聪明的解法，我就直接用了最显然的办法：把遍历「正在列出的那些实体」时得到的过滤结果存进一个数组，每个过滤器一项："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int handler_result = NOT_APPLICABLE;\n entry.handler(entry.param, e, 0, false, &handler_result);\n\nif(handler_result != NOT_APPLICABLE)\n{\n special_states[special_index] |= (handler_result ? 2 : 1);\n}"
+    },
+    {
+      "type": "p",
+      "en": "Basically, for each entity, I stored a bit field where bit 1 was set if the filter was negative, and bit 2 was set if the filter was positive, so that anyone in the future could check for any combination of the two and act accordingly.  The xxx code above now has a proper way to get the value it wants:",
+      "zh": "基本上，我为每个实体存了一个位域：过滤器结果为反向时置第 1 位，为正向时置第 2 位，这样以后的人就能检查这两位的任意组合并相应处理。上面那段代码里的 xxx，现在有了正经的取法："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool current_state = special_states[special_index];"
+    },
+    {
+      "type": "p",
+      "en": "And that completes the implementation of quick and easy editing of filter-based values in the Lister Panel.",
+      "zh": "至此，Lister Panel 里对「基于过滤器的值」做快速便捷编辑的功能就实现完了。"
+    },
+    { "type": "h2", "id": "corrections", "zh": "更正", "en": "Corrections" },
+    {
+      "type": "p",
+      "en": "One of the things I pride myself on in this Witness Wednesdays series is the relentless fact-checking that I do before publication.  Each article is fact checked for several months, if not more, before it is finally considered ready for publication.  Therefore it is my extreme displeasure to report that there was, for the very first time, a slight factual inaccuracy in last week's article: technically, Tolkien does not use apostrophes in his names.  He actually uses dashes and accents.",
+      "zh": "在这个 Witness Wednesday 系列里（每周三连载），我引以为豪的一点，就是发文前会做毫不留情的事实核查。每篇文章都要经过好几个月、甚至更久的核查，才算终于可以发布。因此，我极其不快地报告：上周的文章里第一次出现了一处轻微的事实错误——严格来说，Tolkien 的名字里并不用撇号。他用的其实是破折号和重音符号。"
+    },
+    {
+      "type": "p",
+      "en": "In my defense, accents are sort of like apostrophes.  If you didn't know what an accent was, for example, you might say, \"hey look, Tolkien puts apostrophes on top of his words for some reason\" or \"why do these French people put backwards apostrophes on top of their words\" and so on.  Of course, you shouldn't say that last one because it's vaguely racist, because it implies that all French people put backwards apostrophes on things, whereas really, when you get to know them, a lot of French people are actually very capable of using apostrophes correctly.  I am not racist, of course, even though I said it, because it was hypothetical, and besides, some of my best friends are French.",
+      "zh": "替自己辩解一下：重音符号多少有点像撇号。比如说，如果你不知道重音符号是什么，你可能会说「嘿你看，Tolkien 不知为什么在字母上面放撇号」，或者「这些法国人干嘛老爱在字母上放反着的撇号」，如此等等。当然，最后这句你不该说，因为它隐约有点种族主义——它暗示所有法国人都在东西上放反撇号；可实际上，等你熟悉他们之后就会发现，很多法国人其实非常擅长正确使用撇号。当然，我不是种族主义者，尽管我说了那话，因为那只是假设的说法；再说，我最好的朋友里就有法国人。"
+    },
+    {
+      "type": "p",
+      "en": "Anyway, racism and factual errors aside, tune in next week for another error-free Witness Wednedsay where I will continue the construction of the Lister Panel with copious, excruciatingly detailed commentary for your extreme reading pleasure!",
+      "zh": "总之，种族主义和事实错误先放一边，下周请继续收看又一期毫无错误的 Witness Wednedsay——我会用海量、细致到令人发指的解说继续搭建 Lister Panel，供你享受极致的阅读快感！"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "castano-2014-08-29-hlslparser",
+  "title": {
+    "zh": "HLSLParser",
+    "en": "HLSLParser"
+  },
+  "subtitle": {
+    "zh": "我把 Max McGuire 的 HLSLParser 用到了《The Witness》里，改动都发布在 Thekla 的仓库上了。",
+    "en": "My changes to Max McGuire's HLSLParser, used in The Witness, are now published in Thekla's repository."
+  },
+  "translator": {
+    "note": "本篇是个人博客上的公告贴，正文见 the-witness.net 同名文章（[The Witness – HLSLParser](http://the-witness.net/news/2014/08/hlslparser/)），译文按原文两段照译，指向 github 与 the-witness.net 的链接原样保留。`HLSLParser`、`Max McGuire`、`Thekla`、`The Witness`、`github` 保留英文（`The Witness` 按术语表写书名号，仓库名与文章标题里的英文原样保留）。",
+    "source": "archive/castano-blog/2014-08-29-hlslparser.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We are using Max McGuire’s [HLSLParser](https://github.com/unknownworlds/hlslparser) in [The Witness](http://the-witness.net) and I just published all my changes in [Thekla’s github repository](https://github.com/Thekla/hlslparser).",
+      "zh": "我们在[《The Witness》](http://the-witness.net)里用了 Max McGuire 的 [HLSLParser](https://github.com/unknownworlds/hlslparser)，我刚把自己所有的改动发布到了 [Thekla 的 github 仓库](https://github.com/Thekla/hlslparser)上。"
+    },
+    {
+      "type": "p",
+      "en": "I also wrote some notes about our motivation, the changes we made and how are we using it at [The Witness blog](http://the-witness.net/news/2014/08/hlslparser/).",
+      "zh": "我还在 [The Witness 博客](http://the-witness.net/news/2014/08/hlslparser/)上写了一些笔记，讲我们的动机、所做的改动以及我们是怎么用它的。"
+    }
+  ]
+}

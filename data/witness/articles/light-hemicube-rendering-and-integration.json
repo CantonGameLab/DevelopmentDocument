@@ -1,0 +1,325 @@
+{
+  "id": "light-hemicube-rendering-and-integration",
+  "title": {
+    "zh": "半立方体的渲染与积分",
+    "en": "Hemicube Rendering and Integration"
+  },
+  "subtitle": {
+    "zh": "用现有的渲染引擎、按固定顺序的最终采集步骤来估算全局光照：投影方法的取舍、半立方体的重叠、阴影渲染与积分。",
+    "en": "Estimating global illumination with a fixed sequence of final gathering steps in our existing rendering engine: projection tradeoffs, hemicube overlaps, shadow rendering and integration."
+  },
+  "translator": {
+    "note": "原文插图共 12 张，已按 schema 归一化为指向原图的 `![图](原图URL)` 占位块（`hemicube_atlas` 在归档里是「缩略图包永久链接」，只保留原图）。归档在两个代码块外面各留了一层单独的反引号行，这是原文页面本身 `<p><code></p>` 的坏标记，属格式噪音，已去掉；代码块内只含空白的一行按空行保留（原文 HTML 里是 `&nbsp;`），代码本身逐字未改，并按原文的 `<pre class=\"cpp\">` 标注为 cpp。`Integration` 一节里 `texel_solid_angle_bad.gif` / `texel_solid_angle_good.gif` 是两张公式截图，归档（以及 ludicon.com 的同一篇文章）都只有图片、没有可还原的公式文本，因此仍按图片占位处理。原文的拼写笔误（如 `little o no effort`、`dissapears`、`global_illumiantion`）在 en 字段中保持原样。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "One of our aims with our global illumination implementation was to keep it as simple as possible, while still obtaining good performance, and we hoped to achieve that by using the GPU. While the are several approaches to compute global illumination in the GPU, the most simple one that we could come up with was to use our existing rendering engine to estimate global illumination using a fixed sequence of final gathering steps. That is, rendering the scene from every lightmap texel to gather all the incoming irradiance at that point, integrating it to compute the output radiance, and repeating these steps multiple times until the lightmaps converge to an approximate solution. This is basically the same [procedure described by Hugo Elias](http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm).",
+      "zh": "我们对全局光照（global illumination）实现的目标之一，是在拿到不错性能的同时尽量把它做得简单，我们希望通过利用 GPU 来做到这一点。在 GPU 上计算全局光照有好几种思路，我们能想出来的最简单的一种，是拿现有的渲染引擎、用固定顺序的一系列最终采集（final gathering）步骤来估算全局光照。也就是说：从每个光照贴图（lightmap）纹素出发渲染场景，收集该点收到的全部入射辐照度（irradiance），把它积分起来算出射出的辐射亮度（radiance），然后反复执行这些步骤，直到光照贴图收敛到一个近似解。这基本上就是 [Hugo Elias 所描述的那套做法](http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm)。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/pretty_shot.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Using the same engine makes it very easy to keep the global illumination in sync with the rest of the game. If we add new shaders or materials, change the representation of the geometry or alter the world, keeping the global illumination up to date requires little o no effort. Another interesting benefit is that optimizations to the rendering engine also benefit the global illumination pre-computation. However, as we will see later, in practice each application stresses the system in different ways and end up limited by different bottlenecks, what improves the rendering time does not necessary improve the pre-computation and vice-versa.",
+      "zh": "用同一个引擎，可以让全局光照很容易与游戏的其他部分保持同步。无论是新增着色器或材质、改变几何体的表示方式，还是改动世界，让全局光照保持最新几乎不需要额外功夫。另一个有意思的好处是：渲染引擎得到的优化，也会惠及全局光照的预计算。不过后面我们会看到，这两套用法在实践中压榨系统的方式并不相同，最终会受限于不同的瓶颈——能改善渲染耗时的东西不一定能改善预计算，反过来也一样。"
+    },
+    {
+      "type": "h2",
+      "id": "projection-methods",
+      "en": "Projection Methods",
+      "zh": "投影方法"
+    },
+    {
+      "type": "p",
+      "en": "I tried several different approaches to render the scene and estimate the incoming radiance. The most common approach is to render hemicubes; that requires rendering the scene to 5 different viewports. Several sources suggested the use of spherical or parabolic projections, but in my experience these approaches produced terrible results due to the non linear projection. Without very high tessellation rates the scene would become unacceptably distorted, creating gaps between objects or making parallel surfaces self-intersect.",
+      "zh": "为了渲染场景、估算入射辐射亮度，我试过好几种不同的做法。最常见的是渲染半立方体（hemicube），这需要把场景渲染到 5 个不同的视口。也有不少资料建议使用球面投影或抛物面投影，但就我的经验，这类做法由于投影是非线性的，结果非常糟糕。曲面细分（tessellation）密度不够高时，场景会畸变到无法接受的程度：物体之间出现缝隙，或者原本平行的表面发生自相交。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/spherical_paraboloid.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In [GPU Gems 2, Coombe et al.](http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter39.html) suggested to project the z value independently of (x,y) coordinates using an orthographic projection in order to maintain a correct depth ordering. As seen in the next picture, that removed the most obvious artifacts; note how the staircase inside the tower is not visible anymore:",
+      "zh": "在 [GPU Gems 2 里，Coombe 等人](http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter39.html)建议把 z 值与 (x,y) 坐标分开投影——用正交投影来保证正确的深度排序。如下一张图所示，这消除了最明显的瑕疵；注意塔内部的楼梯已经看不见了："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/paraboloid_orthographic.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "However, while this works OK from some points of view, the distortion becomes unacceptable when the camera is close to a surface, which is always our case. So, in practice these approaches are not very useful. Note how the outdoors are visible when sampling the lighting from the interior of the tower:",
+      "zh": "然而，虽然从某些视角看这样还行，但当相机贴近表面时畸变就变得无法接受——而我们的情况永远如此。所以实践中这类方法并不太有用。注意从塔内部采样光照时，居然能看到室外："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/paraboloid_artifacts.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Other implementations use a single plane projection. This kind of projection does not capture the whole hemisphere, but by using a wide field of view it's possible to capture about 80% of it. I haven't actually tried this approach, but to get an idea of what the results would look like, I modified the hemicube integrator to ignore 20% of the samples near the horizon and found out that this introduced artifacts that were unacceptable for high-quality results.",
+      "zh": "另一些实现用的是单平面投影。这种投影覆盖不了整个半球，但借助很宽的视场角可以覆盖大约 80%。我其实没试过这种做法；不过为了大致了解结果会是什么样，我改了改半立方体积分器，让它忽略靠近地平线的那 20% 采样，结果发现这引入的瑕疵对于高质量结果来说是不可接受的。"
+    },
+    {
+      "type": "p",
+      "en": "[Pascal Gautron](http://www.graphics.cornell.edu/~jaroslav/papers/2008-irradiance_caching_class/08-pascal-gpu-notes.pdf) estimates that on typical scenes this approach introduced a 18% RMS error, but suggests various tricks to reduce it by re-balancing the solid angle weights, or extrapolating the border samples and filling the holes. The latter method reduces the error down to a mere 6%.",
+      "zh": "[Pascal Gautron](http://www.graphics.cornell.edu/~jaroslav/papers/2008-irradiance_caching_class/08-pascal-gpu-notes.pdf)估计，在典型场景里这种做法会引入 18% 的 RMS 误差，但他也给出了几个降低误差的技巧：重新平衡立体角权重，或者外插边界采样、填补空洞。后一种方法能把误差降到区区 6%。"
+    },
+    {
+      "type": "p",
+      "en": "However, these improvements do not eliminate banding artifacts caused when an intense light source visible from one location is suddenly not visible anymore in the next when it falls out of the projection frustum. To make things worse, the projection lacks rotational invariance, which enhances the problem when hemicubes are rendered with random rotations. So, while in many cases the results look alright, the few cases that do not render the method impractical.",
+      "zh": "不过这些改进消除不了条带（banding）瑕疵：在某个位置能看到一个强光源，换到相邻位置时它突然掉出投影视锥、再也看不见了，就会产生这种瑕疵。更糟的是，这种投影不具备旋转不变性，而半立方体又是带随机旋转渲染的，于是问题被进一步放大。所以，尽管多数情况下结果看着还行，但少数出问题的情况就足以让这个方法不实用。"
+    },
+    {
+      "type": "p",
+      "en": "Another problem is that the wide frustum is 4 times larger than the equivalent hemicube and easily intersects with the surrounding geometry; as I'll discuss next, this is one of the main problems that I had to deal with.",
+      "zh": "另一个问题是，宽视锥的体积是等效半立方体的 4 倍，很容易与周围的几何体相交；我接下来要讲的，就是我当时必须处理的几个主要问题之一。"
+    },
+    {
+      "type": "p",
+      "en": "In the end I simply stayed with the traditional hemicubes for simplicity. I think it would have been possible to do somewhat better using a fancy tetrahedral or pyramidal projection with 3 or 4 planes, but that didn't seem worth the trouble.",
+      "zh": "最后为了简单，我还是留在了传统的半立方体上。我觉得用 3 个或 4 个平面的四面体、棱锥投影也许能做得更好一些，但看起来不值得这么折腾。"
+    },
+    {
+      "type": "h2",
+      "id": "hemicube-overlaps",
+      "en": "Hemicube Overlaps",
+      "zh": "半立方体的重叠"
+    },
+    {
+      "type": "p",
+      "en": "As I just mentioned, one of the main problems that I had to solve was to handle overlaps between the hemicubes and the geometry. These overlaps are unavoidable unless you impose some severe modeling restrictions that are not desirable for production.",
+      "zh": "正如刚才提到的，我必须解决的一个主要问题，是处理半立方体与几何体之间的重叠。这种重叠无法避免，除非对建模施加严格的限制——那对实际生产来说是不可取的。"
+    },
+    {
+      "type": "p",
+      "en": "When the geometry is well formed and does not have self-intersections, these overlaps can sometimes be avoided with centroid sampling. Without centroid sampling the location where the hemicube is rendered from can easily end up being outside of the polygon that contains the sample and thus inside another volume.",
+      "zh": "当几何体规整、没有自相交时，这类重叠有时可以用质心采样（centroid sampling）避开。不用质心采样的话，半立方体的渲染原点很容易落到包含该采样的多边形之外，从而跑进另一个体里面。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/centroid21.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "With centroid sampling the origin of the hemicube is now always inside the surface. However, it can still be very close to the surface boundary and have overlaps with nearby surfaces. A simple solution is to move the near plane closer to the camera until the overlap dissapears, but how close? The distance to the nearest boundary can be determined analytically, but there's a limit in how much the near plane distance can be reduced without introducing depth sampling artifacts. An interesting solution for this problem is to render multiple hemicubes at the same location, each hemicube enclosing the previous one with its far plane at the near plane of the next.",
+      "zh": "用了质心采样之后，半立方体的原点就总是落在表面内部了。但它仍可能非常靠近表面边界，从而与附近的表面发生重叠。一个简单的办法是把近平面往相机方向推，直到重叠消失，可该推多近呢？到最近边界的距离可以解析地求出来，但近平面距离的缩小有个限度，再小就会引入深度采样瑕疵。针对这个问题有个很有意思的解法：在同一位置渲染多个半立方体，每一个都把前一个包在里面，远平面正好落在下一个的近平面上。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/hemicubes1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That would solve most the problems when the geometry is watertight and centroid sampling is used, but in many cases our assets are not always well conditioned. So, I had to find a more general solution.",
+      "zh": "在几何体是封闭的（watertight）、并且用了质心采样的前提下，这样能解决大部分问题；但我们的资源在很多情况下并不总是规整。所以我必须找一个更通用的方案。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "I tried all sort of heuristics, to render backfaces in black, to fill them with the average color, to extrapolate the nearest colors, etc. None of these solutions worked well in all cases. In the end, something that produced satisfactory results was to render the backfaces with a special tag to distinguish them from front facing faces when integrating the hemicubes. Whenever a hemicube had too many tagged texels it would be discarded entirely, and instead its output radiance would be estimated at that location interpolating or extrapolating it from the nearest valid samples.",
+      "zh": "我试过各种各样的启发式做法：把背面渲染成黑色、用平均色填充、外插最近的颜色，等等。这些方案没有哪个能在所有情况下都工作良好。最后，有一个做法给出了令人满意的结果：渲染背面时给它们打上特殊标记，好在积分半立方体时把它们与正面区分开。一旦某个半立方体里被标记的纹素太多，就把它整个丢弃，转而用最近的合法采样做插值或外插，来估算该位置的射出辐射亮度。"
+    },
+    {
+      "type": "p",
+      "en": "The extrapolation is not always correct, and the detection of invalid hemicubes is not 100% accurate, but so far this is the method that I'm happiest with. In the next article I'll explain how this extrapolation is done in more detail.",
+      "zh": "外插并不总是正确，无效半立方体的检测也不是 100% 准确，但到目前为止，这是我最满意的做法。下一篇文章我会更详细地讲这个外插是怎么做的。"
+    },
+    {
+      "type": "h2",
+      "id": "shadow-rendering",
+      "en": "Shadow Rendering",
+      "zh": "阴影渲染"
+    },
+    {
+      "type": "p",
+      "en": "While the goal was to use the same rendering engine, using its shadow system 'as is' would have been overkill. We are using [cascade shadow maps](http://the-witness.net/news/?p=77), which are updated on every frame, and to maximize the shadow map resolution the shadow maps are tightly aligned to the view frustum slices. When rendering the hemicubes, shadow map resolution is not that important, and re-rendering the shadows for each hemicube face is unnecessarily expensive. To keep things simple I still used cascade shadow maps, but instead of rendering them for each view, I only rendered them once for each object positioning the cascades around the center of the object.",
+      "zh": "虽然我们的目标是复用同一个渲染引擎，但原封不动地照搬它的阴影系统就太过头了。我们用的是[级联阴影贴图](http://the-witness.net/news/?p=77)（cascade shadow maps），每帧都会更新；为了让阴影贴图分辨率最大化，阴影贴图是紧贴着视锥切片对齐的。而渲染半立方体时，阴影贴图分辨率并没有那么重要，为半立方体的每个面重新渲染一遍阴影则是完全没有必要的开销。为了简单，我仍然使用级联阴影贴图，但不再为每个视图渲染，而是对每个物体只渲染一次，把级联围绕物体中心摆放。"
+    },
+    {
+      "type": "h2",
+      "id": "rasterization",
+      "en": "Rasterization",
+      "zh": "光栅化"
+    },
+    {
+      "type": "p",
+      "en": "Now that I've explained how to capture the irradiance of the scene at any point, it's necessary to sample it for every lightmap texel. To do that I simply rasterize the geometry in the lightmap UV space using a conservative rasterizer and render one hemicube at every fragment whose coverage is above certain threshold.",
+      "zh": "既然已经说明白怎么采集场景中任意一点的辐照度，接下来就要为每个光照贴图纹素做采样。我的做法很简单：在光照贴图的 UV 空间里用一个保守光栅化器（conservative rasterizer）光栅化几何体，凡是覆盖率超过某个阈值的片元，就渲染一个半立方体。"
+    },
+    {
+      "type": "p",
+      "en": "One nice thing of using our own rasterizer is that I can evaluate the exact coverage analytically. Since the parameterization does not have overlaps, the coverage is just the area of the intersection of the texel square with the polygon being rasterized. Similarly, the centroid is the center of mass of the clipped polygon.",
+      "zh": "用我们自己的光栅化器有个好处：覆盖率可以解析地精确求出来。由于参数化没有重叠，覆盖率就是纹素方格与被光栅化的多边形相交部分的面积。同样地，质心就是裁剪后多边形的质量中心。"
+    },
+    {
+      "type": "p",
+      "en": "This approach gives us a position and a direction to render the hemicube from, but I still need to determine the orientation of the hemicube. Initially, I simply chose an arbitrary orientation using [the traditional/standard method](http://sourceforge.net/mailarchive/message.php?msg_name=3.0.6.32.20001111143758.010fcdf8%40208.55.130.3), but that resulted in banding artifacts:",
+      "zh": "这样一来我们有了渲染半立方体所需的位置和方向，但还得确定半立方体的朝向。起初我只是用[传统/标准的方法](http://sourceforge.net/mailarchive/message.php?msg_name=3.0.6.32.20001111143758.010fcdf8%40208.55.130.3)随便选了个朝向，结果产生了条带瑕疵："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/banding_small_00.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The source of the problem is just the limited hemicube resolution, but it's surprisingly hard to get rid of it entirely by only increasing the hemicube size. A better solution is to simply use random orientations:",
+      "zh": "问题的根源只是半立方体分辨率有限，但奇怪的是，光靠加大半立方体尺寸极难把它彻底消除。更好的办法是干脆使用随机朝向："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/noise_small_00.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Note that I am trading banding artifacts by noise, but the latter is much easier to get rid of by using some smoothing.",
+      "zh": "注意，我这是用噪声换掉了条带瑕疵，而后者通过一些平滑处理要容易消除得多。"
+    },
+    {
+      "type": "h2",
+      "id": "integration",
+      "en": "Integration",
+      "zh": "积分"
+    },
+    {
+      "type": "p",
+      "en": "Once the hemicubes have been rendered it's necessary to integrate the sampled irradiance to compute the output radiance. The integral of the irradiance hemicube is simply a weighted sum of the samples, where the weights are the cosine-weighted areas of the hemicube texels projected on the hemisphere, that is, the cosine-weighted solid angles of the texels. These weights are constant, so they can be precomputed in advance.",
+      "zh": "半立方体渲染完之后，需要把采样到的辐照度积分起来，算出射出的辐射亮度。辐照度半立方体的积分就是对采样做一次加权求和，权重是半立方体纹素投影到半球上的余弦加权面积，也就是纹素的余弦加权立体角。这些权重是常量，可以事先预计算好。"
+    },
+    {
+      "type": "p",
+      "en": "In the [article by Hugo Helias](http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm) that I referenced in the introduction the same approach is used and this weight table is called the \"The Multiplier Map\". Beware of that part of the article, though, because there's a bug in the formulas. The subtended solid angle of the texel is not \"the cosine of the angle between the direction the camera is facing in, and the line from the camera to the pixel\":",
+      "zh": "我在引言里引用过的 [Hugo Helias 那篇文章](http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm)用的也是同样的做法，他把这张权重表叫做「The Multiplier Map」。不过那一部分要当心，因为公式里有 bug。纹素所张的立体角并不是「相机朝向与从相机到该像素的连线之间夹角的余弦」："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/global_illumiantion_compendium.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/texel_solid_angle_bad.gif)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That term needs to be divided by the squared distance between the location of the camera `x` and the center of the texel `y`:",
+      "zh": "那一项还需要除以相机位置 `x` 与纹素中心 `y` 之间距离的平方："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/09/texel_solid_angle_good.gif)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "See formula 25 in the [Global Illumination Compendium](http://people.cs.kuleuven.be/~philip.dutre/GI/) for more details.",
+      "zh": "更多细节见 [Global Illumination Compendium](http://people.cs.kuleuven.be/~philip.dutre/GI/) 里的公式 25。"
+    },
+    {
+      "type": "p",
+      "en": "Also, since this is a precomputation it made sense to evaluate the solid angle exactly. That can be derived using Girard's formula or directly using the handy formula in [Manne Ohrstrom's thesis](http://www.fizzmoll11.com/thesis/). Doing so improved the invariance of the integral with respect to rotations of the hemicube and that reduced noise significantly.",
+      "zh": "另外，既然这是预计算，把立体角精确求出来才是合理的。可以用 Girard 公式推导，或者直接用 [Manne Ohrstrom 的论文](http://www.fizzmoll11.com/thesis/)里那个现成的公式。这样做之后，积分对半立方体旋转的不变性变好了，噪声也显著减少。"
+    },
+    {
+      "type": "p",
+      "en": "In the end, the integration is a fairly simple operation. It could be done very efficiently using compute shaders and I might still do that in the future, but for prototyping purposes it was much easier to perform the integration in the CPU. Unfortunately, that required transferring the data across the bus and, if not done properly, it severely reduced performance.",
+      "zh": "说到底，积分是一个相当简单的操作。用计算着色器（compute shader）可以做得非常高效，将来我也可能这么改；但在做原型时，把它放在 CPU 上积分要容易得多。可惜这需要把数据通过总线传回来，如果处理不当，性能会严重下降。"
+    },
+    {
+      "type": "h2",
+      "id": "asynchronous-memory-transfers",
+      "en": "Asynchronous Memory Transfers",
+      "zh": "异步内存传输"
+    },
+    {
+      "type": "p",
+      "en": "Contrary to popular belief, Direct3D 9 provides a mechanism to perform memory copies asynchronously. In Direct3D 10 and OpenGL this is done through staging resources or pixel buffer objects; in Direct3D 9 something similar can be achieved with offscreen plain surfaces. The problem is that this is not very well documented, it's very easy to fall out of the fast path, and the conditions in which that happens are slightly different for each IHV.",
+      "zh": "和流行的看法相反，Direct3D 9 其实提供了异步执行内存拷贝的机制。在 Direct3D 10 和 OpenGL 里，这件事通过暂存资源（staging resources）或像素缓冲对象（pixel buffer object）来完成；在 Direct3D 9 里可以用离屏纯表面（offscreen plain surface）达到类似效果。问题在于相关文档写得很不清楚，非常容易掉出快速路径，而且每个 IHV 触发这种情况的条件还略有不同。"
+    },
+    {
+      "type": "p",
+      "en": "In the first place, you have to create two render targets and offscreen plain surfaces:",
+      "zh": "首先，你得创建两个渲染目标和离屏纯表面："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "dev->CreateRenderTarget(..., &render_target_0);\ndev->CreateRenderTarget(..., &render_target_1);\n\ndev->CreateOffscreenPlainSurface(..., &offscreen_surface_0);\ndev->CreateOffscreenPlainSurface(..., &offscreen_surface_1);"
+    },
+    {
+      "type": "p",
+      "en": "If you have more than two targets the copies become synchronous in some systems, but two is sufficient to generate enough work to do in parallel with the memory transfers.",
+      "zh": "如果你用了两个以上的目标，在某些系统上拷贝会变成同步的；但两个就足以产生足够多的工作量，好与内存传输并行起来。"
+    },
+    {
+      "type": "p",
+      "en": "The most important observation is that the only device method that appears to be asynchronous is `GetRenderTargetData`. After calling this method, any other device method blocks until the copy is complete. So, instead of overlapping the memory transfer with the rendering code, you have to find some CPU work to do simultaneously. In my case, I just do the integration of one of the render targets while copying the other:",
+      "zh": "最关键的一点是：看起来唯一异步的设备方法是 `GetRenderTargetData`。调用它之后，任何其他设备方法都会阻塞到拷贝完成。所以，你不是把内存传输与渲染代码重叠起来，而是要找些 CPU 上的活同时干。在我这里，就是一边拷贝其中一个渲染目标，一边对另一个做积分："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "while hemicubes left {\n\n    [...] // Render hemicube to render_target_0\n\n    // Initiate asynchronous copy to system memory.\n    dev->GetRenderTargetData(render_target_0, offscreen_surface_0);\n\n    // Lock offscreen_surface_1\n    // at this point the corresponding async copy has finished already.\n    offscreen_surface_1->LockRect(..., D3DLOCK_READONLY);\n\n    [...] // Integrate hemicube.\n\n    offscreen_surface_1->UnlockRect();\n\n    swap(render_target_0, render_target_1);\n    swap(offscreen_surface_0, offscreen_surface_1);\n}"
+    },
+    {
+      "type": "p",
+      "en": "Another problem is that the buffer needs to be sufficiently big to reach transfer rates that saturate the available bandwidth. In order to achieve that I batch multiple hemicubes in a single texture atlas as seen in the following picture:",
+      "zh": "另一个问题是，缓冲区得足够大，才能达到把可用带宽跑满的传输速率。为此我把多个半立方体打包进一张纹理图集（texture atlas），如下图所示："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/04/hemicube_atlas.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In practice I do not render the hemicubes using the depicted cross layout, but instead arrange the faces tightly in a 3x1 rectangle that does not waste any texture space and maximizes bandwidth. However, the cross layout was useful to visualize the output for debugging purposes.",
+      "zh": "实际使用中我并不按图中那种十字布局来渲染半立方体，而是把各个面紧凑地排成一个 3x1 的矩形，这样既不浪费纹理空间，也能把带宽拉到最大。不过在做调试、需要把结果可视化出来时，十字布局还是很好用的。"
+    },
+    {
+      "type": "h2",
+      "id": "performance-and-conclusions",
+      "en": "Performance and Conclusions",
+      "zh": "性能与结论"
+    },
+    {
+      "type": "p",
+      "en": "The performance of our global illumination solution is somewhat disappointing. While we do most of the work on the GPU we are not really making a very effective use of it. The main GPU bottleneck is in the fixed function geometry pipeline; we are basically rendering a large number of tiny triangles on a small render target.",
+      "zh": "我们这套全局光照方案的性能有点令人失望。虽然大部分工作是在 GPU 上做的，但我们其实并没有把它用得很高效。GPU 侧的主要瓶颈在固定功能几何管线：我们本质上是在一块很小的渲染目标上渲染大量极小的三角形。"
+    },
+    {
+      "type": "p",
+      "en": "But that's not the main problem. Traversing the scene in the CPU and submitting commands to render it actually takes more time than it takes the GPU to process the commands and render the scene, so the GPU is actually underutilized.",
+      "zh": "但这还不是主要问题。在 CPU 上遍历场景、提交渲染命令所花的时间，实际上比 GPU 处理这些命令并渲染场景的时间还长，所以 GPU 其实是被闲置的。"
+    },
+    {
+      "type": "p",
+      "en": "Our engine was designed for quick prototyping, to make it very easy to draw stuff with different materials, but not to do so in the most efficient way possible. These inefficiencies became a lot more pronounced in the lightmap baker.",
+      "zh": "我们的引擎是为快速做原型设计的：它让「用各种材质画东西」变得非常容易，但并不是以最高效的方式做到的。这些低效之处在光照贴图烘焙器里变得格外明显。"
+    },
+    {
+      "type": "p",
+      "en": "On the bright side, as we optimize the CPU side of the engine we expect performance to improve. Modern GPUs also have functionality that make it possible to render to multiple hemicube faces at once. We expect that will also reduce the CPU work significantly.",
+      "zh": "好的一面是，随着我们优化引擎的 CPU 侧，性能应该会提升。现代 GPU 也提供了能一次渲染到多个半立方体面的功能。我们预计这也会显著减少 CPU 的工作量。"
+    },
+    {
+      "type": "p",
+      "en": "While it was easy to get our global illumination solution up and running by reusing our rendering engine, bringing it to a level of sufficient quality and performance took a considerable amount of time. In the next installment I'll describe some of the techniques and optimizations that I implemented to fix some of the remaining artifacts and improve performance.",
+      "zh": "复用渲染引擎让我们很容易就把全局光照跑了起来，但要把它做到质量与性能都足够好的程度，花了相当长的时间。下一篇文章我会介绍我实现的一些技术和优化，用来修掉余下的瑕疵并提升性能。"
+    }
+  ]
+}

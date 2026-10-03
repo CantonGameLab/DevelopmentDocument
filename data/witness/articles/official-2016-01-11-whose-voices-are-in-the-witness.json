@@ -1,0 +1,68 @@
+{
+  "id": "official-2016-01-11-whose-voices-are-in-the-witness",
+  "title": { "zh": "《The Witness》里的声音都是谁？", "en": "Whose voices are in The Witness?" },
+  "subtitle": {
+    "en": "Voice recording is finished, so here is the cast of actors you will hear in the game's recordings.",
+    "zh": "配音录制收工，公布你会在游戏那些录音里听到的演员名单。"
+  },
+  "translator": {
+    "note": "原文里有两行是「粗体姓名 + 缩略图包」挤在同一个源行的，按 schema 约定保留为一个段落，图片标记内联在译文里。Terra Deva 那段里的 The Mickey Mouse Club 和那串感叹号是原文自己就有的语气。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We're a couple of weeks away from our release date, and we've just finished recording the last of the voice acting, which means it's a good time to tell you about the actors!",
+      "zh": "距离发售日只剩两周了，我们刚刚录完最后一批配音，也就是说，现在是介绍这些演员的好时机！"
+    },
+    {
+      "type": "p",
+      "en": "The Witness deliberately riffs on several traditional elements of game design, and one of those elements is the classic audio log, where you are wandering along and you find a recording that was placed there by someone before. The Witness has recordings like this, but let's just say they are done in a highly non-traditional way. When you first encounter them you won't find much in the way of answers, but, if you keep looking, you will eventually be able to piece together what's going on.",
+      "zh": "《The Witness》刻意对若干传统游戏设计元素做了变奏，其中之一就是经典的音频日志：你四处游荡时，发现一段此前由某个人留在那里的录音。《The Witness》里也有这样的录音，但只能说，它们的做法极其非传统。你第一次遇到它们时，从中得不到多少答案；可如果你一直找下去，最终就能把事情的来龙去脉拼起来。"
+    },
+    {
+      "type": "p",
+      "en": "These are the folks whose fine voicework you will hear in these recordings:",
+      "zh": "以下这些人的精彩配音，你会在这些录音里听到："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/01/BxbaTdTCAAAMxel.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "**Ashley Johnson**, who you may know as Ellie from *The Last of Us*, or from her roles in *Tales from the Borderlands* and *Infamous First Light*. She also plays the smartest person on the hit TV show *Blindspot*. [You can find Ashley on Twitter](https://twitter.com/TheVulcanSalute).",
+      "zh": "**Ashley Johnson**，你可能因为《The Last of Us》里的 Ellie 认识她，也可能是因为她在《Tales from the Borderlands》和《Infamous First Light》里的角色。她还在热门电视剧《Blindspot》里演那个最聪明的人。[你可以在 Twitter 上找到 Ashley](https://twitter.com/TheVulcanSalute)。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/01/image1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "**Phil LaMarr**, who I best know as Marvin from *Pulp Fiction*, but who you may know as Vamp in *Metal Gear Solid 2* and *4*, or as Ratbag from *Shadow of Mordor*. He also played Hermes in Futurama and Ollie Williams in Family Guy! [You can follow his random musings here.](https://twitter.com/phillamarr)",
+      "zh": "**Phil LaMarr**，我对他最熟悉的是《Pulp Fiction》里的 Marvin，不过你可能是因为《Metal Gear Solid 2》和《4》里的 Vamp，或者《Shadow of Mordor》里的 Ratbag 才认识他。他还在 Futurama 里演过 Hermes，在 Family Guy 里演过 Ollie Williams！[你可以在这里看他那些随想。](https://twitter.com/phillamarr)"
+    },
+    {
+      "type": "p",
+      "en": "**![图](http://the-witness.net/news/wp-content/uploads/2016/01/Matthew301-8x10.jpg)Matthew Waterson**, who played very English person Sir Lucan in *The Order: 1886*, an has recently acted in *Fallout 4* and *Halo 5*. [Check out Matthew's amazing Sean-Connery-themed profile picture.](https://twitter.com/mjwaterson)",
+      "zh": "**（原文此处有一张图）Matthew Waterson**，在《The Order: 1886》里演了那位非常英国味的 Sir Lucan，最近还出演了《Fallout 4》和《Halo 5》。[来看看 Matthew 那张以 Sean Connery 为主题的精彩头像。](https://twitter.com/mjwaterson)"
+    },
+    {
+      "type": "p",
+      "en": "**![图](http://the-witness.net/news/wp-content/uploads/2016/01/IMG_3356.jpg) Terra Deva**, an oft-performing musician, including recent hit single \"At Night\" with the swiss group Shakedown (though she doesn't play music in *The Witness* because we don't have music in *The Witness*! She is acting!) and veteran of... The Mickey Mouse Club!!!! (Among many other places!) [Terra's Twitter page is here.](https://twitter.com/TerraDeva)",
+      "zh": "**（原文此处有一张图）Terra Deva**，一位经常演出的音乐人，包括与瑞士组合 Shakedown 合作的近期热门单曲「At Night」（不过她在《The Witness》里不玩音乐，因为《The Witness》里没有音乐！她是在演戏！），也是……The Mickey Mouse Club 的老兵！！！！（还有其他许许多多地方！）[Terra 的 Twitter 页面在这里。](https://twitter.com/TerraDeva)"
+    },
+    {
+      "type": "p",
+      "en": "We recorded these sessions at Warner Bros. Studios. Our voice director was Liam O'Brien, who has also done quite a bit of acting in games himself. Pierce O'Toole acted as the great force of organization throughout the process and many things would have gone worse were it not for him!",
+      "zh": "这些录音是在 Warner Bros. Studios 完成的。我们的配音导演是 Liam O'Brien，他自己也在游戏里演过不少角色。Pierce O'Toole 在整个过程中充当了强大的组织力量，要不是他，很多事情都会更糟！"
+    },
+    {
+      "type": "p",
+      "en": "Having said all this, I will warn you that the story in The Witness, such as it is, is fairly subtle and happens mostly implicitly. You really have to explore and read between the lines to know what's going on. So do not expect a traditional game story like *The Last of Us* or *The Order!*All that said, we are very happy to have these actors lending their talents to our game, and I look forward to release when you'll see what we've been up to.",
+      "zh": "说了这么多，我得提醒一句：《The Witness》里的故事——如果算得上有的话——相当隐晦，而且大部分是隐含地发生的。你真的得去探索、去读字里行间，才能明白发生了什么。所以别期待《The Last of Us》或《The Order》那样的传统游戏剧情！话虽如此，我们非常高兴这些演员把才华借给了我们的游戏，也很期待发售——届时你们就会看到我们一直在忙什么。"
+    }
+  ]
+}

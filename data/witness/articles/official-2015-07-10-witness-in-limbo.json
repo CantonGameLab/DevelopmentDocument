@@ -1,0 +1,23 @@
+{
+  "id": "official-2015-07-10-witness-in-limbo",
+  "title": { "zh": "Limbo 里的《The Witness》", "en": "Witness in Limbo" },
+  "subtitle": {
+    "en": "Screenshots taken with the editor's depth mode, which makes the island look like Limbo.",
+    "zh": "用编辑器的深度模式拍的截图，整座岛看上去像《Limbo》。"
+  },
+  "translator": {
+    "note": "原文 9 张图排在同一行，保留为一个占位段落；标题里的 Limbo 兼指游戏《Limbo》与「悬而未决」之意；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We have this depth mode in the editor, that I've never really used for anything other than taking neat screenshots for fun. It's been a while since the last post, so I thought it might be cool to share some. It's difficult to find interesting new screenshots to share lately, since we've already shown a lot of the game and don't want to ruin the exploration when it comes out!",
+      "zh": "我们编辑器里有个深度模式，除了拿它拍些好看的截图玩之外，我从没真正用它做过别的事。距上次发帖已经有一阵子了，所以我想分享几张应该会挺不错。最近很难找到有意思的新截图来分享，因为我们已经展示了很多游戏内容，不想在游戏发售时毁掉探索的乐趣！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_48_n01.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n02.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n03.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_49_n04.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_50_n05.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_51_n07.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_52_n09.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_53_n11.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/07/shot_2015.06.15__time_17_54_n12.png)",
+      "zh": "（原文此处有 9 张图）"
+    }
+  ]
+}

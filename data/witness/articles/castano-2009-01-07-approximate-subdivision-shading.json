@@ -1,0 +1,109 @@
+{
+  "id": "castano-2009-01-07-approximate-subdivision-shading",
+  "title": {
+    "zh": "近似细分曲面着色",
+    "en": "Approximate Subdivision Shading"
+  },
+  "subtitle": {
+    "zh": "用求位置的同一套流程去插值法线，既省算力，又顺手解决了位移贴图的接缝问题。",
+    "en": "Interpolating normals with the same procedure used for positions: cheaper, and it makes watertight displacement mapping easier."
+  },
+  "translator": {
+    "note": "源文正文之后的 `[[acc tangents]] (right aligned)` 是一处 WordPress 短代码行（带图片对齐属性），指向一张缺失的插图，译文按全站图片口径保留为一个图片块 `![图](acc_tangents.png)`，中文写「（原文此处有一张图）」；`en` 里保留了短代码原文以便对齐，占位文件名由短代码补出，原文并没有文件名。保真核验会把这一行报为未覆盖单元，即此处。`ACC`、`Bezier`、`Gamefest`、`SIGGRAPH Asia`、`Subdivision Shading` 保留英文；subdivision surface 作「细分曲面」、位移贴图（displacement map）按术语表。源文两处 `![图](…)` 图行按口径归一化为 `![图](原图URL)`。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "[Subdivision Shading](http://perso.telecom-paristech.fr/~boubek/papers/SuSh/) is a new approach to compute normal fields of subdivision surfaces that was presented at SIGGRAPH Asia 2008.",
+      "zh": "[Subdivision Shading](http://perso.telecom-paristech.fr/~boubek/papers/SuSh/) 是一种计算细分曲面法线场的新方法，在 SIGGRAPH Asia 2008 上发表。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2010/10/subdivision-shading-small.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It’s a very simple idea that provides surprisingly good results. The idea is to interpolate the subdivision surface normals using the same procedure used for positions. The resulting normal field is not the actual surface normal, but looks smooth and doesn’t exhibit some of the artifacts characteristic of subdivision surfaces at the extraordinary vertices.",
+      "zh": "这个想法非常简单，效果却出奇地好。思路就是用与求位置完全相同的过程去插值细分曲面的法线。得到的法线场并不是真正的曲面法线，但看起来很平滑，也不会出现细分曲面在奇异顶点处常见的那类瑕疵。"
+    },
+    {
+      "type": "p",
+      "en": "The main disadvantage is that it looks too smooth compared to the real surface normal, but I’m not sure that’s necessarily bad. To avoid that problem the paper suggests blending the surface normals and the interpolated vertex normals so that the interpolated normals are used only in the proximity of extraordinary vertices.",
+      "zh": "主要缺点是，和真实曲面法线相比它显得过于平滑，但我不确定这一定是坏事。为了避开这个问题，那篇论文建议把曲面法线与插值得到的顶点法线混合起来，让插值法线只在奇异顶点附近起作用。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2009/01/acc_nosush_pixolator-267x300.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2009/01/acc_sush_pixolator-267x300.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The same idea can also be applied to the [Approximate Catmull-Clark Subdivision Surfaces (Bezier ACC)](http://faculty.cs.tamu.edu/schaefer/research/acc.pdf) proposed by Loop and Schaefer. Instead of constructing the normal from the cross product of the tangent patches, the normal can be interpolated directly using the same approximation used to evaluate positions. The resulting surface has G1 discontinuities around extraordinary vertices in both the geometry and the normal field. However, I haven’t been able to notice any artifact due to that in any of our test models.",
+      "zh": "同样的想法也能用在 Loop 和 Schaefer 提出的 [Approximate Catmull-Clark Subdivision Surfaces（Bezier ACC）](http://faculty.cs.tamu.edu/schaefer/research/acc.pdf) 上。与其从切面片的叉积去构造法线，不如直接用求位置时所用的那套近似来插值法线。这样得到的曲面在奇异顶点周围，几何体和法线场都存在 G1 不连续。不过，在我们的任何测试模型里，我都没能看出由此产生的瑕疵。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2009/01/acc_nosush_testmonster-267x201.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2009/01/acc_sush_testmonster-267x201.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This approach is quite efficient. It requires the same number of control points as Bezier ACC, but only one half of the stencil weights, because positions and normals are evaluated exactly the same way. The evaluation of the surface normal itself is also more efficient; evaluating a single 4×4 Bezier patch is faster than evaluating two 3×4 Bezier patches and computing a cross product.",
+      "zh": "这个做法相当高效。它需要的控制点数量和 Bezier ACC 一样，但模板权重只有一半，因为位置和法线是用完全相同的方式求值的。曲面法线本身的求值也更高效：求一个 4×4 的 Bezier 面片，比求两个 3×4 的 Bezier 面片再算一次叉积要快。"
+    },
+    {
+      "type": "p",
+      "en": "However, the nicest thing about this scheme is that it facilitates watertightness when using displacement maps.",
+      "zh": "不过，这个方案最讨人喜欢的地方在于：使用位移贴图时，它让做到无缝变得容易。"
+    },
+    {
+      "type": "p",
+      "en": "At [Gamefest 2008](http://developer.nvidia.com/object/gamefest-2008-subdiv.html) I mentioned that in order to achieve watertight surfaces when using displacement maps it was necessary to:",
+      "zh": "在 [Gamefest 2008](http://developer.nvidia.com/object/gamefest-2008-subdiv.html) 上我提到过，使用位移贴图时要想得到无缝的曲面，必须做到两件事："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "a) [Sample textures in a watertight way](http://castano.ludicon.com/blog/?p=416).",
+          "zh": "a) [以无缝的方式采样纹理](http://castano.ludicon.com/blog/?p=416)。"
+        },
+        {
+          "en": "b) Construct a watertight normal field.",
+          "zh": "b) 构造一个无缝的法线场。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "[[acc tangents]] (right aligned) ![图](acc_tangents.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In order to obtain a watertight normal field, adjacent patches need to compute the normals along their edges consistently.",
+      "zh": "要得到无缝的法线场，相邻面片沿公共边算出的法线必须一致。"
+    },
+    {
+      "type": "p",
+      "en": "The approach proposed in the ACC paper produces a smooth and continuous normal field, but the normals at extraordinary vertices and along the edges that surround them are not consistent. Patches around the extraordinary vertices have tangents that lie on the same plane, but their cross product does not yield exactly the same normal.",
+      "zh": "ACC 论文提出的做法能产生一个平滑、连续的法线场，但在奇异顶点处以及环绕它的那些边上，法线并不一致。奇异顶点周围的面片，各自的切线落在同一平面上，但它们的叉积并不给出完全相同的法线。"
+    },
+    {
+      "type": "p",
+      "en": "There are several ways of to solve that problem, but all of them too complicated to cover them in this post. On the other side, the normal interpolation approach does not suffer from that problem and provides a much more simple solution.",
+      "zh": "解决这个问题的办法有好几种，但都太复杂，没法在这篇里展开。反过来说，法线插值的做法不受这个问题困扰，给出的方案也简单得多。"
+    }
+  ]
+}

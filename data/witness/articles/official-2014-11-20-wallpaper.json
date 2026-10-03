@@ -1,0 +1,23 @@
+{
+  "id": "official-2014-11-20-wallpaper",
+  "title": {
+    "zh": "壁纸",
+    "en": "Wallpaper"
+  },
+  "subtitle": {
+    "en": "A quick new wallpaper, to say thanks for the kind words while everyone is working hard.",
+    "zh": "大家都在忙，于是加一张新壁纸，谢谢大家的好话。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/11/shot_2014.11.20__time_10_59_n02.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We are all working hard, hence the silence on the blog. Always appreciate the kind words in the replies, so I wanted to at least add a quick new wallpaper to say thanks. Hope you like it!",
+      "zh": "我们都在努力工作，所以博客上没什么动静。回复里的那些好话我一直很感激，所以至少想赶紧添一张新壁纸表示感谢。希望你喜欢！"
+    }
+  ]
+}

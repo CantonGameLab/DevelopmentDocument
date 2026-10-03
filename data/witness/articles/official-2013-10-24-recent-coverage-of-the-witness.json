@@ -1,0 +1,48 @@
+{
+  "id": "official-2013-10-24-recent-coverage-of-the-witness",
+  "title": { "zh": "《The Witness》近期的媒体报道：", "en": "Recent coverage of The Witness:" },
+  "subtitle": {
+    "en": "Interviews and podcast discussion from the PlayStation event, plus a Gametrailers interview.",
+    "zh": "PlayStation 活动上的采访与播客讨论，外加一段 Gametrailers 的采访。"
+  },
+  "translator": {
+    "note": "原文里的两行纯链接（PlayStation Blogcast、Gametrailers）在 en 字段保留原样，译文中换成了同样 URL 的中文链接文字；另有一处嵌入媒体按惯例保留为占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Interview with Adam Sessler at last week's PlayStation event:",
+      "zh": "上周 PlayStation 活动上对 Adam Sessler 的采访："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/16wLW9hJTkg?amp;modestbranding=1&fs=0&rel=0&wmode=opaque)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "Discussion on PlayStation Blogcast (Witness talk starts around 26:25):",
+      "zh": "PlayStation Blogcast 上的讨论（关于《The Witness》的部分大约从 26:25 开始）："
+    },
+    {
+      "type": "p",
+      "en": "[http://blog.us.playstation.com/2013/10/18/playstation-blogcast-094-witness-the-daylight/](http://blog.us.playstation.com/2013/10/18/playstation-blogcast-094-witness-the-daylight/)",
+      "zh": "[PlayStation Blogcast 上的这一期](http://blog.us.playstation.com/2013/10/18/playstation-blogcast-094-witness-the-daylight/)"
+    },
+    {
+      "type": "p",
+      "en": "(From the way the PS guys talk, it sounds like it is all me making this game, but as always on games of this size, there is a whole team making it happen!)",
+      "zh": "（从 PlayStation 那帮人说话的口吻听起来，好像这游戏全是我一个人做的；但和这种体量的游戏一贯的情况一样，是一整个团队在让它成真！）"
+    },
+    {
+      "type": "p",
+      "en": "Interview with Gametrailers, also from the PlayStation event (you may have to sit through a commercial with army dudes to see it):",
+      "zh": "对 Gametrailers 的采访，同样来自那场 PlayStation 活动（你可能得先看完一段有大兵出镜的广告才能看到它）："
+    },
+    {
+      "type": "p",
+      "en": "[http://www.gametrailers.com/videos/aeeuwu/the-witness-the-puzzle-of-making-puzzles](http://www.gametrailers.com/videos/aeeuwu/the-witness-the-puzzle-of-making-puzzles)",
+      "zh": "[Gametrailers 的这段采访视频](http://www.gametrailers.com/videos/aeeuwu/the-witness-the-puzzle-of-making-puzzles)"
+    }
+  ]
+}

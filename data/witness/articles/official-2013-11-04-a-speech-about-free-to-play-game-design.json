@@ -1,0 +1,28 @@
+{
+  "id": "official-2013-11-04-a-speech-about-free-to-play-game-design",
+  "title": {
+    "zh": "一场关于 Free-to-Play 游戏设计的演讲",
+    "en": "A speech about Free-to-Play game design"
+  },
+  "subtitle": {
+    "en": "Comparing games to television to look at how the Free-to-Play business model affects game design.",
+    "zh": "把游戏比作电视，看 Free-to-Play 这种商业模式如何影响游戏设计。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "About a month ago, I gave a speech at Creative Mornings in Portland about the way the Free-to-Play business model affects game design. I compared games to television, looking at the way television business models have drastically affected the composition of those shows.",
+      "zh": "大约一个月前，我在 Portland 的 Creative Mornings 上做了一场演讲，讲 Free-to-Play 这种商业模式如何影响游戏设计。我把游戏和电视做了类比，考察电视的商业模式是怎样剧烈地影响了那些节目的构成。"
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/AxFzf6yIfcc?amp;modestbranding=1&fs=0&rel=0&wmode=opaque)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "(I didn't name this speech; the title given here was picked by Creative Mornings after the speech was given.)",
+      "zh": "（这场演讲的名字不是我起的；这里给出的标题是 Creative Mornings 在演讲结束之后定的。）"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "castano-2009-12-19-pate",
+  "title": { "zh": "肉酱（Pâté）", "en": "Pâté" },
+  "subtitle": {
+    "en": "Why pâté is barely known in the US, how Spanish recipes measure things vaguely, and a family recipe made with chicken liver.",
+    "zh": "肉酱在美国为什么没什么人认识、西班牙菜谱里的度量有多含糊，以及一份用鸡肝做的家传做法。"
+  },
+  "translator": {
+    "note": "源文第 44 行「1/4 nutmeg, peper and salt」里的 peper 是 pepper 的笔误，按「不增不删」在 en 里原样保留，中文按「胡椒」译。食材重量单位照原文保留 gr / tbsp。唯一一处插图按全站口径归一化成图片占位块。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "One of the things that I love about Davis is that it’s blessed with a [great bakery](http://daviswiki.org/Village_Bakery) that makes excellent bread. Thanks to that I almost always have some fresh bread at home to enjoy with butter, cheese, or pate. The latter is the subject of this post.",
+      "zh": "我喜欢 Davis 的一点是，这里很幸运地有一家[很棒的面包房](http://daviswiki.org/Village_Bakery)，面包做得极好。多亏了它，我家几乎总有新鲜面包，可以配黄油、奶酪或者肉酱吃。最后这一样就是本篇的主题。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2190/3530748638_114527c884.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Pate is a paste made of meat, liver, and fats. The most popular one is probably the one made of foie gras, but duck liver is quite expensive and very hard to find here, so I usually use chicken liver instead. Chicken liver can be found at any super market with a decent butchery; in the Bay Area PW Supermarkets is probably your best option, while here in Davis you can find it at the co-op or Nuggets.",
+      "zh": "肉酱是用肉、肝脏和脂肪做成的糊状食物。最有名的恐怕是鹅肝酱，但鸭肝在这里很贵，也很难买到，所以我一般改用鸡肝。任何一家肉铺像样的超市都能找到鸡肝；在湾区，PW Supermarkets 大概是最好的选择，而在 Davis，你可以在合作社或者 Nuggets 买到。"
+    },
+    {
+      "type": "p",
+      "en": "Apparently, not everybody agrees on the merits of pate. According to [wikipedia](http://en.wikipedia.org/wiki/P%C3%A2t%C3%A9):",
+      "zh": "看来并不是所有人都认可肉酱的好处。据[维基百科](http://en.wikipedia.org/wiki/P%C3%A2t%C3%A9)说："
+    },
+    {
+      "type": "quote",
+      "en": "in a blind taste test conducted by the American Association of Wine Economists, 15 of 18 subjects misidentified the sample foods – some of which are pâté – as dog food",
+      "zh": "在美国葡萄酒经济学家协会做的一次盲测中，18 名受试者有 15 人把样品食物——其中一些就是肉酱——误认成了狗粮"
+    },
+    {
+      "type": "p",
+      "en": "I’d certainly be surprised if dog food was that good… but this shows however, that pate is a fairly unknown product in the US. While in Spain cheeses and pates share more or less the same shelve space, in the US pate is hard to come by.",
+      "zh": "狗粮要是真有那么好吃，那我确实会吃惊……不过这也说明，肉酱在美国是一种相当小众的东西。在西班牙，奶酪和肉酱在货架上占的地方差不多，而在美国，肉酱很难买到。"
+    },
+    {
+      "type": "p",
+      "en": "In any case, home made pate is actually much better than what you can find on the stores, and it’s super-easy to do it yourself, so you are not really missing anything.",
+      "zh": "不管怎么说，自制的肉酱其实比店里能买到的要好得多，而且自己做超级简单，所以你其实什么也没错过。"
+    },
+    {
+      "type": "p",
+      "en": "The practice of measuring recipe ingredients exactly is not very popular in Spain, most of the recipes that I’ve inherited contain vague measures like “scant”, “pinch” or “handful”, tablespoons and cups never have the same size, and when the ingredients are measured exactly, only their weight is provided. Almost nobody has a scale in their kitchen, so you generally have to take those measures with a grain of salt and use your common sense instead.",
+      "zh": "在西班牙，按菜谱精确称量食材的做法并不流行。我继承下来的大多数菜谱里都是些含糊的度量，比如「少少一点」「一小撮」「一把」；汤匙和杯子从来都不是同一个尺寸；真到了要精确计量的地方，给的也只是重量。而几乎没人在厨房里备秤，所以你一般只能对这些度量打个折扣，靠常识来判断。"
+    },
+    {
+      "type": "p",
+      "en": "I got this recipe from my mother, all the ingredients are measured in weight, and I’ve confirmed they actually work well, but in practice most of the time I do not measure them exactly, so just take them as a guideline:",
+      "zh": "这份做法是我妈传给我的，所有食材都按重量计，我验证过它们确实好用；但实际上我大多时候也不会精确称量，所以你就把它们当成参考吧："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "250 gr of chicken livers", "zh": "250 gr 鸡肝" },
+        { "en": "150 gr of smoked ham", "zh": "150 gr 烟熏火腿" },
+        { "en": "150 gr of bacon", "zh": "150 gr 培根" },
+        { "en": "50 gr green onions or shallots", "zh": "50 gr 小葱或红葱头" },
+        { "en": "1 tbsp butter", "zh": "1 tbsp 黄油" },
+        { "en": "1 tbsp olive oil", "zh": "1 tbsp 橄榄油" },
+        { "en": "200 gr heavy cream", "zh": "200 gr 淡奶油" },
+        { "en": "cured manchego or parmesan cheese", "zh": "陈年 manchego 奶酪或帕玛森奶酪" },
+        { "en": "1/4 nutmeg, peper and salt", "zh": "1/4 个肉豆蔻、胡椒和盐" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "First, remove the hearts and macerate the livers in brandy for at least 4 hours. If you don’t have brandy you can also use white wine and leave them a little longer.",
+      "zh": "先去掉鸡肝上的心脏部分，用白兰地腌渍至少 4 小时。没有白兰地的话也可以用白葡萄酒，多泡一会儿就行。"
+    },
+    {
+      "type": "p",
+      "en": "Fry the onions in the oil and butter in a medium saucepan until softened, then add the bacon and continue frying without letting it brown. Mix in the rest of the meat with the spices, and cook 8 to 10 minutes until the livers are well done.",
+      "zh": "在中号深锅里用油和黄油把洋葱炒软，然后加培根继续炒，别让它上色。再把其余的肉和香料拌进去，煮 8 到 10 分钟，直到鸡肝完全熟透。"
+    },
+    {
+      "type": "p",
+      "en": "Add the cream, it should fill the interstices, but not cover the meat entirely. Then add as much grinded cheese as you see fit. In Spain I always used one-year-cured Manchego cheese, but here that’s very rare, typically you can only find the semi-cured variety, and it’s quite pricey. Instead, I think that cured parmesan also works well. In addition to that, I also add a little bit of blue cheese, but not too much to avoid overriding the other flavors.",
+      "zh": "倒入淡奶油，它应该填满肉之间的空隙，但不要把肉完全盖住。然后按你觉得合适的量加入磨碎的奶酪。在西班牙我一直用陈放一年的 manchego 奶酪，但这里很少见，通常只能买到半陈年的，而且相当贵。我觉得用陈年帕玛森效果也不错。除此之外，我还会加一点点蓝纹奶酪，但不会多，免得盖过别的味道。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, bring it to boil so that the cheese fully dissolves, and blend in a food processor until you have a smooth mixture. Alternatively, you can add other herbs, spices, or nuts, it’s hard to go wrong.",
+      "zh": "最后把它煮开，让奶酪完全化掉，再用食品加工机打成细腻的糊。或者你也可以加别的香草、香料或坚果，这道菜很难做坏。"
+    }
+  ]
+}

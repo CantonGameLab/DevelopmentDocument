@@ -1,0 +1,103 @@
+{
+  "id": "official-2015-06-03-polishing-the-architecture",
+  "title": { "zh": "打磨建筑", "en": "Polishing the Architecture" },
+  "subtitle": {
+    "en": "With content locked down, architect Deanna reviews every structure we built to fix what gameplay compromises left wrong.",
+    "zh": "内容定稿之后，建筑师 Deanna 回来复查我们做过的每一处结构，把当初为玩法妥协出来的毛病修掉。"
+  },
+  "translator": {
+    "note": "原文中文字与截图常常连在同一段里（原文发布时就是这样），译文按原顺序把图片标记留在同一段内。图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In the last few weeks we’ve been adding the final art touches to the island.",
+      "zh": "过去几周，我们一直在给岛加最后的美术润色。"
+    },
+    {
+      "type": "p",
+      "en": "Now that we have all the content locked down, Deanna, one of the architects, is reviewing all the structures we created and make sure they are as correct as possible.",
+      "zh": "现在所有内容都定稿了，Deanna（建筑师之一）正在复查我们做过的所有结构，确保它们尽可能准确。"
+    },
+    {
+      "type": "p",
+      "en": "Even though they previously designed the buildings and we implemented them, there have been many revisions and tweaks for gameplay that caused deviations from the original concepts, and in some cases, we just had to make stuff up with the best of our knowledge without ever having the *Architect Seal Of Approval**™*",
+      "zh": "虽然建筑当初是他们设计的、由我们来实现，但为了玩法做过很多修改和调整，导致我们偏离了最初的概念；有些情况下，我们只能凭自己最好的判断硬凑，从来没拿到过*建筑师认证印章™*"
+    },
+    {
+      "type": "p",
+      "en": "Here is an example, a set of stairs added to a roof structure: ![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_18_n01.png)",
+      "zh": "举个例子，这是给一个屋顶结构加的一组楼梯：（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It looks ok, but looking close up you can see how flimsy the roof attachment is:",
+      "zh": "它看起来还行，但凑近看就能发现屋顶的接合有多单薄："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_19_n02.png) Or the way the railings are assembled together:",
+      "zh": "（原文此处有一张图）再或者看看这些栏杆是怎么拼装在一起的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_19_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Deanna showed us that it would make more sense to extend the main roof support to accommodate for the stairs: ![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_36_n01.png)",
+      "zh": "Deanna 给我们演示了，把主屋顶支撑延长、给楼梯腾出位置会更合理：（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "An in the case of the railings, to do a better job showing the assembled pieces, removing the awkward intersections:",
+      "zh": "至于栏杆，则是要更好地把拼装起来的部件展示出来，去掉那些别扭的穿插："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_38_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Another example is this stone wall door frame. It lacks any assembly detail for its size, making it feel it was made from one single gigantic piece of stone:",
+      "zh": "另一个例子是这道石墙门框。以它的体量来说，它完全缺少拼接细节，让人感觉是用一整块巨大的石头做成的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_21_n04.png) And here is the revised version:",
+      "zh": "（原文此处有一张图）这是修改后的版本："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_40_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Another type of issue is how two different surfaces meet. The more detailed the island gets, the more these stand out as incomplete. As an example, the way this wood structure connects with the floor:",
+      "zh": "另一类问题是两种不同表面相接的地方。岛上的细节越做越丰富，这些地方就越显得没做完。举个例子，这个木结构和地面的衔接："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_24_n05.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And after the revision:",
+      "zh": "修改之后："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_44_n05.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Some of this work might seem minute but it really makes the whole environment feel more grounded, adding a lot to the experience!",
+      "zh": "这些活儿有些看起来很琐碎，但它们确实让整个环境显得更扎实，为体验加了很多分！"
+    }
+  ]
+}

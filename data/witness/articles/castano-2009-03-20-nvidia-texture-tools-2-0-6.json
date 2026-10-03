@@ -1,0 +1,66 @@
+{
+  "id": "castano-2009-03-20-nvidia-texture-tools-2-0-6",
+  "title": {
+    "zh": "NVIDIA Texture Tools 2.0.6",
+    "en": "NVIDIA Texture Tools 2.0.6"
+  },
+  "subtitle": {
+    "zh": "NVTT 2.0.6 稳定版发布说明：多 GPU 选择、CUDA 驱动兼容性、小 mipmap 改在 CPU 压缩等。",
+    "en": ""
+  },
+  "translator": {
+    "note": "本篇是 NVTT 2.0.6 的发布说明，源文归档干净（无压平表格、无被拆散的段落），未做任何结构修复。术语按术语表：`mipmap` 不译，`NVTT`、`CUDA`、`DDS`、`RGB`、`GPU`、`CPU`、`Wolfire`、`API` 保留英文。原文副标题缺失，`subtitle.zh` 是译者按首段概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Yesterday I released another revision of the stable branch of the NVIDIA Texture Tools. I recommend everybody to upgrade, since it fixes some bugs and artifacts, and improves compatibility with current and future CUDA drivers. Starting with this release I’m planning to provide a verbose description of the changes in each release. So, here it goes:",
+      "zh": "昨天我发布了 NVIDIA Texture Tools 稳定分支的又一个修订版。我建议所有人都升级，因为它修复了一些 bug 和瑕疵，并改善了对当前及未来 CUDA 驱动的兼容性。从这个版本开始，我打算为每个版本都写一份详细的变更说明。那么，开始吧："
+    },
+    {
+      "type": "p",
+      "en": "In a multi-GPU environment NVTT will now use the fastest GPU available. This is quite useful on systems that have an embedded and a discrete GPU. You certainly don’t want to use the embedded one while the discrete GPU is idle.",
+      "zh": "在多 GPU 环境下，NVTT 现在会使用可用的最快 GPU。这在同时装有集成显卡和独立显卡的系统上相当有用。你肯定不希望独立显卡闲在一旁，却去用集成显卡。"
+    },
+    {
+      "type": "p",
+      "en": "Using recent CUDA runtimes with older CUDA drivers usually causes problems. To avoid that, NVTT now determines the version of the available CUDA driver and makes sure it’s compatible with the CUDA runtime that was used to compile it.",
+      "zh": "用较新的 CUDA 运行时搭配较旧的 CUDA 驱动通常会造成问题。为了避免这种情况，NVTT 现在会检测可用 CUDA 驱动的版本，并确认它与编译时所用的 CUDA 运行时兼容。"
+    },
+    {
+      "type": "p",
+      "en": "The NVTT shutdown code did not destroy the CUDA context properly, which caused problems the second time you tried to create a context in the same thread. The behavior on 2.0 drivers was to reuse the context already created, but CUDA 2.1 produces an error instead. This is fixed now.",
+      "zh": "NVTT 的关闭代码没有正确销毁 CUDA 上下文，导致在同一线程里第二次创建上下文时出问题。在 2.0 驱动上，它会复用已经创建好的上下文，但 CUDA 2.1 则会直接报错。这个问题现在修好了。"
+    },
+    {
+      "type": "p",
+      "en": "Note however, that you are not allowed to create multiple compressors in the same thread simultaneously. This is a limitation in the CUDA runtime API that transparently creates a CUDA context per thread. In the future I’m planning to use the driver API directly, which should remove this restriction.",
+      "zh": "不过要注意，你仍然不能在同一线程里同时创建多个压缩器。这是 CUDA 运行时 API 的限制——它会透明地为每个线程创建一个 CUDA 上下文。将来我打算直接使用驱动 API，那样应该就能去掉这个限制。"
+    },
+    {
+      "type": "p",
+      "en": "There have been issues reported with the CUDA compressor not producing correct output when processing 1×1 mipmaps. I was able to reproduce the problem on old drivers, but it seems to be fixed now. In any case, I realized that using the entire GPU to compress a 1×1 mipmap did not make any sense, so now I’m compressing small mipmaps in the CPU instead. That is slightly faster and avoids the aforementioned problem.",
+      "zh": "有人报告过 CUDA 压缩器在处理 1×1 mipmap 时输出不正确的问题。我在旧驱动上复现出来了，不过现在看来已经修好了。无论如何，我意识到为了压缩一张 1×1 的 mipmap 就动用整块 GPU 根本说不通，所以现在改成在 CPU 上压缩小尺寸 mipmap。这样还稍微快一点，也绕开了前面提到的问题。"
+    },
+    {
+      "type": "p",
+      "en": "Per request of the Wolfire guys, NVTT now scales images with alpha by weighting the color channels by the alpha component. While a simple workaround to obtain the right results was to use premultiplied alpha, there was no reason not to do the right thing in all cases.",
+      "zh": "应 Wolfire 那几个人的要求，NVTT 现在缩放带 alpha 的图像时，会用 alpha 分量给颜色通道加权。虽然用预乘 alpha 是个能得到正确结果的简单变通办法，但没有任何理由不在所有情况下都做对的事。"
+    },
+    {
+      "type": "p",
+      "en": "As mentioned in my previous post, I’ve updated the single color compression tables to take into account the possible hardware decoding errors.",
+      "zh": "正如上一篇文章提到的，我更新了单色压缩查找表，把硬件解码可能出现的误差考虑了进去。"
+    },
+    {
+      "type": "p",
+      "en": "There was also a bug in the decompression of some RGB DDS files that is now fixed.",
+      "zh": "另外，某些 RGB DDS 文件的解压也存在一个 bug，现在同样修好了。"
+    },
+    {
+      "type": "p",
+      "en": "Progress on the 2.1 release is slow, but steady. The target features are almost complete, but I’ve been cleaning things up, removing a lot of cruft, and simplifying the code, in order to make it more accessible and encourage more contributions. I’m also working in a lower level API that should be more flexible and easier to maintain. More on that in a future post.",
+      "zh": "2.1 版的进展缓慢但稳定。目标特性差不多都完成了，不过我一直在做清理，删掉大量冗余、简化代码，好让它更容易上手、也能招来更多贡献。我还在做一个更低层的 API，它应该更灵活、也更好维护。这个以后另写一篇文章讲。"
+    }
+  ]
+}

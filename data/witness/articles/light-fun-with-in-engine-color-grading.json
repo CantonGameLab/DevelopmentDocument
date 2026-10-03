@@ -1,0 +1,101 @@
+{
+  "id": "light-fun-with-in-engine-color-grading",
+  "title": {
+    "zh": "引擎内色彩分级的乐趣",
+    "en": "Fun with in-engine color grading"
+  },
+  "subtitle": {
+    "en": "Take a screenshot with a color bar baked in, mangle the colors in Photoshop, and load the result back as a look-up table.",
+    "zh": "截图时把一条色条一起烘进图里，在 Photoshop 里随便折腾颜色，再把结果作为查找表加载回游戏。"
+  },
+  "translator": {
+    "note": "`color grading` 按术语表译「色彩分级」；`look-up table` 译「查找表」；`postprocessor` 译「后处理器」；`Hue/Saturation` 是 Photoshop 的工具名，保留英文。插图行按全站口径归一化为 `![图](原图URL)`（丢掉缩略图与外层链接）。原文的 `(Update: …)` 是作者事后追加的更正，属于正文，照译并放在括号内。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Quite some time ago, Ignacio put some color grading features into the engine, so that you could tell the postprocessor to tweak colors in particular ways. For a while these features were very experimental; we just had them on a debug menu and there wasn't a way to save the settings. We didn't really use the features (in part because we were pretty busy just getting the basic parts of the game together).",
+      "zh": "挺早以前，Ignacio 在引擎里加了一些色彩分级功能，让你可以叫后处理器按特定方式调整颜色。有一阵子这些功能还非常实验性；我们只是把它们放在一个调试菜单里，而且没办法保存设置。我们其实也没怎么用这些功能（部分原因是光把游戏的基础部分拼起来就已经够忙了）。"
+    },
+    {
+      "type": "p",
+      "en": "Lately, Ignacio and Salvador took the features all the way so that we can use them easily in normal workflow. (This happened over some period of time, but the last parts came together this week). Now you can take a screenshot, screw around with the colors in Photoshop, and load it back into the game to control the grading. I am pretty sure this is not our idea, and we got it from the Uncharted guys or someone like that (Update: The idea was developed by Naty Hoffman and others; see the comments to this article).",
+      "zh": "最近 Ignacio 和 Salvador 把这些功能做完整了，让我们在正常工作流里就能方便地用起来。（这件事是分一段时间做的，最后几块是这周才凑齐的。）现在你可以截一张图，在 Photoshop 里把颜色随便折腾一通，再把它加载回游戏里来控制分级。我很确定这不是我们原创的想法，我们是从 Uncharted 那帮人或者类似的人那里学来的（更新：这个想法是 Naty Hoffman 等人做出来的；见本文的评论）。"
+    },
+    {
+      "type": "p",
+      "en": "Here's how it goes. First, I find an area the look of which I would like to change:",
+      "zh": "流程是这样的。首先，我找一个我想改变观感的区域："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/shot_2012.08.03__time_16_13_n02-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Next I hold down the control key while taking the screenshot, causing it to be saved with a special color bar along the top of the image:",
+      "zh": "接着我在截图时按住 control 键，这样保存下来的图像顶部会多出一条特别的色条："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/shot_2012.08.03__time_16_13_n03-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Then I go into Photoshop and screw around with the colors. Here I am using the Hue/Saturation tool to shift the palette away from red:",
+      "zh": "然后我进 Photoshop 把颜色折腾一番。这里我在用 Hue/Saturation 工具把色板从红色那边挪开："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/lut_test_1-512x288.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Or, instead, I may wish to shape the histogram of the image:",
+      "zh": "或者，我也可能想去塑形图像的直方图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/lut_test_2-512x288.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That color bar at the top of the screen acts as a look-up table. The game doesn't need to understand what operations we have performed in Photoshop; it just knows what that color bar looked like when the screenshot was saved out, and, by comparing it to the colors in the result, knows how to transform any color in the rendered scene.",
+      "zh": "屏幕顶部那条色条起的就是查找表的作用。游戏不需要理解我们在 Photoshop 里做了哪些操作；它只知道截图保存时那条色条长什么样，再把它和结果里的颜色作比较，就知道该怎么变换渲染场景里的任意颜色。"
+    },
+    {
+      "type": "p",
+      "en": "In the game, you can now attach these grading operations to spatial markers, so that color grading kicks in when you are inside specific areas. Here I am setting up some markers in the editor (the marker is the big white box):",
+      "zh": "在游戏里，你现在可以把这些分级操作挂到空间标记上，这样当你处在特定区域内部时色彩分级就会生效。这里我在编辑器里设置几个标记（标记就是那个大白盒子）："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/shot_2012.08.03__time_16_23_n01-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "After setting up two of these boxes, one for each of the two weird color operations I created, then I can walk around in the game and have these operations apply to everything:",
+      "zh": "设好两个这样的盒子之后——我造的那两个古怪的颜色操作各用一个——我就可以在游戏里四处走动，让这些操作作用到所有东西上："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/shot_2012.08.03__time_16_28_n04-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/shot_2012.08.03__time_16_27_n03-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This gives us a really nice degree of control over how the game looks. We plan to use it to help with the color theming that will tie together specific areas.",
+      "zh": "这让我们对游戏观感的控制精细得多了。我们打算用它来辅助色彩主题化，把特定区域在视觉上串起来。"
+    }
+  ]
+}

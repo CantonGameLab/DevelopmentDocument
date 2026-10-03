@@ -1,0 +1,48 @@
+{
+  "id": "official-2014-03-24-the-art-of-the-witness-gdc-2014",
+  "title": { "zh": "《The Witness》的美术——GDC 2014", "en": "The Art of “The Witness” – GDC 2014" },
+  "subtitle": {
+    "en": "Leaving the technical details to others, this talk is about the decisions that led to the current art style.",
+    "zh": "技术细节留给别人讲，这次讲座谈的是我们做过的哪些决定，才走到现在这种美术风格。"
+  },
+  "translator": {
+    "note": "原文末尾的 UPDATE 是作者后来追补的一句话，其中 “*” 只有开头没有结尾，译文照原文保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last week was the Game Developers Conference (GDC) here in San Francisco and we were invited to talk about the art of \"The Witness\".",
+      "zh": "上周，游戏开发者大会（GDC）在旧金山举行，我们受邀去讲《The Witness》的美术。"
+    },
+    {
+      "type": "p",
+      "en": "I decided to shift the talk from any technical aspect, since there are already plenty of those, and tried to focus instead on our thought process, what were the decisions we took that led us to the current art style.",
+      "zh": "我决定把讲座从技术层面挪开——这类内容已经够多了——转而讲讲我们的思考过程：我们做了哪些决定，才走到现在这种美术风格。"
+    },
+    {
+      "type": "p",
+      "en": "If you are interested you can take a look at the slides PDF here:",
+      "zh": "感兴趣的话，可以在这里看讲座的幻灯片 PDF："
+    },
+    {
+      "type": "p",
+      "en": "[GDC2014_LuisAntonio_TheArtOfTheWitness](http://the-witness.net/news/wp-content/uploads/2014/03/GDC2014_LuisAntonio_TheArtOfTheWitness.pdf)",
+      "zh": "[GDC2014_LuisAntonio_TheArtOfTheWitness](http://the-witness.net/news/wp-content/uploads/2014/03/GDC2014_LuisAntonio_TheArtOfTheWitness.pdf)"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately the PDF merges animated slides so there is some content that you won't be able to see and you are missing the actual talk but it should be available in a few weeks at the [GDC Vault](http://www.gdcvault.com/)!",
+      "zh": "可惜 PDF 把带动画的幻灯片合并在一起了，所以有些内容你看不到，而且你也听不到实际的演讲，不过它过几周应该会在 [GDC Vault](http://www.gdcvault.com/) 上线！"
+    },
+    {
+      "type": "p",
+      "en": "*UPDATE - The talk is now available at the GDC Vault, you can check it here:",
+      "zh": "*更新 —— 演讲现在已经在 GDC Vault 上线，可以在这里查看："
+    },
+    {
+      "type": "p",
+      "en": "[http://www.gdcvault.com/play/1020552/The-Art-of-The](http://www.gdcvault.com/play/1020552/The-Art-of-The)",
+      "zh": "[http://www.gdcvault.com/play/1020552/The-Art-of-The](http://www.gdcvault.com/play/1020552/The-Art-of-The)"
+    }
+  ]
+}

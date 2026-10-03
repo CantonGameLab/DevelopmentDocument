@@ -1,0 +1,14 @@
+{
+  "id": 62,
+  "slug": "nvidia-widgets",
+  "date": "2008-08-26T23:51:01",
+  "modified": "2010-09-07T16:22:11",
+  "link": "https://www.ludicon.com/castano/blog/2008/08/nvidia-widgets/",
+  "title": "nvidia-widgets",
+  "excerpt": "<p>I just published the immediate mode user interface (IMGUI) toolkit that we are using in our latest OpenGL SDK examples. The purpose of the SDK examples is to show how to implement certain techniques using OpenGL. We did not want to spend too much time writing UI code, and we did not want the UI&#8230;</p>\n",
+  "content": "<p>I just published the immediate mode user interface (<a href=\"https://mollyrocket.com/forums/viewforum.php?f=10\">IMGUI</a>) toolkit that we are using in our latest <a href=\"http://developer.download.nvidia.com/SDK/10.5/opengl/samples.html\">OpenGL SDK examples</a>.</p>\n<p>The purpose of the SDK examples is to show how to implement certain techniques using OpenGL. We did not want to spend too much time writing UI code, and we did not want the UI code to end up occupying more space than the code dedicated to the technique we are trying to showcase. IMGUI allowed us to accomplish these goals in an elegant way.</p>\n<p>Here’s a simple example with two widgets:</p>\n<pre>\r\nui.begin();\r\nui.beginGroup(nv::GroupFlags_GrowDownFromLeft);\r\n\r\nstatic bool showButton = false;\r\nui.doCheckButton(none, \"Show exit button\", &showButton);\r\n\r\nif (showButton) {\r\n    if (ui.doButton(none, \"Quit\")) exit(0);\r\n}\r\n\r\nui.endGroup();\r\nui.end();\r\n</pre>\n<p>And this is what the result looks like:</p>\n<p>[missing image]</p>\n<p>One of the nice things is that, since the UI is being rendered in immediate mode, it’s very easy to create/modify widgets dynamically. For example, this is what happens when the check box is activated:</p>\n<p>[missing image]</p>\n<p>You can get the whole source code at the <a href=\"http://code.google.com/p/nvidia-widgets/\">nvidia-widgets google project</a>, and feel free to drop by the <a href=\"https://mollyrocket.com/forums/viewtopic.php?t=658\">Molly Rocket IMGUI forums</a> to share your feedback!</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": []
+}

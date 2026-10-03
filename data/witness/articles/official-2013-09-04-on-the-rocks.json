@@ -1,0 +1,198 @@
+{
+  "id": "official-2013-09-04-on-the-rocks",
+  "title": { "zh": "在岩石上……", "en": "On the Rocks…" },
+  "subtitle": {
+    "en": "How the art team learned to build cliffs from clean, simplified geometry — and made hard edges a tool instead of a problem.",
+    "zh": "美术团队如何学会用干净、简化的几何体做崖壁——并让硬边从问题变成工具。"
+  },
+  "translator": {
+    "note": "标题 On the Rocks… 是双关：字面是「在岩石上」，同时又是英文俗语「（计划、关系）触礁、要完蛋」的意思。图片按占位段落收录，顺序与原文一致。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "What’s up, internet?  I’m Eric - one of the artists working on The Witness.  I figured what better way to celebrate more than two years on the project than by making my very first post on the development blog!  (plus, Luis and Orsi hassled me!!!)  So here goes:",
+      "zh": "网友们，最近好吗？我是 Eric——参与《The Witness》的美术之一。我想，庆祝自己在这个项目上干了两年多，还有什么比在开发博客上发出我的第一篇帖子更好的方式呢！（再说，Luis 和 Orsi 一直烦我！！！）那就开始吧："
+    },
+    {
+      "type": "p",
+      "en": "In the olden days of The Witness art development, our visual “style” for the game hadn't really coalesced yet.  Or, to be more accurate, we knew what our objectives were (from a purely theoretical, gameplay-based perspective) but we hadn't really grasped what the ramifications would be in terms of our production process.",
+      "zh": "在《The Witness》美术开发的「上古时代」，这个游戏的视觉「风格」还没有真正成形。或者说，更准确一点：我们知道自己的目标是什么（纯粹从理论、从玩法的角度），但还没真正弄明白这些目标对我们的制作流程会带来什么后果。"
+    },
+    {
+      "type": "p",
+      "en": "For instance, on an early attempt at adding a rough-stone wall, I approached it like most modern game artists would: using the full spectrum of art tools and tricks...  normal mapping, edge-distress, enhanced details, etc..",
+      "zh": "比如早期尝试加一面粗石墙的时候，我用的办法和大多数现代游戏美术一样：把各种美术工具和花招全用上……法线贴图、边缘破损、细节强化，等等。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-01.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-02.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-03.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "But the problem with this approach is that it’s sort of at odds with one of our prime directives from Jonathan:  to build a game world without unnecessary visual clutter.  “Noise” was our enemy.  But that’s kind of an interesting riddle, since most game engines and art techniques are so often all about adding extra levels of noise, grime, texture, detail, (realism!), etc.",
+      "zh": "但这一做法的问题在于，它和 Jonathan 给我们的一条首要指令有点冲突：构建一个没有多余视觉杂乱的世界。「噪点」是我们的敌人。不过这其实是个挺有意思的谜题，因为大多数游戏引擎和美术技法，往往都是在往上加更多的噪点、污渍、纹理、细节，（还有真实感！）等等。"
+    },
+    {
+      "type": "p",
+      "en": "So we began an exploration of different techniques we could use to achieve a sort of stylized realism.  We needed to be able to capture the “essence” of our reference imagery while not being quite so literal.  It also had to be free of gratuitous visual noise, plus appealing to look at and explore.  So what follows is an early effort to break down and re-think that art process in a different sort of way.",
+      "zh": "于是我们开始探索各种技法，想做出一种风格化的真实感。我们需要能抓住参考图的「神髓」，而不必那么照搬字面。它还必须没有无谓的视觉噪点，同时还看着舒服、值得探索。所以接下来要讲的，是一次早期尝试：用另一种方式拆解并重新思考那套美术流程。"
+    },
+    {
+      "type": "p",
+      "en": "In this case, my objective was to figure out how to attack a medium-sized cliff face while avoiding an overwhelming amount of noise/detail.  First off, reference.  Starting with some photo reference, I wanted to isolate the primary features, and not worry at all about the small, noisy stuff:",
+      "zh": "这次我的目标，是搞清楚怎么处理一面中等大小的崖壁，同时避免压倒性的噪点／细节。首先是参考图。我从一些照片参考入手，想抽出主要特征，完全不管那些细小的、噪点式的东西："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-04.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Then, an attempt to stylistically sculpt those simplified shapes:",
+      "zh": "接着，尝试用风格化的方式把这些简化后的形状雕出来："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-05.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": " And finally, breaking those forms down into modularized, reusable meshes that could be combined to form a cliff:",
+      "zh": "最后，把这些形体拆成模块化、可复用的网格，再把它们拼成一面崖壁："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-06.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-07.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "One of the biggest lessons we learned from this experiment was that if we give the engine nice clean, simplified geometry (not worry as much about the texturing - just keep it understated and focus more on the overall color and balance), the lighting results we get are gorgeous.  In a way this is extremely freeing, as it lets us concentrate on the overall form of objects, rather than obsess over details like perfect seamless, UV mapping, limited texture resolution, normal mapping issues, etc.  We also learned very quickly that hard edges are not evil....  In the absence of heavy texture detail, the faceting had become a powerful tool to help define the form in a clean, almost graphic style, with minimal noise, but lots of subtlety.",
+      "zh": "这次实验教给我们的最大一课是：只要给引擎干净、简化的几何体（不必太在意贴图——保持克制，把重点放在整体色彩与平衡上），得到的光照效果就非常漂亮。某种意义上这极其解放，因为它让我们能专注于物体的整体形体，而不是纠结于完美无缝、UV 展开、贴图分辨率有限、法线贴图出问题之类的细节。我们还很快学到：硬边并不邪恶……在缺少厚重贴图细节的情况下，切面反倒成了一件有力的工具，能以干净、近乎平面化的风格勾勒出形体，噪点极少，却有很多微妙之处。"
+    },
+    {
+      "type": "p",
+      "en": "That process of “analyze, deconstruct, simplify” became our new way of approaching complex surfaces.  And so, as we built out more areas of the island, this visual language began to take shape,and you can now see it deployed across most of the rock forms in the game...",
+      "zh": "「分析、解构、简化」这套流程，成了我们处理复杂表面的新方法。于是，随着我们把岛上更多区域建出来，这套视觉语言开始成形，你现在能看到它被用在游戏里大部分的岩石形体上……"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-08.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-09.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-10.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-11.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-12.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-13.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Take note that foliage has a different language [see Orsi’s previous post on trees], as does rolling terrain, and hard architectural surfaces.  But this style contrast is extremely useful from a game design perspective, as it helps inform the player as to what materials the surfaces they are looking at are likely made from, without having to resort to overtly photoreal textures.",
+      "zh": "注意，植被用的是另一套语言［见 Orsi 之前那篇讲树的帖子］，起伏地形和坚硬的建筑表面也是如此。但从游戏设计的角度看，这种风格上的对比极其有用：它能帮助玩家判断眼前的表面大概是什么材质，而不必求助于那种过分写实的照片级贴图。"
+    },
+    {
+      "type": "p",
+      "en": "Even older areas of the game (that were suddenly “out of style”) were able to be refreshed using this new lens, and brought in-line alongside the cleaner, less-noisy artwork:",
+      "zh": "就连游戏里更早的那些区域（它们突然就「过时」了）也能透过这面新镜头翻新，被拉回到与更干净、噪点更少的美术同一线上："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-14.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-15.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-16.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And here’s some additional rock shots from around the island, just because...",
+      "zh": "另外还有一些岛上各处的岩石截图，纯粹因为想放……"
+    },
+    {
+      "type": "p",
+      "en": "Luis’ awesome sculpted sandstone cliffs:",
+      "zh": "Luis 雕的那些超棒的砂岩崖壁："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-17.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Orsi’s awesome lakeside steppes:",
+      "zh": "Orsi 做的湖边台地，同样超棒："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-18.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And a bit of mysterious tunnel:",
+      "zh": "还有一小段神秘隧道："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/09/rocksImg-19.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That’s all I've got to share for now.  Have a great September!!!",
+      "zh": "目前就分享这些。九月愉快！！！"
+    },
+    {
+      "type": "p",
+      "en": "-eaa",
+      "zh": "-eaa"
+    }
+  ]
+}

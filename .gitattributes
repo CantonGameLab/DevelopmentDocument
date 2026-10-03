@@ -1,0 +1,19 @@
+# 统一换行符：译文与归档都按 LF 存，避免 Windows 上 checkout 后整文件 diff
+* text=auto eol=lf
+
+# 归档 markdown 与译文是数据资产，GitHub 上按文本处理、不要折叠 diff
+*.md text
+*.json text
+*.mjs text
+*.js text
+*.css text
+*.html text
+
+# 图片二进制（仓库里只有极少数几张示意图）
+*.png binary
+*.jpg binary
+*.gif binary
+*.woff2 binary
+
+# vendor/ 里的字体是第三方产物，统计时忽略
+vendor/katex/fonts/* linguist-vendored

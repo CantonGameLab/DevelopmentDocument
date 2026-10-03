@@ -1,0 +1,165 @@
+[
+  {
+    "id": "0005",
+    "title": "Walk Monster",
+    "date": "2012-12-12",
+    "hits": [
+      "I've been playing it since [Jonathan Blow](http://number-none.com/blow/) started developing it several years ago, and I could not be more excited about its upcoming release.",
+      "Unlike Jon's previous game [Braid](https://en.wikipedia.org/wiki/Braid_%28video_game%29), the asset and programming scale for [The Witness](http://the-witness.net/news/) is much further toward the \"triple-A\" side of the scale than the \"indie game\" side.",
+      "So this past Thanksgiving, Jon and I sat down and he went through a list of things in the codebase that he thought would benefit from the attention of an extra programmer.",
+      "But after thinking about the problem for a while, I came to realize is that everything falls more neatly into place if you think in terms of *directionality* as well as proximity."
+    ]
+  },
+  {
+    "id": "0006",
+    "title": "Finding and Fixing a Five-Second Stall",
+    "date": "2012-12-17",
+    "hits": [
+      "On both [Jon](http://number-none.com/blow/) and my machines, there was a period during the initial loading of the game where you couldn't do things like ALT-TAB back to the debugger."
+    ]
+  },
+  {
+    "id": "0007",
+    "title": "A Cliffside Cliffhanger",
+    "date": "2012-12-24",
+    "hits": [
+      "Plus, it's big, unobstructed, and easily pickable in the editor without fear of selecting any other objects.",
+      "But if I'm in the editor, and I tell a rock to move, I expect it to move.",
+      "My understanding was that [The Witness](http://the-witness.net/news/) team did their modeling in [Maya](https://en.wikipedia.org/wiki/Autodesk_Maya), so I put a toggle in the editor that, when enabled, allowed you to use ALT-drag camera movements that replicate the way Maya moves the camera.",
+      "Compared to the camera controls, it was moderately more work to understand all the intricacies of the editor code involved with translation.",
+      "Nothing seemed immediately wrong, so I checked in the feature on a toggle switch that defaulted to \"off\", and asked [Jon](http://number-none.com/blow/) to check it out when he got a chance.",
+      "Since Jon does a lot of work in the editor, and he wrote a lot of the editor code originally, I figured he would know the things to try that might break so we could fix them before any real damage was done.",
+      "When I heard back from Jon, he said it did seem to be working correctly, but sometimes \"moving along the Z axis wasn't working\".",
+      "Surely something was broken in the way my code interacted with the existing planar movement constraints, which were buttons the editor had always provided and which were the only way of constraining interactive movement before I added the translation manipulator."
+    ]
+  },
+  {
+    "id": "0008",
+    "title": "How do you say “plane” in The Witness?",
+    "date": "2013-01-20",
+    "hits": [
+      "From the beginning, the thing that didn't sit right with me about the fix was that when Jon originally reported the problem to me, he didn't mention anything about it happening more on the outskirts of the island than on the interior.",
+      "Jon's a very experienced programmer, so if something like that were happening, he would probably notice and include that in the report, because he'd know it would help me find the bug faster.",
+      "I did have the game on my laptop, because I'd done some initial Linux porting work, so I realized that maybe, if I was lucky, I could reconstruct the problem without actually being able to load and run the editor.",
+      "Just to underscore how much of a native language issue this really is, when I showed Jon the preview of this article, he said, \"If you are thinking of the plane as a geometric object, of course the normal is unit length, what else would it be??"
+    ]
+  },
+  {
+    "id": "0009",
+    "title": "Visually pleasing distributions",
+    "date": "2014-05-16",
+    "hits": [
+      "I'd select it, tell it to \"replant\" (the Witness editor's term for redistributing the geometry), then watch as ferns were freshly scattered around."
+    ]
+  },
+  {
+    "id": "0012",
+    "title": "A Brief Addendum on Staggered Concentric Intersection",
+    "date": "2014-05-07",
+    "hits": [
+      "One of these people was [Jon Olick](http://www.jonolick.com), whom I remembered because I've corresponded with him before."
+    ]
+  },
+  {
+    "id": "0013",
+    "title": "Assorted grass system features",
+    "date": "2014-05-14",
+    "hits": [
+      "The new movement system, all the upgrades to the editor, and of course the grass planting system all happened in CaseyTown before they happened on the Witness island."
+    ]
+  },
+  {
+    "id": "0014",
+    "title": "Interpolation",
+    "date": "2014-05-21",
+    "hits": [
+      "One of the things I did while working on [The Witness](http://the-witness.net/news/) was to put a new entity listing panel in the editor, and I think it would make a good case study for how to put a lot of features into something quickly and without a lot of code."
+    ]
+  },
+  {
+    "id": "0015",
+    "title": "Semantic Compression",
+    "date": "2014-05-28",
+    "hits": [
+      "To start things off, I am going to detail a straightforward set of code transformations that I did on The Witness's editor code.",
+      "Jon Starts Things Off Right In the built-in editor for The Witness, there is a piece of UI called the \"Movement Panel\".",
+      "Originally it was quite small and had only a few buttons, but when I started working on the editor, I added a bunch of features that needed to go in the movement panel.",
+      "The first thing I noticed here was that [Jon](http://number-none.com/blow/), the original programmer, did a really nice job setting me up for success with what I was about to do.",
+      "I looked at the other panels in the editor, of which there were several, and they all had substantively the exact same code as I showed in the original snippet — same startup, same button calculations, etc.",
+      "Typically, I use InterCaps for variable names and lowercase_with_underscores for types, but since I am in the Witness codebase, I try to adhere to its general conventions where possible, and it uses Uppercase_With_Underscores for types and lowercase_with_underscores for variables."
+    ]
+  },
+  {
+    "id": "0016",
+    "title": "Complexity and Granularity",
+    "date": "2014-06-04",
+    "hits": [
+      "\"This is so easy to use, and yet it never gets in my way when I need to do something tricky!\" Why was Baby Bear able to make his code so that it was \"just right\" for Codielocks, as the story goes?",
+      "For example, suppose there had been some code that looked like this before I modified the second push_button() (and in fact, there was code that looked like this in other places in The Witness editor): ```cpp if(layout.push_button(\"Foofing\", foofing_is_enabled())) { set_foofing(!foofing_is_enabled()); } ``` With a modified highlightable push_button(), it would have had to change to look like this: ```cpp bool foofing = foofing_is_enabled(); layout.push_button(\"Foofing\", &foofing); if(foofing != foofing_is_enabled()) { set_foofing(foofing); } ``` Modifying push_button() would have made the boolean toggle case better, but it would have made this case worse.",
+      "Before I started making Jon's UI system support more compression, it was extremely granular."
+    ]
+  },
+  {
+    "id": "0017",
+    "title": "Defining a Single Enumerant",
+    "date": "2014-06-11",
+    "hits": [
+      "The Lister Panel I rewrote a UI element in The Witness editor called the \"Lister Panel\".",
+      "Originally, it was just a list of \"layers\" in the Witness editor that could be hidden or shown by clicking on them in a list.",
+      "Since the old panel could act as either a layer lister or a list of entities of the type selected by the \"entity panel\" (another UI element in The Witness editor), that meant the new lister panel would have to be somewhat modal as well."
+    ]
+  },
+  {
+    "id": "0018",
+    "title": "Type Filtering",
+    "date": "2014-06-18",
+    "hits": [
+      "That is also why you see that unusual \"Foreach\" construct: it is how Jon writes his for loops.",
+      "I figure, since Jon et al has to maintain this code, using constructs familiar to him makes it a little easier, and that's always a good thing.",
+      "One thing that does warrant comment here, though, which has nothing to do with Jon's coding conventions, is the \"current_settings\" bit.",
+      "Since the Lister_Panel is a class, as per The Witness's editor architecture (there is one class per panel), I could just shove everything in that class.",
+      "But I didn't really want to be the person to do that, because like I covered in previous articles, [I have been surprised by the way The Witness codebase did things in the past](https://caseymuratori.com/blog_0008)."
+    ]
+  },
+  {
+    "id": "0019",
+    "title": "Special Filters",
+    "date": "2014-06-25",
+    "hits": [
+      "In The Witness codebase, that is not generally the way things are implemented, but even if it were, I would probably still use this method and not the virtual function call method.",
+      "The note_change() call is just something that The Witness editor uses to mark entities that have changed for more optimal undo processing (ie., to prevent diffing all the entities every frame)."
+    ]
+  },
+  {
+    "id": "0020",
+    "title": "Displaying Groups Hierarchically",
+    "date": "2014-07-02",
+    "hits": [
+      "In the case of The Witness codebase, it actually has very few fundamental algorithm utilities, and so there isn't a notion of a \"set\"."
+    ]
+  },
+  {
+    "id": "0022",
+    "title": "The Source Code",
+    "date": "2014-07-16",
+    "hits": [
+      "I'd like to do a Q&A about the Lister Panel, if people are up for it, just so that beginners can take a look at the actual code as it is used in the editor and ask questions about why things are the way they are.",
+      "Keep in mind that this code is a mixture of styles ([Jon](http://number-none.com/blow/)'s and mine), because even though I wrote all the code, I adopted Jon's conventions in many places, just to make it easier for him to maintain."
+    ]
+  },
+  {
+    "id": "0023",
+    "title": "Lister Panel Q&A",
+    "date": "2014-07-23",
+    "hits": [
+      "Last week, I posted the source code to the Witness editor's Lister Panel and asked you, the internet at large, for questions.",
+      "In the development version of the game, ALLOW_DEVELOPER is defined to be 1, and all the editor code and other developer tools are built into it.",
+      "It helps make the shipping executable smaller on platforms that are resource-constrained (like the one you guys ship, the iPad!), and also prevents users from inadvertently invoking developer commands that would ruin their play experience (like popping up a console or launching the editor).",
+      "\"I would have just used intrusive reference counting for all resources and a more general acquire/release mechanism, but Jon was opposed to that at the time, so when we really needed to add referenced counting for streamed resources it was done in a somewhat ugly way.\" Q: Why not just call thick_line in the loop at lines 533?",
+      "These are [Jon](http://number-none.com/blow/) and [Ignacio](http://www.ludicon.com/castano/blog/)'s special sauces, and I'm not really qualified to comment on them.",
+      "Q: Are the EDITOR_VAR/EDITOR_VAR_INDEXED/EDITOR_VAR_SUBNAME macros some kind of serialization system?",
+      "When I came on the project, The Witness had no concept of persistent editor state.",
+      "I wanted to fix this, so I asked Jon how he would like editor settings to be stored."
+    ]
+  }
+]

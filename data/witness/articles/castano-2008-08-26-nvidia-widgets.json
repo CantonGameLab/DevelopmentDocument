@@ -1,0 +1,58 @@
+{
+  "id": "castano-2008-08-26-nvidia-widgets",
+  "title": { "zh": "nvidia-widgets", "en": "nvidia-widgets" },
+  "subtitle": {
+    "en": "Publishing the IMGUI toolkit used by the latest OpenGL SDK examples, with a two-widget sample.",
+    "zh": "把最新一批 OpenGL SDK 示例里用的 IMGUI 工具包放了出来，附一个两个控件的示例。"
+  },
+  "translator": {
+    "note": "归档源文里两处截图只留下了「[missing image]」这一行占位文字，原始 HTML 里也只有 <p>[missing image]</p>，图片 URL 已经丢失、无法还原，因此保留占位文字作为正文段落。代码块为源文原样，未改一字。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I just published the immediate mode user interface ([IMGUI](https://mollyrocket.com/forums/viewforum.php?f=10)) toolkit that we are using in our latest [OpenGL SDK examples](http://developer.download.nvidia.com/SDK/10.5/opengl/samples.html).",
+      "zh": "我刚把即时模式用户界面（[IMGUI](https://mollyrocket.com/forums/viewforum.php?f=10)）工具包发布了，我们最新那批 [OpenGL SDK 示例](http://developer.download.nvidia.com/SDK/10.5/opengl/samples.html)用的就是它。"
+    },
+    {
+      "type": "p",
+      "en": "The purpose of the SDK examples is to show how to implement certain techniques using OpenGL. We did not want to spend too much time writing UI code, and we did not want the UI code to end up occupying more space than the code dedicated to the technique we are trying to showcase. IMGUI allowed us to accomplish these goals in an elegant way.",
+      "zh": "SDK 示例的目的是演示怎么用 OpenGL 实现某些技术。我们不想在写 UI 代码上花太多时间，也不想让 UI 代码占的篇幅超过我们真正要展示的那项技术。IMGUI 让我们很优雅地达到了这两个目标。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s a simple example with two widgets:",
+      "zh": "下面是一个带两个控件的简单例子："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "ui.begin();\nui.beginGroup(nv::GroupFlags_GrowDownFromLeft);\n\nstatic bool showButton = false;\nui.doCheckButton(none, \"Show exit button\", &showButton);\n\nif (showButton) {\n    if (ui.doButton(none, \"Quit\")) exit(0);\n}\n\nui.endGroup();\nui.end();"
+    },
+    {
+      "type": "p",
+      "en": "And this is what the result looks like:",
+      "zh": "运行结果长这样："
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图，图片链接在归档里已丢失）"
+    },
+    {
+      "type": "p",
+      "en": "One of the nice things is that, since the UI is being rendered in immediate mode, it’s very easy to create/modify widgets dynamically. For example, this is what happens when the check box is activated:",
+      "zh": "这么做的一个好处是：既然 UI 是以即时模式渲染的，动态创建、修改控件就非常容易。比如勾选框被激活之后，界面就变成了这样："
+    },
+    {
+      "type": "p",
+      "en": "[missing image]",
+      "zh": "（原文此处有一张图，图片链接在归档里已丢失）"
+    },
+    {
+      "type": "p",
+      "en": "You can get the whole source code at the [nvidia-widgets google project](http://code.google.com/p/nvidia-widgets/), and feel free to drop by the [Molly Rocket IMGUI forums](https://mollyrocket.com/forums/viewtopic.php?t=658) to share your feedback!",
+      "zh": "完整源码在 [nvidia-widgets google project](http://code.google.com/p/nvidia-widgets/)，也欢迎到 [Molly Rocket IMGUI 论坛](https://mollyrocket.com/forums/viewtopic.php?t=658)来聊聊你的想法！"
+    }
+  ]
+}

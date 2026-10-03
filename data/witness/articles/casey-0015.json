@@ -1,0 +1,378 @@
+{
+  "id": "casey-0015",
+  "title": {
+    "zh": "语义压缩",
+    "en": "Semantic Compression"
+  },
+  "subtitle": {
+    "en": "An introduction to the idea that code should be approached with a mindset towards compressing it semantically, rather than orienting it around objects.",
+    "zh": "一篇导论：写代码时应当抱着对它做语义压缩的心态，而不是围绕对象来组织它。"
+  },
+  "translator": {
+    "note": "代码块逐字保留英文原文。档案转写把第一段代码块的外框画错了位置，把一整段说明文字混进了代码里，译文按原文还原成独立的正文段落。文末的 \"to evoke Knuth\" 指的是 Knuth 那句「过早优化是万恶之源」。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We all know how to program in C++, don't we?  I mean, we've all read a selection of wonderful books by the gaggle of bearded fellows who defined the language in the first place, so we've all learned the best ways to write C++ code that solves real-world problems.",
+      "zh": "我们都会写 C++，对吧？我是说，当初定义这门语言的那帮大胡子写的书，我们多少都读过几本，所以我们都学会了「用 C++ 解决现实问题的最佳写法」。"
+    },
+    {
+      "type": "p",
+      "en": "First, you look at the real world problem  —  say, a payroll system  —  and you see that it has some plural nouns in it: \"employees\", \"managers\", etc.  So the first thing you need to do is make classes for each of these nouns.  There should be an employee class and a manager class, at least.",
+      "zh": "首先，你看着那个现实问题——比如一个薪酬系统——发现里面有几个复数名词：「employees」「managers」等等。于是你要做的第一件事，就是给每个名词各建一个类。至少得有个 employee 类和一个 manager 类。"
+    },
+    {
+      "type": "p",
+      "en": "But really, both of those are just people.  So we probably need a base class called \"person\", so that things in our program that don't care whether you're an employee or a manager can just treat you as a person.  This is very humanizing, and makes the other classes feel less like cogs in a corporate machine!",
+      "zh": "可实际上，这两者都只是「人」。所以大概还需要一个叫 person 的基类，这样程序里那些不在乎你是员工还是经理的部分，就可以单纯把你当成一个人来对待。这非常有「人文关怀」，也让别的类感觉自己不那么像公司机器上的齿轮了！"
+    },
+    {
+      "type": "p",
+      "en": "There's a bit of a problem, though.  Isn't a manager also an employee?  So manager should probably inherit from employee, and then employee can inherit from person.  Now we're really getting somewhere!  We haven't actually thought about how to write any code, sure, but we're modeling the objects that are involved, and once we have those solid, the code is just going to write itself.",
+      "zh": "不过有点小问题：经理不也是员工吗？所以 manager 大概应该继承 employee，employee 再继承 person。这下可真走上正轨了！当然，我们其实还完全没想过代码该怎么写，但我们在给涉及的对象建模；只要这些模型立住了，代码自己就会写出来。"
+    },
+    {
+      "type": "p",
+      "en": "Wait, shoot  —  you know what?  I just realized, what if we have contractors?  We definitely need a contractor class, because they are not employees.  The contractor class could inherit from the person class, because all contractors are people (aren't they?).  That would be totally sweet.",
+      "zh": "等等，糟了——你知道吗？我刚想到，要是有外包人员（contractor）怎么办？我们必须得有个 contractor 类，因为他们不是员工。contractor 类可以继承 person 类，因为所有外包人员都是人（难道不是吗？）。那可就太完美了。"
+    },
+    {
+      "type": "p",
+      "en": "But then what does the manager class inherit from?  If it inherits from the employee class, then we can't have managers who work on contract.  If it inherits from the contractor class, then we can't have full-time managers.  This is turning out to be a really hard programming problem, like the Simplex algorithm or something!",
+      "zh": "那 manager 类又该继承谁呢？继承 employee，就没法有按外包合同干活的经理；继承 contractor，就没法有全职经理。看来这是个极其困难的编程问题，堪比单纯形算法之类的玩意儿！"
+    },
+    {
+      "type": "p",
+      "en": "OK, we could have manager inherit from both classes, and then just not use one of them.  But that's not type-safe enough.  This isn't some sloppy JavaScript program!  But you know what?  BAM!  I've got the solution right here: we templatize the manager class.  We templatize the manager class on its base class, and then everything that works with manager classes is templatized on that as well!",
+      "zh": "好吧，我们可以让 manager 同时继承这两个类，然后有一个干脆不用。但那样类型安全还不够。这又不是那种随便乱写的 JavaScript 程序！不过你知道吗？砰！解决方案就在这儿：我们给 manager 类加上模板。把 manager 类对它的基类做模板化，然后所有跟 manager 类打交道的代码也一并模板化！"
+    },
+    {
+      "type": "p",
+      "en": "This is going to be the best payroll system ever!  As soon as I get all these classes and templates spec'd out, I'm going to fire up my editor and get to work on the UML diagrams.",
+      "zh": "这将会是有史以来最好的薪酬系统！等我把这些类和模板全部规划完毕，我就打开编辑器，开始画 UML 图。"
+    },
+    {
+      "type": "h2",
+      "id": "programmers-posting",
+      "zh": "程序员发编程帖",
+      "en": "Programmers Posting Programming Posts"
+    },
+    {
+      "type": "p",
+      "en": "It'd be great if everything I just wrote had been farcical, but sadly, there's actually a lot of programmers in the world who think like this.  I'm not talking about \"Bob the Intern\"  —  I'm talking about all kinds of programmers, including famous programmers who give lectures and write books.  I am also sad to say that there was a time in my life when I thought this way, too.  I was introduced to \"object oriented programming\" when I was 18, and it took me until I was about 24 to realize it was all a load of horseshit (and the realization was thanks in no small part to my taking a job with RAD Game Tools, which thankfully never bought into the whole OOP nightmare).",
+      "zh": "要是我上面写的全是滑稽戏就好了，但遗憾的是，世界上真有大量程序员是这么想的。我说的不是「实习生小鲍勃」——我说的是各种程序员，包括那些到处演讲、出书的著名程序员。我还得难过地承认，我人生中也有一段时期是这么想的。我 18 岁接触「面向对象编程」，直到 24 岁左右才意识到那全是一派胡言（能有这个觉悟，很大程度上要归功于我去了 RAD Game Tools 工作，幸好那家公司从来没买过 OOP 那套噩梦的账）。"
+    },
+    {
+      "type": "p",
+      "en": "But despite the fact that many programmers out there have gone through bad phases like this and eventually come to smart conclusions about how to actually write good code efficiently, it seems that the landscape of educational materials out there still overwhelmingly falls into the \"objectively bad\" category.  I suspect this has something to do with the fact that good programming seems very straightforward once you know how to do it, unlike, say, a fancy math technique that retains its sexiness and makes you want to spend the time to post about it.  So, although I don't have any data to back this up, I strongly suspect that experienced programmers rarely spend time posting about how they program because they just don't think it's anything special.",
+      "zh": "但是，尽管很多程序员都经历过这种糟糕阶段、并最终得出了关于「如何高效写好代码」的明智结论，市面上现成的教学材料似乎仍以「客观地糟糕」为绝对主流。我猜这和一件事有关：好的编程一旦你会了，就显得平淡无奇；它不像某种花哨的数学技巧，能一直保持性感，让你愿意花时间去发帖炫耀。所以，虽然我没有数据支撑，但我强烈怀疑：有经验的程序员很少花时间写「自己是怎么编程的」，因为他们根本不觉得这有什么特别。"
+    },
+    {
+      "type": "p",
+      "en": "But they should!  It may not be special, but it's necessary, and if good programmers don't start posting about how to do good programming, we'll never get out of this nasty place where everyone has to go through six years of writing horrible object-oriented programs before they realize they're wasting their time.  So what I'd like to do with this next set of Witness articles is spend some serious word count talking about the purely mechanical process of putting code into a computer, and it is my sincere hope that other experienced programmers out there will take some time to do the same.  Personally, I'd love to read more about the techniques actual good programmers out there use when they sit down to code.",
+      "zh": "可他们应该写！这事也许不特别，但它是必要的。如果好程序员不开始写「怎么做好的编程」，我们就永远走不出这个恶劣的处境：每个人都得先写上六年糟糕的面向对象程序，才意识到自己一直在浪费时间。所以接下来这一组《The Witness》文章，我想花相当多的篇幅，谈「把代码敲进计算机」这个纯机械的过程；我真诚地希望其他有经验的程序员也能抽出时间做同样的事。就我个人而言，我很想多读一些真正的优秀程序员坐下来写代码时所用的技巧。"
+    },
+    {
+      "type": "p",
+      "en": "To start things off, I am going to detail a straightforward set of code transformations that I did on The Witness's editor code.  In the coming weeks, I'll move from that into some larger examples where I wrote more pieces from scratch, but the entire time I'll be focusing solely on code and how it's structured.  Nothing that I'm going to cover has any fancy algorithms or math or anything, it's all just pure plumbing.",
+      "zh": "作为开端，我要详细讲一组我在《The Witness》编辑器代码上做过的直白代码变换。接下来几周，我会从这些例子走向一些更大的例子，那时我会从零写更多东西；但自始至终，我只关注代码本身以及它的结构。我要讲的内容里没有任何花哨的算法或数学，全是纯粹的管道代码。"
+    },
+    {
+      "type": "h2",
+      "id": "jon-starts-things-off-right",
+      "zh": "Jon 开了个好头",
+      "en": "Jon Starts Things Off Right"
+    },
+    {
+      "type": "p",
+      "en": "In the built-in editor for The Witness, there is a piece of UI called the \"Movement Panel\".  It is a floating window with some buttons on it that are used to perform operations on entities like \"rotate 90 degrees\".  Originally it was quite small and had only a few buttons, but when I started working on the editor, I added a bunch of features that needed to go in the movement panel.  This was going to expand its contents considerably, and it meant I had to learn how to add elements to the UI, which I'd never done before.  I examined the existing code, which looked like this:",
+      "zh": "在《The Witness》的内置编辑器里，有一块叫「Movement Panel」的 UI。它是一个浮动窗口，上面有一些按钮，用来对实体执行「旋转 90 度」之类的操作。它原本很小，只有几个按钮；但我开始做编辑器时，加了一堆需要放进 Movement Panel 的功能。这会让它的内容大幅扩张，也意味着我得学会怎么往 UI 里加控件——这是我以前从没做过的。我去看了现有的代码，它长这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int num_categories = 4;\n int category_height = ypad + 1.2 * body_font->character_height;\n float x0 = x;\n float y0 = y;\n float title_height = draw_title(x0, y0, title);\n float height = title_height + num_categories * category_height + ypad;\n my_height = height;\n y0 -= title_height;\n\n{\n y0 -= category_height;\n char *string = \"Auto Snap\";\n bool pressed = draw_big_text_button(x0, y0, my_width, category_height, string);\n if (pressed) do_auto_snap(this);\n}\n\n{\n y0 -= category_height;\n char *string = \"Reset Orientation\";\n bool pressed = draw_big_text_button(x0, y0, my_width, category_height, string);\n if (pressed) {\n // ...\n}\n}\n // ..."
+    },
+    {
+      "type": "p",
+      "en": "The first thing I noticed here was that [Jon](http://number-none.com/blow/), the original programmer, did a really nice job setting me up for success with what I was about to do.  A lot of times, you open up some code for something simple like this, and you find that it is just a massive tangle of unnecessary structure and indirection.  Here, instead, we find an extremely straightforward series of things happening, that read exactly like how you would instruct a person to draw a UI panel: \"First, figure out where the title bar should go.  Then, draw the title bar.  Now, below that, draw the Auto Snap button.  If it's pressed, do auto snapping…\"  This is exactly how programming should go.  I suspect that most anyone could read this code and know what it was doing, and probably intuit how to add more buttons without having to read anything beyond just this excerpt.",
+      "zh": "我在这里注意到的第一件事是：[Jon](http://number-none.com/blow/)，也就是最初的作者，为我要做的事铺了非常好的路。很多时候，你打开一段做这种简单小事的代码，会发现它只是一大团没必要的结构和间接层缠在一起。而这里恰恰相反，我们看到的是极其直白的一连串操作，读起来完全就像你在指导一个人怎么画一个 UI 面板：「先确定标题栏该放在哪儿。然后画标题栏。接着在它下面画 Auto Snap 按钮。如果按钮被按下，就执行自动吸附……」编程就该是这样。我猜几乎任何人都能读懂这段代码在干什么，而且不用看这段摘录之外的任何东西，大概也能凭直觉知道该怎么加更多按钮。"
+    },
+    {
+      "type": "p",
+      "en": "However, nice as the code was, it was obviously not set up for doing large amounts of UI, because all the layout work was still being done by hand, in-line.  This is mildly inconvenient in the snippet above, but gets more onerous once you consider more complex layouts, like this piece of the UI that has four separate buttons that occur on the same row:",
+      "zh": "不过，代码虽然漂亮，它显然不是为「大量做 UI」准备的，因为所有布局工作仍然是手写、内联完成的。在上面的小片段里这还只是稍微不方便，但一旦考虑更复杂的布局，就变得烦人多了——比如这段 UI，同一行上有 4 个独立按钮："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{\n y0 -= category_height;\n\nfloat w = my_width / 4.0f;\n float x1 = x0 + w;\n float x2 = x1 + w;\n float x3 = x2 + w;\n\nunsigned long button_color;\n unsigned long button_color_bright;\n unsigned long text_color;\n\nget_button_properties(this, motion_mask_x, &button_color, &button_color_bright, &text_color);\n bool x_pressed = draw_big_text_button(x0, y0, w, category_height, \"X\", button_color, button_color_bright, text_color);\n\nget_button_properties(this, motion_mask_y, &button_color, &button_color_bright, &text_color);\n bool y_pressed = draw_big_text_button(x1, y0, w, category_height, \"Y\", button_color, button_color_bright, text_color);\n\nget_button_properties(this, motion_mask_z, &button_color, &button_color_bright, &text_color);\n bool z_pressed = draw_big_text_button(x2, y0, w, category_height, \"Z\", button_color, button_color_bright, text_color);\n\nget_button_properties(this, motion_local, &button_color, &button_color_bright, &text_color);\n bool local_pressed = draw_big_text_button(x3, y0, w, category_height, \"Local\", button_color, button_color_bright, text_color);\n\nif (x_pressed) motion_mask_x = !motion_mask_x;\n if (y_pressed) motion_mask_y = !motion_mask_y;\n if (z_pressed) motion_mask_z = !motion_mask_z;\n if (local_pressed) motion_local = !motion_local;\n}"
+    },
+    {
+      "type": "p",
+      "en": "So, before I started adding lots of new buttons, I already felt like I should spend a little time working on the underlying code to make it simpler to add new things.  Why did I feel that way, and how did I know what \"simpler\" means in this case?",
+      "zh": "所以，在开始加大批新按钮之前，我就已经觉得应该先花点时间收拾底层代码，让添加新东西变得更容易。我为什么会有这种感觉？在这个场景里，我又怎么知道「更容易」指的是什么？"
+    },
+    {
+      "type": "h2",
+      "id": "semantic-compression",
+      "zh": "语义压缩",
+      "en": "Semantic Compression"
+    },
+    {
+      "type": "p",
+      "en": "I look at programming as having essentially two parts: figuring out what the processor actually needs to do to get something done, and then figuring out the most efficient way to express that in the language I'm using.  Increasingly, it is the latter that accounts for what programmers actually spend their time on: wrangling all those algorithms and all that math into a coherent whole that doesn't collapse under its own weight.",
+      "zh": "在我看来，编程本质上分两部分：搞清楚要让处理器完成某件事，它实际上需要做什么；然后搞清楚用我正在使用的语言，怎样表达这件事最高效。如今，程序员真正花掉时间的地方越来越是后者：把那些算法和那些数学驯服成一个连贯的整体，让它不至于被自身的重量压垮。"
+    },
+    {
+      "type": "p",
+      "en": "So any experienced programmer who's any good has had to come up with some way  —  if even just by intuition  —  of thinking about what it means to program efficiently.  By \"efficiently\", this doesn't just mean that the code is optimized.  Rather, it means that the *development* of the code is optimized  —  that the code is structured in such a way so as to minimize the amount of human effort necessary to type it, get it working, modify it, and debug it enough for it to be shippable.",
+      "zh": "所以任何一个真正靠谱的有经验程序员，都必然形成了某种思路——哪怕只是凭直觉——来思考「高效编程」意味着什么。这里的「高效」不只是说代码被优化了，而是说代码的*开发过程*被优化了：代码的结构方式，使得把它敲进去、让它跑起来、修改它、调试到可以发布，所需的人力降到最低。"
+    },
+    {
+      "type": "p",
+      "en": "I like to think of efficiency as holistically as possible.  If you look at the development process for a piece of code as a whole, you won't overlook any hidden costs.  Given a certain level of performance and quality required by the places the code gets used, beginning at its inception and ending with the last time the code is ever used by anyone for any reason, the goal is to minimize the amount of human effort it cost.  This includes the time to type it in.  It includes the time to debug it.  It includes the time to modify it.  It includes the time to adapt it for other uses.  It includes any work done to other code to get it to work with this code that perhaps wouldn't have been necessary if the code were written differently.  All work on the code for its entire usable lifetime is included.",
+      "zh": "我喜欢尽可能整体地考虑效率。把一段代码的开发过程当成一个整体来看，你就不会漏掉任何隐藏成本。在代码的使用场景所要求的性能与质量水平下，从它诞生开始，到任何人因为任何原因最后一次使用它为止，目标就是让它耗费的人力总量最小。这包括敲入它的时间，包括调试它的时间，包括修改它的时间，包括为别的用途改造它的时间，也包括为了让其他代码能和它配合而做的工作——如果这段代码当初换个写法，那些工作也许根本不用做。整段可用生命周期里花在这段代码上的所有工作，都算在内。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "When considered in this way, my experience has led me to conclude that the most efficient way to program is to approach your code as if you were a dictionary compressor.  Like, literally, pretend you were a really great version of PKZip, running continuously on your code, looking for ways to make it (semantically) smaller.  And just to be clear, I mean semantically smaller, as in less duplicated or similar code, not physically smaller, as in less text, although the two often go hand-in-hand.",
+      "zh": "按这个思路想下去，我的经验让我得出这样一个结论：最高效的编程方式，是把你的代码当成一本字典去压缩。对，就是字面意思——假装你是一个超级加强版的 PKZip，持续不断地跑在你的代码上，寻找让它（在语义上）变小的办法。说清楚一点，我指的是语义上的变小，也就是重复或相似的代码更少，而不是物理上的变小，也就是文本更短——尽管这两者经常是一回事。"
+    },
+    {
+      "type": "p",
+      "en": "This is a very bottom-up programming methodology, a pseudo-variant of which has recently gained the monicker \"refactoring\", even though that is a ridiculous term for a number of reasons that are not worth belaboring at the moment.  I also think that the formal \"refactoring\" stuff missed the main point, but that's also not worth belaboring.  Point being, they are sort-of related, and hopefully you will understand the similarities and differences more over the course of this article series.",
+      "zh": "这是一套非常自底向上的编程方法论。它有一个伪变体，最近得了个名号叫「重构」——尽管因为种种原因，这是个荒唐的说法，这里就不细究了。我也认为那些正式的「重构」理论没抓住重点，这同样不必细说。关键在于：两者算是有点关系，希望随着这个系列写下去，你会更明白它们的异同。"
+    },
+    {
+      "type": "p",
+      "en": "So what does compression-oriented programming look like, and why is it efficient?",
+      "zh": "那么，压缩导向编程到底长什么样，它为什么高效？"
+    },
+    {
+      "type": "p",
+      "en": "Like a good compressor, I don't reuse anything until I have at least two instances of it occurring.  Many programmers don't understand how important this is, and try to write \"reusable\" code right off the bat, but that is probably one of the biggest mistakes you can make.  My mantra is, \"make your code usable before you try to make it reusable\".",
+      "zh": "就像一个好的压缩器，在同一个东西至少出现两次之前，我不会复用它。很多程序员不明白这一点有多重要，一上来就想写「可复用」的代码——而这大概是你可能犯的最大的错误之一。我的信条是：「先让代码可用，再去想让它可复用。」"
+    },
+    {
+      "type": "p",
+      "en": "I always begin by just typing out exactly what I want to happen in each specific case, without any regard to \"correctness\" or \"abstraction\" or any other buzzword, and I get that working.  Then, when I find myself doing the same thing a second time somewhere else, that is when I pull out the reusable portion and share it, effectively \"compressing\" the code.  I like \"compress\" better as an analogy, because it means something useful, as opposed to the often-used \"abstracting\", which doesn't really imply anything useful.  Who cares if code is abstract?",
+      "zh": "我总是先把每个具体场景里我真正想要发生的事原样敲出来，完全不管什么「正确性」「抽象」或者别的流行词，然后让它跑起来。之后，当我在别处第二次做同一件事时，我才会把可复用的部分抽出来共享，也就是把代码「压缩」掉。我更喜欢「压缩」这个比喻，因为它有实际含义；而人们常说的「抽象」其实并不指向任何有用的东西。代码抽不抽象，谁在乎？"
+    },
+    {
+      "type": "p",
+      "en": "Waiting until there are (at least) two examples of a piece of code means I not only save time thinking about how to reuse it until I know I really need to, but it also means I always have at least two different real examples of what the code has to do before I try to make it reusable.  This is crucial for efficiency, because if you only have one example, or worse, no examples (in the case of code written preemptively), then you are very likely to make mistakes in the way you write it and end up with code that isn't conveniently reusable.  This leads to even more wasted time once you go to use it, because either it will be cumbersome, or you will have to redo it to make it work the way you need it to.  So I try very hard to never make code \"prematurely reusable\", to evoke Knuth.",
+      "zh": "等到一段代码（至少）出现两个实例再动手，意味着我不仅省下了「提前想怎么复用」的时间，还意味着在尝试让它可复用之前，我手上至少有两个真实的用例能说明这段代码到底要做什么。这对效率至关重要：如果你只有一个例子，或者更糟——一个例子都没有（提前写出来的代码就是这种情况），那你写它的方式极有可能出错，最后得到的代码并不能方便地复用。等到真要用的时候，浪费的时间更多：要么它用起来别扭，要么你得推倒重来，把它改成你需要的样子。所以我极力避免让代码「过早可复用」——借用一下 Knuth 的说法。"
+    },
+    {
+      "type": "p",
+      "en": "Similarly, like a magical globally optimizing compressor (which sadly PKZip isn't), when you are presented with new places where a previously reused piece of code could be reused again, you make a decision: if the reusable code is already suitable, you just use it, but if it's not, you decide whether or not you should modify how it works, or whether you should introduce a new layer on top of or underneath it.  Multiresolution entry points are a big part of making code resuable, but I'll save discussion of that for a later article, since it's a topic unto itself.",
+      "zh": "同样地，就像一个能全局优化的魔法压缩器（可惜 PKZip 不是），当遇到新的场合、某段已经复用过的代码可以再次复用时，你要做个判断：如果这段可复用代码已经合适，直接用就行；如果不合适，你就要决定是修改它的工作方式，还是在它上面或下面引入一个新层。多分辨率入口点是让代码可复用的关键部分，但这个话题本身就能单独成篇，我留到后面的文章再讲。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, the underlying assumption in all of this is, if you compress your code to a nice compact form, it is easy to read, because there's a minimal amount of it, and the semantics tend to mirror the real \"language\" of the problem, because like a real language, those things that are expressed most often are given their own names and are used consistently.  Well-compressed code is also easy to maintain, because all the places in the code that are doing identical things all go through the same paths, but code that is unique is not needlessly complicated or separated from its use.  Finally, well-compressed code is easy to extend, because producing more code that does similar operations is simple, as all the necessary code is there in a nicely recomposable way.",
+      "zh": "最后，这一切背后的假设是：如果你把代码压缩到紧凑漂亮的形式，它就易于阅读，因为代码量最少，而且语义往往会映射出问题本身的「真实语言」——就像自然语言一样，被表达得最频繁的东西会有自己的名字，并且被一致地使用。压缩得好的代码也易于维护，因为代码里所有做同一件事的地方都走同一条路径，而独特的东西既不会被无谓地复杂化，也不会与它的使用场所隔开。最后，压缩得好的代码易于扩展，因为再多写出做类似操作的代码很简单：所有必要的代码都在那儿，而且能被漂亮地重新组合。"
+    },
+    {
+      "type": "p",
+      "en": "These are all things that most programming methodologies claim to do in an abstract fashion (build UML diagrams, make class hierarchies, make systems of objects, etc.), but always fail to achieve, because the hard part of code is getting the details right.  Starting from a place where the details don't exist inevitably means you will forget or overlook something that will cause your plans to fail or lead to suboptimal results.  Starting with the details and repeatedly compressing to arrive at the eventual architecture avoids all the pitfalls of trying to conceive the architecture ahead of time.",
+      "zh": "这些事，大多数编程方法论都宣称能以抽象的方式做到（画 UML 图、搭类继承体系、构建对象系统等等），但从未真正实现，因为代码难就难在把细节搞对。从一个细节尚未存在的地方出发，必然意味着你会忘掉或漏掉某样东西，让你的计划落空，或者导致次优的结果。从细节出发、反复压缩、直到最终架构自然浮现——这样才能避开「提前构想架构」的所有陷阱。"
+    },
+    {
+      "type": "p",
+      "en": "With all that in mind, let's take a look at how all this can be applied to the simple Witness UI code.",
+      "zh": "有了这些准备，我们来看看这一切怎么用到《The Witness》那点简单的 UI 代码上。"
+    },
+    {
+      "type": "h2",
+      "id": "shared-stack-frames",
+      "zh": "共享栈帧",
+      "en": "Shared Stack Frames"
+    },
+    {
+      "type": "p",
+      "en": "The first bit of code compression I did on the UI code happens to be one of my very favorites, since it's trivial to do and yet is extremely satisfying.",
+      "zh": "我在这些 UI 代码上做的第一处压缩，恰好是我最喜欢的几处之一：做起来毫不费力，效果却极其令人满足。"
+    },
+    {
+      "type": "p",
+      "en": "Basically, in C++, functions are very selfish.  They keep all their local variables to themselves, and you can't really do anything about that (although as the cancerous C++ specification continues to metastasize, it's starting to add more options for this, but that is a separate issue).  So when I see code like the Witness UI code that's doing stuff like this:",
+      "zh": "基本上，C++ 里的函数非常自私。它们把局部变量全藏在自己肚子里，你拿它没什么办法（虽然随着癌变的 C++ 标准不断转移扩散，这方面开始有了更多选项，但那是另一个话题）。所以当我看到《The Witness》UI 这样写代码时："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int category_height = ypad + 1.2 * body_font->character_height;\n float y0 = y;\n // ...\n y0 -= category_height;\n // ...\n y0 -= category_height;\n // ...\n y0 -= category_height;\n // ..."
+    },
+    {
+      "type": "p",
+      "en": "I think it's time for me to make a shared stack frame.",
+      "zh": "我觉得是时候做一个共享栈帧了。"
+    },
+    {
+      "type": "p",
+      "en": "What I mean by this is, anywhere there's going to be a panel UI in the Witness, this sort of thing is going to happen.  I looked at the other panels in the editor, of which there were several, and they all had substantively the exact same code as I showed in the original snippet  —  same startup, same button calculations, etc.  So it's clear that I want to compress all this so that each thing only happens in one place, then just gets used by everyone else.",
+      "zh": "我的意思是：在《The Witness》里，凡是要做面板 UI 的地方，都会出现这类代码。我去看了编辑器里的其他面板（有好几个），它们的内容本质上和我最初展示的那段片段完全一样——同样的初始化、同样的按钮计算，等等。所以很明显，我想把这一切压缩掉，让每件事只在一个地方发生，其他地方只管用。"
+    },
+    {
+      "type": "p",
+      "en": "But it's not really feasible to wrap what's going on purely in a function, because there's systems of variables that interact, and they interact in multiple places that need to connect with each other.  So the first thing I did to this code was to pull those variables out into a structure that can serve as a sort of shared stack frame for all these operations if I want them to be separate functions:",
+      "zh": "但要把它纯粹包进一个函数里并不现实，因为这里有几组互相作用的变量，而它们作用的多个地方之间还需要彼此对接。所以我对这段代码做的第一件事，就是把这些变量抽进一个结构体，好让它充当所有操作共享的栈帧——如果我想把它们拆成独立函数的话："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "struct Panel_Layout\n{\n float width; // renamed from \"my_width\"\n float row_height; // rename from \"category_height\"\n float at_x; // renamed from \"x0\"\n float at_y; // renamed from \"y0\"\n};"
+    },
+    {
+      "type": "p",
+      "en": "Simple, right?  You just grab the variables that you see that are being used in a repetitive way, and you put them in a struct.  Typically, I use InterCaps for variable names and lowercase_with_underscores for types, but since I am in the Witness codebase, I try to adhere to its general conventions where possible, and it uses Uppercase_With_Underscores for types and lowercase_with_underscores for variables.",
+      "zh": "很简单吧？你只要把那些看得出来被重复使用的变量抓出来，放进一个 struct 就行。通常我对变量名用 InterCaps，对类型用 lowercase_with_underscores；但因为我在《The Witness》的代码库里，所以尽量遵守它的一般约定——它对类型用 Uppercase_With_Underscores，对变量用 lowercase_with_underscores。"
+    },
+    {
+      "type": "p",
+      "en": "After I substituted the structure in for the local variables, the code looked like this:",
+      "zh": "我用这个结构体替换掉那些局部变量之后，代码变成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Panel_Layout layout;\n int num_categories = 4;\n layout.row_height = ypad + 1.2 * body_font->character_height;\n layout.at_x = x;\n layout.at_y = y;\n float title_height = draw_title(layout.at_x, layout.at_y, title);\n float height = title_height + num_categories * layout.row_height + ypad;\n my_height = height;\n layout.at_y -= title_height;\n\n{\n layout.at_y -= layout.row_height;\n char *string = \"Auto Snap\";\n bool pressed = draw_big_text_button(layout.at_x, layout.at_y, layout.width, layout.row_height, string);\n if (pressed) do_auto_snap(this);\n}\n\n{\n layout.at_y -= category_height;\n char *string = \"Reset Orientation\";\n bool pressed = draw_big_text_button(layout.at_x, layout.at_y, layout.width, layout.row_height, string);\n if (pressed) {\n // ...\n}\n}\n // ..."
+    },
+    {
+      "type": "p",
+      "en": "Not an improvement yet, but it was a necessary first step.  Next I pulled the redundant code out into functions: one at startup, and one for each time there's a new row of UI.  Normally, I would probably not make these member functions, but since The Witness is a more C++-ish codebase than my own, I thought it was more consistent with the style (and I don't have a strong preference either way):",
+      "zh": "这还看不出改进，但这是必要的第一步。接着我把冗余的代码抽成函数：一个负责初始化，一个负责每次新起一行 UI。通常我大概不会把它们做成成员函数，但因为《The Witness》的代码库比我自己那套更 C++ 味，我觉得做成成员函数和它的风格更一致（而且我对此也没什么强烈偏好）："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Panel_Layout::Panel_Layout(Panel *panel, float left_x, float top_y, float width)\n{\n row_height = panel->ypad + 1.2 * panel->body_font->character_height;\n at_y = top_y;\n at_x = left_x;\n}\n\nvoid Panel_Layout::row()\n{\n at_y -= row_height;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Once I had the structure, it was also trivial to take these two lines",
+      "zh": "有了这个结构体之后，要把这两行"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "float title_height = draw_title(x0, y0, title);\n y0 -= title_height;"
+    },
+    {
+      "type": "p",
+      "en": "from the original and wrap them up:",
+      "zh": "从原代码里拿出来包一包，也是轻而易举："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void Panel_Layout::window_title(char *title)\n{\n float title_height = draw_title(at_x, at_y, title);\n at_y -= title_height;\n}"
+    },
+    {
+      "type": "p",
+      "en": "So then the code looked like this:",
+      "zh": "于是代码变成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Panel_Layout layout(this, x, y, my_width);\n layout.window_title(title);\n\nint num_categories = 4;\n float height = title_height + num_categories * layout.row_height + ypad;\n my_height = height;\n\n{\n layout.row();\n char *string = \"Auto Snap\";\n bool pressed = draw_big_text_button(layout.at_x, layout.at_y, layout.width, layout.row_height, string);\n if (pressed) do_auto_snap(this);\n}\n\n{\n layout.row();\n char *string = \"Reset Orientation\";\n bool pressed = draw_big_text_button(layout.at_x, layout.at_y, layout.width, layout.row_height, string);\n if (pressed) {\n // ...\n}\n}\n // ..."
+    },
+    {
+      "type": "p",
+      "en": "Although that wouldn't be necessary if this was the only panel (since the code only happens once), all the Witness UI panels did the same thing, so pulling it out meant I could go compress all that code too (which I did, but which I won't be covering here).",
+      "zh": "如果这是唯一的面板，那这么做其实没必要（因为这段代码只出现一次）；但《The Witness》所有的 UI 面板都在做同一件事，所以把它抽出来意味着我还能顺手把那些代码也压缩掉（我确实做了，不过这里不打算讲）。"
+    },
+    {
+      "type": "p",
+      "en": "Things were looking better, but I also wanted to get rid of the weird \"num_categories\" bit and the height calculation.  Looking at that code further, I determined that all it was really doing was pre-counting how high the panel would be after all the rows were used.  Since there was no actual reason why this had to be set up front, I figured hey, why not do it after all the rows have been made, so I can just count how many actually got added rather than forcing the program to pre-declare that?  That makes it less error prone, because the two cannot get out of sync.  So I added a \"complete\" function that gets run at the end of a panel layout:",
+      "zh": "情况在变好，但我还想干掉那个奇怪的 `num_categories` 和高度计算。再仔细看那段代码，我判断它真正做的事，只是在预先数出「所有行用完之后面板会有多高」。既然并没有实际理由要求它必须提前设定，我就想：嘿，为什么不干脆等所有行都加完了再算？这样我只要数一数实际加了几行，而不必逼着程序预先声明。这更不容易出错，因为两者不可能对不上。于是我加了一个 `complete` 函数，在面板布局结束时运行："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void Panel_Layout::complete(Panel *panel)\n{\n panel->my_height = top_y - at_y;\n}"
+    },
+    {
+      "type": "p",
+      "en": "I went back to the constructor and made sure I saved \"top_y\" as the starting y, so all I had to do was just subtract the two.  Poof!  No more need for the precalculation:",
+      "zh": "我回到构造函数，确保把 `top_y` 存为起始的 y 值，这样我只要把两者相减就行。噗！预计算再也不需要了："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Panel_Layout layout(this, x, y, my_width);\n layout.window_title(title);\n\n{\n layout.row();\n char *string = \"Auto Snap\";\n bool pressed = draw_big_text_button(layout.at_x, layout.at_y, layout.my_width, layout.row_height, string);\n if (pressed) do_auto_snap(this);\n}\n\n{\n layout.row();\n char *string = \"Reset Orientation\";\n bool pressed = draw_big_text_button(layout.at_x, layout.at_y, layout.my_width, layout.row_height, string);\n if (pressed) {\n // ...\n}\n}\n\n// ...\n layout.complete(this);"
+    },
+    {
+      "type": "p",
+      "en": "The code was getting a lot more concise, but it was also clear from the often-repeated draw_big_text_button calls that there was plenty of compressibility left.  So I took those out next:",
+      "zh": "代码简洁多了，但从那些反复出现的 `draw_big_text_button` 调用也能看出，可压缩的空间还很大。于是我把它们也抽了出去："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool Panel_Layout::push_button(char *text)\n{\n bool result = panel->draw_big_text_button( at_x, at_y, width, row_height, text);\n return(result);\n}"
+    },
+    {
+      "type": "p",
+      "en": "which left the code looking rather nice and compact:",
+      "zh": "这样一来，代码看着就相当漂亮紧凑了："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Panel_Layout layout(this, x, y, my_width);\n layout.window_title(title);\n\n{\n layout.row();\n char *string = \"Auto Snap\";\n bool pressed = layout.push_button(string);\n if (pressed) do_auto_snap(this);\n}\n\n{\n layout.row();\n char *string = \"Reset Orientation\";\n bool pressed = layout.push_button(string);\n if (pressed) {\n // ...\n}\n}\n\n// ...\n layout.complete(this);"
+    },
+    {
+      "type": "p",
+      "en": "and I decided to pretty it up a bit by reducing some of the unnecessary verbosity:",
+      "zh": "然后我决定再美化一下，砍掉一些不必要的啰嗦："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Panel_Layout layout(this, x, y, my_width);\n layout.window_title(title);\n\nlayout.row();\n if(layout.push_button(\"Auto Snap\")) {do_auto_snap(this);}\n\nlayout.row();\n if(layout.push_button(\"Reset Orientation\"))\n{\n // ...\n}\n\n// ...\n layout.complete(this);"
+    },
+    {
+      "type": "p",
+      "en": "Ah!  It's like a breath of fresh air compared to the original, isn't it?  Look at how nice that looks!  It's getting close to the minimum amount of information necessary to actually define the unique UI of the movement panel, which is how we know we're doing a good job of compressing.  And adding new buttons is getting very simple  —  no more in-line math, just one call to make a row and another to make a button.",
+      "zh": "啊！和最初相比，这简直是一口新鲜空气，对吧？看看它多好看！它已经接近「真正定义 Movement Panel 独有 UI 所必需的最小信息量」——这正说明我们压缩得不错。而加新按钮也变得非常简单：不再有内联的算术，一次调用开一行，再一次调用放一个按钮。"
+    },
+    {
+      "type": "p",
+      "en": "Now, I want to point out something really important.  Did all that seem pretty straightforward?  I'm guessing that there wasn't anything in there where you were like, \"oh my god, how did he DO that??\"  I'm hoping that every step was really obvious, and everyone could have easily done a similar set of steps if charged with just pulling out the common pieces of code into functions.",
+      "zh": "现在，我要指出一件非常重要的事。刚才那些是不是看着都挺直白？我猜其中没有任何一步会让你惊叹「天哪，他到底是怎么做到的？？」。我希望每一步都非常显然，换任何人来做，只要任务是「把公共代码片段抽成函数」，都能轻松走出类似的几步。"
+    },
+    {
+      "type": "p",
+      "en": "So, given that, what I want to point out is this: this is the correct way to give birth to \"objects\".  We made a real, usable bundle of code and data: the Panel_Layout structure and its member functions.  It does exactly what we want, it fits perfectly, it's really easy to use, it was trivial to design.",
+      "zh": "那么在这一点的基础上，我想指出的是：这才是「对象」诞生的正确方式。我们造出了一个真实可用的代码与数据捆绑体：Panel_Layout 结构体及其成员函数。它做的恰是我们想要的，贴合得天衣无缝，用起来非常舒服，设计起来毫不费力。"
+    },
+    {
+      "type": "p",
+      "en": "Contrast this with the absolute absurdity that you see in object-oriented \"methodologies\" that tell you to start writing things on index cards (like the \"class responsibility collaborators\" methodology), or breaking out Visio to show how things \"interact\" using boxes and lines that connect them.  You can spend hours with these methodologies and end up more confused about the problem than when you started.  But if you just forget all that, and write simple code, you can always create your objects after the fact and you will find that they are exactly what you wanted.",
+      "zh": "对比一下面向对象「方法论」里那些荒唐到极点的做法吧：叫你从在索引卡上写东西开始（比如「类—职责—协作」方法），或者掏出 Visio，用方框和连线展示这些东西如何「交互」。你可以在这些方法论上耗上几个小时，最后对问题的理解比开始时还糊涂。但如果你把那些全忘掉，只写简单的代码，你总能在事后创建出你的对象，而且你会发现它们正是你想要的。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "If you're not used to programming like this, you may think I'm exaggerating, but you'll just have to trust me, it's true.  I spend exactly zero time thinking about \"objects\" or what goes where.  The fallacy of \"object-oriented programming\" is exactly that: that code is at all \"object-oriented\".  It isn't.  Code is procedurally oriented, and the \"objects\" are simply constructs that arise that allow procedures to be reused.  So if you just let that happen instead of trying to force everything to work backwards, programming becomes immensely more pleasant.",
+      "zh": "如果你不习惯这样编程，可能会觉得我在夸大其词，但你只好信我：这是真的。我花在思考「对象」或者「什么该放哪儿」上的时间，正好是零。「面向对象编程」的谬误恰恰就在这里：以为代码在什么意义上真的是「面向对象的」。它不是。代码是面向过程的，而那些「对象」不过是自然浮现出来的构造物，作用是让过程可以被复用。所以，如果你任由这件事自然发生，而不是硬要一切倒着来，编程会变得愉快得多。"
+    },
+    {
+      "type": "h2",
+      "id": "more-compression-then-expansion",
+      "zh": "先继续压缩，再扩张",
+      "en": "More Compression, Then Expansion"
+    },
+    {
+      "type": "p",
+      "en": "Because I needed to spend some time introducing the concept of compression-oriented programming, and also because I enjoy trashing object-oriented programming, this article is already very long despite only showing a small fraction of the code transformations I did to the Witness UI code.  So I will save the next round for next week, where I'll talk about handling that multi-button code I showed, and then how I started using the newly compressed UI semantics to start extending what the UI itself could do.",
+      "zh": "因为我需要花些篇幅介绍压缩导向编程这个概念，又因为我很享受痛批面向对象编程，所以这篇文章已经很长了，尽管它只展示了我在《The Witness》UI 代码上所做变换的一小部分。所以剩下的留到下周：我会讲怎么处理我展示过的那段多按钮代码，以及我如何开始利用刚刚压缩出来的 UI 语义，去扩展 UI 本身能做的事。"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "official-2013-03-04-island-snapshot",
+  "title": {
+    "zh": "岛屿快照",
+    "en": "Island Snapshot"
+  },
+  "subtitle": {
+    "en": "The first island snapshot since January, plus the current puzzle count of 499.",
+    "zh": "1 月以来的第一张岛屿快照，外加目前 499 个谜题。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Can it be that we haven't posted an island snapshot since January 3rd?",
+      "zh": "我们竟然从 1 月 3 日之后就没再发过岛屿快照了？"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/03/shot_2013.03.04__time_12_28_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Well, you got a pretty good look at the island in [the trailer we recently released](http://the-witness.net/news/2013/02/first-official-trailer-for-the-witness/) in conjunction with the PlayStation 4 announcement. That version has a lot of new modeling compared to the January snapshot, because we were working on the trailer pretty hard. But some new modeling has happened since then, and there are some subtle but nice things to see here.",
+      "zh": "不过，在[我们最近发布的预告片](http://the-witness.net/news/2013/02/first-official-trailer-for-the-witness/)里，你已经把这座岛看得挺清楚了，那支预告片是配合 PlayStation 4 的公布一起发的。和 1 月那张快照相比，那个版本多了很多新模型，因为我们在预告片上干得很拼。不过那之后又有一些新的建模，这里有几处细微但好看的东西值得一看。"
+    },
+    {
+      "type": "p",
+      "en": "Since someone is going to ask: The current puzzle count is 499.",
+      "zh": "既然肯定会有人问：目前的谜题数量是 499 个。"
+    }
+  ]
+}

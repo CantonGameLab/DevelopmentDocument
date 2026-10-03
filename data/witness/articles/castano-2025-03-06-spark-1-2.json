@@ -1,0 +1,499 @@
+{
+  "id": "castano-2025-03-06-spark-1-2",
+  "title": { "zh": "Spark 1.2", "en": "Spark 1.2" },
+  "subtitle": {
+    "en": "Spark 1.2 is finally out: major optimizations, new compression formats, and expanded platform support.",
+    "zh": "Spark 1.2 正式发布：大幅优化、新的压缩格式，以及更广的平台支持。"
+  },
+  "translator": {
+    "note": "这篇本来是一封发布说明，原文在好几处写了「下面的图表显示……」「下图对比……」却没有对应的插图行——归档源文里这些图表本来就不存在，所以译文没有为它们生成图片块，这不是漏译。其余插图按全站口径归一化成「（原文此处有一张图）」占位。原文里的若干笔误（`*Spark*1.2`、`*Spark’*s`、`*Spark*‘s`、`the the`、`they reconstructed`、`only some of codecs`）在 `en` 字段中一律原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’m excited to announce that *Spark* 1.2 is finally out!",
+      "zh": "我很兴奋地宣布：*Spark* 1.2 终于发布了！"
+    },
+    {
+      "type": "p",
+      "en": "[Spark](https://ludicon.com/spark/) is the **go-to solution for real-time GPU texture compression**, offering high-performance codecs that deliver high-quality results at real-time speeds. It enables developers to efficiently compress textures directly on the GPU, reducing memory usage and improving rendering performance across a wide range of platforms.",
+      "zh": "[Spark](https://ludicon.com/spark/) 是**实时 GPU 纹理压缩的首选方案**，它提供的编解码器性能高，能以实时速度给出高质量结果。它让开发者可以直接在 GPU 上高效压缩纹理，从而降低内存占用，并在各种平台上改善渲染性能。"
+    },
+    {
+      "type": "p",
+      "en": "With *Spark*1.2, I’ve taken things even further with major optimizations, new compression formats, and expanded platform support:",
+      "zh": "*Spark* 1.2 在此基础上走得更远：大幅优化、新的压缩格式，以及更广的平台支持："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Major optimizations: [f16 vectorization](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#f16-vectorization) of all codecs and improved performance on all devices, but especially [Bifrost GPUs](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#bifrost-improvements), and a much [faster EAC codec](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#improved-eac).",
+          "zh": "大幅优化：所有编解码器都做了 [f16 向量化](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#f16-vectorization)，所有设备上的性能都有提升，[Bifrost GPU](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#bifrost-improvements) 上尤其明显；还有[快得多的 EAC 编解码器](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#improved-eac)。"
+        },
+        {
+          "en": "New formats: including an [improved BC3-YCoCg codec](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#bc3-ycocg), [HDR (RGBM) support](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#hdr-codecs), a [real-time ETC2](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#etc2) codec that matches the quality of offline codecs, support for larger block sizes starting with [ASTC 6×6](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#astc-6x6), and a [new type of codec optimized for transcoding](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#sideband-data-codecs) applications.",
+          "zh": "新格式：包括[改进的 BC3-YCoCg 编解码器](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#bc3-ycocg)、[HDR（RGBM）支持](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#hdr-codecs)、质量能追平离线编解码器的[实时 ETC2](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#etc2) 编解码器、以 [ASTC 6×6](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#astc-6x6) 为起点对更大块尺寸的支持，以及[为转码应用优化的新型编解码器](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#sideband-data-codecs)。"
+        },
+        {
+          "en": "New platform support: Extended compatibility to [Android TV](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#android-tv) and [consoles](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#consoles).",
+          "zh": "新的平台支持：兼容性扩展到 [Android TV](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#android-tv) 和[游戏主机](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/#consoles)。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "For these release notes, I’m trying a slightly different format. Instead of just sharing the highlights on social media, I’m using my blog to provide a more personal and in depth update. I’m afraid I will have to keep some of the specifics under wraps, so I won’t be sharing as much implementation details as in my typical blog posts, but I hope I can offer enough insight to satisfy my regular audience. If you are interested, read on!",
+      "zh": "这次的发布说明我想换个稍微不同的形式。我不打算只在社交媒体上分享亮点，而是用博客来写一篇更个人化、更深入的更新。恐怕有些具体细节我得保密，所以我不会像平时写博客那样分享那么多实现细节，但希望能给出足够的洞见，让我的老读者满意。感兴趣的话就往下读吧！"
+    },
+    {
+      "type": "p",
+      "en": "The initial focus for this release was improving vectorization to enhance performance on RDNA, consoles, and Mali GPUs. But along the way, I ended up adding far more than planned. Looking through my notes, I’m surprised by just how much made it into this release.",
+      "zh": "这个版本最初的关注点是改进向量化，以提升在 RDNA、游戏主机和 Mali GPU 上的性能。但一路做下来，我加进去的东西远远超出了计划。翻看自己的笔记，我都惊讶于这个版本里塞进了这么多东西。"
+    },
+    {
+      "type": "p",
+      "en": "Most of these features weren’t even on my roadmap. Some came from licensee requests, which is great, as I want my clients to feel they’re getting real value for their financial support. Others were simply ideas that had been lingering in the back of my mind until something clicked, and I couldn’t resist tackling them. And then there were features added in response to prospective clients’ needs. While many of these additions are valuable, this reactive approach hasn’t necessarily translated into closing deals.",
+      "zh": "这些功能大多根本不在我的路线图上。有些来自授权方的需求——这很好，我希望客户觉得自己的钱花得值。还有些只是在我脑子里盘桓已久的想法，某天忽然想通了，我就忍不住动手去做。另外一些则是为了回应潜在客户的需求而加的。这些新增功能里有很多确实有价值，但这种被动的做法并没有必然转化成签单。"
+    },
+    {
+      "type": "p",
+      "en": "This has made me rethink my priorities. Moving forward, I plan to stay more focused on long-term goals rather than chasing feature requests from potential clients who haven’t committed to a license yet. That said, I think all my existing clients can attest that once they come on board, I go all-in to support them. If there’s a missing feature they need, I’ll bend over backward to make it happen.",
+      "zh": "这让我重新思考了优先级。往后我打算更专注于长期目标，而不是去追那些还没确定授权的潜在客户提的功能需求。话虽如此，我想我现有的客户都能作证：一旦他们加入，我就会全力支持。如果他们缺某个功能，我会想尽办法把它做出来。"
+    },
+    {
+      "type": "p",
+      "en": "With that out of the way, let’s dive in:",
+      "zh": "这些说完了，我们进入正题："
+    },
+    { "type": "h2", "id": "optimizations", "zh": "优化", "en": "Optimizations" },
+    {
+      "type": "p",
+      "en": "For this release, I’ve revisited nearly all the codecs, profiling them across multiple devices and applying numerous optimizations. Below is a brief overview of just the most significant improvements:",
+      "zh": "为了这个版本，我把几乎所有编解码器都重新过了一遍，在多台设备上做了性能剖析，并施加了大量优化。下面简要介绍一下其中最重大的几项改进："
+    },
+    { "type": "h2", "id": "f16-vectorization", "zh": "f16 向量化", "en": "f16 vectorization" },
+    {
+      "type": "p",
+      "en": "Many devices can issue two `f16` instructions in parallel, as long as the operands and the result are packed into the same register. This often doubles the throughput compared to `f32` operations. While compilers attempt to leverage this capability, they are limited by the strict floating-point evaluation order requirements and the way data is laid out in registers. If values are not stored in the same registers, the overhead of shuffling them can outweigh the benefits of dual-issue execution. However, by structuring the code to make the compiler’s job easier, we can maximize these optimizations. I refer to this as *f16 vectorization* since the techniques used are closely related to traditional SIMD vectorization strategies.",
+      "zh": "许多设备可以并行发射两条 `f16` 指令，只要操作数和结果都打包在同一个寄存器里。相比 `f32` 运算，这常常能把吞吐量翻倍。编译器会尝试利用这个能力，但受限于严格的浮点求值顺序要求，以及数据在寄存器里的排布方式。如果这些值没有存在同一个寄存器里，搬运它们的开销可能会超过双发射执行带来的好处。不过，只要把代码组织得让编译器更省事，我们就能把这些优化做到极致。我把它称为 *f16 向量化*，因为用到的技术和传统的 SIMD 向量化策略关系很近。"
+    },
+    {
+      "type": "p",
+      "en": "In *Spark* 1.1 only some of codecs were vectorized. My initial approach to vectorization wasn’t always producing optimal results and it was tedious; I couldn’t easily share code between the vectorized and non-vectorized versions. While the resulting code performed better on devices with packed `f16` math support, it was slower on other devices.",
+      "zh": "在 *Spark* 1.1 里，只有一部分编解码器做了向量化。我最初的做法并不总能得到最优结果，而且很繁琐；向量化版本和非向量化版本之间很难共用代码。结果就是：这些代码在支持打包 `f16` 运算的设备上表现更好，在其他设备上却更慢。"
+    },
+    {
+      "type": "p",
+      "en": "With the new approach, the vectorized version now performs as well or better than the scalar version in nearly all cases. This simplifies shader selection and distribution, making it possible to use the `f16x2` variant of the codecs almost everywhere.",
+      "zh": "用新做法之后，向量化版本在几乎所有情况下都表现得和标量版本一样好、甚至更好。这简化了着色器的选择和分发，让 `f16x2` 版本的编解码器几乎到处都能用。"
+    },
+    { "type": "h2", "id": "bifrost-improvements", "zh": "Bifrost 上的大幅改进", "en": "Massive Bifrost improvements" },
+    {
+      "type": "p",
+      "en": "One class of devices that benefited greatly from these optimizations are Bifrost devices. These devices support dual-issue, but my initial experiments resulted in reduced performance. It turns out the problem was that the Bifrost compiler was not unrolling loops aggressively enough.",
+      "zh": "从这些优化里获益最大的一类设备是 Bifrost 设备。这类设备支持双发射，但我最初的实验反而让性能下降。问题出在 Bifrost 编译器展开循环不够激进。"
+    },
+    {
+      "type": "p",
+      "en": "The vectorized code relies on loop unrolling and constant folding to eliminate table lookups, which are necessary to reorder the access to block texels. Forcing the frontend to unroll the loops had a massive performance impact and improved the effectiveness of the the vectorizing optimizations.",
+      "zh": "向量化的代码依赖循环展开和常量折叠来消除查表，而这些查表原本是为了重排对块内纹素的访问顺序。强制前端展开循环带来了巨大的性能提升，也让向量化优化更有效。"
+    },
+    {
+      "type": "p",
+      "en": "The following chart shows the speedups I was able to achieve with respect to *Spark* 1.1:",
+      "zh": "下面的图表显示了我相对 *Spark* 1.1 取得的加速比："
+    },
+    {
+      "type": "p",
+      "en": "Moreover, explicit loop unrolling also led to performance gains on many Adreno devices, though the improvements were not as pronounced as on Bifrost GPUs.",
+      "zh": "此外，显式循环展开也在许多 Adreno 设备上带来了性能提升，只是幅度没有 Bifrost GPU 上那么明显。"
+    },
+    { "type": "h2", "id": "improved-eac", "zh": "改进的 EAC 编解码器", "en": "Improved EAC codec" },
+    {
+      "type": "p",
+      "en": "One of the codecs that has seen the greatest improvements is the EAC Q0 codec, thanks to the elimination of table lookups. This has improved performance across all devices, but the speedups are most notable on Bifrost devices due to the improved `f16` vectorization:",
+      "zh": "改进最大的编解码器之一是 EAC Q0，这要归功于查表的消除。它提升了所有设备上的性能，而出于 `f16` 向量化的改进，Bifrost 设备上的加速最为显著："
+    },
+    {
+      "type": "p",
+      "en": "The only other real-time EAC codec I’m aware of is the one included with Unreal Engine. However, Epic’s codec delivers significantly lower quality:",
+      "zh": "据我所知，另一个实时 EAC 编解码器就是 Unreal Engine 里附带的那个。不过 Epic 的编解码器给出的质量明显更低："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250303002409-700x366.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And with these optimizations it runs much slower in comparison:",
+      "zh": "而有了这些优化之后，相比之下它跑得慢得多："
+    },
+    { "type": "h2", "id": "new-codecs", "zh": "新的编解码器", "en": "New Codecs" },
+    { "type": "h2", "id": "bc3-ycocg", "zh": "BC3-YCoCg", "en": "BC3-YCoCg" },
+    {
+      "type": "p",
+      "en": "As one of the inventors of the [scaled BC3-YCoCg format](https://ludicon.com/publications/Real-Time-YCoCg-DXT-Compression.pdf), I’m disappointed that there have been no more innovations in this direction. Most implementations still use almost the exact same code we published 18 years ago. While it’s possible to write better encoders that target the same format, there’s also an opportunity to modify the color transform to achieve additional gains.",
+      "zh": "作为[缩放版 BC3-YCoCg 格式](https://ludicon.com/publications/Real-Time-YCoCg-DXT-Compression.pdf)的发明人之一，看到这个方向此后没有更多创新，我有点失望。大多数实现用的仍然是我们 18 年前发表的那份几乎一模一样的代码。虽然可以针对同一格式写出更好的编码器，但还有一个机会：改动颜色变换本身，以取得额外的收益。"
+    },
+    {
+      "type": "p",
+      "en": "Our original approach was constrained by the need to run on the CPU using integer SIMD instructions. To achieve this efficiently, it scaled the CoCg components using one of three predefined factors, which was then stored in the blue channel. In the shader, the chrominance was reconstructed by extracting the scale stored in the blue component and dividing the red and green components.",
+      "zh": "我们最初的做法受制于一个前提：必须用整数 SIMD 指令在 CPU 上运行。为了高效实现，它用三个预定义因子之一来缩放 CoCg 分量，并把该因子存进蓝色通道。在着色器里，重建色度的方式是取出蓝色分量里存的缩放因子，再用它去除红色和绿色分量。"
+    },
+    {
+      "type": "p",
+      "en": "Today, we can remove this constraint by allowing an arbitrary scaling factor, storing its reciprocal, and eliminating the division in the decoder. With a slightly more sophisticated encoder, we can significantly reduce the error while also simplifying the decoder, which runs far more frequently. However, special care must be taken to ensure that the scale is reconstructed precisely so that the CoCg values are divided by the exact same factor used during encoding.",
+      "zh": "今天我们可以去掉这个约束：允许任意的缩放因子，存它的倒数，并在解码器里消掉那次除法。配上一个稍微精巧些的编码器，我们就能在显著降低误差的同时还简化解码器——而解码器的运行频率要高得多。不过要特别小心，确保缩放因子被精确重建，让 CoCg 值除以的正好是编码时用的那个因子。"
+    },
+    {
+      "type": "p",
+      "en": "Below is the proposed decoding procedure. Notice that the scale no longer requires any transformation:",
+      "zh": "下面是提议的解码过程。注意缩放因子已经不需要任何变换了："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "f32x3 spark_ycocg_to_rgb(f32x4 ycocg) {\n    f32 Co = ycocg.r;\n    f32 Cg = ycocg.g;\n    f32 scale = ycocg.b;\n    f32 Y = ycocg.a;\n\n    #if SPK_BC3_YCOCG_WAVEREN\n        scale = 1.0 / ((scale * (255.0 / 8.0)) + 1.0);\n    #endif\n\n    Co = (Co - cocg_offset) * scale;\n    Cg = (Cg - cocg_offset) * scale;\n\n    return saturate(f32x3(Y + Co - Cg, Y + Cg, Y - Co - Cg));\n}"
+    },
+    {
+      "type": "p",
+      "en": "The chart below compares our original BC3-YCoCg codec (as used in the Unreal Engine) with *Spark’*s encoder using the same BC3-YCoCg format, as well as our improved scheme that uses a continuous scaling factor. The error is significantly lower when using the proposed approach:",
+      "zh": "下面的图表把我们的原始 BC3-YCoCg 编解码器（也就是 Unreal Engine 里用的那个）和 *Spark* 使用同一 BC3-YCoCg 格式的编码器，以及我们采用连续缩放因子的改进方案做了对比。采用所提议的做法后，误差显著更低："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250303234047-700x392.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "An important caveat is that the scaled YCoCg color transform is not linear, which can lead to bilinear interpolation artifacts at block boundaries when adjacent blocks use different scale factors. This issue is most noticeable in images with drastic chrominance variations, such as the one shown below:",
+      "zh": "有个重要的提醒：缩放版 YCoCg 颜色变换不是线性的，当相邻块使用不同的缩放因子时，这会在块边界处产生双线性插值瑕疵。在色度变化剧烈的图像上，这个问题最明显，比如下面这张："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/2-700x524.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "However, these artifacts can be easily avoided by constraining the scaling factors and ensuring they are never too close to zero.",
+      "zh": "不过，只要约束缩放因子、确保它们永远不会太接近零，这些瑕疵就很容易避免。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/1-700x524.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "hdr-codecs", "zh": "HDR 编解码器", "en": "HDR Codecs" },
+    {
+      "type": "p",
+      "en": "A common application of real-time texture compression is to compress light probes that are generated at runtime. Light probes usually store high dynamic range (HDR) colors. Today we have GPU texture formats that can represent HDR colors efficiently, but on mobile ASTC HDR is not available on all devices. In particular, iOS devices prior to A13 (iPhone 11) lacked ASTC HDR support, and even today ASTC HDR is missing from all PVR devices and many Qualcomm ones.",
+      "zh": "实时纹理压缩的一个常见用途是压缩运行期生成的光照探针（light probe）。光照探针通常存的是高动态范围（HDR）颜色。如今我们有能高效表示 HDR 颜色的 GPU 纹理格式，但在移动端，ASTC HDR 并非所有设备都支持。尤其是 A13（iPhone 11）之前的 iOS 设备就不支持 ASTC HDR；即便到了今天，所有 PVR 设备和许多 Qualcomm 设备也都没有 ASTC HDR。"
+    },
+    {
+      "type": "p",
+      "en": "For our first HDR codecs I’ve focused on a solution that works everywhere by using the RGBM color transform. This allows extending the typical LDR range by about 16x while still providing good quality. I first used this format to [encode the lightmaps of The Witness](http://www.ludicon.com/castano/blog/2016/09/lightmap-compression-in-the-witness/). Back then I used least squares optimization of the M component to minimize the RGB error, but I’ve found a similar approach for error compensation that works even better and is suitable for real-time encoding.",
+      "zh": "我们最初这批 HDR 编解码器，我专注于一个到处都能用的方案：使用 RGBM 颜色变换。这能把典型的 LDR 范围扩展大约 16 倍，同时仍保持良好的质量。我第一次用到这个格式，是[编码《The Witness》的光照贴图](http://www.ludicon.com/castano/blog/2016/09/lightmap-compression-in-the-witness/)。当时我对 M 分量做最小二乘优化，以最小化 RGB 误差；后来我找到了一种类似的误差补偿思路，效果更好，而且适合实时编码。"
+    },
+    {
+      "type": "p",
+      "en": "One of the challenges is constraining the M values to avoid bilinear interpolation artifacts. Our approach does not eliminate these completely, but the M values are chosen such that they don’t change abruptly, and therefore artifacts are hardly noticeable.",
+      "zh": "其中一个挑战是约束 M 的取值以避免双线性插值瑕疵。我们的做法并没有把它们完全消除，但 M 的取值会被选得不会突变，因此瑕疵几乎察觉不到。"
+    },
+    {
+      "type": "p",
+      "en": "The following example compares a naïve RGBM encoder:",
+      "zh": "下面这个例子对比了一个朴素的 RGBM 编码器："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/55e30e3ab6f2491a-700x400.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Against the new error compensation:",
+      "zh": "以及新的误差补偿："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/8a52a9e21bf31ab8-700x400.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Notice the overall smoother results and lack of quantization errors near the transitions between bright and shadowed areas.",
+      "zh": "注意整体结果更平滑，而且在明亮区域与阴影区域的过渡附近没有量化误差。"
+    },
+    {
+      "type": "p",
+      "en": "Getting this to work on the actual mobile devices was tricky! I thought the ASTC format was specified exactly and that all vendors conformed to it, but it turned out that was not the case. In particular, when using the [EXT_astc_decode_mode](https://registry.khronos.org/vulkan/specs/latest/man/html/VK_EXT_astc_decode_mode.html) extension to select the 8-bit decode mode the way rounding is done is device-dependent.",
+      "zh": "要让它在真机上跑起来可真不容易！我原以为 ASTC 格式有精确的规范、所有厂商都会遵从，结果并不是这样。尤其是当使用 [EXT_astc_decode_mode](https://registry.khronos.org/vulkan/specs/latest/man/html/VK_EXT_astc_decode_mode.html) 扩展来选择 8 位解码模式时，舍入的方式取决于具体设备。"
+    },
+    {
+      "type": "p",
+      "en": "Typically these differences only result in off-by one errors and are hardly noticeable. However, in our case the RGB components are divided by M in the encoder and they reconstructed by the decoder multiplying by M. If the M value in the decoder differs slightly from the M value expected by the encoder, then significant errors can occur and this does in practice result in significant artifacts.",
+      "zh": "通常这些差异只会造成差一的误差，几乎看不出来。但在我们的情况下，RGB 分量在编码器里是除以 M 的，解码器再把它们乘回 M。如果解码器里的 M 值和编码器期望的 M 值有一点点不同，就可能产生可观的误差——而在实践中，这确实导致了明显的瑕疵。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s the diff output of the same RGBM-encoded texture on three different devices:",
+      "zh": "下面是同一张 RGBM 编码纹理在三台不同设备上的 diff 输出："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250303002703-700x525.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Fortunately, the solution to this problem appears to be quite simple. Since our textures are encoded in real-time we can adapt the encoding scheme to the underlying hardware. This is something that would not be possible if these textures were encoded offline!",
+      "zh": "好在解决这个问题的办法看起来相当简单。既然我们的纹理是实时编码的，我们就可以让编码方案去适配底层硬件。如果这些纹理是离线编码的，这一点就做不到！"
+    },
+    {
+      "type": "p",
+      "en": "The BC3 format has similar issues, [every vendor implements it in a slightly different way](https://fgiesen.wordpress.com/2021/10/04/gpu-bcn-decoding/), but the BC3-RGBM encoder is designed so that these small implementation differences do not make a significant difference.",
+      "zh": "BC3 格式也有类似的问题，[每个厂商的实现方式都略有不同](https://fgiesen.wordpress.com/2021/10/04/gpu-bcn-decoding/)；不过 BC3-RGBM 编码器的设计让这些细小的实现差异不会造成明显区别。"
+    },
+    {
+      "type": "p",
+      "en": "It is possible to achieve higher quality and greater range by targeting native HDR formats. Krzysztof Narkowicz has a [free BC6H encoder](https://github.com/knarkowicz/GPURealTimeBC6H) that he described in [this GDC 2016 presentation](https://gdcvault.com/play/1022953/Real-time-BC6H-Compression-on). Krzysztof’s encoder has two modes, one that targets a single partition and another that uses a more exhaustive partition search. The former has similar performance characteristics to our RGBM codecs and can be compared directly. While RGBM has a more constrained range and higher quantization artifacts, the BC6H codec often suffers from block-compression artifacts that are not present in ours:",
+      "zh": "如果直接针对原生 HDR 格式，是有可能取得更高质量和更大范围的。Krzysztof Narkowicz 有一个[免费的 BC6H 编码器](https://github.com/knarkowicz/GPURealTimeBC6H)，他在[这篇 GDC 2016 演讲](https://gdcvault.com/play/1022953/Real-time-BC6H-Compression-on)里做了介绍。Krzysztof 的编码器有两种模式，一种针对单一分区，另一种做更彻底的划分搜索。前者的性能特征和我们的 RGBM 编解码器接近，可以直接对比。RGBM 的范围更受限、量化瑕疵更多，而 BC6H 编解码器则常常出现我们这边没有的块压缩瑕疵："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/1-1-700x448.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "BC6H with Narkowicz’s codec (with `QUALITY == 0`)",
+      "zh": "使用 Narkowicz 编解码器的 BC6H（`QUALITY == 0`）"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/2-1-700x448.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "*Spark’*s BC3-RGBM codec",
+      "zh": "*Spark* 的 BC3-RGBM 编解码器"
+    },
+    {
+      "type": "p",
+      "en": "In future updates I plan to provide improved real-time BC6H and ASTC-HDR codecs that don’t suffer from these issues.",
+      "zh": "在后续更新里，我打算提供改进的实时 BC6H 和 ASTC-HDR 编解码器，不再有这些问题。"
+    },
+    { "type": "h2", "id": "etc2", "zh": "ETC2", "en": "ETC2" },
+    {
+      "type": "p",
+      "en": "*Spark* 1.2 also introduces a new ETC2 codec. Initially I didn’t have high expectations about the possibilities of this format, but I’m actually very pleased with the results. The quality of this codec matches or surpasses offline encoders like [Basis](https://github.com/BinomialLLC/basis_universal) and [etcpak](https://github.com/wolfpld/etcpak), yet it runs in real-time!",
+      "zh": "*Spark* 1.2 还引入了新的 ETC2 编解码器。起初我对这个格式的潜力期望不高，但结果让我非常满意。这个编解码器的质量能追平甚至超过 [Basis](https://github.com/BinomialLLC/basis_universal) 和 [etcpak](https://github.com/wolfpld/etcpak) 这类离线编码器，而它是实时运行的！"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250304155940-700x201.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This was achieved through a combination of table selection heuristics, accurate quantization, and a novel least squares optimization technique.",
+      "zh": "这是靠表选择启发式、精确量化，以及一种新的最小二乘优化技术组合实现的。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "At the lowest quality level, the ETC codec targets the [ETC1s](https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ETC1S) subset.",
+          "zh": "在最低质量档位，ETC 编解码器针对的是 [ETC1s](https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ETC1S) 子集。"
+        },
+        {
+          "en": "At medium quality, mode selection is based on a heuristic, and it targets both ETC1 partitions and endpoint encoding modes, as well as the ETC2 planar mode.",
+          "zh": "在中等质量档位，模式选择基于启发式，同时针对 ETC1 的划分方式和端点编码模式，以及 ETC2 的 planar 模式。"
+        },
+        {
+          "en": "At high quality it simply targets planar mode more aggressively and instead of using a heuristic, it actually evaluates the planar mode error and selects it when it’s below a certain threshold.",
+          "zh": "在高质量档位，它会更激进地使用 planar 模式，而且不再依赖启发式，而是真正去评估 planar 模式的误差，当误差低于某个阈值时就选它。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The planar mode coefficients are determined using least squares optimization. This is particularly tricky to do with reduced precision, but I was able to express all the computations in `f16`. The exception however is the evaluation of the residual, so in high quality mode I rely on direct error evaluation instead. It’s possible to vectorize this code aggressively, so the end result is faster than evaluating the residual in full precision.",
+      "zh": "planar 模式的系数用最小二乘优化来确定。在降低精度的情况下做这件事特别棘手，但我成功把全部计算都用 `f16` 表达了出来。例外是残差的求值，所以在高质量模式下我改为直接评估误差。这段代码可以做得非常激进的向量化，因此最终结果比用全精度求残差还快。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately PowerVR devices have trouble with planar mode optimization and are currently limited to the low quality level. I’ll be talking to ImgTec to try to address this and if there’s enough interest I’ll try to address it in the future.",
+      "zh": "遗憾的是，PowerVR 设备在 planar 模式优化上有问题，目前只能用到最低质量档位。我会和 ImgTec 沟通，试着解决这件事；如果有足够的需求，将来我会去处理它。"
+    },
+    {
+      "type": "p",
+      "en": "With the addition of this codec, *Spark* can serve as a drop in replacement for all the codecs in the Unreal Engine. This can make a huge difference in mobile applications using virtual texturing or Lumen, both of which rely on real-time texture compression.",
+      "zh": "加上这个编解码器之后，*Spark* 可以当作 Unreal Engine 里所有编解码器的直接替代品。对于使用虚拟纹理或 Lumen 的移动应用来说，这可能带来巨大的差别——这两者都依赖实时纹理压缩。"
+    },
+    {
+      "type": "p",
+      "en": "*Spark*‘s quality is not only much higher:",
+      "zh": "*Spark* 的质量不只是高得多："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250304154508-700x392.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "But it achieves that with much higher performance. The table below shows the throughput in MPix/sec:",
+      "zh": "而且它是在性能高得多的情况下做到的。下表给出的是以 MPix/sec 计的吞吐量："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250304155328-700x93.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The results speak for themselves, *Spark* is on the left and Epic’s encoder on the right:",
+      "zh": "结果不言自明：左边是 *Spark*，右边是 Epic 的编码器："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250304161335.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "astc-6x6", "zh": "ASTC 6×6 与流式编解码器", "en": "ASTC 6×6 & Streaming Codecs" },
+    {
+      "type": "p",
+      "en": "Supporting additional block sizes has been a goal from day one, but larger block sizes are particularly challenging due to the large number of registers required to hold all the texels in a larger block. It’s not uncommon to have compute kernels take a large number of texture samples, for example, to perform a convolution. The challenge with block compression is that the shader needs to process these samples multiple times, making register pressure a limiting factor.",
+      "zh": "支持更多块尺寸从第一天起就是目标，但更大的块特别难做，因为要把更大块里的所有纹素都装下需要很多寄存器。计算内核取大量纹理采样并不罕见，比如做一次卷积。块压缩的难处在于着色器需要多次处理这些采样，于是寄存器压力就成了限制因素。"
+    },
+    {
+      "type": "p",
+      "en": "The key breakthrough in *Spark* 1.2 is an encoding algorithm that only iterates over the texels once. This enables a new class of streaming codecs, which process input colors sequentially. Once a color is processed, it’s never used again, allowing its register to be recycled.",
+      "zh": "*Spark* 1.2 的关键突破是一种只遍历一遍纹素的编码算法。这催生了一类新的流式编解码器：它按顺序处理输入颜色，一个颜色处理完就不再使用，于是它的寄存器可以被回收。"
+    },
+    {
+      "type": "p",
+      "en": "Additionally, I developed a least squares optimization method that requires only one-third of the registers used in traditional implementations. Together these two innovations enable codecs that can handle arbitrary block dimensions and are suitable for real-time use on all devices.",
+      "zh": "此外，我还开发了一种最小二乘优化方法，所需寄存器只有传统实现的三分之一。这两项创新合在一起，使编解码器能够处理任意块尺寸，并且在所有设备上都适合实时使用。"
+    },
+    {
+      "type": "p",
+      "en": "Despite these advancements, compilers still struggle to generate optimal code. They often front-load too many texture samples or introduce unnecessary register spills in cases that could be avoided. While the results are already practical, I plan to continue refining these kernels and collaborating with IHVs to fully unlock their potential.",
+      "zh": "尽管有这些进展，编译器仍然难以生成最优代码。它们常常在前段堆积过多的纹理采样，或者在本可避免的情况下引入不必要的寄存器溢出。虽然结果已经可用，但我打算继续打磨这些内核，并与 IHVs 合作，把它们的潜力完全释放出来。"
+    },
+    {
+      "type": "p",
+      "en": "Currently, *Spark* 1.2 supports only the 6×6 block size, but this approach can be extended to other dimensions. However, due to the inherent constraints, these codecs cannot explore as much of the search space as 4×4 codecs, meaning quality will always be somewhat lower. That said, the results are still suitable for many applications.",
+      "zh": "目前 *Spark* 1.2 只支持 6×6 的块尺寸，但这个做法可以扩展到其它尺寸。不过由于固有的限制，这些编解码器能搜索的空间不如 4×4 编解码器那么大，也就是说质量总会低一些。话虽如此，结果对很多应用来说仍然够用。"
+    },
+    {
+      "type": "p",
+      "en": "The following example shows the quality difference between ASTC 6×6 (left) and 4×4 (right) on a couple of textures:",
+      "zh": "下面这个例子展示了 ASTC 6×6（左）与 4×4（右）在几张纹理上的质量差异："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250304164023.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "sideband-data-codecs", "zh": "边带数据编解码器", "en": "Sideband Data Codecs" },
+    {
+      "type": "p",
+      "en": "One of the innovations that I’m most excited about is the use pre-computation of sideband data to assist the encoders.",
+      "zh": "最让我兴奋的创新之一，是利用边带数据（sideband data）的预计算来辅助编码器。"
+    },
+    {
+      "type": "p",
+      "en": "A common application of real-time texture compression is to transcode textures from formats that are more suitable for transmission and storage. For example, some applications use JPEG textures downloaded from the web, others use formats like AV1 for improved quality and compression ratios and to leverage the hardware decoders on mobile devices, and finally many developers are exploring the possibilities offered by new neural texture encoding schemes. All these applications benefit from transcoding these textures to GPU formats. It reduces their memory footprint and power consumption, and it improves runtime performance.",
+      "zh": "实时纹理压缩的一个常见用途，是把纹理从更适合传输和存储的格式转码过来。比如说，有些应用用从网上下载的 JPEG 纹理，有的用 AV1 这类格式，以获得更好的质量和压缩比，并利用移动设备上的硬件解码器，还有不少开发者在探索新的神经纹理编码方案提供的可能性。这些应用都能从把纹理转码成 GPU 格式中获益：它减小内存占用和功耗，并改善运行期性能。"
+    },
+    {
+      "type": "p",
+      "en": "In all these cases the compressed data is known in advance. To transcode these representations to GPU texture formats we can use a standard real-time encoder, but since we know the input data we can do better. It’s possible to precompute a small amount of per-block sideband data to assist the encoder to improve the quality and its performance.",
+      "zh": "在所有这些情况下，压缩数据都是事先已知的。要把这些表示转码成 GPU 纹理格式，我们可以用标准的实时编码器；但既然输入数据已知，我们就能做得更好。我们可以预计算少量逐块的边带数据来辅助编码器，从而改善质量和性能。"
+    },
+    {
+      "type": "p",
+      "en": "This release features 3 codecs with sideband data.",
+      "zh": "这个版本包含 3 个带边带数据的编解码器。"
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "An ASTC 6×6 codec that uses 8 bits per block (2/9 bpp)", "zh": "一个 ASTC 6×6 编解码器，每块用 8 位（2/9 bpp）" },
+        { "en": "An ASTC 4×4 codec that uses 2 bits per block (1/8 bpp)", "zh": "一个 ASTC 4×4 编解码器，每块用 2 位（1/8 bpp）" },
+        { "en": "A BC7 codec that uses 2 bits per block (1/8 bpp)", "zh": "一个 BC7 编解码器，每块用 2 位（1/8 bpp）" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The ASTC 6×6 sideband codec produces higher quality results than the standard ASTC 6×6 codec. It lifts some of the limitations of the *streaming* codec allowing it achieve higher quality and to do so with better performance.",
+      "zh": "ASTC 6×6 边带编解码器给出的质量高于标准 ASTC 6×6 编解码器。它解除了*流式*编解码器的一部分限制，从而能做到更高的质量，而且性能更好。"
+    },
+    {
+      "type": "p",
+      "en": "The ASTC 4×4 sideband data codec (in yellow) is my highest quality ASTC codec. It produces much higher quality results than the standard Q2 ASTC codec (in blue) and slightly better than the Q3 codec (in red), which is not yet available in the GPU.",
+      "zh": "ASTC 4×4 边带数据编解码器（黄色）是我质量最高的 ASTC 编解码器。它的质量远高于标准的 Q2 ASTC 编解码器（蓝色），也略好于 Q3 编解码器（红色）——后者在 GPU 上还没有实现。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250302234032-700x465.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The BC7 sideband codec has similar characteristics.",
+      "zh": "BC7 边带编解码器的特性类似。"
+    },
+    {
+      "type": "p",
+      "en": "I feel like I’m only scratching the surface of what’s possible with strategies like these. The size of the sideband data is fairly small already, but it can usually be compressed very effectively and it’s possible to use Lagrange optimization to balance quality against storage and performance by choosing block modes that compress better or reduce divergence.",
+      "zh": "我感觉这类策略的可能性我才刚刚触及皮毛。边带数据本身已经相当小了，但通常还能压得很有效；而且可以用 Lagrange 优化来权衡质量与存储、性能——选择压缩得更好或能减少分支发散的块模式。"
+    },
+    { "type": "h2", "id": "new-devices", "zh": "新的设备", "en": "New Devices" },
+    { "type": "h2", "id": "android-tv", "zh": "Android TV", "en": "Android TV" },
+    {
+      "type": "p",
+      "en": "*Spark* 1.2 introduces support for Android TV, expanding compatibility to a broader range of devices, including ultra low-end GPUs like the Mali-G31 and PowerVR GE9215. These devices are heavily ALU-limited, making our optimization work especially impactful.",
+      "zh": "*Spark* 1.2 引入了对 Android TV 的支持，把兼容范围扩展到更多设备，包括 Mali-G31 和 PowerVR GE9215 这类超低端 GPU。这些设备严重受限于 ALU，因此我们的优化工作在这里影响格外大。"
+    },
+    {
+      "type": "p",
+      "en": "To showcase these improvements, I updated the Android demo to support “leanback” setups and Android TV input methods. I’m particularly pleased with how well [ImGui](https://github.com/ocornut/imgui) works in scenarios like this.",
+      "zh": "为了展示这些改进，我更新了 Android demo，让它支持「leanback」场景和 Android TV 的输入方式。我特别满意 [ImGui](https://github.com/ocornut/imgui) 在这种场景下表现得这么好。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/03/Pasted-image-20250303002607-1-700x525.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "consoles", "zh": "游戏主机", "en": "Consoles" },
+    {
+      "type": "p",
+      "en": "I finally got access to the Xbox and PlayStation SDKs. While the codecs didn’t work out of the box, I was able to get the expected results with some minor adjustments. There’s a lot of room for optimization and opportunities to leverage the lower-level access these platforms provide. However, interest in console support seems to have stalled for now, so further work is on hold until customers specifically request it.",
+      "zh": "我终于拿到了 Xbox 和 PlayStation 的 SDK。编解码器虽然不能开箱即用，但我做了一些小调整之后就得到了预期的结果。这里优化空间很大，也有机会利用这些平台提供的更底层访问能力。不过目前对主机支持的兴趣似乎停滞了，所以进一步的工作暂停，等客户明确要求再说。"
+    },
+    { "type": "h2", "id": "final-words", "zh": "最后的话", "en": "Final Words" },
+    {
+      "type": "p",
+      "en": "You can evaluate all these new codecs using the [Spark View web app](https://ludicon.com/spark/view/) and test their performance on your device with the [Android demo app](https://play.google.com/store/apps/details?id=com.ludicon.demo_spark_android).",
+      "zh": "你可以用 [Spark View 网页版](https://ludicon.com/spark/view/) 试用所有这些新编解码器，并用 [Android demo app](https://play.google.com/store/apps/details?id=com.ludicon.demo_spark_android) 在自己的设备上测试它们的性能。"
+    },
+    {
+      "type": "p",
+      "en": "If you’ve made it this far and still want to learn more, I’ll be at **GDC in a couple of weeks** and would be happy to meet and chat about anything related to texture compression.",
+      "zh": "如果你读到了这里还想了解更多，**几周后我会在 GDC**，很乐意和大家见面聊聊任何与纹理压缩有关的话题。"
+    },
+    {
+      "type": "p",
+      "en": "For **licensing inquiries** or anything else, feel free to reach out at **[spark@ludicon.com](mailto:spark@ludicon.com)**.",
+      "zh": "如果有**授权方面的咨询**或其它任何事情，欢迎发邮件到 **[spark@ludicon.com](mailto:spark@ludicon.com)**。"
+    }
+  ]
+}

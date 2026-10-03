@@ -1,0 +1,23 @@
+{
+  "id": "official-2016-01-22-pre-order-widget-test",
+  "title": { "zh": "预购小部件测试", "en": "Pre-Order Widget Test" },
+  "subtitle": {
+    "en": "A test of the embedded Humble Store purchase widget, before it goes on the front page.",
+    "zh": "在把它放到首页之前，先测试一下 Humble Store 购买小部件的嵌入。"
+  },
+  "translator": {
+    "note": "原文第二行是一处嵌入媒体（Humble Store 的预购小部件），按本站惯例保留为占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "If this works we will put it on the front page pretty soon. This is for getting the game from the Humble Store.",
+      "zh": "如果这个能用，我们很快就会把它放到首页上。这是用来从 Humble Store 买游戏的。"
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.humblebundle.com/widget/v2/product/thewitness/xe32?theme=light)",
+      "zh": "（原文此处嵌入一个 Humble Store 预购小部件）"
+    }
+  ]
+}

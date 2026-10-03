@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="pingback" href="https://www.ludicon.com/castano/blog/xmlrpc.php">
+<script src="https://cdn.counter.dev/script.js" data-id="d35a48c2-0e1d-4b08-972d-bd0016273314" data-utcoffset="-7"></script>
+<script>
+// IC: This code was added for the image comparison widget in the "An updated Sponza glTF" post.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-cmp-tabs] .cmp-tab');
+  if (!btn) return;
+
+  const root = btn.closest('[data-cmp-tabs]');
+  const img = root.querySelector('.cmp-img');
+  const label = root.querySelector('.cmp-label');
+  const tabs = root.querySelectorAll('.cmp-tab');
+
+  tabs.forEach(t => {
+    t.classList.toggle('is-active', t === btn);
+    t.setAttribute('aria-selected', t === btn ? 'true' : 'false');
+  });
+
+  img.src = btn.dataset.src;
+  label.textContent = btn.dataset.label;
+});
+
+</script>
+<title>Irradiance Caching &#8211; Part 1 &#8211; Ignacio Castaño</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Feed" href="https://www.ludicon.com/castano/blog/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Comments Feed" href="https://www.ludicon.com/castano/blog/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Irradiance Caching &#8211; Part 1 Comments Feed" href="https://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www.ludicon.com/castano/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.ludicon.com%2Fcastano%2Fblog%2Farticles%2Firradiance-caching-part-1%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www.ludicon.com/castano/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.ludicon.com%2Fcastano%2Fblog%2Farticles%2Firradiance-caching-part-1%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='graphy-font-css' href='https://fonts.googleapis.com/css?family=Source+Serif+Pro%3A400%7CLora%3A400%2C400italic%2C700&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/genericons/genericons.css?ver=3.4.1' type='text/css' media='all' />
+<link rel='stylesheet' id='normalize-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/css/normalize.css?ver=4.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='graphy-style-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/style.css?ver=2.3.2' type='text/css' media='all' />
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://www.ludicon.com/castano/blog/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://www.ludicon.com/castano/blog/wp-json/wp/v2/pages/912" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.ludicon.com/castano/blog/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.9" />
+<link rel="canonical" href="https://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/" />
+<link rel='shortlink' href='https://www.ludicon.com/castano/blog/?p=912' />
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-N5MLWTT7JM"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-N5MLWTT7JM');
+		</script>
+
+		<style type="text/css">
+		/* Colors */
+				.entry-content a, .entry-summary a, .page-content a, .author-profile-description a, .comment-content a, .main-navigation .current_page_item > a, .main-navigation .current-menu-item > a {
+			color: #a62425;
+		}
+						.main-navigation a:hover, .entry-content a:hover, .entry-summary a:hover, .page-content a:hover, .author-profile-description a:hover, .comment-content a:hover {
+			color: #b85051;
+		}
+		
+			</style>
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+		<style type="text/css" id="wp-custom-css">
+			.wp-block-image figure {
+  margin:0 0 1.6em
+}
+
+
+.cmp-tabs { margin: 1em 0; }
+
+.cmp-tabbar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem;   justify-content: center; text-align: center;}
+
+.cmp-img { width: 100%; height: auto; display: block; }
+.cmp-caption { font-size: .9em; opacity: .8; margin-top: .35rem; }
+
+.cmp-tab {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.04);
+  color: inherit;
+  padding: .35rem .65rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  opacity: 1;
+  transition: background .15s ease, border-color .15s ease;
+  text-transform: none;
+}
+
+/* Hover */
+.cmp-tab:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Active / selected */
+.cmp-tab.is-active {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+.cmp-image-wrapper {
+  position: relative;
+}
+
+.cmp-label {
+  position: absolute;
+  right: .6rem;
+  bottom: .6rem;
+  padding: .25rem .5rem;
+  font-size: .8rem;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  border-radius: .4rem;
+  pointer-events: none;
+}		</style>
+		
+    <!-- START - Open Graph and Twitter Card Tags 3.3.9 -->
+     <!-- Facebook Open Graph -->
+      <meta property="og:locale" content="en_US"/>
+      <meta property="og:site_name" content="Ignacio Castaño"/>
+      <meta property="og:title" content="Irradiance Caching - Part 1"/>
+      <meta property="og:url" content="https://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/"/>
+      <meta property="og:type" content="article"/>
+      <meta property="og:description" content="This is the first article I wanted to publish when I started writing about the technology behind The Witness. I had just spent a week or so implementing irradiance caching with rotation and translation gradients. Extending the equations of the gradient estimation to the hemicube sample distribution"/>
+      <meta property="og:image" content="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg"/>
+      <meta property="og:image:url" content="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg"/>
+      <meta property="og:image:secure_url" content="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg"/>
+     <!-- Google+ / Schema.org -->
+      <meta itemprop="name" content="Irradiance Caching - Part 1"/>
+      <meta itemprop="headline" content="Irradiance Caching - Part 1"/>
+      <meta itemprop="description" content="This is the first article I wanted to publish when I started writing about the technology behind The Witness. I had just spent a week or so implementing irradiance caching with rotation and translation gradients. Extending the equations of the gradient estimation to the hemicube sample distribution"/>
+      <meta itemprop="image" content="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg"/>
+      <meta itemprop="author" content="Ignacio Castaño"/>
+      <!--<meta itemprop="publisher" content="Ignacio Castaño"/>--> <!-- To solve: The attribute publisher.itemtype has an invalid value. -->
+     <!-- Twitter Cards -->
+      <meta name="twitter:title" content="Irradiance Caching - Part 1"/>
+      <meta name="twitter:url" content="https://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/"/>
+      <meta name="twitter:description" content="This is the first article I wanted to publish when I started writing about the technology behind The Witness. I had just spent a week or so implementing irradiance caching with rotation and translation gradients. Extending the equations of the gradient estimation to the hemicube sample distribution"/>
+      <meta name="twitter:image" content="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg"/>
+      <meta name="twitter:card" content="summary_large_image"/>
+     <!-- SEO -->
+     <!-- Misc. tags -->
+     <!-- is_singular -->
+    <!-- END - Open Graph and Twitter Card Tags 3.3.9 -->
+        
+    </head>
+
+<body class="wp-singular page-template-default page page-id-912 page-child parent-pageid-17 wp-theme-graphy has-sidebar footer-1 has-avatars">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header">
+
+		<div class="site-branding">
+					<div class="site-title"><a href="https://www.ludicon.com/castano/blog/" rel="home">Ignacio Castaño</a></div>
+						<div class="site-description"></div>
+						</div><!-- .site-branding -->
+
+				<nav id="site-navigation" class="main-navigation">
+			<button class="menu-toggle"><span class="menu-text">Menu</span></button>
+			<div class="menu-main-menu-container"><ul id="menu-main-menu" class="menu"><li id="menu-item-426" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-426"><a href="http://www.ludicon.com/castano/blog/">Blog</a></li>
+<li id="menu-item-236" class="menu-item menu-item-type-post_type menu-item-object-page current-page-ancestor menu-item-236"><a href="https://www.ludicon.com/castano/blog/articles/">Articles</a></li>
+<li id="menu-item-235" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-235"><a href="https://www.ludicon.com/castano/blog/projects/">Projects</a></li>
+<li id="menu-item-234" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-234"><a href="https://www.ludicon.com/castano/blog/about/">About</a></li>
+</ul></div>						<form role="search" method="get" class="search-form" action="https://www.ludicon.com/castano/blog/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form>					</nav><!-- #site-navigation -->
+		
+				<div id="header-image" class="header-image">
+			<img width="1260" height="350" src="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0-1260x350.jpg" class="attachment-graphy-page-thumbnail size-graphy-page-thumbnail wp-post-image" alt="" decoding="async" fetchpriority="high" />		</div><!-- #header-image -->
+		
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main">
+
+		
+			
+<article id="post-912" class="post-912 page type-page status-publish has-post-thumbnail hentry">
+		<header class="entry-header">
+				<h1 class="entry-title">Irradiance Caching &#8211; Part 1</h1>
+			</header><!-- .entry-header -->
+	
+	<div class="entry-content">
+		<p>This is the first article I wanted to publish when I started writing about the technology behind <a href="http://the-witness.net">The Witness</a>. I had just spent a week or so implementing irradiance caching with rotation and translation gradients. Extending the equations of the gradient estimation to the hemicube sample distribution had proven to be tricky and had taken me a considerable amount of effort. So, I thought it would be cool to document my derivation, so that others would not have to do the same. However, for that article to make sense I first had to provide some background, hence the previous two articles:</p>
+<ul>
+<li><a href="http://www.ludicon.com/castano/blog/lightmap-parameterization/">Lightmap Parameterization</a></li>
+<li><a href="http://the-witness.net/news/?p=244">Hemicube Rendering and Integration</a></li>
+</ul>
+<p>Unfortunately, by the time I was done with these, the work I had done on the gradients was not so fresh anymore, which is why it has taken me so long to complete this article.</p>
+<p><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg"><img decoding="async" class="aligncenter wp-image-1250 size-large" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0-700x394.jpg" alt="" width="700" height="394" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0-700x394.jpg 700w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0-267x150.jpg 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0-768x432.jpg 768w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0-800x450.jpg 800w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/irradiance_gradients_0.jpg 1280w" sizes="(max-width: 700px) 100vw, 700px" /></a><span id="more-912"></span></p>
+<p>In <a href="http://the-witness.net/news/?p=244">my previous post</a> I mentioned the need to find an algorithm that would allow us to extrapolate the irradiance to fill lightmap texels with invalid samples, to smooth the resulting lightmaps to reduce noise, and to sample the irradiance at a lower frequency to improve performance. As some avid readers suggested <em>Irradiance Caching</em> solves all these problems. However, at the time I didn&#8217;t know that, and my initial attempts at a solution were misguided.</p>
+<h2>Texture Space Approaches</h2>
+<p>I had some experience writing baker tools to capture normal and displacement maps from high resolution meshes. In that setting it is common to use various image filters to fill holes caused by sampling artifacts and extend sampled attributes beyond the boundaries of the mesh parameterization. <a href="http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm">Hugo Elias&#8217; popular article</a> also proposes a texture space hierarchical sampling method, and that persuaded me that working in texture space would be a good idea.</p>
+<p>However, in practice texture space methods had many problems. Extrapolation filters only provide accurate estimates close to chart boundaries, and even then, they only use information from one side of the boundary, which usually results in seams. Also, the effectiveness of irregular sampling and interpolation approaches in texture space is greatly reduced by texture discontinuities and did not reduce the number of samples as much as desired.</p>
+<p>After trying various approaches, it became clear that the solution was to work in object space instead. I was about to implement my own solution, when I learned that this is what irradiance caching was about.</p>
+<h2>Irradiance Caching</h2>
+<p>This technique has such a terrible name that I would have never learned about it if it wasn&#8217;t due to a friend&#8217;s suggestion. I think that a much more appropriate name would be adaptive irradiance sampling or irradiance interpolation. In fact, in the <a href="http://radsite.lbl.gov/radiance/papers/sg88/paper.html">paper that introduced the technique for the first time</a> Greg Ward referred to it as <em>lazy irradiance evaluation</em>, which seems to me a much more appropriate name.</p>
+<p>There&#8217;s plenty of literature on the subject and I don&#8217;t want to repeat what you can learn elsewhere. So, in this article I&#8217;m only going to provide a brief overview, focus on the unique aspects of our implementation, and point you to other sources for further reference.</p>
+<p>The basic idea behind irradiance caching is to sample the irradiance adaptively based on a metric that predicts changes in the irradiance due to proximity to occluders and reflectors. This metric is based on the split sphere model, which basically models the worst possible illumination conditions in order to predict the necessary distance between irradiance samples based on their distance to the surrounding geometry.</p>
+<p>Interpolation between these samples is then performed using radial basis functions, the radius associated to each sample is also based on this distance. Whenever the contribution of the nearby samples falls below a certain threshold a new irradiance record needs to be generated, in our case this is done by rendering an hemicube at that location. In order to perform interpolation efficiently the irradiance records are inserted in an octree, which allows us to efficiently query the nearby records at any given point.</p>
+<p>For more details, the <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm">Siggraph &#8217;08 course</a> on the topic is probably the most comprehensive reference. There&#8217;s also a book based on the materials of the course; it&#8217;s slightly augmented, but in my opinion it does not add much value to the freely available material.</p>
+<p>The <a href="http://www.pbrt.org/"><em>Physically Based Rendering book</em> by Matt Pharr &amp; Greg Humphreys</a> is an excellent resource and the <a href="https://github.com/mmp/pbrt-v2">accompanying source code</a> contains a good, albeit basic implementation.</p>
+<p>Finally, Rory Driscoll provides a good introduction from a programmer&#8217;s point of view: <a href="http://www.rorydriscoll.com/2009/01/18/irradiance-caching-part-1/">part 1</a>, <a href="http://www.rorydriscoll.com/2009/01/24/irradiance-caching-part-2/">part 2</a>.</p>
+<p>Our implementation is fairly standard, there are however a two main differences: First, we are sampling the irradiance using hemicubes instead of a stratified Montecarlo distribution. As a result, the way the we compute the irradiance gradients for interpolation is somewhat different. Second, we use a record placement strategy more suited to our setting. In part 1 I&#8217;ll focus on the estimation of the irradiance gradients, while in part 2 I&#8217;ll write about our record placement strategies.</p>
+<h2>Irradiance Gradients</h2>
+<p>When interpolating our discrete irradiance samples using radial basis functions the resulting images usually have spotty or smudgy appearance. This can be mitigated by increasing the number of samples and increasing the interpolation threshold, which effectively makes them overlap and smoothes out the result. However, this also increases the number of samples significantly, which defeats the purpose of using irradiance caching.</p>
+<p>One of the most effective approaches to improve the interpolation is estimating the irradiance gradients at the sampling points, which basically tell how the irradiance changes when the position and orientation of the surface changes. We cannot evaluate the irradiance gradients exactly, but we can find reasonable approximations with the information that we already have from rendering an hemicube.</p>
+<p>In my previous article I explained that the irradiance integral was just a weighted sum over the radiance samples, where the contribution of each sample is the product of the radiance through each of the hemicube texels <img src='https://s0.wp.com/latex.php?latex=L_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='L_i' title='L_i' class='latex' />, the solid angle of the texel <img src='https://s0.wp.com/latex.php?latex=A_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='A_i' title='A_i' class='latex' />, and the cosine term <img src='https://s0.wp.com/latex.php?latex=%5Ccos_%7B%5Ctheta_i%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\cos_{\theta_i}' title='\cos_{\theta_i}' class='latex' />. That is, the irradiance <img src='https://s0.wp.com/latex.php?latex=E%28%5Cmathbf%7Bx%7D%29&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='E(\mathbf{x})' title='E(\mathbf{x})' class='latex' /> at a point <img src='https://s0.wp.com/latex.php?latex=%5Cmathbf%7Bx%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathbf{x}' title='\mathbf{x}' class='latex' /> is approximated as:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+A_i+L_i+%5Ccos%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='E(\mathbf{x}) \simeq \sum_{i=0}^N A_i L_i \cos\theta_i' title='E(\mathbf{x}) \simeq \sum_{i=0}^N A_i L_i \cos\theta_i' class='latex' /></p>
+<p>The irradiance gradients consider how each these terms change under infinitesimal rotations and translations and can be obtained by differentiating <img src='https://s0.wp.com/latex.php?latex=E%28%5Cmathbf%7Bx%7D%29&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='E(\mathbf{x})' title='E(\mathbf{x})' class='latex' />.</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+%5Cnabla+A_i+L_i+%5Ccos%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N \nabla A_i L_i \cos\theta_i' title='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N \nabla A_i L_i \cos\theta_i' class='latex' /></p>
+<p>The radiance term is considered to be constant, so the equation reduces to:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+L_i+%5Cnabla+A_i+%5Ccos%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla A_i \cos\theta_i' title='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla A_i \cos\theta_i' class='latex' /></p>
+<p>In reality, the radiance is not really constant, but the goal is to estimate the gradients without using any information in addition to what we have already obtained by rendering the scene on a hemicube. So that we can improve the quality of the interpolation by only doing some additional computations while integrating the hemicube.</p>
+<h3>Rotation Gradient</h3>
+<p>The rotation gradient expresses how the irradiance changes as the hemicube is rotated in any direction:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla_r+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+L_i+%5Cnabla_r+A_i+%5Ccos%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla_r E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla_r A_i \cos\theta_i' title='\nabla_r E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla_r A_i \cos\theta_i' class='latex' /></p>
+<p>The most important observation is that as the hemicube rotates, the solid angle of the texels with respect to the origin remains constant. So, the only factor that influences the gradient is the cosine term:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla_r+A_i+%5Ccos%5Ctheta_i+%3D+A_i+%5Cnabla_r+%5Ccos%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla_r A_i \cos\theta_i = A_i \nabla_r \cos\theta_i' title='\nabla_r A_i \cos\theta_i = A_i \nabla_r \cos\theta_i' class='latex' /></p>
+<p>With this in mind, the rotation gradient is simply the rotation axis scaled by the rate of change, that is, the angle gradient:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cfrac%7B%5Cpartial+%7D%7B%5Cpartial+%5Ctheta_i%7D+%5Ccos%5Ctheta_i+%3D+-%5Csin%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\frac{\partial }{\partial \theta_i} \cos\theta_i = -\sin\theta_i' title='\frac{\partial }{\partial \theta_i} \cos\theta_i = -\sin\theta_i' class='latex' /></p>
+<p>And the rotation axis is given by the cross product of the z axis and the texel direction <img src='https://s0.wp.com/latex.php?latex=%5Cmathbf%7Bd%7D_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathbf{d}_i' title='\mathbf{d}_i' class='latex' />:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cmathbf%7Bv%7D_i+%3D+%5Cleft%7C+%5Cmathbf%7Bd%7D_i+%5Ctimes+%280%2C+0%2C+1%29+%5Cright%7C&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathbf{v}_i = \left| \mathbf{d}_i \times (0, 0, 1) \right|' title='\mathbf{v}_i = \left| \mathbf{d}_i \times (0, 0, 1) \right|' class='latex' /></p>
+<p>Therefore:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla_r+%5Ccos%5Ctheta_i+%3D+-%5Cmathbf%7Bv%7D_i+%5Csin%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla_r \cos\theta_i = -\mathbf{v}_i \sin\theta_i' title='\nabla_r \cos\theta_i = -\mathbf{v}_i \sin\theta_i' class='latex' /></p>
+<p>This can be simplified further by noting that <img src='https://s0.wp.com/latex.php?latex=%5Csin%5Ctheta_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\sin\theta_i' title='\sin\theta_i' class='latex' /> is the length of <img src='https://s0.wp.com/latex.php?latex=%5Cmathbf%7Bv%7D_i&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathbf{v}_i' title='\mathbf{v}_i' class='latex' /> before normalization and that results in a very simple expression:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla_r+%5Ccos%5Ctheta_i+%3D+%28%5Cmathbf%7Bd%7D_%7Byi%7D%2C+-%5Cmathbf%7Bd%7D_%7Bxi%7D%2C+0%29&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla_r \cos\theta_i = (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' title='\nabla_r \cos\theta_i = (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' class='latex' /></p>
+<p>Finally, the rotation gradient for the hemisphere is the sum of the gradients corresponding to each texel.</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+L_i+A_i+%28%5Cmathbf%7Bd%7D_%7Byi%7D%2C+-%5Cmathbf%7Bd%7D_%7Bxi%7D%2C+0%29&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i A_i (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' title='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i A_i (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' class='latex' /></p>
+<p>The resulting code is trivial:</p>
+<pre lang="cpp">foreach texel, color in hemicube {
+    Vector2 v = texel.solid_angle * Vector2(texel.dir.y, -texel.dir.x);
+    rotation_gradient[0] += v * color.x;
+    rotation_gradient[1] += v * color.y;
+    rotation_gradient[2] += v * color.z;
+}
+</pre>
+<h3>Translation Gradients</h3>
+<p>The derivation of the translation gradients is a bit more complicated than the rotation gradients because the solid angle term is not invariant under translations anymore.</p>
+<p>My first approach was to simplify the expression of the solid angle term by using an approximation that is easier to differentiate. Instead of using the exact texel solid angle like I had been doing so far, I approximated it by the differential solid angle scaled by the constant area of the texel, which is a reasonable approximation if the texels are sufficiently small.</p>
+<p>In general, the differential solid angle in a given direction <img src='https://s0.wp.com/latex.php?latex=%5CTheta&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\Theta' title='\Theta' class='latex' /> is given by:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=d%5Comega_%5CTheta+%3D+%5Cfrac%7B%5Cmathbf%7Bn%7D%5Ccdot%5CTheta%7D%7Br%5E2%7D+da&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='d\omega_\Theta = \frac{\mathbf{n}\cdot\Theta}{r^2} da' title='d\omega_\Theta = \frac{\mathbf{n}\cdot\Theta}{r^2} da' class='latex' /></p>
+<p>For the particular case of the texels of the top face of the hemicube, <strong>n</strong> is equal to the z axis. So, the differential solid angle is:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=d%5Comega_%5CTheta+%3D+%5Cfrac%7B%5Ccos%5Ctheta%7D%7Br%5E2%7D+da&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='d\omega_\Theta = \frac{\cos\theta}{r^2} da' title='d\omega_\Theta = \frac{\cos\theta}{r^2} da' class='latex' /></p>
+<p>We also know that:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Ccos%5Ctheta+%3D+1%2Fr&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\cos\theta = 1/r' title='\cos\theta = 1/r' class='latex' /></p>
+<p>which simplifies the expression further:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=d%5Comega_%5CTheta+%3D+%28%5Ccos%5Ctheta%29%5E3+da&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='d\omega_\Theta = (\cos\theta)^3 da' title='d\omega_\Theta = (\cos\theta)^3 da' class='latex' /></p>
+<p>Using this result and factoring the area of the texels out of the sum we obtain the following expression for the gradient:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cnabla_t+E_z%28%5Cmathbf%7Bx%7D%29+%5Csimeq+4+%5Csum_%7Bi%3D0%7D%5EN+L_i+%5Cnabla_t+%28%5Ccos%5Ctheta_i%29%5E4&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\nabla_t E_z(\mathbf{x}) \simeq 4 \sum_{i=0}^N L_i \nabla_t (\cos\theta_i)^4' title='\nabla_t E_z(\mathbf{x}) \simeq 4 \sum_{i=0}^N L_i \nabla_t (\cos\theta_i)^4' class='latex' /></p>
+<p>The remaining faces have similar expressions, slightly more complex, but still easy to differentiate along the x and y directions. We could continue along this path and we would obtain closed formulas that can be used to estimate the translation gradients. However, this simple approach did not produce satisfactory results. The problem is that these gradients assume that the only thing that changes under translation is the projected solid angle of the texels, but that ignores the parallax effect and the occlusion between neighboring texels. That is, samples that correspond to objects that are close to the origin of the hemicube should move faster than those that that are farther, and as they move they may occlude nearby samples.</p>
+<p>As you can see in the following lightmap, the use of these gradients resulted in smoother results in areas that are away from occluders, but produced incorrect results whenever the occluders are nearby.</p>
+<figure id="attachment_1251" aria-describedby="caption-attachment-1251" style="width: 600px" class="wp-caption aligncenter"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison_a.png"><img decoding="async" class="size-full wp-image-1251" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison_a.png" alt="" width="600" height="157" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison_a.png 600w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison_a-267x70.png 267w" sizes="(max-width: 600px) 100vw, 600px" /></a><figcaption id="caption-attachment-1251" class="wp-caption-text">Left: Reference. Middle: Irradiance caching without gradients. Right: Irradiance caching with flawed gradients</figcaption></figure>
+<p>The hexagonal shape corresponds to the ceiling of a room that has walls along its sides and a window through which the light enters. The image on the left is a reference lightmap with one hemicube sample per pixel. The image on the middle is the same lightmap computed using irradiance caching taking only 2% of the samples. Note that the number of samples is artificially low to emphasize the artifacts. On the right side the same lightmap is computed using the proposed gradients. If you look closely you can notice that on the interior the lightmap looks smoother, but close to the walls the artifacts remain.</p>
+<p>This is exactly the same flaw of the gradients that Krivanek et al proposed in <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/tvcg2005/krivanek05radiance_caching.pdf">Radiance Caching for Efficient Global Illumination Computation</a>, but was later corrected in the followup paper <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/sccg2005/sccg2005-krivanek.pdf">Improved Radiance Gradient Computation</a> by approaching the problem the same way Greg Ward did in the original <a href="http://radsite.lbl.gov/radiance/papers/erw92/paper.pdf">original <em>Irradiance Gradients</em> paper</a>.</p>
+<p>I then tried follow the same approach. The basic idea is to consider the cosine term invariant under translation so that only the area term needs to be differentiated, and to express the gradient of the cell area in terms of the marginal area changes between adjacent cells. The most important observation is that the motion of the boundary between cells is always determined by the closest sample, so this approach takes occlusion into account.</p>
+<p>Unfortunately we cannot directly use Greg Ward&#8217;s gradients, because they are closely tied to the stratified Montecarlo distribution and we are using a hemicube sampling distribution. However, we can still apply the same methodology to arrive to a formulation of the gradients that we can use in our setting.</p>
+<p>In our case, the cells are the hemicube texels projected onto the hemisphere and the cell area is the texel solid angle. To determine the translation gradients of the texel&#8217;s solid angle is equivalent to computing the sum of the marginal gradients corresponding to each of the texel walls.</p>
+<p>These marginal gradients are the wall normals projected onto the translation plane, scaled by the length of the wall, and multiplied by the rate of motion of the wall in that direction.</p>
+<p>Since the hemicube uses a gnomonic projection, where lines in the plane map to great circles in the sphere, the texel boundaries of the hemicubes map to great arcs in the hemisphere. So, the length of these arcs is very easy to compute. Given the direction of the two texel corners <img src='https://s0.wp.com/latex.php?latex=%5Cmathbf%7Bd%7D_0%2C+%5Cmathbf%7Bd%7D_1&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\mathbf{d}_0, \mathbf{d}_1' title='\mathbf{d}_0, \mathbf{d}_1' class='latex' />, the length of their hemispherical projection is:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=arclength%28%5Cmathbf%7Bd%7D_0%2C+%5Cmathbf%7Bd%7D_1%29+%3D+%5Carccos%7B%5Cmathbf%7Bd%7D_0+%5Ccdot+%5Cmathbf%7Bd%7D_1%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='arclength(\mathbf{d}_0, \mathbf{d}_1) = \arccos{\mathbf{d}_0 \cdot \mathbf{d}_1}' title='arclength(\mathbf{d}_0, \mathbf{d}_1) = \arccos{\mathbf{d}_0 \cdot \mathbf{d}_1}' class='latex' /></p>
+<p>The remaining problem is to compute the rate of motion of the wall, which as Greg Ward noted has to be proportional to the minimum distance of the two samples.</p>
+<p>The key observation is that we can classify all the hemicube edges in wo categories: Edges with constant longitude (<img src='https://s0.wp.com/latex.php?latex=%5Ctheta&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\theta' title='\theta' class='latex' /> is invariant), and edges with constant latitude (<img src='https://s0.wp.com/latex.php?latex=%5Cphi&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\phi' title='\phi' class='latex' /> is invariant).</p>
+<p style="text-align: left;">In each of these cases we can estimate the rate of change of edges with respect to the normal direction by considering the analogous problem in the <a href="http://mathworld.wolfram.com/SphericalCoordinates.html">canonical hemispherical parametrization</a>:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=r+%3D+%5Csqrt%7Bx%5E2%2By%5E2%2Bz%5E2%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='r = \sqrt{x^2+y^2+z^2}' title='r = \sqrt{x^2+y^2+z^2}' class='latex' /><br />
+<img src='https://s0.wp.com/latex.php?latex=%5Cphi+%3D+%5Carctan%5Cfrac%7By%7D%7Bx%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\phi = \arctan\frac{y}{x}' title='\phi = \arctan\frac{y}{x}' class='latex' /><br />
+<img src='https://s0.wp.com/latex.php?latex=%5Ctheta+%3D+%5Carccos%5Cfrac%7Bz%7D%7Br%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\theta = \arccos\frac{z}{r}' title='\theta = \arccos\frac{z}{r}' class='latex' /></p>
+<p>For longitudinal edges we can consider how <img src='https://s0.wp.com/latex.php?latex=%5Ctheta&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\theta' title='\theta' class='latex' /> changes with respect to motion along the x axis:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cfrac%7B%5Cpartial%5Ctheta%7D%7B%5Cpartial+x%7D+%3D+%5Cfrac%7B-%5Ccos%5Ctheta%7D%7Br%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\frac{\partial\theta}{\partial x} = \frac{-\cos\theta}{r}' title='\frac{\partial\theta}{\partial x} = \frac{-\cos\theta}{r}' class='latex' /></p>
+<p>and for latitudinal edges we can consider how <img src='https://s0.wp.com/latex.php?latex=%5Cphi&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\phi' title='\phi' class='latex' /> changes with respect to motion along the y axis:</p>
+<p style="text-align: center;"><img src='https://s0.wp.com/latex.php?latex=%5Cfrac%7B%5Cpartial%5Cphi%7D%7B%5Cpartial+y%7D+%3D+%5Cfrac%7B-1%7D%7Br+%5Csin%5Ctheta%7D&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='\frac{\partial\phi}{\partial y} = \frac{-1}{r \sin\theta}' title='\frac{\partial\phi}{\partial y} = \frac{-1}{r \sin\theta}' class='latex' /></p>
+<p>As we noted before, the rate of the motion is dominated by the nearest edge, so <img src='https://s0.wp.com/latex.php?latex=r&#038;bg=ffffff&#038;fg=000000&#038;s=0' alt='r' title='r' class='latex' /> takes the value of the minimum depth of the two samples adjacent to the edge.</p>
+<p>A detailed derivation for these formulas can be found in <a href="https://cs.dartmouth.edu/~wjarosz/publications/dissertation/">Wojciech Jarosz&#8217;s dissertation</a>, which is now publicly available online. His detailed explanation is very didactic and I highly recommend reading it to get a better understanding of how these formulas are obtained.</p>
+<p>Note that these are just the same formulas used by Greg Ward and others. In practice, the only thing that changes is the layout of the cells and the length of the walls between them.</p>
+<p>As can be seen in the following picture, the new gradients produce much better results. Note that the appearance on the interior of the lightmap is practically the same, but closer to the walls the results are now much smoother. Keep in mind that artifacts are still present, because the number of samples is artificially low.</p>
+<figure id="attachment_1252" aria-describedby="caption-attachment-1252" style="width: 598px" class="wp-caption aligncenter"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison.png"><img loading="lazy" decoding="async" class="wp-image-1252" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison.png" alt="" width="598" height="160" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison.png 355w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/translation_gradient_comparison-267x71.png 267w" sizes="auto, (max-width: 598px) 100vw, 598px" /></a><figcaption id="caption-attachment-1252" class="wp-caption-text">Left: No gradients. Middle: Flawed translation gradients. Right: Improved translation gradients.</figcaption></figure>
+<p>In order to estimate the translation gradients efficiently we precompute the direction and magnitude of the marginal gradients corresponding to each texel edge without taking the distance to the edge into account:</p>
+<pre lang="cpp">// Compute the length of the edge walls multiplied by the rate of motion
+// with respect to motion in the normal direction
+foreach edge in hemicube {
+    float wall_length = acos(dot(d0, d1));
+    Vector2 projected_wall_normal = normalize(cross(d0, d1).xy);
+    float motion_rate = (constant_longitude(d0,d1) ?
+        -cos_theta(d0,d1) :      // d(theta)/dx = -cos(theta) / depth
+        -1 / sin_theta(d0,d1);   // d(phi)/dy = -1 / (sin(theta) * depth)
+
+    edge.translation_gradient = projected_wall_normal * wall_length * motion_rate;
+}
+</pre>
+<p>Then, during integration we split the computations in two steps. First, we accumulate the marginal gradients of each of the edges scaled by the minimum edge distance:</p>
+<pre lang="cpp">foreach edge in hemicube {
+    float depth0 = depth(edge.x0, edge.y0);
+    float depth1 = depth(edge.x1, edge.y1);
+    float min_depth = min(depth0, depth1);
+
+    texel[edge.x0, edge.y0].translation_gradient -= edge.gradient / min_depth;
+    texel[edge.x1, edge.y1].translation_gradient += edge.gradient / min_depth;
+}
+</pre>
+<p>Once we have the per texel gradient, we compute the final irradiance gradient as the sum of the texel gradients weighted by the texel colors:</p>
+<pre lang="cpp">foreach texel, color in hemicube {
+    Vector2 translation_gradient = texel.translation_gradient * texel.clamped_cosine;
+    translation_gradient_sum[0] += translation_gradient * color.x;
+    translation_gradient_sum[1] += translation_gradient * color.y;
+    translation_gradient_sum[2] += translation_gradient * color.z;
+}
+</pre>
+<h2>Conclusions</h2>
+<p>Irradiance Caching provides a very significant speedup to our lightmap baker. On typical meshes we only need to render about 10 to 20% of the samples to approximate the irradiance at very high quality, and for lower quality results or fast previews we can get away with as few as 3% of the samples.</p>
+<p>The use of irradiance gradients for interpolation allows reducing the number of samples significantly, or for the same number of samples produces much higher quality results. The following picture compares the results without irradiance gradients and with them, in both cases the number of samples and their location is the same, note how the picture at the bottom has much smoother lightmaps.</p>
+<p><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1.jpg"><img loading="lazy" decoding="async" class="aligncenter  wp-image-1253" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1-700x766.jpg" alt="" width="535" height="586" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1-700x766.jpg 700w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1-267x292.jpg 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1-768x840.jpg 768w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1-800x875.jpg 800w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/ic_comparison_1.jpg 1280w" sizes="auto, (max-width: 535px) 100vw, 535px" /></a></p>
+<p>I think that without irradiance caching the hemicube rendering approach to global illumination would have not been practical. That said, implementing irradiance caching robustly is tricky and a lot of tuning and tweaking is required in order to obtain good results.</p>
+<p><em>Note: This article was originally published on <a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/">The Witness blog</a>.</em></p>
+			</div><!-- .entry-content -->
+</article><!-- #post-## -->
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			1 Comment		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-533874" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/" class="url" rel="ugc">Irradiance Caching &#8211; Continued &#8211; Ignacio Castaño</a> 			</div>
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/castano/blog/articles/irradiance-caching-part-1/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://www.ludicon.com/castano/blog/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message">Required fields are marked <span class="required">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='912' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6ee4926f49" /></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="35"/><script type="text/javascript">
+/* <![CDATA[ */
+document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+/* ]]> */
+</script>
+</p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+<div id="secondary" class="sidebar-area" role="complementary">
+		<div class="normal-sidebar widget-area">
+		<aside id="categories-2" class="widget widget_categories"><h2 class="widget-title">Categories</h2>
+			<ul>
+					<li class="cat-item cat-item-9"><a href="https://www.ludicon.com/castano/blog/category/coding/">Coding</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://www.ludicon.com/castano/blog/category/cooking/">Cooking</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://www.ludicon.com/castano/blog/category/outdoors/">Outdoors</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://www.ludicon.com/castano/blog/category/personal/">Personal</a>
+</li>
+	<li class="cat-item cat-item-22"><a href="https://www.ludicon.com/castano/blog/category/spark/">Spark</a>
+</li>
+			</ul>
+
+			</aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h2 class="widget-title">Recent Comments</h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/" class="url" rel="ugc">Encoding Render Targets for Free with Tile Shaders &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/#comment-614384">Writing to Compressed Textures in Metal</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/" class="url" rel="ugc">Encoding Render Targets for Free with Tile Shaders &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/#comment-614383">Spark 1.4</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/" class="url" rel="ugc">Spark 1.4 &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/#comment-613545">Spark for Unity</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/" class="url" rel="ugc">Spark 1.4 &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/#comment-613544">The True Size of ASTC Textures</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://renderdiagrams.org/2024/12/18/shadowmap-bias/" class="url" rel="ugc external nofollow">Shadowmap Bias &#8211; Render Diagrams</a></span> on <a href="https://www.ludicon.com/castano/blog/articles/shadow-mapping-summary-part-1/#comment-612196">Shadow Mapping Summary</a></li></ul></aside><aside id="archives-2" class="widget widget_archive"><h2 class="widget-title">Archives</h2>		<label class="screen-reader-text" for="archives-dropdown-2">Archives</label>
+		<select id="archives-dropdown-2" name="archive-dropdown">
+			
+			<option value="">Select Month</option>
+				<option value='https://www.ludicon.com/castano/blog/2026/09/'> September 2026 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/06/'> June 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/05/'> May 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/04/'> April 2026 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/03/'> March 2026 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/02/'> February 2026 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/01/'> January 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/09/'> September 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/08/'> August 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/03/'> March 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/02/'> February 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2024/12/'> December 2024 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2022/11/'> November 2022 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/12/'> December 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/04/'> April 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/03/'> March 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/01/'> January 2019 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2017/10/'> October 2017 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2016/09/'> September 2016 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/12/'> December 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/09/'> September 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/08/'> August 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/07/'> July 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2011/07/'> July 2011 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2011/04/'> April 2011 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/11/'> November 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/10/'> October 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/09/'> September 2010 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/05/'> May 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/03/'> March 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/02/'> February 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/12/'> December 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/11/'> November 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/09/'> September 2009 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/07/'> July 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/05/'> May 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/04/'> April 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/03/'> March 2009 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/02/'> February 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/01/'> January 2009 &nbsp;(6)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/12/'> December 2008 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/09/'> September 2008 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/08/'> August 2008 &nbsp;(2)</option>
+
+		</select>
+
+			<script type="text/javascript">
+/* <![CDATA[ */
+
+( ( dropdownId ) => {
+	const dropdown = document.getElementById( dropdownId );
+	function onSelectChange() {
+		setTimeout( () => {
+			if ( 'escape' === dropdown.dataset.lastkey ) {
+				return;
+			}
+			if ( dropdown.value ) {
+				document.location.href = dropdown.value;
+			}
+		}, 250 );
+	}
+	function onKeyUp( event ) {
+		if ( 'Escape' === event.key ) {
+			dropdown.dataset.lastkey = 'escape';
+		} else {
+			delete dropdown.dataset.lastkey;
+		}
+	}
+	function onClick() {
+		delete dropdown.dataset.lastkey;
+	}
+	dropdown.addEventListener( 'keyup', onKeyUp );
+	dropdown.addEventListener( 'click', onClick );
+	dropdown.addEventListener( 'change', onSelectChange );
+})( "archives-dropdown-2" );
+
+//# sourceURL=WP_Widget_Archives%3A%3Awidget
+/* ]]> */
+</script>
+</aside><aside id="meta-2" class="widget widget_meta"><h2 class="widget-title">Meta</h2>
+		<ul>
+						<li><a href="https://www.ludicon.com/castano/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/feed/">Entries feed</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.org/">WordPress.org</a></li>
+		</ul>
+
+		</aside>	</div><!-- .normal-sidebar -->
+	</div><!-- #secondary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer">
+
+		
+	<div id="supplementary" class="footer-widget-area" role="complementary">
+		<div class="footer-widget-wrapper">
+			<div class="footer-widget">
+								<div class="footer-widget-1 widget-area">
+					<aside id="meta-2" class="widget widget_meta"><h2 class="widget-title">Meta</h2>
+		<ul>
+						<li><a href="https://www.ludicon.com/castano/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/feed/">Entries feed</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.org/">WordPress.org</a></li>
+		</ul>
+
+		</aside>				</div><!-- .footer-widget-1 -->
+																			</div><!-- .footer-widget -->
+		</div><!-- .footer-widget-wrapper -->
+	</div><!-- #supplementary -->
+
+		<div class="site-bottom">
+
+			<div class="site-info">
+				<div class="site-copyright">
+					&copy; 2026 <a href="https://www.ludicon.com/castano/blog/" rel="home">Ignacio Castaño</a>
+				</div><!-- .site-copyright -->
+				<div class="site-credit">
+					Powered by <a href="https://wordpress.org/">WordPress</a>				<span class="site-credit-sep"> | </span>
+					Theme: <a href="http://themegraphy.com/wordpress-themes/graphy/">Graphy</a> by Themegraphy				</div><!-- .site-credit -->
+			</div><!-- .site-info -->
+
+		</div><!-- .site-bottom -->
+
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/castano/blog/*"},{"not":{"href_matches":["/castano/blog/wp-*.php","/castano/blog/wp-admin/*","/castano/blog/wp-content/uploads/*","/castano/blog/wp-content/*","/castano/blog/wp-content/plugins/*","/castano/blog/wp-content/themes/graphy/*","/castano/blog/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/jquery.fitvids.js?ver=1.1" id="fitvids-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/skip-link-focus-fix.js?ver=20160525" id="graphy-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/navigation.js?ver=20160525" id="graphy-navigation-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/doubletaptogo.min.js?ver=1.0.0" id="double-tap-to-go-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/comment-reply.min.js?ver=6.9.9" id="comment-reply-js" async="async" data-wp-strategy="async" fetchpriority="low"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/functions.js?ver=20160822" id="graphy-functions-js"></script>
+<script defer type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1790630560" id="akismet-frontend-js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www.ludicon.com/castano/blog/wp-includes/js/wp-emoji-release.min.js?ver=6.9.9"}}
+</script>
+<script type="module">
+/* <![CDATA[ */
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://www.ludicon.com/castano/blog/wp-includes/js/wp-emoji-loader.min.js
+/* ]]> */
+</script>
+
+</body>
+</html>

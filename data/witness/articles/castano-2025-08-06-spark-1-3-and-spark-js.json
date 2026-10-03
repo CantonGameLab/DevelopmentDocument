@@ -1,0 +1,257 @@
+{
+  "id": "castano-2025-08-06-spark-1-3-and-spark-js",
+  "title": { "zh": "Spark 1.3 与 spark.js", "en": "Spark 1.3 and spark.js" },
+  "subtitle": {
+    "en": "The highlight of this release is full WebGPU support, plus spark.js, a JavaScript API for real-time GPU texture compression on the web.",
+    "zh": "这个版本的亮点是完整的 WebGPU 支持，以及面向 Web 的实时 GPU 纹理压缩 JavaScript API：spark.js。"
+  },
+  "translator": {
+    "note": "归档源文里有几处写了「下面的图表显示……」「最终我找到了一个方案……」「同时还能带来大幅性能提升……」却没有对应的插图行，这些图表在归档源文里本来就不存在，译文没有为它们生成图片块，这不是漏译。文章里的一张 HypeHype 截图在源文中是 `![图](…/hypehype-screenshot-700x390.png)` 这种嵌套写法，外层链接指向 HypeHype 上的 demo（https://hypehype.com/game/textured-fps-gdc-demo/r/ydR4wIMX5erTEP），按全站图片归一化口径去掉了外层链接、只保留图片。h2 的 `id` 按全站约定用连字符，所以 `spark.js` 一节的 id 写作 `spark-js`，正文里的原文锚点 `#spark.js` 保持原样未改。原文里的笔误（`texure`、`*Spark*codecs`、`*Spark*1.3`、`[Netflix](https://netflix.com)as`、`the lack special handling`）在 `en` 字段中一律原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’m excited to announce the release of *Spark* 1.3 and the launch of [spark.js](https://ludicon.com/sparkjs/), our new JavaScript API for real-time GPU texture compression on the web.",
+      "zh": "我很高兴地宣布 *Spark* 1.3 发布，同时推出 [spark.js](https://ludicon.com/sparkjs/)——我们面向 Web 的实时 GPU 纹理压缩 JavaScript API。"
+    },
+    {
+      "type": "p",
+      "en": "The highlight of this release is full [WebGPU](#webgpu) support. *[Spark](https://ludicon.com/spark/)*’s real-time codecs are now available as WGSL compute shaders that run natively in modern browsers. To make it easy to use *Spark* on the web, we’re also introducing [spark.js](#spark.js), a separate JavaScript package that wraps a subset of the codecs with a simple API. *spark.js* is free for non-commercial use and available under an affordable license for commercial projects.",
+      "zh": "这个版本的亮点是完整的 [WebGPU](#webgpu) 支持。*[Spark](https://ludicon.com/spark/)* 的实时编解码器现在以 WGSL 计算着色器的形式提供，能在现代浏览器里原生运行。为了方便在 Web 上使用 *Spark*，我们还推出了 [spark.js](#spark.js)——一个独立的 JavaScript 包，用简单的 API 封装了其中一部分编解码器。*spark.js* 对非商业用途免费，商业项目可以用一个价格合理的许可证获得授权。"
+    },
+    {
+      "type": "p",
+      "en": "**What’s new in Spark 1.3:**",
+      "zh": "**Spark 1.3 的新内容：**"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "New RGBA codecs: Introduced a [new BC7 RGBA codec](#bc7-rgba) and improved the quality of our [ASTC RGBA codec](#astc-rgba-quality).",
+          "zh": "新的 RGBA 编解码器：引入了[新的 BC7 RGBA 编解码器](#bc7-rgba)，并提升了 [ASTC RGBA 编解码器](#astc-rgba-quality) 的画质。"
+        },
+        {
+          "en": "Performance and quality improvements across the board, in particular a [faster EAC codec](#faster-eac), a faster [ASTC RGBA codec](#astc-rgba) and improvements to [BC1 quality](#quality-improvements).",
+          "zh": "全方位的性能和画质改进，尤其是[更快的 EAC 编解码器](#faster-eac)、更快的 [ASTC RGBA 编解码器](#astc-rgba)，以及 [BC1 画质](#quality-improvements) 的改进。"
+        },
+        {
+          "en": "Expanded platform support including: [WebGPU](#webgpu), [OpenGL 4.1 (macOS), GLES 3.0 (iOS) and broader AndroidTV support](#expanded-platform-support).",
+          "zh": "扩展的平台支持，包括：[WebGPU](#webgpu)、[OpenGL 4.1（macOS）、GLES 3.0（iOS）以及更广的 AndroidTV 支持](#expanded-platform-support)。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "This release also includes new examples, bug fixes, and continued improvements based on user feedback.",
+      "zh": "这个版本还包含新的示例、bug 修复，以及基于用户反馈的持续改进。"
+    },
+    {
+      "type": "p",
+      "en": "I’m thrilled to welcome [Infinite Flight](https://infiniteflight.com/) and [Netflix](https://netflix.com)as new *Spark* licensees, and deeply grateful to [HypeHype](https://hypehype.com) for their continued support.",
+      "zh": "我很高兴地欢迎 [Infinite Flight](https://infiniteflight.com/) 和 [Netflix](https://netflix.com) 成为 *Spark* 的新授权方，也深深感谢 [HypeHype](https://hypehype.com) 一直以来的支持。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/08/logos-700x158.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "webgpu", "zh": "WebGPU", "en": "WebGPU" },
+    {
+      "type": "p",
+      "en": "[HypeHype](https://hypehype.com) has already been using *Spark* in their WebGPU client ahead of this release, but now it’s fully supported and tested across all browsers using both `f32` and `f16` floating point variants.",
+      "zh": "[HypeHype](https://hypehype.com) 在这个版本之前就已经在他们的 WebGPU 客户端里用上了 *Spark*，而现在它已经得到完整支持，并在所有浏览器上用 `f32` 和 `f16` 两种浮点变体测试过。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2025/08/hypehype-screenshot-700x390.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The codecs work reliably across all WebGPU-enabled browsers and devices we’ve tested.",
+      "zh": "在我们测试过的所有支持 WebGPU 的浏览器和设备上，这些编解码器都能稳定工作。"
+    },
+    { "type": "h2", "id": "spark-js", "zh": "spark.js", "en": "spark.js" },
+    {
+      "type": "p",
+      "en": "In addition to WebGPU support, we’re introducing [spark.js](https://ludicon.com/sparkjs) a standalone JavaScript package that exposes a subset of the Spark codecs through a simple and lightweight API:",
+      "zh": "除了 WebGPU 支持之外，我们还推出了 [spark.js](https://ludicon.com/sparkjs)：一个独立的 JavaScript 包，通过简单轻量的 API 暴露一部分 Spark 编解码器："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "texure = await spark.encodeTexture(\"image.avif\", {mips: true, srgb: true})"
+    },
+    {
+      "type": "p",
+      "en": "This makes it easy to load standard image formats in the browser and transcode them to native GPU formats optimized for rendering.",
+      "zh": "这样就能轻松地在浏览器里加载标准图像格式，并把它们转码成为渲染优化的原生 GPU 格式。"
+    },
+    {
+      "type": "p",
+      "en": "Modern image formats like AVIF and JXL provide excellent quality across a wide range of compression ratios, making them ideal for storage and transmission. In contrast, native GPU formats offer compact in-memory representations but compress poorly. While rate-distortion optimization (RDO) can help, the quality of RDO-based encoders degrades significantly at lower bitrates.",
+      "zh": "像 AVIF 和 JXL 这样的现代图像格式在很宽的压缩比范围内都能提供出色的画质，因此非常适合存储和传输。相比之下，原生 GPU 格式提供紧凑的内存表示，但压缩能力差。率失真优化（RDO）虽然有帮助，但基于 RDO 的编码器在较低码率下画质会明显下降。"
+    },
+    {
+      "type": "p",
+      "en": "The chart below compares the [SSIMULACRA2](https://github.com/cloudinary/ssimulacra2) score of multiple encoders under various bit rates on an image that is representative of typical textures:",
+      "zh": "下面的图表在一张能代表典型纹理的图像上，比较了多种编码器在各种码率下的 [SSIMULACRA2](https://github.com/cloudinary/ssimulacra2) 得分："
+    },
+    {
+      "type": "p",
+      "en": "Scores above 80 are considered very high quality (distortion not noticeable by an average observer under normal viewing conditions). While RDO codecs perform well at high bitrates, their quality drops sharply as compression increases. In contrast, AVIF images transcoded with *Spark* maintain much higher quality, even at aggressive compression levels.",
+      "zh": "80 分以上被认为是非常高的画质（在正常观看条件下，普通观察者察觉不到失真）。RDO 编解码器在高码率下表现不错，但随着压缩程度提高，画质会急剧下降。相比之下，用 *Spark* 转码的 AVIF 图像即使在很激进的压缩程度下也能保持高得多的画质。"
+    },
+    {
+      "type": "p",
+      "en": "You can find more details, examples, and licensing information on the [spark.js website](https://ludicon.com/sparkjs) and the [GitHub repository](https://github.com/Ludicon/spark.js). To evaluate the codecs directly in a WebGPU-enabled browser, try the [spark.js viewer](https://ludicon.com/sparkjs/viewer/).",
+      "zh": "更多细节、示例和授权信息可以在 [spark.js 网站](https://ludicon.com/sparkjs) 和 [GitHub 仓库](https://github.com/Ludicon/spark.js) 上找到。想直接在支持 WebGPU 的浏览器里试用这些编解码器，可以试试 [spark.js viewer](https://ludicon.com/sparkjs/viewer/)。"
+    },
+    {
+      "type": "p",
+      "en": "I am excited to bring the *Spark*codecs to the web and can’t wait to see what you build with them!",
+      "zh": "把 *Spark* 编解码器带到 Web 上让我很兴奋，我迫不及待想看到你们用它做出什么！"
+    },
+    { "type": "h2", "id": "bc7-rgba", "zh": "BC7 RGBA 编解码器", "en": "BC7 RGBA Codec" },
+    {
+      "type": "p",
+      "en": "The lack of support for BC7 with alpha was an outstanding gap in our codec lineup. This release closes that gap with a new BC7 RGBA codec and also improves the quality of all other RGBA formats.",
+      "zh": "不支持带 alpha 的 BC7，一直是我们编解码器阵容里一个明显的缺口。这个版本用新的 BC7 RGBA 编解码器补上了这个缺口，同时也提升了所有其它 RGBA 格式的画质。"
+    },
+    {
+      "type": "p",
+      "en": "The mode selection heuristic in BC7 RGBA is an improvement over the heuristic I employed in the ASTC codec. However, it’s tailored to the modes available in the BC7 format and is somewhat cheaper to evaluate. On opaque textures, it produces the same results as the BC7 RGB codec, but it’s also able to handle varying alpha values.",
+      "zh": "BC7 RGBA 里的模式选择启发式比我用在 ASTC 编解码器里的启发式有所改进。不过它是针对 BC7 格式可用的模式定制的，求值成本也低一些。在不透明纹理上，它给出的结果和 BC7 RGB 编解码器相同，但它还能处理变化的 alpha 值。"
+    },
+    {
+      "type": "p",
+      "en": "In addition to that it’s optimized for images where the alpha is used for transparency. By default, alpha is treated as a separate independent channel. However, when alpha is known to be used for transparency, we can weight the RGB error by the alpha channel, giving more importance to opaque texels than transparent ones.",
+      "zh": "除此之外，它还针对 alpha 用于透明度的图像做了优化。默认情况下，alpha 被当作一个独立分开的通道。但当已知 alpha 是用于透明度时，我们可以用 alpha 通道给 RGB 误差加权，让不透明纹素比透明纹素更重要。"
+    },
+    {
+      "type": "p",
+      "en": "As far as I know, this alpha-weighted optimization is only supported by the squish codec I co-wrote with Simon Brown and the NVTT and ICBC codecs derived from it, but is absent from most other offline codecs. It comes with some tradeoffs: In rare cases, it can introduce interpolation artifacts such as bleeding due to bilinear filtering. In practice, this is often not an issue, and the results compare favorably with offline codecs that do not account for transparency usage.",
+      "zh": "据我所知，这种 alpha 加权优化只有我和 Simon Brown 合写的 squish 编解码器、以及由它派生出的 NVTT 和 ICBC 编解码器支持，大多数其它离线编解码器都没有。它也有一些代价：在少数情况下，它会引入插值瑕疵，比如双线性滤波造成的颜色渗漏。实践中这通常不成问题，而且结果比那些没有考虑透明度用途的离线编解码器更好。"
+    },
+    {
+      "type": "p",
+      "en": "The quality of our alpha-weighted BC7 codec is competitive with the best offline solutions (SSIMULACRA2 scores, higher is better):",
+      "zh": "我们 alpha 加权 BC7 编解码器的画质足以和最好的离线方案竞争（SSIMULACRA2 得分，越高越好）："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/08/alpha-weighted-ssimulacra2-700x130.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Some of these changes have also translated into improvements in the ASTC RGBA codec, where in some cases the quality has improved noticeably:",
+      "zh": "其中一些改动也带来了 ASTC RGBA 编解码器的改进，在有些情况下画质提升相当明显："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/08/ASTC-RGBA-SSIMU2-1.3-700x364.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "faster-eac", "zh": "更快的 EAC 压缩", "en": "Faster EAC Compression" },
+    {
+      "type": "p",
+      "en": "Our [previous Spark 1.2 release](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/) saw some impressive performance improvements in the EAC Q0 codecs. This release brings even more performance gains and extends these improvements to the remaining quality levels.",
+      "zh": "我们[上一个版本 Spark 1.2](https://www.ludicon.com/castano/blog/2025/03/spark-1-2/) 给 EAC Q0 编解码器带来了可观的性能提升。这个版本又进一步提升了性能，并把改进扩展到了其余的质量档位。"
+    },
+    {
+      "type": "p",
+      "en": "The focus this time was on low-end Adreno devices. Some of the Adreno 5xx devices would time-out when compressing large normal map textures at the highest quality level. This could be solved by dispatching the codec kernels multiple times to compress portions of image, but this issue made me take a closer look at the performance on these devices.",
+      "zh": "这次的关注点是低端 Adreno 设备。有些 Adreno 5xx 设备在最高质量档位压缩大尺寸法线贴图时会超时。这个问题可以通过多次派发编解码器内核、分块压缩图像来解决，但它也促使我仔细审视这些设备上的性能。"
+    },
+    {
+      "type": "p",
+      "en": "An EAC_RG block is composed of two identical EAC_R sub-blocks that can be encoded independently. Most of our codecs are limited by bandwidth and reducing register pressure is critical to maintain good occupancy and maximize throughput. However, in this case most compilers chose to pre-load all the texels and interleave the instructions that encode each of the sub-blocks, possibly in a misguided effort to improve ILP. However, this doubled the number of required registers and often resulted in spilling. To prevent that from happening, I place the code inside loops that only run once, but the compiler is unable to eliminate and thus prevent code motion, ensuring the sub-blocks are encoded sequentially.",
+      "zh": "一个 EAC_RG 块由两个完全相同的 EAC_R 子块组成，它们可以独立编码。我们大多数编解码器受带宽限制，降低寄存器压力对于维持良好的占用率、把吞吐量做到最大至关重要。但在这个例子里，大多数编译器选择预加载所有纹素，并把编码两个子块的指令交错起来——大概是想提高 ILP，方向却错了。可这样一来所需寄存器数量翻倍，还经常导致溢出。为了阻止这种情况，我把代码放进只会执行一次的循环里，编译器无法把它消除，也就无法做代码搬移，从而保证两个子块被顺序编码。"
+    },
+    {
+      "type": "p",
+      "en": "Another problem was that the EAC codec relied on lookup tables to compute the optimal index assignments. This is much faster than the typical brute force approach, but these loads are divergent and have a severe performance impact on some devices. To avoid them we pack and encode these tables into just a couple literals avoiding the divergence with some cheap math to decode the original values.",
+      "zh": "另一个问题是 EAC 编解码器依赖查找表来计算最优的索引分配。这比典型的暴力做法快得多，但这些加载是发散的，在某些设备上会严重影响性能。为了避开它们，我们把这些表打包编码进仅仅几个字面量里，再用一些廉价的数学运算解码出原来的值，从而避免了发散。"
+    },
+    {
+      "type": "p",
+      "en": "Getting these changes to not regress across any devices was particularly difficult as improvements on Adreno would often cause regressions on Mali and vice-versa. The throughput of integer operations on Mali is much lower than that of float operations and in some cases that resulted in lower performance than the lookup tables. To avoid that I had to carefully express the integer operations using int16 vectorization and work around compiler bugs that resulted in sub-optimal code.",
+      "zh": "要让这些改动不在任何设备上造成回归特别困难，因为在 Adreno 上的改进常常会在 Mali 上造成回归，反之亦然。Mali 上整数运算的吞吐量比浮点运算低得多，有些情况下这导致性能还不如用查找表。为了避开这一点，我不得不小心地用 int16 向量化来表达整数运算，并绕开那些会导致代码次优的编译器 bug。"
+    },
+    {
+      "type": "p",
+      "en": "In the end I found a solution that works great across almost all Mali devices:",
+      "zh": "最终我找到了一个在几乎所有 Mali 设备上都表现很好的方案："
+    },
+    {
+      "type": "p",
+      "en": "while also providing a big performance boost on Adrenos:",
+      "zh": "同时还能在 Adreno 上带来大幅性能提升："
+    },
+    {
+      "type": "p",
+      "en": "This not only improved the throughput, but also allowed us to encode large textures with all the codecs on the lowest end devices without running into compute time-outs. If you wonder why some of the Adreno 505 bars are missing, that’s why. Previously, the Q1 and Q2 codecs would run into resource limits and timeouts on that device.",
+      "zh": "这不仅提升了吞吐量，还让我们能在最低端的设备上用所有编解码器编码大纹理，而不会撞上计算超时。如果你好奇为什么有些 Adreno 505 的柱子是缺失的，原因就在这里：以前 Q1 和 Q2 编解码器在那台设备上会撞上资源上限和超时。"
+    },
+    { "type": "h2", "id": "astc-rgba", "zh": "ASTC RGBA 优化", "en": "ASTC RGBA Optimizations" },
+    {
+      "type": "p",
+      "en": "The recent quality improvements in the ASTC RGBA codec introduced minor performance regressions, particularly noticeable on low-end devices. To address this, I’ve done a new round of optimizations targeted at mobile GPUs.",
+      "zh": "ASTC RGBA 编解码器最近的画质改进带来了一些轻微的性能回归，在低端设备上尤其明显。为了解决这个问题，我又做了一轮针对移动 GPU 的优化。"
+    },
+    {
+      "type": "p",
+      "en": "Endpoint encoding in the ASTC RGBA kernel is more expensive than in other codecs due to the need to handle endpoints in different quantization modes. The encoder relied on lookup tables to facilitate the encoding, but these have been eliminated in favor of vectorized int16 operations, the bread and butter of Android performance optimizations.",
+      "zh": "由于需要处理不同量化模式下的端点，ASTC RGBA 内核里的端点编码比其他编解码器更昂贵。这个编码器原本依赖查找表来简化编码，但现在这些查表已经被向量化的 int16 运算取代——后者正是 Android 性能优化的看家本领。"
+    },
+    {
+      "type": "p",
+      "en": "This change provides a moderate speedup on the most sensitive lower-end devices without sacrificing quality.",
+      "zh": "这一改动在最敏感的低端设备上带来了中等幅度的加速，同时没有牺牲画质。"
+    },
+    { "type": "h2", "id": "quality-improvements", "zh": "画质改进", "en": "Quality Improvements" },
+    {
+      "type": "p",
+      "en": "I’ve made several small quality improvements across the board, many of them informed by the SSIMULACRA2 perceptual error metric. One notable improvement is in the BC1 codec.",
+      "zh": "我在各方面做了一些小幅的画质改进，其中不少是受 SSIMULACRA2 感知误差指标启发。一个值得一提的改进在 BC1 编解码器里。"
+    },
+    {
+      "type": "p",
+      "en": "An oversight in my BC1 encoder was the lack special handling of single color blocks. I was reluctant to add this code path due to concerns about introducing divergence and the need for a lookup table. At the time I thought the quality gains were too minor to justify the overhead. While the RMSE improvements are indeed small, the perceptual gains are very significant and make this worthwhile at higher quality settings.",
+      "zh": "我的 BC1 编码器里有个疏漏：没有对单色块做特殊处理。当时我不太愿意加这条代码路径，因为担心引入发散、还得用查找表。那时候我觉得画质收益太小，不值得这点开销。RMSE 的改进确实很小，但感知上的收益非常显著，所以在较高质量档位下这么做是值得的。"
+    },
+    {
+      "type": "p",
+      "en": "The chart below shows the SSIMULACRA2 scores of the new codec compared to the previous version. Images containing smooth, uniform regions benefit significantly from this optimization.",
+      "zh": "下面的图表显示了新编解码器与上一版本相比的 SSIMULACRA2 得分。含有平滑均匀区域的图像从这项优化中获益显著。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/08/bc1-single-color-score-700x389.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Instead of adopting the standard tables used in other encoders, I’ve generated new tables that take into account the way the BC1 format is actually decoded by the hardware and result in slightly higher quality.",
+      "zh": "我没有采用其它编码器用的标准表，而是生成了新的表，把 BC1 格式在硬件上实际解码的方式考虑了进去，从而得到略高一些的画质。"
+    },
+    {
+      "type": "p",
+      "en": "*Spark*1.3 also has a new experimental mode that produces higher quality results on non-photographic images and illustrations. This currently has a small performance impact, but can produce much higher quality results in some cases.",
+      "zh": "*Spark* 1.3 还有一个新的实验性模式，在非摄影类图像和插画上能给出更高的画质。它目前会带来一点性能开销，但在某些情况下能大幅提升画质。"
+    },
+    { "type": "h2", "id": "expanded-platform-support", "zh": "扩展的平台支持", "en": "Expanded Platform Support" },
+    {
+      "type": "p",
+      "en": "Extended support for earlier OpenGL versions that lack compute shaders and even copy image extension. This is possible using pixel buffer objects.",
+      "zh": "把支持扩展到了更早的 OpenGL 版本——这些版本没有计算着色器，甚至连 copy image 扩展都没有。借助 pixel buffer object 可以做到这一点。"
+    },
+    {
+      "type": "p",
+      "en": "Additionally, some current Amazon FireTV devices come with PowerVR drivers that have not seen an update in the last 7 years and had numerous bugs. However, I was able to find workarounds and get the many of the codecs running on them.",
+      "zh": "此外，现在有些 Amazon FireTV 设备搭载的 PowerVR 驱动已经 7 年没更新过，bug 一大堆。不过我还是找到了绕过办法，让其中很多编解码器能在这些设备上跑起来。"
+    }
+  ]
+}

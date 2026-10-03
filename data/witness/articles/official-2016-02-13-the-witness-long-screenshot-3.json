@@ -1,0 +1,29 @@
+{
+  "id": "official-2016-02-13-the-witness-long-screenshot-3",
+  "title": { "zh": "《The Witness》长截图 #3", "en": "The Witness Long Screenshot #3" },
+  "subtitle": {
+    "en": "The third long screenshot video, ending with the ESRB badge.",
+    "zh": "第三支长截图视频，结尾附 ESRB 分级标识。"
+  },
+  "translator": {
+    "note": "正文没有文字，只有一段嵌入视频、一张 ESRB 标识图和它下方的一行内容描述。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/YJgkwRbW46k?amp;modestbranding=1&fs=0&rel=0&wmode=opaque)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/esrb_e.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": " (Alcohol Reference)",
+      "zh": "（提及酒精）",
+      "noteZh": "「Alcohol Reference」是 ESRB 分级标签上的一项内容描述，原文把它作为分级图标下的一行小字附在文末。"
+    }
+  ]
+}

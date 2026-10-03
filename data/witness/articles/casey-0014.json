@@ -1,0 +1,70 @@
+{
+  "id": "casey-0014",
+  "title": { "zh": "插值", "en": "Interpolation" },
+  "subtitle": {
+    "en": "A video that introduces the basic concepts behind linear and bezier interpolation.",
+    "zh": "一段视频，介绍线性插值与贝塞尔插值背后的基本概念。"
+  },
+  "translator": {
+    "note": "「草系列」指 Witness Wednesday 里此前关于草地渲染的几篇；文末说的「实体列表面板」就是术语表里的 Lister Panel / Entity Panel。原文此处是一个内嵌的 YouTube 视频，归档只剩占位链接，视频地址见该段的链接。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I wanted to end the grass series with a little introduction to the concept of interpolation, for those programmers out there who perhaps haven't been exposed to the basics.  I spent a good deal of time trying to type out an article, but it just didn't work.  There's too much stuff to talk about, even if I leave a lot out, and it's too hard to emphasize the important parts when I can't easily point at parts of diagrams.",
+      "zh": "我想用一小段插值概念的入门来给「草系列」收尾，写给那些可能还没接触过这些基础的程序员。我花了不少时间想敲出一篇文章，但就是不行。要讲的东西太多了，哪怕我省掉一大半也一样，而且在没法随手指出图里某一部分的时候，实在很难把重点强调出来。"
+    },
+    {
+      "type": "p",
+      "en": "So, I tried a different approach, and recorded a video of me drawing everything out on my notebook.  The first one was ridiculously long, so I recorded a second one that was greatly abridged, and I talked very quickly.  It's an experiment, but in both cases I was able to get a lot more across than I could with text.  It's still a bit long, but you could, you know, um… watch it in parts?",
+      "zh": "于是我换了个办法，录了一段我在笔记本上把一切画出来的视频。第一版长得离谱，所以我又录了第二版，大幅删减，语速也很快。这是个实验，但两版都比文字传达的多得多。它还是有点长，不过你可以，那个，嗯……分几次看？"
+    },
+    {
+      "type": "p",
+      "en": "[嵌入视频/媒体](https://www.youtube.com/embed/S2fz4BS2J3Y?t=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3;enablejsapi=1)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "I was trying to keep the video to an hour, so I ran out of time to talk about the second interpolation case in the grass code, which was bitmap interpolation.  This is just bilinear interpolation, so I was going to show how bilinear interpolation is just applying the b(t) function three times, and how it boils down to the same weighted sum equation as well.  Nothing particularly interesting, but I would have liked to have gone fast enough to get that in there so it could just reinforce the notion that this equation is everywhere.",
+      "zh": "我一直想把视频控制在一小时以内，所以没时间讲草代码里的第二种插值情形：位图插值。那就是双线性插值，我本来打算演示双线性插值不过是把 b(t) 函数应用三次，以及它同样会归结为同一个加权求和式子。没什么特别有意思的，但我想讲得够快、把这段塞进去，好再一次强化「这个式子无处不在」的印象。"
+    },
+    {
+      "type": "p",
+      "en": "Similarly, in the abridged version, I didn't talk about how there are multiple degrees of Bezier curves, and how you can construct other ones (quadratic, etc.) by doing the exact same pyramid method just by adding or removing rows of the pyramid.  Hopefully it's straightforward to see how to do that.",
+      "zh": "同样，在删减版里我也没讲贝塞尔曲线有多个次数，以及你可以用完全相同的金字塔方法，只靠增减金字塔的行来构造别的曲线（二次的等等）。希望这一点看起来足够直白。"
+    },
+    {
+      "type": "p",
+      "en": "For quick reference, here are the related Wikipedia pages:",
+      "zh": "便于快速查阅，下面是相关的维基百科页面："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[Barycentric coordinates](https://en.wikipedia.org/wiki/Barycentric_coordinate_system), so you can read about how these are used",
+          "zh": "[重心坐标](https://en.wikipedia.org/wiki/Barycentric_coordinate_system)，你可以读读它们是怎么被使用的"
+        },
+        {
+          "en": "[Bezier curves](http://en.wikipedia.org/wiki/B%C3%A9zier_curve)  —  has some nice animations, unfortunately doesn't ever draw the pyramids",
+          "zh": "[贝塞尔曲线](http://en.wikipedia.org/wiki/B%C3%A9zier_curve)——里面有几段不错的动画，可惜从来没画出那些金字塔"
+        },
+        {
+          "en": "[Bilinear blending](https://en.wikipedia.org/wiki/Bilinear_interpolation)  —  like Beziers, it's built from repeated linear blends",
+          "zh": "[双线性混合](https://en.wikipedia.org/wiki/Bilinear_interpolation)——和贝塞尔一样，它是由反复的线性混合搭建起来的"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Anyway, despite the fact that I don't really have a proper set up, I like how the video came out, and I think, with practice, I could do some nice tutorials like this that might be useful to people.  I think with more practice I could structure them so that they were less sprawling.  Let me know what you think!  There are a lot of things I wouldn't have the time to do properly in article format (unrelated to [The Witness](http://the-witness.net/news/), just general programming things) that I could easily do in this format, so if people actually find it useful, I'd try to record some more after Witness Wednesdays wrap up.",
+      "zh": "总之，虽然我其实并没有什么像样的设备条件，但我挺喜欢这段视频出来的效果；我觉得多练几次，我能做出一些这样的教程，对别人也许有用。我想多练之后，我能把它们组织得不那么散。告诉我你们怎么看！有很多东西我没时间用文章的形式做好（和 [The Witness](http://the-witness.net/news/) 无关，就是些通用编程话题），用这种形式却很容易做，所以如果大家真的觉得有用，等 Witness Wednesday（每周三连载）结束后，我会试着再录一些。"
+    },
+    {
+      "type": "p",
+      "en": "And speaking of Witness Wednesdays, now that I've finished the series on grass, it is time for a new topic: code.  Yes, just code.  One of the things I did while working on [The Witness](http://the-witness.net/news/) was to put a new entity listing panel in the editor, and I think it would make a good case study for how to put a lot of features into something quickly and without a lot of code.  So check back next Wednesday, when I'll start walking through how I went about writing it, and show a lot of examples of how I structured the code so it could be built quickly without becoming excessively janky.",
+      "zh": "说到 Witness Wednesday，既然「草系列」已经讲完，该换个新话题了：代码。对，就是代码。我在做 [The Witness](http://the-witness.net/news/) 期间做的事之一，是在编辑器里加了一个新的实体列表面板，我觉得它很适合当案例，讲讲怎么快速把一大堆功能塞进一个东西里，而且不用写很多代码。所以下周三再来看，我会开始逐一讲我是怎么写它的，并展示很多例子，说明我是怎么组织代码，让它能快速搭起来而又不至于变得过于破烂。"
+    }
+  ]
+}

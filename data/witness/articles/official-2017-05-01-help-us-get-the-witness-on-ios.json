@@ -1,0 +1,33 @@
+{
+  "id": "official-2017-05-01-help-us-get-the-witness-on-ios",
+  "title": { "zh": "帮我们把《The Witness》弄到 iOS 上！", "en": "Help Us Get The Witness on iOS!" },
+  "subtitle": {
+    "en": "We're looking for a contractor to optimize art assets in Maya for an iOS release of The Witness.",
+    "zh": "我们在找一位合同工，在 Maya 里为《The Witness》的 iOS 版优化美术资源。"
+  },
+  "translator": {
+    "note": "原文四段，均无小标题与配图；招聘邮箱在原文里是纯文本，未改成链接。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "If you are looking for 2-3 months of straightforward contract work, are excellent at optimizing art assets in Maya, can pick up workflows quickly and have good attention to detail, then we are looking for you! We are planning on shipping The Witness on iOS in a few months, but still have a lot of optimization work to get done.",
+      "zh": "如果你在找一份 2 到 3 个月、直接了当的合同工作，擅长在 Maya 里优化美术资源，能快速上手新的工作流程，而且对细节很在意，那我们要找的就是你！我们计划在几个月内把《The Witness》发到 iOS 上，但还有大量优化工作要做完。"
+    },
+    {
+      "type": "p",
+      "en": "Familiarity with The Witness is obviously a plus, as it is a very intricate game with a lot of gameplay-relevant details. Being able to work in-office in our San Francisco studio would also be nice, but is not required if you are really good at communicating long distance.",
+      "zh": "熟悉《The Witness》当然是加分项，因为它是一款非常精细、有很多与玩法相关的细节的游戏。能到我们旧金山的工作室坐班也很好，不过如果你远程沟通能力真的很强，那并不是必须的。"
+    },
+    {
+      "type": "p",
+      "en": "Please only apply if you have shipped games before and have a good idea of the optimiziation process, we do not have time to bring someone inexperienced into the fold!",
+      "zh": "请只有在做过已发售游戏、并且对优化流程心里有数的情况下再投递——我们没有时间把一个没经验的人慢慢带进门！"
+    },
+    {
+      "type": "p",
+      "en": "Send resumes/portfolios to jobs@thekla.com",
+      "zh": "请把简历／作品集发到 jobs@thekla.com"
+    }
+  ]
+}

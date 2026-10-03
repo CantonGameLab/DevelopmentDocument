@@ -1,0 +1,105 @@
+{
+  "id": "castano-2009-03-18-ham-and-beans",
+  "title": { "zh": "火腿与蚕豆", "en": "Ham and Beans" },
+  "subtitle": {
+    "en": "A family that runs a pork farm in Spain is the backdrop for explaining why good Iberian ham is so hard to get in the US, plus a recipe for fava beans with ham.",
+    "zh": "从家里在西班牙经营养猪场说起，讲为什么在美国很难吃到好火腿，最后是一道火腿蚕豆的做法。"
+  },
+  "translator": {
+    "note": "只翻译正文，不译评论区：源文正文结束后有一条分隔线（`---`），其后是 6 条读者评论（Chewie、cb、Jesus、Chad Austin、castano、Nick，连同分隔线与评论区标题共 22 个源文单元），属归档附带的评论区，按本批口径不计入正文，也不在译文里。保真核验报出的未覆盖单元全部来自这一段。正文部分全部覆盖：源文插图按全站口径归一化成图片占位块，两处 Flickr 插图只保留原图 URL，丢掉外层链接与缩略图后缀；源文第 18 行「[missing image – Iberian pigs in the Dehesa]」在归档 markdown 和原始 HTML 里都只有这行占位文字，图片 URL 已丢失、无法还原，故保留为正文段落。三条做法步骤在源文里是无序列表，归入一个 list 块，其中的笔误「cook until flagrant」（应为 fragrant）按「不增不删」原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’ve been thinking about writing about cooking in this blog for a while. Not just to share what I’ve learned, because, well, I don’t have much to share, but to get other people’s ideas and suggestions. While I may cook better than the average American and may be able to impress my wife and friends, I’m not really such a good cook. I know how to follow recipes, and I’m starting to get some sense of what works and what does not, but I have a lot to learn, which is actually fascinating; there’s a whole world of flavors out there and exploring it is a very rewarding experience.",
+      "zh": "我想在这个博客上写点做饭的事已经有一阵子了。倒不只是为了分享我学到的东西——毕竟我也没什么好分享的——而是为了听听别人的想法和建议。我做饭大概比普通美国人强一点，也还算能让太太和朋友吃得高兴，但我真算不上什么好厨子。我会照着菜谱做，也开始有点明白什么搭配行、什么不行，但要学的还多着呢，而这恰恰特别有意思：外面有一整个风味的世界，探索它的回报很丰厚。"
+    },
+    {
+      "type": "p",
+      "en": "It took me a while to get used to cook in the US. Spanish cooking is not very sophisticated, but it’s based on seasonal dishes and the use of high quality ingredients available locally. Not the kind of thing you find in the US at your nearest supermarket.",
+      "zh": "我在美国花了好一阵子才习惯做饭这回事。西班牙菜并不怎么精致，但它讲究时令，讲究用当地能买到的优质食材。这种东西，你在美国最近的超市里是找不到的。"
+    },
+    {
+      "type": "p",
+      "en": "This is all changing very quickly, but many of the traditions still remain. I for one grew up without paying to much attention to food. I just thought it was fuel for my body. It was only when I moved to the US that I started to appreciate what I used to have and now missed.",
+      "zh": "这一切都在飞快地变，但很多传统还是留了下来。拿我自己来说，我从小到大都没怎么在意过吃。我只把食物当成给身体加的燃料。直到搬到美国，我才开始懂得珍惜以前拥有、如今却想念的那些东西。"
+    },
+    {
+      "type": "p",
+      "en": "The Mediterranean diet is mostly composed of olive oil, bread, fresh fruits, fish and vegetables. However, I grew up in a family that runs a pork farm and a small meat production and distribution business. So, I had a larger share of meat than the average. Despite of that, meat was most often used as a condiment or in small dishes, except on special occasions.",
+      "zh": "地中海饮食主要由橄榄油、面包、新鲜水果、鱼和蔬菜构成。不过，我成长的家庭经营着一家养猪场，还有一门规模不大的肉类生产和分销生意。所以我吃的肉比一般人要多。即便如此，肉大多时候也只是当作调味，或者做成一两道小菜，只有特殊场合才会放开吃。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – Iberian pigs in the Dehesa]",
+      "zh": "（原文此处有一张图，图片链接在归档中已丢失）"
+    },
+    {
+      "type": "p",
+      "en": "Our pork is unlike any other. Most of it is free-range and acorn-fed, which gives its meat a very distinct flavor. It is generally destined to the production of the finest quality deli meats: cured ham, loins, and sausages.",
+      "zh": "我们家的猪肉跟别处的都不一样。大部分是散养、吃橡果长大的，所以肉质风味非常独特。这些猪一般都被用来做成最高品质的腌腊制品：火腿、里脊和香肠。"
+    },
+    {
+      "type": "p",
+      "en": "As far as I know it’s not possible to find anything like that in the US. Exports of Iberian ham are legal now, but the FDA requires installations to be periodically inspected and approved. Small farmers cannot really afford to comply with all the requirements of the FDA, so the only ham that you can usually find in the US is from larger and lower quality producers.",
+      "zh": "据我所知，在美国是找不到这种东西的。伊比利亚火腿的出口现在是合法的，但 FDA 要求生产设施定期接受检查和认证。小农户根本负担不起满足 FDA 全部要求的成本，所以你在美国通常能买到的火腿，都来自规模更大、品质更低的厂家。"
+    },
+    {
+      "type": "p",
+      "en": "To add more insult to injury, the low quality ham that is available here is sold at outrageous prices, as if it were a high quality product! If you are not discouraged yet, you can find some of it at the [Spanish Table](http://www.spanishtable.com/), or at online retailers such as [La Tienda](http://www.tienda.com/reference/ibericoquest.html).",
+      "zh": "更气人的是，这里能买到的那些低品质火腿，卖的却是离谱的高价，好像它是什么高档货一样！如果你还没被吓退，可以在 [Spanish Table](http://www.spanishtable.com/) 找到一些，或者在 [La Tienda](http://www.tienda.com/reference/ibericoquest.html) 这样的网店上买。"
+    },
+    {
+      "type": "p",
+      "en": "I would not recommend any of those options. Instead, what I do is to bring some of our ham with us every time we travel to Spain. This is actually illegal, but is usually safe. However, once we tried to bring an entire leg and, much to our dismay, it was confiscated by the border officers. Since then, I only bring small quantities that are hardly noticeable on the scanner.",
+      "zh": "这些途径我一个都不推荐。我的做法是：每次回西班牙，都带一点自家的火腿回来。这其实是违法的，但通常不会被查。不过有一次我们想带一整条腿，结果让我们极为沮丧，被边检人员没收了。从那以后，我只带很少的量，少到在扫描仪上几乎看不出来。"
+    },
+    {
+      "type": "p",
+      "en": "Rather than eating all of it right away, I generally save it for months, waiting for the right opportunity to enjoy it. Last weekend that opportunity presented itself in the form of fresh fava beans:",
+      "zh": "我不会一口气把它吃完，通常都会存上好几个月，等一个合适的机会再享用。上个周末，这个机会以新鲜蚕豆的形式出现了："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2274/3529928629_05ba79a985.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Fava beans are delicious eaten raw, or simply sautéed in olive oil with red onions. However, a little bit of Iberian Ham turns that delicious dish into a delicacy.",
+      "zh": "蚕豆生吃就很好吃，或者简单地用橄榄油加红洋葱煎一下也行。但只要加一点点伊比利亚火腿，这道好菜就变成了珍馐。"
+    },
+    {
+      "type": "p",
+      "en": "The preparation is trivial:",
+      "zh": "做法简单得不能再简单："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Remove the beans from their pods. It’s possible to also remove the beans from the shells by cooking them in boiling water for a short period of time and cooling them quickly in cold water. I personally don’t bother with that and leave the beans in their shells.",
+          "zh": "把豆子从豆荚里剥出来。也可以用沸水短时间煮一下、再迅速过冷水，把豆子外面那层薄皮也去掉。我自己懒得折腾，就这么带着皮用。"
+        },
+        {
+          "en": "Pour a small amount of olive oil on a sauté pan on high heat. Chop the onions and the ham, and cook until flagrant.",
+          "zh": "在煎锅里倒少量橄榄油，大火烧热。把洋葱和火腿切碎，下锅炒到香气扑鼻。"
+        },
+        {
+          "en": "Then add the beans, season to taste with salt and freshly ground pepper, and cook lightly for a few minutes while stirring often.",
+          "zh": "然后放入蚕豆，按口味加盐和现磨胡椒调味，轻轻翻炒几分钟，注意勤翻动。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2012/3529930017_cf9c5827cf.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Let me know if you like posts like this, and if so, in future posts I’ll continue rambling about my quest to adapt the traditional Spanish recipes to the resources available in the US.",
+      "zh": "如果你们喜欢这种帖子就告诉我；要是喜欢，以后我就接着絮叨我在美国怎么用手边的食材去还原西班牙传统菜谱这件事。"
+    }
+  ]
+}

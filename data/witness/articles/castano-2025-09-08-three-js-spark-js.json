@@ -1,0 +1,342 @@
+{
+  "id": "castano-2025-09-08-three-js-spark-js",
+  "title": { "zh": "three.js + spark.js", "en": "three.js + spark.js" },
+  "subtitle": {
+    "en": "three.js r180 adds ExternalTexture support, making it possible to use spark.js-encoded textures directly — and the results are faster than the default loader.",
+    "zh": "three.js r180 加入 ExternalTexture 支持，让 spark.js 编码的纹理可以直接使用——而且结果比默认加载器还快。"
+  },
+  "translator": {
+    "note": "归档把原文里的几张数据表压平了，每个单元格各占一行，译文沿用全站已有做法（见 `light-graphics-tech-lighting-comparison` 一篇）保持一单元格一段落。原文里 `[gltf-transform](https://gltf-transform.dev/)` 被一对单反引号整个包住，属于归档转换残留，已按原意还原成普通链接、去掉外层反引号。插图按全站口径归一化成「（原文此处有一张图）」占位；其中一张截图的 URL 在归档源文里含一个空格（`…11.05.07 PM-700x724.png`），按源文原样保留。原文里的笔误（`the use textures`、`after after a bit of polish`、`It is be possible`、`occlussion`、`loading these require`、`this will the subject`、`much higher that I anticipated`）在 `en` 字段中一律原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "[three.js r180](https://github.com/mrdoob/three.js/releases/tag/r180) was released last week and among the many improvements, the one that I’m most excited about is a series of changes by [Don McCurdy](https://www.donmccurdy.com/) that enable the use textures encoded with [spark.js](https://ludicon.com/sparkjs/) in [three.js](https://threejs.org/):",
+      "zh": "[three.js r180](https://github.com/mrdoob/three.js/releases/tag/r180) 上周发布了，在众多改进里，最让我兴奋的是 [Don McCurdy](https://www.donmccurdy.com/) 做的一系列改动，它们让 [three.js](https://threejs.org/) 能用上以 [spark.js](https://ludicon.com/sparkjs/) 编码的纹理："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Support ExternalTexture with GPUTexture [#31653](https://github.com/mrdoob/three.js/pull/31653)",
+          "zh": "支持带 GPUTexture 的 ExternalTexture [#31653](https://github.com/mrdoob/three.js/pull/31653)"
+        },
+        {
+          "en": "ExternalTexture: Support copy(), clone(). [#31731](https://github.com/mrdoob/three.js/pull/31731)",
+          "zh": "ExternalTexture：支持 copy()、clone()。[#31731](https://github.com/mrdoob/three.js/pull/31731)"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Support for `ExternalTexture` objects in the WebGPU backend allows you to wrap a `GPUTexture` object, such as the one produced by `Spark.encodeTexture` and use it directly in three.js. This makes it straightforward to work with Spark-encoded textures.",
+      "zh": "WebGPU 后端对 `ExternalTexture` 对象的支持，让你可以把一个 `GPUTexture` 对象（比如 `Spark.encodeTexture` 产出的那个）包起来，直接在 three.js 里使用。这让处理 Spark 编码的纹理变得非常简单。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s a brief example:",
+      "zh": "这里有个简短示例："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "// Load and encode texture using spark:\nconst gpuTexture = await spark.encodeTexture(textureUrl, { srgb: true, flipY: true });\n\n// Wrap the GPUTexture for three.js\nconst externalTex = new THREE.ExternalTexture(gpuTexture);\n\n// Use as any other texture:\nconst material = new THREE.MeshBasicMaterial({ map: externalTex });"
+    },
+    {
+      "type": "p",
+      "en": "With this feature in place, I began testing spark.js in more complex scenarios. The first thing I wanted was a GLTF viewer example. With some help from Don McCurdy I was able to get something running quickly, and after after a bit of polish, I’m very happy with the results. It requires very minimal changes to existing code.",
+      "zh": "有了这个特性，我开始在更复杂的场景里测试 spark.js。我首先想要的是一个 GLTF 查看器示例。在 Don McCurdy 的一些帮助下，我很快就让东西跑了起来；再稍加打磨之后，我对结果非常满意。它对现有代码的改动极小。"
+    },
+    {
+      "type": "p",
+      "en": "To simplify integration, the spark.js node package includes an addon that you import explicitly:",
+      "zh": "为了简化集成，spark.js 的 node 包包含一个需要显式导入的 addon："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "import { Spark } from \"@ludicon/spark.js\";\nimport { registerSparkLoader } from \"@ludicon/spark.js/three-gltf\";"
+    },
+    {
+      "type": "p",
+      "en": "Then use the imported function to register Spark with an existing `GLTFLoader` instance:",
+      "zh": "然后用导入的函数，把 Spark 注册到一个已有的 `GLTFLoader` 实例上："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "const loader = new GLTFLoader()\nregisterSparkLoader(loader, spark)"
+    },
+    {
+      "type": "p",
+      "en": "And that’s it! After registration, the loader will automatically encode textures with Spark whenever applicable.",
+      "zh": "就这么简单！注册之后，只要适用，loader 就会自动用 Spark 编码纹理。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/09/Screenshot-2025-09-08-at-11.05.07 PM-700x724.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This exercise was very useful in identifying some issues in the initial spark.js implementation, as well as some limitations in three.js.",
+      "zh": "这次实践非常有用，帮我发现了 spark.js 最初实现里的一些问题，也发现了 three.js 的一些局限。"
+    },
+    { "type": "h2", "id": "concurrent-image-decoding", "zh": "并发的图像解码", "en": "Concurrent Image Decoding" },
+    {
+      "type": "p",
+      "en": "The initial performance results of the Spark texture loader were not surprising. I expected it to be a bit slower than the default loader, since Spark needs to dispatch its codecs to the GPU, and the first measurements seemed to confirm this.",
+      "zh": "Spark 纹理加载器最初的性能结果并不让人意外。我本来就预期它会比默认加载器慢一点，因为 Spark 需要把编解码器派发到 GPU 上，而最初的测量似乎也证实了这一点。"
+    },
+    {
+      "type": "p",
+      "en": "After profiling, however, I discovered the reason why the Spark texture loader was slower: the input textures were being decoded sequentially in the main thread instead of being offloaded to a separate thread.",
+      "zh": "但做过性能剖析之后，我发现了 Spark 纹理加载器更慢的原因：输入纹理是在主线程上顺序解码的，而没有卸载到单独的线程上。"
+    },
+    {
+      "type": "p",
+      "en": "Fixing this was surprisingly simple. To get the image data I was using a [DOM Image object](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement) and the solution was to simply set the [decoding](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding) attribute to `\"async\"`:",
+      "zh": "修好这个问题出奇地简单。我之前是用一个 [DOM Image 对象](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement) 来获取图像数据的，解决办法就是把 [decoding](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding) 属性设成 `\"async\"`："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "img.decoding = \"async\""
+    },
+    {
+      "type": "p",
+      "en": "While digging into this, I also learned that the recommended approach is to use the [createImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap) API. Both approaches worked well, but the latter appeared to be slightly faster in practice, while producing the same results. The only difference I found is that the `Image` object supported rendering of SVG files while the `createImageBitmap` function did not, so to maintain feature parity I use `Image` objects for SVG files, and `createImageBitmap` for other image types.",
+      "zh": "在深挖这个问题的过程中，我还了解到推荐的做法是使用 [createImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap) API。两种做法都工作得很好，但后者在实践中似乎稍快一点，结果则完全一样。我发现的唯一区别是：`Image` 对象支持渲染 SVG 文件，而 `createImageBitmap` 函数不支持。所以为了保持功能对等，我对 SVG 文件用 `Image` 对象，对其它图像类型用 `createImageBitmap`。"
+    },
+    {
+      "type": "p",
+      "en": "With these changes I was pleased to see that the performance of the Spark texture loader was as good as the regular texture loader and in some cases even faster! Texture encoding happens asynchronously in the GPU which is usually idle during load time, so the extra work doesn’t add a noticeable overhead to the main thread.",
+      "zh": "做了这些改动之后，我很高兴地看到 Spark 纹理加载器的性能和普通纹理加载器一样好，有些情况下甚至更快！纹理编码是异步发生在 GPU 上的，而 GPU 在加载期间通常是空闲的，所以这些额外工作不会给主线程带来明显的开销。"
+    },
+    {
+      "type": "p",
+      "en": "Both three.js and spark.js need to generate mipmaps for these textures. Spark does this using compute shaders immediately after decoding, while three.js uses fragment shaders and does so at a later stage when the scene is evaluated. These differences may explain why Spark sometimes has a performance advantage, though I’m not familiar enough with the three.js internals to say for certain.",
+      "zh": "three.js 和 spark.js 都需要为这些纹理生成 mipmap。Spark 是在解码之后立刻用计算着色器做的；three.js 用的是片元着色器，而且是在稍后求值场景的阶段才做。这些差异也许能解释为什么 Spark 有时性能更好，不过我对 three.js 内部还不够熟悉，没法下定论。"
+    },
+    {
+      "type": "p",
+      "en": "**Edit:**[Arseny points out](https://mastodon.gamedev.place/@zeux/115175339410444742) that image decoding appears to be sequential in Firefox and I’ve confirmed that’s indeed the case with both approaches described above. The only information I could find on the matter is a [14 year old bug report titled “Multithreaded image decoding”](https://bugzilla.mozilla.org/show_bug.cgi?id=716140) which appears to indicate the feature was implemented long ago, so I’m not sure what’s going on. If anyone can shed some light I would appreciate it!",
+      "zh": "**补充：**[Arseny 指出](https://mastodon.gamedev.place/@zeux/115175339410444742)，在 Firefox 里图像解码似乎是顺序的，我也确认了上面说的两种做法都是如此。关于这件事我能找到的唯一信息，是一份[14 年前、标题为「Multithreaded image decoding」的 bug 报告](https://bugzilla.mozilla.org/show_bug.cgi?id=716140)，它看起来表明这个特性很久以前就实现了，所以我不确定到底是怎么回事。如果有人能说明一下，我会很感激！"
+    },
+    { "type": "h2", "id": "rg-normal-map-support", "zh": "RG 法线贴图支持", "en": "RG Normal Map Support" },
+    {
+      "type": "p",
+      "en": "Another surprise was that three.js did not support normal maps stored in two-channel textures. This is a very common practice, most engines use two-channel compressed textures for normals, but in three.js the material shaders expect RGB values representing the packed XYZ coordinate.",
+      "zh": "另一个意外是 three.js 不支持以双通道纹理存储的法线贴图。这是非常常见的做法，大多数引擎对法线都用双通道压缩纹理；但在 three.js 里，材质着色器期望的是表示打包 XYZ 坐标的 RGB 值。"
+    },
+    {
+      "type": "p",
+      "en": "In practice, it’s more efficient to store only the XY coordinates and reconstruct the Z by projecting it onto the hemisphere:",
+      "zh": "在实践中，只存 XY 坐标、再把 Z 投影到半球上重建出来更高效："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "normal.z = sqrt(saturate(1.0 - dot(normal.xy, normal.xy)));"
+    },
+    {
+      "type": "p",
+      "en": "The XY normal map coordinates are usually not correlated, so block compression using a single plane doesn’t work very well. Early implementations used DXT5 textures using the Alpha block and the Green channel of the color block to encode the X and Y coordinates independently. Jan Paul van Waveren and I analyzed this scheme in our [Real-Time Normal Map DXT Compression](https://developer.download.nvidia.com/whitepapers/2008/real-time-normal-map-dxt-compression.pdf) paper back in 2008.",
+      "zh": "法线贴图的 XY 坐标通常不相关，所以用单一平面的块压缩效果不太好。早期实现用 DXT5 纹理，拿 Alpha 块和颜色块的绿色通道分别独立编码 X 和 Y 坐标。Jan Paul van Waveren 和我在 2008 年的论文 [Real-Time Normal Map DXT Compression](https://developer.download.nvidia.com/whitepapers/2008/real-time-normal-map-dxt-compression.pdf) 里分析过这个方案。"
+    },
+    {
+      "type": "p",
+      "en": "Today, we have specialized two-channel compression formats that are ideal to encode normal maps: BC5 on PC and EAC11_RG on mobile. Even with more general formats like BC7 and ASTC it’s also beneficial to use two-channel encodings. For example, the [Arm ASTC Encoder guidelines](https://developer.arm.com/documentation/102162/0430/About-Arm-ASTC-Encoder#md282-about-arm-astc-encoder__compressing-normal-maps) recommend packing normals as XXXY in order to use the Luminance-Alpha endpoint mode.",
+      "zh": "今天我们有了专门的双通道压缩格式，非常适合编码法线贴图：PC 上是 BC5，移动端是 EAC11_RG。即便是 BC7 和 ASTC 这类更通用的格式，用双通道编码也有好处。比如 [Arm ASTC Encoder 指南](https://developer.arm.com/documentation/102162/0430/About-Arm-ASTC-Encoder#md282-about-arm-astc-encoder__compressing-normal-maps) 就建议把法线打包成 XXXY，以便使用 Luminance-Alpha 端点模式。"
+    },
+    {
+      "type": "p",
+      "en": "To support these packing schemes I’ve submitted a [PR to three.js](https://github.com/mrdoob/three.js/pull/31695), which is currently being reviewed, and I hope will land in the upcoming r181 release.",
+      "zh": "为了支持这些打包方案，我给 [three.js 提了一个 PR](https://github.com/mrdoob/three.js/pull/31695)，目前正在评审中，希望能进入即将发布的 r181。"
+    },
+    {
+      "type": "p",
+      "en": "This feature benefits all three.js developers working with compressed textures, but to improve the quality of existing assets with offline-compressed textures it’s necessary to recompress them. In contrast, spark.js will leverage this feature as soon as it becomes available, automatically improving the quality of existing normal maps without any additional work.",
+      "zh": "这个特性对所有使用压缩纹理的 three.js 开发者都有好处；但对于已经用离线压缩纹理做好的资源，要想提升画质就必须重新压缩。相比之下，spark.js 会在这个特性一可用时就利用它，自动提升现有法线贴图的画质，而不需要任何额外工作。"
+    },
+    { "type": "h2", "id": "performance-results", "zh": "性能结果", "en": "Performance Results" },
+    {
+      "type": "p",
+      "en": "Measuring performance on web applications is tricky. Execution is very asynchronous, so when timing a piece of code it’s hard to be sure of what you are timing exactly. You could be timing extraneous tasks that happen to be scheduled in between your timing measurements, and code that you think you are measuring may actually be evaluated at a later point.",
+      "zh": "在 Web 应用上测性能很棘手。执行是高度异步的，所以给一段代码计时时，很难确定你到底在给什么计时。你可能把恰好调度在两次计时之间的一些无关任务也算了进去，而你以为在测的代码实际上可能在更晚的时候才求值。"
+    },
+    {
+      "type": "p",
+      "en": "The chrome profiler has proven very useful to understand unexpected timing results. I wish the GPU timeline displayed the GPU debug group annotations, but in my tests the GPU usage is so sparse that it’s easy to infer what’s executing on it.",
+      "zh": "Chrome 的性能剖析器对理解意外的计时结果非常有用。我希望 GPU 时间线能显示 GPU 调试组的标注；不过在我的测试里 GPU 占用太稀疏了，很容易推断出上面在执行什么。"
+    },
+    {
+      "type": "p",
+      "en": "To keep things simple I decided to load a single GLTF file and measure the [FCP](https://web.dev/articles/fcp) (first contentful paint), that is, the time to the first rendered frame. Although in this particular test the first frame is not rendered until *all* the contents have finished loading. To estimate how much of that time can be attributed to the GLTF loading, I also measured the FCP of the same scene without the GLTF file and subtract that. Results are somewhat noisy specially on mobile, so I run them at least 3 times and pick the best. I also let the devices cool down in between tests to prevent throttling.",
+      "zh": "为了简单起见，我决定只加载一个 GLTF 文件，并测量 [FCP](https://web.dev/articles/fcp)（first contentful paint，首次内容绘制），也就是到第一帧渲染出来的时间。不过在这个特定测试里，要等*所有*内容都加载完毕才会渲染第一帧。为了估算其中有多少时间可以归到 GLTF 加载上，我还测了同一场景不带 GLTF 文件时的 FCP，再把它减掉。结果有些噪声，在移动端尤其如此，所以我每条至少跑 3 次并取最好的。我还会在两次测试之间让设备冷却，以防降频。"
+    },
+    {
+      "type": "p",
+      "en": "I’ve tested a bunch of different models, but the numbers here correspond to the [SciFiHelmet GLTF example](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/SciFiHelmet) from the Khronos [GLTF Sample Models](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main). The original textures are PNGs and to produce the other variants I’ve used [gltf-transform](https://gltf-transform.dev/) with the default texture compression settings agglomerating the results in a single GLB file.",
+      "zh": "我测过好些不同的模型，不过这里的数字对应的是 Khronos [GLTF Sample Models](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main) 里的 [SciFiHelmet GLTF 示例](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/SciFiHelmet)。原始纹理是 PNG，为了生成其它几个变体，我用了 [gltf-transform](https://gltf-transform.dev/) 的默认纹理压缩设置，并把结果合并到一个 GLB 文件里。"
+    },
+    {
+      "type": "p",
+      "en": "SciFiHelmet contains a single material with 4 2048×2048 textures for albedo, normal, roughness-metalness (RM), and occlusion. When using Spark these are encoded using a 16 byte per block format available for the albedo, normal and RM maps, and an 8 byte per block format for the occlussion. Format selection is done automatically based on the channel usage and available formats on the device. It is be possible to target lower quality (8 byte per block) formats, but I’m not doing that in this test.",
+      "zh": "SciFiHelmet 只包含一个材质，带有 4 张 2048×2048 纹理，分别用于 albedo、法线、roughness-metalness（RM）和遮蔽。使用 Spark 时，albedo、法线和 RM 贴图用可用的每块 16 字节格式编码，遮蔽则用每块 8 字节格式。格式选择是根据通道用途和设备上可用的格式自动完成的。本来也可以选择更低画质（每块 8 字节）的格式，但这个测试里我没有那样做。"
+    },
+    {
+      "type": "p",
+      "en": "I gathered these results on a MacBook Pro M4:",
+      "zh": "这些结果是在一台 MacBook Pro M4 上收集的："
+    },
+    { "type": "p", "en": "SciFiHelmet", "zh": "SciFiHelmet" },
+    { "type": "p", "en": "Time (ms)", "zh": "时间（ms）" },
+    { "type": "p", "en": "Texture Size (MB)", "zh": "纹理大小（MB）" },
+    { "type": "p", "en": "VRAM (MB)", "zh": "VRAM（MB）" },
+    { "type": "p", "en": "PNG", "zh": "PNG" },
+    { "type": "p", "en": "121", "zh": "121" },
+    { "type": "p", "en": "26.64", "zh": "26.64" },
+    { "type": "p", "en": "85.33", "zh": "85.33" },
+    { "type": "p", "en": "PNG+Spark", "zh": "PNG+Spark" },
+    { "type": "p", "en": "101", "zh": "101" },
+    { "type": "p", "en": "26.64", "zh": "26.64" },
+    { "type": "p", "en": "18.66", "zh": "18.66" },
+    { "type": "p", "en": "WebP", "zh": "WebP" },
+    { "type": "p", "en": "68", "zh": "68" },
+    { "type": "p", "en": "1.44", "zh": "1.44" },
+    { "type": "p", "en": "85.33", "zh": "85.33" },
+    { "type": "p", "en": "WebP+Spark", "zh": "WebP+Spark" },
+    { "type": "p", "en": "55", "zh": "55" },
+    { "type": "p", "en": "1.44", "zh": "1.44" },
+    { "type": "p", "en": "18.66", "zh": "18.66" },
+    { "type": "p", "en": "AVIF", "zh": "AVIF" },
+    { "type": "p", "en": "60", "zh": "60" },
+    { "type": "p", "en": "0.92", "zh": "0.92" },
+    { "type": "p", "en": "85.33", "zh": "85.33" },
+    { "type": "p", "en": "AVIF+Spark", "zh": "AVIF+Spark" },
+    { "type": "p", "en": "53", "zh": "53" },
+    { "type": "p", "en": "0.92", "zh": "0.92" },
+    { "type": "p", "en": "18.66", "zh": "18.66" },
+    { "type": "p", "en": "Basis UASTC", "zh": "Basis UASTC" },
+    { "type": "p", "en": "170", "zh": "170" },
+    { "type": "p", "en": "12.96", "zh": "12.96" },
+    { "type": "p", "en": "22.36", "zh": "22.36" },
+    { "type": "p", "en": "Basis ETC1S", "zh": "Basis ETC1S" },
+    { "type": "p", "en": "113", "zh": "113" },
+    { "type": "p", "en": "1.91", "zh": "1.91" },
+    { "type": "p", "en": "11.2", "zh": "11.2" },
+    {
+      "type": "p",
+      "en": "As noted before, on this machine the Spark texture loader appears to be faster than the default texture loader.",
+      "zh": "如前所述，在这台机器上 Spark 纹理加载器看起来比默认纹理加载器更快。"
+    },
+    {
+      "type": "p",
+      "en": "I also run this test in some mobile devices:",
+      "zh": "我也在一些移动设备上跑了这个测试："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/09/sparkjs-mobile-700x525.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "With the following results (all timings in milliseconds):",
+      "zh": "结果如下（所有计时单位为毫秒）："
+    },
+    { "type": "p", "en": "SciFiHelmet", "zh": "SciFiHelmet" },
+    { "type": "p", "en": "Galaxy S23", "zh": "Galaxy S23" },
+    { "type": "p", "en": "Pixel 8", "zh": "Pixel 8" },
+    { "type": "p", "en": "Pixel 7", "zh": "Pixel 7" },
+    { "type": "p", "en": "AVIF", "zh": "AVIF" },
+    { "type": "p", "en": "673", "zh": "673" },
+    { "type": "p", "en": "690", "zh": "690" },
+    { "type": "p", "en": "688", "zh": "688" },
+    { "type": "p", "en": "AVIF+Spark", "zh": "AVIF+Spark" },
+    { "type": "p", "en": "736", "zh": "736" },
+    { "type": "p", "en": "653", "zh": "653" },
+    { "type": "p", "en": "811", "zh": "811" },
+    { "type": "p", "en": "Basis UASTC", "zh": "Basis UASTC" },
+    { "type": "p", "en": "1607", "zh": "1607" },
+    { "type": "p", "en": "2920", "zh": "2920" },
+    { "type": "p", "en": "crash!", "zh": "崩溃！" },
+    { "type": "p", "en": "Basis ETC1S", "zh": "Basis ETC1S" },
+    { "type": "p", "en": "1120", "zh": "1120" },
+    { "type": "p", "en": "1120", "zh": "1120" },
+    { "type": "p", "en": "1077", "zh": "1077" },
+    {
+      "type": "p",
+      "en": "I was curious to see how the Spark texture loaders compared to the KTX loader using textures encoded with Basis. Basis uses an intermediate representation that can be transcoded into any GPU texture format, but the transcoding runs on the CPU. While it’s much simpler than a full encoder, it appears to add a very significant overhead. Another issue is that Basis textures don’t compress nearly as well and the cost of loading these from disk is much higher that I anticipated.",
+      "zh": "我很好奇 Spark 纹理加载器和使用 Basis 编码纹理的 KTX 加载器相比如何。Basis 用一种中间表示，可以转码成任何 GPU 纹理格式，但转码是在 CPU 上跑的。虽然它比完整的编码器简单得多，但看起来开销非常可观。另一个问题是 Basis 纹理的压缩率远没那么好，从磁盘加载它们的代价比我预想的高得多。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s the cost of the Basis transcoder on some devices using 4 worker threads with nearly 100% utilization:",
+      "zh": "下面是 Basis 转码器在一些设备上的开销，使用 4 个 worker 线程，利用率接近 100%："
+    },
+    { "type": "p", "en": "MacBook Pro M4", "zh": "MacBook Pro M4" },
+    { "type": "p", "en": "Galaxy S23", "zh": "Galaxy S23" },
+    { "type": "p", "en": "Pixel 8", "zh": "Pixel 8" },
+    { "type": "p", "en": "Basis UASTC", "zh": "Basis UASTC" },
+    { "type": "p", "en": "123 ms", "zh": "123 ms" },
+    { "type": "p", "en": "358 ms", "zh": "358 ms" },
+    { "type": "p", "en": "325 ms", "zh": "325 ms" },
+    { "type": "p", "en": "Basis ETC1S", "zh": "Basis ETC1S" },
+    { "type": "p", "en": "83 ms", "zh": "83 ms" },
+    { "type": "p", "en": "170 ms", "zh": "170 ms" },
+    { "type": "p", "en": "175 ms", "zh": "175 ms" },
+    { "type": "h2", "id": "other-performance-observations", "zh": "其它性能观察", "en": "Other Performance Observations" },
+    {
+      "type": "p",
+      "en": "It’s fairly common to use a single GLB file that embeds geometry and textures in a single file. While this is convenient for distribution and it may be appealing to reduce the number of connections, there’s one major disadvantage: A GLB file needs to be downloaded completely before transcoding can start.",
+      "zh": "用一个 GLB 文件把几何体和纹理都嵌进去是很常见的做法。这在分发上很方便，减少连接数也挺吸引人，但有一个明显的缺点：GLB 文件必须完整下载完，转码才能开始。"
+    },
+    {
+      "type": "p",
+      "en": "I think it may be beneficial to use GLTF/GLB files that reference external texture assets. Loading these require additional connections and an indirection that may add latency, but as soon as the first image file is received we can start processing it in concurrently with the remaining downloads. Maybe this will the subject of an upcoming benchmark.",
+      "zh": "我觉得使用引用外部纹理资源的 GLTF/GLB 文件可能更有好处。加载这些文件需要额外的连接和一层间接引用，可能会增加延迟；但只要第一个图像文件送达，我们就可以一边处理它、一边继续下载剩下的。也许这会成为下一篇基准测试的主题。"
+    },
+    {
+      "type": "p",
+      "en": "Compression ratios make a huge difference when downloading the files over the network, but I did not expect the loading times to make as big of a difference in my tests, because I’m running them locally and the assets are always cached on disk by the browser. I thought the reduced asset sizes would mainly have a secondary effect. With higher compression ratios, you can hold more assets in a fixed size cache, making cache hits more likely.",
+      "zh": "在通过网络下载文件时，压缩比的影响巨大；但我没料到在本地跑测试时，加载时间的差异也会这么大，因为资源总是被浏览器缓存在磁盘上。我原本以为资源体积变小主要只有间接的影响：压缩比更高时，你可以在固定大小的缓存里装下更多资源，从而更容易命中缓存。"
+    },
+    {
+      "type": "p",
+      "en": "However, the impact of asset sizes is much more direct. Disk loading times on mobile appear to be much longer than I expected, or perhaps the browser is adding some other overheads I’m not aware of.",
+      "zh": "然而，资源体积的影响要直接得多。移动端的磁盘加载时间似乎比我预期的长得多，又或者浏览器还加上了一些我没意识到的别的开销。"
+    },
+    {
+      "type": "p",
+      "en": "Here are the disk loading times for two different GLB files on different devices:",
+      "zh": "下面是两个不同 GLB 文件在不同设备上的磁盘加载时间："
+    },
+    { "type": "p", "en": "GLTF Size", "zh": "GLTF 大小" },
+    { "type": "p", "en": "MacBook Pro M4", "zh": "MacBook Pro M4" },
+    { "type": "p", "en": "Galaxy S23", "zh": "Galaxy S23" },
+    { "type": "p", "en": "Pixel 8", "zh": "Pixel 8" },
+    { "type": "p", "en": "SciFiHelmet-avif.glb", "zh": "SciFiHelmet-avif.glb" },
+    { "type": "p", "en": "4.4 MB", "zh": "4.4 MB" },
+    { "type": "p", "en": "26.5 ms", "zh": "26.5 ms" },
+    { "type": "p", "en": "191 ms", "zh": "191 ms" },
+    { "type": "p", "en": "192 ms", "zh": "192 ms" },
+    { "type": "p", "en": "SciFiHelmet-uastc.glb", "zh": "SciFiHelmet-uastc.glb" },
+    { "type": "p", "en": "16 MB", "zh": "16 MB" },
+    { "type": "p", "en": "41 ms", "zh": "41 ms" },
+    { "type": "p", "en": "795 ms", "zh": "795 ms" },
+    { "type": "p", "en": "629 ms", "zh": "629 ms" },
+    { "type": "h2", "id": "feedback-and-acknowledgments", "zh": "反馈与致谢", "en": "Feedback and Acknowledgments" },
+    {
+      "type": "p",
+      "en": "If you’d like to try this out, the [spark.js GitHub repository](https://github.com/ludicon/spark.js) now includes two three.js examples. They should be easy to run, and I’d really appreciate your feedback.",
+      "zh": "如果你想试试，[spark.js 的 GitHub 仓库](https://github.com/ludicon/spark.js) 现在包含两个 three.js 示例。它们应该很容易跑起来，我非常期待你的反馈。"
+    },
+    {
+      "type": "p",
+      "en": "Getting this up and running so quickly wouldn’t have been possible without the work from Don McCurdy, the patience from my college friend Tulo, and the incredible work of all the volunteers advancing web frameworks and standards. In recognition of this, I’ll be donating 10% of the [spark.js](https://ludicon.com/sparkjs/) sales to developers working on adjacent projects that push 3D graphics forward on the Web.",
+      "zh": "能这么快把它做出来跑通，离不开 Don McCurdy 的工作、我大学朋友 Tulo 的耐心，以及所有推动 Web 框架与标准的志愿者的出色工作。为了表示感谢，我会把 [spark.js](https://ludicon.com/sparkjs/) 销售收入的 10% 捐给那些在相关项目上推动 Web 3D 图形前进的开发者。"
+    }
+  ]
+}

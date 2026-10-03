@@ -1,0 +1,28 @@
+{
+  "id": "official-2014-05-28-witness-wednesday-on-how-to-program",
+  "title": {
+    "zh": "关于如何编程的 Witness Wednesday",
+    "en": "Witness Wednesday on How to Program"
+  },
+  "subtitle": {
+    "en": "A pointer to Casey’s advice on how to program.",
+    "zh": "指向 Casey 那篇关于如何编程的建议。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Sometimes people ask me for advice on how to program, and I have to say that Casey's advice here is right on:",
+      "zh": "有时候有人问我编程方面的建议，我得说，Casey 在这里给出的建议完全正确："
+    },
+    {
+      "type": "p",
+      "en": "[http://mollyrocket.com/casey/stream_0019.html](http://mollyrocket.com/casey/stream_0019.html)",
+      "zh": "[http://mollyrocket.com/casey/stream_0019.html](http://mollyrocket.com/casey/stream_0019.html)"
+    },
+    {
+      "type": "p",
+      "en": "Meanwhile, we've had a lot of Witness Wednesday posts in a row on this blog. I'll have to stop slacking and write something about the game.",
+      "zh": "另外，这个博客上已经连着发了好多篇 Witness Wednesday（每周三连载）的帖子了。我得停止偷懒，写点关于游戏本身的东西了。"
+    }
+  ]
+}

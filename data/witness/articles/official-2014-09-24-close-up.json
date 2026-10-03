@@ -1,0 +1,30 @@
+{
+  "id": "official-2014-09-24-close-up",
+  "title": { "zh": "特写", "en": "Close-up" },
+  "subtitle": {
+    "en": "Spoiler-free architectural detail shots of a place Orsi Spanyol has been working on.",
+    "zh": "几张不涉及剧透的建筑细节图，来自 Orsi Spanyol 最近在做的一个地方。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Some spoiler free architectural detail shots of a place I've been working on:",
+      "zh": "几张不剧透的建筑细节图，拍的是我最近一直在做的一个地方："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/09/shot_2014.09.05__time_14_13_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/09/shot_2014.09.24__time_17_35_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/09/shot_2014.09.24__time_17_36_n06.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

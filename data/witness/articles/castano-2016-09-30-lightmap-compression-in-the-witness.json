@@ -1,0 +1,379 @@
+{
+  "id": "castano-2016-09-30-lightmap-compression-in-the-witness",
+  "title": {
+    "zh": "《The Witness》里的光照贴图压缩",
+    "en": "Lightmap Compression in The Witness"
+  },
+  "subtitle": {
+    "en": "From RGBA16F to R10G10B10A2 to RGBM, and finally to an optimized RGBM-DXT5 encoder tuned to the color distribution of lightmaps.",
+    "zh": "从 RGBA16F 到 R10G10B10A2、再到 RGBM，最后落到为光照贴图颜色分布专门调优的 RGBM-DXT5 编码器。"
+  },
+  "translator": {
+    "note": "原文没有副标题，`subtitle` 是译者按首段核心句概括的。插图行按全站口径归一化为 `![图](原图URL)`：首图源文只有 `-512x288` 缩略图、`capcom` 那张外层还包着指向 game.watch.impress.co.jp 的链接，按口径丢掉外层链接、保留源文给出的图片 URL；文字与截图混在同一源行的那段（`capcom`）仍是一个段落，图片标记按源顺序内联、中文里换成「（原文此处有一张图）」，源文图片与后文之间没有空格，按全站其它篇的写法补了一个空格。原图注用的 `[caption]` 短代码已被归档脚本去掉，剩下的图注文字（`RMSE`、`Normalized RMSE`、`RGBM vs YCoCg`）在源文里各自单独成行，译文按原顺序保留为独立段落。代码围栏内首行的空行属归档格式噪音，已去掉；围栏在源文里没有语言标注，按内容把 C 风格的编码循环标为 `cpp`、公式与实验数据表标为 `text`。归档把「…(R11G11B10_FLOAT」和「R9G9B9E5_SHAREDEXP) and ASTC's HDR mode.」拆成了两段（中间多一个空行），这显然是同一句话，已合并为一段，两个格式名之间按中文列举习惯加顿号。格式名（RGBM、RGBM-DXT5、DXT1、DXT5、BC6、RGBA16F、R10G10B10A2、RGBA8、RGBA4、ETC2 EAC_RGBA8、R11G11B10_FLOAT、R9G9B9E5_SHAREDEXP、ASTC、LDR、HDR、YCoCg）一律保留英文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2016/09/screenshot06-512x288.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In my initial implementation of our lightmapping technology I simply stored lightmap textures in RGBA16F format. This produced excellent results, but at a very high memory cost. I later switched to the R10G10B10A2 fixed point format to reduce the memory footprint of our lightmaps, but that introduced some quantization artifacts. At first glance it seemed that we would need more than 10 bits per component in order to have smooth gradients!",
+      "zh": "在我最初实现我们的光照贴图技术时，我只是把光照贴图纹理存成 RGBA16F 格式。效果非常好，但内存开销极高。后来我改用 R10G10B10A2 定点格式来降低光照贴图的内存占用，可这又引入了一些量化瑕疵。乍看之下，想要得到平滑的渐变，我们似乎需要每个分量超过 10 位！"
+    },
+    {
+      "type": "p",
+      "en": "At the time the RGBM color transform seemed to be a popular way to encode lightmaps. I gave that a try and the results weren’t perfect, but it was a clear improvement and I could already think of several ways of improving the encoder. Over time I tested some of these ideas and managed to improve the quality significantly and also reduce the size of the lightmap data. In this post I’ll describe some of these ideas and support them with examples showing my results.",
+      "zh": "当时 RGBM 色彩变换似乎是编码光照贴图的一种流行做法。我试了一下，结果并不完美，但已是明显的改进，而且我马上就能想到几种改进编码器的办法。后来我陆续试了其中一些想法，成功把质量显著提高，同时还减小了光照贴图数据的大小。这篇文章里我会介绍其中一些想法，并用展示结果的例子来佐证。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/capcom.png) I believe the RGBM transform was first proposed by Capcom [in these CEDEC 2006 slides](http://game.watch.impress.co.jp/docs/20070131/3dlp113.htm). While Capcom employs it for diffuse textures, it has become a popular way to encode lightmaps. RGBM or some of its variations are used in [Unity](https://gist.github.com/aras-p/1199797), [Bioshock Infinite](http://solid-angle.blogspot.com/2014/03/bioshock-infinite-lighting.html), and the Unreal Engine, among others. Its use for standard color textures is not as widespread, but [Shane Calimlim found it to be a good fit for the stylized artwork of Duck Tales](https://shaneycg.github.io/ducktales-remastered-texture-compression/) and suggests it could be a good format in general. However, with so many precedents, I was surprised it had not been analyzed in more detail.",
+      "zh": "（原文此处有一张图）我相信 RGBM 变换最早是 Capcom [在 CEDEC 2006 的这些幻灯片里](http://game.watch.impress.co.jp/docs/20070131/3dlp113.htm)提出的。虽然 Capcom 是用它来处理漫反射纹理的，但它后来成了一种流行的光照贴图编码方式。RGBM 及其若干变体被用在 [Unity](https://gist.github.com/aras-p/1199797)、[Bioshock Infinite](http://solid-angle.blogspot.com/2014/03/bioshock-infinite-lighting.html) 和 Unreal Engine 等处。它在标准彩色纹理上的使用没那么普遍，但 [Shane Calimlim 发现它很适合 Duck Tales 那种风格化的美术](https://shaneycg.github.io/ducktales-remastered-texture-compression/)，并认为它总体上会是一种好格式。不过，有这么多先例，它却没有被更细致地分析过，这让我很意外。"
+    },
+    {
+      "type": "p",
+      "en": "The main challenge of compressing lightmaps is that often they have a wider range than regular diffuse textures. This range is not as large as in typical HDR textures, but it’s large enough that using regular LDR formats results in obvious quantization artifacts. Lightmaps don’t usually have high frequency details, they are often close to greyscale, and only have smooth variations in the chrominance.",
+      "zh": "压缩光照贴图的主要难点在于，它们的动态范围往往比普通漫反射纹理更大。这个范围不像典型的 HDR 纹理那么大，但已经大到用普通 LDR 格式会产生明显量化瑕疵的程度。光照贴图通常没有高频细节，往往接近灰度，只有色度上的平滑变化。"
+    },
+    {
+      "type": "p",
+      "en": "In our case, most our lightmap values are within the [0, 16] range, and in the rare occasions when they are outside of that range, we constrain them clamping the colors while preserving the hue to avoid saturation artifacts. Brian Karis also [suggests tone mapping the upper section of the range](http://graphicrants.blogspot.com/2013/12/tone-mapping.html) to avoid sharp discontinuities, but I only found this to be a problem when light sources had unreasonably high intensity values.",
+      "zh": "在我们的例子里，大部分光照贴图值都落在 [0, 16] 区间内；偶尔超出这个范围时，我们会做钳制，并在钳制时保持色相，以避免过饱和瑕疵。Brian Karis 也[建议对区间上段做色调映射](http://graphicrants.blogspot.com/2013/12/tone-mapping.html)来避免突变，但我只在光源强度值高得不合理的时候才遇到这个问题。"
+    },
+    {
+      "type": "p",
+      "en": "The shape of the lightmap color distribution varies considerably. Interior lightmaps are predominantly dark with a long tail of brighter highlights:",
+      "zh": "光照贴图颜色分布的形状差别很大。室内光照贴图以暗部为主，拖着一条亮部高光的长尾："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/tunnel.histogram.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "while outdoor lightmaps have a more Gaussian distribution with a bell-like shape. This particular lightmap is under the shade of some colored fall trees, which give it an orange tone:",
+      "zh": "而室外光照贴图则更接近高斯分布，呈钟形。这张特定的光照贴图位于几棵彩色秋树的树荫下，因此带上了橙色色调："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/hut.histogram.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Not all lightmaps use all the available range, so after tone mapping the next thing we do is to scale the range to [0, 1].",
+      "zh": "并不是所有光照贴图都会用满整个可用范围，所以在色调映射之后，我们紧接着要做的就是把范围缩放到 [0, 1]。"
+    },
+    {
+      "type": "p",
+      "en": "So, why is RGBM a good choice for data like this? The distribution of distinct values that can be represented with RGBM looks as follows:",
+      "zh": "那么，为什么 RGBM 对这样的数据是个好选择？RGBM 能表示的不同取值的分布是这样的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/rgbm.histogram.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It provides much more precision toward 0 than toward 1. This is beneficial for images that are intended to be visualized at multiple exposures. We want to obtain smooth lightmaps without quantization artifacts independently of the camera exposure. However, as we will see later, this provides much more precision around 0 than is actually necessary.",
+      "zh": "它在靠近 0 的地方提供的精度远高于靠近 1 的地方。对于需要在多种曝光下观看的图像，这是有好处的。我们希望在无论相机曝光如何的情况下，都得到平滑、没有量化瑕疵的光照贴图。不过，后面会看到，它在 0 附近提供的精度远超实际所需。"
+    },
+    {
+      "type": "h2",
+      "id": "naive-rgbm-encoding",
+      "zh": "朴素的 RGBM 编码",
+      "en": "Naive RGBM Encoding"
+    },
+    {
+      "type": "p",
+      "en": "In my initial implementation I simply used RGBA8 textures, squaring the colors to perform gamma correction in the shader. The standard `rgb -> RGBM` transform is as follows:",
+      "zh": "在我最初的实现里，我只是用了 RGBA8 纹理，并对着色器里的颜色取平方来做伽马校正。标准的 `rgb -> RGBM` 变换如下："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "m = max(r,g,b)\nR = r/m\nG = g/m\nB = b/m\nM = m"
+    },
+    {
+      "type": "p",
+      "en": "A simple improvement [I did early on](http://the-witness.net/news/2011/09/a-pleasant-lightmapping-update/) is to divide the quantization interval in two. This is a variation of the idea presented in [Microsoft’s LUVW HDR texture paper](http://www.ppsloan.org/publications/HDRComp.pdf), but instead of using an extra texture, I simply rely on the RGB and alpha (M) channels.",
+      "zh": "我[早期做过](http://the-witness.net/news/2011/09/a-pleasant-lightmapping-update/)的一个简单改进，是把量化区间一分为二。这是 [Microsoft 的 LUVW HDR 纹理论文](http://www.ppsloan.org/publications/HDRComp.pdf)里那个想法的一个变体，但我不再用一张额外的纹理，而是直接依靠 RGB 和 alpha（M）通道。"
+    },
+    {
+      "type": "p",
+      "en": "A similar observation is done by [Shane Calimlim](https://shaneycg.github.io/ducktales-remastered-texture-compression/):",
+      "zh": "[Shane Calimlim](https://shaneycg.github.io/ducktales-remastered-texture-compression/) 也提出了类似的观察："
+    },
+    {
+      "type": "quote",
+      "en": "Gray is encoded as pure white in the color map, which may not always be optimal. Gray is an edge case most of the time, but a smarter encoding algorithm could make vast improvements in its handling. In the simple version of the algorithm the entire burden of representing gray lies with the multiply map; this could be split between both maps, improving precision greatly in scenarios where the color map can accommodate extra data without loss.",
+      "zh": "在颜色贴图里，灰色被编码成纯白，这未必总是最优。多数情况下灰色只是个边缘情况，但更聪明的编码算法可以在处理它时取得大幅改进。在算法的简单版本里，表示灰色的全部负担都落在乘数贴图上；这份负担可以分摊到两张贴图上，在颜色贴图能无损容纳额外数据的场景下大幅提升精度。",
+      "noteZh": "这里的「颜色贴图」和「乘数贴图」分别指 RGBM 里的 RGB 与 M 两个分量。"
+    },
+    {
+      "type": "p",
+      "en": "But in our case grey is not really an edge case! Lightmaps are mostly grey with slight smooth color variations.",
+      "zh": "但在我们这里，灰色根本算不上边缘情况！光照贴图大部分都是灰色，只带一点点平滑的颜色变化。"
+    },
+    {
+      "type": "p",
+      "en": "The way I implemented this is by choosing a certain threshold `t`. For values of `m` that are lower than `t` the color is fully encoded using only the RGB components as follows:",
+      "zh": "我的实现方式是选定一个阈值 `t`。对于小于 `t` 的 `m` 值，颜色完全只用 RGB 分量来编码，如下："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "R = r/t\nG = g/t\nB = b/t\nM = 0"
+    },
+    {
+      "type": "p",
+      "en": "and for values of `m` greater than the threshold `t`, the normalized color is encoded in the RGB components, and the normalization factor `m` is biased and scaled to store it at a higher precision:",
+      "zh": "而对于大于阈值 `t` 的 `m` 值，归一化后的颜色编码在 RGB 分量里，归一化因子 `m` 则经过偏移和缩放，以便用更高的精度存储："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "R = r/m\nG = g/m\nB = b/m\nM = (m-t) / (1-t)"
+    },
+    {
+      "type": "p",
+      "en": "That’s equivalent to just doing:",
+      "zh": "这等价于直接这样做："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "m = max(r,g,b,t)\nR = r/m\nG = g/m\nB = b/m\nM = (m-t) / (1-t)"
+    },
+    {
+      "type": "p",
+      "en": "This is useful for several reasons. As Shane notes, splitting the burden of representing the luminance between the RGB and M maps we can obtain more precision and reduce the size of the quantization interval.",
+      "zh": "这样做有几个好处。正如 Shane 指出的，把表示亮度的负担分摊到 RGB 和 M 两张贴图上，我们能获得更高的精度，并缩小量化区间的大小。"
+    },
+    {
+      "type": "p",
+      "en": "It’s important to note that this actually reduces precision around zero, where we don’t actually need so much, because the game camera never has long enough exposures. If we look at the distribution of grey levels that biased RGBM can represent it now looks as follows:",
+      "zh": "有一点很重要：这实际上降低了 0 附近的精度，而我们在那里并不需要那么高的精度，因为游戏里的相机曝光从来不会长到那个程度。如果看带偏移的 RGBM 所能表示的灰阶分布，现在它变成了这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/rgbmt.histogram.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Picking different values of `t` allows us to use different quantization intervals for different parts of the color range. The optimal choice of `t` depends on the distribution of colors in the lightmap and the number of bits used to represent each of the components. We chose this value experimentally. For our lightmaps values around 0.3 seemed to work best when encoding them in RGBA8 format.",
+      "zh": "选取不同的 `t` 值，就能对颜色范围的不同区段采用不同的量化区间。`t` 的最优取值取决于光照贴图里的颜色分布，以及每个分量所用的位数。我们是靠实验来选这个值的。对我们的光照贴图来说，用 RGBA8 格式编码时，0.3 左右的取值似乎效果最好。"
+    },
+    {
+      "type": "h2",
+      "id": "optimized-rgbm-encoding",
+      "zh": "优化后的 RGBM 编码",
+      "en": "Optimized RGBM Encoding"
+    },
+    {
+      "type": "p",
+      "en": "With these improvements RGBM was already producing very good results. Visually I could not see any difference between the RGBM lightmaps and the raw half floating point lightmaps. However, I had not reduced the size of the lightmaps by much and ideally I wanted to compress them further.",
+      "zh": "有了这些改进，RGBM 的效果已经非常好了。从视觉上看，我分辨不出 RGBM 光照贴图和原始的半精度浮点光照贴图有什么区别。不过，我并没有把光照贴图的大小压缩多少，而理想情况下我还想进一步压缩它们。"
+    },
+    {
+      "type": "p",
+      "en": "The next thing that I tried to do was to choose `M` in a way that minimizes the quantization error. I did that by brute force, trying all possible values of `M`, computing the corresponding `RGB` values for that choice of `M`, and selecting the one that minimized the MSE:",
+      "zh": "我接下来尝试的是：以最小化量化误差的方式来选取 `M`。我用的是暴力搜索——试遍所有可能的 `M` 值，针对每个 `M` 算出对应的 `RGB` 值，然后选出使 MSE 最小的那个："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "for (int m = 0; m < 256; m++) {\n    // Decode M\n    float M = float(m) / 255.0f * (1 - threshold) + threshold;\n\n    // Encode RGB.\n    int R = ftoi_round(255.0f * saturate(r/ M));\n    int G = ftoi_round(255.0f * saturate(g / M));\n    int B = ftoi_round(255.0f * saturate(b / M));\n\n    // Decode RGB.\n    float dr = (float(R) / 255.0f) * M;\n    float dg = (float(G) / 255.0f) * M;\n    float db = (float(B) / 255.0f) * M;\n\n    // Measure error.\n    float error = square(r-dr) + square(g-dg) + square(b-db);\n\n    if (error < bestError) {\n        bestError = error;\n        bestM = M;\n    }\n}"
+    },
+    {
+      "type": "p",
+      "en": "This improved the error substantially, but it introduced interpolation artifacts. The RGBM encoding is not linear, so interpolation of RGBM colors is not correct. With the naive method this was not a big deal, because adjacent texels usually had similar values of `M`, but the `M` values resulting from this optimization procedure were not necessarily similar anymore.",
+      "zh": "这大幅降低了误差，但引入了插值瑕疵。RGBM 编码不是线性的，所以对 RGBM 颜色做插值并不正确。用朴素方法时这问题不大，因为相邻纹素的 `M` 值通常相近；但这个优化过程得到的 `M` 值就不一定还相近了。"
+    },
+    {
+      "type": "p",
+      "en": "However, it was easy to solve this problem by constraining the search to a small range around the `M` value selected with the naive method:",
+      "zh": "不过，要解决这个问题很容易：把搜索限制在朴素方法选出的 `M` 值附近的一个小范围内即可："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "float M = max(max(R, G), max(B, threshold));\nint iM = ftoi_ceil((M - threshold) / (1 - threshold) * 255.0f);\n\nfor (int m = max(iM-16, 0); m < min(iM+16, 256); m++) {\n    ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "This constrain did not reduce the quality noticeably, but eliminated the interpolation artifacts entirely.",
+      "zh": "这一约束没有让质量明显下降，却把插值瑕疵彻底消除了。"
+    },
+    {
+      "type": "p",
+      "en": "While this idea showed that there's a significant optimization potential over the naive approach, it did not get us any closer to our stated goal: to reduce the size of the lightmaps. I tried to use a packed pixel format such as RGBA4, but even with the optimized encoding, it did not produce sufficiently high quality results. To reduce the size further we would have to use DXT block compression.",
+      "zh": "这个想法说明，相比朴素做法确实还有相当大的优化空间，但它并没有让我们更接近既定目标：缩小光照贴图的大小。我试过用 RGBA4 这样的打包像素格式，可即便配上优化后的编码，它产生的质量也不够高。要进一步缩小体积，我们就得用 DXT 块压缩了。"
+    },
+    {
+      "type": "h2",
+      "id": "rgbm-dxt5",
+      "zh": "RGBM-DXT5",
+      "en": "RGBM-DXT5"
+    },
+    {
+      "type": "p",
+      "en": "Simply compressing the RGBM data produced poor results and compressing the optimized RGBM data did not help, but instead only degraded the results even more.",
+      "zh": "直接压缩 RGBM 数据效果很差；压缩优化后的 RGBM 数据也没帮上忙，反而让结果更糟。"
+    },
+    {
+      "type": "p",
+      "en": "A brute force compressor is not practical in this case, because when processing blocks of 4x4 colors simultaneously the search space is much larger.",
+      "zh": "在这种情形下，暴力搜索式的压缩器不实用，因为在同时处理 4x4 的颜色块时，搜索空间要大得多。"
+    },
+    {
+      "type": "p",
+      "en": "A better approach is to first compress the `RGB` values obtained through the naive procedure using a standard DXT1 compressor and then choosing the `M` values to compensate for the quantization and compression errors of the DXT1 component.",
+      "zh": "更好的做法是：先用标准的 DXT1 压缩器压缩通过朴素流程得到的 `RGB` 值，然后再选取 `M` 值，去补偿 DXT1 分量带来的量化和压缩误差。"
+    },
+    {
+      "type": "p",
+      "en": "That is, we want to compute `M` so that:",
+      "zh": "也就是说，我们要算出一个 `M`，使得："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "M * (R, G, B) == (r, g, b)"
+    },
+    {
+      "type": "p",
+      "en": "This gives us three equations that we can minimize in the least squares sense. The `M` that minimizes the error is:",
+      "zh": "这给了我们三个方程，可以在最小二乘意义下求最小。使误差最小的 `M` 是："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "M = dot(rgb, RGB) / dot(RGB, RGB)"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "In my tests, the resulting `M`'s compress very well in the alpha map and reduced the error significantly.",
+      "zh": "在我的测试里，这样得到的 `M` 在 alpha 贴图里压缩得很好，并且显著降低了误差。"
+    },
+    {
+      "type": "p",
+      "en": "I also tried to encode `RGB` again with the newly obtained `M`, and compress them afterward, but in most cases that did not improve the error. Something that worked well was to simply weight the `RGB` error by `M` in the initial compression step.",
+      "zh": "我也试过用新得到的 `M` 重新编码 `RGB`、然后再压缩，但多数情况下误差并没有改善。真正有效的一个做法，是在最初的压缩步骤里直接用 `M` 给 `RGB` 的误差加权。"
+    },
+    {
+      "type": "p",
+      "en": "The number of bits allocated for the `RGB` and `M` components is very different than in our initial RGBA8 texture, so the choice of `t` had to be reviewed. In this case values of `t` around 0.15 produced best results. I attribute this to the reduced number of bits per pixel used to encode the `RGB` channels.",
+      "zh": "分配给 `RGB` 和 `M` 分量的位数，与我们最初的 RGBA8 纹理差别很大，所以 `t` 的取值必须重新审视。在这种情况下，`t` 取 0.15 左右效果最好。我把原因归结为用于编码 `RGB` 通道的每像素位数减少了。"
+    },
+    {
+      "type": "h2",
+      "id": "results",
+      "zh": "结果",
+      "en": "Results"
+    },
+    {
+      "type": "p",
+      "en": "In addition to the described formats I also compared the proposed method against BC6. BC6 is specifically designed to encode HDR textures, but it's not available in all hardware. Our optimized RGBM-DXT5 scheme provides nearly the same quality as BC6:",
+      "zh": "除了上面描述的这些格式，我还把所提方法与 BC6 做了对比。BC6 是专门为编码 HDR 纹理设计的，但并非所有硬件都支持它。我们优化后的 RGBM-DXT5 方案提供的质量与 BC6 几乎相同："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/rmse.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "RMSE",
+      "zh": "RMSE"
+    },
+    {
+      "type": "p",
+      "en": "The above chart is displaying RMSE values of the final images after color space conversion and range rescaling.",
+      "zh": "上图显示的是经过色彩空间转换和范围重缩放之后，最终图像的 RMSE 值。"
+    },
+    {
+      "type": "p",
+      "en": "To study the effectiveness of the encoders it's more useful to look at the errors before rescaling. These look a lot more uniform, but cannot be compared against BC6 anymore, since in that case adjusting the range of the input values does not usually reduce the compression error.",
+      "zh": "要研究各编码器的有效性，看重缩放之前的误差更有用。这些误差看起来均匀得多，但已经不能和 BC6 相比了，因为那种情况下调整输入值的范围通常并不会降低压缩误差。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/normalized-rmse.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Normalized RMSE",
+      "zh": "归一化 RMSE"
+    },
+    {
+      "type": "p",
+      "en": "Finally, I thought it would be interesting to use RGBM-DXT5 to compress standard images and compare it against YCoCg-DXT5. The following chart shows the results for the first 8 images of the kodim image set:",
+      "zh": "最后，我觉得用 RGBM-DXT5 压缩标准图像、再和 YCoCg-DXT5 比较会很有意思。下面的图表给出了 kodim 图像集里前 8 张图的结果："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/12/RGBM-YCoCg.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "RGBM vs YCoCg",
+      "zh": "RGBM 对 YCoCg"
+    },
+    {
+      "type": "p",
+      "en": "YCoCg-DXT5 is clearly a much better choice for LDR color textures.",
+      "zh": "对于 LDR 彩色纹理，YCoCg-DXT5 显然是更好的选择。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions-and-future-work",
+      "zh": "结论与后续工作",
+      "en": "Conclusions and Future Work"
+    },
+    {
+      "type": "p",
+      "en": "Our proposed RGBM encoder was good enough for our lightmaps, but I'm convinced there's more room for improvement.",
+      "zh": "我们提出的 RGBM 编码器对我们的光照贴图来说已经够好了，但我确信还有更多改进空间。"
+    },
+    {
+      "type": "p",
+      "en": "One idea would be to pick a different threshold `t` for each texture. Finding the best `t` for a given texture to be encoded using the plain RGBM linear format would be easy, but it's not so obvious when using block compression.",
+      "zh": "一个想法是为每张纹理选取不同的阈值 `t`。对于要按纯 RGBM 线性格式编码的纹理，找出最优的 `t` 很容易；但用块压缩时就没那么显然了。"
+    },
+    {
+      "type": "p",
+      "en": "The RGB components are encoded with a standard weighted DXT1 compressor. It would be interesting to use a specialized compressor that favored `RGB` values with errors that the `M` component could correct. For example, the `M` values resulting from the least squares minimization are sometimes above 1, but need to be clamped to the `[0, 1]` range, it should be possible to constrain the `RGB` endpoints to prevent that. It may also be possible to choose `RGB` endpoints such that the error of the least squares fitted `M` are as small as possible.",
+      "zh": "RGB 分量是用标准带权 DXT1 压缩器编码的。如果能用一个专门的压缩器，让它偏好那些误差可以被 `M` 分量修正的 `RGB` 值，应该会很有意思。比如，最小二乘最小化得到的 `M` 值有时会大于 1，但必须钳制到 `[0, 1]` 范围内，应该可以通过约束 `RGB` 端点来避免这种情况。也有可能这样选取 `RGB` 端点，使得最小二乘拟合出的 `M` 的误差尽可能小。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, DXT5 is not available on most mobile GPUs. I haven't tried this yet, but it seems the ETC2 EAC_RGBA8 format is widely available and would be a good fit for the techniques presented here. It would also be interesting to compare our method against packed floating point formats such as (R11G11B10_FLOAT R9G9B9E5_SHAREDEXP) and ASTC's HDR mode.",
+      "zh": "最后，DXT5 在大多数移动 GPU 上并不支持。我还没试过，但 ETC2 EAC_RGBA8 格式似乎已经被广泛支持，而且会很适合这里介绍的技术。把我们的方法与打包浮点格式（比如 R11G11B10_FLOAT、R9G9B9E5_SHAREDEXP）以及 ASTC 的 HDR 模式做个对比，也会很有意思。"
+    },
+    {
+      "type": "h2",
+      "id": "tables",
+      "zh": "表格",
+      "en": "Tables"
+    },
+    {
+      "type": "p",
+      "en": "In all cases I measured the error using the RMSE metric, which is the same metric used to guide the block compressors. It may make more sense to use a metric that takes into account how the lightmaps are visualized in the game. I did exactly that, tone map the lightmaps at different exposures and compute the error in post-tone-mapping space. The tables below show the resulting values and they roughly correlate with the plain RMSE metric.",
+      "zh": "在所有情况下，我都用 RMSE 这个指标来度量误差，它也是用来指导块压缩器的同一个指标。采用一个考虑到光照贴图在游戏里如何被观看的指标可能更有意义。我正是这么做的：在不同的曝光下对光照贴图做色调映射，然后在色调映射后的空间里计算误差。下面的表格给出了得到的数值，它们与单纯的 RMSE 指标大致相关。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "               Tone mapped error\n            e=2.2   e=1.0   e=0.22     average   rmse\n\nRGBM8 naive:\n\nhallway:    0.00026 0.00045 0.00089 -> 0.00053 | 0.00007\nhut:        0.00100 0.00102 0.00082 -> 0.00095 | 0.00609\narchway:    0.00114 0.00141 0.00190 -> 0.00148 | 0.00818\nwindmill:   0.00102 0.00133 0.00185 -> 0.00140 | 0.00083\nshaft:      0.00201 0.00228 0.00214 -> 0.00214 | 0.00798\nhub:        0.00151 0.00182 0.00191 -> 0.00175 | 0.00267\ntower:      0.00153 0.00200 0.00299 -> 0.00217 | 0.00160\ntunnel:     0.00094 0.00123 0.00171 -> 0.00129 | 0.00093\nmine:       0.00105 0.00120 0.00141 -> 0.00122 | 0.00640\ntheater:    0.00099 0.00126 0.00160 -> 0.00128 | 0.00129\n\nRGBM8 optimized:\n\nhallway     0.00010 0.00015 0.00030 -> 0.00018 | 0.00004\nhut         0.00049 0.00043 0.00031 -> 0.00041 | 0.00543\narchway     0.00044 0.00060 0.00122 -> 0.00075 | 0.00595\nwindmill    0.00020 0.00026 0.00036 -> 0.00027 | 0.00024\nshaft       0.00059 0.00066 0.00102 -> 0.00076 | 0.00501\nhub         0.00038 0.00051 0.00085 -> 0.00058 | 0.00099\ntower       0.00060 0.00072 0.00082 -> 0.00072 | 0.00112\ntunnel      0.00025 0.00031 0.00042 -> 0.00033 | 0.00048\nmine:       0.00044 0.00049 0.00083 -> 0.00058 | 0.00467\ntheater:    0.00061 0.00076 0.00087 -> 0.00075 | 0.00095\n\nRGBM4 optimized:\n\nhallway:    0.00169 0.00259 0.00562 -> 0.00330 | 0.00063\nhut:        0.00932 0.00899 0.00773 -> 0.00868 | 0.08317\narchway:    0.00906 0.01287 0.02616 -> 0.01603 | 0.09614\nwindmill:   0.00424 0.00562 0.00830 -> 0.00606 | 0.00402\nshaft:      0.01103 0.01314 0.01978 -> 0.01465 | 0.08204\nhub:        0.00868 0.01160 0.01848 -> 0.01292 | 0.01722\ntower:      0.01004 0.01217 0.01466 -> 0.01229 | 0.01835\ntunnel:     0.00516 0.00687 0.01066 -> 0.00757 | 0.00764\nmine:       0.00871 0.01044 0.01742 -> 0.01219 | 0.07510\ntheater:    0.00683 0.00840 0.00963 -> 0.00829 | 0.01057\n\nDXT5 naive:\n\nhallway:    0.00155 0.00249 0.00570 -> 0.00325 | 0.00048\nhut:        0.00487 0.00536 0.00564 -> 0.00529 | 0.02119\narchway:    0.00500 0.00656 0.01039 -> 0.00731 | 0.01949\nwindmill:   0.00214 0.00287 0.00444 -> 0.00315 | 0.00177\nshaft:      0.01062 0.01339 0.01977 -> 0.01459 | 0.03412\nhub:        0.00616 0.00796 0.01130 -> 0.00848 | 0.01481\ntower:      0.00551 0.00712 0.01019 -> 0.00761 | 0.00735\ntunnel:     0.00235 0.00308 0.00451 -> 0.00331 | 0.00285\nmine:       0.00471 0.00589 0.00877 -> 0.00646 | 0.01809\ntheater:    0.00332 0.00412 0.00496 -> 0.00413 | 0.00498\n\nDXT5 optimized:\n\nhallway:    0.00125 0.00199 0.00456 -> 0.00260 | 0.00041\nhut:        0.00336 0.00373 0.00408 -> 0.00372 | 0.01529\narchway:    0.00353 0.00460 0.00719 -> 0.00511 | 0.01285\nwindmill:   0.00134 0.00180 0.00280 -> 0.00198 | 0.00116\nshaft:      0.00801 0.01016 0.01507 -> 0.01108 | 0.02437\nhub:        0.00469 0.00602 0.00846 -> 0.00639 | 0.01241\ntower:      0.00421 0.00544 0.00781 -> 0.00582 | 0.00599\ntunnel:     0.00157 0.00206 0.00306 -> 0.00223 | 0.00193\nmine:       0.00338 0.00428 0.00646 -> 0.00471 | 0.01178\ntheater:    0.00245 0.00302 0.00357 -> 0.00301 | 0.00382\n\nDXT5 optimized with M-weighted RGB:\n\nhallway:    0.00114 0.00184 0.00430 -> 0.00243 | 0.00038\nhut:        0.00338 0.00382 0.00443 -> 0.00388 | 0.01478\narchway:    0.00356 0.00464 0.00725 -> 0.00515 | 0.01271\nwindmill:   0.00134 0.00180 0.00281 -> 0.00198 | 0.00113\nshaft:      0.00804 0.01023 0.01522 -> 0.01116 | 0.02382\nhub:        0.00472 0.00611 0.00868 -> 0.00650 | 0.01088\ntower:      0.00421 0.00544 0.00787 -> 0.00584 | 0.00597\ntunnel:     0.00157 0.00206 0.00306 -> 0.00223 | 0.00193\nmine:       0.00337 0.00428 0.00648 -> 0.00471 | 0.01170\ntheater:    0.00245 0.00302 0.00356 -> 0.00301 | 0.00382"
+    }
+  ]
+}

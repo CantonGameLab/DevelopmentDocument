@@ -1,0 +1,242 @@
+{
+  "id": "castano-2026-02-04-normal-map-compression-revisited",
+  "title": { "zh": "重谈法线贴图压缩", "en": "Normal Map Compression Revisited" },
+  "subtitle": {
+    "en": "Normal maps don’t represent color, rely on geometric assumptions, and small encoding or decoding details can lead to subtle artifacts.",
+    "zh": "法线贴图表示的不是颜色，依赖几何假设，而且编码或解码上的小细节就可能造成细微瑕疵。"
+  },
+  "translator": {
+    "note": "原文的六个标题在归档里是三级标题（`###`），译文按本 schema 一律映射成 `h2`。DXT5 / BC3 的两条项目符号在归档里把加粗引语和正文挤在同一行（`- A color block (like DXT1 / BC1) This part stores …`），译文按源文的行结构保留为两个 `list` 项。`swizzle` / `swizzled` 按术语表译作「通道重排」，`channel` 译「通道」，格式名（DXT5、BC3、BC1、BC4、BC5、EAC_RG、ETC、ASTC、UNORM8、SNORM8、S3TC、3Dc）与着色器代码里的变量名原样保留英文。译文里的 `[-1, 1]` 用行内代码标记包住，以免校验器把它当成中文里的半角标点。原文里的笔误（`it’s a more complex format` 之外无其它）在 `en` 字段中原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Normal maps are one of the most widely used texture types in real-time rendering, but they’re also a bit unusual. They don’t represent color, rely on geometric assumptions, and small encoding or decoding details can lead to subtle artifacts.",
+      "zh": "法线贴图是实时渲染里使用最广的纹理类型之一，但它也有点特殊。它表示的不是颜色，依赖几何上的假设，而且编码或解码上的一些小细节就可能造成细微的瑕疵。"
+    },
+    {
+      "type": "p",
+      "en": "This article takes a practical look at how normal maps are commonly compressed today, the tradeoffs involved, and a few pitfalls that are easy to overlook. We’ll look at these details and see how they are handled in practice in the context of [spark.js](https://ludicon.com/sparkjs/) and web 3d development.",
+      "zh": "这篇文章从实用角度看一看如今法线贴图通常是怎么压缩的、其中有哪些取舍，以及几个容易被忽略的坑。我们会看这些细节，并结合 [spark.js](https://ludicon.com/sparkjs/) 与 Web 3D 开发的语境，看看它们在实践中是怎么处理的。"
+    },
+    {
+      "type": "p",
+      "en": "Compressing normal map textures with spark.js is easy. You just need to tell *Spark* that the input image contains normal map data, and it will apply the correct processing automatically:",
+      "zh": "用 spark.js 压缩法线贴图纹理很简单。你只要告诉 *Spark* 输入图像里装的是法线贴图数据，它就会自动施加正确的处理："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "texture = await spark.encodeTexture(textureUrl, { normal: true });"
+    },
+    {
+      "type": "p",
+      "en": "Spark will then pick the best normal map format supported by the current device. In practice that usually means **BC5** on desktop GPUs, or **EAC_RG** on mobile. These formats store the X and Y components of the normal in two channels, and the Z component can be reconstructed in the shader.",
+      "zh": "然后 Spark 会挑出当前设备支持的最好的法线贴图格式。实践中通常意味着桌面 GPU 上的 **BC5**，或者移动端的 **EAC_RG**。这些格式把法线的 X 和 Y 分量存在两个通道里，Z 分量可以在着色器里重建。"
+    },
+    {
+      "type": "p",
+      "en": "If you also need mipmaps, you can request them explicitly. Spark will build the mip chain while preserving correct normal map behavior:",
+      "zh": "如果你还需要 mipmap，可以显式请求。Spark 会在构建 mipmap 链的同时保持法线贴图的正确行为："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "texture = await spark.encodeTexture(textureUrl, { normal: true, mips: true });"
+    },
+    { "type": "h2", "id": "integration-with-threejs", "zh": "与 three.js 集成", "en": "Integration with three.js" },
+    {
+      "type": "p",
+      "en": "One of the first things I wanted to do with spark.js was integrate it with three.js, since it’s one of the most popular 3D libraries on the web.",
+      "zh": "我最早想用 spark.js 做的事情之一，就是把它和 three.js 集成起来，因为它是 Web 上最流行的 3D 库之一。"
+    },
+    {
+      "type": "p",
+      "en": "Early on I discovered that three.js did not support BC compressed formats for normal maps, so getting spark-compressed normal maps working required a few changes: extending three.js support for additional texture formats, and updating the material shader generator to reconstruct the Z component when two-channel normal maps are used. These changes have since been integrated into three.js and are available starting with the [r182 release](https://github.com/mrdoob/three.js/releases/tag/r182).",
+      "zh": "我很早就发现 three.js 不支持用于法线贴图的 BC 压缩格式，所以要让 spark 压缩的法线贴图跑起来得做几处改动：扩展 three.js 对更多纹理格式的支持，以及修改材质着色器生成器，让它在使用双通道法线贴图时重建 Z 分量。这些改动后来已经并入 three.js，从 [r182 版本](https://github.com/mrdoob/three.js/releases/tag/r182) 开始可用。"
+    },
+    {
+      "type": "p",
+      "en": "This was a bit unexpected, because two-channel normal maps are extremely common in the game industry. This is probably common knowledge for most game and graphics programmers, but it’s not something web developers typically run into, so I feel it’s worth documenting.",
+      "zh": "这有点出乎意料，因为双通道法线贴图在游戏行业里极其常见。这对大多数游戏和图形程序员来说大概是常识，但 Web 开发者通常碰不到，所以我觉得值得写下来。"
+    },
+    { "type": "h2", "id": "normal-map-encodings", "zh": "法线贴图的编码方式", "en": "Normal map encodings" },
+    {
+      "type": "p",
+      "en": "In the D3D9 era, normal maps were often stored using a “swizzled” encoding in a 4-channel block format like DXT5 / BC3. Instead of using it as a color texture, the encoder would pack the X component into the green channel and the Y component into alpha, then swizzle the XY coordinates from those two channels in the shader:",
+      "zh": "在 D3D9 时代，法线贴图常常用一种「通道重排」（swizzled）的编码方式存在 DXT5 / BC3 这样的 4 通道块格式里。编码器不把它当颜色纹理用，而是把 X 分量塞进绿色通道、把 Y 分量塞进 alpha，然后在着色器里从这两个通道重排出 XY 坐标："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "normal.xy = tex2D(normalMap, uv).ga;"
+    },
+    {
+      "type": "p",
+      "en": "A **DXT5 / BC3** block is really two compressed blocks glued together:",
+      "zh": "一个 **DXT5 / BC3** 块实际上是两个压缩块粘在一起："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "A color block (like DXT1 / BC1) This part stores two RGB endpoints in 5:6:5 format, plus a 4×4 table of 2-bit indices selecting interpolated values between those endpoints.",
+          "zh": "颜色块（类似 DXT1 / BC1）这一部分存两个 5:6:5 格式的 RGB 端点，再加一张 4×4 的表，里面是 2 位索引，用来在这些端点之间选取插值出来的值。"
+        },
+        {
+          "en": "An alpha block This part stores two 8-bit alpha endpoints, plus a 4×4 table of 3-bit indices selecting interpolated values between them.",
+          "zh": "alpha 块这一部分存两个 8 位 alpha 端点，再加一张 4×4 的表，里面是 3 位索引，用来在它们之间选取插值出来的值。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "As a result, the alpha block has much higher precision than the RGB block. That’s why the classic approach was to store one normal component in the alpha channel, and the other in green, which is the most accurate RGB channel as it gets 6 bits versus 5 bits for red and blue.",
+      "zh": "结果是，alpha 块的精度比 RGB 块高得多。所以经典做法是把法线的一个分量存在 alpha 通道，另一个存在绿色通道——绿色是 RGB 里最精确的通道，因为它有 6 位，而红色和蓝色只有 5 位。"
+    },
+    {
+      "type": "p",
+      "en": "This worked surprisingly well for its time, but the lower precision of the endpoint and the weights used by the BC1-style color block were often not enough to represent smooth gradients accurately. That led to visible banding or quantization artifacts, especially on slowly varying normals.",
+      "zh": "在当年，这套做法效果好得出人意料；但 BC1 风格颜色块所用的端点精度和权重往往不足以精确表示平滑的渐变。这就造成了可见的条带或量化瑕疵，在变化缓慢的法线上尤其明显。"
+    },
+    {
+      "type": "p",
+      "en": "To fix this, D3D10 added support for the BC5 format (which was introduced earlier on AMD hardware as 3Dc and exposed in D3D9 through various hacks). A BC5 block is essentially two independent BC4 blocks (i.e., two alpha blocks), one for the X and one for the Y, so both components get the same precision.",
+      "zh": "为了解决这个问题，D3D10 加入了对 BC5 格式的支持（这个格式更早在 AMD 硬件上以 3Dc 之名出现，并通过各种取巧手段在 D3D9 里暴露出来）。一个 BC5 块本质上是两个独立的 BC4 块（也就是两个 alpha 块），一个给 X、一个给 Y，于是两个分量获得相同的精度。"
+    },
+    {
+      "type": "p",
+      "en": "An interesting aspect of the BC5 format is that interpolation actually happens at higher precision than 8-bit. The hardware expands the 8 bit endpoints to 16 bits via bit replication and performs the interpolation with 16 bits of precision, so in practice you often get something like 10-11 bits of effective precision. This can be very helpful on smooth glossy surfaces, where normal map banding is more noticeable.",
+      "zh": "BC5 格式一个有意思的地方是：它的插值实际上是以高于 8 位的精度进行的。硬件通过位复制把 8 位端点扩展到 16 位，并以 16 位精度做插值，所以实践中往往能得到 10 到 11 位左右的有效精度。这在光滑的高光表面上非常有帮助，因为那里的法线贴图条带更明显。"
+    },
+    {
+      "type": "p",
+      "en": "Even though spark.js is currently limited to 8-bit normal maps, it’s still possible to take advantage of this extra precision when using the lower level APIs available in the Spark SDK.",
+      "zh": "虽然 spark.js 目前只支持 8 位法线贴图，但在使用 Spark SDK 里提供的更底层 API 时，仍然可以利用这份额外精度。"
+    },
+    {
+      "type": "p",
+      "en": "On mobile devices the BC5 format is usually not available, but instead it’s possible to use the EAC_RG format, which is similarly composed of two independent EAC blocks. Like ETC, EAC was devised to work around the S3TC patent, and like ETC it’s a more complex format that often results in lower quality textures.",
+      "zh": "在移动设备上通常没有 BC5 格式，但可以用 EAC_RG，它同样由两个独立的 EAC 块组成。和 ETC 一样，EAC 是为了绕开 S3TC 专利而设计的；也和 ETC 一样，它是一种更复杂的格式，往往导致纹理质量更低。"
+    },
+    {
+      "type": "p",
+      "en": "Curiously, from the perspective of the root mean square error, the EAC_RG format actually produces lower error. However, in practice, or from a perceptual point of view, the BC5 format is able to achieve higher quality on smooth regions, where artifacts are most noticeable. This is unfortunate, and may have been mitigated with different handling of the `mul == 0` case in the EAC decoder.",
+      "zh": "有意思的是，从均方根误差的角度看，EAC_RG 格式实际上产生的误差更低。但在实践中、或者说从感知角度看，BC5 能在平滑区域取得更高的质量，而瑕疵恰恰在这些区域最显眼。这挺遗憾的；如果在 EAC 解码器里对 `mul == 0` 这种情况换一种处理方式，也许就能缓解。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, another option on mobile is to use the ASTC format to encode normal maps. However, to actually achieve higher quality than what’s possible with EAC_RG you have to swizzle the input in a way similar to the old DXT5 trick:",
+      "zh": "最后，移动端还有一个选择：用 ASTC 格式编码法线贴图。不过，要想真正取得比 EAC_RG 更高的质量，你必须按类似当年 DXT5 那套技巧的方式对输入做通道重排："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "normal.xy = tex2D(normalMap, uv).ga;"
+    },
+    {
+      "type": "p",
+      "en": "This is necessary because ASTC does not have an explicit two-channel XY mode. Instead, it relies on special endpoint encoding modes (such as Luminance + Alpha), which can be repurposed to store normal data. [Arm’s astc-encoder](https://github.com/ARM-software/astc-encoder/blob/main/Docs/Encoding.md#encoding-normal-maps) uses this swizzle when using the `-normal` command line option, but most web 3d frameworks (including three.js) don’t have a way to specify that an ASTC normal map is encoded this way and needs to have its Z component reconstructed in the shader.",
+      "zh": "这是必要的，因为 ASTC 没有显式的双通道 XY 模式。它靠的是特殊的端点编码模式（比如 Luminance + Alpha），这些模式可以被挪用来存法线数据。[Arm 的 astc-encoder](https://github.com/ARM-software/astc-encoder/blob/main/Docs/Encoding.md#encoding-normal-maps) 在使用 `-normal` 命令行选项时就会做这种通道重排，但大多数 Web 3D 框架（包括 three.js）都没有办法指明某张 ASTC 法线贴图是这样编码的、需要在着色器里重建 Z 分量。"
+    },
+    {
+      "type": "p",
+      "en": "While ASTC can produce higher quality normal maps than EAC_RG, getting the best results usually requires a costly optimization step. In practice, the real-time encoders in spark.js default to EAC_RG or BC5, which offer a better quality-performance tradeoff.",
+      "zh": "虽然 ASTC 能产出比 EAC_RG 质量更高的法线贴图，但要拿到最好的结果通常需要一步开销很大的优化。实践中，spark.js 里的实时编码器默认用 EAC_RG 或 BC5，它们在质量和性能之间提供了更好的折中。"
+    },
+    { "type": "h2", "id": "z-reconstruction", "zh": "Z 分量的重建", "en": "Z reconstruction" },
+    {
+      "type": "p",
+      "en": "The XY normal map encodings rely on the assumption that the normal is a unit vector, so the Z component can be reconstructed in the shader from that constraint:",
+      "zh": "XY 法线贴图编码依赖一个假设：法线是单位向量，因此可以在着色器里由这个约束重建出 Z 分量："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "z = sqrt(max(0.0, 1.0 - x*x - y*y));"
+    },
+    {
+      "type": "p",
+      "en": "This corresponds to using an orthographic projection of the unit hemisphere onto the XY plane. While this is by far the most common way to reconstruct Z, it is not the only option. For example, in our [Real-Time Normal Map DXT Compression paper](https://www.ludicon.com/publications/Real-Time-Normal-Map-DXT-Compression.pdf) we also evaluated the stereographic projection, and [A Survey of Efficient Representations for Independent Unit Vectors](https://jcgt.org/published/0003/02/01/paper.pdf) analyzes many other alternatives.",
+      "zh": "这相当于把单位半球正交投影到 XY 平面上。虽然这是目前最常见的 Z 重建方式，但它并不是唯一的选择。比如在我们的论文 [Real-Time Normal Map DXT Compression](https://www.ludicon.com/publications/Real-Time-Normal-Map-DXT-Compression.pdf) 里，我们也评估了球极投影（stereographic projection），而 [A Survey of Efficient Representations for Independent Unit Vectors](https://jcgt.org/published/0003/02/01/paper.pdf) 则分析了很多其它替代方案。"
+    },
+    {
+      "type": "p",
+      "en": "These alternative representations have not been widely explored in the context of normal mapping. With both orthographic and stereographic projections, only about 86% of the possible XY values are meaningful, since values outside the unit circle do not correspond to a valid unit-length normal. In those cases the radicand of the square root becomes negative and does not produce a valid Z component, which is why it is typically clamped.",
+      "zh": "这些替代表示在法线贴图的语境里还没有被广泛探索。用正交投影和球极投影时，只有大约 86% 的 XY 取值是有意义的，因为单位圆之外的取值并不对应合法的单位长度法线。在这些情况下，开方的被开方数会变成负数，也就无法给出合法的 Z 分量，所以通常要把它钳制住。"
+    },
+    {
+      "type": "p",
+      "en": "A semi-octahedral representation uses the entire XY domain, but introduces first order discontinuities along fold lines and produces a more uniform distribution that does not favor directions near the pole. Whether these tradeoffs result in higher-quality normal maps in practice remains unclear.",
+      "zh": "半八面体（semi-octahedral）表示会用满整个 XY 定义域，但会在折线处引入一阶不连续，并且给出更均匀的分布，不再偏向极点附近的方向。这些取舍在实践中是否能带来更高质量的法线贴图，目前还不清楚。"
+    },
+    { "type": "h2", "id": "tangent-space-discontinuities", "zh": "切线空间的不连续", "en": "Tangent space discontinuities" },
+    {
+      "type": "p",
+      "en": "An interesting issue that we run into in The Witness manifested itself as subtle discontinuities along uv seams like the one seen here:",
+      "zh": "我们在《The Witness》里遇到过一个有意思的问题，它表现为沿着 uv 接缝出现的细微不连续，就像这里看到的这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/normal-discontinuity-700x379.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Many of the normal maps in The Witness were mostly flat, with occasional details to convey the type of material in a stylized way. The expectation was that these flat normals would look exactly the same on both sides of the seam, but instead the lighting was slightly different.",
+      "zh": "《The Witness》里很多法线贴图大体上是平的，偶尔有一些细节，以风格化的方式传达材质类型。按预期，这些平坦的法线在接缝两侧看起来应该完全一样，但实际光照却略有不同。"
+    },
+    {
+      "type": "p",
+      "en": "At first I thought it was caused by discontinuities in the vertex normals or the tangent frames. Maybe a bug in the way the tangent space was quantized or reconstructed or in the tangent space transform code? Turns out it was caused by the way UNORM normal maps are unpacked, which followed the usual formula:",
+      "zh": "起初我以为是顶点法线或切线基不连续造成的。也许是切线空间量化或重建的方式有 bug，或者切线空间变换的代码有问题？结果原因是 UNORM 法线贴图的解包方式，它用的是那个常见的公式："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "normal.xy = 2.0 * normal.xy - 1.0;"
+    },
+    {
+      "type": "p",
+      "en": "The problem was not in the tangent space representation, but on the values of the normals. When unpacking the flat normals using the standard formula presented above, the resulting normal was not the `(0,0,1)` vector, but actually `(-0.00392..., -0.00392..., 0.99607...)`, that is, a vector that is not pointing straight up. When this vector was rotated to the tangent space on each side of the seam, the resulting world-space normal would be different.",
+      "zh": "问题不在切线空间的表示上，而在法线的取值上。用上面那个标准公式解包平坦法线时，得到的并不是 `(0,0,1)` 向量，而实际上是 `(-0.00392..., -0.00392..., 0.99607...)`，也就是一个并不笔直朝上的向量。当这个向量在接缝两侧分别旋转到各自的切线空间时，得到的世界空间法线就会不同。"
+    },
+    {
+      "type": "p",
+      "en": "The solution was to agree on the way zero is represented in UNORM and adjust the offset accordingly. In our case, we chose to represent 0 as 127 and updated the code as follows:",
+      "zh": "解决办法是就 UNORM 里零的表示方式达成一致，并相应调整偏移量。在我们的例子里，我们选择把 0 表示成 127，并把代码改成这样："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "normal.xy = 2.0 * normal.xy - 254.0/255.0;"
+    },
+    { "type": "h2", "id": "unorm-vs-snorm", "zh": "UNORM 与 SNORM", "en": "UNORM vs SNORM" },
+    {
+      "type": "p",
+      "en": "The BC5 and EAC_RG formats both have signed and unsigned variants. The signed variants were introduced specifically to represent zero exactly and to address the issue described above. In practice, however, they are rarely used. Why?",
+      "zh": "BC5 和 EAC_RG 格式都有有符号和无符号两种变体。有符号变体是专门为了精确表示零、并解决上面描述的问题而引入的。然而在实践中，它们很少被使用。为什么呢？"
+    },
+    {
+      "type": "p",
+      "en": "While signed formats do solve that particular problem, they introduce another one. Input normal maps are almost always stored in UNORM8 form. This is what most tools produce, and most common interchange file formats do not support signed pixel values. Converting those UNORM8 values into the [-1, 1] range and then requantizing them to SNORM8 introduces an extra quantization step, which can result in additional error and a noticeable loss of precision.",
+      "zh": "有符号格式确实解决了那个特定的问题，但也引入了另一个问题。输入的法线贴图几乎总是以 UNORM8 形式存储的。这是大多数工具产出的形式，而且大多数常见的交换文件格式都不支持有符号像素值。把这些 UNORM8 值转换到 `[-1, 1]` 区间、再重新量化成 SNORM8，会引入一次额外的量化，从而可能带来更多误差和明显的精度损失。"
+    },
+    {
+      "type": "p",
+      "en": "If your source normal map assets are generated and stored with 16 bits per component, using the signed variants can be a practical option, since the additional precision helps avoid the extra quantization loss. Otherwise, the best options are to either ignore the issue entirely, or to apply a small offset correction as discussed earlier.",
+      "zh": "如果你的源法线贴图资源是按每分量 16 位生成和存储的，那么用有符号变体是个实际可行的选择，因为额外的精度有助于避免那次额外的量化损失。否则，最好的选择要么是完全忽略这个问题，要么是像前面讨论的那样施加一个小幅的偏移校正。"
+    },
+    { "type": "h2", "id": "conclusions", "zh": "结论", "en": "Conclusions" },
+    {
+      "type": "p",
+      "en": "Hopefully this article provides a clearer picture of how normal maps are typically encoded, along with some of the common pitfalls.",
+      "zh": "希望这篇文章能让大家更清楚地了解法线贴图通常是怎么编码的，以及一些常见的坑。"
+    },
+    {
+      "type": "p",
+      "en": "If you’re using spark.js, most of these details are handled for you, but you are still responsible for reconstructing the Z component in the shader. Frameworks like three.js now take care of this automatically; if you’re using your own engine or a different framework, you may need to handle this step yourself.",
+      "zh": "如果你在用 spark.js，这些细节大多已经替你处理好了，但重建 Z 分量这一步仍然要你自己在着色器里负责。像 three.js 这样的框架现在已经自动处理了；如果你用自己的引擎或别的框架，可能需要自己处理这一步。"
+    }
+  ]
+}

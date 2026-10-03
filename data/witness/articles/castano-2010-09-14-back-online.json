@@ -1,0 +1,65 @@
+{
+  "id": "castano-2010-09-14-back-online",
+  "title": {
+    "zh": "重新上线",
+    "en": "Back Online"
+  },
+  "subtitle": {
+    "zh": "博客塌了几个月又回来了：丢掉的帖子、没恢复的抱怨贴、搬到 the-witness.net 的技术文章，还有那个夏天。",
+    "en": "The blog comes back after months offline: lost posts, the ones not worth restoring, technical articles moving to the-witness.net, and that summer."
+  },
+  "translator": {
+    "note": "人名与地名保留英文；`The Witness` 按术语表写书名号。`DAM` 是作者常去游泳的 Davis Aquatic Masters 游泳队的缩写，中文保留 `DAM`。`lane 5`/`lane 3` 是泳道号，在这里代指他恢复训练的进度（泳道号越大通常游得越快），译文保留泳道号。`Nacho’s Hiking Notes` 是作者自己那份徒步笔记的标题，保留英文。源文里两条交叉发布链接是 `- ` 开头的列表项，译文按 schema 放进 `list` 块。",
+    "source": "archive/castano-blog/2010-09-14-back-online.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "You may have noticed my blog has been down during the last few months. I had some trouble with the server and lost all my posts. Unfortunately I did not have backups so it took quite some effort to restore them. At least I’ve managed to recover most articles and some of the posts that I wrote last year.",
+      "zh": "你可能已经注意到，过去几个月我的博客一直挂着。服务器出了点问题，所有帖子都丢了。可惜我没有备份，所以恢复起来费了不少劲。至少我把大部分文章和去年写的一些帖子找回来了。"
+    },
+    {
+      "type": "p",
+      "en": "I really didn’t bother to restore the ones in which I only whine about my back pain; I’d rather not remember that part of my life. Some articles still have missing images, and I may update them progressively.",
+      "zh": "那些纯粹在抱怨我背痛的帖子，我实在懒得恢复；那段日子我宁可不要想起来。有些文章现在还是缺图，我可能会慢慢补上。"
+    },
+    {
+      "type": "p",
+      "en": "In the meantime I’ve written a couple of articles for [The Witness blog](http://the-witness.net/news/) and in the future I’ll continue posting most of my technical articles there as well:",
+      "zh": "这期间我为 [The Witness 博客](http://the-witness.net/news/)写了两篇文章，以后我的大部分技术文章也会继续发在那里："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[The Witness – Computing Alpha Mipmaps](http://the-witness.net/news/?p=484), September 9, 2010",
+          "zh": "[The Witness – Computing Alpha Mipmaps](http://the-witness.net/news/?p=484)，2010 年 9 月 9 日"
+        },
+        {
+          "en": "[The Witness – Texture Parameterization](http://the-witness.net/news/?p=120), March 30, 2010",
+          "zh": "[The Witness – Texture Parameterization](http://the-witness.net/news/?p=120)，2010 年 3 月 30 日"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Last spring was fantastic. I went hiking almost every single weekend and felt in better shape than ever. I’ve started writing some notes about my hikes in an attempt to plan them better; I don’t think this stuff is very useful to anyone but me, but here it is anyway:",
+      "zh": "去年春天太棒了。我几乎每个周末都去徒步，感觉状态比以往任何时候都好。我开始把徒步的经过记下来，为的是能更好地做计划；我觉得这东西除了我自己对谁都没什么用，不过还是放出来："
+    },
+    {
+      "type": "p",
+      "en": "[Nacho’s Hiking Notes](http://dl.dropbox.com/u/195124/hiking-notes.html)",
+      "zh": "[Nacho’s Hiking Notes](http://dl.dropbox.com/u/195124/hiking-notes.html)"
+    },
+    {
+      "type": "p",
+      "en": "This summer I went to Spain and stayed there 5 weeks, much longer than usual. My grandmother died unexpectedly and it was good to be able to spend some more time with my family. When I got back I realized how lonely I am here in the US, how superficial are all my relationships.",
+      "zh": "今年夏天我回了西班牙，待了 5 个星期，比平常长得多。我祖母意外去世了，能多陪陪家人是件好事。回来之后我才意识到自己在美国有多孤独，我所有的关系有多表面。"
+    },
+    {
+      "type": "p",
+      "en": "I tried to stay in shape while abroad, but there’s nothing like the DAM workouts. I was flirting with lane 5 when I left and I’m now back to lane 3 again. The first two weeks have been excruciating, but I’m getting back into my routine and hopefully I’ll make my way up again.",
+      "zh": "在国外我也尽量保持状态，但什么都比不上 DAM 的训练。我走之前在 5 道附近晃悠，现在又退回 3 道了。头两个星期真是要命，不过我在慢慢回到原来的节奏，希望能再爬上去。"
+    }
+  ]
+}

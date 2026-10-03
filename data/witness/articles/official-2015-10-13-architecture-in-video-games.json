@@ -1,0 +1,23 @@
+{
+  "id": "official-2015-10-13-architecture-in-video-games",
+  "title": { "zh": "电子游戏中的建筑", "en": "Architecture in Video Games" },
+  "subtitle": {
+    "en": "Deanna Van Buren's Gamasutra post on video games seen through the eyes of an architect.",
+    "zh": "Deanna Van Buren 在 Gamasutra 上的文章：从建筑师的眼中看电子游戏。"
+  },
+  "translator": {
+    "note": "本篇只有两句话，是 Jon 转荐他人文章的短贴，译文不做扩充。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Deanna Van Buren, who worked with us designing the buildings for The Witness, has a blog posting on Gamasutra about video games seen through the eyes of an architect.",
+      "zh": "Deanna Van Buren 曾和我们一起为《The Witness》设计建筑，她在 Gamasutra 上发了一篇博客，讲从建筑师的眼中看电子游戏是什么样子。"
+    },
+    {
+      "type": "p",
+      "en": "[You can read it here.](http://www.gamasutra.com/blogs/DeannaVanBuren/20151012/254238/Architecture_in_Video_Games_Designing_for_Impact.php)",
+      "zh": "[可以在这里读到。](http://www.gamasutra.com/blogs/DeannaVanBuren/20151012/254238/Architecture_in_Video_Games_Designing_for_Impact.php)"
+    }
+  ]
+}

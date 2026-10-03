@@ -1,0 +1,40 @@
+{
+  "id": "official-2012-11-06-we-are-going-map-crazy",
+  "title": { "zh": "我们为地图疯了", "en": "We are going Map Crazy." },
+  "subtitle": {
+    "en": "Redrawing the island plan to compress it further, now that added detail has made the world feel too big.",
+    "zh": "细节一多，世界就显大了；于是我们重画岛屿规划，把它再压缩一轮。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/11/Photo-Nov-06-1-50-02-PM.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "One of my primary design goals, all through development, has been to keep the island spatially small, so that there isn't a lot of wandering through empty or pointless spaces. The idea is to take the best parts of an open-world game, involving choice, exploration and discovery, but compressing these into a maximally dense experience.",
+      "zh": "整个开发过程中，我的首要设计目标之一，一直是让这座岛在空间上保持小，这样就不会有大量在空旷或无意义空间里瞎逛的情况。想法是取开放世界游戏最好的部分——选择、探索与发现——但把它们压缩成一次密度最大的体验。"
+    },
+    {
+      "type": "p",
+      "en": "That has been going well, but there's an interesting phenomenon where, as we add more detail to the world, it starts to feel a lot bigger. When something is a mostly-featureless plain it is easy to feel like it's small, but once you are passing tiny rocks and plants that are set up very carefully, your brain has more scale reference. So there have been a couple of times during development where we stopped and said \"Hey wait a minute, things are just too big.\"",
+      "zh": "这事一直进展得不错，但有个有趣的现象：随着我们给世界加进更多细节，它开始让人感觉大得多。一片几乎没什么特征的平原，很容易让人觉得小；可一旦你身边经过的是摆放得很讲究的小石头和小植物，你的大脑就有了更多尺度参照。所以开发过程中有几次我们停下来，说：「哎，等等，东西就是太大了。」"
+    },
+    {
+      "type": "p",
+      "en": "Last week that happened again; we were looking at two different parts of the island on the same day, and both of them seemed much bigger than we needed. So, we decided to go back to the overall island plan and try to compress it further. We had a discussion about this on Thursday, then the architects talked it over; you see the result of those discussions in the image above. These maps are a handy guide to helping us figure out what we can cut and how we can scoot existing areas around to pack them a little better, and to better-define the areas between them.",
+      "zh": "上周这事又发生了一次；同一天里我们看了岛上两个不同的部分，两个都显得比我们需要的要大得多。于是我们决定回到岛屿的总体规划上，试着进一步压缩。周四我们为此讨论了一次，然后建筑师们又商量了一遍；上面那张图就是这些讨论的结果。这些地图是个顺手的指引，帮我们想清楚哪些可以砍掉、已有的区域怎么挪一挪才能排得更紧凑，以及怎么更清晰地界定区域之间的地方。"
+    },
+    {
+      "type": "p",
+      "en": "This is a little painful, since we *almost* had the island back into playable shape, and this knocks it back out of playable shape for a little longer. But my hope is that we can just make a mess and then clean it up very quickly.",
+      "zh": "这有点让人难受，因为我们*差点*就把岛弄回可玩的状态了，而这一下又把它打回不可玩的状态，还得再多花些时间。但我希望我们能先把局面弄乱，然后很快收拾干净。"
+    },
+    {
+      "type": "p",
+      "en": "In other news, there had been a puzzle that I needed to design for two years -- in the sense that I knew I needed to build the puzzle in order for a certain area to be complete, and I knew what that puzzle vaguely had to be about, but didn't have any good ideas on how to build it. Last week I had a breakthrough on that and built it very quickly; it's now one of the best puzzles in the game. So things are coming along well!",
+      "zh": "另外，有个谜题我已经需要对它做设计两年了——意思是，我知道要让某个区域完整，就必须把这个谜题做出来，也知道它大致该讲什么，但一直没想到好办法去实现它。上周我在这上面有了突破，很快就把它做出来了；它现在是游戏里最好的谜题之一。所以进展很顺利！"
+    }
+  ]
+}

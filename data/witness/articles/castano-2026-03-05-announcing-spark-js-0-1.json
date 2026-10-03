@@ -1,0 +1,175 @@
+{
+  "id": "castano-2026-03-05-announcing-spark-js-0-1",
+  "title": { "zh": "发布 spark.js 0.1", "en": "Announcing spark.js 0.1" },
+  "subtitle": {
+    "en": "I’m excited to announce spark.js 0.1, now with WebGL support!",
+    "zh": "我很高兴地宣布 spark.js 0.1 发布，现在支持 WebGL 了！"
+  },
+  "translator": {
+    "note": "原文的六个标题在归档里是三级标题（`###`），译文按本 schema 一律映射成 `h2`。归档把几张对比图的列标签单独排成缩进行（`Spark OFF`、`Spark ON`）以及图下方的说明行，译文按源文行结构保留为独立 `p` 块。插图按全站口径归一化成「（原文此处有一张图）」占位，两张图的 alt 原文都是「TileRenderer with and wihtout Spark」，也一并压平成「图」。第 107–108 行在源文里是被软换行拆开的一句话加一个 URL，markdown 上属于同一段，译文合并成一个 `p` 块。API 名（`ExternalTexture`、`TilesRenderer`、`GLTFLoader`、`userData`、`EXT_copy_image`、`Pixel Buffer Object`/PBO、`?renderer=webgl`）与产品名（`spark.js`、`WebGL`、`WebGPU`、`three.js`、`3D Tiles Renderer`、`3DTilesRendererJS`、`gltf-demo`、`Khronos`）一律保留英文；`mipmap` 不译。原文里的笔误（`wihtout`）在 `en` 字段中原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’m excited to announce [spark.js](https://github.com/Ludicon/spark.js) 0.1, now with WebGL support!",
+      "zh": "我很高兴地宣布 [spark.js](https://github.com/Ludicon/spark.js) 0.1 发布，现在支持 WebGL 了！"
+    },
+    {
+      "type": "p",
+      "en": "[spark.js](https://github.com/Ludicon/spark.js) has been evolving since I released it last summer. Since then, the WebGPU ecosystem has matured considerably. WebGPU is now more stable and widely supported across browsers and platforms. However, users kept telling me the same thing: even though targeting WebGPU is practical today, most teams have codebases that still rely on WebGL, and that made adoption difficult. For that reason I committed to adding WebGL support.",
+      "zh": "自从去年夏天发布以来，[spark.js](https://github.com/Ludicon/spark.js) 一直在演进。这段时间里，WebGPU 生态成熟了不少。WebGPU 现在更稳定，在各浏览器和平台上的支持也更广泛。但用户一直在跟我说同一件事：虽然如今面向 WebGPU 已经很实际了，但大多数团队的代码库仍然依赖 WebGL，这让采用变得困难。因此我决定把 WebGL 支持做出来。"
+    },
+    {
+      "type": "p",
+      "en": "This felt like the right moment to bump the version number to 0.1 and signal that [spark.js](https://ludicon.com/sparkjs/) is production ready, not just experimental. That said, I expect the API to continue evolving based on the features developers need and the friction points they encounter.",
+      "zh": "我觉得这是把版本号升到 0.1 的好时机，以表明 [spark.js](https://ludicon.com/sparkjs/) 已经可用于生产，而不只是实验性的。话虽如此，我预计 API 还会继续演进，取决于开发者需要哪些功能、以及在哪些地方遇到摩擦。"
+    },
+    { "type": "h2", "id": "webgl-support", "zh": "WebGL 支持", "en": "WebGL Support" },
+    {
+      "type": "p",
+      "en": "Support for WebGL is the main feature of this update. For a long time I believed WebGL could not update the contents of a block compressed texture from the GPU. I thought it lacked support for Pixel Buffer Objects and didn’t support `EXT_copy_image` either, making it impossible to implement Spark without a CPU read-back. Turns out [I was wrong](https://github.com/KhronosGroup/WebGL/issues/3744), PBO support is there!",
+      "zh": "支持 WebGL 是这次更新的主要特性。很长一段时间里，我都以为 WebGL 无法从 GPU 更新一张块压缩纹理的内容。我以为它不支持 Pixel Buffer Object，也不支持 `EXT_copy_image`，所以不做 CPU 回读就没法实现 Spark。结果[我错了](https://github.com/KhronosGroup/WebGL/issues/3744)，PBO 支持是有的！"
+    },
+    {
+      "type": "p",
+      "en": "I’m not entirely sure where that misconception came from. I was possibly confused because PBO support in WebGL is somewhat limited compared to OpenGL. That may have been reinforced by Unity’s documentation, which reports that WebGL does [not have texture copy support](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Rendering.CopyTextureSupport.html), making me think that these limitations imposed a more severe constraint. However, in practice, WebGL provides everything needed to implement copies from UINT textures to block-compressed textures.",
+      "zh": "我不太确定这个误解是从哪来的。可能是因为 WebGL 里的 PBO 支持相比 OpenGL 有些受限，我搞混了。Unity 的文档也许加深了这一点：它说 WebGL [不支持纹理复制](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Rendering.CopyTextureSupport.html)，让我以为这些限制带来的约束更严重。但实际上，WebGL 提供了实现「从 UINT 纹理复制到块压缩纹理」所需的一切。"
+    },
+    {
+      "type": "p",
+      "en": "That said, these copies are more expensive compared to WebGPU and native APIs like Vulkan and D3D12. In WebGPU the shader can output to a buffer and then copy its contents to the compressed texture, and in some native APIs the shader can write to the compressed texture directly. The process in WebGL is far more convoluted. Compute shaders with buffer stores and raw image copies aren’t supported, so the codec has to run as a fragment program and output compressed blocks to a render target, then copy the render target to a pixel buffer object, and the PBO to the final compressed texture. Even with this overhead, real-time compression remains practical and fast enough for most applications.",
+      "zh": "话虽如此，和 WebGPU 以及 Vulkan、D3D12 这类原生 API 相比，这些复制更昂贵。在 WebGPU 里，着色器可以输出到一个缓冲区，再把它的内容复制到压缩纹理；在某些原生 API 里，着色器还能直接写入压缩纹理。而 WebGL 里的流程要绕得多：它不支持带缓冲区写入的计算着色器，也不支持原始图像复制，所以编解码器必须以片元程序的形式运行，把压缩块输出到渲染目标，再把渲染目标复制到 pixel buffer object，最后把 PBO 复制到最终的压缩纹理。即便有这些额外开销，实时压缩对大多数应用来说依然是可行而且足够快的。"
+    },
+    { "type": "h2", "id": "cached-temporary-resources", "zh": "缓存临时资源", "en": "Cached Temporary Resources" },
+    {
+      "type": "p",
+      "en": "Another issue I wanted to address is the driver overhead when compressing many textures. In my initial implementation I created temporary resources for each texture and destroyed them afterward. To reduce this overhead I added support for caching of the temporary resources. This is particularly critical in WebGL where you need to have both, temporary buffers and render targets.",
+      "zh": "我想解决的另一个问题是压缩大量纹理时的驱动开销。在最初的实现里，我会为每张纹理创建临时资源，用完再销毁。为了减少这部分开销，我加入了对临时资源的缓存支持。这一点在 WebGL 里尤其关键，因为那里既需要临时缓冲区，也需要渲染目标。"
+    },
+    {
+      "type": "p",
+      "en": "In order to use the feature you have to opt-in when creating the spark object, and you can free the resources explicitly when done:",
+      "zh": "要使用这个特性，你必须在创建 spark 对象时主动开启；用完之后可以显式释放资源："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "// Create spark object with temp resource caching enabled.\nconst spark = await Spark.create(device, { cacheTempResources: true })\n\n// Load and transcode a bunch of textures at once.\nconst textures = await Promise.all(\n  imageUrls.map(url => spark.encodeTexture(url))\n)\n\n// Free cached resources.\nspark.freeTempResources()"
+    },
+    { "type": "h2", "id": "other-features", "zh": "其它特性", "en": "Other Features" },
+    {
+      "type": "p",
+      "en": "Another way to reduce overhead is to allocate the output texture once and reuse it across updates. This is useful for textures whose contents change frequently, and can be achieved by passing the output texture as an option:",
+      "zh": "另一种降低开销的做法是只分配一次输出纹理，在多次更新之间重复使用。这对内容频繁变化的纹理很有用，只要把输出纹理作为选项传进去就能做到："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "persistentTexture = spark.encodeTexture(renderTarget, \n    { outputTexture: persistentTexture }\n)"
+    },
+    {
+      "type": "p",
+      "en": "In the future I’d like to extend this option to support other use cases, for example, encoding regions of a larger texture, which would be helpful to support virtual texturing applications.",
+      "zh": "将来我希望能扩展这个选项以支持其它用法，比如只编码一张更大纹理的某些区域——这对支持虚拟纹理类的应用会很有帮助。"
+    },
+    {
+      "type": "p",
+      "en": "The mipmapping improvements I discussed in [my previous post](https://www.ludicon.com/castano/blog/2026/02/runtime-mipmap-generation/) have now been merged. One unexpected issue I encountered is that alpha-weighting and the magic kernel did not play well together. The negative lobes of the kernel would sometimes produce zero or near zero alpha values. These would then cause fireflies when un-pre-multiplying. For now I’m using the alpha-weighted box kernel for textures with alpha. In the future, the right solution is probably to apply the sharpening filter after undoing the alpha pre-multiplication. If you’ve tackled this problem before, I’d love to hear how you approached it.",
+      "zh": "我在[上一篇帖子](https://www.ludicon.com/castano/blog/2026/02/runtime-mipmap-generation/)里讲过的 mipmapping 改进现在已经合并进来了。我遇到一个意外的问题：alpha 加权和 magic kernel 配合得不好。卷积核的负瓣有时会产生零或接近零的 alpha 值，而在反预乘的时候这些值就会造成亮点闪烁（firefly）。目前对带 alpha 的纹理，我用的是 alpha 加权的盒式卷积核。将来正确的做法大概是在撤销 alpha 预乘之后再施加锐化滤波器。如果你以前处理过这个问题，我很想听听你是怎么做的。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, I’ve also started publishing the examples automatically with a github workflow, so you can explore them without having to checkout the repository or install the required development tools:",
+      "zh": "最后，我还开始用 GitHub workflow 自动发布示例，这样你不用检出仓库、也不用安装所需的开发工具就能直接浏览它们："
+    },
+    {
+      "type": "p",
+      "en": "[https://ludicon.github.io/spark.js](https://ludicon.github.io/spark.js)",
+      "zh": "[https://ludicon.github.io/spark.js](https://ludicon.github.io/spark.js)"
+    },
+    { "type": "h2", "id": "webgl-demo", "zh": "WebGL Demo", "en": "WebGL Demo" },
+    {
+      "type": "p",
+      "en": "With WebGL support in place, I’ve updated the [gltf-demo](https://ludicon.com/sparkjs/gltf-demo/) to support it. WebGL is used automatically when WebGPU is not supported, but you can also choose it explicitly using the `?renderer=webgl` URL argument:",
+      "zh": "有了 WebGL 支持之后，我更新了 [gltf-demo](https://ludicon.com/sparkjs/gltf-demo/) 让它也能用 WebGL。当不支持 WebGPU 时会自动使用 WebGL，你也可以用 `?renderer=webgl` 这个 URL 参数显式选择它："
+    },
+    {
+      "type": "p",
+      "en": "[https://ludicon.com/sparkjs/gltf-demo/?renderer=webgl](https://ludicon.com/sparkjs/gltf-demo/?renderer=webgl)",
+      "zh": "[https://ludicon.com/sparkjs/gltf-demo/?renderer=webgl](https://ludicon.com/sparkjs/gltf-demo/?renderer=webgl)"
+    },
+    { "type": "h2", "id": "integration-with-3d-tiles-renderer", "zh": "与 3D Tiles Renderer 集成", "en": "Integration with 3D Tiles Renderer" },
+    {
+      "type": "p",
+      "en": "To really showcase this release, I wanted to take an existing WebGL application and add real-time texture compression, and I thought there was no better stress test than the [3D Tiles Renderer](https://github.com/NASA-AMMOS/3DTilesRendererJS).",
+      "zh": "为了真正展示这个版本，我想拿一个现成的 WebGL 应用来加上实时纹理压缩，而我觉得没有比 [3D Tiles Renderer](https://github.com/NASA-AMMOS/3DTilesRendererJS) 更好的压力测试对象了。"
+    },
+    {
+      "type": "p",
+      "en": "Integrating [spark.js](https://github.com/Ludicon/spark.js) turned out to be extremely straightforward. The `TilesRenderer` uses three.js’s `GLTFLoader`, and spark already provides a plugin that handles image transcoding automatically, so the initial integration required just a couple of lines of code.",
+      "zh": "集成 [spark.js](https://github.com/Ludicon/spark.js) 出乎意料地直接。`TilesRenderer` 用的是 three.js 的 `GLTFLoader`，而 spark 已经提供了一个自动处理图像转码的插件，所以最初接入只写了两行代码。"
+    },
+    {
+      "type": "p",
+      "en": "There was one gotcha: `TilesRenderer` tracks memory used by loaded tiles to decide when to stream in new tiles or unload existing ones, and it does this by assuming textures have an associated image bitmap. That assumption breaks when transcoding textures with Spark, since the resulting textures are `ExternalTexture` objects. To handle this, the Spark GLTF Plugin now stores the byte length in the texture’s `userData` field:",
+      "zh": "有一个坑：`TilesRenderer` 会跟踪已加载 tile 占用的内存，以此决定何时流入新 tile 或卸载已有的 tile，而它做这件事时假定纹理都关联着一个 image bitmap。用 Spark 转码纹理时这个假设就不成立了，因为得到的纹理是 `ExternalTexture` 对象。为了解决这一点，Spark GLTF Plugin 现在会把字节长度存在纹理的 `userData` 字段里："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "const texture = new THREE.ExternalTexture(textureObject.texture)\ntexture.format = textureObject.format\ntexture.userData.byteLength = textureObject.byteLength"
+    },
+    {
+      "type": "p",
+      "en": "And the memory footprint calculation handles this special case:",
+      "zh": "而内存占用的计算会处理这个特殊情况："
+    },
+    {
+      "type": "code",
+      "lang": "js",
+      "code": "if ( tex instanceof ExternalTexture && tex.userData?.byteLength ) {\n  return tex.userData.byteLength;\n}"
+    },
+    {
+      "type": "p",
+      "en": "The results speak for themselves. Texture compression doesn’t just reduce bandwidth and power consumption, it frees up memory for higher-resolution textures with mipmaps (improving aliasing) and increased geometric detail. As they say, a picture is worth a thousand words:",
+      "zh": "结果不言自明。纹理压缩不只是降低带宽和功耗，它还腾出内存，让更高分辨率的纹理（带 mipmap，从而改善混叠）和更精细的几何细节成为可能。俗话说，一图胜千言："
+    },
+    { "type": "p", "en": "Spark OFF", "zh": "Spark OFF" },
+    { "type": "p", "en": "Spark ON", "zh": "Spark ON" },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/03/rome-spark-off.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "Spark OFF", "zh": "Spark OFF" },
+    { "type": "p", "en": "Spark OFF", "zh": "Spark OFF" },
+    { "type": "p", "en": "Spark ON", "zh": "Spark ON" },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/03/sevilla-spark-off.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "Spark OFF", "zh": "Spark OFF" },
+    {
+      "type": "p",
+      "en": "You can check out the full code changes in our fork of the 3DTilesRendererJS repository: [https://github.com/NASA-AMMOS/3DTilesRendererJS/pull/1497](https://github.com/NASA-AMMOS/3DTilesRendererJS/pull/1497)",
+      "zh": "完整的代码改动可以在我们对 3DTilesRendererJS 仓库的分叉里查看：[https://github.com/NASA-AMMOS/3DTilesRendererJS/pull/1497](https://github.com/NASA-AMMOS/3DTilesRendererJS/pull/1497)"
+    },
+    { "type": "h2", "id": "see-you-at-gdc", "zh": "GDC 见", "en": "See You at GDC" },
+    {
+      "type": "p",
+      "en": "Finally, if you would like to see [spark.js](https://github.com/Ludicon/spark.js) in person or chat about texture compression, I’ll be at GDC next week and I will be presenting at the 3D on the Web Khronos event:",
+      "zh": "最后，如果你想当面看看 [spark.js](https://github.com/Ludicon/spark.js)、或者聊聊纹理压缩，下周我会在 GDC，并将在 Khronos 的 3D on the Web 活动上做演讲："
+    },
+    {
+      "type": "p",
+      "en": "[https://www.khronos.org/events/3d-on-the-web-2026](https://www.khronos.org/events/3d-on-the-web-2026)",
+      "zh": "[https://www.khronos.org/events/3d-on-the-web-2026](https://www.khronos.org/events/3d-on-the-web-2026)"
+    },
+    {
+      "type": "p",
+      "en": "Hope to see you there!",
+      "zh": "希望在那里见到你！"
+    }
+  ]
+}

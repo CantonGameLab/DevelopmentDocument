@@ -1,0 +1,315 @@
+{
+  "id": "light-kriging-is-cool",
+  "title": {
+    "zh": "Kriging 很酷。",
+    "en": "Kriging is cool."
+  },
+  "subtitle": {
+    "en": "Unstructured terrain control points, interpolated with Kriging, so a hill can be picked up, rotated and dragged like any other object.",
+    "zh": "用 Kriging 插值的无结构地形控制点，让一座山丘能像别的物体一样被拿起来、旋转、拖动。"
+  },
+  "translator": {
+    "note": "术语表里没有的统计名词按通行译法处理，首次出现给出英文原词：`variogram` 译「变差函数」、`semivariance` 语义上译「半方差」、`compact support` 译「紧支撑」、`rank-deficient` 译「秩亏」、`distributive property` 译「分配律」、`z-fighting` 译「z 冲突」。`Kriging` 是人名派生的方法名，全篇保留英文；`heightfield` 译「高度场」；`block` 在讲地形分块时译「块」；`spline patch` 译「样条面片」。插图行按全站口径归一化为 `![图](原图URL)`（丢掉外层链接、`-nggid…` 缩略图后缀与 `-400x300x100-00f0w010c010r110f110r010t010` 这类动态尺寸后缀）。原文用 `*斜体*` 标出的两段旁白按原样保留斜体。文中的 `$…$` 行内公式与变量名（`r0`、`r1`、`n`、`x`、`y`、`Z`）原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In *The Witness* we decided that it's a good idea to have a heightfield terrain making up the bulk of the island surface.  The advantages of this are in rendering performance and in ease of texturing (it is relatively easy, with one continuously-parameterized terrain block, to get rid of seams; if your terrain is a bunch of otherwise-unrelated meshes, then what do you do?)   When we made this decision it seemed clear to me that the biggest disadvantage, for this game at least, was authoring the terrain.  There are typically a few different ways that large heightfields are built:",
+      "zh": "在《The Witness》里，我们觉得让高度场地形构成岛屿表面的大部分是个好主意。好处在于渲染性能，以及贴图上的便利（用一整块连续参数化的地形块，消掉接缝相对容易；要是你的地形是一堆彼此无关的网格，那你能怎么办？）做出这个决定的时候，在我看来很清楚：至少对这个游戏来说，最大的缺点是地形的制作。大面积高度场通常有几种不同的建法："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Use an external terrain editing tool and then write an importer for its file format",
+          "zh": "用外部的 3D 地形编辑工具，再为它的文件格式写一个导入器"
+        },
+        {
+          "en": "Build a terrain editing tool into the game's editor (this will require a bunch of work to do a good job, and will have fewer features than an external tool but they may be more appropriate for your game; also, you can make reasonable things happen to entities placed in the world when you interactively move the terrain around)",
+          "zh": "把地形编辑工具做进游戏的编辑器里（要做到好用得下一堆功夫，功能会比外部工具少，但可能更适合你的游戏；另外，你在交互式地挪动地形时，还能对摆在世界里的实体做出合理的处理）"
+        },
+        {
+          "en": "Paint heightmaps in an image editor like Photoshop and hotload those from the game engine (requires much less programming; doesn't provide many features, but you have very fine control over the results; unfortunately, the editing process becomes pretty cumbersome)",
+          "zh": "在 Photoshop 这类图像编辑器里画高度图，再由游戏引擎热加载（需要的编程量小得多；功能不多，但你对结果有极精细的控制；可惜编辑过程变得相当笨重）"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "These seemed to be the main approaches on offer.  However, I wasn't enthusiastic about doing any of the traditional things; I have written a number of terrain systems for games, and what bugged me, with respect to this game, was the way in which terrain handling tends to be very different from laying out objects in the world, and how this creates an extremely disjoint work process.",
+      "zh": "这些看来就是摆在面前的主要做法。可是我对这些传统路子一个都提不起劲；我给游戏写过好些地形系统，而就这个游戏而言，让我烦的是地形处理的方式往往和「往世界里摆物体」差得很远，而这造成了一个极其割裂的工作流程。"
+    },
+    {
+      "type": "p",
+      "en": "In concrete terms, this means that terrain was not going to be as malleable as the other objects in the world.  I am taking a very rough-drafty approach to the game; we are building areas, then moving them across the world if we feel they will work better somewhere else, rotating them as a group, etc.  The goal is to build a very-cohesive game world in which carefully-tuned gameplay is the most important thing -- where we more-or-less have a rough draft of the whole world set up before we go in and try to get serious about how everything looks.",
+      "zh": "具体来说，这意味着地形不会像世界里其他物体那样可塑。我在用一种非常「打草稿」的方式来推进这个游戏；我们先把区域搭出来，如果觉得放到别处更好就把它挪到世界另一处，整组一起旋转，诸如此类。目标是做一个非常有整体感的游戏世界，其中精心调校的玩法才是最重要的——也就是说，在我们进场认真处理外观之前，整个世界的草稿大致已经搭好了。"
+    },
+    {
+      "type": "p",
+      "en": "This kind of approach just dies when you have elements that behave very differently, and are difficult to manipulate together, such as terrain and objects.  If I have two hills with a path winding between them, a bench by the path with a book upon the bench, and a signpost nearby, what happens when I want to move that scene across the map and then rotate it by 30 degrees?  With the entities, it is no problem, we just do that in the editor.  But with the terrain it just becomes a mess to move the hills at all, regardless of which of the above approaches are used.  And if you want to move and rotate the hills in sync with the entities so that the whole scene is intact... **good luck!**",
+      "zh": "这种做法只要碰上行为差别很大、又难以一起操作的要素就会直接死掉，比如地形和物体。假设我有两座山丘，中间蜿蜒着一条小路，路边有条长凳，凳上放着本书，近处还有个路标牌——当我想把这一整景挪到地图另一处、再旋转 30 度的时候会怎样？对于实体，毫无问题，我们在编辑器里做就是了。但对地形来说，不管上面哪种做法，光是挪动山丘就会变成一团乱麻。而如果你想连地形带实体一起同步移动和旋转，好让整个场景保持完整……**祝你好运！**"
+    },
+    {
+      "type": "p",
+      "en": "To solve this problem, terrain needed to be built in the in-game editor, in a way that would be maximally malleable -- so that I can pick up a hill and rotate and drag it.  Because of the requirement for rotation, you can't really be manipulating samples directly; it has to be control surfaces of some kind (because if you are just blitting samples around, a few rotation operations are going to mangle whatever original shapes you made).",
+      "zh": "要解决这个问题，地形就得在游戏内编辑器里建，而且要以最大程度可塑的方式建——好让我能把一座山丘拿起来、旋转、拖动。因为有旋转这个要求，你实际上没法直接操纵采样点；必须是某种控制曲面（因为如果你只是把采样点搬来搬去，几次旋转操作就会把你原本做出的形状揉烂）。"
+    },
+    {
+      "type": "p",
+      "en": "As for control surfaces, the first ideas that come to mind are things like spline patches.  But the problem with spline patches is that you have to be very careful managing the control points in a patch, and they ultimately aren't that malleable -- what if I want to split a patch in half without changing the shapes of areas near the edges?  What if I want to move one small, high-detail terrain area so that it overlaps somewhat with a big, low-detail area?  How is that going to work?  And if I have spline patches, then any time I instantiate a new grid of patches, I have to manage a bunch of individual control points, which is labor-intensive.  If I am rough-drafting, I want to do the minimum possible work to lay out a given area.  If I just generally want to build a hill but don't care much about its shape, I ought to be able to do that with just 2 or 3 control points, arbitrarily-placed.",
+      "zh": "说到控制曲面，最先想到的是样条面片（spline patch）之类的东西。但样条面片的问题在于，你得非常小心地管理一个面片里的控制点，而且它到底还是不够可塑——如果我想把一个面片一分为二，又不改变边缘附近区域的形状，怎么办？如果我想挪动一小块高细节的地形区域，让它和大片低细节区域有些重叠，那又该怎么办？而如果我用了样条面片，那么每次我实例化一组新的面片网格，就得管理一堆单独的控制点，非常费工。如果我在打草稿，我就想用尽可能少的功夫铺出一个区域。如果我大体上只是想造一座山丘、并不太在乎它的形状，那我应该只靠 2、3 个任意摆放的控制点就能办到。"
+    },
+    {
+      "type": "p",
+      "en": "Clearly what I wanted was a system that would just look at a set of unstructured control points -- no topology or anything -- and generate a terrain from those points in the local area.  When there is no topology or parameterization, you can merge and split groups of control points at will; you can have them overlap; you can do whatever you want.",
+      "zh": "显然我想要的是一个这样的系统：它只看一组无结构的控制点——没有拓扑，什么都没有——就在局部区域里由这些点生成地形。没有拓扑也没有参数化的时候，你可以随意合并、拆分控制点组；可以让它们重叠；想怎么来就怎么来。"
+    },
+    {
+      "type": "p",
+      "en": "I started putting together an ad hoc scheme for doing this, but did not take it very far before discovering that the mathematics for doing a good job at exactly this problem had already been invented decades ago.  The method is called [Kriging](http://en.wikipedia.org/wiki/Kriging), and it is well known in geostatistics.  If you've got a survey of height field data (or any other field data -- the density of a mineral at certain points, for instance), and that data is missing values for some locations, Kriging will give you a reasonable guess at the values of the field at the unknown points.",
+      "zh": "我开始临时拼凑一套方案来做这件事，但还没走多远就发现，恰好针对这个问题的成熟数学方法几十年前就已经被发明出来了。这个方法叫 [Kriging](http://en.wikipedia.org/wiki/Kriging)，在地质统计学里很有名。如果你有一组高度场数据的测量值（或者别的什么场数据——比如某些点上某种矿物的密度），而这份数据缺少某些位置的值，Kriging 会给你一个关于未知点处场值的合理猜测。"
+    },
+    {
+      "type": "p",
+      "en": "For rough-draft terrain modeling, we can turn the idea around; if we give a Kriging function only a small set of known data points, it will do a quite fantastic job of filling in the values at all the other points.  The basic math involves the inverse of an n by n matrix, where n is the number of known data points.  In theory that could become a huge computation, but for the number of points we may typically have in one local area of the map, the computation is easy for modern CPUs.  Kriging is not hard to implement; I started with some public domain code written at a university and modified it for our needs (though this basically involved rewriting it, as it was messy and had some serious bugs!  If anyone wants our version of the Kriging code, drop me a line).",
+      "zh": "对于打草稿式的地形建模，我们可以把这个思路反过来用：如果只给 Kriging 函数一小撮已知数据点，它在推算出其余所有点的值这件事上会干得相当漂亮。基本数学里涉及一个 n×n 矩阵的求逆，其中 n 是已知数据点的个数。理论上这可能会变成巨量计算，但就我们在地图某个局部区域通常可能有的点数而言，现代 CPU 算起来很轻松。Kriging 不难实现；我从某所大学写的公有领域代码起步，为我们的需要做了修改（不过基本上等于重写，因为它又乱又有几个严重 bug！如果有人想要我们这版 Kriging 代码，给我留个信）。"
+    },
+    {
+      "type": "p",
+      "en": "Here's how we have it integrated into our game engine.  There's a type of object that exists as a set of terrain control points, which can be moved around the world arbitrarily, just like anything else.  It looks like this:",
+      "zh": "我们在游戏引擎里是这样把它接进去的。有一种对象，其存在形式就是一组地形控制点，它们可以像别的东西一样在世界里任意移动。它长这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-1.jpg-nggid0275-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The only meaningful data in this object, with respect to terrain shaping, are the positions of the control points (purple boxes).  The surface is just a visualization; it tells you what surface these points would define if they were the only control points in the universe.  (Though actually, the surface defined by those points would extend infinitely in all directions; this visualization stays within the convex hull of the control points, which helps you see what you are doing when editing).",
+      "zh": "就地形造型而言，这个对象里唯一有意义的数据就是控制点（紫色的方块）的位置。那个曲面只是一个可视化；它告诉你，如果宇宙里只有这些控制点，它们会定义出什么样的曲面。（不过实际上，这些点定义的曲面会在所有方向上无限延伸；这个可视化只画到控制点的凸包以内，这有助于你在编辑时看清自己在做什么。）"
+    },
+    {
+      "type": "p",
+      "en": "Right now these control points haven't actually been applied to the game's terrain (green surface below); they are just hovering above it.  Here's a shot from another angle:",
+      "zh": "眼下这些控制点还没有真正应用（apply）到游戏地形上（下面那张绿色曲面）；它们只是悬在地形上方。这是另一个角度的截图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-2.jpg-nggid0280-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I can press a key to add a new control point to this object:",
+      "zh": "我可以按一个键往这个对象里加一个新的控制点："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-3.jpg-nggid0281-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The new control point doesn't affect the shape of the old surface in any way, which is very convenient.  I can drag the new control point at will:",
+      "zh": "新的控制点完全不会影响原有曲面的形状，这非常方便。我可以随意拖动这个新的控制点："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-4.jpg-nggid0282-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Or add many more control points:",
+      "zh": "或者再加很多控制点："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-5.jpg-nggid0283-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Here's that same visualization surface, with the control points and gridding turned off, so you can see it better:",
+      "zh": "还是那个可视化曲面，这次把控制点和网格线关掉，方便你看得更清楚："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-6.jpg-nggid0284-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Then, when I decide I like the shape, I can press another key to apply these control points to the game's terrain:",
+      "zh": "然后，当我认定这个形状不错时，可以按另一个键把这些控制点应用到游戏地形上："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-7.jpg-nggid0285-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "(Now there's a lot of z-fighting between the control surface and the terrain because they are in pretty much the same place.)",
+      "zh": "（现在控制曲面和地形之间有大量 z 冲突，因为它们几乎处在同一个位置上。）"
+    },
+    {
+      "type": "p",
+      "en": "Here is the terrain with the control surface hidden.  Note that the terrain values have been smoothly interpolated, even in areas outside the control object:",
+      "zh": "这是把控制曲面藏起来之后的地形。注意地形值已经被平滑插值了，连控制对象之外的区域也一样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-8.jpg-nggid0286-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "*(By the way, those seams you see in the previous two pictures are lighting seams. These don't have anything to do with Kriging, it's just that the terrain blocks don't know how to look up their neighbors' height values when generating their surface normals. Any block-based terrain system has to solve a similar problem. It's easy to solve, but at a low priority on the to-do list, hence it hasn't been done yet. The distance between seams tells you how big the terrain blocks are, so the seams are sort of useful in this image!)*",
+      "zh": "*（顺便一提，前两张图里你看到的那些接缝是光照接缝。它们和 Kriging 毫无关系，只是地形块在生成自身表面法线时不知道该怎么去查邻居的高度值。任何按块划分的地形系统都得解决类似的问题。这问题好解决，但在待办清单上优先级很低，所以还没做。接缝之间的距离能告诉你地形块有多大，所以在这个画面里接缝还算有点用处！）*"
+    },
+    {
+      "type": "p",
+      "en": "*Suppose this control surface is part of a scene that I want to reorient. I'll rotate it about 70 degrees clockwise (now you'll see the surface intercutting more-heavily with the existing terrain values):*",
+      "zh": "*假设这个控制曲面属于一个我想重新定向的场景。我把它顺时针旋转大约 70 度（现在你会看到这个曲面与现有地形值交切得更厉害）：*"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-9.jpg-nggid0287-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And then once again, I apply Kriging to the terrain, generating the same hills in a rotated orientation:",
+      "zh": "然后我再一次对地形施加 Kriging，在旋转后的朝向上生成同样的山丘："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-10.jpg-nggid0276-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "To illustrate the way that interpolation is not confined to a single control object, and that in fact this is a control point soup, here I've created three control objects:",
+      "zh": "为了说明插值并不局限于单个控制对象、实际上这是一锅控制点杂烩，我在这里建了三个控制对象："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-11.jpg-nggid0277-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And here's what the terrain looks like with them applied:",
+      "zh": "把它们应用上去之后，地形是这样的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-12.jpg-nggid0278-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And here's the final terrain along with the control objects (lots of z-fighting again):",
+      "zh": "这是最终地形连同控制对象一起的样子（又是一堆 z 冲突）："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-13.jpg-nggid0279-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Hopefully that's enough screenshots to illustrate the point.  Compared to splines, Kriging has the following highly beneficial properties (aside from the huge benefits of not requiring a topology, discussed above):",
+      "zh": "希望这些截图足够说明问题了。与样条相比，Kriging 有下面这些非常有益的性质（除了上面讨论过的、不需要拓扑这个巨大的好处之外）："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Always interpolates every control point exactly",
+          "zh": "总是精确地插值经过每一个控制点"
+        },
+        {
+          "en": "Adding a new control point does not change the existing surface at all.",
+          "zh": "新增一个控制点完全不会改变已有的曲面。"
+        },
+        {
+          "en": "No funny spline-like behavior (curves appearing in strange places, huge overshoots, etc)",
+          "zh": "没有样条那种古怪行为（曲线出现在奇怪的地方、巨大的过冲等等）"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "**Hacking In Compact Support**",
+      "zh": "**硬凑出紧支撑**"
+    },
+    {
+      "type": "p",
+      "en": "When doing Kriging in a video game, you probably don't want to compute the terrain for the entire world at once for every change, because that would be very expensive, and it also is a little bit unintuitive (since a change to a control point very far away could change some interpolated terrain nearby, even if only slightly).  However, the vanilla Kriging algorithm would require global computation and thus behave nonlocally.  For *The Witness* we clearly wanted our control points to affect only nearby areas, *i.e.* have compact support.  My first attempt at this was:",
+      "zh": "在电子游戏里做 Kriging，你大概不会想每次改动都把整个世界的地形算一遍，那太贵了，而且也有点反直觉（因为改动一个非常远的控制点，也可能改变附近某处插值出来的地形，哪怕只是略微改变）。可是原味的 Kriging 算法要求全局计算，因此行为是非局部的。对《The Witness》来说，我们显然希望控制点只影响附近区域，也就是具有紧支撑（compact support）。我第一次尝试的做法是："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Pick a radius r0 at which any control point has maximum effect, and a larger radius r1 at which the point has no effect, with smooth interpolation in-between.",
+          "zh": "选一个半径 r0，任何控制点在这个半径内都达到最大影响；再选一个更大的半径 r1，到那里控制点就没有影响了；两者之间做平滑过渡。"
+        },
+        {
+          "en": "Terrain consists of contiguous blocks 33x33 samples in size.",
+          "zh": "地形由一块块相邻的 33x33 采样的块组成。"
+        },
+        {
+          "en": "For each block of terrain you want to Krige, find all control points whose distance in the XY plane from any sample in the block is less than r1 (these are all the control points that could possibly affect any sample in the block).",
+          "zh": "对你想做 Kriging 的每一块地形，找出所有「与块内任一采样点在 XY 平面上的距离小于 r1」的控制点（这些就是有可能影响块内任一采样的全部控制点）。"
+        },
+        {
+          "en": "Pass all these points to the Kriging routine, which computes every sample in the block. It does this by building an inverse variogram matrix -- square with dimension (n+1) -- and performing one matrix-vector multiply for each terrain sample, which is pretty fast.",
+          "zh": "把这些点全部交给 Kriging 例程，由它算出块内的每个采样。做法是构造一个变差函数（variogram）矩阵的逆——维度为 (n+1) 的方阵——再为每个地形采样做一次矩阵乘向量，速度相当快。"
+        },
+        {
+          "en": "For each sample, the Kriging routine gives us the set of weights we would use to blend each control point if the control points did not have compact support. To provide compact support, just compute an additional factor that is (distance - r1) / (r0 - r1) clamped to [0, 1], multiply all the weights by these factors, and then re-normalize the weights (ensure they all add to 1).",
+          "zh": "对每个采样，Kriging 例程给出的是「假如控制点没有紧支撑时，我们会用来混合各控制点的那组权重」。要提供紧支撑，只需再算一个额外的因子 (distance - r1) / (r0 - r1)，并把它钳制到 [0, 1]，用这些因子乘上所有权重，然后重新归一化权重（确保它们加起来等于 1）。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "This almost works, but not quite; we get discontinuities between terrain blocks (which should not happen if everything is correct, since two vertices at the same XY position should always get the same Z value).  At first I thought this was a programming error, but after looking more closely at the situation I convinced myself that the reason is mathematical.  My assumption had been that a control point with a weight of 0 will have the same effect as a control point that never enters into the calculation, but this seems not to be true.",
+      "zh": "这几乎可行，但不完全行；地形块之间会出现不连续（如果一切正确，这本不该发生，因为处于同一 XY 位置的两个顶点应该总是得到相同的 Z 值）。一开始我以为这是程序错误，但更仔细地看了这个情况之后，我说服了自己：原因是数学上的。我原先的假设是「权重为 0 的控制点」和「根本不参与计算的控制点」效果相同，但这似乎并不成立。"
+    },
+    {
+      "type": "p",
+      "en": "The step that I added, multiplying the compact-support factors against the weights provided by the matrix-vector multiply, is -- by the distributive property -- the same as multiplying each row of the matrix by the support factor before doing the matrix-vector multiply.  If a support factor is 0, then this makes the matrix rank-deficient, *i.e.* it could not have been the result of an inversion, which means that this step is not compatible with the mathematical technique being applied.  The idea of a 0 blend factor just isn't valid.  *(This also brings into question whether the idea of multiplying by the support factors is valid at all, but for now I will just observe that it produces very useful and convenient behavior. However, there are some small stepping artifacts that I see in some locations. I think these may be due to having too-low a density of control points in the world (some terrain samples having 0 control points inside r1) but there's a possibility that they aren't, and have something to do with the weighting procedure itself. I haven't investigated yet.)*",
+      "zh": "我加上去的那一步——把紧支撑因子乘到矩阵乘向量给出的权重上——根据分配律，等价于在做矩阵乘向量之前把矩阵的每一行都乘以支撑因子。如果某个支撑因子是 0，这就使矩阵秩亏（rank-deficient），也就是说这个矩阵不可能是求逆的结果，这意味这一步与所用的数学方法并不相容。「混合因子为 0」这个想法本身就不成立。*（这也让人怀疑「乘以支撑因子」这个做法到底成不成立，但眼下我只想指出：它产生的行为非常有用、非常方便。不过在某些位置我能看到一些小的阶梯状瑕疵。我想这可能是因为世界里的控制点密度太低（有些地形采样在 r1 之内一个控制点都没有），但也可能不是这个原因，而是与加权过程本身有关。我还没去查。）*"
+    },
+    {
+      "type": "p",
+      "en": "Now, as I type this, I am not 100% convinced that it is the right reasoning, and that something more like a typical programming error might be the problem.  My math is pretty rusty these days.  However, my updated version of the routine does not have discontinuities.  ",
+      "zh": "话说回来，在我敲下这些字的时候，我并不百分之百确信这个推理是对的，也不排除问题其实是那种典型的程序错误。我这些日子数学挺生疏的。不过我更新后的例程确实没有不连续了。  "
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, the fix for discontinuities has made the Kriging a bit slower.  What I do is, instead of building just one inverse variogram for the entire terrain block, I build a new variogram for every vertex, and include in that variogram only the control points that have nonzero support factors.  Thus the dimensions of the matrix will change from sample to sample, and I am inverting a new matrix for each output sample.",
+      "zh": "可惜，修掉不连续让 Kriging 慢了一些。我的做法是：不再为整个地形块只构造一个变差函数的逆，而是为每个顶点构造一个新的变差函数，并且只把支撑因子非零的那些控制点纳入其中。于是矩阵的维度会随着采样而变，我为每一个输出采样都要求一个新矩阵的逆。"
+    },
+    {
+      "type": "p",
+      "en": "Unoptimized, this version of the algorithm takes between 5 and 25 seconds to recompute the terrain for the entire world, depending on how large r1 is.  This is fine for now, especially since editing operations only hit about 1/50 of the world or less at any given time.  However, it'll get slower as more control points are added to the world.",
+      "zh": "未做优化的情况下，这个版本的算法重算整个世界的地形需要 5 到 25 秒，取决于 r1 有多大。目前这没问题，尤其因为编辑操作在任何时刻只涉及整个世界的大约 1/50 甚至更少。不过，随着世界里加入更多控制点，它会越来越慢。"
+    },
+    {
+      "type": "p",
+      "en": "Fortunately, this first version of the discontinuity-fixing was intended to be slow -- I programmed it in the most straightforward way possible, to maximize the likelihood that it would work.  It is easy to think of ways to make it faster by caching the matrices, but it's unclear which of these would be fastest.  For example, if you just cache one copy of the matrix and invalidate it any time a new control point comes into or out of range, then you might easily find yourself in a situation where you oscillate between recomputing two different matrices as you work your way along the sample grid.  This is a little reminiscent of the kinds of problems that 3D hardware has, which store images in a non-linear way so that they can be cache-efficient when sampled along lines in arbitrary directions... but it's not clear to me how far to take that analogy or whether any applicable wisdom can be derived from it.",
+      "zh": "幸好，这第一版修不连续的实现本来就是有意做得慢的——我用最直白的方式写它，为的是尽量保证它能跑通。靠缓存矩阵来提速的办法很容易想到，但哪种最快并不清楚。举例来说，如果你只缓存一份矩阵，并且每当有控制点进入或离开范围时就把它作废，那你很可能发现自己沿着采样网格推进时，会在重算两个不同矩阵之间来回震荡。这有点让人想起 3D 硬件的那类问题：硬件以非线性的方式存储图像，这样在沿任意方向的直线采样时能对缓存友好……但我不清楚这个类比能推到多远，也不清楚能否从中得出什么可用的智慧。"
+    },
+    {
+      "type": "p",
+      "en": "So I intend to optimize it, or come up with a faster solution to the discontinuity problem, but it's not clear yet what form that will take.",
+      "zh": "所以我打算优化它，或者想出一个更快的办法解决不连续问题，但具体会是什么形式，现在还不清楚。"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "official-2013-02-01-interview-about-the-witness-and-related-design-topics",
+  "title": { "zh": "关于《The Witness》及相关设计话题的采访", "en": "Interview about The Witness and related design topics" },
+  "subtitle": {
+    "en": "Tom McShea of Gamespot interviews Jonathan Blow for the Break Room Interview series.",
+    "zh": "Gamespot 的 Tom McShea 为「Break Room」采访系列采访 Jonathan Blow。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "On January 31, 2013, Tom McShea of Gamespot interviewed me as part of their Break Room Interview series. It was an interesting conversation!",
+      "zh": "2013 年 1 月 31 日，Gamespot 的 Tom McShea 在他们「Break Room」采访系列里采访了我。这次谈话很有意思！"
+    },
+    {
+      "type": "p",
+      "en": "Here's the interview. ![图](http://the-witness.net/news/wp-content/uploads/2013/02/pic-512x286.jpg)",
+      "zh": "[采访在这里。（原文此处有一张图）](http://www.gamespot.com/the-witness/videos/the-break-room-interviews-jonathan-blow-6403321/)"
+    }
+  ]
+}

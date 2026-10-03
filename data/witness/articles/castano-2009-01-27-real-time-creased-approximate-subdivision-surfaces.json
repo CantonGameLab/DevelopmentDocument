@@ -1,0 +1,47 @@
+{
+  "id": "castano-2009-01-27-real-time-creased-approximate-subdivision-surfaces",
+  "title": {
+    "zh": "Real-Time Creased Approximate Subdivision Surfaces",
+    "en": "Real-Time Creased Approximate Subdivision Surfaces"
+  },
+  "subtitle": {
+    "zh": "Denis 把 I3D 论文放上网了——讲的是 Valve 把 ACC 集成进 Source 引擎的真实经验。",
+    "en": "Denis puts his I3D paper online: Valve's experience integrating ACC into the Source engine."
+  },
+  "translator": {
+    "note": "标题是一篇论文的名字，按术语表「论文名一律保留英文」的规则不译，只给英文原名。源文插图的 URL 是 NYU 的一个 moin-moin wiki 附件链接、外层还包着指向同一 wiki 页面的链接，按全站图片口径丢掉外层链接、保留原图 URL，归一化为 `![图](原图URL)`。`ACC`（Approximate Catmull-Clark）、`I3D`、`Valve`、`Source`、`Denis` 保留英文；patch 作「面片」，subdivision surface 作「细分曲面」，production pipeline 作「生产管线」。",
+    "source": "archive/castano-blog/2009-01-27-real-time-creased-approximate-subdivision-surfaces.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Denis finally put his [I3D paper online](http://linserv1.cims.nyu.edu:17351/cgi-bin/moin.cgi/RealTimeCreasedACC)!",
+      "zh": "Denis 终于把他的 [I3D 论文放到网上了](http://linserv1.cims.nyu.edu:17351/cgi-bin/moin.cgi/RealTimeCreasedACC)！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://linserv1.cims.nyu.edu:17351/cgi-bin/moin.cgi/RealTimeCreasedACC?action=AttachFile&do=get&target=heavy.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Denis was my intern a couple of summers ago. We worked together on the implementation of the an emulation framework to implement and prototype various tessellation algorithms. Last summer he wanted to try something different, I recommended him to join a game studio, and he finally went to work at Valve.",
+      "zh": "Denis 是前两年夏天的实习生。我们一起做了一套模拟框架，用来实现并快速原型化各种曲面细分算法。去年夏天他想试试不一样的东西，我建议他去游戏工作室，最后他去了 Valve。"
+    },
+    {
+      "type": "p",
+      "en": "Having spent so much time and effort working on approximate subdivision surfaces and talking about them to developers, it’s very pleasing to see these techniques being adopted in real applications.",
+      "zh": "花了那么多时间和精力研究近似细分曲面、又跟开发者们讲了那么多，看到这些技术真的被实际项目采用，非常令人欣慰。"
+    },
+    {
+      "type": "p",
+      "en": "Adding support for subdivision surfaces in a game engine requires significant changes in the production pipeline. Not only tools need to be updated, but production processes need to change, and artists need to be educated to adopt and learn the new tools.",
+      "zh": "在游戏引擎里加入对细分曲面的支持，需要生产管线做出相当大的改动。不只是工具要更新，生产流程也要改，还得培训美术，让他们接受并学会用这些新工具。"
+    },
+    {
+      "type": "p",
+      "en": "I think this paper will be very valuable in that regard. It describes Valve’s experience integrating ACC into the Source engine. How the ACC scheme had to be extended to support creases in order to achieve the visuals that they were trying to achieve, the many problems that arose, and more importantly, the problems that could not be solved and that required artist intervention.",
+      "zh": "我觉得这篇论文在这方面会很有价值。它讲了 Valve 把 ACC 集成进 Source 引擎的经验：为了达到他们想要的画面，ACC 方案不得不怎样扩展才支持折痕；冒出来的一大堆问题；以及更重要的是那些解决不了、只能靠美术介入的问题。"
+    }
+  ]
+}

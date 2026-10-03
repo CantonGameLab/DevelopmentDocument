@@ -1,0 +1,18 @@
+{
+  "id": 1377,
+  "slug": "crossing-the-ludicon",
+  "date": "2022-11-13T01:24:05",
+  "modified": "2025-09-24T20:12:56",
+  "link": "https://www.ludicon.com/castano/blog/2022/11/crossing-the-ludicon/",
+  "title": "<strong>Crossing the Ludicon</strong>",
+  "excerpt": "<p>I&#8217;m excited to announce that I&#8217;m starting my own business to research and develop graphics and game technologies, with a focus on the texture and mesh processing pipelines. My first product is a real-time ASTC encoder that is orders of magnitude faster than existing offline compressors. It targets a small subset of the available encoding&#8230;</p>\n",
+  "content": "\n<p>I&#8217;m excited to announce that I&#8217;m starting <a href=\"http://www.ludicon.com/\" data-type=\"URL\" data-id=\"http://www.ludicon.com/\" target=\"_blank\" rel=\"noreferrer noopener\">my own business</a> to research and develop graphics and game technologies, with a focus on the texture and mesh processing pipelines.</p>\n\n\n\n<p>My first product is a real-time ASTC encoder that is orders of magnitude faster than existing offline compressors. It targets a small subset of the available encoding space, but achieves competitive quality through carefully crafted algorithms and creative optimizations.<br><br>In addition to that I&#8217;m exploring middleware products and applications that advance the state of the art in the areas of RDO texture compression, mesh processing algorithms such as simplification and parameterization, and alternative representations for rendering and physical simulation.</p>\n\n\n\n<p>For inquiries, contact me at: <a rel=\"noreferrer noopener\" href=\"mailto:castano@ludicon.com\" target=\"_blank\">castano@ludicon.com</a></p>\n",
+  "categories": [
+    9,
+    7,
+    22
+  ],
+  "tags": [
+    21
+  ]
+}

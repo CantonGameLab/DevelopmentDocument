@@ -1,0 +1,30 @@
+{
+  "id": "official-2014-05-23-caseys-witness-wednesday-on-interpolation",
+  "title": { "zh": "Casey 的 Witness Wednesday：谈插值", "en": "Casey’s Witness Wednesday on Interpolation" },
+  "subtitle": {
+    "en": "Casey Muratori's Witness Wednesday series leaves grass planting behind and moves on to interpolation in general.",
+    "zh": "Casey Muratori 的 Witness Wednesday（每周三连载）离开种草这个具体话题，转向更通用的插值问题。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "He's put up another very informative blog post, leaving the specific topic of grass planting, venturing into more general territory regarding interpolation. And there's a video, from which it is possible to learn a lot of this is a new subject.",
+      "zh": "他又贴出了一篇信息量很大的博客文章，这次离开了种草这个具体话题，进入了插值这块更通用的领域。另外还有一段视频，从中能学到不少东西，这个题目对他来说也是新的。"
+    },
+    {
+      "type": "p",
+      "en": "[Here's the blog post.](http://mollyrocket.com/casey/stream_0018.html)",
+      "zh": "[博客文章在这里。](http://mollyrocket.com/casey/stream_0018.html)"
+    },
+    {
+      "type": "p",
+      "en": "Here's the video:",
+      "zh": "视频在这里："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/S2fz4BS2J3Y?feature=oembed)",
+      "zh": "（原文此处嵌入一段视频）"
+    }
+  ]
+}

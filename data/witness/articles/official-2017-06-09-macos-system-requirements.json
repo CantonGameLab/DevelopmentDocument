@@ -1,0 +1,105 @@
+{
+  "id": "official-2017-06-09-macos-system-requirements",
+  "title": { "zh": "MacOS 系统需求", "en": "MacOS System Requirements" },
+  "subtitle": {
+    "en": "The system requirements for The Witness on MacOS, plus the full list of Macs that support Metal.",
+    "zh": "《The Witness》在 MacOS 上的系统需求，以及支持 Metal 的 Mac 机型完整列表。"
+  },
+  "translator": {
+    "note": "原文的配置清单与机型列表都是以围栏代码块给出的，按规范以 code 块原样保留（内容基本都是型号与数字），未译成中文；正文中单独一行的 “System Requirements:” 按小标题（h2）处理。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We released The Witness for MacOS a little while back, and we felt it'd be a good idea to post the system requirements somewhere so we could link people to them when they ask. So...",
+      "zh": "前一阵我们发布了 MacOS 版的《The Witness》，我们觉得把系统需求发到一个固定的地方是个好主意，这样有人来问的时候就能把链接甩给他们。那么……"
+    },
+    {
+      "type": "p",
+      "en": "The Witness requires Metal for rendering. Metal is a graphics technology from Apple that allows faster and more fluid graphics. These are the Mac computers that support Metal:",
+      "zh": "《The Witness》渲染需要 Metal。Metal 是 Apple 的一项图形技术，能让图形跑得更快、更流畅。下面是支持 Metal 的 Mac 电脑："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "MacBook (Early 2015)", "zh": "MacBook（2015 年初）" },
+        { "en": "MacBook Air (Mid 2012 or newer)", "zh": "MacBook Air（2012 年中或更新机型）" },
+        { "en": "MacBook Pro (Mid 2012 or newer)", "zh": "MacBook Pro（2012 年中或更新机型）" },
+        { "en": "Mac mini (Late 2012 or newer)", "zh": "Mac mini（2012 年末或更新机型）" },
+        { "en": "iMac (Late 2012 or newer)", "zh": "iMac（2012 年末或更新机型）" },
+        { "en": "Mac Pro (Late 2013 or newer)", "zh": "Mac Pro（2013 年末或更新机型）" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "[https://support.apple.com/en-us/HT205073](https://support.apple.com/en-us/HT205073)",
+      "zh": "[Apple 官方支持文档](https://support.apple.com/en-us/HT205073)"
+    },
+    {
+      "type": "p",
+      "en": "It's possible to build custom Mac systems with Metal support, either using an old Mac Pro and upgrading the graphics card or building it from scratch using compatible parts (Hackintosh). These configurations are unsupported, but some customers have found them to work.",
+      "zh": "你也可以自己攒一台支持 Metal 的 Mac：要么用老 Mac Pro 换一块显卡，要么用兼容的配件从零组装（Hackintosh）。这些配置我们不予支持，但有些客户发现它们确实能用。"
+    },
+    {
+      "type": "p",
+      "en": "If using an AMD GPU, the only supported add-in card with Metal support is:",
+      "zh": "如果使用 AMD GPU，唯一受支持、且支持 Metal 的加装显卡是："
+    },
+    {
+      "type": "p",
+      "en": "**AMD Radeon 7950 (Tahiti Pro) Sapphire card.**",
+      "zh": "**AMD Radeon 7950（Tahiti Pro）Sapphire 版。**"
+    },
+    {
+      "type": "p",
+      "en": "If using an NVIDIA GPU, any GeForce 6xx or newer should work, but it is necessary to install the latest drivers from:",
+      "zh": "如果使用 NVIDIA GPU，任何 GeForce 6xx 或更新的型号都应该能用，但必须安装来自下面这个地址的最新驱动："
+    },
+    {
+      "type": "p",
+      "en": "[http://www.nvidia.com/object/mac-driver-archive.html](http://www.nvidia.com/object/mac-driver-archive.html)",
+      "zh": "[NVIDIA Mac 驱动归档页面](http://www.nvidia.com/object/mac-driver-archive.html)"
+    },
+    { "type": "h2", "id": "system-requirements", "zh": "系统需求", "en": "System Requirements:" },
+    {
+      "type": "p",
+      "en": "Minimum:",
+      "zh": "最低配置："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "* OS: El Capitan 10.11.6\n* Processor: Intel Core i5 @ 1.8 GHz\n* Memory: 4 GB RAM\n* Graphics: 1 GB of video memory\n- Intel: HD Graphics 4000\n- AMD: Radeon R9 M290\n- NVIDIA: GeForce 640M\n* Storage: 5 GB available space"
+    },
+    {
+      "type": "p",
+      "en": "Recommended:",
+      "zh": "推荐配置："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "* OS: Sierra 10.12.4\n* Processor: Intel Core i7 @ 2.4 GHz\n* Memory: 8 GB RAM\n* Graphics: 2 GB of video memory\n- AMD: Radeon R9 M390\n- NVIDIA: GeForce 780\n* Storage: 5 GB available space"
+    },
+    {
+      "type": "p",
+      "en": "The list of Apple systems with AMD graphics that support Metal is:",
+      "zh": "支持 Metal、配备 AMD 显卡的 Apple 机型列表如下："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Mac Pro 6,1 (Radeon FirePro D300, D500, D700) - cylinder\niMac 15,1 (Radeon R9 M290, M295X)\niMac 17,1 (Radeon R9 M380, M390, M395, M395X)\n\nMacBook Pro 11,5 (Radeon R9 M370X)\nMacBook Pro 13,3 (Radeon Pro 460)"
+    },
+    {
+      "type": "p",
+      "en": "The list of Apple systems with NVIDIA graphics that support Metal is:",
+      "zh": "支持 Metal、配备 NVIDIA 显卡的 Apple 机型列表如下："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "MacBook Pro 9,1 (GeForce GT 650M)\nMacBook Pro 10,1 (GeForce GT 650M)\nMacBook Pro 11,3 (GeForce GT 750M)\niMac 13,1 (GeForce GT 640M, 650M)\niMac 13,2 (GeForce GTX 660M, 675M)\niMac 14,2 (GeForce GT 755M, 775M)\niMac 14,3 (GeForce GT 750M)"
+    }
+  ]
+}

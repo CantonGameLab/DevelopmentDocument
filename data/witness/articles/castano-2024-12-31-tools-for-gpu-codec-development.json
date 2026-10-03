@@ -1,0 +1,346 @@
+{
+  "id": "castano-2024-12-31-tools-for-gpu-codec-development",
+  "title": { "zh": "开发 GPU 编解码器的工具", "en": "Tools for GPU Codec Development" },
+  "subtitle": {
+    "en": "While I was able to create a proof of concept in a few days, over time it became clear that I would need better tools in order to maintain that fast development pace.",
+    "zh": "虽然几天内就做出了概念验证，但随着时间推移，很明显我需要更好的工具才能维持那种快速的开发节奏。"
+  },
+  "translator": {
+    "note": "插图按全站口径归一化成「（原文此处有一张图）」占位。其中一张截图在归档源文里是 `![图](…/2024/12/image.png)` 这种嵌套写法，外层链接指向 Spark View 的网页版（https://ludicon.com/spark/view），按全站图片归一化口径去掉了外层链接、只保留图片。代码块原文没有语言标注，按内容标为 cpp / ini / text。原文里的若干笔误（`it's execution`、`are make`、`avilable`、`more more`、`I my find`）在 `en` 字段中一律原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I would like to share some details about the tools that I’ve built to develop the [Spark codecs](https://ludicon.com/spark/).",
+      "zh": "我想分享一些细节，讲讲我为开发 [Spark 编解码器](https://ludicon.com/spark/) 而搭建的那些工具。"
+    },
+    {
+      "type": "p",
+      "en": "When I started working on *Spark* I had no idea how much time and effort I would be investing on this project. I started with very few tools and helpers, with the goal of obtaining results quickly. While I was able to create a proof of concept in a few days, over time it became clear that I would need better tools in order to maintain that fast development pace.",
+      "zh": "刚开始做 *Spark* 的时候，我完全没想到会在这个项目上投入这么多时间和精力。起步时我的工具和辅助代码都少得可怜，目标就是尽快拿到结果。虽然我在几天内就做出了一个概念验证，但随着时间推移，很明显我需要更好的工具，才能维持那种快速的开发节奏。"
+    },
+    {
+      "type": "p",
+      "en": "The first tool I built was *Spark Report*, a command-line application that automates codec testing. It runs the codecs on diverse image sets, calculates error metrics, generates detailed reports, compares results with other codecs, and tracks performance over time. With *Spark Report*, I could confidently iterate on the codecs, knowing that any changes I made wouldn’t introduce regressions and would improve results across a wide range of images.",
+      "zh": "我做的第一个工具是 *Spark Report*，一个把编解码器测试自动化的命令行程序。它会在各种图像集上运行编解码器、计算误差指标、生成详细报告、与其他编解码器对比结果，并长期追踪性能。有了 *Spark Report*，我就能放心地迭代编解码器，因为我知道自己的改动不会引入回归，而且能在大量图像上改善结果。"
+    },
+    {
+      "type": "p",
+      "en": "In addition to detecting regressions and doing comparative analysis against other codecs, I also needed a tool to dig deeper, understand the behavior of the codecs and the consequences of the changes. Something that I learned early is that you cannot trust error metrics too much, and that there’s no alternative to visual inspection, so I also built *Spark View,* a tool to view the output of the codecs.",
+      "zh": "除了检测回归和与其他编解码器做对比分析之外，我还需要一个工具来深挖下去，理解编解码器的行为以及这些改动带来的后果。我很早就学到一点：误差指标不能太当真，而且目视检查没有替代品，所以我又做了 *Spark View*，用来查看编解码器的输出。"
+    },
+    {
+      "type": "p",
+      "en": "There’s always been some tension between codec development, tools, and quality of life improvements, but in retrospect I think that every effort on better tools has paid off handsomely, and if anything I’d say I’ve delayed that work too much. In my defense, it was hard to justify the work without knowing the full scope of the project. Would I be working on *Spark* for a few months? Or a few years? Initially I did not know if it would be worth building a commercial product around it, but as things progressed, the scope of the project grew, adding more formats, more codecs, more platforms, and the depth of the codecs and the complexity of the optimizations increased.",
+      "zh": "编解码器开发、工具建设、以及使用体验上的改进，这三者之间一直有些拉扯；但现在回头看，我觉得每一分花在更好工具上的努力都回报丰厚，要说的话，我反而觉得自己把这件事拖得太久了。为自己辩解一句：在不知道项目全貌的情况下，很难为这项投入找到理由。我会做 *Spark* 几个月？还是几年？起初我并不知道围绕它做一个商业产品是否值得；但随着事情推进，项目范围变大了——更多格式、更多编解码器、更多平台，编解码器的深度和优化的复杂度也都在上升。"
+    },
+    {
+      "type": "p",
+      "en": "Looking back, I wish I had prioritized tool development earlier, but hindsight always feels clearer in retrospect.",
+      "zh": "回头看，我希望能更早把工具开发排在前面，不过事后回看，一切总是显得更清楚。"
+    },
+    { "type": "h2", "id": "development-process", "zh": "开发流程", "en": "Development Process" },
+    {
+      "type": "p",
+      "en": "Even though the *Spark* codecs are meant to run in the GPU, I initially develop them in the CPU. The CPU implementation is not intended to be used by customers; it is merely a playground to experiment with different algorithms and ideas, but it’s written in a way that makes it easy to translate the code to the equivalent compute shader.",
+      "zh": "虽然 *Spark* 编解码器最终是要跑在 GPU 上的，我一开始都是在 CPU 上开发它们。CPU 实现并不是给客户用的，它只是个试验不同算法和想法的游乐场；不过它的写法让代码很容易翻译成等价的计算着色器。"
+    },
+    {
+      "type": "p",
+      "en": "The main advantage of doing this in the CPU is faster development. I can experiment much more quickly without having to worry about GPU resource constrains, bugs in the shader compilers, or differences between devices.",
+      "zh": "在 CPU 上做这件事的主要好处是开发更快。我可以快得多地做实验，不用操心 GPU 资源限制、着色器编译器里的 bug，或者设备之间的差异。"
+    },
+    {
+      "type": "p",
+      "en": "The code is also much easier to debug in the CPU. GPU debuggers have come a long way, but CPU debuggers are still much more powerful, robust, and easier to integrate into my tools. One of the *Spark View* features that I use most often is the ability to select a particular block and trigger a breakpoint when encoding or decoding the selected block:",
+      "zh": "CPU 上的代码也容易调试得多。GPU 调试器已经进步了很多，但 CPU 调试器依然更强大、更健壮，也更容易集成进我的工具里。我用得最多的 *Spark View* 功能之一，就是选中某个特定的块，然后在编码或解码这个块时触发断点："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2024/12/block_inspector_breakpoint.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The CPU code is not only much easier to debug, but also much easier to instrument in ways that allow me to gather statistics and tweak it’s execution at runtime.",
+      "zh": "CPU 代码不仅调试起来容易得多，也更容易加装探针，让我能收集统计数据，并在运行期调整它的执行方式。"
+    },
+    {
+      "type": "p",
+      "en": "When developing a new algorithm or refining an existing one, I often have different variants or variables that I can tweak to control execution. Surfacing these options to the public API of the codec, and then to the user interface, takes too much time. Most of these options are short-lived, enabling an experimental code path or keeping an old code path around for comparison.",
+      "zh": "在开发新算法或改进已有算法时，我经常会有一些可以调整以控制执行过程的变体或变量。把这些选项暴露到编解码器的公开 API、再接到用户界面上，太费时间了。这些选项大多是短命的——要么是为开启一条实验性的代码路径，要么是为保留一条旧代码路径用来对比。"
+    },
+    {
+      "type": "p",
+      "en": "Instead, I achieve this is using a global variable system with reflection. This is something that has been present in most of the games I’ve worked on in one form or another, but I think the way in which I’m using it is fairly innovative.",
+      "zh": "我的做法是用一套带反射的全局变量系统。我参与过的大多数游戏里，多多少少都有类似的东西，不过我觉得自己用它的方式相当有新意。"
+    },
+    {
+      "type": "p",
+      "en": "Global variables are declared in code as follows:",
+      "zh": "全局变量在代码里这样声明："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "IC_VAR_BOOL(etc_exact_quantization, false)\nIC_VAR_FLOAT(etc_planar_mode_threshold, 48)"
+    },
+    {
+      "type": "p",
+      "en": "These macros declare the global variables inside the `var` namespace and automatically register them in the variable system. Using the variables in code is straightforward:",
+      "zh": "这些宏在 `var` 命名空间里声明全局变量，并自动把它们注册到变量系统中。在代码里使用这些变量很直接："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if (lum_range < var::etc_planar_mode_threshold) { ... }\n...\nif (var::etc_exact_quantization) { ... }\nelse { ... }"
+    },
+    {
+      "type": "p",
+      "en": "By default, the variables take the values provided in the declaration, but those values can be overridden by different means. In final builds, the variables become constants, allowing the compiler to eliminate unused code branches for performance. However, this is not particularly important, as by that point most of the variables have been eliminated.",
+      "zh": "默认情况下，变量取声明里给的值，但这些值可以通过不同方式覆盖。在最终构建里，变量会变成常量，让编译器能为了性能消除用不到的代码分支。不过这并不特别重要，因为到那时候大多数变量早就被消掉了。"
+    },
+    {
+      "type": "p",
+      "en": "One way to customize the variables is by using simple config files like this:",
+      "zh": "定制这些变量的一种方式，是使用像这样的简单配置文件："
+    },
+    {
+      "type": "code",
+      "lang": "ini",
+      "code": "etc_exact_quantization true\netc_planar_mode_luma_threshold 32"
+    },
+    {
+      "type": "p",
+      "en": "*Spark View* loads a config file at startup and constantly monitors it for changes. When the config file is updated, the current codec is re-run automatically. This provides immediate feedback and an intuitive way to exercise different code paths, test the effect of various values, and inspect the results visually.",
+      "zh": "*Spark View* 启动时加载一个配置文件，并持续监视它的变化。配置文件一更新，当前编解码器就会自动重跑。这带来了即时反馈，也是一种直观的方式：走不同的代码路径、测试各种取值的效果、并目视检查结果。"
+    },
+    {
+      "type": "p",
+      "en": "*Spark Report* also loads a similar config file at startup, but when running a specific test it allows me to specify an additional config file that may override some of the values.",
+      "zh": "*Spark Report* 启动时也会加载一个类似的配置文件，但在跑某个具体测试时，它允许我再指定一个额外的配置文件，用来覆盖其中一些值。"
+    },
+    {
+      "type": "p",
+      "en": "This allows me to quickly make changes to the codecs, visually verify the consequences of the change in *Spark View*, and then validate it across a larger set of images using *Spark Report*.",
+      "zh": "这样我就能快速改动编解码器，在 *Spark View* 里目视确认改动的后果，再用 *Spark Report* 在更大的图像集上验证它。"
+    },
+    {
+      "type": "p",
+      "en": "For example, I was recently developing a new ETC2 codec and my initial heuristic was similar to that of the QuickETC2 paper: using fixed luma threshold to select the best mode. I thought a better approach would be to try the planar more more aggressively, but only use that mode if the residual of the least squares solver was under a given threshold.",
+      "zh": "举个例子，我最近在开发一个新的 ETC2 编解码器，最初的启发式方法和 QuickETC2 论文里的类似：用固定的 luma 阈值来选择最佳模式。我觉得更好的做法是更激进地去尝试 planar 模式，但只有在最小二乘求解器的残差低于给定阈值时才使用该模式。"
+    },
+    {
+      "type": "p",
+      "en": "I could enable that new code path using the `etc_planar_try_residual_error` variable, and that allowed me to run tests with the variable on and off:",
+      "zh": "我可以用 `etc_planar_try_residual_error` 这个变量打开那条新代码路径，这样就可以把变量打开和关闭各跑一遍测试："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{ Encoder_Spark, Format_ETC2_RGB, 1, \"etc_planar_try_residual_error false\" },\n{ Encoder_Spark, Format_ETC2_RGB, 1, \"etc_planar_try_residual_error true\" },"
+    },
+    {
+      "type": "p",
+      "en": "The results showed a small, but consistent improvement across all images:",
+      "zh": "结果显示，在所有图像上都有一点点但一致的改善："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2024/12/Pasted-image-20241230145701-700x377.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Similarly, I could run the same tests using different residual thresholds to determine the ideal value. If any of the images behaved in an unexpected way, I would then use *Spark View* to investigate the behavior on that particular image.",
+      "zh": "同样地，我也可以用不同的残差阈值跑同一批测试，来确定理想的取值。如果某张图像的表现出乎意料，我就会用 *Spark View* 去调查它在那张图像上的行为。"
+    },
+    { "type": "h2", "id": "spark-view", "zh": "Spark View", "en": "Spark View" },
+    {
+      "type": "p",
+      "en": "*Spark View* is not just an image viewer that applies the *Spark* codecs to the output. It supports practically every texture encoder I’m aware of. This is useful to compare my codecs against others and to understand the choices those codecs are make.",
+      "zh": "*Spark View* 不只是一个把 *Spark* 编解码器套到输出上的图像查看器。它支持我听说过的几乎每一种纹理编码器。这对我拿自己的编解码器和其他人对比、以及理解那些编解码器做出的选择很有用。"
+    },
+    {
+      "type": "p",
+      "en": "I ship *Spark View* with the *Spark* SDK, but in that build, I only include my own codecs to minimize third-party dependencies. For my development builds, I usually enable just a handful of codecs to speed up build times and keep the user interface uncluttered. Enabling or disabling codecs at compile time is very straightforward, and I often create custom builds of *Spark View* to share with customers. I can easily enable the codecs they use, allowing them to make side-by-side comparisons. In some cases, I have even integrated customers’ custom internal codecs into *Spark View* for more direct comparisons with *Spark*.",
+      "zh": "*Spark View* 是随 *Spark* SDK 一起发布的，但在那个构建里我只包含自己的编解码器，以尽量减少第三方依赖。在我的开发构建里，我通常只启用少数几个编解码器，以加快构建速度、让用户界面保持清爽。在编译期启用或禁用编解码器非常简单，我也经常做定制版的 *Spark View* 分享给客户。我可以轻松启用他们用到的那几个编解码器，让他们做并排对比。有些情况下，我甚至把客户内部的定制编解码器集成进 *Spark View*，好和 *Spark* 做更直接的对比。"
+    },
+    {
+      "type": "p",
+      "en": "Recently, I created a wasm/emscripten build of *Spark View* so people can try it directly on the web:",
+      "zh": "最近我给 *Spark View* 做了一个 wasm/emscripten 构建，这样大家可以直接在网页上试用："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2024/12/image.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Most of the advanced tools in *Spark View* are available only in my development builds. One of my favorite features is the block inspector, which I previewed earlier:",
+      "zh": "*Spark View* 里大多数高级工具只在我的开发构建里才有。我最喜欢的功能之一是 block inspector，前面已经展示过："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2024/12/block_inspector_etc.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The inspector allows me to select a specific block of an image and inspect many of its properties. I can view the block’s color ranges and average color. I can examine the covariance matrix and its derived properties, such as the direction of the best-fit line and the magnitude of the eigenvalues. I can also review the block’s average error, the differences in individual texels, and the coding choices made by the encoder.",
+      "zh": "这个 inspector 让我能选中图像里某个特定的块，检查它的许多属性。我可以查看这个块的颜色范围和平均颜色；可以检查协方差矩阵及其派生属性，比如最佳拟合直线的方向和特征值的大小；还可以查看这个块的平均误差、各个纹素之间的差异，以及编码器做出的编码选择。"
+    },
+    {
+      "type": "p",
+      "en": "Nothing beats the integrated debugger functionality for understanding how the encoder arrives at its results. Unfortunately, this feature is not avilable when using a GPU codec. Instead, depending on the API backend, I provide the ability to capture GPU data using either PIX or RenderDoc and immediately opening it in the corresponding application. While useful, this process is less convenient than pausing a CPU debugger at the block being encoded. It involves navigating the debugger UI to locate the dispatch call, starting the shader debugger, and entering the thread ID corresponding to the selected block.",
+      "zh": "要理解编码器是怎么得到这个结果的，没有什么比集成调试器更好用。可惜的是，用 GPU 编解码器时没有这个功能。替代方案是：根据 API 后端的不同，我提供了用 PIX 或 RenderDoc 抓取 GPU 数据、并立刻在对应程序里打开的能力。这虽然有用，但比在 CPU 调试器里停在正在编码的那个块上要不方便。它需要在调试器界面里找到 dispatch 调用、启动着色器调试器，再输入选中块对应的线程 ID。"
+    },
+    {
+      "type": "p",
+      "en": "I am hopeful that [RenderDoc’s Python API](https://renderdoc.org/docs/python_api/index.html) will allow me to automate this process entirely, though I have not implemented it yet.",
+      "zh": "我期待 [RenderDoc 的 Python API](https://renderdoc.org/docs/python_api/index.html) 能让我把这套流程完全自动化，虽然我还没实现。"
+    },
+    { "type": "h2", "id": "spark-report", "zh": "Spark Report", "en": "Spark Report" },
+    {
+      "type": "p",
+      "en": "*Spark Report* produces two forms of output: a CSV file for regression testing and an HTML report with charts, tables, and thumbnails that are easier to inspect visually. For generating the charts, I use the Google Charts API. Early on, I used to spend a lot of time copying numbers into Excel and generating charts manually, so having this process fully automated has been a huge time saver.",
+      "zh": "*Spark Report* 产出两种形式的输出：用于回归测试的 CSV 文件，以及带图表、表格和缩略图、更便于目视检查的 HTML 报告。图表的生成用的是 Google Charts API。早年间我常常花大量时间把数字复制到 Excel 里手工做图表，所以把这套流程完全自动化省下了巨量时间。"
+    },
+    {
+      "type": "p",
+      "en": "Like *Spark View*, *Spark Report* serves two purposes. One is the internal use I described earlier, but in addition to that the reports it generates are also a valuable marketing tool.",
+      "zh": "和 *Spark View* 一样，*Spark Report* 也有两个用途。一个是我前面说的内部使用；除此之外，它生成的报告还是一种很有价值的市场推广工具。"
+    },
+    {
+      "type": "p",
+      "en": "For example, I can create reports using textures provided by customers or other representative assets to showcase the performance of *Spark* codecs compared to common alternatives, or even against customers’ own internal codecs.",
+      "zh": "比如说，我可以用客户提供的纹理或其他有代表性的素材来做报告，展示 *Spark* 编解码器相对于常见替代方案、甚至相对于客户自己内部编解码器的性能。"
+    },
+    {
+      "type": "p",
+      "en": "Here is an example report comparing the new ETC2 codec currently under development with other popular codecs that are publicly available:",
+      "zh": "下面是一个示例报告，把目前正在开发的新 ETC2 编解码器和其它公开可用的流行编解码器做了对比："
+    },
+    {
+      "type": "p",
+      "en": "[https://ludicon.com/spark/report/etc2](https://ludicon.com/spark/report/etc2)",
+      "zh": "[https://ludicon.com/spark/report/etc2](https://ludicon.com/spark/report/etc2)"
+    },
+    {
+      "type": "p",
+      "en": "The use of the Google Charts API is extremely powerful and enables me to generate charts that I would not know how to create manually. For example, when measuring both distortion and throughput over a large set of images, I can produce charts like this, which provide a better insight into the performance of the different codecs:",
+      "zh": "Google Charts API 非常强大，让我能生成一些手工根本不知道怎么画的图表。比如说，在大量图像上同时测量失真和吞吐量时，我可以生成这样的图表，它能更好地反映不同编解码器的性能："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2024/12/Pasted-image-20241231153017.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That said, Google does not have a good track record maintaining useful services like this that do not bring any revenue, often shutting them down with little notice. So, I my find myself scrambling for alternatives or developing my own.",
+      "zh": "话虽如此，Google 在维护这类不带来收入的有用服务方面记录不佳，经常没什么预告就把它关掉。所以我可能会发现自己得赶紧找替代品，或者自己开发一个。"
+    },
+    { "type": "h2", "id": "other-tools", "zh": "其它工具", "en": "Other Tools" },
+    {
+      "type": "p",
+      "en": "In addition to these tools, I have developed several smaller utilities. Some of the most notable are the Shader Processor, the Offline Compiler, and the Android Launcher.",
+      "zh": "除了这些工具，我还开发了几个较小的实用程序。其中最值得一提的是 Shader Processor、Offline Compiler 和 Android Launcher。"
+    },
+    { "type": "h2", "id": "shader-processor", "zh": "Shader Processor", "en": "Shader Processor" },
+    {
+      "type": "p",
+      "en": "The *Spark* Shader Processor is a utility that preprocesses the *Spark* shader code to retarget it for any supported shading language, such as HLSL, GLSL, or Metal. The processor also strips comments and removes features that I do not want to redistribute to customers. While functional, the Shader Processor is not as sophisticated as I would like it to be. Ideally, I would like to be able to minimize and obfuscate the shader code of the codecs, but this has taken a back seat to more pressing priorities. Fortunately, I can always redistribute precompiled shaders when some obfuscation is needed.",
+      "zh": "*Spark* Shader Processor 是一个实用程序，它对 *Spark* 着色器代码做预处理，把它重新定位到任何受支持的着色语言，比如 HLSL、GLSL 或 Metal。这个处理器还会去掉注释，并移除我不想分发给客户的功能。虽然能用，但 Shader Processor 没有我想要的那么精巧。理想情况下，我希望能对着色器代码做压缩和混淆，但这件事在更紧要的任务面前被搁置了。好在需要一点混淆时，我总是可以分发预编译好的着色器。"
+    },
+    { "type": "h2", "id": "offline-compiler", "zh": "Offline Compiler", "en": "Offline Compiler" },
+    {
+      "type": "p",
+      "en": "The Offline Compiler takes these shaders and compiles them using all the shader compilers I support. This includes not just `fxc`, `dxc`, `glslang`, `metalc`, and various console-specific compilers, but also several cross-compilation pipelines. Here is a subset of the shader compiler pipelines I regularly test:",
+      "zh": "Offline Compiler 拿这些着色器，用我支持的所有着色器编译器把它们编译一遍。这里面不只是 `fxc`、`dxc`、`glslang`、`metalc` 和各种游戏主机专用的编译器，还包括若干条交叉编译流水线。下面是我经常测试的着色器编译流水线中的一部分："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "hlsl + dxc:dxil", "zh": "hlsl + dxc:dxil" },
+        { "en": "hlsl + dxc:dxil + metal-shaderconverter", "zh": "hlsl + dxc:dxil + metal-shaderconverter" },
+        { "en": "hlsl + dxc:spirv", "zh": "hlsl + dxc:spirv" },
+        { "en": "hlsl + dxc:spirv + spirv-cross:metal + metalc", "zh": "hlsl + dxc:spirv + spirv-cross:metal + metalc" },
+        { "en": "hlsl + glslang + spirv-opt", "zh": "hlsl + glslang + spirv-opt" },
+        { "en": "hlsl + glslang + spirv-opt + spirv-cross:metal + metalc", "zh": "hlsl + glslang + spirv-opt + spirv-cross:metal + metalc" },
+        { "en": "glsl + glslang + spirv-opt", "zh": "glsl + glslang + spirv-opt" },
+        { "en": "hlsl + fxc", "zh": "hlsl + fxc" },
+        { "en": "glsl es + glslang", "zh": "glsl es + glslang" },
+        { "en": "metal + metalc", "zh": "metal + metalc" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "I’m also in the process of evaluating Slang and adding it to the offline compiler.",
+      "zh": "我也正在评估 Slang，准备把它加入 Offline Compiler。"
+    },
+    {
+      "type": "p",
+      "en": "Doing all this only allows me to catch compiler errors and warnings. The process I use to check for correctness and performance is a bit more cumbersome.",
+      "zh": "做这些只能让我抓到编译器错误和警告。我用来检查正确性和性能的流程要麻烦一些。"
+    },
+    {
+      "type": "p",
+      "en": "To catch performance regressions early, I have integrated offline shader analyzers from all the mobile and console vendors I support, as well as Radeon’s GPU Analyzer (RGA) for PC. I parse the output of each analyzer to extract relevant metrics and generate a CSV file for each vendor and platform. Whenever the shaders change, I can easily compare the new output against the last known good version to identify any unexpected regressions.",
+      "zh": "为了尽早抓到性能回归，我集成了我支持的所有移动端和游戏主机厂商提供的离线着色器分析器，以及 PC 上的 Radeon GPU Analyzer（RGA）。我会解析每个分析器的输出，提取相关指标，并针对每个厂商和平台生成一个 CSV 文件。只要着色器有改动，我就能轻松把新输出和上一个已知良好的版本做对比，找出任何意料之外的回归。"
+    },
+    {
+      "type": "p",
+      "en": "The output produced by these tools is a lot of information. I support around 16 different texture formats, each with three different quality levels, using more than 10 compiler pipelines. To narrow it down, I filter specific shader subsets for each vendor. Currently, I rely on visual inspection of the diff output, but I hope to automate this further by producing summaries that are easier to interpret.",
+      "zh": "这些工具产生的输出信息量很大。我支持大约 16 种不同的纹理格式，每种格式有三个不同的质量档位，用到 10 条以上的编译流水线。为了缩小范围，我会针对每个厂商筛选出特定的着色器子集。目前我还靠目视检查 diff 输出，但我希望进一步自动化，生成更容易解读的摘要。"
+    },
+    {
+      "type": "p",
+      "en": "The metrics reported by the offline compilers are often not representative of actual performance on the device. Sometimes the ratio between ALU and Load/Store operations changes in ways that make it unclear whether the change is an improvement or a regression. Sometimes an increase in instruction count enables shortcuts that are taken most of the time, resulting in better performance despite the higher count. There are also cases where all the metrics indicate an improvement, but the shader runs slower on specific devices for reasons that are hard to understand!",
+      "zh": "离线编译器报告的指标往往不能代表设备上的真实性能。有时候 ALU 与 Load/Store 操作之间的比例变化方式，让人说不清这个改动是改善还是回归；有时候指令数增加反而开启了大多数情况下都会走到的捷径，于是尽管指令更多，性能却更好；还有些情况是所有指标都显示有改善，但着色器在某些特定设备上就是跑得更慢，原因很难理解！"
+    },
+    { "type": "h2", "id": "android-launcher", "zh": "Android Launcher", "en": "Android Launcher" },
+    {
+      "type": "p",
+      "en": "In practice, nothing beats testing the codecs on actual devices. This is especially true on Android, where performance is often unpredictable, and changes that seem harmless can result in significant regressions, pipeline compilation errors, or even crashes. For this reason, I have put special effort into testing on Android.",
+      "zh": "实际上，在真机上测试编解码器是无可替代的。在 Android 上尤其如此：性能常常难以预测，看似无害的改动可能导致明显的回归、流水线编译错误，甚至崩溃。正因如此，我在 Android 测试上花了特别的功夫。"
+    },
+    {
+      "type": "p",
+      "en": "I maintain a small device farm with about 20 devices connected to a pair of USB hubs, and I also use the [Spark Demo App](https://play.google.com/store/apps/details?id=com.ludicon.demo_spark_android) to benchmark the devices.",
+      "zh": "我维护着一个小型设备农场，大约 20 台设备接在两个 USB 集线器上；我还会用 [Spark Demo App](https://play.google.com/store/apps/details?id=com.ludicon.demo_spark_android) 来给这些设备跑基准测试。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2024/12/mini-farm-1-700x525.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "However, running these tests manually is time-consuming. To automate the process, I use a Python script that uses `adb` to enumerate the devices, launch a custom version of the demo app configured to start the desired benchmark automatically, and save the results to disk. The launcher monitors the file system for updates as the apps run. Once all results are written, it outputs a summary and saves them to a CSV file, which I use to check for correctness, quality and performance regressions.",
+      "zh": "不过手工跑这些测试很费时间。为了自动化，我用一个 Python 脚本，它通过 `adb` 枚举设备、启动一个配置成自动开始指定基准测试的定制版 demo app，并把结果保存到磁盘。这个 launcher 会在 app 运行期间监视文件系统的更新。等所有结果都写好了，它会输出一份摘要并保存成 CSV 文件，我用它来检查正确性、质量和性能上的回归。"
+    },
+    { "type": "h2", "id": "final-thoughts", "zh": "最后的一些想法", "en": "Final Thoughts" },
+    {
+      "type": "p",
+      "en": "As much progress as I have made in developing tools for *Spark*, there is still plenty of room for improvement. Better automation is one area I need to focus on, but several factors have held me back. Part of it comes down to development time and competing priorities, and to some extent, a lack of discipline. For example, it would have been useful to maintain a historical record of benchmarks. To do that, I would need to pick a specific set of images and stick to it without making changes over time, something I have not been disciplined enough to do.",
+      "zh": "虽然我在为 *Spark* 开发工具这件事上已经进展不少，但可改进的空间依然很大。更好的自动化是我需要重点投入的方向之一，不过有好几个因素拖住了我。一部分要归到开发时间和相互竞争的任务上，某种程度上也要归到我自己不够自律。比如说，维护一份基准测试的历史记录本来会很有用。要做到这一点，我需要选定一组特定的图像并长期保持不变，而我不够自律，没能做到。"
+    },
+    {
+      "type": "p",
+      "en": "Platform limitations also play a role. On Apple platforms, the lack of offline shader analyzers is frustrating. Having a Metal shader compiler that works on Windows is great, as it allows me to catch Metal errors regardless of the platform I am using, but a shader analyzer would be incredibly useful. I also have not spent much time automating testing on iOS, and I am not even sure it is possible to achieve the same level of automation I already have on Android.",
+      "zh": "平台限制也有影响。在 Apple 平台上，缺少离线着色器分析器让人很沮丧。有一个能在 Windows 上用的 Metal 着色器编译器已经很好了，这让我不管在哪个平台上都能抓到 Metal 的错误；但要是有个着色器分析器，那会极其有用。我也没花多少时间去做 iOS 上的自动化测试，甚至不确定能不能达到我在 Android 上已经做到的那种自动化程度。"
+    },
+    {
+      "type": "p",
+      "en": "Even practical concerns like space constraints have made automation harder. Testing on Android has been surprisingly easy compared to PC. I can set up a dozen mobile devices on my desk and run benchmarks on them without much trouble. In contrast, testing on PC requires physically swapping GPUs to test the code on different configurations, which is time-consuming, or having multiple PC setups, which takes up far more space.",
+      "zh": "就连空间不够这种实际问题也让自动化变得更难。和在 PC 上相比，在 Android 上测试出奇地方便。我可以在桌上摆十几台移动设备，跑基准测试没什么麻烦。相比之下，在 PC 上测试要么得物理更换 GPU 才能在不同配置上测代码，很费时间；要么得准备多套 PC，占的地方大得多。"
+    },
+    {
+      "type": "p",
+      "en": "Despite these challenges, improving automation is an area I plan to keep working on.",
+      "zh": "尽管有这些挑战，改进自动化仍是我打算继续投入的方向。"
+    }
+  ]
+}

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="pingback" href="https://www.ludicon.com/castano/blog/xmlrpc.php">
+<script src="https://cdn.counter.dev/script.js" data-id="d35a48c2-0e1d-4b08-972d-bd0016273314" data-utcoffset="-7"></script>
+<script>
+// IC: This code was added for the image comparison widget in the "An updated Sponza glTF" post.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-cmp-tabs] .cmp-tab');
+  if (!btn) return;
+
+  const root = btn.closest('[data-cmp-tabs]');
+  const img = root.querySelector('.cmp-img');
+  const label = root.querySelector('.cmp-label');
+  const tabs = root.querySelectorAll('.cmp-tab');
+
+  tabs.forEach(t => {
+    t.classList.toggle('is-active', t === btn);
+    t.setAttribute('aria-selected', t === btn ? 'true' : 'false');
+  });
+
+  img.src = btn.dataset.src;
+  label.textContent = btn.dataset.label;
+});
+
+</script>
+<title>Hemicube Rendering and Integration &#8211; Ignacio Castaño</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Feed" href="https://www.ludicon.com/castano/blog/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Comments Feed" href="https://www.ludicon.com/castano/blog/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www.ludicon.com/castano/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.ludicon.com%2Fcastano%2Fblog%2Farticles%2Fhemicube-rendering-and-integration%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www.ludicon.com/castano/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.ludicon.com%2Fcastano%2Fblog%2Farticles%2Fhemicube-rendering-and-integration%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='graphy-font-css' href='https://fonts.googleapis.com/css?family=Source+Serif+Pro%3A400%7CLora%3A400%2C400italic%2C700&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/genericons/genericons.css?ver=3.4.1' type='text/css' media='all' />
+<link rel='stylesheet' id='normalize-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/css/normalize.css?ver=4.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='graphy-style-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/style.css?ver=2.3.2' type='text/css' media='all' />
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://www.ludicon.com/castano/blog/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://www.ludicon.com/castano/blog/wp-json/wp/v2/pages/1273" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.ludicon.com/castano/blog/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.9" />
+<link rel="canonical" href="https://www.ludicon.com/castano/blog/articles/hemicube-rendering-and-integration/" />
+<link rel='shortlink' href='https://www.ludicon.com/castano/blog/?p=1273' />
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-N5MLWTT7JM"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-N5MLWTT7JM');
+		</script>
+
+		<style type="text/css">
+		/* Colors */
+				.entry-content a, .entry-summary a, .page-content a, .author-profile-description a, .comment-content a, .main-navigation .current_page_item > a, .main-navigation .current-menu-item > a {
+			color: #a62425;
+		}
+						.main-navigation a:hover, .entry-content a:hover, .entry-summary a:hover, .page-content a:hover, .author-profile-description a:hover, .comment-content a:hover {
+			color: #b85051;
+		}
+		
+			</style>
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+		<style type="text/css" id="wp-custom-css">
+			.wp-block-image figure {
+  margin:0 0 1.6em
+}
+
+
+.cmp-tabs { margin: 1em 0; }
+
+.cmp-tabbar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem;   justify-content: center; text-align: center;}
+
+.cmp-img { width: 100%; height: auto; display: block; }
+.cmp-caption { font-size: .9em; opacity: .8; margin-top: .35rem; }
+
+.cmp-tab {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.04);
+  color: inherit;
+  padding: .35rem .65rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  opacity: 1;
+  transition: background .15s ease, border-color .15s ease;
+  text-transform: none;
+}
+
+/* Hover */
+.cmp-tab:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Active / selected */
+.cmp-tab.is-active {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+.cmp-image-wrapper {
+  position: relative;
+}
+
+.cmp-label {
+  position: absolute;
+  right: .6rem;
+  bottom: .6rem;
+  padding: .25rem .5rem;
+  font-size: .8rem;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  border-radius: .4rem;
+  pointer-events: none;
+}		</style>
+		
+    <!-- START - Open Graph and Twitter Card Tags 3.3.9 -->
+     <!-- Facebook Open Graph -->
+      <meta property="og:locale" content="en_US"/>
+      <meta property="og:site_name" content="Ignacio Castaño"/>
+      <meta property="og:title" content="Hemicube Rendering and Integration"/>
+      <meta property="og:url" content="https://www.ludicon.com/castano/blog/articles/hemicube-rendering-and-integration/"/>
+      <meta property="og:type" content="article"/>
+      <meta property="og:description" content="One of our aims with our global illumination implementation was to keep it as simple as possible, while still obtaining good performance, and we hoped to achieve that by using the GPU. While the are several approaches to compute global illumination in the GPU, the most simple one that we could come"/>
+     <!-- Google+ / Schema.org -->
+      <meta itemprop="name" content="Hemicube Rendering and Integration"/>
+      <meta itemprop="headline" content="Hemicube Rendering and Integration"/>
+      <meta itemprop="description" content="One of our aims with our global illumination implementation was to keep it as simple as possible, while still obtaining good performance, and we hoped to achieve that by using the GPU. While the are several approaches to compute global illumination in the GPU, the most simple one that we could come"/>
+      <meta itemprop="author" content="Ignacio Castaño"/>
+      <!--<meta itemprop="publisher" content="Ignacio Castaño"/>--> <!-- To solve: The attribute publisher.itemtype has an invalid value. -->
+     <!-- Twitter Cards -->
+      <meta name="twitter:title" content="Hemicube Rendering and Integration"/>
+      <meta name="twitter:url" content="https://www.ludicon.com/castano/blog/articles/hemicube-rendering-and-integration/"/>
+      <meta name="twitter:description" content="One of our aims with our global illumination implementation was to keep it as simple as possible, while still obtaining good performance, and we hoped to achieve that by using the GPU. While the are several approaches to compute global illumination in the GPU, the most simple one that we could come"/>
+      <meta name="twitter:card" content="summary_large_image"/>
+     <!-- SEO -->
+     <!-- Misc. tags -->
+     <!-- is_singular -->
+    <!-- END - Open Graph and Twitter Card Tags 3.3.9 -->
+        
+    </head>
+
+<body class="wp-singular page-template-default page page-id-1273 page-child parent-pageid-17 wp-theme-graphy has-sidebar footer-1 has-avatars">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header">
+
+		<div class="site-branding">
+					<div class="site-title"><a href="https://www.ludicon.com/castano/blog/" rel="home">Ignacio Castaño</a></div>
+						<div class="site-description"></div>
+						</div><!-- .site-branding -->
+
+				<nav id="site-navigation" class="main-navigation">
+			<button class="menu-toggle"><span class="menu-text">Menu</span></button>
+			<div class="menu-main-menu-container"><ul id="menu-main-menu" class="menu"><li id="menu-item-426" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-426"><a href="http://www.ludicon.com/castano/blog/">Blog</a></li>
+<li id="menu-item-236" class="menu-item menu-item-type-post_type menu-item-object-page current-page-ancestor menu-item-236"><a href="https://www.ludicon.com/castano/blog/articles/">Articles</a></li>
+<li id="menu-item-235" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-235"><a href="https://www.ludicon.com/castano/blog/projects/">Projects</a></li>
+<li id="menu-item-234" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-234"><a href="https://www.ludicon.com/castano/blog/about/">About</a></li>
+</ul></div>						<form role="search" method="get" class="search-form" action="https://www.ludicon.com/castano/blog/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form>					</nav><!-- #site-navigation -->
+		
+		
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main">
+
+		
+			
+<article id="post-1273" class="post-1273 page type-page status-publish hentry">
+		<header class="entry-header">
+				<h1 class="entry-title">Hemicube Rendering and Integration</h1>
+			</header><!-- .entry-header -->
+	
+	<div class="entry-content">
+		<p><span class="md-plain md-expand">One of our aims with our global illumination implementation was to keep it as simple as possible, while still obtaining good performance, and we hoped to achieve that by using the GPU. While the are several approaches to compute global illumination in the GPU, the most simple one that we could come up with was to use our existing rendering engine to estimate global illumination using a fixed sequence of final gathering steps. That is, rendering the scene from every lightmap texel to gather all the incoming irradiance at that point, integrating it to compute the output radiance, and repeating these steps multiple times until the lightmaps converge to an approximate solution. This is basically the same </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm"><span class="md-plain">procedure described by Hugo Elias</span></a><span class="md-plain">.</span></span><span class="md-plain md-expand"><br />
+</span></p>
+<p class="md-end-block md-p"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/pretty_shot.png"><img fetchpriority="high" decoding="async" class="aligncenter  wp-image-1274" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/pretty_shot.png" alt="" width="562" height="316" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/pretty_shot.png 512w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/pretty_shot-267x150.png 267w" sizes="(max-width: 562px) 100vw, 562px" /></a></p>
+<p class="md-end-block md-p"><span class="md-plain">Using the same engine makes it very easy to keep the global illumination in sync with the rest of the game. If we add new shaders or materials, change the representation of the geometry or alter the world, keeping the global illumination up to date requires little o no effort. Another interesting benefit is that optimizations to the rendering engine also benefit the global illumination pre-computation. However, as we will see later, in practice each application stresses the system in different ways and end up limited by different bottlenecks, what improves the rendering time does not necessary improve the pre-computation and vice-versa.</span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain md-expand">Projection Methods</span></h3>
+<p class="md-end-block md-p"><span class="md-plain">I tried several different approaches to render the scene and estimate the incoming radiance. The most common approach is to render hemicubes; that requires rendering the scene to 5 different viewports. Several sources suggested the use of spherical or parabolic projections, but in my experience these approaches produced terrible results due to the non linear projection. Without very high tessellation rates the scene would become unacceptably distorted, creating gaps between objects or making parallel surfaces self-intersect.</span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/spherical_paraboloid.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/spherical_paraboloid.png"><img decoding="async" class="aligncenter size-full wp-image-1275" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/spherical_paraboloid.png" alt="" width="520" height="278" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/spherical_paraboloid.png 520w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/spherical_paraboloid-267x143.png 267w" sizes="(max-width: 520px) 100vw, 520px" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">In </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter39.html"><span class="md-plain">GPU Gems 2, Coombe et al.</span></a><span class="md-plain"> suggested to project the z value independently of (x,y) coordinates using an orthographic projection in order to maintain a correct depth ordering. As seen in the next picture, that removed the most obvious artifacts; note how the staircase inside the tower is not visible anymore:</span></span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/paraboloid_orthographic.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_orthographic.png"><img decoding="async" class="aligncenter size-full wp-image-1276" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_orthographic.png" alt="" width="256" height="256" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_orthographic.png 256w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_orthographic-150x150.png 150w" sizes="(max-width: 256px) 100vw, 256px" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">However, while this works OK from some points of view, the distortion becomes unacceptable when the camera is close to a surface, which is always our case. So, in practice these approaches are not very useful. Note how the outdoors are visible when sampling the lighting from the interior of the tower:</span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/paraboloid_artifacts.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_artifacts.png"><img loading="lazy" decoding="async" class="aligncenter size-full wp-image-1277" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_artifacts.png" alt="" width="256" height="256" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_artifacts.png 256w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/paraboloid_artifacts-150x150.png 150w" sizes="auto, (max-width: 256px) 100vw, 256px" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">Other implementations use a single plane projection. This kind of projection does not capture the whole hemisphere, but by using a wide field of view it&#8217;s possible to capture about 80% of it. I haven&#8217;t actually tried this approach, but to get an idea of what the results would look like, I modified the hemicube integrator to ignore 20% of the samples near the horizon and found out that this introduced artifacts that were unacceptable for high-quality results.</span></p>
+<p class="md-end-block md-p"><span class="md-meta-i-c md-link md-expand"><a spellcheck="false" href="http://www.graphics.cornell.edu/~jaroslav/papers/2008-irradiance_caching_class/08-pascal-gpu-notes.pdf"><span class="md-plain">Pascal Gautron</span></a></span><span class="md-plain"> estimates that on typical scenes this approach introduced a 18% RMS error, but suggests various tricks to reduce it by re-balancing the solid angle weights, or extrapolating the border samples and filling the holes. The latter method reduces the error down to a mere 6%.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">However, these improvements do not eliminate banding artifacts caused when an intense light source visible from one location is suddenly not visible anymore in the next when it falls out of the projection frustum. To make things worse, the projection lacks rotational invariance, which enhances the problem when hemicubes are rendered with random rotations. So, while in many cases the results look alright, the few cases that do not render the method impractical.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">Another problem is that the wide frustum is 4 times larger than the equivalent hemicube and easily intersects with the surrounding geometry; as I&#8217;ll discuss next, this is one of the main problems that I had to deal with.</span></p>
+<p class="md-end-block md-p md-focus"><span class="md-plain">In the end I simply stayed with the traditional hemicubes for simplicity. I think it would have been possible to do somewhat better using a fancy tetrahedral or pyramidal projection with 3 or 4 planes, but that didn&#8217;t seem worth the trouble.</span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain md-expand">Hemicube Overlaps</span></h3>
+<p class="md-end-block md-p"><span class="md-plain">As I just mentioned, one of the main problems that I had to solve was to handle overlaps between the hemicubes and the geometry. These overlaps are unavoidable unless you impose some severe modeling restrictions that are not desirable for production.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">When the geometry is well formed and does not have self-intersections, these overlaps can sometimes be avoided with centroid sampling. Without centroid sampling the location where the hemicube is rendered from can easily end up being outside of the polygon that contains the sample and thus inside another volume.</span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/centroid21.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/centroid21.png"><img loading="lazy" decoding="async" class="aligncenter  wp-image-1278" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/centroid21.png" alt="" width="549" height="259" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/centroid21.png 490w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/centroid21-267x126.png 267w" sizes="auto, (max-width: 549px) 100vw, 549px" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">With centroid sampling the origin of the hemicube is now always inside the surface. However, it can still be very close to the surface boundary and have overlaps with nearby surfaces. A simple solution is to move the near plane closer to the camera until the overlap dissapears, but how close? The distance to the nearest boundary can be determined analytically, but there&#8217;s a limit in how much the near plane distance can be reduced without introducing depth sampling artifacts. An interesting solution for this problem is to render multiple hemicubes at the same location, each hemicube enclosing the previous one with its far plane at the near plane of the next.</span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/hemicubes1.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicubes1.png"><img loading="lazy" decoding="async" class="aligncenter  wp-image-1279" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicubes1.png" alt="" width="332" height="240" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">That would solve most the problems when the geometry is watertight and centroid sampling is used, but in many cases our assets are not always well conditioned. So, I had to find a more general solution.</span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">I tried all sort of heuristics, to render backfaces in black, to fill them with the average color, to extrapolate the nearest colors, etc. None of these solutions worked well in all cases. In the end, something that produced satisfactory results was to render the backfaces with a special tag to distinguish them from front facing faces when integrating the hemicubes. Whenever a hemicube had too many tagged texels it would be discarded entirely, and instead its output radiance would be estimated at that location interpolating or extrapolating it from the nearest valid samples.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">The extrapolation is not always correct, and the detection of invalid hemicubes is not 100% accurate, but so far this is the method that I&#8217;m happiest with. In the next article I&#8217;ll explain how this extrapolation is done in more detail.</span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Shadow Rendering</span></h3>
+<p class="md-end-block md-p"><span class="md-plain">While the goal was to use the same rendering engine, using its shadow system &#8216;as is&#8217; would have been overkill. We are using </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://the-witness.net/news/?p=77"><span class="md-plain">cascade shadow maps</span></a><span class="md-plain">, which are updated on every frame, and to maximize the shadow map resolution the shadow maps are tightly aligned to the view frustum slices. When rendering the hemicubes, shadow map resolution is not that important, and re-rendering the shadows for each hemicube face is unnecessarily expensive. To keep things simple I still used cascade shadow maps, but instead of rendering them for each view, I only rendered them once for each object positioning the cascades around the center of the object.</span></span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Rasterization</span></h3>
+<p class="md-end-block md-p"><span class="md-plain">Now that I&#8217;ve explained how to capture the irradiance of the scene at any point, it&#8217;s necessary to sample it for every lightmap texel. To do that I simply rasterize the geometry in the lightmap UV space using a conservative rasterizer and render one hemicube at every fragment whose coverage is above certain threshold.</span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">One nice thing of using our own rasterizer is that I can evaluate the exact coverage analytically. Since the parameterization does not have overlaps, the coverage is just the area of the intersection of the texel square with the polygon being rasterized. Similarly, the centroid is the center of mass of the clipped polygon.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">This approach gives us a position and a direction to render the hemicube from, but I still need to determine the orientation of the hemicube. Initially, I simply chose an arbitrary orientation using </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://sourceforge.net/mailarchive/message.php?msg_name=3.0.6.32.20001111143758.010fcdf8%40208.55.130.3"><span class="md-plain">the traditional/standard method</span></a><span class="md-plain">, but that resulted in banding artifacts:</span></span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/banding_small_00.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/banding_small_00.png"><img loading="lazy" decoding="async" class="aligncenter  wp-image-1280" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/banding_small_00.png" alt="" width="420" height="236" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/banding_small_00.png 320w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/banding_small_00-267x150.png 267w" sizes="auto, (max-width: 420px) 100vw, 420px" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">The source of the problem is just the limited hemicube resolution, but it&#8217;s surprisingly hard to get rid of it entirely by only increasing the hemicube size. A better solution is to simply use random orientations:</span></p>
+<p class="md-end-block md-p"><span class="md-image md-img-loaded" data-src="http://the-witness.net/news/wp-content/uploads/2010/09/noise_small_00.png"><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/noise_small_00.png"><img loading="lazy" decoding="async" class="aligncenter  wp-image-1281" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/noise_small_00.png" alt="" width="416" height="234" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/noise_small_00.png 320w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/noise_small_00-267x150.png 267w" sizes="auto, (max-width: 416px) 100vw, 416px" /></a></span></p>
+<p class="md-end-block md-p"><span class="md-plain">Note that I am trading banding artifacts by noise, but the latter is much easier to remove by using some smoothing.</span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Integration</span></h3>
+<p class="md-end-block md-p md-focus"><span class="md-plain">Once the hemicubes have been rendered it&#8217;s necessary to integrate the sampled irradiance to compute the output radiance. The integral of the irradiance hemicube is simply a weighted sum of the samples, where the weights are the cosine-weighted areas of the hemicube texels projected on the hemisphere, that is, the cosine-weighted solid angles of the texels. These weights are constant, so they can be precomputed in advance.</span></p>
+<p><span class="md-plain md-expand">In the </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm"><span class="md-plain">article by Hugo Helias</span></a><span class="md-plain"> that I referenced in the introduction the same approach is used and this weight table is called the &#8220;The Multiplier Map&#8221;. Beware of that part of the article, though, because there&#8217;s a bug in the formulas. The subtended solid angle of the texel is not &#8220;the cosine of the angle between the direction the camera is facing in, and the line from the camera to the pixel&#8221;:</span></span></p>
+<p><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/global_illumiantion_compendium.png"><img loading="lazy" decoding="async" class="aligncenter size-full wp-image-1282" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/global_illumiantion_compendium.png" alt="" width="275" height="141" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/global_illumiantion_compendium.png 275w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/global_illumiantion_compendium-267x137.png 267w" sizes="auto, (max-width: 275px) 100vw, 275px" /></a></p>
+<p><span class="md-plain md-expand">That term needs to be divided by the squared distance between the location of the camera </span><span class="md-pair-s" spellcheck="false"><code>x</code><span class="md-plain"> and the center of the texel </span><code>y</code><span class="md-plain md-expand">:</span></span></p>
+<p><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/texel_solid_angle_good.gif"><img loading="lazy" decoding="async" class="aligncenter size-full wp-image-1285" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/texel_solid_angle_good.gif" alt="" width="133" height="46" /></a></p>
+<p><span class="md-plain md-expand">See formula 25 in the </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://people.cs.kuleuven.be/~philip.dutre/GI/"><span class="md-plain">Global Illumination Compendium</span></a><span class="md-plain"> for more details.</span></span></p>
+<p><span class="md-plain md-expand">Also, since this is a precomputation it made sense to evaluate the solid angle exactly. That can be derived using Girard&#8217;s formula or directly using the handy formula in </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://www.fizzmoll11.com/thesis/"><span class="md-plain">Manne Ohrstrom&#8217;s thesis</span></a><span class="md-plain">. Doing so improved the invariance of the integral with respect to rotations of the hemicube and that reduced noise significantly.</span></span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">In the end, the integration is a fairly simple operation. It could be done very efficiently using compute shaders and I might still do that in the future, but for prototyping purposes it was much easier to perform the integration in the CPU. Unfortunately, that required transferring the data across the bus and, if not done properly, it severely reduced performance.</span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Asynchronous Memory Transfers</span></h3>
+<p class="md-end-block md-p"><span class="md-plain md-expand">Contrary to popular belief, Direct3D 9 provides a mechanism to perform memory copies asynchronously. In Direct3D 10 and OpenGL this is done through staging resources or pixel buffer objects; in Direct3D 9 something similar can be achieved with offscreen plain surfaces. The problem is that this is not very well documented, it&#8217;s very easy to fall out of the fast path, and the conditions in which that happens are slightly different for each IHV.</span></p>
+<p class="md-end-block md-p md-focus"><span class="md-plain">In the first place, you have to create two render targets and offscreen plain surfaces:</span></p>
+<pre class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c++" spellcheck="false"><span role="presentation"><span class="cm-variable">dev</span><span class="cm-operator">-&gt;</span><span class="cm-variable">CreateRenderTarget</span>(..., <span class="cm-operator">&amp;</span><span class="cm-variable">render_target_0</span>); </span>
+<span role="presentation"><span class="cm-variable">dev</span><span class="cm-operator">-&gt;</span><span class="cm-variable">CreateRenderTarget</span>(..., <span class="cm-operator">&amp;</span><span class="cm-variable">render_target_1</span>);  </span>
+<span role="presentation"><span class="cm-variable">dev</span><span class="cm-operator">-&gt;</span><span class="cm-variable">CreateOffscreenPlainSurface</span>(..., <span class="cm-operator">&amp;</span><span class="cm-variable">offscreen_surface_0</span>); <span class="cm-variable">dev</span><span class="cm-operator">-&gt;</span><span class="cm-variable">CreateOffscreenPlainSurface</span>(..., <span class="cm-operator">&amp;</span><span class="cm-variable">offscreen_surface_1</span>); 
+</span></pre>
+<p class="md-end-block md-p"><span class="md-plain md-expand">If you have more than two targets the copies become synchronous in some systems, but two is sufficient to generate enough work to do in parallel with the memory transfers.</span></p>
+<p class="md-end-block md-p md-focus"><span class="md-plain">The most important observation is that the only device method that appears to be asynchronous is </span><span class="md-pair-s" spellcheck="false"><code>GetRenderTargetData</code><span class="md-plain">. After calling this method, any other device method blocks until the copy is complete. So, instead of overlapping the memory transfer with the rendering code, you have to find some CPU work to do simultaneously. In my case, I just do the integration of one of the render targets while copying the other:</span></span></p>
+<div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c++">
+<div class="CodeMirror-scroll" tabindex="-1">
+<div class="CodeMirror-sizer">
+<div>
+<div class="CodeMirror-lines" role="presentation">
+<div role="presentation">
+<div class="CodeMirror-code" role="presentation">
+<pre class="CodeMirror-activeline">while hemicubes left {
+  [...] // Render hemicube to render_target_0
+​
+   // Initiate asynchronous copy to system memory.    
+   dev-&gt;GetRenderTargetData(render_target_0, offscreen_surface_0);
+​
+   // Lock offscreen_surface_1    
+   // at this point the corresponding async copy has finished already.
+   offscreen_surface_1-&gt;LockRect(..., D3DLOCK_READONLY);
+​
+  [...] // Integrate hemicube.
+​
+   offscreen_surface_1-&gt;UnlockRect();
+​
+   swap(render_target_0, render_target_1);
+   swap(offscreen_surface_0, offscreen_surface_1);
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div></div>
+</div>
+</div>
+<p class="md-end-block md-p md-focus"><span class="md-plain">Another problem is that the buffer needs to be sufficiently big to reach transfer rates that saturate the available bandwidth. In order to achieve that I batch multiple hemicubes in a single texture atlas as seen in the following picture:</span></p>
+<p><a href="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas.png"><img loading="lazy" decoding="async" class="aligncenter  wp-image-1283" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas-700x700.png" alt="" width="546" height="546" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas-700x700.png 700w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas-267x267.png 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas-150x150.png 150w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas-768x768.png 768w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas-800x800.png 800w, https://www.ludicon.com/castano/blog/wp-content/uploads/2020/05/hemicube_atlas.png 1024w" sizes="auto, (max-width: 546px) 100vw, 546px" /></a></p>
+<p>In practice I do not render the hemicubes using the depicted cross layout, but instead arrange the faces tightly in a 3&#215;1 rectangle that does not waste any texture space and maximizes bandwidth. However, the cross layout was useful to visualize the output for debugging purposes.</p>
+<h2>Performance and Conclusions</h2>
+<p>The performance of our global illumination solution is somewhat disappointing. While we do most of the work on the GPU we are not really making a very effective use of it. The main GPU bottleneck is in the fixed function geometry pipeline; we are basically rendering a large number of tiny triangles on a small render target.</p>
+<p>But that&#8217;s not the main problem. Traversing the scene in the CPU and submitting commands to render it actually takes more time than it takes the GPU to process the commands and render the scene, so the GPU is actually underutilized.</p>
+<p>Our engine was designed for quick prototyping, to make it very easy to draw stuff with different materials, but not to do so in the most efficient way possible. These inefficiencies became a lot more pronounced in the lightmap baker.</p>
+<p>On the bright side, as we optimize the CPU side of the engine we expect performance to improve. Modern GPUs also have functionality that make it possible to render to multiple hemicube faces at once. We expect that will also reduce the CPU work significantly.</p>
+<p>While it was easy to get our global illumination solution up and running by reusing our rendering engine, bringing it to a level of sufficient quality and performance took a considerable amount of time. In the next installment I&#8217;ll describe some of the techniques and optimizations that I implemented to fix some of the remaining artifacts and improve performance.</p>
+<p><em>Note: This article was originally published on <a href="http://the-witness.net/news/?p=244">The Witness blog</a>.</em></p>
+			</div><!-- .entry-content -->
+</article><!-- #post-## -->
+			
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+<div id="secondary" class="sidebar-area" role="complementary">
+		<div class="normal-sidebar widget-area">
+		<aside id="categories-2" class="widget widget_categories"><h2 class="widget-title">Categories</h2>
+			<ul>
+					<li class="cat-item cat-item-9"><a href="https://www.ludicon.com/castano/blog/category/coding/">Coding</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://www.ludicon.com/castano/blog/category/cooking/">Cooking</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://www.ludicon.com/castano/blog/category/outdoors/">Outdoors</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://www.ludicon.com/castano/blog/category/personal/">Personal</a>
+</li>
+	<li class="cat-item cat-item-22"><a href="https://www.ludicon.com/castano/blog/category/spark/">Spark</a>
+</li>
+			</ul>
+
+			</aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h2 class="widget-title">Recent Comments</h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/" class="url" rel="ugc">Encoding Render Targets for Free with Tile Shaders &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/#comment-614384">Writing to Compressed Textures in Metal</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/" class="url" rel="ugc">Encoding Render Targets for Free with Tile Shaders &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/#comment-614383">Spark 1.4</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/" class="url" rel="ugc">Spark 1.4 &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/#comment-613545">Spark for Unity</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/" class="url" rel="ugc">Spark 1.4 &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/#comment-613544">The True Size of ASTC Textures</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://renderdiagrams.org/2024/12/18/shadowmap-bias/" class="url" rel="ugc external nofollow">Shadowmap Bias &#8211; Render Diagrams</a></span> on <a href="https://www.ludicon.com/castano/blog/articles/shadow-mapping-summary-part-1/#comment-612196">Shadow Mapping Summary</a></li></ul></aside><aside id="archives-2" class="widget widget_archive"><h2 class="widget-title">Archives</h2>		<label class="screen-reader-text" for="archives-dropdown-2">Archives</label>
+		<select id="archives-dropdown-2" name="archive-dropdown">
+			
+			<option value="">Select Month</option>
+				<option value='https://www.ludicon.com/castano/blog/2026/09/'> September 2026 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/06/'> June 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/05/'> May 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/04/'> April 2026 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/03/'> March 2026 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/02/'> February 2026 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/01/'> January 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/09/'> September 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/08/'> August 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/03/'> March 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/02/'> February 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2024/12/'> December 2024 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2022/11/'> November 2022 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/12/'> December 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/04/'> April 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/03/'> March 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/01/'> January 2019 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2017/10/'> October 2017 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2016/09/'> September 2016 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/12/'> December 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/09/'> September 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/08/'> August 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/07/'> July 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2011/07/'> July 2011 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2011/04/'> April 2011 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/11/'> November 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/10/'> October 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/09/'> September 2010 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/05/'> May 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/03/'> March 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/02/'> February 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/12/'> December 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/11/'> November 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/09/'> September 2009 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/07/'> July 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/05/'> May 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/04/'> April 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/03/'> March 2009 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/02/'> February 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/01/'> January 2009 &nbsp;(6)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/12/'> December 2008 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/09/'> September 2008 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/08/'> August 2008 &nbsp;(2)</option>
+
+		</select>
+
+			<script type="text/javascript">
+/* <![CDATA[ */
+
+( ( dropdownId ) => {
+	const dropdown = document.getElementById( dropdownId );
+	function onSelectChange() {
+		setTimeout( () => {
+			if ( 'escape' === dropdown.dataset.lastkey ) {
+				return;
+			}
+			if ( dropdown.value ) {
+				document.location.href = dropdown.value;
+			}
+		}, 250 );
+	}
+	function onKeyUp( event ) {
+		if ( 'Escape' === event.key ) {
+			dropdown.dataset.lastkey = 'escape';
+		} else {
+			delete dropdown.dataset.lastkey;
+		}
+	}
+	function onClick() {
+		delete dropdown.dataset.lastkey;
+	}
+	dropdown.addEventListener( 'keyup', onKeyUp );
+	dropdown.addEventListener( 'click', onClick );
+	dropdown.addEventListener( 'change', onSelectChange );
+})( "archives-dropdown-2" );
+
+//# sourceURL=WP_Widget_Archives%3A%3Awidget
+/* ]]> */
+</script>
+</aside><aside id="meta-2" class="widget widget_meta"><h2 class="widget-title">Meta</h2>
+		<ul>
+						<li><a href="https://www.ludicon.com/castano/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/feed/">Entries feed</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.org/">WordPress.org</a></li>
+		</ul>
+
+		</aside>	</div><!-- .normal-sidebar -->
+	</div><!-- #secondary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer">
+
+		
+	<div id="supplementary" class="footer-widget-area" role="complementary">
+		<div class="footer-widget-wrapper">
+			<div class="footer-widget">
+								<div class="footer-widget-1 widget-area">
+					<aside id="meta-2" class="widget widget_meta"><h2 class="widget-title">Meta</h2>
+		<ul>
+						<li><a href="https://www.ludicon.com/castano/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/feed/">Entries feed</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.org/">WordPress.org</a></li>
+		</ul>
+
+		</aside>				</div><!-- .footer-widget-1 -->
+																			</div><!-- .footer-widget -->
+		</div><!-- .footer-widget-wrapper -->
+	</div><!-- #supplementary -->
+
+		<div class="site-bottom">
+
+			<div class="site-info">
+				<div class="site-copyright">
+					&copy; 2026 <a href="https://www.ludicon.com/castano/blog/" rel="home">Ignacio Castaño</a>
+				</div><!-- .site-copyright -->
+				<div class="site-credit">
+					Powered by <a href="https://wordpress.org/">WordPress</a>				<span class="site-credit-sep"> | </span>
+					Theme: <a href="http://themegraphy.com/wordpress-themes/graphy/">Graphy</a> by Themegraphy				</div><!-- .site-credit -->
+			</div><!-- .site-info -->
+
+		</div><!-- .site-bottom -->
+
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/castano/blog/*"},{"not":{"href_matches":["/castano/blog/wp-*.php","/castano/blog/wp-admin/*","/castano/blog/wp-content/uploads/*","/castano/blog/wp-content/*","/castano/blog/wp-content/plugins/*","/castano/blog/wp-content/themes/graphy/*","/castano/blog/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/jquery.fitvids.js?ver=1.1" id="fitvids-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/skip-link-focus-fix.js?ver=20160525" id="graphy-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/navigation.js?ver=20160525" id="graphy-navigation-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/doubletaptogo.min.js?ver=1.0.0" id="double-tap-to-go-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/functions.js?ver=20160822" id="graphy-functions-js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www.ludicon.com/castano/blog/wp-includes/js/wp-emoji-release.min.js?ver=6.9.9"}}
+</script>
+<script type="module">
+/* <![CDATA[ */
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://www.ludicon.com/castano/blog/wp-includes/js/wp-emoji-loader.min.js
+/* ]]> */
+</script>
+
+</body>
+</html>

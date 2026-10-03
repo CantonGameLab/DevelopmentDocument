@@ -1,0 +1,23 @@
+{
+  "id": "official-2016-01-26-the-witness-is-now-up-on-psn-in-the-americas-and-europe",
+  "title": { "zh": "《The Witness》已在美洲和欧洲的 PSN 上架。", "en": "The Witness is now up on PSN in the Americas and Europe." },
+  "subtitle": {
+    "en": "Out now on PSN, with the Steam release expected the same morning.",
+    "zh": "PSN 版已经上架，Steam 版预计同一天上午放出。"
+  },
+  "translator": {
+    "note": "第一段的源行是「照片 + 正文」混排，按 schema 保留为一个段落、图片标记按源顺序内联。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/01/CZodCbOW0AEYvbs-1.jpg)It should go up on Steam this morning around 9 or 10am Pacific time.",
+      "zh": "（原文此处有一张图）它应该会在今天上午太平洋时间 9 点或 10 点左右上架 Steam。"
+    },
+    {
+      "type": "p",
+      "en": "I made a posting on the PlayStation Blog: https://t.co/ChsVlBzhVw",
+      "zh": "我在 PlayStation Blog 上发了一篇帖子：https://t.co/ChsVlBzhVw"
+    }
+  ]
+}

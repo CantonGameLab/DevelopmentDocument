@@ -1,0 +1,18 @@
+{
+  "id": "castano-2008-08-25-moving",
+  "title": { "zh": "搬家", "en": "Moving" },
+  "subtitle": {
+    "en": "Ignacio's better half got into UC Davis, so the family is moving to Davis, closer to the Sierra.",
+    "zh": "另一半被 UC Davis 录取，一家人要搬去 Davis，那里离内华达山脉也更近。"
+  },
+  "translator": {
+    "note": "源文只有一段，标题为译者所加。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "My better half has been accepted to UC Davis, and we’ll be moving there in the next few days. We are pretty excited; I think Davis will be a better place to raise our son. It’s also closer to the Sierra, so I’ll have the chance to spend more time in the backcountry.",
+      "zh": "我的另一半被 UC Davis 录取了，接下来几天我们就要搬过去。我们挺兴奋的；我觉得 Davis 会是个更适合养孩子的地方。那里离内华达山脉也更近，我就有机会多去几趟深山野外了。"
+    }
+  ]
+}

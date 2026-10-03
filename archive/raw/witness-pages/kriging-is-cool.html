@@ -1,0 +1,1493 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Kriging is cool. &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Kriging is cool. Comments Feed" href="http://the-witness.net/news/2010/05/kriging-is-cool/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2894,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_03.png","alt":"","desc":"","caption":"Banner_03","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_03-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/345" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2010/05/kriging-is-cool/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=345' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2010%2F05%2Fkriging-is-cool%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=B3538B963E173B400FABD3F2838517A3');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='ngg_trigger_buttons-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/trigger_buttons.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='shutter-0-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/shutter/shutter.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='fontawesome-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/fontawesome/font-awesome.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='nextgen_basic_singlepic_style-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_basic_singlepic/static/nextgen_basic_singlepic.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='nggallery-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/ngglegacy/css/nggallery.css?ver=2.1.31' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-345 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-345" class="post-345 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">Kriging is cool.</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/jon/" title="View all posts by Jonathan Blow">Jonathan Blow</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2010-05-24T06:46:10-07:00">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/" rel="bookmark">May 24, 2010</a>
+				</time>
+			   </span><time class="updated"  datetime="2010-05-24T06:46:10-07:00">May 24, 2010</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>In <em>The Witness</em> we decided that it's a good idea to have a heightfield terrain making up the bulk of the island surface.  The advantages of this are in rendering performance and in ease of texturing (it is relatively easy, with one continuously-parameterized terrain block, to get rid of seams; if your terrain is a bunch of otherwise-unrelated meshes, then what do you do?)  <span id="more-345"></span> When we made this decision it seemed clear to me that the biggest disadvantage, for this game at least, was authoring the terrain.  There are typically a few different ways that large heightfields are built:</p>
+<ol>
+<li>Use an external terrain editing tool and then write an importer for its file format</li>
+<li>Build a terrain editing tool into the game's editor (this will require a bunch of work to do a good job, and will have fewer features than an external tool but they may be more appropriate for your game; also, you can make reasonable things happen to entities placed in the world when you interactively move the terrain around)</li>
+<li>Paint heightmaps in an image editor like Photoshop and hotload those from the game engine (requires much less programming; doesn't provide many features, but you have very fine control over the results; unfortunately, the editing process becomes pretty cumbersome)</li>
+</ol>
+<p>These seemed to be the main approaches on offer.  However, I wasn't enthusiastic about doing any of the traditional things; I have written a number of terrain systems for games, and what bugged me, with respect to this game, was the way in which terrain handling tends to be very different from laying out objects in the world, and how this creates an extremely disjoint work process.</p>
+<p>In concrete terms, this means that terrain was not going to be as malleable as the other objects in the world.  I am taking a very rough-drafty approach to the game; we are building areas, then moving them across the world if we feel they will work better somewhere else, rotating them as a group, etc.  The goal is to build a very-cohesive game world in which carefully-tuned gameplay is the most important thing -- where we more-or-less have a rough draft of the whole world set up before we go in and try to get serious about how everything looks.</p>
+<p>This kind of approach just dies when you have elements that behave very differently, and are difficult to manipulate together, such as terrain and objects.  If I have two hills with a path winding between them, a bench by the path with a book upon the bench, and a signpost nearby, what happens when I want to move that scene across the map and then rotate it by 30 degrees?  With the entities, it is no problem, we just do that in the editor.  But with the terrain it just becomes a mess to move the hills at all, regardless of which of the above approaches are used.  And if you want to move and rotate the hills in sync with the entities so that the whole scene is intact... <strong>good luck!</strong></p>
+<p>To solve this problem, terrain needed to be built in the in-game editor, in a way that would be maximally malleable -- so that I can pick up a hill and rotate and drag it.  Because of the requirement for rotation, you can't really be manipulating samples directly; it has to be control surfaces of some kind (because if you are just blitting samples around, a few rotation operations are going to mangle whatever original shapes you made).</p>
+<p>As for control surfaces, the first ideas that come to mind are things like spline patches.  But the problem with spline patches is that you have to be very careful managing the control points in a patch, and they ultimately aren't that malleable -- what if I want to split a patch in half without changing the shapes of areas near the edges?  What if I want to move one small, high-detail terrain area so that it overlaps somewhat with a big, low-detail area?  How is that going to work?  And if I have spline patches, then any time I instantiate a new grid of patches, I have to manage a bunch of individual control points, which is labor-intensive.  If I am rough-drafting, I want to do the minimum possible work to lay out a given area.  If I just generally want to build a hill but don't care much about its shape, I ought to be able to do that with just 2 or 3 control points, arbitrarily-placed.</p>
+<p>Clearly what I wanted was a system that would just look at a set of unstructured control points -- no topology or anything -- and generate a terrain from those points in the local area.  When there is no topology or parameterization, you can merge and split groups of control points at will; you can have them overlap; you can do whatever you want.</p>
+<p>I started putting together an ad hoc scheme for doing this, but did not take it very far before discovering that the mathematics for doing a good job at exactly this problem had already been invented decades ago.  The method is called <a href="http://en.wikipedia.org/wiki/Kriging" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Kriging', 'Kriging']);" >Kriging</a>, and it is well known in geostatistics.  If you've got a survey of height field data (or any other field data -- the density of a mineral at certain points, for instance), and that data is missing values for some locations, Kriging will give you a reasonable guess at the values of the field at the unknown points.</p>
+<p>For rough-draft terrain modeling, we can turn the idea around; if we give a Kriging function only a small set of known data points, it will do a quite fantastic job of filling in the values at all the other points.  The basic math involves the inverse of an n by n matrix, where n is the number of known data points.  In theory that could become a huge computation, but for the number of points we may typically have in one local area of the map, the computation is easy for modern CPUs.  Kriging is not hard to implement; I started with some public domain code written at a university and modified it for our needs (though this basically involved rewriting it, as it was messy and had some serious bugs!  If anyone wants our version of the Kriging code, drop me a line).</p>
+<p>Here's how we have it integrated into our game engine.  There's a type of object that exists as a set of terrain control points, which can be moved around the world arbitrarily, just like anything else.  It looks like this:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-1.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-1.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-1.jpg"
+             data-image-id="75"
+             data-title="untitled-1"
+             data-description=""
+             target='_self'
+             class="shutterset_14b67f7d8cce79794931c0b3b61d11be">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-1.jpg-nggid0275-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-1"
+             title="untitled-1"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>The only meaningful data in this object, with respect to terrain shaping, are the positions of the control points (purple boxes).  The surface is just a visualization; it tells you what surface these points would define if they were the only control points in the universe.  (Though actually, the surface defined by those points would extend infinitely in all directions; this visualization stays within the convex hull of the control points, which helps you see what you are doing when editing).</p>
+<p>Right now these control points haven't actually been applied to the game's terrain (green surface below); they are just hovering above it.  Here's a shot from another angle:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-2.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-2.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-2.jpg"
+             data-image-id="80"
+             data-title="untitled-2"
+             data-description=""
+             target='_self'
+             class="shutterset_dc4d5ad918bd57619715f68f3c0f3eea">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-2.jpg-nggid0280-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-2"
+             title="untitled-2"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>I can press a key to add a new control point to this object:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-3.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-3.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-3.jpg"
+             data-image-id="81"
+             data-title="untitled-3"
+             data-description=""
+             target='_self'
+             class="shutterset_ff93f8fb278857fb8e0b8c374f0aefce">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-3.jpg-nggid0281-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-3"
+             title="untitled-3"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>The new control point doesn't affect the shape of the old surface in any way, which is very convenient.  I can drag the new control point at will:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-4.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-4.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-4.jpg"
+             data-image-id="82"
+             data-title="untitled-4"
+             data-description=""
+             target='_self'
+             class="shutterset_6bb4ebb19da728f9e0b57e7acdd5babf">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-4.jpg-nggid0282-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-4"
+             title="untitled-4"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>Or add many more control points:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-5.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-5.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-5.jpg"
+             data-image-id="83"
+             data-title="untitled-5"
+             data-description=""
+             target='_self'
+             class="shutterset_ee2670ea726c811eb3a7131851be8cd8">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-5.jpg-nggid0283-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-5"
+             title="untitled-5"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>Here's that same visualization surface, with the control points and gridding turned off, so you can see it better:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-6.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-6.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-6.jpg"
+             data-image-id="84"
+             data-title="untitled-6"
+             data-description=""
+             target='_self'
+             class="shutterset_e6e1f8b5de3183c73c5f0140be290b53">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-6.jpg-nggid0284-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-6"
+             title="untitled-6"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>Then, when I decide I like the shape, I can press another key to apply these control points to the game's terrain:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-7.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-7.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-7.jpg"
+             data-image-id="85"
+             data-title="untitled-7"
+             data-description=""
+             target='_self'
+             class="shutterset_7fab1ee19d3e1e7c3dd7e389d51de924">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-7.jpg-nggid0285-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-7"
+             title="untitled-7"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>(Now there's a lot of z-fighting between the control surface and the terrain because they are in pretty much the same place.)</p>
+<p>Here is the terrain with the control surface hidden.  Note that the terrain values have been smoothly interpolated, even in areas outside the control object:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-8.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-8.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-8.jpg"
+             data-image-id="86"
+             data-title="untitled-8"
+             data-description=""
+             target='_self'
+             class="shutterset_33612225a654800db158e41052bf618d">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-8.jpg-nggid0286-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-8"
+             title="untitled-8"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p><em>(By the way, those seams you see in the previous two pictures are lighting seams.  These don't have anything to do with Kriging, it's just that the terrain blocks don't know how to look up their neighbors' height values when generating their surface normals.  Any block-based terrain system has to solve a similar problem.  It's easy to solve, but at a low priority on the to-do list, hence it hasn't been done yet.  The distance between seams tells you how big the terrain blocks are, so the seams are sort of useful in this image!)</em></p>
+<p><em><span style="font-style: normal;">Suppose this control surface is part of a scene that I want to reorient.  I'll rotate it about 70 degrees clockwise (now you'll see the surface intercutting more-heavily with the existing terrain values):</span></em></p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-9.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-9.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-9.jpg"
+             data-image-id="87"
+             data-title="untitled-9"
+             data-description=""
+             target='_self'
+             class="shutterset_6085372825872410e00671b76d011f8e">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-9.jpg-nggid0287-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-9"
+             title="untitled-9"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>And then once again, I apply Kriging to the terrain, generating the same hills in a rotated orientation:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-10.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-10.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-10.jpg"
+             data-image-id="76"
+             data-title="untitled-10"
+             data-description=""
+             target='_self'
+             class="shutterset_4d0e11771358a99831c049424525676c">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-10.jpg-nggid0276-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-10"
+             title="untitled-10"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>To illustrate the way that interpolation is not confined to a single control object, and that in fact this is a control point soup, here I've created three control objects:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-11.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-11.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-11.jpg"
+             data-image-id="77"
+             data-title="untitled-11"
+             data-description=""
+             target='_self'
+             class="shutterset_ee9e9339400e0523a1925bc8fa03e8df">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-11.jpg-nggid0277-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-11"
+             title="untitled-11"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>And here's what the terrain looks like with them applied:</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-12.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-12.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-12.jpg"
+             data-image-id="78"
+             data-title="untitled-12"
+             data-description=""
+             target='_self'
+             class="shutterset_88be361d595a96308c8c440c184ed572">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-12.jpg-nggid0278-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-12"
+             title="untitled-12"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>And here's the final terrain along with the control objects (lots of z-fighting again):</p>
+<p>            
+		<div class="ngg-gallery-singlepic-image ngg-center" style="max-width: 400px">
+			    	<a href="http://the-witness.net/news/wp-content/gallery/kriging/untitled-13.jpg"
+		     title=""
+             data-src="http://the-witness.net/news/wp-content/gallery/kriging/untitled-13.jpg"
+             data-thumbnail="http://the-witness.net/news/wp-content/gallery/kriging/thumbs/thumbs_untitled-13.jpg"
+             data-image-id="79"
+             data-title="untitled-13"
+             data-description=""
+             target='_self'
+             class="shutterset_1e2ebfcea120e23ecfd1a2d82537e8a6">
+            <img class="ngg-singlepic"
+             src="http://the-witness.net/news/wp-content/gallery/kriging/dynamic/untitled-13.jpg-nggid0279-ngg0dyn-400x300x100-00f0w010c010r110f110r010t010.jpg"
+             alt="untitled-13"
+             title="untitled-13"
+              width="400"               />
+    	</a>
+		      </div>
+    <span></span>    </p>
+<p>Hopefully that's enough screenshots to illustrate the point.  Compared to splines, Kriging has the following highly beneficial properties (aside from the huge benefits of not requiring a topology, discussed above):</p>
+<ul>
+<li>Always interpolates every control point exactly</li>
+<li>Adding a new control point does not change the existing surface at all.</li>
+<li>No funny spline-like behavior (curves appearing in strange places, huge overshoots, etc)</li>
+</ul>
+<p><P>&nbsp;<P><br />
+<strong>Hacking In Compact Support</strong></p>
+<p>When doing Kriging in a video game, you probably don't want to compute the terrain for the entire world at once for every change, because that would be very expensive, and it also is a little bit unintuitive (since a change to a control point very far away could change some interpolated terrain nearby, even if only slightly).  However, the vanilla Kriging algorithm would require global computation and thus behave nonlocally.  For <em>The Witness</em> we clearly wanted our control points to affect only nearby areas, <em>i.e.</em> have compact support.  My first attempt at this was:</p>
+<ul>
+<li>Pick a radius r0 at which any control point has maximum effect, and a larger radius r1 at which the point has no effect, with smooth interpolation in-between.</li>
+<li>Terrain consists of contiguous blocks 33x33 samples in size.</li>
+<li>For each block of terrain you want to Krige, find all control points whose distance in the XY plane from any sample in the block is less than r1 <em>(these are all the control points that could possibly affect any sample in the block).</em></li>
+<li>Pass all these points to the Kriging routine, which computes every sample in the block.  It does this by building an inverse variogram matrix -- square with dimension (n+1) -- and performing one matrix-vector multiply for each terrain sample, which is pretty fast.</li>
+<li>For each sample, the Kriging routine gives us the set of weights we would use to blend each control point if the control points did not have compact support.  To provide compact support, just compute an additional factor that is (distance - r1) / (r0 - r1) clamped to [0, 1], multiply all the weights by these factors, and then re-normalize the weights (ensure they all add to 1).</li>
+</ul>
+<p><P><br />
+This almost works, but not quite; we get discontinuities between terrain blocks (which should not happen if everything is correct, since two vertices at the same XY position should always get the same Z value).  At first I thought this was a programming error, but after looking more closely at the situation I convinced myself that the reason is mathematical.  My assumption had been that a control point with a weight of 0 will have the same effect as a control point that never enters into the calculation, but this seems not to be true.</p>
+<p>The step that I added, multiplying the compact-support factors against the weights provided by the matrix-vector multiply, is -- by the distributive property -- the same as multiplying each row of the matrix by the support factor before doing the matrix-vector multiply.  If a support factor is 0, then this makes the matrix rank-deficient, <em>i.e.</em> it could not have been the result of an inversion, which means that this step is not compatible with the mathematical technique being applied.  The idea of a 0 blend factor just isn't valid.  <em>(This also brings into question whether the idea of multiplying by the support factors is valid at all, but for now I will just observe that it produces very useful and convenient behavior.  However, there are some small stepping artifacts that I see in some locations.  I think these may be due to having too-low a density of control points in the world (some terrain samples having 0 control points inside r1) but there's a possibility that they aren't, and have something to do with the weighting procedure itself.  I haven't investigated yet.)</em></p>
+<p>Now, as I type this, I am not 100% convinced that it is the right reasoning, and that something more like a typical programming error might be the problem.  My math is pretty rusty these days.  However, my updated version of the routine does not have discontinuities.  </p>
+<p>Unfortunately, the fix for discontinuities has made the Kriging a bit slower.  What I do is, instead of building just one inverse variogram for the entire terrain block, I build a new variogram for every vertex, and include in that variogram only the control points that have nonzero support factors.  Thus the dimensions of the matrix will change from sample to sample, and I am inverting a new matrix for each output sample.</p>
+<p>Unoptimized, this version of the algorithm takes between 5 and 25 seconds to recompute the terrain for the entire world, depending on how large r1 is.  This is fine for now, especially since editing operations only hit about 1/50 of the world or less at any given time.  However, it'll get slower as more control points are added to the world.</p>
+<p>Fortunately, this first version of the discontinuity-fixing was intended to be slow -- I programmed it in the most straightforward way possible, to maximize the likelihood that it would work.  It is easy to think of ways to make it faster by caching the matrices, but it's unclear which of these would be fastest.  For example, if you just cache one copy of the matrix and invalidate it any time a new control point comes into or out of range, then you might easily find yourself in a situation where you oscillate between recomputing two different matrices as you work your way along the sample grid.  This is a little reminiscent of the kinds of problems that 3D hardware has, which store images in a non-linear way so that they can be cache-efficient when sampled along lines in arbitrary directions... but it's not clear to me how far to take that analogy or whether any applicable wisdom can be derived from it.</p>
+<p>So I intend to optimize it, or come up with a faster solution to the discontinuity problem, but it's not clear yet what form that will take.</p>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2010/05/kriging-is-cool/" title="Permalink to Kriging is cool." rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2010/05/the-island-this-week/" rel="prev"><i class="meta-nav-prev"></i> The island this week.</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2010/06/island-snapshot/" rel="next">Island Snapshot <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				34 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-398">
+		<div id="comment-398">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/ae19a4267063958623f8eb83fe3523c7?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/ae19a4267063958623f8eb83fe3523c7?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Maksym Diachenko</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-398">
+					May 24, 2010 at 7:55 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very interesting. This inspired me to try it out! =)<br />
+Is it possible to get your version of Kriging math implementation on max.dyachenko (at) gmail.com?</p>
+<p>Thanks!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=398#respond' data-commentid="398" data-postid="345" data-belowelement="comment-398" data-respondelement="respond" data-replyto="Reply to Maksym Diachenko" aria-label='Reply to Maksym Diachenko'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-399">
+		<div id="comment-399">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/db2a23144d0466e962f12eee5a6108af?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/db2a23144d0466e962f12eee5a6108af?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://moultano.blogspot.com' rel='external nofollow ugc' class='url'>Ryan Moulton</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-399">
+					May 24, 2010 at 8:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The one part of this that confuses me is the variogram. Does it learn the spatial dependence of  two separated samples just based on the control points you&#8217;ve already placed? I feel like I&#8217;m missing something there.</p>
+<p>Seems like something like compressed sensing / basis pursuit could work pretty well too. <a href="http://en.wikipedia.org/wiki/Compressed_sensing" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://en.wikipedia.org/wiki/Compressed_sensing', 'http://en.wikipedia.org/wiki/Compressed_sensing']);" rel="nofollow ugc">http://en.wikipedia.org/wiki/Compressed_sensing</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=399#respond' data-commentid="399" data-postid="345" data-belowelement="comment-399" data-respondelement="respond" data-replyto="Reply to Ryan Moulton" aria-label='Reply to Ryan Moulton'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-400">
+		<div id="comment-400">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-400">
+					May 24, 2010 at 8:50 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The variogram doesn&#8217;t talk about the samples you are solving for at all.  It is basically just a big matrix of correlations between the height values of the control points, where each correlation is just defined to be some function of distance that is tweaked in the way you desire.  You invert that matrix; then the B vector that you multiply through is the correlations of the control points with the sample point that you want to solve for.  This is a system of linear equations, the solution to which is a set of weights for each control point.</p>
+<p>So when you are solving for one specific sample point of the terrain, you only think about that sample point and the control points; you don&#8217;t think about any other sample points.  (This is a little different from the geostatistics way of thinking about it, where the control points are some of the sample points.)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=400#respond' data-commentid="400" data-postid="345" data-belowelement="comment-400" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-401">
+		<div id="comment-401">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/818afd392503485d8322030c8b611cf9?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/818afd392503485d8322030c8b611cf9?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.spikysnail.com' rel='external nofollow ugc' class='url'>Niv Fisher</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-401">
+					May 24, 2010 at 8:56 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Great post!<br />
+Always nice to see work from other fields put to use. Actually, I&#8217;m sure I&#8217;ll find use for this method, which is basically a structure-less control point interpolation.</p>
+<p>I still haven&#8217;t dug into the Kriging algorithm and obviously have no idea how your terrain system works, But I do have one comment/suggestion regarding &#8216;compact support&#8217; you mentioned: </p>
+<p>Did you try interpolating surfaces instead of weights?<br />
+What I mean is, you could generate one Kriging matrix for each of the terrain blocks containing the control points from that block and extending into adjacent blocks  (you can make the overlap as big as you like by increasing the radius of interest).</p>
+<p>When trying to evaluate the height of a sample you need to sample each &#8216;Kriging surface&#8217; that covers your sample and interpolate between the different surface results. Just need to figure out the weight for each surface which shouldn&#8217;t be difficult. If anything that should assure continuity.</p>
+<p>If you have an overlap of 1/2 a terrain block (choose r = grid_block_size * 1.5) you could be done with just sampling 4 surfaces. On the down side, you might loose some local support away from the grid block centers &#8211; but with an overlap of a full terrain block you still get just 9 samples which should still be pretty fast and practically quite accurate.</p>
+<p>Anyway thanks for all that info, cool stuff!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=401#respond' data-commentid="401" data-postid="345" data-belowelement="comment-401" data-respondelement="respond" data-replyto="Reply to Niv Fisher" aria-label='Reply to Niv Fisher'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-2" id="li-comment-729196">
+		<div id="comment-729196">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/60752542382cabf89b22f68cbc3c11b9?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/60752542382cabf89b22f68cbc3c11b9?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://technomagi.com/josh/' rel='external nofollow ugc' class='url'>Josh Levenberg</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-729196">
+					April 26, 2013 at 1:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Interpolating surfaces suffers from the &#8220;Prussian helmet eﬀect&#8221;.  See:</p>
+<p>Robin Sibson. A brief description of natural neighbour interpolation. In Vic Barnett, editor,<br />
+Interpreting Multivariate Data, chapter 2, pages 21–36. John Wiley &amp; Sons, 1981.</p>
+<p>which also gives a good interpolation scheme for scattered data (based on Voronoi diagrams), assuming you have some way of estimating the tangent plane at your data samples.  And once you have the tangent planes, the interpolant is very local.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=729196#respond' data-commentid="729196" data-postid="345" data-belowelement="comment-729196" data-respondelement="respond" data-replyto="Reply to Josh Levenberg" aria-label='Reply to Josh Levenberg'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-729204">
+		<div id="comment-729204">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/60752542382cabf89b22f68cbc3c11b9?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/60752542382cabf89b22f68cbc3c11b9?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://technomagi.com/josh/' rel='external nofollow ugc' class='url'>Josh Levenberg</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-729204">
+					April 26, 2013 at 1:52 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I see others have mentioned natural neighbour interpolation below.  You can see a picture of the Prussian helmet effect on page 109 of <a href="http://technomagi.com/josh/math/phd.pdf" onclick="_gaq.push(['_trackEvent','download','http://technomagi.com/josh/math/phd.pdf']);" rel="nofollow ugc">http://technomagi.com/josh/math/phd.pdf</a> .</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=729204#respond' data-commentid="729204" data-postid="345" data-belowelement="comment-729204" data-respondelement="respond" data-replyto="Reply to Josh Levenberg" aria-label='Reply to Josh Levenberg'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-402">
+		<div id="comment-402">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/85df14573083ee37c1aeafa562e6dd40?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/85df14573083ee37c1aeafa562e6dd40?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">tomat</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-402">
+					May 24, 2010 at 8:59 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Pretty cool and this way you could not only rotate but even do scale and uniform scale too. For example to do a narrow hill passage wider.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=402#respond' data-commentid="402" data-postid="345" data-belowelement="comment-402" data-respondelement="respond" data-replyto="Reply to tomat" aria-label='Reply to tomat'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-404">
+		<div id="comment-404">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/fce1fc37203a97586da8dc80d66aafad?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/fce1fc37203a97586da8dc80d66aafad?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://playtechs.blogspot.com' rel='external nofollow ugc' class='url'>James McNeill</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-404">
+					May 24, 2010 at 2:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Natural neighbor interpolation might be worth consideration as an alternative to Kriging:</p>
+<p><a href="http://en.wikipedia.org/wiki/Natural_neighbor" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://en.wikipedia.org/wiki/Natural_neighbor', 'http://en.wikipedia.org/wiki/Natural_neighbor']);" rel="nofollow ugc">http://en.wikipedia.org/wiki/Natural_neighbor</a></p>
+<p>The basic idea is to build a Voronoi diagram of the control points. Then, for each sample point on the height field grid, you pretend you&#8217;re inserting it into the Voronoi diagram. The sample point is a weighted sum of the control points from which it would have stolen area; the weight for each control point is how much area it&#8217;s contributed to the new Voronoi region.</p>
+<p>This algorithm has local support built in so updates could be made fairly efficient. The surface is smooth everywhere except at the control points. It works well with anisotropic sample data; for instance, if you have sampled the terrain in long strips of data points, i.e. Mars orbiters:</p>
+<p><a href="http://pirlwww.lpl.arizona.edu/~abramovo/MOLA_interpolation/interpolation.html" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://pirlwww.lpl.arizona.edu/~abramovo/MOLA_interpolation/interpolation.html', 'http://pirlwww.lpl.arizona.edu/~abramovo/MOLA_interpolation/interpolation.html']);" rel="nofollow ugc">http://pirlwww.lpl.arizona.edu/~abramovo/MOLA_interpolation/interpolation.html</a></p>
+<p>I initially encountered natural neighbor interpolation years ago via Dave Watson, a professor at an Australian university. Unfortunately he seems to have dropped off of the web. I remember he had a modification to this algorithm where you could estimate (or define) normals at the control points and add those into the interpolation to get rid of slope discontinuities there.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=404#respond' data-commentid="404" data-postid="345" data-belowelement="comment-404" data-respondelement="respond" data-replyto="Reply to James McNeill" aria-label='Reply to James McNeill'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-405">
+		<div id="comment-405">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/ea5767e5421dd38b96bb3fc7a0b0060b?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/ea5767e5421dd38b96bb3fc7a0b0060b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Marc</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-405">
+					May 24, 2010 at 4:05 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m probably missing something here, but why not sum the points instead of blending between them? It might make the behavior a bit harder to control, because you&#8217;re not interpolating control points anymore, but since you can display the result exactly, does it matter? Basically each point would would be a smooth peak that you&#8217;re adding to the height of the terrain. You could still rotate a group of points. Most importantly, you could throw away the whole Kriging thing. It&#8217;s much less cool though. Another idea would be to arbitrarily group control points together, Kringe them, then sum the results. You will need to group points together by game area though, and the boundaries will be harder to control, so that may not be such a good idea.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=405#respond' data-commentid="405" data-postid="345" data-belowelement="comment-405" data-respondelement="respond" data-replyto="Reply to Marc" aria-label='Reply to Marc'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-407">
+		<div id="comment-407">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-407">
+					May 24, 2010 at 6:00 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Niv: If you decide to interpolate surfaces then you immediately lose what to me is one of the most valuable properties, which is that control points are interpolated exactly.  If you want the terrain to go through a certain point, you just mark that point&#8230; that is huge in terms of modeling ability.</p>
+<p>James: Interesting, but I worry about the idea for this kind of application.  If you are inserting your samples into a Voronoi diagram, then you are always interpolating between only very-close neighbors.  In cases where you are interpolating on a triangle or near-triangle (which are pretty common in Voronoi diagrams), you are going to just be linearly interpolating between 3 points, i.e. making a flat plane.  So the result would exhibit hard facets very often.  I think the estimation-of-normals you are talking about would be key in eliminating that problem&#8230; Certainly though, this method would be a lot faster than what I am doing, and if the smoothing makes it usable, that would be cool.</p>
+<p>Marc: As I mentioned, I want to interpolate points.  I don&#8217;t want to treat each point as an individual summed Gaussian or whatever that moves around, because that would be unmanageable, and it&#8217;s very difficult in that kind of scheme to get smooth surfaces of the shape you want without endlessly tweaking the widths and heights of neighbor points&#8230; and then if you want to make a small change, say hello to more endless tweaking.  No good.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=407#respond' data-commentid="407" data-postid="345" data-belowelement="comment-407" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-408">
+		<div id="comment-408">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-408">
+					May 24, 2010 at 6:34 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>(Thinking about it more, one property that you would inevitably lose in Natural Neighbor Inerpolation is the ability to add control points without changing the surface&#8230; for example, if there is a quad in the Voronoi diagram, and you add a control point interior to it such that the new point makes a triangle with two of the quad&#8217;s corners, all the curvature inside that triangle is going to disappear.  Unless again there is some smoothing going on, but then the question is, what are the properties of the smoothing and are they invariant under the insertion of control points?)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=408#respond' data-commentid="408" data-postid="345" data-belowelement="comment-408" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-422">
+		<div id="comment-422">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zaphos</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-422">
+					May 28, 2010 at 6:44 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This sounds a lot like a 2d version of using radial basis functions for modeling &#8212; like James  O&#8217;Brien and Greg Turk&#8217;s &#8220;Modelling with Implicit Surfaces that Interpolate&#8221;?</p>
+<p>To speed it up, I think for RBFs with global support people have used the Fast Multipole Method to do faster solvers.  Alternatively, for compact support interpolating implicits, perhaps check out the &#8220;Multi-level Partition of Unity Implicits&#8221; paper?</p>
+<p>How many control points do you use for your whole world?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=422#respond' data-commentid="422" data-postid="345" data-belowelement="comment-422" data-respondelement="respond" data-replyto="Reply to Zaphos" aria-label='Reply to Zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-425">
+		<div id="comment-425">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-425">
+					May 28, 2010 at 7:10 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I don&#8217;t actually know how many control points are in the world right now.  But it wouldn&#8217;t make sense to count yet, since it is a lot less detailed than it will be eventually, and that means there are going to be many more control points.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=425#respond' data-commentid="425" data-postid="345" data-belowelement="comment-425" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-430">
+		<div id="comment-430">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Reginald</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-430">
+					May 29, 2010 at 7:36 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Will the Witness ship with the in-game editor, the way that Braid did ?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=430#respond' data-commentid="430" data-postid="345" data-belowelement="comment-430" data-respondelement="respond" data-replyto="Reply to Reginald" aria-label='Reply to Reginald'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-431">
+		<div id="comment-431">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-431">
+					May 30, 2010 at 6:39 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It&#8217;s unlikely.  It would be very difficult to add meaningful content (due to the way the gameplay works).  </p>
+<p>On top of this, not very many people used the Braid editor.  This may be largely due to the fact that it is not explicitly called out in-game, with  a menu option or something.  But, in order to promote an editor as a feature at that level it has to have way, way more work put into it than made sense at that time.  I would expect the same thing to be true for The Witness.  </p>
+<p>My current thinking on this is, if your game is designed around user-made content, then it totally makes sense to make the editor great and expose it in a high-profile way.  Otherwise, it doesn&#8217;t make sense, because the number of people who will use such an editor is not very high, and pragmatically speaking, you can add more to the world / create more interesting times for more people just by working on the next game.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=431#respond' data-commentid="431" data-postid="345" data-belowelement="comment-431" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-455">
+		<div id="comment-455">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-455">
+					June 3, 2010 at 4:11 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>An update on this&#8230;</p>
+<p>I was working out a more-formalized way to get compact support in kriging.  But even when I did it the supposedly right way, I still saw some artifacts.  Researching why led me to the following complaint by Philip and Watson:</p>
+<p><a href="http://www.springerlink.com/content/kh71041n26070768/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.springerlink.com/content/kh71041n26070768/', 'http://www.springerlink.com/content/kh71041n26070768/']);" rel="nofollow ugc">http://www.springerlink.com/content/kh71041n26070768/</a></p>
+<p>(Watson is the very same David Watson mentioned in these comments by James McNeill).  This referred to another paper that shows discontinuities that happen with kriging:</p>
+<p><a href="http://www.springerlink.com/content/r73v34635g6m1718/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.springerlink.com/content/r73v34635g6m1718/', 'http://www.springerlink.com/content/r73v34635g6m1718/']);" rel="nofollow ugc">http://www.springerlink.com/content/r73v34635g6m1718/</a></p>
+<p>Which looks exactly like the artifacts that I get when I don&#8217;t try to mitigate them, so I know that my kriging code is working properly and that we are on the same page.</p>
+<p>This complaint and other follow-up paper were encouraging the use of Natural Neighbor Interpolation as a way of solving these problems, so I decided to try it.</p>
+<p>With some searching I found  Pavel Sakov&#8217;s nn library for Natural Neighbor Interpolation:  <a href="http://code.google.com/p/nn-c/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://code.google.com/p/nn-c/', 'http://code.google.com/p/nn-c/']);" rel="nofollow ugc">http://code.google.com/p/nn-c/</a></p>
+<p>I got this integrated into the game and working fairly quickly.  The results are better than I postulated earlier in this thread (indeed, triangles are not quite faceted, I didn&#8217;t understand the algorithm so well when posting that comment).  However, while not quite faceted, the shapes generated by natural neighbor interpolation are not so natural, at least for a sparse set of sample points. The results from kriging look a lot better with many fewer sample points.  So now I am back to kriging and working on ways of minimizing the artifacts and speeding it up.   Seeking some outside help from experienced geostaticians in this area.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=455#respond' data-commentid="455" data-postid="345" data-belowelement="comment-455" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-459">
+		<div id="comment-459">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/30ff55e517bf0f9882d67546d1efb97c?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/30ff55e517bf0f9882d67546d1efb97c?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">T-82</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-459">
+					June 4, 2010 at 8:21 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m assuming you wouldn&#8217;t be using this technic if the PS3 couldn&#8217;t handle it, right?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=459#respond' data-commentid="459" data-postid="345" data-belowelement="comment-459" data-respondelement="respond" data-replyto="Reply to T-82" aria-label='Reply to T-82'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-460">
+		<div id="comment-460">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-460">
+					June 5, 2010 at 2:02 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>None of the kriging happens at runtime, so it doesn&#8217;t matter.</p>
+<p>In general, though, I care more about the game than about what platforms it is coming out on.  So if we needed to do something for the game to reach its full potential, and that thing doesn&#8217;t work on some specific platform, then the answer is probably just not to release on that platform (or else to release an inferior version on that platform).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=460#respond' data-commentid="460" data-postid="345" data-belowelement="comment-460" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-473">
+		<div id="comment-473">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zaphos</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-473">
+					June 8, 2010 at 4:49 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Do you know if Watson&#8217;s complaints about C1 continuity for Kriging apply to all compactly supported RBF interpolation methods in general?  I thought some compact support RBF interpolation methods could guarantee smoothness &#8230;</p>
+<p>Also, have you considered solving a discretized version of the problem?  Often when I&#8217;ve seen people implement thin plate splines for shape modeling (which are essentially the same problem as this I think?), instead of solving for the function weights directly they turn it into a finite difference or finite element problem and solve for the vertex positions that way.  It ends up giving a giant sparse matrix (one equation per free vertex), instead of a smaller dense matrix, but since sparse solvers scale much better it can turn out to be faster depending on the problem.  Also, as long as the constraints don&#8217;t change too rapidly during editing, you can get a speed boost by reusing previous solutions (or previous factorizations, for sparse direct solvers).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=473#respond' data-commentid="473" data-postid="345" data-belowelement="comment-473" data-respondelement="respond" data-replyto="Reply to Zaphos" aria-label='Reply to Zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-474">
+		<div id="comment-474">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-474">
+					June 8, 2010 at 7:26 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I really have no idea about the continuity issue.  About sparse vs dense, one of the first papers I read suggested going the sparse route in order to ensure continuity &#8212; in that case, you just have every control point in the matrix all the time, but most of them are diagonal elements (no effect on the result).  What this means in terms of real, practical speed, I have no idea.  Part of the problem is that the attractiveness of various solutions will surely change depending on how many control points there are, and as I&#8217;ve mentioned, there aren&#8217;t so many yet.</p>
+<p>In general, though, anything that tries to re-use prior solutions, etc, etc, I don&#8217;t have patience for at the current time &#8212; it is way too easy to rathole on tech (as discussed in the comments, the shadow map memory savings thing is sort of that, though it might help on consoles).  To have any prayer of shipping a game any time soon, we just have to do the simplest things possible wherever possible.</p>
+<p>Of course sometimes it turns out that you need to do a lot of work in order to establish basic functionality.  If that turns out to be true, then in this case I probably would pursue it, because this way of modeling terrain really is the right thing for this game.  So, we&#8217;ll see&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=474#respond' data-commentid="474" data-postid="345" data-belowelement="comment-474" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-490">
+		<div id="comment-490">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zaphos</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-490">
+					June 14, 2010 at 6:19 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I looked in to the compact support RBF methods I was wondering about, and it looks like they guarantee smoothness only within a thin area around the control points, which is useful for designing a level set function but probably not helpful when making a height field.  Oops.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=490#respond' data-commentid="490" data-postid="345" data-belowelement="comment-490" data-respondelement="respond" data-replyto="Reply to Zaphos" aria-label='Reply to Zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-493">
+		<div id="comment-493">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.eecs.berkeley.edu/~jima/rbf_heights/applet/' rel='external nofollow ugc' class='url'>Zaphos</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-493">
+					June 16, 2010 at 8:55 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hmm, actually, after implementing Wendland&#8217;s compact RBF, it does look like it&#8217;s smooth everywhere in practice (though it does fall to zero when there are no near-enough control points, of course).  I made a processing applet to play around with it and posted it on the mollyrocket forums, if you want to try it out.  I&#8217;ll put a link to the applet as my website, too. Note in the applet you need to press r a few times to switch it to the Wendland rbf (it defaults to the thin plate spline) and perhaps press t once to turn off the polynomial term.</p>
+<p>Could you give some more detail re what the artifacts you see with compact support are?  I&#8217;m curious to see if my applet has the same issues or not.  (Unfortunately the springerlink papers seem to be behind a paywall &#8230;)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=493#respond' data-commentid="493" data-postid="345" data-belowelement="comment-493" data-respondelement="respond" data-replyto="Reply to Zaphos" aria-label='Reply to Zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-511">
+		<div id="comment-511">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/eccf88ec8ef8f026cb15f9deaab7d9b1?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/eccf88ec8ef8f026cb15f9deaab7d9b1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Torsten Giebl</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-511">
+					June 28, 2010 at 4:02 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Do you use any official GUI Toolkit for your own<br />
+designed tools or did you create your own<br />
+GUI functions ?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=511#respond' data-commentid="511" data-postid="345" data-belowelement="comment-511" data-respondelement="respond" data-replyto="Reply to Torsten Giebl" aria-label='Reply to Torsten Giebl'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-514">
+		<div id="comment-514">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-514">
+					June 28, 2010 at 7:07 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It&#8217;s our own code based on IMGUI principles.  GUI toolkits tend to all subscribe to the same retained-mode philosophy one way or the other, and require way too much work for what they actually get done.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=514#respond' data-commentid="514" data-postid="345" data-belowelement="comment-514" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-526">
+		<div id="comment-526">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/894ea233d9ec21f884b29096ea7849a1?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/894ea233d9ec21f884b29096ea7849a1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.rachelslabnotes.com' rel='external nofollow ugc' class='url'>Rachel Blum</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-526">
+					July 7, 2010 at 7:43 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The interesting question is, can you take a known heightfield and generate kriging control points with a minimal error for a given number of points&#8230;</p>
+<p>Then you could pick up random areas of terrain and move them/rotate them, apply the changes back to the terrain, and be done with the control surfaces. Looking up &#8220;inverse kriging&#8221; brings at least one promising hit&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=526#respond' data-commentid="526" data-postid="345" data-belowelement="comment-526" data-respondelement="respond" data-replyto="Reply to Rachel Blum" aria-label='Reply to Rachel Blum'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-527">
+		<div id="comment-527">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-527">
+					July 7, 2010 at 10:43 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Well, here&#8217;s the thing.  Because the height field is a regular grid, any rotation or non-quantized translation is going to destroy information.  So this is a lossy process, which means you actually want the control surfaces to stick around so that they contain the information in a clean form; otherwise, things will degrade slowly as you keep performing these operations on them.</p>
+<p>However, the idea still does have applicability here; if one wanted to use some other kind of tool to sculpt a local area, it would then be interesting to apply a find-the-kriging-weights system to that in order to generalize it.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=527#respond' data-commentid="527" data-postid="345" data-belowelement="comment-527" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-2169">
+		<div id="comment-2169">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/996ad91d8a1bad11c5f0d930a777f4cb?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/996ad91d8a1bad11c5f0d930a777f4cb?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.paceholder.ru' rel='external nofollow ugc' class='url'>paceholder</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-2169">
+					January 3, 2011 at 2:42 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Could you give me some advice on smooth embedding kriged surface into the base one?</p>
+<p>I used both kriging and RBF in my application, but still have problems with local update of the surface.</p>
+<p>I have tried to build some polygone around the updating region. Then I built so-called smoothin zones where I lineary smoothed base surface and new one. But this approach gives some artifacts.</p>
+<p>You can see small pdf document with description of my method: <a href="http://ubuntuone.com/p/WVc/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://ubuntuone.com/p/WVc/', 'http://ubuntuone.com/p/WVc/']);" rel="nofollow ugc">http://ubuntuone.com/p/WVc/</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=2169#respond' data-commentid="2169" data-postid="345" data-belowelement="comment-2169" data-respondelement="respond" data-replyto="Reply to paceholder" aria-label='Reply to paceholder'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-2170">
+		<div id="comment-2170">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-2170">
+					January 3, 2011 at 4:43 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Well, my system doesn&#8217;t work that way.  There isn&#8217;t a &#8220;base surface&#8221; into which things are being smoothed.  The terrain surface is determined entirely by kriging the various data points; the only difference at any time is which points are being considered.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=2170#respond' data-commentid="2170" data-postid="345" data-belowelement="comment-2170" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-2171">
+		<div id="comment-2171">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">zaphos</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-2171">
+					January 3, 2011 at 8:14 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@paceholder &#8212; just looking at your pdf, I can&#8217;t really tell what the artifacts are &#8230; but if the artifacts you&#8217;re seeing are related to the self-intersections in your smoothing-zone polygons, you could try using a different technique to build the smoothing zone? For example the &#8220;straight skeleton&#8221; can give you a nice offset curve that doesn&#8217;t fold back on itself.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=2171#respond' data-commentid="2171" data-postid="345" data-belowelement="comment-2171" data-respondelement="respond" data-replyto="Reply to zaphos" aria-label='Reply to zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-28216">
+		<div id="comment-28216">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/358e9fce142e31ed20c8a92e96f80402?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/358e9fce142e31ed20c8a92e96f80402?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Dan Pool</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-28216">
+					August 29, 2012 at 12:55 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Jonathan,</p>
+<p>I&#8217;m developing a system which will use the Kriging method for displaying data.  I would be interested in the code you referred to above.  I&#8217;ve not been able to find any working implementations other than a mathcad library, so if you know of any other existing code (the universities code that you reference above, for example),  I would be interested in looking at that, too.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=28216#respond' data-commentid="28216" data-postid="345" data-belowelement="comment-28216" data-respondelement="respond" data-replyto="Reply to Dan Pool" aria-label='Reply to Dan Pool'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3794732">
+		<div id="comment-3794732">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1aa73500226b726a15dacef788029075?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1aa73500226b726a15dacef788029075?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Erik</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-3794732">
+					April 2, 2014 at 11:02 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I read the whole article, but not all of the comments; hopefully what I say is not irrelevant. </p>
+<p>The problem you reached was a result of trying to multiply by zero&#8230;.what if instead of clamping the weights between [0, 1], have them asymptotically approach zero? That&#8217;s the first thing that popped into my head.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=3794732#respond' data-commentid="3794732" data-postid="345" data-belowelement="comment-3794732" data-respondelement="respond" data-replyto="Reply to Erik" aria-label='Reply to Erik'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-4527035">
+		<div id="comment-4527035">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/17c4e947af7040815cc81f45c7e12107?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/17c4e947af7040815cc81f45c7e12107?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.weefreestudio.com' rel='external nofollow ugc' class='url'>Michiel</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-4527035">
+					May 20, 2014 at 9:06 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Jonathan, if you&#8217;re still willing to send out a copy of the code, I&#8217;d be interested! Hoping to get away with inverse distance weighting for some interpolation I&#8217;ll have to do, but it looks like kriging would give better results, and I&#8217;d love to take a look at a working implementation to crib from.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=4527035#respond' data-commentid="4527035" data-postid="345" data-belowelement="comment-4527035" data-respondelement="respond" data-replyto="Reply to Michiel" aria-label='Reply to Michiel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8675014">
+		<div id="comment-8675014">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/745dc18bee5b3ce0b6aa8f3880c4561c?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/745dc18bee5b3ce0b6aa8f3880c4561c?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jay</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-8675014">
+					October 21, 2016 at 1:18 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I think I may have identified your block continuity problem, and the solution should be pretty simple.</p>
+<p>Like you said, zeroing a row of the matrix makes it rank-deficient. However, a valid &#8216;variogram matrix&#8217; (and it&#8217;s inverse) is symmetric, so if a row is zero, the corresponding column must also be zero, in which case it is still pseudo-invertible (as if lower rank).</p>
+<p>With that in mind, consider that even if a control point&#8217;s immediate influence doesn&#8217;t reach a given terrain block, it will reach other control points in the block&#8217;s vicinity, and so the matrix will have nonzero elements somewhere along the row and column of that seemingly-cullable distant control point.</p>
+<p>If all that is correct, the solution would be to include in the matrix for a terrain block all control points within r1 of any control point within r1 of the block (i.e. the neighborhood of the neighborhood).</p>
+<p>(First make sure that the compact support factor is included when calculating the matrix, not just applied to the final weight vector. I assume it was, but that wasn&#8217;t clear from the article.)</p>
+<p>A quick test, assuming you have the means to compute pseudo-inverse instead of strict inverse, would be to expand the cull radius to &#8216;2*r1&#8217; instead of &#8216;r1&#8217; (some null rows/columns might result).</p>
+<p>Sorry I&#8217;m very late to the convo, but stumbled in while investigating similar things and thought that might be worth sharing.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=8675014#respond' data-commentid="8675014" data-postid="345" data-belowelement="comment-8675014" data-respondelement="respond" data-replyto="Reply to Jay" aria-label='Reply to Jay'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-8675020">
+		<div id="comment-8675020">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/745dc18bee5b3ce0b6aa8f3880c4561c?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/745dc18bee5b3ce0b6aa8f3880c4561c?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jay</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/05/kriging-is-cool/#comment-8675020">
+					October 21, 2016 at 2:00 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Upon further inspection I realized that the pseudo-inverse stuff is irrelevant because the matrix diagonal will always be nonzero. It should always be invertible, even with the compact support factor cooked in the matrix (which is crucial).<br />
+The upshot is that the outlined solution should be easier to verify.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/05/kriging-is-cool/?replytocom=8675020#respond' data-commentid="8675020" data-postid="345" data-belowelement="comment-8675020" data-respondelement="respond" data-replyto="Reply to Jay" aria-label='Reply to Jay'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2010/05/kriging-is-cool/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='345' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="3d03c00d52" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="48"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' id='photocrati_ajax-js-extra'>
+/* <![CDATA[ */
+var photocrati_ajax = {"url":"http:\/\/the-witness.net\/news\/?photocrati_ajax=1","wp_home_url":"http:\/\/the-witness.net\/news","wp_site_url":"http:\/\/the-witness.net\/news","wp_root_url":"http:\/\/the-witness.net\/news","wp_plugins_url":"http:\/\/the-witness.net\/news\/wp-content\/plugins","wp_content_url":"http:\/\/the-witness.net\/news\/wp-content","wp_includes_url":"http:\/\/the-witness.net\/news\/wp-includes\/","ngg_param_slug":"nggallery"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/ajax/static/ajax.min.js?ver=2.1.31' id='photocrati_ajax-js'></script>
+<script type='text/javascript' id='ngg_common-js-extra'>
+/* <![CDATA[ */
+
+var galleries = {};
+galleries.gallery_14b67f7d8cce79794931c0b3b61d11be = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["75"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"14b67f7d8cce79794931c0b3b61d11be"};
+galleries.gallery_14b67f7d8cce79794931c0b3b61d11be.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_dc4d5ad918bd57619715f68f3c0f3eea = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["80"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"dc4d5ad918bd57619715f68f3c0f3eea"};
+galleries.gallery_dc4d5ad918bd57619715f68f3c0f3eea.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_ff93f8fb278857fb8e0b8c374f0aefce = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["81"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"ff93f8fb278857fb8e0b8c374f0aefce"};
+galleries.gallery_ff93f8fb278857fb8e0b8c374f0aefce.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_6bb4ebb19da728f9e0b57e7acdd5babf = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["82"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"6bb4ebb19da728f9e0b57e7acdd5babf"};
+galleries.gallery_6bb4ebb19da728f9e0b57e7acdd5babf.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_ee2670ea726c811eb3a7131851be8cd8 = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["83"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"ee2670ea726c811eb3a7131851be8cd8"};
+galleries.gallery_ee2670ea726c811eb3a7131851be8cd8.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_e6e1f8b5de3183c73c5f0140be290b53 = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["84"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"e6e1f8b5de3183c73c5f0140be290b53"};
+galleries.gallery_e6e1f8b5de3183c73c5f0140be290b53.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_7fab1ee19d3e1e7c3dd7e389d51de924 = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["85"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"7fab1ee19d3e1e7c3dd7e389d51de924"};
+galleries.gallery_7fab1ee19d3e1e7c3dd7e389d51de924.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_33612225a654800db158e41052bf618d = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["86"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"33612225a654800db158e41052bf618d"};
+galleries.gallery_33612225a654800db158e41052bf618d.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_6085372825872410e00671b76d011f8e = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["87"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"6085372825872410e00671b76d011f8e"};
+galleries.gallery_6085372825872410e00671b76d011f8e.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_4d0e11771358a99831c049424525676c = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["76"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"4d0e11771358a99831c049424525676c"};
+galleries.gallery_4d0e11771358a99831c049424525676c.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_ee9e9339400e0523a1925bc8fa03e8df = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["77"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"ee9e9339400e0523a1925bc8fa03e8df"};
+galleries.gallery_ee9e9339400e0523a1925bc8fa03e8df.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_88be361d595a96308c8c440c184ed572 = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["78"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"88be361d595a96308c8c440c184ed572"};
+galleries.gallery_88be361d595a96308c8c440c184ed572.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+galleries.gallery_1e2ebfcea120e23ecfd1a2d82537e8a6 = {"id":null,"source":"galleries","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["79"],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"width":"","height":"","link":"","link_target":"_blank","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","w":"400","h":"300"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"1e2ebfcea120e23ecfd1a2d82537e8a6"};
+galleries.gallery_1e2ebfcea120e23ecfd1a2d82537e8a6.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/05\/kriging-is-cool\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/common.min.js?ver=2.1.31' id='ngg_common-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/lightbox_context.min.js?ver=2.1.31' id='ngg_lightbox_context-js'></script>
+<script type='text/javascript' id='shutter-0-js-extra'>
+/* <![CDATA[ */
+
+nextgen_shutter_i18n = {"msgLoading":"L O A D I N G","msgClose":"Click to Close"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/shutter/shutter.min.js?ver=2.1.31' id='shutter-0-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/shutter/nextgen_shutter.min.js?ver=2.1.31' id='shutter-1-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.298 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:41:16 -->
+
+<!-- super cache -->

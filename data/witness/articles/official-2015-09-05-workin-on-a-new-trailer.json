@@ -1,0 +1,38 @@
+{
+  "id": "official-2015-09-05-workin-on-a-new-trailer",
+  "title": { "zh": "在做一部新预告片。", "en": "Workin’ on a new trailer." },
+  "subtitle": {
+    "en": "Stills from the new trailer we are putting together, using non-final footage.",
+    "zh": "新预告片的几张静帧——用的还是非最终素材。"
+  },
+  "translator": {
+    "note": "原文 3 张图排在同一行，保留为一个占位段落；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This week we have been working on a new trailer that we hope to release before too long.",
+      "zh": "这周我们一直在做一部新预告片，希望不用太久就能放出来。"
+    },
+    {
+      "type": "p",
+      "en": "It will not only show the game in a further state of visual development than the previous trailer (which is two and a half years old now -- wow!), it'll also show lots of scenes you probably haven't seen before.",
+      "zh": "它不仅会展示比上一部预告片（那已经是两年半前的东西了——哇！）在美术开发上更进一步的状态，还会展示很多你大概没见过的场景。"
+    },
+    {
+      "type": "p",
+      "en": "The trailer isn't done yet, but here are a few stills:",
+      "zh": "预告片还没做完，但这里先放几张静帧："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/09/vlcsnap-2015-09-05-18h56m05s251.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/09/vlcsnap-2015-09-05-18h57m01s238.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/09/vlcsnap-2015-09-05-18h58m26s420.png)",
+      "zh": "（原文此处有 3 张图）"
+    },
+    {
+      "type": "p",
+      "en": "Ignore the debug text in the upper-right (including the frame rate; these were taken on a monitor that's locked at 30Hz; the game runs much faster on higher-end PCs.) Also, the actual trailer will be produced at much sharper image quality and higher resolution. These are just snippets of the non-final footage we are using to figure out the composition and flow of the trailer.",
+      "zh": "请忽略右上角的调试文字（包括帧率；这些是在一台锁在 30Hz 的显示器上截的，游戏在高配 PC 上跑起来快得多。）另外，真正的预告片会以清晰得多的画质和更高的分辨率制作。这些只是我们用来琢磨预告片构图与节奏的非最终素材片段。"
+    }
+  ]
+}

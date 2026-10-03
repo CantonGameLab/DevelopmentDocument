@@ -1,0 +1,40 @@
+{
+  "id": "official-2015-09-17-new-trailer-and-interviews",
+  "title": { "zh": "新预告片和采访！", "en": "New trailer and interviews!" },
+  "subtitle": {
+    "en": "A new trailer, plus a roundup of interviews and previews of the game.",
+    "zh": "一支新预告片，外加一批关于这款游戏的采访与前瞻。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Hey look! A new trailer!",
+      "zh": "快看！新预告片！"
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/SPMMKFX78x0?feature=oembed)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "[Here's my update on the PlayStation Blog](http://t.co/K4ynW5n35d).",
+      "zh": "[我在 PlayStation Blog 上的更新在这里](http://t.co/K4ynW5n35d)。"
+    },
+    {
+      "type": "p",
+      "en": "Also, we have some interviews and previews of the game:",
+      "zh": "另外，还有一些关于这款游戏的采访和前瞻："
+    },
+    {
+      "type": "p",
+      "en": "[Gamespot](http://t.co/mhw3Yex11e) [Ars Technica](http://t.co/TDEwGb9Fxx)[Polygon](http://t.co/B5gPE2Qj0b)[Wired](http://t.co/1h1goJqogC)[PlayStation Blog](http://blog.us.playstation.com/2015/09/21/the-witness-inside-one-of-2016s-most-important-games-2/)",
+      "zh": "[Gamespot](http://t.co/mhw3Yex11e) [Ars Technica](http://t.co/TDEwGb9Fxx)[Polygon](http://t.co/B5gPE2Qj0b)[Wired](http://t.co/1h1goJqogC)[PlayStation Blog](http://blog.us.playstation.com/2015/09/21/the-witness-inside-one-of-2016s-most-important-games-2/)"
+    },
+    {
+      "type": "p",
+      "en": "The PlayStation Blogcast had a [nice ten-minute discussion of the game](http://blog.us.playstation.com/2015/09/17/playstation-blogcast-180-witness-me/).",
+      "zh": "PlayStation Blogcast 用了[十分钟聊这款游戏](http://blog.us.playstation.com/2015/09/17/playstation-blogcast-180-witness-me/)，聊得不错。"
+    }
+  ]
+}

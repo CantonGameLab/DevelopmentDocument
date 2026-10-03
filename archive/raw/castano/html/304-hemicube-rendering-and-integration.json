@@ -1,0 +1,16 @@
+{
+  "id": 304,
+  "slug": "hemicube-rendering-and-integration",
+  "date": "2010-09-29T17:31:18",
+  "modified": "2019-01-17T23:41:29",
+  "link": "https://www.ludicon.com/castano/blog/2010/09/hemicube-rendering-and-integration/",
+  "title": "Hemicube Rendering and Integration",
+  "excerpt": "<p>I just posted another article about the global illumination solution that I implemented for The Witness, the second one in the series: The Witness &#8211; Hemicube Rendering and Integration, September 29, 2010 The Witness &#8211; Texture Parameterization, March 30, 2010</p>\n",
+  "content": "<p>I just posted another article about the global illumination solution that I implemented for <a href=\"http://the-witness.net/\">The Witness</a>, the second one in the series:</p>\n<ul>\n<li><a href=\"http://the-witness.net/news/?p=244\">The Witness &#8211; Hemicube Rendering and Integration</a>, September 29, 2010</li>\n<li><a href=\"http://the-witness.net/news/?p=120\">The Witness &#8211; Texture Parameterization</a>, March 30, 2010</li>\n</ul>\n",
+  "categories": [
+    9
+  ],
+  "tags": [
+    13
+  ]
+}

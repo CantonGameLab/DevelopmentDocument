@@ -1,0 +1,45 @@
+{
+  "id": "official-2015-02-20-thekla",
+  "title": { "zh": "Thekla！", "en": "Thekla!" },
+  "subtitle": {
+    "en": "A sunny Sunday spent reorganizing the office where The Witness is getting finished.",
+    "zh": "一个阳光明媚的周日，用来重新整理《The Witness》即将完工的地方——办公室。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last Sunday morning was exceptionally  beautiful and sunny, and so I decided to spend the day reorganizing the office.",
+      "zh": "上周日早上天气特别好，阳光明媚，所以我决定花一天时间重新整理办公室。"
+    },
+    {
+      "type": "p",
+      "en": "When we moved in two years ago, we just pulled things out of the moving boxes and shoved them here and there so we could get to work as quickly as possible, so the mess was only getting worse. We spend most of our waking lives here, so I thought it was worth a few hours to make it a more pleasant space. I moved some furniture around to create  a more convenient  place to test the ps4 build,  threw out a giant pile of old things,  put up some of  the decorations we made for the Play Station Experience booth, etc.",
+      "zh": "两年前搬进来的时候，我们只是把东西从搬家箱里掏出来，随手往各处一塞，好尽快开始干活，所以乱糟糟的状况只会越来越糟。我们醒着的大部分时间都待在这里，所以我觉得花几个小时把它弄成更舒服的空间是值得的。我挪动了一些家具，腾出一个更方便测试 PS4 版本的地方，扔掉了一大堆旧东西，把一些我们为 PlayStation Experience 展位做的装饰挂了起来，等等。"
+    },
+    {
+      "type": "p",
+      "en": "I figured I'd put up some pictures, so you guys can see where The Witness is getting finished (because it's getting finished, yo!):",
+      "zh": "我想那就放几张照片吧，让你们看看《The Witness》是在哪儿被做完的（因为它真的快做完了，哟！）："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/02/IMG_1811.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/02/IMG_1808.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/02/IMG_1809.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "You can use Oswin, a.k.a. The Witness Dog, for spatial reference.",
+      "zh": "你可以用 Oswin，也就是「The Witness 狗」，来作空间参照。"
+    }
+  ]
+}

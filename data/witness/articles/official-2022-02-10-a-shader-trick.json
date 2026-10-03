@@ -1,0 +1,74 @@
+{
+  "id": "official-2022-02-10-a-shader-trick",
+  "title": { "zh": "一个着色器小技巧", "en": "A Shader Trick" },
+  "subtitle": {
+    "en": "Keeping the time variable in shaders precise by resetting it at a power-of-ten second mark, and why the fog was snapping.",
+    "zh": "把着色器里的时间变量每 10 的整数次幂秒重置一次以保证精度，以及雾为什么会跳变。"
+  },
+  "translator": {
+    "note": "本篇是 Jon 把一封发给团队的邮件公开贴出，原文没有小标题，译文同样不设小标题；原文段落之间空了一到两个空行，译文按原样划为段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "*(I was sending an email today about a simple trick we use in the shader system, and it seemed easy and useful to share that email publicly, so, here you go!)*",
+      "zh": "*（今天我在写一封邮件，讲的是我们在着色器系统里用到的一个简单技巧；把这封邮件公开分享出来似乎又省事又有用，所以，拿去！）*"
+    },
+    {
+      "type": "p",
+      "en": "There's one other place where fog snaps right now, and that is in time -- it is probably pretty easy to fix, though the explanation might be a little unexpected so I am Ccing it to the team as a general knowledge transfer thing.",
+      "zh": "现在还有一个地方会出现雾的跳变，那就是在时间上——它大概很容易修，不过解释起来可能有点出人意料，所以我把它抄送给团队，当作一次通用的知识传递。"
+    },
+    {
+      "type": "p",
+      "en": "In general, with floating point numbers, there is a problem with loss of precision when you do computations involving large numbers added to small numbers; the small numbers tend to get dropped and go toward zero. This is a general thing about computers, not just graphics (it is the price we pay for being able to pretend we can store real numbers in small amounts of memory). Most of the time it's not an issue and programmers don't think about it, but there are some times when it can be an issue.",
+      "zh": "一般来说，浮点数在涉及「大数加小数」的运算里会有精度损失的问题；小数往往会被丢掉，向零的方向靠拢。这是计算机的普遍现象，不只是图形领域（这就是我们能假装用一小段内存存下实数的代价）。大多数时候它都不是问题，程序员也不会去想它，但有些时候它确实会变成问题。"
+    },
+    {
+      "type": "p",
+      "en": "In shaders, we often want to have a time variable, controlled by the CPU, that we can use to help generate effects. That time variable counts upward, maybe from the time the level started, or the time the game started. If that number is measured in seconds, then after 10 minutes it will be around 600, after 2 hours it will be 7200, etc. If someone leaves the game running for 3 days (a certification requirement on consoles!), it would get up over 250,000.",
+      "zh": "在着色器里，我们常常需要一个由 CPU 控制的时间变量，用来帮助生成各种效果。这个时间变量会不断往上增长，可能是从关卡开始时算起，也可能是从游戏启动时算起。如果这个数是以秒为单位的，那么 10 分钟后它大约是 600，2 小时后是 7200，等等。如果有人把游戏开着放了 3 天（这是主机认证的一项要求！），它就会涨到 250000 以上。"
+    },
+    {
+      "type": "p",
+      "en": "Those numbers don't seem super big, but at the same time, we also deal with numbers that are small. If the game is running at 60fps (which on PC these days is considered maybe a slow frame rate!), that's 0.017 seconds per frame, and we might be doing math that involves both this dt and the current time. At which point the ratio of the current time to the frame time is like 250,000 / (1/60) = 15 million. That is really very high and a recipe for all kinds of numerical problems you don't expect -- if you add the delta time to the current time, in a 32-bit float, the delta time is almost completely destroyed because there is not enough precision in the number. Long before this time, you'd start to see jitteriness in animation, things not matching up to where you'd expect them to be, etc.",
+      "zh": "这些数看起来不算特别大，但与此同时，我们也在和小数字打交道。如果游戏跑在 60fps（如今在 PC 上这大概已经算是慢的帧率了！），那就是每帧 0.017 秒，而我们可能会做同时涉及这个 dt 和当前时间的运算。这时，当前时间与帧时间的比值大约是 250000 / (1/60) = 1500 万。这真的非常之大，是各种你预料不到的数值问题的温床——如果你把增量时间加到当前时间上，在 32 位浮点数里，增量时间几乎会被彻底抹掉，因为这个数里的精度已经不够了。远在这之前，你就会开始看到动画抖动、物体的位置和你的预期对不上，等等。"
+    },
+    {
+      "type": "p",
+      "en": "One way to solve this is not to let the current time grow indefinitely -- at some point, you reset it to 0. You could pick a fixed amount of time, like I don't know, every minute, and at the end of the minute the time is back at 0 and you keep going. But if you want your effects to be seamless, they all have to match up exactly at the 1-minute boundary, which makes tuning things difficult and annoying. For example, if you want to make a cosine wave that is seamless across time, you can make the wave with a period of 1 minute, or half a minute, or 1/3 a minute, etc, and firstly this is annoying because when designers want to tune stuff, they have to know this, and it's unwieldy and confusing, and secondly, these numbers cannot be represented exactly in floating-point numbers either, so you're adding imprecision that way.",
+      "zh": "解决这个问题的一种办法，是不让当前时间无限增长——到某个点就把它重置为 0。你可以选一个固定的时长，比如说，我也不知道，每分钟一次，在这一分钟结束时时间回到 0，然后接着走。但如果你希望自己的效果是无缝的，它们就都必须在那一分钟的分界上精确对齐，这会让调参变得又难又烦人。举个例子，如果你想做一条在时间上无缝的余弦波，你可以把波周期做成 1 分钟、半分钟、三分之一分钟等等——首先这很烦人，因为设计师想调东西时就必须知道这套规矩，既笨重又让人糊涂；其次，这些数字本身也没法用浮点数精确表示，于是你又在那里引入了不精确。"
+    },
+    {
+      "type": "p",
+      "en": "But there is an old graphics programmer trick that solves this very cleanly, that I think has been around for a long time (I first heard of it from Ignacio when we were working on The Witness).",
+      "zh": "不过有一个图形程序员的老技巧能非常干净地解决这个问题，我觉得它已经存在很久了（我最早是从 Ignacio 那里听来的，当时我们正在做 *The Witness*）。"
+    },
+    {
+      "type": "p",
+      "en": "For our cosine wave example mentioned above, we are going to be evaluating some function like cos(freq*time*2*PI), where 'time' is just the wall clock time according to the game, and 'freq' is some parameter controlling the frequency of the cosine wave, that we want it to be very easy for designers to adjust without introducing problems.",
+      "zh": "拿上面提到的余弦波做例子，我们要计算的函数大致是 cos(freq*time*2*PI)，其中 time 就是游戏里的挂钟时间，freq 是控制余弦波频率的某个参数；而我们的诉求是：设计师调整它时要非常容易，同时不引入问题。"
+    },
+    {
+      "type": "p",
+      "en": "The constraint you have to meet, for your cosine waves to match up when the timer resets, is that they all have to evaluate to 1 at whatever the max time is -- because when you reset to time = 0, you will get cos(freq*0*2*PI), which is 1. So cos(freq*time_max*2*PI) also has to be 1, in other words, the cosine has to have gone around the circle an integer number of times. Since we have a factor of 2*PI in there, this means that our wave will be flawless any time freq*time_max is an integer.",
+      "zh": "要让你的余弦波在计时器重置时能对接上，你必须满足的约束是：在最大时间值那里，它们都必须求值为 1——因为当你重置到 time = 0 时，你会得到 cos(freq*0*2*PI)，也就是 1。所以 cos(freq*time_max*2*PI) 也必须等于 1；换句话说，余弦必须正好绕着圆走了整数圈。既然式子里有个 2*PI 因子，这就意味着：只要 freq*time_max 是整数，我们的波就是完美的。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "How do we ensure that, easily, in a way that people don't have to think about? Pick, for time_max, a number of seconds that is 10 to some integer power -- for example, 1000. Then, any number you type into a tweak file, that has no more than 3 digits after the decimal, will result in an integer number of times around the circle. For example, if freq = 9.876, we get cos(9.876*1000*2*PI) == cos(9876*2*PI) == 1. This works for any number you pick with 3 digits after the decimal. If you need 4 digits, make time_max 10000, and so forth. If we are reading values from a tweak file, we can round them to the nearest 3 digits before sending them to the shader (and maybe output a warning, that the digits aren't being used, if the rounded number is appreciably different from the input number, to remind people of this system).",
+      "zh": "怎么才能轻易地、而且让人们完全不用动脑子就保证这一点？把 time_max 取成 10 的某个整数次幂的秒数——比如 1000。这样，你往调参文件（tweak file）里敲进去的任何数字，只要小数点后不超过 3 位，都会得到整数圈。举例来说，如果 freq = 9.876，我们就得到 cos(9.876*1000*2*PI) == cos(9876*2*PI) == 1。你挑的任何小数点后 3 位的数字都成立。如果你需要 4 位，就把 time_max 设成 10000，依此类推。如果我们是从调参文件里读值，可以在把它们送去着色器之前先四舍五入到 3 位（而且，如果四舍五入后的数和输入的数明显不同，也许还可以输出一条警告，说那些位数没被用上，以提醒大家这套机制的存在）。"
+    },
+    {
+      "type": "p",
+      "en": "This works with any periodic function, we just used cosine here as an example. For linear shifts, like scrolling uv coordinates or whatnot, it's similar -- if you have uv coordinates from 0 to 1, you just need to make sure shift_rate*time_max is an integer in order for the scrolling to be perfect when the time resets. Similarly for the time parameter used to index a flipbook animation.",
+      "zh": "这对任何周期函数都成立，我们这里只是拿余弦当例子。对于线性偏移，比如滚动 uv 坐标之类的事情，道理类似——如果你的 uv 坐标是从 0 到 1，你只需要保证 shift_rate*time_max 是整数，滚动在时间重置时就会是完美的。用来索引翻页动画（flipbook）的时间参数也是同理。"
+    },
+    {
+      "type": "p",
+      "en": "So the reason the fog is snapping after you play for a while is that the time sent to the shader system gets reset to 0 every 1000 seconds but the fog doesn't know about this. And the reason for the resetting is to make sure we maintain good precision in the time-based effects in the shaders.",
+      "zh": "所以，玩了一会儿之后雾会跳变，原因就是送去着色器系统的时间每 1000 秒会被重置为 0，而雾并不知道这件事。之所以要做这个重置，是为了保证着色器里那些基于时间的效果能维持良好的精度。"
+    }
+  ]
+}

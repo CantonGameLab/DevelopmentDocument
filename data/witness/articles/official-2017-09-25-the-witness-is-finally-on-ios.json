@@ -1,0 +1,42 @@
+{
+  "id": "official-2017-09-25-the-witness-is-finally-on-ios",
+  "title": { "zh": "《The Witness》终于上 iOS 了！", "en": "The Witness is finally on iOS!" },
+  "subtitle": {
+    "en": "After nearly a year of optimization, the full game is out on iOS for $9.99.",
+    "zh": "经过将近一年的优化，完整版游戏已登陆 iOS，售价 $9.99。"
+  },
+  "translator": {
+    "note": "原文里受支持的机型是四个独立行、没有 bullet 标记，这里按列表（list）处理。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In case you haven't heard the news, after nearly a year of optimizing, refining touch-controls, etc., we finally released The Witness on iOS!",
+      "zh": "万一你还没听说这个消息：在将近一年的优化、打磨触控操作等等之后，我们终于把《The Witness》发布到 iOS 上了！"
+    },
+    {
+      "type": "p",
+      "en": "You can find it on the App Store, and carry around the full game in your pocket...which is pretty crazy if you ask me.",
+      "zh": "你可以在 App Store 上找到它，把完整版游戏装进口袋随身带着……要我说，这挺疯狂的。"
+    },
+    {
+      "type": "p",
+      "en": "The game will work with iOS 10 and up, on:",
+      "zh": "游戏支持 iOS 10 及更高版本，可运行于以下设备："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "iPhone 5S (or newer)", "zh": "iPhone 5S（或更新机型）" },
+        { "en": "iPad Air (or newer)", "zh": "iPad Air（或更新机型）" },
+        { "en": "iPad Mini 2 (or newer)", "zh": "iPad Mini 2（或更新机型）" },
+        { "en": "iPod Touch 6th Generation", "zh": "iPod Touch（第六代）" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Oh, also, it's only $9.99!",
+      "zh": "哦，还有，它只卖 $9.99！"
+    }
+  ]
+}

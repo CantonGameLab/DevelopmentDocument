@@ -1,0 +1,208 @@
+{
+  "id": "castano-2026-04-15-the-true-size-of-astc-textures",
+  "title": {
+    "zh": "ASTC 纹理的真实大小",
+    "en": "The True Size of ASTC Textures"
+  },
+  "subtitle": {
+    "zh": "名义 bpp 骗人：从早期 Apple、PowerVR 到 Adreno 与 Mali，各家 GPU 对 ASTC 块尺寸的对齐方式决定了纹理实际占多少内存。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文 md 共 1590 行，其中约 1200 行是 6 张基准测试表（每张 15 行 × 8 列）加末尾 1 张汇总表被归档压成「一行一个单元格」的结果。译文全部对照原始 HTML（`archive/raw/castano/html/1777-the-true-size-of-astc-textures.json`）还原：7 张表各用一个 `code` 块（`lang: \"text\"`）、空格对齐列并保留表头行，所有数值（含 `8.00`、`3.56`、`2.25×`）逐字未改；每张表前的公式块同样是 `code`/`text`，逐字保留。开头那张示意图在原始 HTML 里是一段 SVG（含 `<title>`、`<desc>` 与 14 个 `<text>` 标注），归档把它压成了 16 行散块：译文把 title、desc 两行各留为一个 `p` 块，14 个标注按图形本身的左右两栏重排为一个 `code` 块（`lang: \"text\"`），标注文字逐字未改、只调整了栏位与缩进。源文第一段里的 `<br><br>` 在归档 md 里被拆成两段，译文按 md 保持为两个 `p` 块。术语：`block` 作「块」、`tile` 作「图块」，但 `macro tile`、`pow2`、`bpp`、`stride`（行跨距）中的专名按本批口径保留英文；GPU 家族名（Apple、PowerVR、Adreno、Mali Bifrost、Valhall、Midgard、Samsung Xclipse）与 `ASTC`、`4×4`、`6×6`、`10×6` 保留原文写法。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In my previous post [Writing to Compressed Textures in Metal](https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/), I showed how Metal heaps can be used to alias buffers and textures to inspect their actual memory layout. Something that caught my attention was how much memory is wasted with non-power-of-two textures. On many devices the texture dimensions get rounded up to the next power of two, and you end up paying for padding memory you never use.",
+      "zh": "在上一篇[在 Metal 里写入压缩纹理](https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/)里，我展示了如何用 Metal heap 让缓冲区和纹理互为别名，从而检查它们真实的内存布局。当时有一点引起了我的注意：非 2 的幂尺寸的纹理浪费了多少内存。在很多设备上，纹理的尺寸会被向上取整到下一个 2 的幂，于是你就得为自己永远用不到的填充内存买单。"
+    },
+    {
+      "type": "p",
+      "en": "You may think that non power of two textures do not have much use outside of render targets, but it turns out that they are much more prevalent than what most people realize. When allocating ASTC textures with power-of-two *pixel* dimensions the resulting textures often have non-power-of-two *block* dimensions, and it’s the *block* dimensions, not the *pixel* dimensions, that determine how much memory the texture occupies.",
+      "zh": "你可能会觉得，非 2 的幂尺寸的纹理除了渲染目标之外没什么用武之地，但事实是它们比大多数人以为的要普遍得多。给 ASTC 纹理分配 2 的幂的*像素*尺寸时，得到的纹理往往具有非 2 的幂的*块*尺寸；而决定纹理占用多少内存的，正是*块*尺寸，而不是*像素*尺寸。"
+    },
+    {
+      "type": "p",
+      "en": "ASTC 6×6 block alignment — 64×64 texture, nominal vs pow2 aligned",
+      "zh": "ASTC 6×6 块对齐 —— 64×64 纹理，名义布局与 pow2 对齐后的布局"
+    },
+    {
+      "type": "p",
+      "en": "Left: exact 11×11 block grid = 121 blocks. Right: pow2-aligned 16×16 = 256 blocks, with hatched padding.",
+      "zh": "左：精确的 11×11 块网格 = 121 个块。右：按 pow2 对齐的 16×16 = 256 个块，斜线部分为填充。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "nominal layout                     memory layout (pow2 aligned)\nceil(64/6) = 11 → 11×11 blocks     11 rounds up to 16 → 16×16 blocks\n\n11 blocks wide                     16 blocks wide\n121 blocks × 16 bytes              256 blocks × 16 bytes\n= 1,936 bytes                      = 4,096 bytes\n3.56 bpp (nominal)                 8.00 bpp — 2.25× overhead\n\ntexture data\npadding (wasted)"
+    },
+    {
+      "type": "p",
+      "en": "How bad is it in practice? I ran a test on several mobile devices to find out. In the tables below I compared the nominal bpp, that is, the exact memory footprint with no alignment padding, against the actual bpp considering the alignment.",
+      "zh": "实际中到底有多糟？我在好几台移动设备上做了测试来搞清楚。下面这些表里，我把名义 bpp（也就是不含任何对齐填充的精确内存占用）与考虑对齐之后的实际 bpp 做了对比。"
+    },
+    {
+      "type": "h2",
+      "id": "early-apple-and-all-powervr-gpus",
+      "en": "Early Apple and all PowerVR GPUs",
+      "zh": "早期 Apple 与所有 PowerVR GPU"
+    },
+    {
+      "type": "p",
+      "en": "Early Apple GPUs and all current PowerVR GPUs are the worst offenders, block dimensions are simply aligned to the next power of two, ie following the following pseudocode:",
+      "zh": "早期 Apple GPU 和当前所有 PowerVR GPU 是最糟糕的：它们只是把块的尺寸直接对齐到下一个 2 的幂，也就是遵循下面这段伪代码："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "bw = (w + block_size.x - 1) / block_size.x\nbh = (h + block_size.y - 1) / block_size.y\nsize = 16 * nextPow2(bw) * nextPow2(bh)\nbpp = 8 * size / (w * h)"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "block  nominal  64    128   256   512   1024  2048\n4×4    8.00     8.00  8.00  8.00  8.00  8.00  8.00\n5×4    6.40     8.00  8.00  8.00  8.00  8.00  8.00\n5×5    5.12     8.00  8.00  8.00  8.00  8.00  8.00\n6×5    4.27     8.00  8.00  8.00  8.00  8.00  8.00\n6×6    3.56     8.00  8.00  8.00  8.00  8.00  8.00\n8×5    3.20     4.00  4.00  4.00  4.00  4.00  4.00\n8×6    2.67     4.00  4.00  4.00  4.00  4.00  4.00\n10×5   2.56     4.00  4.00  4.00  4.00  4.00  4.00\n10×6   2.13     4.00  4.00  4.00  4.00  4.00  4.00\n8×8    2.00     2.00  2.00  2.00  2.00  2.00  2.00\n10×8   1.60     2.00  2.00  2.00  2.00  2.00  2.00\n10×10  1.28     2.00  2.00  2.00  2.00  2.00  2.00\n12×10  1.07     2.00  2.00  2.00  2.00  2.00  2.00\n12×12  0.89     2.00  2.00  2.00  2.00  2.00  2.00"
+    },
+    {
+      "type": "p",
+      "en": "The result collapses all ASTC block sizes into just three memory footprint categories: 8, 4, and 2 bpp, regardless of the block size chosen.",
+      "zh": "结果是，无论你选用哪种块尺寸，所有 ASTC 块尺寸都被压缩进三个内存占用档位：8、4 和 2 bpp。"
+    },
+    {
+      "type": "p",
+      "en": "PowerVR matching early Apple behavior isn’t surprising, the two share common architectural roots. That said, given how long ASTC has been the dominant mobile compression format, it’s disappointing to see this inefficiency persist in current PowerVR hardware.",
+      "zh": "PowerVR 与早期 Apple 表现一致并不让人意外，两者有共同的架构渊源。话虽如此，考虑到 ASTC 成为移动端主流压缩格式已经这么多年了，看到这种低效至今仍存在于当前的 PowerVR 硬件上，还是令人失望。"
+    },
+    {
+      "type": "h2",
+      "id": "modern-apple-gpus",
+      "en": "Modern Apple GPUs",
+      "zh": "现代 Apple GPU"
+    },
+    {
+      "type": "p",
+      "en": "Modern Apple GPUs reduce waste by aligning block dimensions to a 32-block macro tile boundary rather than the next power of two. For block counts smaller than 32, where the next power of two is the tighter bound, it falls back to power-of-two alignment automatically, since `min(nextPow2(n), align32(n))` picks whichever is smaller:",
+      "zh": "现代 Apple GPU 通过把块的尺寸对齐到 32 个块的 macro tile 边界（而不是下一个 2 的幂）来减少浪费。当块数小于 32、下一个 2 的幂反而是更紧的界时，它会自动回退到 2 的幂对齐，因为 `min(nextPow2(n), align32(n))` 会取两者中较小的那个："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "bw = (w + block_size.x - 1) / block_size.x\nbh = (h + block_size.y - 1) / block_size.y\nsize = 16 * min(nextPow2(bw), align32(bw)) * min(nextPow2(bh), align32(bh))\nbpp = 8 * size / (w * h)"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "block  nominal  64    128   256   512   1024  2048\n4×4    8.00     8.00  8.00  8.00  8.00  8.00  8.00\n5×4    6.40     8.00  8.00  8.00  8.00  7.00  6.50\n5×5    5.12     8.00  8.00  8.00  8.00  6.12  5.28\n6×5    4.27     8.00  8.00  8.00  6.00  5.25  4.47\n6×6    3.56     8.00  8.00  8.00  4.50  4.50  3.78\n8×5    3.20     4.00  4.00  4.00  4.00  3.50  3.25\n8×6    2.67     4.00  4.00  4.00  3.00  3.00  2.75\n10×5   2.56     4.00  4.00  4.00  4.00  3.50  2.84\n10×6   2.13     4.00  4.00  4.00  3.00  3.00  2.41\n8×8    2.00     2.00  2.00  2.00  2.00  2.00  2.00\n10×8   1.60     2.00  2.00  2.00  2.00  2.00  1.75\n10×10  1.28     2.00  2.00  2.00  2.00  2.00  1.53\n12×10  1.07     2.00  2.00  2.00  2.00  1.50  1.31\n12×12  0.89     2.00  2.00  2.00  2.00  1.12  1.12"
+    },
+    {
+      "type": "h2",
+      "id": "adreno-740",
+      "en": "Adreno 740",
+      "zh": "Adreno 740"
+    },
+    {
+      "type": "p",
+      "en": "Adreno 740 uses a smaller 16-block tile size than Apple’s 32-block alignment, but does not fall back to power-of-two alignment on textures smaller than the tile.",
+      "zh": "Adreno 740 使用的 16 块图块比 Apple 的 32 块对齐更小，但对于小于一个图块的纹理，它不会回退到 2 的幂对齐。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "bw = (w + block_size.x - 1) / block_size.x\nbh = (h + block_size.y - 1) / block_size.y\nsize = 16 * align16(bw) * align16(bh)\nbpp  = 8 * size / (w * h)"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "block  nominal  64    128   256   512   1024  2048\n4×4    8.00     8.00  8.00  8.00  8.00  8.00  8.00\n5×4    6.40     8.00  8.00  8.00  7.00  6.50  6.50\n5×5    5.12     8.00  8.00  8.00  6.12  5.28  5.28\n6×5    4.27     8.00  8.00  6.00  5.25  4.47  4.47\n6×6    3.56     8.00  8.00  4.50  4.50  3.78  3.78\n8×5    3.20     8.00  4.00  4.00  3.50  3.25  3.25\n8×6    2.67     8.00  4.00  3.00  3.00  2.75  2.75\n10×5   2.56     8.00  4.00  4.00  3.50  2.84  2.64\n10×6   2.13     8.00  4.00  3.00  3.00  2.41  2.23\n8×8    2.00     8.00  2.00  2.00  2.00  2.00  2.00\n10×8   1.60     8.00  2.00  2.00  2.00  1.75  1.62\n10×10  1.28     8.00  2.00  2.00  2.00  1.53  1.32\n12×10  1.07     8.00  2.00  2.00  1.50  1.31  1.12\n12×12  0.89     8.00  2.00  2.00  1.12  1.12  0.95"
+    },
+    {
+      "type": "h2",
+      "id": "adreno-640",
+      "en": "Adreno 640",
+      "zh": "Adreno 640"
+    },
+    {
+      "type": "p",
+      "en": "Interestingly, Adreno 640 uses a finer 4-block alignment than Adreno 740’s 16-block alignment, which translates to noticeably smaller allocations, particularly for small textures where coarse alignment wastes a larger fraction of the total footprint. Additionally, only the block width (stride) is aligned, while the height is left exact. This asymmetry avoids padding an entire dimension unnecessarily, reducing waste compared to a fully 2D-aligned scheme:",
+      "zh": "有意思的是，Adreno 640 用的 4 块对齐比 Adreno 740 的 16 块对齐更细，这意味着分配明显更小——尤其是小纹理，粗粒度对齐会浪费掉总占用中更大的一部分。此外，它只对齐块的宽度（行跨距），高度保持精确值。这种不对称避免了无谓地给整个维度做填充，相比完全二维对齐的方案进一步减少了浪费："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "bw = (w + block_size.x - 1) / block_size.x\nbh = (h + block_size.y - 1) / block_size.y\nsize = 16 * align4(bw) * bh\nbpp  = 8 * size / (w * h)"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "block  nominal  64    128   256   512   1024  2048\n4×4    8.00     8.00  8.00  8.00  8.00  8.00  8.00\n5×4    6.40     8.00  7.00  6.50  6.50  6.50  6.44\n5×5    5.12     6.50  5.69  5.28  5.23  5.21  5.16\n6×5    4.27     4.88  4.88  4.47  4.43  4.30  4.30\n6×6    3.56     4.12  4.12  3.70  3.70  3.59  3.59\n8×5    3.20     3.25  3.25  3.25  3.22  3.20  3.20\n8×6    2.67     2.75  2.75  2.69  2.69  2.67  2.67\n10×5   2.56     3.25  3.25  2.84  2.62  2.60  2.60\n10×6   2.13     2.75  2.75  2.35  2.18  2.17  2.17\n8×8    2.00     2.00  2.00  2.00  2.00  2.00  2.00\n10×8   1.60     2.00  2.00  1.75  1.62  1.62  1.62\n10×10  1.28     1.75  1.62  1.42  1.32  1.31  1.30\n12×10  1.07     1.75  1.22  1.22  1.12  1.11  1.08\n12×12  0.89     1.50  1.03  1.03  0.92  0.92  0.90"
+    },
+    {
+      "type": "h2",
+      "id": "adreno-540-mali",
+      "en": "Adreno 540 & Mali",
+      "zh": "Adreno 540 与 Mali"
+    },
+    {
+      "type": "p",
+      "en": "Adreno 540 shares the same 4-block alignment as Adreno 640, but applies it to both width and height rather than width alone. Mali Bifrost and Valhall happen to use the identical scheme, arriving at the same formula from a different architecture entirely. I haven’t been able to test on Midgard, so it’s unclear whether that holds for older Mali hardware as well.",
+      "zh": "Adreno 540 与 Adreno 640 使用相同的 4 块对齐，但它同时对宽度和高度生效，而不只是宽度。Mali Bifrost 和 Valhall 恰好采用完全相同的方案——从一套完全不同的架构出发，得出了同一个公式。我没能测到 Midgard，所以不清楚更老的 Mali 硬件是否也如此。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "bw = (w + block_size.x - 1) / block_size.x\nbh = (h + block_size.y - 1) / block_size.y\nsize = 16 * align4(bw) * align4(bh)\nbpp = 8 * size / (w * h)"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "block  nominal  64    128   256   512   1024  2048\n4×4    8.00     8.00  8.00  8.00  8.00  8.00  8.00\n5×4    6.40     8.00  7.00  6.50  6.50  6.50  6.44\n5×5    5.12     8.00  6.12  5.28  5.28  5.28  5.18\n6×5    4.27     6.00  5.25  4.47  4.47  4.37  4.33\n6×6    3.56     4.50  4.50  3.78  3.78  3.61  3.61\n8×5    3.20     4.00  3.50  3.25  3.25  3.25  3.22\n8×6    2.67     3.00  3.00  2.75  2.75  2.69  2.69\n10×5   2.56     4.00  3.50  2.84  2.64  2.64  2.62\n10×6   2.13     3.00  3.00  2.41  2.23  2.18  2.18\n8×8    2.00     2.00  2.00  2.00  2.00  2.00  2.00\n10×8   1.60     2.00  2.00  1.75  1.62  1.62  1.62\n10×10  1.28     2.00  2.00  1.53  1.32  1.32  1.32\n12×10  1.07     2.00  1.50  1.31  1.12  1.12  1.09\n12×12  0.89     2.00  1.12  1.12  0.95  0.95  0.90"
+    },
+    {
+      "type": "h2",
+      "id": "samsung-xclipse",
+      "en": "Samsung Xclipse",
+      "zh": "Samsung Xclipse"
+    },
+    {
+      "type": "p",
+      "en": "The Xclipse results don’t fit a clean formula. At small texture sizes the behavior roughly matches Adreno 740’s 16-block alignment, but at larger sizes the results become less efficient and notably non-monotonic. A texture can occupy more with a larger block, than with a smaller block. Further investigation with additional texture sizes is needed to figure out the exact allocation scheme.",
+      "zh": "Xclipse 的结果套不进一个干净的公式。在较小的纹理尺寸下，其行为大致与 Adreno 740 的 16 块对齐相符；但尺寸变大之后，结果变得效率更低，而且明显不单调——用更大的块反而可能比用更小的块占用更多。要弄清确切的分配方案，还需要用更多纹理尺寸做进一步研究。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "block  nominal  64    128   256   512   1024  2048\n4×4    8.00     8.00  8.00  8.00  8.00  8.00  8.00\n5×4    6.40     8.00  8.00  8.00  8.00  8.00  7.00\n5×5    5.12     8.00  8.00  8.00  8.00  5.28  6.12\n6×5    4.27     8.00  8.00  8.00  5.25  6.00  5.25\n6×6    3.56     8.00  8.00  4.50  4.50  4.50  4.50\n8×5    3.20     8.00  4.00  4.00  4.00  4.00  3.50\n8×6    2.67     8.00  4.00  3.00  4.00  3.00  3.00\n10×5   2.56     8.00  4.00  4.00  4.00  4.00  3.50\n10×6   2.13     8.00  4.00  3.00  4.00  3.00  3.00\n8×8    2.00     8.00  2.00  2.00  2.00  2.00  2.00\n10×8   1.60     8.00  2.00  2.00  2.00  2.00  2.00\n10×10  1.28     8.00  2.00  2.00  2.00  2.00  1.32\n12×10  1.07     8.00  2.00  2.00  2.00  1.31  1.50\n12×12  0.89     8.00  2.00  2.00  1.12  1.12  1.12"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结语"
+    },
+    {
+      "type": "p",
+      "en": "The takeaway for asset pipelines is that nominal bpp is a poor predictor of actual memory usage, especially on older hardware or at small texture sizes.",
+      "zh": "对资源管线来说，结论是：名义 bpp 并不能很好地预测实际内存占用，尤其是在较老的硬件上或纹理尺寸较小时。"
+    },
+    {
+      "type": "p",
+      "en": "It’s worth keeping in mind that texture compression serves two distinct goals: reducing memory footprint and reducing bandwidth. Bandwidth savings are proportional to the nominal bpp regardless of alignment. A 6×6 block will always fetch less data per texel than a 4×4 block during sampling. Memory footprint, however, is affected by alignment, and that’s where the different hardware behaviors described in this article matters.",
+      "zh": "要记住，纹理压缩服务两个不同的目标：降低内存占用和降低带宽。带宽的节省与名义 bpp 成正比，与对齐无关：采样时 6×6 的块每个纹素取的数据永远比 4×4 的块少。而内存占用会受对齐影响，本文描述的那些硬件差异正是在这里起作用。"
+    },
+    {
+      "type": "p",
+      "en": "For example, on early Apple and PowerVR hardware, switching from 4×4 to 6×6 ASTC cuts bandwidth by more than half, but saves no memory at all for small power-of-two textures.",
+      "zh": "举个例子：在早期 Apple 和 PowerVR 硬件上，从 4×4 换到 6×6 的 ASTC 能把带宽砍掉一半以上，但对于小的 2 的幂尺寸纹理，内存一点也省不下来。"
+    },
+    {
+      "type": "p",
+      "en": "The following table summarizes the actual bpp for each GPU family at two representative block and texture sizes. The overhead varies significantly across GPU families, from a 2.5× penalty on early Apple and PowerVR hardware down to near-nominal on Adreno 640 and Mali.",
+      "zh": "下表汇总了各 GPU 家族在两种有代表性的块尺寸与纹理尺寸下的实际 bpp。开销在不同 GPU 家族之间差别很大：从早期 Apple 和 PowerVR 硬件上 2.5 倍的代价，一直到 Adreno 640 与 Mali 上接近名义值。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "GPU family             6×6 @ 512  10×6 @ 1024  formula\nEarly Apple / PowerVR  8.00       4.00         pow2 both axes\nModern Apple           4.50       3.00         min(pow2, align32) both axes\nAdreno 740             4.50       2.41         align16 both axes\nMali / Adreno 540      3.78       2.18         align4 both axes\nAdreno 640             3.70       2.17         align4 width only"
+    }
+  ]
+}

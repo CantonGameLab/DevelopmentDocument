@@ -1,0 +1,126 @@
+{
+  "id": "light-regarding-water",
+  "title": {
+    "zh": "关于水",
+    "en": "Regarding Water"
+  },
+  "subtitle": {
+    "en": "Ignacio's internal email on the new water shader: extinction colors, shoreline foam, and approximating the specular exponent.",
+    "zh": "Ignacio 关于新水面着色器的内部邮件：消光颜色、岸线泡沫，以及高光指数的近似。"
+  },
+  "translator": {
+    "note": "本篇是 Blow 转发的一封内部邮件全文，开头的日期行与署名行按原文保留为独立段落。`shader` 按术语表译「着色器」；`extinction color` 译「消光颜色」；`opacity` 译「不透明度」；`roughness` 译「粗糙度」；`foam` 译「泡沫」；`depth buffer` 译「深度缓冲」；`screenspace` 译「屏幕空间」。`water_color_map`、`water_flow_map`、`print_map`、`light probe`、`LEAN` 等资源名与论文名保留英文。文末两个裸 URL 在源文里各自独占一行，译文按段落原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "*(Here's an internal email that Ignacio sent today that may provide some flavor on what we're doing lately.)*",
+      "zh": "*（这是 Ignacio 今天发的一封内部邮件，也许能让大家对我们最近在做的事情有点感觉。）*"
+    },
+    {
+      "type": "p",
+      "en": "From: Ignacio Castaño",
+      "zh": "发件人：Ignacio Castaño"
+    },
+    {
+      "type": "p",
+      "en": "Date: 24 August 2012",
+      "zh": "日期：2012 年 8 月 24 日"
+    },
+    {
+      "type": "p",
+      "en": "I just checked in a few changes to the water shader. Note that this is still work in progress, there are some artifacts and unfinished features.",
+      "zh": "我刚把水面着色器的几处改动提交了。注意这仍然是半成品，还有一些瑕疵和没做完的功能。"
+    },
+    {
+      "type": "p",
+      "en": "From the art point of view, the main change is that there's now a water_color_map and a water_flow_map that you can use to change the behavior of the shader.",
+      "zh": "从美术角度看，主要的变化是现在多了一个 water_color_map 和一个 water_flow_map，你可以用它们来改变着色器的行为。"
+    },
+    {
+      "type": "p",
+      "en": "The RGB channels of the color map control the water extinction color and the alpha controls the opacity factor. The previous underwater shading model was simply wrong, the new one works nicely and is easy to tweak. Note that I assume the water color changes very smoothly, avoid sharp color changes!",
+      "zh": "颜色贴图的 RGB 通道控制水的消光颜色，alpha 控制不透明度系数。之前的水下着色模型根本就是错的，新的这个效果好，也容易调。注意我假设水色的变化非常平滑，请避免颜色的突变！"
+    },
+    {
+      "type": "p",
+      "en": "The flow_map is intended to contain additional water attributes. Right now it's only used for the stillness, but I will certainly add more in the future.",
+      "zh": "flow_map 的用途是存水面的其他属性。目前它只用来控制平静程度，但以后我肯定会往里加更多东西。"
+    },
+    {
+      "type": "p",
+      "en": "You will also notice that the shoreline now also has a foam layer:",
+      "zh": "你还会注意到岸线现在多了一层泡沫："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/a-512x287.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The way it's computed is by comparing the screenspace depth difference. This is not very correct, it looks OK from some angles, but it breaks badly when the underwater geometry has screen-space depth discontinuities:",
+      "zh": "它的算法是比较屏幕空间上的深度差。这并不太正确，从某些角度看还行，但当水下几何体在屏幕空间上有深度不连续时就会崩得很厉害："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/b-512x287.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "If the foam is a desirable feature, I'm considering modifying the print_map command to render a foam map, or maybe this is something that can be painted manually and added to the water_flow_map. One of my concerns is that this map may not have enough resolution.",
+      "zh": "如果泡沫这个特性是大家想要的，我在考虑改造 print_map 命令让它渲染一张泡沫贴图，又或者这东西可以手工绘制再塞进 water_flow_map。我担心的其中一点是这张贴图的分辨率可能不够。"
+    },
+    {
+      "type": "p",
+      "en": "Just Cause 2 seems to use this method to render foam, but they apply a big screenspace distortion to hide the artifacts, I found it sickening when you stare at it closely...",
+      "zh": "Just Cause 2 好像就是用这个方法渲染泡沫的，但他们加了一个很大的屏幕空间扭曲来掩饰瑕疵，你凑近盯着看会觉得挺恶心的……"
+    },
+    {
+      "type": "p",
+      "en": "The way the water is shaded has also changed somewhat. First, I now approximate the specular exponent based on the position of the camera with respect to the water and the water roughness. Somewhat like the LEAN paper does, but assuming the roughness of the water is the same for the whole texture. Depending on the value of the exponent I either sample the mirrored reflection map, a filtered environment map, or blend between the two. My goal was to be able to use the mirrored reflection map only on a small subset of the lake entities. The physically based approach does not allow us to cull many, so I'll probably have to introduce some hacks. BTW, I'm doing all these work not just an optimization, but also so that we can use the light probe reflection model in the river and lakes inside the island, where the mirrored reflection map is not available.",
+      "zh": "水面的着色方式也有一些变化。首先，我现在根据相机相对水面的位置以及水的粗糙度来近似高光指数。有点类似 LEAN 那篇论文的做法，但这里假设整张贴图上的水的粗糙度是相同的。根据指数值的大小，我要么采样镜像反射贴图，要么采样过滤后的环境贴图，要么在两者之间做混合。我的目标是只在少数湖泊实体上用镜像反射贴图。基于物理的做法不允许我们剔除掉多少，所以我大概得引入一些取巧手段。顺便说一句，我做这些工作不只是在做优化，也是为了让我们能在岛内的河流和湖泊里用上光照探针（light probe）反射模型——那些地方是没有镜像反射贴图可用的。"
+    },
+    {
+      "type": "p",
+      "en": "The main problem with the filtered environment map is that it does not take local reflections and occlusion from the environment into account. I have two ideas to work around this, one is to store an ambient occlusion map in the lightmaps, this may be a bit too smooth and will lack directional information. The other is to do screenspace raycasting of the depth buffer to decide whether the environment map is occluded or not.",
+      "zh": "过滤后的环境贴图的主要问题是它不考虑来自周围环境的局部反射与遮蔽。我有两个绕开这个问题的想法：一是把环境光遮蔽贴图存进光照贴图里，但这可能太平滑、缺少方向信息；另一个是对深度缓冲做屏幕空间光线投射，以此判断环境贴图是否被遮蔽。"
+    },
+    {
+      "type": "p",
+      "en": "This is somewhat like what Crysis 2 does. Insomniac also uses a similar approach with just a single sample:",
+      "zh": "这有点像是 Crysis 2 的做法。Insomniac 也用了类似的方法，只不过只取一个采样："
+    },
+    {
+      "type": "p",
+      "en": "[http://www.insomniacgames.com/tech/articles/0409/files/water.pdf](http://www.insomniacgames.com/tech/articles/0409/files/water.pdf)",
+      "zh": "[http://www.insomniacgames.com/tech/articles/0409/files/water.pdf](http://www.insomniacgames.com/tech/articles/0409/files/water.pdf)"
+    },
+    {
+      "type": "p",
+      "en": "I'm hoping we can get away with a crude approximation too. I did a quick test, where the maths are not exactly right, with only 4 samples and no smoothing, and it was starting to look promising:",
+      "zh": "我希望我们也能用一个粗糙的近似糊弄过去。我做了个快速测试，数学上并不完全正确，只用了 4 个采样，也没做平滑，但已经开始看着有戏了："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/08/c-512x287.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This won't allow us to use the filtered environment maps closer to the camera, but if the screenspace raycasting works well, I'm thinking about using non-filtered environment maps in place of the mirrored reflection map, whenever those are not available.",
+      "zh": "这不会让我们在离相机更近的地方用上过滤后的环境贴图，但如果屏幕空间光线投射效果够好，我在考虑用未过滤的环境贴图来顶替镜像反射贴图——凡是没有镜像反射贴图可用的地方就这样做。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, I've also been playing with Valve's water flow model, I have the basic implementation working, but I haven't yet been able to reproduce the workaround for the pulsing and repetition artifacts that Alex proposes.",
+      "zh": "最后，我还在玩 Valve 的水流模型，基础实现已经能跑了，但 Alex 针对脉动和重复瑕疵提出的那个变通办法我还没能复现出来。"
+    },
+    {
+      "type": "p",
+      "en": "[http://www.valvesoftware.com/publications/2010/siggraph2010_vlachos_waterflow.pdf](http://www.valvesoftware.com/publications/2010/siggraph2010_vlachos_waterflow.pdf)",
+      "zh": "[http://www.valvesoftware.com/publications/2010/siggraph2010_vlachos_waterflow.pdf](http://www.valvesoftware.com/publications/2010/siggraph2010_vlachos_waterflow.pdf)"
+    }
+  ]
+}

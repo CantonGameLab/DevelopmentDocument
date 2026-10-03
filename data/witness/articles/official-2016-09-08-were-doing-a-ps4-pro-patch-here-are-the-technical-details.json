@@ -1,0 +1,66 @@
+{
+  "id": "official-2016-09-08-were-doing-a-ps4-pro-patch-here-are-the-technical-details",
+  "title": { "zh": "我们要做 PS4 Pro 补丁！技术细节如下。", "en": "We’re doing a PS4 Pro patch! Here are the technical details." },
+  "subtitle": {
+    "en": "The rendering resolutions, antialiasing and HDR plans behind the PS4 Pro patch for The Witness.",
+    "zh": "《The Witness》PS4 Pro 补丁的渲染分辨率、抗锯齿与 HDR 支持计划。"
+  },
+  "translator": {
+    "note": "原文的两种模式分别对应 4k 显示器和 1080p 及以下的显示器；「棋盘式渲染」指 checkerboard rendering，是 PS4 Pro 上常用的一种重建式渲染技术。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Now that the PlayStation 4 Pro has been announced, we can tell you that we are working on a PS4 Pro patch for The Witness.",
+      "zh": "既然 PlayStation 4 Pro 已经公布，我们可以告诉大家：我们正在为《The Witness》做 PS4 Pro 补丁。"
+    },
+    {
+      "type": "p",
+      "en": "The Witness already runs at a consistent 60fps on the base PlayStation 4, so rather than increasing frame rate, our patch is about visual quality. Please don't take the specifics mentioned here as absolute promises; things might change by release. But here's what we are aiming for:",
+      "zh": "在基础版 PlayStation 4 上，《The Witness》已经能稳定跑 60fps，所以我们的补丁不是去提高帧率，而是提升画质。请不要把这里提到的具体数字当成绝对的承诺，发售时可能还会有变化。但我们目前的目标是："
+    },
+    {
+      "type": "p",
+      "en": "When you start up the game on a PS4 Pro, it will go into one of two modes, depending on the current display device:",
+      "zh": "在 PS4 Pro 上启动游戏时，它会根据当前使用的显示设备进入两种模式之一："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "When using PS4 Pro with a 4k display, we will render at 1440p or possibly higher, all while keeping a consistent 60 frames per second. This image will then be upscaled to 4k, and we will draw text, menus, and other UI at native 4k resolution. (This is similar to what happens on the base PS4, where we render the 3D scene at 900p, then upscale to 1080p and draw UI at 1080p). We might be able to achieve resolutions higher than 1440p based on various engineering tradeoffs (for example, if we boost the resolution of the main scene to a greater degree than we boost the resolution of the reflections in water, which tend to be distorted anyway. Also, we'll evaluate checkerboard rendering -- we're not sure if it's the right way to go for this game, but we'll see.) We'll post again when we finalize these specs.",
+          "zh": "PS4 Pro 搭配 4k 显示器时，我们会以 1440p 或更高的分辨率渲染，同时保持稳定的每秒 60 帧。这个画面随后会被放大到 4k，而文字、菜单和其他 UI 则以原生 4k 分辨率绘制。（这有点类似基础版 PS4 上的做法：3D 场景按 900p 渲染，再放大到 1080p，UI 按 1080p 绘制。）在各种工程取舍之下，我们也许能达到高于 1440p 的分辨率（举例来说，让主场景分辨率的提升幅度大于水中倒影——那里的倒影本来就会失真。另外，我们也会评估棋盘式渲染——我们不确定它对这款游戏是不是正确的路子，但先看看。）等这些规格定下来，我们会再发一篇。"
+        },
+        {
+          "en": "When using PS4 Pro with a display that is 1080p or lower, we will render the scene at 1080p (instead of the old 900p), and increase antialiasing quality from 2x to 4x MSAA, again while keeping a solid 60 frames per second. We are exploring additional visual quality increases, like increased streaming distance for high-resolution meshes, or decreasing the noticeability of the fade-in between faraway LODs and high-res close-up meshes. Again, we'll post details when this is finalized!",
+          "zh": "PS4 Pro 搭配 1080p 或更低分辨率的显示器时，我们会把场景改为以 1080p 渲染（取代原来的 900p），并把抗锯齿从 2x MSAA 提升到 4x MSAA，同样是保持稳如磐石的每秒 60 帧。我们还在探索其他画质提升，比如加大高分辨率网格的流式加载距离，或者让远处 LOD 与近处高精度网格之间的淡入变得不那么显眼。同样，这些定下来之后我们会发文说细节！"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "We're also working on HDR support. Here in the office we just got a new LG B6P television, which is very bright and has low black levels, providing a lot of dynamic range, and it's been fun so far tweaking the look of the game on HDR displays like this.",
+      "zh": "我们也在做 HDR 支持。办公室里刚到了一台新的 LG B6P 电视，非常亮、黑位很低，动态范围很大；到目前为止，在这类 HDR 显示器上调游戏画面的观感挺有意思的。"
+    },
+    {
+      "type": "p",
+      "en": "We thought we were working on HDR support only for the PS4 Pro, but yesterday Sony announced that they will be enabling HDR support on all PS4s via a firmware update. Sometimes Sony even surprises developers! (Back when the PS4 was originally announced, we were surprised by some of the final specs too ... and I was on stage in that show!)",
+      "zh": "我们原以为只是在为 PS4 Pro 做 HDR 支持，但昨天 Sony 宣布，他们会通过固件更新让所有 PS4 都支持 HDR。有时候 Sony 连开发者都能给个惊喜！（当初 PS4 首次公布的时候，最终规格里的某些部分也让我们吃了一惊……而我就站在那场发布会的台上！）"
+    },
+    {
+      "type": "p",
+      "en": "We think it's great that Sony are doing this. We don't know the technical details of how it will work, yet, but provided that nothing prevents us, the Witness patch will use HDR on all PS4s when available. (You will, of course, need an HDR TV or monitor for HDR mode to kick in!)",
+      "zh": "我们觉得 Sony 这么做很棒。我们还不清楚它在技术上会怎么实现，但如果没有阻碍，Witness 的补丁会在所有 PS4 上、在 HDR 可用的时候启用 HDR。（当然，你需要一台 HDR 电视或显示器才能真正进入 HDR 模式！）"
+    },
+    {
+      "type": "p",
+      "en": "If all goes well, this patch will be downloadable on November 10 when the PlayStation 4 Pro is released.",
+      "zh": "如果一切顺利，这个补丁会在 11 月 10 日 PlayStation 4 Pro 发售当天可以下载。"
+    },
+    {
+      "type": "p",
+      "en": "We'll keep you posted as we continue work on this patch!",
+      "zh": "补丁继续开发的过程中，我们会随时向大家汇报！"
+    }
+  ]
+}

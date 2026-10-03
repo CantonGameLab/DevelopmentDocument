@@ -1,0 +1,465 @@
+{
+  "id": "official-2018-03-14-testing-the-jai-compiler",
+  "title": {
+    "zh": "测试 Jai 编译器",
+    "en": "Testing the Jai Compiler"
+  },
+  "subtitle": {
+    "en": "Using the Jai language itself to build an automated framework that tests the Jai compiler.",
+    "zh": "用 Jai 这门语言本身做一个自动化框架，来测试 Jai 编译器自己。"
+  },
+  "translator": {
+    "note": "原文里的 note 指 Jai 中由编译器识别的注记（类似其他语言的 attribute），译文统一作「注记」。正文里那 10 处单独成行的粗体是原文的小标题，译文按小标题（h2）处理；归档里紧跟开篇斜体段之后还有一条水平分隔线（---），不是正文内容。*Basic* / *String* 那一段在归档里被空行拆成了两行，译文按原意并回一段。",
+    "noteEn": "The archive splits the *Basic* / *String* paragraph across a blank line and leaves a horizontal rule after the opening italic paragraph; both are archive artifacts."
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "*As the company [grows](https://twitter.com/thekla_inc) with projects beyond The Witness, we thought it'd be nice to show progress on something not too secretive. For those folks into technical posts, I'll discuss how we used our new programming language to create an automated framework to test the language itself.*",
+      "zh": "*随着公司[不断壮大](https://twitter.com/thekla_inc)、项目不再只有《The Witness》，我们觉得展示一些不那么机密的东西的进展会挺好。写给喜欢技术文章的朋友：下面我要讲的是，我们如何用自己这门新编程语言，做出一个自动化框架来测试这门语言本身。*"
+    },
+    {
+      "type": "p",
+      "en": "Jon wanted to convert his [demos](https://www.youtube.com/watch?v=TH9VCN6UkyQ&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO) into proper language tests, and add in new ones. Testing becomes increasingly important as we approach a closed-group release. As it turns out, the literature on compiler testing is scarce, and getting access to quality test suites is pricey (see [C](http://www.plumhall.com/cqs/price/standard.html) or [FORTRAN](http://www.fortran.com/f90tsl.html)). I've also disliked test frameworks in general, which added to the problem.",
+      "zh": "Jon 想把他那些[演示](https://www.youtube.com/watch?v=TH9VCN6UkyQ&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO)改成正经的语言测试，再补上一些新的。随着我们逼近面向封闭小组的发布，测试变得越来越重要。而事实证明，关于编译器测试的文献相当稀少，要拿到高质量的测试套件又很贵（看看 [C](http://www.plumhall.com/cqs/price/standard.html) 或 [FORTRAN](http://www.fortran.com/f90tsl.html) 的价钱）。另外，我一向不喜欢各种测试框架，这让问题雪上加霜。"
+    },
+    {
+      "type": "p",
+      "en": "In the interest of feeling joyful and productive, I decided to sit and think about the specific reasons *why* I've been unhappy with frameworks, and to use the language to write one I'd enjoy using.",
+      "zh": "为了能感到愉快又有产出，我决定坐下来好好想想，我究竟*为什么*一直对框架不满意，然后用这门语言写一个我自己会喜欢用的框架。"
+    },
+    {
+      "type": "h2",
+      "id": "how-i-like-to-test",
+      "zh": "我喜欢的测试方式",
+      "en": "How I Like to Test"
+    },
+    {
+      "type": "p",
+      "en": "I like to ask personally interesting questions which the tests ought to help me answer. Often, they relate to the behavior of software at the threshold of cross-cutting concerns. For the jai compiler, they could be questions such as:",
+      "zh": "我喜欢提出一些我个人觉得有意思的问题，让测试来帮我回答。这些问题常常和软件在横切关注点交界处的行为有关。对 jai 编译器来说，可能是这样的问题："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Can we make a procedure's return type randomly change at compile-time?",
+          "zh": "能让一个过程的返回类型在编译期随机变化吗？"
+        },
+        {
+          "en": "What if a polymorphic procedure is used as a constructor?",
+          "zh": "如果一个多态过程被当作构造函数使用，会怎样？"
+        },
+        {
+          "en": "How do we prevent certain structs from using a procedure as a constructor?",
+          "zh": "我们如何阻止某些结构体把一个过程用作构造函数？"
+        },
+        {
+          "en": "Can we generate bytecode for a slightly different procedure because of the struct that is using it as a constructor?",
+          "zh": "能不能因为把它当构造函数使用的那个结构体不同，而为同一个过程生成略有差异的字节码？"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "*Note: We tend to use the term procedure instead of function.*",
+      "zh": "*注：我们倾向于用「过程」（procedure）这个词，而不是「函数」。*"
+    },
+    {
+      "type": "p",
+      "en": "Don't worry if the questions seem bizarre (the language is new and hasn't been released yet). The common theme is they all require very different language features to interact with each other (i.e. cross-cutting). For example, the first item could be handled polymorphically with the [modify](https://youtu.be/BwqeFrlSpuI?t=2594) directive, enums, a switch statement, and some random bit generator. The answer to the second item is that nothing bad happens; in fact, this opens the door for multiple structs to use the same polymorphic procedure as their constructor. This observation naturally leads to questions three and four. When I wrote the tests for some of these, compiler bugs were uncovered naturally and without much effort.",
+      "zh": "这些问题看着古怪，但不用担心（这门语言还很新，也还没发布）。它们的共同点是：都需要差异极大的语言特性彼此交互（也就是横切）。举例来说，第一项可以用 [modify](https://youtu.be/BwqeFrlSpuI?t=2594) 指示字、枚举、switch 语句再加一个随机位生成器，以多态的方式实现。第二项的答案是：什么坏事都不会发生；事实上，这反而为「多个结构体可以用同一个多态过程作为各自的构造函数」打开了门。这个观察自然引出第三和第四个问题。我给其中一些问题写测试的时候，编译器 bug 就自然而然地、几乎不费力地被翻了出来。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Note how these questions are answered by just writing programs. *They* are the language tests. Anything not helping me towards that feels like noise, and that explains why I haven't been happy with many testing systems. Here's the criteria I want a framework to meet to feel good about writing tests:",
+      "zh": "注意，这些问题仅仅是靠写程序就得到了回答。*那些程序*就是语言测试。任何无助于我抵达这一点的手段，在我看来都是噪音，这也解释了我为什么对很多测试系统都不满意。我要求一个框架满足下面这些条件，我才愿意开心地写测试："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Ability to write tests as if they were real, independent programs.",
+          "zh": "能把测试写得像真实的、独立的程序一样。"
+        },
+        {
+          "en": "Simple asserts the tests can use.",
+          "zh": "测试可以使用的简单 assert。"
+        },
+        {
+          "en": "By default, virtually zero interaction with the test framework.",
+          "zh": "默认情况下，几乎不需要和测试框架打交道。"
+        },
+        {
+          "en": "Minimal test suite reports that are nice to look at.",
+          "zh": "极简但好看的测试套件报告。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "By a minimal report I mean showing me which programs ran and when, how many test asserts were called and where to find them if they failed. The report should look good so I can help my brain enjoy the overall experience.",
+      "zh": "所谓极简报告，指的是告诉我哪些程序跑了、什么时候跑的、一共调用了多少个测试 assert，以及失败时去哪儿找它们。报告要好看，这样我才好帮助自己的大脑享受整个过程。"
+    },
+    {
+      "type": "h2",
+      "id": "our-framework",
+      "zh": "我们的框架",
+      "en": "Our Framework"
+    },
+    {
+      "type": "p",
+      "en": "To showcase the framework we ended up creating, let's go through an example, transforming a program into a language test.",
+      "zh": "为了展示我们最终做出来的这个框架，我们走一个例子：把一个程序改造成一个语言测试。"
+    },
+    {
+      "type": "p",
+      "en": "Here's the program that tackles one of the simpler inquiries from earlier: *What if a polymorphic procedure is used as a constructor?* While we're at it we'll ask the same of destructors.",
+      "zh": "下面这个程序回答前面那些问题里较简单的一个：*如果一个多态过程被当作构造函数使用，会怎样？* 既然都动手了，我们顺便也问问析构函数。"
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": "#import \"Basic\";\r\n\r\nThing :: struct {\r\n    mem : *u8;\r\n    value := 42;\r\n    #constructor init_thing;\r\n    #destructor free_thing;\r\n}\r\n\r\ninit_thing :: (using thing : *$T) {\r\n    mem = alloc(1000);\r\n}\r\n\r\nfree_thing :: (using thing: *$T) {\r\n    free(mem);\r\n    mem = null;\r\n    print(\"Thing memory freed.\\n\");\r\n}\r\n\r\nmain :: () {\r\n    {\r\n        our_thing : Thing; // Constructor fires off.\r\n        print(\"%\\n\", our_thing);\r\n    } // Destructor fires off.\r\n}"
+    },
+    {
+      "type": "p",
+      "en": "If we compile it, we see that it's valid:",
+      "zh": "编译一下，可以看到它是合法的："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": " >>> jai poly_constructor.jai\r\n >>> poly_constructor.exe\r\n Thing { value = 42; mem = 1e4e6b4f790; }\r\n Thing memory freed.\r\n >>>"
+    },
+    {
+      "type": "p",
+      "en": "As I had mentioned, this means multiple structs can use the procedure as their respective constructors.",
+      "zh": "如我前面所说，这意味着多个结构体都能把这个过程用作各自的构造函数。"
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": " #import \"Basic\";\r\n\r\nThing :: struct {\r\n    mem : *u8;\r\n    value := 42;\r\n    #constructor init_thing;\r\n    #destructor free_thing;\r\n}\r\n\r\nAnotherThing :: struct {\r\n    mem : *u8;\r\n    message := \"I don't hold the meaning of life.\";\r\n    #constructor init_thing;\r\n    #destructor free_thing;\r\n}\r\n\r\ninit_thing :: (using thing : *$T) {\r\n    mem = alloc(1000);\r\n}\r\n\r\nfree_thing :: (using thing: *$T) {\r\n    free(mem);\r\n    mem = null;\r\n    print(\"Thing memory freed.\\n\");\r\n}\r\n\r\nmain :: () {\r\n    //\r\n    // Test with multiple structs.\r\n    //\r\n    {\r\n        our_thing : Thing;\r\n        print(\"%\\n\", our_thing);\r\n\r\n        different_thing : AnotherThing;\r\n        print(\"%\\n\", different_thing);\r\n    }\r\n}"
+    },
+    {
+      "type": "p",
+      "en": "Output:",
+      "zh": "输出："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": " >>> jai poly_constructor.jai\r\n >>> poly_constructor.exe\r\n Thing { mem = 1d7df5bf790; value = 42; }\r\n AnotherThing { mem = 1d7df5c0190; message = \"I don't hold the meaning of life.\"; }\r\n Thing memory freed.\r\n Thing memory freed.\r\n >>>"
+    },
+    {
+      "type": "p",
+      "en": "Great! And remember: this is just a program. We can explore the possibility space even more, define any number of procedures, declare hundreds of complex structs, import 3rd-party modules—you name it. However, let's pretend we're done answering our polymorphic constructor questions. To turn this into a language test, let's make two straightforward modifications (we'll add a couple of asserts while we're at it):",
+      "zh": "太好了！记住：这只是一个程序。我们可以把可能性空间探索得更远——定义任意多个过程、声明几百个复杂结构体、import 第三方模块——随你。不过，假设我们已经问完了关于多态构造函数的问题。要把这个程序变成一个语言测试，我们做两处直截了当的修改（顺便加上几个 assert）："
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": "polymorphic_constructor :: () {\r\n    //\r\n    // Test multiple things.\r\n    //\r\n    {\r\n        our_thing : Thing; // Constructor fires off.\r\n        assert(our_thing.mem, \"Thing didn't get an memory address.\");\r\n\r\n        different_thing : AnotherThing;\r\n        assert(different_thing.mem, \"AnotherThing didn't get an memory address.\");\r\n     }\r\n } @TestProcedure"
+    },
+    {
+      "type": "p",
+      "en": "Notice I changed the name from *main* to something else and added the simple note *TestProcedure*.",
+      "zh": "注意我把名字从 *main* 改成了别的，并加上了一个简单的注记 *TestProcedure*。"
+    },
+    {
+      "type": "p",
+      "en": "Notes are essentially comments recognized by the compiler that do nothing by default.",
+      "zh": "注记本质上就是编译器能识别的注释，默认情况下什么都不做。"
+    },
+    {
+      "type": "p",
+      "en": "Let's put that file in a *tests/* folder.",
+      "zh": "我们把这个文件放进 *tests/* 文件夹。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": " >>> mv poly_constructor.jai tests/\r\n >>> ls\r\n tests/\r\n tests.jai\r\n >>>"
+    },
+    {
+      "type": "p",
+      "en": "Ah, the reader will notice I have a file conveniently called *tests.jai*. Let's compile it.",
+      "zh": "啊，读者会注意到，我有个文件恰好就叫 *tests.jai*。编译它。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": " >>> jai tests.jai\r\n >>> ls\r\n tests/\r\n tests.exe\r\n tests.jai\r\n >>>"
+    },
+    {
+      "type": "p",
+      "en": "That produced *tests.exe*; let's run it! We'll use some real screenshots this time.",
+      "zh": "它生成了 *tests.exe*，跑起来！这次我们用几张真实截图。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://i.imgur.com/jyhfNMH.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And we just made a full test suite run.",
+      "zh": "我们就这样完成了一次完整的测试套件运行。"
+    },
+    {
+      "type": "p",
+      "en": "*Note:* *The reader might ask why we have 82 more asserts than what we wrote, plus another test procedure*",
+      "zh": "*注：* *读者可能会问，为什么 assert 比我们写的多出 82 个，还多了一个测试过程*"
+    },
+    {
+      "type": "p",
+      "en": "*from a String file. More on that soon.*",
+      "zh": "*出自一个 String 文件。稍后细说。*"
+    },
+    {
+      "type": "p",
+      "en": "Notice a log file was generated. Here's the summary portion of that report:",
+      "zh": "注意，生成了一个日志文件。下面是那份报告的摘要部分："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://i.imgur.com/5v7SpC0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "*Report format is based off Aras Pranckevicius'*[API doc](https://casual-effects.com/markdeep/apidoc.md.html)",
+      "zh": "*报告格式基于 Aras Pranckevicius 的*[API 文档](https://casual-effects.com/markdeep/apidoc.md.html)"
+    },
+    {
+      "type": "p",
+      "en": "That's a lot of useful output just by compiling a source file! In addition, we can have multiple test procedures on the same test file:",
+      "zh": "只是编译一个源文件，就得到这么多有用的输出！此外，同一个测试文件里还可以有多个测试过程："
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": "    polymorphic_constructor :: () {\r\n        //\r\n        // Test multiple things.\r\n        //\r\n        {\r\n            our_thing : Thing; // Constructor fires off.\r\n            assert(our_thing.mem != null, \"Thing points to null.\");\r\n\r\n            different_thing : AnotherThing;\r\n            assert(different_thing.mem != null, \"AnotherThing points to null.\");\r\n        }\r\n    } @TestProcedure\r\n\r\n    polymorphic_constructor_uninit :: () {\r\n        //\r\n        // Control when the initializer and constructors\r\n        // actually get called.\r\n        //\r\n        {\r\n            our_thing : Thing = ---; // Uninitialized var.\r\n            memset(*our_thing, 0, size_of(Thing));\r\n\r\n            T :: type_of(our_thing);\r\n            tis := cast(*Type_Info_Struct) type_info(Thing);\r\n            initializer := cast((*T) -> void) tis.initializer;\r\n            constructor := cast((*T) -> void) tis.constructor;\r\n\r\n            initializer(*our_thing);\r\n\r\n            assert(our_thing.value == 42, \"Expected % but got %\\n\", 42, our_thing.value);\r\n            assert(our_thing.mem == null, \"Expected % but got %\\n\", null, our_thing.mem);\r\n\r\n            constructor(*our_thing);\r\n\r\n            assert(our_thing.value == 42, \"Expected % but got %\\n\", 42, our_thing.value);\r\n            assert(our_thing.mem != null, \"Didn't want % but got % anyway\", null, our_thing.mem);\r\n\r\n            //\r\n            // We can do the same for AnotherThing.\r\n            //\r\n\r\n            // ...\r\n        }\r\n} @TestProcedure"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://i.imgur.com/oDHdGOD.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Opening the report we get:",
+      "zh": "打开报告，我们看到："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://i.imgur.com/wh9QAKu.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "If we wanted to, we could drop in more test files in the *tests/* folder, each containing their own sub-programs. Finally, if invariances in our tests don't hold (i.e. an assert fails), that will also be reported. Let's add a deliberate failure on the first test procedure:",
+      "zh": "如果我们愿意，还可以往 *tests/* 文件夹里再塞更多测试文件，每个文件里放自己的子程序。最后，如果测试里的不变式不成立（也就是某个 assert 失败），那也会被报告出来。我们在第一个测试过程里故意加一个失败："
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": "    polymorphic_constructor :: () {\r\n        //\r\n        // Test multiple things.\r\n        //\r\n        {\r\n            our_thing : Thing; // Constructor fires off.\r\n            assert(our_thing.mem != null, \"Thing points to null.\");\r\n\r\n            //\r\n            // Deliberate failure.\r\n            //\r\n            assert(our_thing.value == 999, \"Meaning of life isn't 999? It's %\", our_thing.value);\r\n\r\n             different_thing : AnotherThing;\r\n             assert(different_thing.mem != null, \"AnotherThing points to null.\");\r\n         }\r\n} @TestProcedure"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://i.imgur.com/nyT0SM1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And we get that on the log file too:",
+      "zh": "日志文件里同样能看到它："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://i.imgur.com/Jira64p.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "If the test writer heads to the test files section, the procedure that failed would be made apparent.",
+      "zh": "如果测试作者翻到报告里的测试文件部分，失败的那个过程就会被明确指出来。"
+    },
+    {
+      "type": "h2",
+      "id": "library-tests",
+      "zh": "库的测试",
+      "en": "Library Tests"
+    },
+    {
+      "type": "p",
+      "en": "So how do we explain that weird *String* file from the reports earlier? We didn't write that! Well, Ignacio found it useful to use this framework for the language's system modules. System modules are special *.jai* files we provide programmers. Users can import them to leverage OpenGL / D3D, font rendering, audio playback, and more.",
+      "zh": "那么，前面报告里那个奇怪的 *String* 文件该怎么解释？那不是我们写的！事情是这样的：Ignacio 觉得把这个框架用在语言的系统模块上很有用。系统模块是我们提供给程序员的一些特殊 *.jai* 文件。用户可以 import 它们，从而用上 OpenGL / D3D、字体渲染、音频播放等等。"
+    },
+    {
+      "type": "p",
+      "en": "The test file from earlier imported *Basic* (a catch-all module we use to experiment new features). *Basic* happens to indirectly import the *String* module. When I opened up *String*, I noticed Ignacio had written this somewhere on the file:",
+      "zh": "前面那个测试文件 import 了 *Basic*（我们用来试验新特性的一个大杂烩模块）。*Basic* 恰好会间接 import *String* 模块。我打开 *String* 的时候，发现 Ignacio 在文件里某处写了这么一段："
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": "string_tests :: () {\r\n\r\n    assert(join(..{:string: \"foo\", \"bar\", \"puf\"}, \", \") == \"foo, bar, puf\");\r\n    assert(join(\"foo\", \"bar\", \"puf\", separator=\"/\") == \"foo/bar/puf\");\r\n\r\n    assert(\"foo/bar/puf\" == join(..split(\"foo/bar/puf\", \"/\"), \"/\"));\r\n    assert(\"foo\\\\bar\\\\puf\" == join(..split(\"foo/bar/puf\", \"/\"), \"\\\\\"));\r\n    assert(\"foo/bar/puf/grr\" == join(..split(\"foo, bar, puf, grr\", \", \"), \"/\"));\r\n\r\n    // More asserts\r\n    // ...\r\n} @TestProcedure"
+    },
+    {
+      "type": "p",
+      "en": "Which accounted for the 82 additional asserts. That's because the framework detects tests written in external modules, outside of our own test files. Now anyone on the team writing modules can write test procedures inside their module, tag them, and they're done. In fact, I have a file under *tests/* that just imports all the modules. The actual tests can live right next to the module code, outside of our folder, and we register them for free just as we automatically register the test files inside the folder for free. And fret not, a module being imported multiple times will still have its test recognized only once.",
+      "zh": "那 82 个多出来的 assert 就是这么来的。因为框架会检测写在外部模块里的测试，而不只是我们自己的测试文件。现在团队里任何写模块的人都可以在模块内部写测试过程、给它打上标记，就完事了。事实上，我在 *tests/* 下有一个文件，专门 import 所有模块。真正的测试可以就放在模块代码旁边、在我们那个文件夹之外，我们能免费把它们注册进来，就像我们免费自动注册文件夹里的测试文件一样。而且不用担心：一个模块被 import 多次，它的测试也只会被识别一次。"
+    },
+    {
+      "type": "h2",
+      "id": "future-updates",
+      "zh": "未来的更新",
+      "en": "Future Updates"
+    },
+    {
+      "type": "p",
+      "en": "I'd like to note there are special settings and configurations the user doesn't know about (good! that's the point!), and those who care can open up the build file, which is just the *tests.jai* source file. Documentation amounts to a few well-placed comments.",
+      "zh": "我想指出，这里有一些用户并不知道的特殊设置与配置（很好！重点就在这儿！），在意的人可以打开构建文件——它就是 *tests.jai* 这个源文件。文档就是几处放得恰到好处的注释。"
+    },
+    {
+      "type": "p",
+      "en": "Upon release (if we have time to make it happen), I'd like people to write their numerous test procedures, compile *tests.jai*, and have them witness Jon's [bananas.jai](https://youtu.be/OHZwYYW9koI?list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO&t=476) but in the context of tests: A visualization of a growing tree of test files as branches, where each test procedure is a leaf from the branch.",
+      "zh": "等到发布时（如果我们有时间把它做出来），我希望大家写好自己的许多测试过程、编译 *tests.jai*，然后亲眼看到 Jon 那个 [bananas.jai](https://youtu.be/OHZwYYW9koI?list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO&t=476) 的效果出现在测试语境里：把不断生长的测试文件树可视化成枝干，每个测试过程都是枝干上的一片叶子。"
+    },
+    {
+      "type": "h2",
+      "id": "how-it-all-works",
+      "zh": "它是怎么运作的",
+      "en": "How It All Works"
+    },
+    {
+      "type": "p",
+      "en": "A common theme back at Kennedy Space Center was that we wanted to automate most of the \"bookkeeping\" so the engineer's time and effort went into thinking about the real problem. Interacting with build systems was not in our best interest! Even so, sometimes we were stuck with what I think were high-friction tools. I can't properly express to the reader how great it's been to write a tool that reduces friction nontrivially.",
+      "zh": "当年在 Kennedy Space Center，一个常见的主题是：把大部分「记账」工作自动化掉，好让工程师的时间和精力花在思考真正的问题上。跟构建系统打交道从来不符合我们的最大利益！话虽如此，有时我们还是被困在——我认为是——摩擦力很高的工具里。我实在没法向读者表达，写一个能实实在在地降低摩擦的工具，感觉有多好。"
+    },
+    {
+      "type": "p",
+      "en": "Let's take a quick look at how the language played a part in letting me create this framework, as I think it has the right kind of features all statically-typed languages should have going forward.",
+      "zh": "我们快速看看，这门语言在让我做出这个框架上起到了什么作用——我认为它具备的那种特性，是所有静态类型语言今后都该有的。"
+    },
+    {
+      "type": "h2",
+      "id": "minimizing-framework-interaction",
+      "zh": "把与框架的交互降到最低",
+      "en": "Minimizing Framework Interaction"
+    },
+    {
+      "type": "p",
+      "en": "Initially, the main struggles in making the testing system work were psychological, working to unlearn years of how I was told automated test frameworks should be structured. My first attempt was writing a hybrid *C++/Jai* program with wacky command-line parameters. I think Jon nearly had a heart attack. It was difficult to implement something that met the criteria listed at the beginning of this post, because my model was tied to old-school software testing models.",
+      "zh": "一开始，让测试系统跑起来的主要困难是心理上的：我得努力忘掉多年来被灌输的「自动化测试框架应该长什么样」。我的第一次尝试是写一个 *C++/Jai* 混合的程序，配上古怪的命令行参数。我觉得 Jon 差点心脏病发作。要做出符合本文开头那几条标准的东西很难，因为我的思维模型被老派软件测试模型绑住了。"
+    },
+    {
+      "type": "p",
+      "en": "The closest implementation I have ever found is [CxxTest](http://cxxtest.com/guide.html). What caught my interest was the second sentence on their homepage:",
+      "zh": "我找到的最接近的实现是 [CxxTest](http://cxxtest.com/guide.html)。吸引我注意的是他们主页上的第二句话："
+    },
+    {
+      "type": "quote",
+      "en": "CxxTest is easy to use because it does not require precompiling a CxxTest testing library, it employs no advanced features of C++ (e.g. RTTI) and it supports a very flexible form of test discovery.",
+      "zh": "CxxTest 用起来很简单，因为它不需要预编译一个 CxxTest 测试库，也不使用 C++ 的高级特性（例如 RTTI），而且它支持一种非常灵活的测试发现机制。"
+    },
+    {
+      "type": "p",
+      "en": "Aha! It's trying to make itself invisible, and the term *test discovery* sounds like it's doing work on behalf of the user. Indeed, later the website goes on to say:",
+      "zh": "啊哈！它在努力让自己隐形，而 *test discovery* 这个说法听起来就像是它在替用户干活。果然，网站后面接着说："
+    },
+    {
+      "type": "quote",
+      "en": "Additionally, CxxTest supports test discovery. Tests are defined in C++ header files, which are parsed by CxxTest to automatically generate a test runner. Thus, CxxTest is somewhat easier to use than alternative C++ testing frameworks, since you do not need to register tests.",
+      "zh": "此外，CxxTest 支持测试发现。测试定义在 C++ 头文件里，CxxTest 会解析这些文件，自动生成一个测试运行器。因此，比起其他 C++ 测试框架，CxxTest 用起来要稍微容易一些，因为你不需要注册测试。"
+    },
+    {
+      "type": "p",
+      "en": "Aha por dos! Test discovery is the property I want frameworks to exhibit. With *CxxTest*, though, we still need to understand its build system steps to reap the benefits, but that's a difficult limitation to overcome with *C++*. In *jai*, however, we can specify our build system in the language.",
+      "zh": "Aha por dos！测试发现正是我希望框架具备的性质。不过用 *CxxTest* 的话，我们仍然得先弄懂它构建系统的各个步骤才能享受到好处，而这是 *C++* 很难克服的局限。但在 *jai* 里，我们可以用语言本身来指定构建系统。"
+    },
+    {
+      "type": "p",
+      "en": "So I made a source file, *tests.jai*. In said file, we can ask the compiler to compile any number of different files, and request it to open up its compilation stages to us as things get lexically scanned, parsed, and code generated. That's more than we care to ask for, so our entire build system can amount to compiling a single file, in the same way we compile any normal code.",
+      "zh": "于是我建了一个源文件 *tests.jai*。在这个文件里，我们可以让编译器去编译任意多个不同的文件，也可以要求它把编译的各阶段向我们敞开：词法扫描、语法解析、代码生成。这已经超出我们真正需要的程度了，所以我们的整个构建系统可以简化成「编译一个文件」，跟我们编译任何普通代码没什么两样。"
+    },
+    {
+      "type": "h2",
+      "id": "tagging-procedures",
+      "zh": "给过程打标记",
+      "en": "Tagging Procedures"
+    },
+    {
+      "type": "p",
+      "en": "As I just said, in *tests.jai* we can ask the compiler to pause at any compilation stage for us to intervene in the process. So I used that for the test discovery. The current mechanism, as we have seen, is to tag procedures that want to behave like an independent test program with the note *@TestProcedure*. Then, once the compiler has finished type-checking all source files, I ask it to give me the declarations tagged with the note. Specifically:",
+      "zh": "如我刚刚所说，在 *tests.jai* 里，我们可以要求编译器在任意编译阶段暂停，好让我们介入这个过程。我就用它来做测试发现。目前的机制，正如我们已经看到的，是给那些想表现得像一个独立测试程序的过程打上注记 *@TestProcedure*。然后，等编译器完成所有源文件的类型检查之后，我让它把带这个注记的声明交给我。具体是这样："
+    },
+    {
+      "type": "code",
+      "lang": "jai",
+      "code": "for decl.notes {\r\n    if it.text == {\r\n        case \"TestProcedure\";\r\n        proc_info := cast(*Type_Info_Procedure) type;\r\n        if proc_info.argument_types.count > 0 {\r\n            print(\"[Test Suite] WARNING: '%' tagged with @TestProcedure should take no arguments.\\n\", proc.name);\r\n            continue;\r\n        }\r\n        user_test : TestProcedure;\r\n        user_test.filename = decl.filename;\r\n        user_test.procname = proc.name;\r\n        array_add(*tests_to_register, user_test);\r\n\r\n        //...\r\n        case;\r\n        // Do nothing.\r\n    }\r\n}"
+    },
+    {
+      "type": "p",
+      "en": "Where *decl* is the current code declaration we're inspecting from the *AST*.",
+      "zh": "其中 *decl* 是我们正从 *AST* 里检视的那个当前代码声明。"
+    },
+    {
+      "type": "p",
+      "en": "In the past, I used to check for procedure names starting with *test*, but [Allen](https://twitter.com/allenwebster4th) and [Nico](https://twitter.com/kneeko) made me question whether that was too constraining. Turns out it was. The downside with the notes here, though, is there might be tests importing external modules that tagged some of their code with *@TestProcedure* for unrelated reasons. I mitigate that by ignoring structs with that tag, and by verifying whether the procedure acts as an entry point (i.e. *main* with no parameters). There are other options available to us, but for now this is a good-enough solution.",
+      "zh": "以前我会去检查以 *test* 开头的过程名，但 [Allen](https://twitter.com/allenwebster4th) 和 [Nico](https://twitter.com/kneeko) 让我怀疑那样是不是限制得太紧。结果确实太紧了。不过用注记也有个坏处：可能有测试 import 了外部模块，而那些模块出于无关的原因把某些代码标成了 *@TestProcedure*。我的缓解办法是忽略带这个标记的结构体，并检查该过程是否充当入口点（也就是不带参数的 *main*）。我们还有别的选择，但眼下这个方案够好了。"
+    },
+    {
+      "type": "h2",
+      "id": "hidden-test-suite",
+      "zh": "隐藏的测试套件",
+      "en": "Hidden Test Suite"
+    },
+    {
+      "type": "p",
+      "en": "I register the discovered tests by creating *register_test* procedure calls on-the-fly--meaning I update the program's *AST* before things enter the bytecode pipeline. Where is the *register_test*procedure defined? Well, the dirty secret is I still wrote an actual test suite, contained in a single file living inside the *tests/* folder. The build file has access to that, as do people. If anyone wishes to avoid all the automatic magic and also believe editing the build file is not enough, they are free to ignore it altogether and figure out how the suite works. They can register tests manually, generate reports however they see fit, and perform the entire job of a framework themselves.",
+      "zh": "我注册这些被发现的测试的方式，是即时生成 *register_test* 过程调用——也就是说，在代码进入字节码流水线之前，我先更新程序的 *AST*。那 *register_test* 过程定义在哪儿？这个不太光彩的秘密是：我确实还是写了一个实打实的测试套件，放在 *tests/* 文件夹里的单个文件中。构建文件能访问它，人也能。如果有人想避开所有这些自动魔法，而且觉得光改构建文件还不够，那他们完全可以无视它，自己去搞清楚这个套件是怎么运作的。他们可以手动注册测试、按自己觉得合适的方式生成报告，把框架该干的活全自己干一遍。"
+    },
+    {
+      "type": "h2",
+      "id": "test-asserts",
+      "zh": "测试 assert",
+      "en": "Test Asserts"
+    },
+    {
+      "type": "p",
+      "en": "As we can see from the *CxxTest* homepage, it has different types of asserts for us to use. I had something similar going, but Ignacio reminded me that Jon added an assertion handler as part of the [implicit context](https://youtu.be/ciGQCP6HgqI?t=837). That means we can override the behavior of regular asserts! This is what allows external modules to write officially-recognized tests inside their file and still compile anywhere--we're not requiring them to do anything special.",
+      "zh": "从 *CxxTest* 的主页可以看到，它提供了不同类型的 assert 给我们用。我本来也做了类似的东西，但 Ignacio 提醒我，Jon 把断言处理器作为[隐式上下文](https://youtu.be/ciGQCP6HgqI?t=837)的一部分加了进去。这意味着我们可以覆盖普通 assert 的行为！正是这一点，让外部模块能在自己的文件里写官方认可的测试、还照样在任何地方都能编译——我们并不要求它们做什么特殊的事。"
+    },
+    {
+      "type": "h2",
+      "id": "whats-next",
+      "zh": "接下来",
+      "en": "What's Next"
+    },
+    {
+      "type": "p",
+      "en": "I now enjoy writing tests whenever I need to, and I hope this straightforward style sounds appealing to some people.",
+      "zh": "现在只要需要，我就很乐意写测试；希望这种直白的风格能让一些人觉得有意思。"
+    },
+    {
+      "type": "p",
+      "en": "In other news, for the purpose of testing a compiler, will an automated test suite suffice? Not really, though it's a necessary first step. Although we've uncovered dozens upon dozens of important compiler bugs, we're starting to hit the ceiling of what human-made tests can offer. It's no surprise we've started to seriously look into a different beast entirely—a compiler fuzzer.",
+      "zh": "另外一件事：就测试编译器这个目的而言，一套自动化测试套件够用吗？其实不够，尽管它是必要的第一步。虽然我们已经翻出了几十上百个重要的编译器 bug，但我们正在触及人写的测试所能提供成果的天花板。所以我们开始认真研究另一种完全不同的猛兽——编译器 fuzzer，也就不奇怪了。"
+    },
+    {
+      "type": "p",
+      "en": "But that's a story for another blog post!",
+      "zh": "不过那是另一篇博客的故事了！"
+    },
+    {
+      "type": "p",
+      "en": "P.S. Shoutout to [Josh](https://twitter.com/machinamentum), who among other things, helped write a bunch of the language tests and makes sure everything keeps running smoothly on Mac and Linux.",
+      "zh": "附：感谢 [Josh](https://twitter.com/machinamentum)，他除了别的事情之外，还帮忙写了一大堆语言测试，并确保一切在 Mac 和 Linux 上都顺畅运行。"
+    }
+  ]
+}

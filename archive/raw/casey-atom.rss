@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>
+<channel>
+<atom:link href='https://caseymuratori.com/blog_atom.rss' rel='self' type='application/rss+xml' />
+<link>https://caseymuratori.com/blog</link>
+<title>Casey Muratori's Blog</title>
+<description>Personal stuff.</description>
+<language>en-us</language>
+<copyright>(C) Copyright 2005-2020</copyright>
+<webMaster>casey@mollyrocket.com (Casey Muratori)</webMaster>
+<generator>Molly Rocket Web Backend</generator>
+<pubDate>Wed, 02 Dec 2020 22:35:42 GMT</pubDate>
+<lastBuildDate>Wed, 02 Dec 2020 22:35:42 GMT</lastBuildDate>
+<ttl>1</ttl>
+<image>
+<title>Casey Muratori's Blog</title>
+<url>https://caseymuratori.com/r/casey_logo_2_be354f073101a48d.png</url>
+<link>https://caseymuratori.com/blog</link>
+<description>Personal stuff.</description>
+</image>
+<item>
+<title>Printing Presses Are Giant GPUs</title>
+<link>https://caseymuratori.com/blog_0038</link>
+<comments>https://caseymuratori.com/blog_0038</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Tue, 28 Apr 2020 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0038</guid>
+<description>The more I learn about printing presses, the more they seem like giant GPUs.</description>
+</item>
+<item>
+<title>Jittering Fonts in Photoshop with Prime Pussify</title>
+<link>https://caseymuratori.com/blog_0037</link>
+<comments>https://caseymuratori.com/blog_0037</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Sat, 18 Apr 2020 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0037</guid>
+<description>A Photoshop script for randomizing per-character font attributes on text layers.</description>
+</item>
+<item>
+<title>Stable Filtering  -  Part 2</title>
+<link>https://caseymuratori.com/blog_0036</link>
+<comments>https://caseymuratori.com/blog_0036</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 25 Mar 2019 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0036</guid>
+<description>How to make a filter than can be implied an infinite number of times without producing artifacts and remain nearly indistinguishable from the original image.</description>
+</item>
+<item>
+<title>Stable Filtering  -  Part 1</title>
+<link>https://caseymuratori.com/blog_0035</link>
+<comments>https://caseymuratori.com/blog_0035</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Tue, 05 Mar 2019 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0035</guid>
+<description>How to make a filter that can be applied millions of times without producing artifacts.</description>
+</item>
+<item>
+<title>How to get clang++ to find link.exe</title>
+<link>https://caseymuratori.com/blog_0034</link>
+<comments>https://caseymuratori.com/blog_0034</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 23 Jan 2019 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0034</guid>
+<description>As of version 8.0.0, clang on Windows requires some gyrations if you want to tell it where link.exe is located.</description>
+</item>
+<item>
+<title>How close is WinDBG Preview to an everyday debugger?</title>
+<link>https://caseymuratori.com/blog_0033</link>
+<comments>https://caseymuratori.com/blog_0033</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 09 Jan 2019 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0033</guid>
+<description>A look at what Microsoft has been doing to improve the usability of WinDBG, and what's still missing.</description>
+</item>
+<item>
+<title>Killing the Walk Monster (2018)</title>
+<link>https://caseymuratori.com/blog_0032</link>
+<comments>https://caseymuratori.com/blog_0032</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Thu, 11 Oct 2018 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0032</guid>
+<description>My BICFest 2018 lecture overview of the movement system I developed for The Witness.</description>
+</item>
+<item>
+<title>The Thirty-Million-Line Problem (2015)</title>
+<link>https://caseymuratori.com/blog_0031</link>
+<comments>https://caseymuratori.com/blog_0031</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 21 May 2018 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0031</guid>
+<description>A lecture from 2015 that argues for moving away from drivers and toward ISAs.</description>
+</item>
+<item>
+<title>Papers I Have Loved (2016)</title>
+<link>https://caseymuratori.com/blog_0030</link>
+<comments>https://caseymuratori.com/blog_0030</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 05 Feb 2018 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0030</guid>
+<description>A lecture from the 2016 Papers We Love conference about papers that proved inspirational to new work.</description>
+</item>
+<item>
+<title>How to Open a Black Box (2007)</title>
+<link>https://caseymuratori.com/blog_0029</link>
+<comments>https://caseymuratori.com/blog_0029</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 05 Feb 2018 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0029</guid>
+<description>A look back at the development of normal mapping technology as a motivating example of why understanding concepts at a deep level is important for game engine programming.</description>
+</item>
+<item>
+<title>Are register names still useful?</title>
+<link>https://caseymuratori.com/blog_0028</link>
+<comments>https://caseymuratori.com/blog_0028</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Sun, 18 Dec 2016 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0028</guid>
+<description>Why do CPUs still take instruction streams encoded with register names?</description>
+</item>
+<item>
+<title>Why Software Patents are Bad, Period.</title>
+<link>https://caseymuratori.com/blog_0027</link>
+<comments>https://caseymuratori.com/blog_0027</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 24 Aug 2016 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0027</guid>
+<description>An e-mail I wrote to a Stanford Law student a long time ago who asked me why programmers thought software patents were bad.</description>
+</item>
+<item>
+<title>Fixing Multi-monitor and Multi-window OpenGL on Windows</title>
+<link>https://caseymuratori.com/blog_0026</link>
+<comments>https://caseymuratori.com/blog_0026</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Sat, 06 Feb 2016 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0026</guid>
+<description>A simple proposal for a wgl extension that makes multi-monitor and multi-window output on Windows clean and simple.</description>
+</item>
+<item>
+<title>The Worst API Ever Made</title>
+<link>https://caseymuratori.com/blog_0025</link>
+<comments>https://caseymuratori.com/blog_0025</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 06 Aug 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0025</guid>
+<description>A call-by-call look at context switch logging with the Event Tracing for Windows API.</description>
+</item>
+<item>
+<title>Designing and Evaluating Reusable Components (2004)</title>
+<link>https://caseymuratori.com/blog_0024</link>
+<comments>https://caseymuratori.com/blog_0024</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 30 Jul 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0024</guid>
+<description>An in-depth look at the five core principles of API design.</description>
+</item>
+<item>
+<title>Lister Panel Q&amp;A</title>
+<link>https://caseymuratori.com/blog_0023</link>
+<comments>https://caseymuratori.com/blog_0023</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 23 Jul 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0023</guid>
+<description>Questions and answers from last week's post on The Witness's lister panel.</description>
+</item>
+<item>
+<title>The Source Code</title>
+<link>https://caseymuratori.com/blog_0022</link>
+<comments>https://caseymuratori.com/blog_0022</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 16 Jul 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0022</guid>
+<description>The complete source code to The Witness's lister panel implementation.</description>
+</item>
+<item>
+<title>Lister Panel Demonstration</title>
+<link>https://caseymuratori.com/blog_0021</link>
+<comments>https://caseymuratori.com/blog_0021</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 09 Jul 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0021</guid>
+<description>A brief video showing how the lister panel works in The Witness.</description>
+</item>
+<item>
+<title>Displaying Groups Hierarchically</title>
+<link>https://caseymuratori.com/blog_0020</link>
+<comments>https://caseymuratori.com/blog_0020</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 02 Jul 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0020</guid>
+<description>Making some simple changes to the lister panel code so that its display could show a hierarchy.</description>
+</item>
+<item>
+<title>Special Filters</title>
+<link>https://caseymuratori.com/blog_0019</link>
+<comments>https://caseymuratori.com/blog_0019</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 25 Jun 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0019</guid>
+<description>Implementing lister panel filtering for arbitrary entity characteristics.</description>
+</item>
+<item>
+<title>Type Filtering</title>
+<link>https://caseymuratori.com/blog_0018</link>
+<comments>https://caseymuratori.com/blog_0018</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 18 Jun 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0018</guid>
+<description>Implementing lister panel filtering by primary entity type.</description>
+</item>
+<item>
+<title>Defining a Single Enumerant</title>
+<link>https://caseymuratori.com/blog_0017</link>
+<comments>https://caseymuratori.com/blog_0017</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 11 Jun 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0017</guid>
+<description>An in-depth look at the decision-making process behind a small, simple piece of code.</description>
+</item>
+<item>
+<title>Complexity and Granularity</title>
+<link>https://caseymuratori.com/blog_0016</link>
+<comments>https://caseymuratori.com/blog_0016</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 04 Jun 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0016</guid>
+<description>An examination of two fundamental principles in effective programming.</description>
+</item>
+<item>
+<title>Semantic Compression</title>
+<link>https://caseymuratori.com/blog_0015</link>
+<comments>https://caseymuratori.com/blog_0015</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 28 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0015</guid>
+<description>An introduction to the idea that code should be approached with a mindset towards compressing it semantically, rather than orienting it around objects.</description>
+</item>
+<item>
+<title>Interpolation</title>
+<link>https://caseymuratori.com/blog_0014</link>
+<comments>https://caseymuratori.com/blog_0014</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 21 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0014</guid>
+<description>A video that introduces the basic concepts behind linear and bezier interpolation.</description>
+</item>
+<item>
+<title>Assorted grass system features</title>
+<link>https://caseymuratori.com/blog_0013</link>
+<comments>https://caseymuratori.com/blog_0013</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 14 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0013</guid>
+<description>Brief discussions of some of the features of the grass system, and how they were implemented.</description>
+</item>
+<item>
+<title>A Brief Addendum on Staggered Concentric Intersection</title>
+<link>https://caseymuratori.com/blog_0012</link>
+<comments>https://caseymuratori.com/blog_0012</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 07 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0012</guid>
+<description>Summaries and responses to emails received regarding the "Staggered Concentric Intersection" pattern.</description>
+</item>
+<item>
+<title>The Nebraska Problem</title>
+<link>https://caseymuratori.com/blog_0011</link>
+<comments>https://caseymuratori.com/blog_0011</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Fri, 02 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0011</guid>
+<description>The search for a "random" distribution with the most favorable qualities for ground cover.</description>
+</item>
+<item>
+<title>The Color of Noise</title>
+<link>https://caseymuratori.com/blog_0010</link>
+<comments>https://caseymuratori.com/blog_0010</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Fri, 23 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0010</guid>
+<description>What kinds of random distributions are good for the sorts of graphics work we do in game development?</description>
+</item>
+<item>
+<title>Visually pleasing distributions</title>
+<link>https://caseymuratori.com/blog_0009</link>
+<comments>https://caseymuratori.com/blog_0009</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Fri, 16 May 2014 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0009</guid>
+<description>An exploration of the grass system in The Witness leads to a discussion about what sorts of "random" distributions look pleasing to the human visual system.</description>
+</item>
+<item>
+<title>How do you say "plane" in The Witness?</title>
+<link>https://caseymuratori.com/blog_0008</link>
+<comments>https://caseymuratori.com/blog_0008</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Sun, 20 Jan 2013 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0008</guid>
+<description>The exciting conclusion to the immovable rock mystery.</description>
+</item>
+<item>
+<title>A Cliffside Cliffhanger</title>
+<link>https://caseymuratori.com/blog_0007</link>
+<comments>https://caseymuratori.com/blog_0007</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 24 Dec 2012 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0007</guid>
+<description>A little mystery about a rock that refused to move, that I thought I'd solved but didn't really solve until Part 2.</description>
+</item>
+<item>
+<title>Finding and Fixing a Five-Second Stall</title>
+<link>https://caseymuratori.com/blog_0006</link>
+<comments>https://caseymuratori.com/blog_0006</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 17 Dec 2012 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0006</guid>
+<description>A strange pause in The Witness's startup sequence leads to an investigation of Windows' hotkey handling.</description>
+</item>
+<item>
+<title>Walk Monster</title>
+<link>https://caseymuratori.com/blog_0005</link>
+<comments>https://caseymuratori.com/blog_0005</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Wed, 12 Dec 2012 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0005</guid>
+<description>Mapping the walkable surfaces on the island of The Witness as a step toward bulletproofing the player movement code.</description>
+</item>
+<item>
+<title>The Next Twenty Years</title>
+<link>https://caseymuratori.com/blog_0004</link>
+<comments>https://caseymuratori.com/blog_0004</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Mon, 08 Oct 2012 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0004</guid>
+<description>Why the closed distribution model of Windows 8 should be changed for the sake of developers, consumers, and Microsoft itself.</description>
+</item>
+<item>
+<title>Implementing GJK (2006)</title>
+<link>https://caseymuratori.com/blog_0003</link>
+<comments>https://caseymuratori.com/blog_0003</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Thu, 12 May 2016 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0003</guid>
+<description>An old makeshift video I recorded about how to implement the GJK collision detection algorithm.</description>
+</item>
+<item>
+<title>Quaternions, Double-cover, and the Rest Pose Neighborhood (2006)</title>
+<link>https://caseymuratori.com/blog_0002</link>
+<comments>https://caseymuratori.com/blog_0002</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Thu, 12 May 2016 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0002</guid>
+<description>An old makeshift tech video I recorded about a special property of quaternions and how to use it to your advantage.</description>
+</item>
+<item>
+<title>Immediate-Mode Graphical User Interfaces (2005)</title>
+<link>https://caseymuratori.com/blog_0001</link>
+<comments>https://caseymuratori.com/blog_0001</comments>
+<author>casey@mollyrocket.com (Casey Muratori)</author>
+<pubDate>Thu, 12 May 2016 00:00:00 GMT</pubDate>
+<guid isPermaLink='true'>https://caseymuratori.com/blog_0001</guid>
+<description>An old makeshift tech video I recorded introducing the concept of "IMGUI"  -  the Immediate-Mode Graphical User Interface.</description>
+</item>
+</channel>
+</rss>

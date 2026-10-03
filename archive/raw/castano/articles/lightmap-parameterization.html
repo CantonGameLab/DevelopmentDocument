@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="pingback" href="https://www.ludicon.com/castano/blog/xmlrpc.php">
+<script src="https://cdn.counter.dev/script.js" data-id="d35a48c2-0e1d-4b08-972d-bd0016273314" data-utcoffset="-7"></script>
+<script>
+// IC: This code was added for the image comparison widget in the "An updated Sponza glTF" post.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-cmp-tabs] .cmp-tab');
+  if (!btn) return;
+
+  const root = btn.closest('[data-cmp-tabs]');
+  const img = root.querySelector('.cmp-img');
+  const label = root.querySelector('.cmp-label');
+  const tabs = root.querySelectorAll('.cmp-tab');
+
+  tabs.forEach(t => {
+    t.classList.toggle('is-active', t === btn);
+    t.setAttribute('aria-selected', t === btn ? 'true' : 'false');
+  });
+
+  img.src = btn.dataset.src;
+  label.textContent = btn.dataset.label;
+});
+
+</script>
+<title>Lightmap Parameterization &#8211; Ignacio Castaño</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Feed" href="https://www.ludicon.com/castano/blog/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Ignacio Castaño &raquo; Comments Feed" href="https://www.ludicon.com/castano/blog/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www.ludicon.com/castano/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.ludicon.com%2Fcastano%2Fblog%2Farticles%2Flightmap-parameterization%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www.ludicon.com/castano/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.ludicon.com%2Fcastano%2Fblog%2Farticles%2Flightmap-parameterization%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='graphy-font-css' href='https://fonts.googleapis.com/css?family=Source+Serif+Pro%3A400%7CLora%3A400%2C400italic%2C700&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/genericons/genericons.css?ver=3.4.1' type='text/css' media='all' />
+<link rel='stylesheet' id='normalize-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/css/normalize.css?ver=4.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='graphy-style-css' href='https://www.ludicon.com/castano/blog/wp-content/themes/graphy/style.css?ver=2.3.2' type='text/css' media='all' />
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://www.ludicon.com/castano/blog/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://www.ludicon.com/castano/blog/wp-json/wp/v2/pages/1265" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.ludicon.com/castano/blog/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.9" />
+<link rel="canonical" href="https://www.ludicon.com/castano/blog/articles/lightmap-parameterization/" />
+<link rel='shortlink' href='https://www.ludicon.com/castano/blog/?p=1265' />
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-N5MLWTT7JM"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-N5MLWTT7JM');
+		</script>
+
+		<style type="text/css">
+		/* Colors */
+				.entry-content a, .entry-summary a, .page-content a, .author-profile-description a, .comment-content a, .main-navigation .current_page_item > a, .main-navigation .current-menu-item > a {
+			color: #a62425;
+		}
+						.main-navigation a:hover, .entry-content a:hover, .entry-summary a:hover, .page-content a:hover, .author-profile-description a:hover, .comment-content a:hover {
+			color: #b85051;
+		}
+		
+			</style>
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+		<style type="text/css" id="wp-custom-css">
+			.wp-block-image figure {
+  margin:0 0 1.6em
+}
+
+
+.cmp-tabs { margin: 1em 0; }
+
+.cmp-tabbar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem;   justify-content: center; text-align: center;}
+
+.cmp-img { width: 100%; height: auto; display: block; }
+.cmp-caption { font-size: .9em; opacity: .8; margin-top: .35rem; }
+
+.cmp-tab {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.04);
+  color: inherit;
+  padding: .35rem .65rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  opacity: 1;
+  transition: background .15s ease, border-color .15s ease;
+  text-transform: none;
+}
+
+/* Hover */
+.cmp-tab:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Active / selected */
+.cmp-tab.is-active {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+.cmp-image-wrapper {
+  position: relative;
+}
+
+.cmp-label {
+  position: absolute;
+  right: .6rem;
+  bottom: .6rem;
+  padding: .25rem .5rem;
+  font-size: .8rem;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  border-radius: .4rem;
+  pointer-events: none;
+}		</style>
+		
+    <!-- START - Open Graph and Twitter Card Tags 3.3.9 -->
+     <!-- Facebook Open Graph -->
+      <meta property="og:locale" content="en_US"/>
+      <meta property="og:site_name" content="Ignacio Castaño"/>
+      <meta property="og:title" content="Lightmap Parameterization"/>
+      <meta property="og:url" content="https://www.ludicon.com/castano/blog/articles/lightmap-parameterization/"/>
+      <meta property="og:type" content="article"/>
+      <meta property="og:description" content="As explained by Jon in his previous post, we are using precomputed global illumination in The Witness, and one of my first tasks was to work on that system.
+I have developed some interesting technology to compute automatic paramaterizations, to formulate the lighting computations in a way that can b"/>
+     <!-- Google+ / Schema.org -->
+      <meta itemprop="name" content="Lightmap Parameterization"/>
+      <meta itemprop="headline" content="Lightmap Parameterization"/>
+      <meta itemprop="description" content="As explained by Jon in his previous post, we are using precomputed global illumination in The Witness, and one of my first tasks was to work on that system.
+I have developed some interesting technology to compute automatic paramaterizations, to formulate the lighting computations in a way that can b"/>
+      <meta itemprop="author" content="Ignacio Castaño"/>
+      <!--<meta itemprop="publisher" content="Ignacio Castaño"/>--> <!-- To solve: The attribute publisher.itemtype has an invalid value. -->
+     <!-- Twitter Cards -->
+      <meta name="twitter:title" content="Lightmap Parameterization"/>
+      <meta name="twitter:url" content="https://www.ludicon.com/castano/blog/articles/lightmap-parameterization/"/>
+      <meta name="twitter:description" content="As explained by Jon in his previous post, we are using precomputed global illumination in The Witness, and one of my first tasks was to work on that system.
+I have developed some interesting technology to compute automatic paramaterizations, to formulate the lighting computations in a way that can b"/>
+      <meta name="twitter:card" content="summary_large_image"/>
+     <!-- SEO -->
+     <!-- Misc. tags -->
+     <!-- is_singular -->
+    <!-- END - Open Graph and Twitter Card Tags 3.3.9 -->
+        
+    </head>
+
+<body class="wp-singular page-template-default page page-id-1265 page-child parent-pageid-17 wp-theme-graphy has-sidebar footer-1 has-avatars">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header">
+
+		<div class="site-branding">
+					<div class="site-title"><a href="https://www.ludicon.com/castano/blog/" rel="home">Ignacio Castaño</a></div>
+						<div class="site-description"></div>
+						</div><!-- .site-branding -->
+
+				<nav id="site-navigation" class="main-navigation">
+			<button class="menu-toggle"><span class="menu-text">Menu</span></button>
+			<div class="menu-main-menu-container"><ul id="menu-main-menu" class="menu"><li id="menu-item-426" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-426"><a href="http://www.ludicon.com/castano/blog/">Blog</a></li>
+<li id="menu-item-236" class="menu-item menu-item-type-post_type menu-item-object-page current-page-ancestor menu-item-236"><a href="https://www.ludicon.com/castano/blog/articles/">Articles</a></li>
+<li id="menu-item-235" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-235"><a href="https://www.ludicon.com/castano/blog/projects/">Projects</a></li>
+<li id="menu-item-234" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-234"><a href="https://www.ludicon.com/castano/blog/about/">About</a></li>
+</ul></div>						<form role="search" method="get" class="search-form" action="https://www.ludicon.com/castano/blog/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form>					</nav><!-- #site-navigation -->
+		
+		
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main">
+
+		
+			
+<article id="post-1265" class="post-1265 page type-page status-publish hentry">
+		<header class="entry-header">
+				<h1 class="entry-title">Lightmap Parameterization</h1>
+			</header><!-- .entry-header -->
+	
+	<div class="entry-content">
+		<p><span class="md-plain">As explained by Jon </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://the-witness.net/news/?p=50"><span class="md-plain">in his previous post</span></a><span class="md-plain">, we are using precomputed global illumination in </span><span class="md-pair-s "><em><span class="md-plain">The Witness</span></em><span class="md-plain">, and one of my first tasks was to work on that system.</span></span></span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">I have developed some interesting technology to compute automatic paramaterizations, to formulate the lighting computations in a way that can be easily mapped to the GPU, and to speed them up performing them at a lower frequency by using irradiance caching. None of these things are very cutting edge, but I run into some interesting problems that are usually overlooked in the literature and came up with some creative solutions that I think would be interesting to share. However, in retrospect, I think I also made some mistakes, but I hope that being honest about them will help me avoid them in the future.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">In this first post I will describe the lightmap parameterization algorithm that I have implemented and in the next few posts I&#8217;ll cover other details of our lighting system such as our approach to perform final gathering using hemicubes and our implementation of irradiance caching.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">In order to use precomputed lighting we need a way of mapping these lighting computations to the surfaces. One possibility is to store them per vertex, but in many cases that does not provide enough resolution and the interpolation of the lighting makes the triangulation of the mesh fairly obvious. Many games get away with that by compensating the lack of detail in the lighting with high texture and normal map detail, but that does not go along well with the graphical style that Jon wants to achieve. So, instead of that we decided to create full parameterizations of our objects in order to store the precomputed lighting into lightmap textures.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">Creating these parameterizations by hand is possible, but it is time consuming and I&#8217;d rather have our artists work on something more enjoyable. So, we decided to create the parameterizations automatically. However, the greatest mistake I&#8217;ve made so far is to not look more carefully at the available solutions to accomplish that. I had some pieces of the implementation already available, and I overestimated how much effort it would take to put them together and produce robust results. While talking about this to some friends at GDC one of them asked why I wasn&#8217;t using </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://msdn.microsoft.com/en-us/library/ee422528(VS.85).aspx"><span class="md-plain">Microsoft&#8217;s UVAtlas</span></a><span class="md-plain"> tool, and to my dismay and embarrassment my only answer was that it had not occurred to me. I think that goes to prove how valuable it is to be open about our development in a small team like ours.</span></span></p>
+<p class="md-end-block md-p"><span class="md-plain">Now that I got that out of the way, let&#8217;s talk about the tech. We only use lightmaps to represent indirect illumination and the direct illumination of static area lights. So, our expectation was that lightmaps would be fairly smooth and that seams would not be a huge problem. For this reason we decided not to invest in a solution that guaranteed seamless parameterizations and instead used a fairly traditional approach: We first divide the input geometry into charts with disk topology, parameterize them individually, and finally pack them into a rectangular texture.</span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Segmentation</span></h3>
+<p><span class="md-plain md-expand">Dividing the mesh into charts is by far the most complex step of the process. In the past I had tried using hierarchical clustering without much success, so this time around I decided to use an iterative clustering algorithm similar to Lloyd&#8217;s algorithm, in the same vein as the algorithm used in the </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/"><span class="md-plain">Multi-chart geometry images (MCGI)</span></a><span class="md-plain md-expand"> paper.</span></span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">Like Lloyd&#8217;s clustering algorithm, the MCGI algorithm iterates between chart growing and reseeding stages. The growth of the charts is guided by a metric based on the normal deviation and the distance between the face centroids. After each chart growing iteration a new seed is selected taking the most central face of the chart, and the process is repeated until the seed location does not change anymore.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">My implementation of the MCGI algorithm worked moderately well, but it didn&#8217;t always produce good results. It was possible to tweak the number and location of the seeds to obtain the desired output, but that required a certain amount of user intervention that was not desired.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">Part of the problem is that the meaning of &#8220;good&#8221; in this setting is very subjective. It usually means nicely shaped charts, that fit well to the surface, produce parameterizations with little distortion, have fairly straight and convex boundaries and are more or less equaly sized.</span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">In order to adapt the algorithm to our purposes I did two things, modified the bootstraping method so that the initial number of seeds is chosen automatically and used a combination of metrics to obtain better control over the results.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">In order to select the initial number of seeds, I simply insert the seeds one by one, and grow the respective charts until a threshold is met. At that point I pick an arbitrary face that is not assigned to any chart yet and repeat the process. When no faces are left, the growing process is restarted from all seeds in parallel.</span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">A common strategy to remove the sensitivity to the initial conditions is to use the farthest point heuristic. However, instead of doing that I found that an approach that works well is to pick the worst candidate face of the already chosen charts as the next seed.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">The second important change to the algorithm was to use a different set of metrics. The MCGI paper proposes a metric that combines normal deviation with distance between face centroids. I found that using absolute distances made the algorithm very dependent on the tessellation of the mesh and that measuring the distances from the centroids favored triangles with low aspect ratios.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">Instead of using distance between faces I considered only the normal deviation and combined it with other metrics similar to the ones proposed in </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://www.cs.ubc.ca/labs/imager/tr/2005/Vlad_DCharts/"><span class="md-plain">D-Charts: Quasi-Developable Mesh Segmentation</span></a><span class="md-plain"> and that take roundness and straightness into account.</span></span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">These metrics also had their own problems and I had to tweak them in various ways. The most significant issue is that they constrained the chart growth in undesired ways. For example, to encourage chart convexity you would associate a high factor to the corresponding metric, but that would result in a large number of almost convex charts, as soon as a convex configuration was found no additional faces could be added to the chart. So, instead of using these metrics to constrain the growth I only use them to favor convex charts or straight boundaries; that allowed the charts to grow freely, but still retain the most convex and most straight shape possible.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">A trick that helped in many cases was to incorporate some input from the artist, but without imposing any additional burden to them. A simple way of doing that is taking into account the existing parameterization of the mesh. Our objects already have a parameterization that is used for texturing and the artists tend to place texture seams at locations that are not easily visible. Snapping the boundaries of our charts to the existing seams did not only reduce the overall number of seams, but also caused the charts to evolve in a way that matches better what the artist would have done manually.</span></p>
+<p><img fetchpriority="high" decoding="async" class="aligncenter size-large wp-image-1463" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts02-700x394.png" alt="" width="700" height="394" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts02-700x394.png 700w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts02-267x150.png 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts02-768x432.png 768w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts02-800x450.png 800w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts02.png 1280w" sizes="(max-width: 700px) 100vw, 700px" /></p>
+<p class="md-end-block md-p md-focus"><span class="md-plain md-expand">I considered texture and normal seams independently. Since our parameterization is used for lighting I follow normal seams more strictly and proportionally to their angle, not doing so would cause the corners to appear less defined or more blurry. That also helps the process to converge much more quickly in architectural meshes that have many hard edges.</span></p>
+<p><img decoding="async" class="aligncenter size-large wp-image-1461" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts00-700x394.png" alt="" width="700" height="394" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts00-700x394.png 700w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts00-267x150.png 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts00-768x432.png 768w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts00-800x450.png 800w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts00.png 1280w" sizes="(max-width: 700px) 100vw, 700px" /></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">Finally, I don&#8217;t impose any chart topology constrains. I specially wanted charts go grow around holes in the mesh as long as the metric was below the desired threshold. I was tempted to use a better proxy fitting metric instead of the normal deviation metric, but that would have generated cylindrical or conical charts that would have to be cut, and I did not want to deal with that. Closing holes on the other side is fairly easy, it&#8217;s just matter of detecting the boundaries and closing all, but the longest one.</span></p>
+<p class="md-end-block md-p"><img decoding="async" class="aligncenter size-large wp-image-1462" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts01-700x394.png" alt="" width="700" height="394" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts01-700x394.png 700w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts01-267x150.png 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts01-768x432.png 768w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts01-800x450.png 800w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/charts01.png 1280w" sizes="(max-width: 700px) 100vw, 700px" /></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Parameterization</span></h3>
+<p><span class="md-plain md-expand">For the chart parameterization algorithm we simply use </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://alice.loria.fr/index.php/publications.html?Paper=lscm@2002"><span class="md-plain">Least Squares Conformal Maps</span></a><span class="md-plain"> since I had an implementation already available. My implementation is based on the description of the algorithm in the </span><a spellcheck="false" href="http://www.inf.usi.ch/hormann/parameterization/CourseNotes.pdf"><span class="md-plain">notes</span></a><span class="md-plain"> of the </span><a spellcheck="false" href="http://www.inf.usi.ch/hormann/parameterization/index.html"><span class="md-plain">SIGGRAPH 2007 Mesh Parameterization course</span></a><span class="md-plain">, which I found much more accessible than the one in the original paper. Particularly useful is the chapter about numerical optimization, although if I had to write a sparse matrix solver again I would probably use </span><a spellcheck="false" href="http://alice.loria.fr/index.php/software/4-library/23-opennl.html"><span class="md-plain">OpenNL</span></a><span class="md-plain">, since it has now been released under a liberal BSD license.</span></span></p>
+<p>LSCM is not the best parameterization algorithm out there. It worked pretty well in most cases, although in some rare situations it resulted in small self-overlaps. That happened in two cases:</p>
+<ul class="ul-list" data-mark="-">
+<li class="md-list-item md-focus-container"><span class="md-plain md-expand">Zero area triangles in the input sometimes flipped in the parameterization.</span></li>
+<li class="md-list-item md-focus-container">
+<p class="md-end-block md-p md-focus"><span class="md-plain md-expand">Charts with complex boundaries that self-intersect when parameterized.</span></p>
+</li>
+</ul>
+<p class="md-end-block md-p"><span class="md-plain md-expand">The first case turned out that was caused by T-junctions in the input mesh that were detected as holes and filled with a degenerate triangle. In practice the small overlaps in the parameterization were not really an issue so instead of fixing the input we simply plan to report these problems to the artist in the exporter and have him fix the them if it turns out it&#8217;s causing artifacts.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">In the second case, increasing the weight of the convexity metric used during the clustering process allowed us to prevent these errors. So, I didn&#8217;t really do anything to handle this problem, but so far it has not been an issue.</span></p>
+<p class="md-end-block md-p"><span class="md-plain md-expand">Even after that we had some problematic cases remaining. I noticed that the implementation in Blender was not having this same issues and was handling these cases more gracefully. So, I asked Brecht Van Lommel, who suggested the use of alternate matrix weights based on the ABF formulation of LSCM, and that seemed to eliminate the remaining issues.</span></p>
+<p class="md-end-block md-p md-focus"><span class="md-plain">While LSCM is very easy to implement, it&#8217;s definitely not the best parameterization method out there. If I were to implement something better I would probably look at </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://alice.loria.fr/index.php/publications.html?Paper=LinABF@2007"><span class="md-plain">LinABF</span></a><span class="md-plain"> or </span><a spellcheck="false" href="http://mgarland.org/files/papers/param.pdf"><span class="md-plain">Fitting to Guidance Gradient Fields</span></a><span class="md-plain">. However, since parameterization of the individual charts is currently the fastest step it may make sense to also look at more expensive deformation analysis methods.</span></span></p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Packing</span></h3>
+<p class="md-end-block md-p"><span class="md-plain md-expand">Our packing algorithm is fairly simple. Like many other implementations we first sort the charts by parametric area, rotate them to align the charts with their best fit rectangle and greedily introduce them in the atlas one by one. Ideally I should test all 4 possible orientations, but currently I simply pick one of the orientations randomly.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">Instead of using a tetris-like scheme to find the best location for each chart, I use a more brute force approach in which all the possible locations are considered. I achieve that using a conservative rasterizer that tags all the texels touched by a chart, plus an extra texel for padding. I progressively increase the texture extents as new charts are inserted. If the a location within the current extents is found, the chart is automatically accepted, otherwise a metric is evaluated to determine the location that least increases the extents of the atlas. Since I use a greedy algorithm, minimizing area resulted in atlases with very high aspect ratios. So, instead I minimize a metric that combines extent and perimeter and results in mostly square atlases.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">Here are some examples of the results:</span></p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-full wp-image-1464" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_cottage00.png" alt="" width="448" height="452" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_cottage00.png 448w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_cottage00-267x269.png 267w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_cottage00-150x150.png 150w" sizes="auto, (max-width: 448px) 100vw, 448px" /></p>
+<p class="md-end-block md-p">
+<p class="md-end-block md-p">
+<p><img loading="lazy" decoding="async" class="aligncenter size-full wp-image-1465" src="http://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_tower00.png" alt="" width="435" height="421" srcset="https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_tower00.png 435w, https://www.ludicon.com/castano/blog/wp-content/uploads/2025/01/packing_tower00-267x258.png 267w" sizes="auto, (max-width: 435px) 100vw, 435px" /></p>
+<p>Once we use lightmap compression it will probably make sense to align the charts to DXT block boundaries in order to prevent bleeding artifacts.</p>
+<h3 class="md-end-block md-heading"><span class="md-plain">Future Improvements</span></h3>
+<p class="md-end-block md-p"><span class="md-plain md-expand">This is one of the areas where I think there&#8217;s a lot of room for improvement, but at the same time, there&#8217;s not much !/$ in spending more time improving the results. Even though it has not been tested in production, I think that our current solution works fairly well. It would be nice to have larger charts with less distortion or a lower number of seams, and I would certainly have fun working on that. However, that&#8217;s not going to make the game run significantly faster or look dramatically better. We plan to release the source code of these algorithms at some point so my hope is that the implementation will progressively get better as other people adopt it and improve it to fit their needs.</span></p>
+<p class="md-end-block md-p"><span class="md-plain">That said, if there&#8217;s one area where I think it&#8217;s worth investing, that is in the use of signal specialized parameterizations. The research papers on the subject (</span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://research.microsoft.com/en-us/um/people/hoppe/proj/ssp/"><span class="md-plain">Signal-specialized parametrization</span></a><span class="md-plain"> and </span><a spellcheck="false" href="http://research.microsoft.com/en-us/um/people/hoppe/proj/ssplinear/"><span class="md-plain">Signal-specialized parameterization for piecewise linear reconstruction</span></a><span class="md-plain">) are probably overkill in our setting, and I&#8217;m not sure they would work very well with our low resolution meshes.</span></span></p>
+<p class="md-end-block md-p"><span class="md-plain">Half-Life 2 achieved that that by using artist specified sampling rates for each surface, but I think it&#8217;s worth doing that automatically using an approach like </span><span class="md-meta-i-c  md-link"><a spellcheck="false" href="http://www.bungie.net/images/Inside/publications/presentations/Lightmap_Compression_2008_02_22.pptx"><span class="md-plain">the one proposed by Bungie</span></a><span class="md-plain">, which seems fairly simple and provides most of the gains the more complex approaches would give us.</span></span></p>
+<p class="md-end-block md-p md-focus"><span class="md-plain">My expectation is that the current implementation won&#8217;t suffer significant changes, other than small tweaks and slight adjustments to deal with problematic cases that may show up in the future. If someone has any experience with these kind of algorithms, I would love to hear about it. In particular I&#8217;d like to know if there&#8217;s anything you would have done differently, or if there&#8217;s any optimization or improvement that I may have overlooked and you think is worth considering.</span></p>
+<p><em>Note: This article was originally published on <a href="http://the-witness.net/news/?p=120">The Witness blog</a>.</em></p>
+			</div><!-- .entry-content -->
+</article><!-- #post-## -->
+			
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+<div id="secondary" class="sidebar-area" role="complementary">
+		<div class="normal-sidebar widget-area">
+		<aside id="categories-2" class="widget widget_categories"><h2 class="widget-title">Categories</h2>
+			<ul>
+					<li class="cat-item cat-item-9"><a href="https://www.ludicon.com/castano/blog/category/coding/">Coding</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://www.ludicon.com/castano/blog/category/cooking/">Cooking</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://www.ludicon.com/castano/blog/category/outdoors/">Outdoors</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://www.ludicon.com/castano/blog/category/personal/">Personal</a>
+</li>
+	<li class="cat-item cat-item-22"><a href="https://www.ludicon.com/castano/blog/category/spark/">Spark</a>
+</li>
+			</ul>
+
+			</aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h2 class="widget-title">Recent Comments</h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/" class="url" rel="ugc">Encoding Render Targets for Free with Tile Shaders &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/#comment-614384">Writing to Compressed Textures in Metal</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/" class="url" rel="ugc">Encoding Render Targets for Free with Tile Shaders &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/#comment-614383">Spark 1.4</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/" class="url" rel="ugc">Spark 1.4 &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/#comment-613545">Spark for Unity</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.ludicon.com/castano/blog/2026/09/spark-1-4/" class="url" rel="ugc">Spark 1.4 &#8211; Ignacio Castaño</a></span> on <a href="https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/#comment-613544">The True Size of ASTC Textures</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://renderdiagrams.org/2024/12/18/shadowmap-bias/" class="url" rel="ugc external nofollow">Shadowmap Bias &#8211; Render Diagrams</a></span> on <a href="https://www.ludicon.com/castano/blog/articles/shadow-mapping-summary-part-1/#comment-612196">Shadow Mapping Summary</a></li></ul></aside><aside id="archives-2" class="widget widget_archive"><h2 class="widget-title">Archives</h2>		<label class="screen-reader-text" for="archives-dropdown-2">Archives</label>
+		<select id="archives-dropdown-2" name="archive-dropdown">
+			
+			<option value="">Select Month</option>
+				<option value='https://www.ludicon.com/castano/blog/2026/09/'> September 2026 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/06/'> June 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/05/'> May 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/04/'> April 2026 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/03/'> March 2026 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/02/'> February 2026 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2026/01/'> January 2026 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/09/'> September 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/08/'> August 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/03/'> March 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2025/02/'> February 2025 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2024/12/'> December 2024 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2022/11/'> November 2022 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/12/'> December 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/04/'> April 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/03/'> March 2019 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2019/01/'> January 2019 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2017/10/'> October 2017 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2016/09/'> September 2016 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/12/'> December 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/09/'> September 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/08/'> August 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2014/07/'> July 2014 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2011/07/'> July 2011 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2011/04/'> April 2011 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/11/'> November 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/10/'> October 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/09/'> September 2010 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/05/'> May 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/03/'> March 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2010/02/'> February 2010 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/12/'> December 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/11/'> November 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/09/'> September 2009 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/07/'> July 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/05/'> May 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/04/'> April 2009 &nbsp;(2)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/03/'> March 2009 &nbsp;(3)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/02/'> February 2009 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2009/01/'> January 2009 &nbsp;(6)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/12/'> December 2008 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/09/'> September 2008 &nbsp;(1)</option>
+	<option value='https://www.ludicon.com/castano/blog/2008/08/'> August 2008 &nbsp;(2)</option>
+
+		</select>
+
+			<script type="text/javascript">
+/* <![CDATA[ */
+
+( ( dropdownId ) => {
+	const dropdown = document.getElementById( dropdownId );
+	function onSelectChange() {
+		setTimeout( () => {
+			if ( 'escape' === dropdown.dataset.lastkey ) {
+				return;
+			}
+			if ( dropdown.value ) {
+				document.location.href = dropdown.value;
+			}
+		}, 250 );
+	}
+	function onKeyUp( event ) {
+		if ( 'Escape' === event.key ) {
+			dropdown.dataset.lastkey = 'escape';
+		} else {
+			delete dropdown.dataset.lastkey;
+		}
+	}
+	function onClick() {
+		delete dropdown.dataset.lastkey;
+	}
+	dropdown.addEventListener( 'keyup', onKeyUp );
+	dropdown.addEventListener( 'click', onClick );
+	dropdown.addEventListener( 'change', onSelectChange );
+})( "archives-dropdown-2" );
+
+//# sourceURL=WP_Widget_Archives%3A%3Awidget
+/* ]]> */
+</script>
+</aside><aside id="meta-2" class="widget widget_meta"><h2 class="widget-title">Meta</h2>
+		<ul>
+						<li><a href="https://www.ludicon.com/castano/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/feed/">Entries feed</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.org/">WordPress.org</a></li>
+		</ul>
+
+		</aside>	</div><!-- .normal-sidebar -->
+	</div><!-- #secondary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer">
+
+		
+	<div id="supplementary" class="footer-widget-area" role="complementary">
+		<div class="footer-widget-wrapper">
+			<div class="footer-widget">
+								<div class="footer-widget-1 widget-area">
+					<aside id="meta-2" class="widget widget_meta"><h2 class="widget-title">Meta</h2>
+		<ul>
+						<li><a href="https://www.ludicon.com/castano/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/feed/">Entries feed</a></li>
+			<li><a href="https://www.ludicon.com/castano/blog/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.org/">WordPress.org</a></li>
+		</ul>
+
+		</aside>				</div><!-- .footer-widget-1 -->
+																			</div><!-- .footer-widget -->
+		</div><!-- .footer-widget-wrapper -->
+	</div><!-- #supplementary -->
+
+		<div class="site-bottom">
+
+			<div class="site-info">
+				<div class="site-copyright">
+					&copy; 2026 <a href="https://www.ludicon.com/castano/blog/" rel="home">Ignacio Castaño</a>
+				</div><!-- .site-copyright -->
+				<div class="site-credit">
+					Powered by <a href="https://wordpress.org/">WordPress</a>				<span class="site-credit-sep"> | </span>
+					Theme: <a href="http://themegraphy.com/wordpress-themes/graphy/">Graphy</a> by Themegraphy				</div><!-- .site-credit -->
+			</div><!-- .site-info -->
+
+		</div><!-- .site-bottom -->
+
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/castano/blog/*"},{"not":{"href_matches":["/castano/blog/wp-*.php","/castano/blog/wp-admin/*","/castano/blog/wp-content/uploads/*","/castano/blog/wp-content/*","/castano/blog/wp-content/plugins/*","/castano/blog/wp-content/themes/graphy/*","/castano/blog/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/jquery.fitvids.js?ver=1.1" id="fitvids-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/skip-link-focus-fix.js?ver=20160525" id="graphy-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/navigation.js?ver=20160525" id="graphy-navigation-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/doubletaptogo.min.js?ver=1.0.0" id="double-tap-to-go-js"></script>
+<script type="text/javascript" src="https://www.ludicon.com/castano/blog/wp-content/themes/graphy/js/functions.js?ver=20160822" id="graphy-functions-js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www.ludicon.com/castano/blog/wp-includes/js/wp-emoji-release.min.js?ver=6.9.9"}}
+</script>
+<script type="module">
+/* <![CDATA[ */
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://www.ludicon.com/castano/blog/wp-includes/js/wp-emoji-loader.min.js
+/* ]]> */
+</script>
+
+</body>
+</html>

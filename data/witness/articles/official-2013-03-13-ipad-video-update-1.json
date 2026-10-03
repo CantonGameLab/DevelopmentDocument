@@ -1,0 +1,33 @@
+{
+  "id": "official-2013-03-13-ipad-video-update-1",
+  "title": { "zh": "iPad 视频更新 #1", "en": "iPad video update #1" },
+  "subtitle": {
+    "en": "A short video of the iPad port, running on some basic hacks but already sort of playable.",
+    "zh": "iPad 移植版的短视频——跑在一些基础凑合做法上，但已经勉强能玩了。"
+  },
+  "translator": {
+    "note": "原文第二行是一处嵌入媒体（YouTube 视频），按本站惯例保留为占位段落；文中 “Just Work” 与 “Famous last words.” 口语化的自嘲按原意保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Andy's got the iPad port far enough along that you can sort of play the game now. Here's a short video:",
+      "zh": "Andy 已经把 iPad 移植推进到差不多的程度，现在你勉强能玩这个游戏了。下面是一段短视频："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](http://www.youtube.com/embed/pXuPKOy_PXU?feature=oembed)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "There are some basic hacks going on; for example, right now, we are not drawing the real sky; it's just solid blue. Also, right now we are just loading this starting area, but it should not be long before we can load the whole game (Salvador wrote the streaming system a while back and we have been testing it extensively on the PC, so for the iPad it should Just Work. Famous last words.) Also, as you can see, the panel-tracing controls could use some work.",
+      "zh": "里面有一些很基础的凑合做法；比如现在我们并没有绘制真正的天空，只是一片纯蓝。另外，目前我们只加载了这个起始区域，但应该不用多久就能加载整个游戏（Salvador 之前写了流式加载系统，我们在 PC 上做了大量测试，所以在 iPad 上它应该直接就能跑。典型的遗言。）还有，如你所见，面板描线的操作还需要打磨。"
+    },
+    {
+      "type": "p",
+      "en": "When we can wander around the island generally, I'll post another video update!",
+      "zh": "等我们能在岛上到处随便逛的时候，我会再发一期视频更新！"
+    }
+  ]
+}

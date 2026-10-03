@@ -1,0 +1,188 @@
+{
+  "id": "official-2015-08-05-bugs",
+  "title": { "zh": "Bug！", "en": "Bugs!" },
+  "subtitle": {
+    "en": "A batch of art-side bugs from full extermination mode, and how the collision-visualization tools Casey added made them findable.",
+    "zh": "全面剿灭 bug 阶段的一批美术类 bug，以及 Casey 加的碰撞可视化工具如何让它们变得可查。"
+  },
+  "translator": {
+    "note": "原文里那 10 条 bug 说明是写作 `-文字`（连字符后没有空格）的，在 markdown 里并不构成列表；译文按列表块处理，符号不译。第一条里提到的可视化碰撞的工具，就是 Casey 博客里讲过的碰撞体/可行走表面可视化工具。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We are in full bug extermination mode.",
+      "zh": "我们现在处于全面剿灭 bug 模式。"
+    },
+    {
+      "type": "p",
+      "en": "A few months ago, only a few of Jon's friends were playing the game and checking for major problems, but now we have Francis as a game tester, and we have an other guy starting later this month as a tester too. With someone testing the game full time, the bugs are really piling up. This is great because we are getting the game in shape for release, but it's also wearing us down a bit because it's non-creative, discouraging work, since for every bug we solve there are usually more that appear on our list.",
+      "zh": "几个月前，还只有 Jon 的几个朋友在玩这个游戏、帮忙检查大问题；但现在我们有 Francis 做游戏测试，这个月晚些时候还会有另一个人来做测试。有了全职测试游戏的人，bug 就真的堆起来了。这很好，因为我们在把游戏调整到可以发售的状态；但这也让我们有点疲惫，因为这活儿没有创造性、让人泄气——我们每修掉一个 bug，清单上通常又会冒出来更多。"
+    },
+    {
+      "type": "p",
+      "en": "There are many different kinds of bugs, some really major and a ton of minor things that can be solved fairly quickly. We are finding errors of all sorts, in lightmaps, shadows, collision, grass planting, reflections, mesh placement, modeling, materials, sound, etc. Not to mention a bunch of weird things that sometimes take a while to track down. We also have to check the game in High, Medium and Low quality, because different errors can happen at the different settings.",
+      "zh": "bug 有很多种，有些非常严重，还有一大堆能相当快解决的小问题。我们找到各种各样的错误，涉及光照贴图、阴影、碰撞、草皮种植、反射、网格摆放、建模、材质、声音等等。更别提还有一堆怪事，有时要花不少时间才能定位。我们还必须在 High、Medium 和 Low 三档画质下分别检查游戏，因为不同设置下会冒出不同的错误。"
+    },
+    {
+      "type": "p",
+      "en": "The biggest bugs involve spoilers, since they are usually finicky and gameplay related, so I can't share those, but here are some minor ones that wouldn't generally take too long to fix:",
+      "zh": "最大的那些 bug 都涉及剧透——它们通常很挑剔，而且和玩法有关，所以这些我不能分享；不过下面是一些通常不用花太久就能修好的小 bug："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Here we have a bit of collision randomly hanging out in the desert. If you tried to walk through it, you would be blocked and have no idea why. Things like this were really difficult to find, until Casey added some tools to visualize the collision:",
+          "zh": "这里有一小块碰撞体莫名其妙地待在沙漠里。如果你想从它那儿走过去，就会被挡住，而且完全不知道为什么。这类东西以前真的很难找，直到 Casey 加了一些把碰撞可视化的工具："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/Desert_SpuriousCollisionHere2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Sometimes, we just get bugs of areas that look unfinished, or wrong, like this corner over here. Francis is supposed to tell us not only about serious errors, but also notify us about things that generally feel wrong to him as a player. By fixing these areas, we hopefully get rid of some potential immersion breaking moments.",
+          "zh": "有时候我们碰到的 bug 是「某片区域看起来没做完或者不对劲」，比如这边的这个角落。Francis 不仅要向我们报告严重错误，还要把他作为一个玩家觉得不对劲的地方都告诉我们。修好这些区域，我们就有希望消除一些可能破坏沉浸感的时刻。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/lonely2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "In this shot, some of the little modular rocks were not receiving any sunlight:",
+          "zh": "这张图里，一些模块化的小石头没有接收到任何阳光："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/no_sunlight_on_rocks.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "And here we have two separate bugs, the turret that is getting black lightmaps, and an open rock mesh below:",
+          "zh": "这里有两个彼此独立的 bug：炮塔拿到了全黑的光照贴图，以及下方一个没有封闭的岩石网格："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/not-a-lightmat-issue-look-at-the-rock-down-below.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "This is a shot of the player being able to walk into a rock, and seeing through it:",
+          "zh": "这张图拍到玩家能够走进一块石头里，并且能看穿它："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/shot_2015.01.22__time_13_10_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "This is a pretty one, some error with the clusters of the modular catwalk meshes:",
+          "zh": "这个挺好看的——模块化天桥网格的簇出了点错："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/shot_2015.04.08__time_17_56_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "There are tons of cases where the grass is clipping through things:",
+          "zh": "有大量草穿进其他物体里的情况："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/shot_2015.05.20__time_18_19_n10.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "And little lightmap errors that mean there is a back-facing triangle somewhere in the mesh:",
+          "zh": "还有些细小的光照贴图错误，意味着网格里某处有一个背朝外的三角形："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/shot_2015.05.20__time_18_23_n15.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "In this area the dynamic lights create some really ugly shadows:",
+          "zh": "在这片区域，动态光源产生了非常难看的阴影："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/shot_2015.08.05__time_14_56_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "And finally, the bug that haunted us for at least a year, the giant colorful grass bug. It would happen almost always when replanting grass, and would not disappear until you restarted the game. Insanely large, colorful versions of the grass would appear and wave in the wind, blocking you from doing anything. Still not sure if we ever figured this one out:",
+          "zh": "最后是至少困扰了我们一年的那个 bug——巨型彩色草 bug。它几乎总是在重新种草的时候出现，而且不重启游戏就不会消失。草会以疯狂巨大的彩色形态出现，在风里摆动，挡得你什么都做不了。到现在我也不确定我们到底有没有搞清楚这个 bug："
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/shot_2015.08.05__time_14_56_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "These are only a tiny sliver of all the different kinds of things that we run into while testing the game. It's a huge island and a lot of things can go wrong, so to make sure we ship a great game, we have to do a really thorough job. However, this and some optimization is pretty much all that's left to do!",
+      "zh": "这些只是我们测试游戏时遇到的各种问题里极小的一部分。岛很大，可能出问题的地方很多，所以要确保交出一款好游戏，我们得做得非常彻底。不过，除了这些再加上一些优化，基本上就剩下这些活了！"
+    },
+    {
+      "type": "p",
+      "en": "And now, here is a bonus a picture of Jon doing something weird with a tape measure taped to a mug:",
+      "zh": "最后附赠一张照片：Jon 正用一卷用胶带粘在马克杯上的卷尺做着什么奇怪的事："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/08/FullSizeRender-13.jpg)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

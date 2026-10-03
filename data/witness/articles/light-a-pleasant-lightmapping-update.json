@@ -1,0 +1,41 @@
+{
+  "id": "light-a-pleasant-lightmapping-update",
+  "title": {
+    "zh": "一次令人愉快的光照贴图更新",
+    "en": "A pleasant lightmapping update"
+  },
+  "subtitle": {
+    "en": "Clamping the M in RGBM to 1 gets rid of banding in the lightmaps.",
+    "zh": "把 RGBM 里的 M 钳制到不小于 1，光照贴图上的色带就没了。"
+  },
+  "translator": {
+    "note": "短进度贴，正文只有四段。插图行按全站口径归一化为 `![图](原图URL)`（丢掉 `-300x168` 缩略图与外层链接）。`RGBM` 的 `M` 按原文保留为单个字母变量；`HDR` 按原文保留；`banding` 按上下文作「色带」。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "It's been a little bit since the last post.  We have been busy doing a lot of good things with the game.  Here's one of them: Ignacio just got back from vacation and implemented a simple lightmap encoding idea that improves the color resolution of our lightmaps, removing banding, like so:",
+      "zh": "距离上一篇已经有一阵子了。我们一直忙着给游戏做了很多不错的东西。下面是其中之一：Ignacio 刚休完假回来，实现了一个简单的光照贴图编码想法，它提升了我们光照贴图的颜色分辨率，把色带去掉了，就像这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/09/before_after-300x168.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The difference is not too pronounced in this scene, but with smoother-colored textures it becomes a lot more obvious (and I do want to use more smoother-colored textures, art-direction-wise!)",
+      "zh": "在这个场景里差别不算太明显，但在颜色更平滑的纹理上就会明显得多（而且就美术方向而言，我确实想用更多颜色更平滑的纹理！）"
+    },
+    {
+      "type": "p",
+      "en": "The situation is, the lightmaps are HDR (for some definition of \"high\"), so we needed a way to encode those values reasonably into a bitmap.  We were using RGBM where M is just an overall brightness factor; you read RGB from the texture then multiply by M to get the output color.  We used to just encode this naively, but the problem is, when M is less than 1 then it actually kills precision in your RGB, so the solution is, well, don't ever let M go below 1; just clamp it.  This is not rocket science and in fact is the kind of thing that is a little funny, as one starts wondering why we didn't think of that a long time ago, but hey, that's how it is sometimes.  The results made me happy, though, so I am posting them.",
+      "zh": "情况是这样的：这些光照贴图是 HDR 的（按「高」的某种定义来说），所以我们需要一种办法把这些值合理地编码进位图。我们当时用的是 RGBM，其中 M 只是一个整体亮度因子；你从纹理里读出 RGB，再乘以 M 得到输出颜色。以前我们就那么天真地编码，但问题在于，当 M 小于 1 的时候，它实际上会毁掉你 RGB 的精度，所以解决办法就是：别让 M 掉到 1 以下，把它钳制住就好。这算不上什么高深技术，事实上这种事还有点好笑，因为你会开始纳闷我们怎么早没想到，不过嘛，有时候就是这样。不管怎么说，结果让我挺高兴，所以就发出来给大家看看。"
+    },
+    {
+      "type": "p",
+      "en": "The improved image quality may enable us to have higher dynamic range throughout the game (this is probably something we will evaluate later on), which would be very nice!",
+      "zh": "画质的提升也许能让我们在整个游戏里用上更高的动态范围（这大概是我们以后才会评估的事），那会非常棒！"
+    }
+  ]
+}

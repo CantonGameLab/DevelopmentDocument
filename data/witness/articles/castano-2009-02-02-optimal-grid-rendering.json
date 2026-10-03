@@ -1,0 +1,157 @@
+{
+  "id": "castano-2009-02-02-optimal-grid-rendering",
+  "title": {
+    "zh": "最优网格渲染",
+    "en": "Optimal Grid Rendering"
+  },
+  "subtitle": {
+    "zh": "面片转换后顶点缓存的性能取决于三角形顺序。把所有顶点都恰好变换一次的网格遍历顺序长什么样？",
+    "en": "Post-transform vertex cache performance depends on triangle order: what a grid traversal that transforms every vertex exactly once looks like."
+  },
+  "translator": {
+    "note": "源文里的 ASCII 图示与实验数据表都被归档脚本按行摊平、每行之间留着空行，属已知格式（与库里其它 castano 篇一致）：译文把它们各自合并为一个 `code` 块（`lang` 为 `text`），围栏内的空行与对齐空格原样保留，这样表格与网格图的列对齐不会丢。源文第 113 行 `if (x1 - x0 + 1  cacheSize)` 在归档里就缺了比较运算符（原文应为 `+ 1 < cacheSize` 之类），译文按「代码原样」规则逐字保留，不做修补。表格里的方法名 `Scanline`、`NVTriStrip`、`Morton`、`K-Cache-Reorder`、`Hilbert`、`Forsyth`、`Tipsy`、`Optimal` 与指标缩写 `ACMR`、`ATVR` 保留英文。`Matthias Wloka`、`NVIDIA`、`Morton`、`Hilbert` 保留英文；post-transform cache 作「转换后顶点缓存」，instancing 作「实例化」，degenerate triangle 作「退化三角形」，scanline order 作「扫描线顺序」。",
+    "source": "archive/castano-blog/2009-02-02-optimal-grid-rendering.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This is a trick that I learned from [Matthias Wloka](http://www.linkedin.com/pub/matthias-wloka/0/376/b86) during my job interview at NVIDIA. I thought I had a good understanding of the behavior of the vertex post-transform cache, but embarrassingly it turned out it wasn’t good enough. I’m sure many people don’t know this either, so here it goes.",
+      "zh": "这是我在 NVIDIA 面试时从 [Matthias Wloka](http://www.linkedin.com/pub/matthias-wloka/0/376/b86) 那里学来的一个技巧。我原以为自己很懂顶点变换后缓存的行为，结果不好意思地说，我懂得还不够。我敢肯定很多人都不知道这件事，所以写下来。"
+    },
+    {
+      "type": "p",
+      "en": "Rendering regular grids of triangles is common enough to make it worth spending some time thinking about how to do it most efficiently. They are used to render terrains, water effects, curved surfaces, and in general any regularly tessellated object.",
+      "zh": "渲染规则的三角形网格太常见了，值得花点时间想想怎么做得最高效。地形、水面效果、曲面，以及一般来说任何规则细分的物体，都要用到它们。"
+    },
+    {
+      "type": "p",
+      "en": "It’s possible to simulate the native hardware tessellation by rendering a single grid multiple times, and the fastest way of doing that is using instancing. That idea was first proposed in [Generic Mesh Refinement on GPU](http://iparla.labri.fr/publications/2005/BS05/) and at NVIDIA we also have examples that show how to do that in [OpenGL](http://developer.download.nvidia.com/SDK/10.5/opengl/samples.html#instanced_tessellation) and [Direct3D](http://developer.download.nvidia.com/SDK/10.5/direct3d/samples.html#InstancedTessellation).",
+      "zh": "通过把一个网格渲染多次，可以模拟硬件原生的曲面细分，而最快的做法是用实例化。这个想法最早是在 [Generic Mesh Refinement on GPU](http://iparla.labri.fr/publications/2005/BS05/) 里提出的，在 NVIDIA 我们也有示例演示怎么在 [OpenGL](http://developer.download.nvidia.com/SDK/10.5/opengl/samples.html#instanced_tessellation) 和 [Direct3D](http://developer.download.nvidia.com/SDK/10.5/direct3d/samples.html#InstancedTessellation) 里这么做。"
+    },
+    {
+      "type": "p",
+      "en": "That’s enough for the motivation. Imagine we have a 4×4 grid. The first two rows would look like this:",
+      "zh": "动机说这些就够了。假设我们有一个 4×4 的网格。头两行长这样："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "* - * - * - * - *\n| / | / | / | / |\n* - * - * - * - *\n| / | / | / | / |\n* - * - * - * - *"
+    },
+    {
+      "type": "p",
+      "en": "With a vertex cache with 8 entries, the location of the vertices after rendering the first 6 triangles of the first row should be as follows:",
+      "zh": "如果顶点缓存有 8 个条目，那么渲染完第一行的前 6 个三角形之后，各个顶点所在的位置应该是这样的："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "7 - 5 - 3 - 1 - *\n| / | / | / | / |\n6 - 4 - 2 - 0 - *\n| / | / | / | / |\n* - * - * - * - *"
+    },
+    {
+      "type": "p",
+      "en": "And after the next two triangles:",
+      "zh": "再渲染两个三角形之后："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "* - 7 - 5 - 3 - 1\n| / | / | / | / |\n* - 6 - 4 - 2 - 0\n| / | / | / | / |\n* - * - * - * - *"
+    },
+    {
+      "type": "p",
+      "en": "Notice that the first two vertices are no longer in the cache. As we proceed to the next two triangles two of the vertices that were previously in the cache need to be loaded again:",
+      "zh": "注意，最先的两个顶点已经不在缓存里了。继续渲染接下来两个三角形时，之前还在缓存里的两个顶点必须重新加载："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "* - * - * - 7 - 5\n| / | / | / | / |\n3 - 1 - * - 6 - 4\n| / | / | / | / |\n2 - 0 - * - * - *"
+    },
+    {
+      "type": "p",
+      "en": "Instead of using the straightforward traversal, it’s possible to traverse the triangles in Morton or Hilbert order, which are known to have better cache behavior. Another possibility is to feed the triangles to any of the standard mesh optimization algorithms.",
+      "zh": "除了用最直白的遍历方式，也可以按 Morton 或 Hilbert 顺序遍历三角形，这两种顺序的缓存表现已知更好。另一种做法是把三角形交给任何一种标准的网格优化算法去排。"
+    },
+    {
+      "type": "p",
+      "en": "All these options are better than not doing anything, but still produce results that are far from the optimal. In the table below you can see the results obtained for a 16×16 grid and with a FIFO cache with 20 entries:",
+      "zh": "这些做法都比什么都不做强，但结果离最优还差得远。下表中是对一个 16×16 网格、使用 20 个条目的 FIFO 缓存得到的结果："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Method          ACMR    ATVR\nScanline        1.062   1.882\nNVTriStrip      0.818   1.450\nMorton          0.719   1.273\nK-Cache-Reorder\t0.711   1.260\nHilbert         0.699   1.239\nForsyth         0.666   1.180\nTipsy           0.658   1.166\nOptimal         0.564   1.000"
+    },
+    {
+      "type": "p",
+      "en": "Note that I’m using my own implementation for all of these methods. So, the results with the code from the original author might differ slightly.",
+      "zh": "注意，这些方法我用的都是自己的实现。所以用原作者代码得到的结果可能会有细微差别。"
+    },
+    {
+      "type": "p",
+      "en": "The most important observation is that, for every row of triangles, the only vertices that are reused are the vertices that are at the bottom of the triangles, and these are the vertices that we would like to have in the cache when rendering the next row of triangles.",
+      "zh": "最重要的观察是：对每一行三角形来说，会被重复使用的只有位于这行三角形底部的那些顶点，而它们正是我们希望在渲染下一行三角形时留在缓存里的顶点。"
+    },
+    {
+      "type": "p",
+      "en": "When traversing triangles in scanline order the cache interleaves vertices from the first and second row. However, we can avoid that by prefetching the first row of vertices:",
+      "zh": "按扫描线顺序遍历三角形时，缓存里的顶点会在第一行和第二行之间交错。不过，只要预取第一行的顶点就能避免这一点："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "4 - 3 - 2 - 1 - 0\n| / | / | / | / |\n* - * - * - * - *\n|   |   |   |   |\n* - * - * - * - *"
+    },
+    {
+      "type": "p",
+      "en": "That can be done issuing degenerate triangles. Once the first row of vertices is in the cache, you can continue adding the triangles in scanline order. The cool thing now is that the vertices that leave the cache are always vertices that are not going to be used anymore:",
+      "zh": "发一些退化三角形就能做到这一点。第一行的顶点进了缓存之后，就可以继续按扫描线顺序添加三角形。现在妙的地方在于：被挤出缓存的顶点，总是那些再也不会被用到的顶点："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "* - 7 - 6 - 5 - 4\n| / | / | / | / |\n3 - 2 - 1 - 0 - *\n| / | / | / | / |\n* - * - * - * - *"
+    },
+    {
+      "type": "p",
+      "en": "In general, the minimum cache size to render a W*W grid without transforming any vertex multiple times is W+2.",
+      "zh": "一般来说，要想渲染一个 W*W 的网格而任何顶点都不被变换多次，所需的最小缓存大小是 W+2。"
+    },
+    {
+      "type": "p",
+      "en": "The degenerate triangles have a small overhead, so you also want to avoid them when the cache is sufficiently large to store two rows of vertices. When the cache is too small you also have to split the grid into smaller sections and apply this method to each of them. The following code accomplishes that:",
+      "zh": "退化三角形有一点额外开销，所以当缓存大到足以存下两行顶点时，你也想避开它们。而当缓存太小时，你又必须把网格切成更小的块，对每一块分别应用这个方法。下面这段代码做的就是这件事："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void gridGen(int x0, int x1, int y0, int y1, int width, int cacheSize)\n{\n    if (x1 - x0 + 1  cacheSize)\n        {\n            for (int x = x0; x < x1; x++)\n            {\n                indices.push_back(x + 0);\n                indices.push_back(x + 0);\n                indices.push_back(x + 1);\n            }\n        }\n\n        for (int y = y0; y < y1; y++)\n        {\n            for (int x = x0; x < x1; x++)\n            {\n                indices.push_back((width + 1) * (y + 0) + (x + 0));\n                indices.push_back((width + 1) * (y + 1) + (x + 0));\n                indices.push_back((width + 1) * (y + 0) + (x + 1));\n\n                indices.push_back((width + 1) * (y + 0) + (x + 1));\n                indices.push_back((width + 1) * (y + 1) + (x + 0));\n                indices.push_back((width + 1) * (y + 1) + (x + 1));\n            }\n        }\n    }\n    else\n    {\n        int xm = x0 + cacheSize - 2;\n        gridGen(x0, xm, y0, y1, width, cacheSize);\n        gridGen(xm, x1, y0, y1, width, cacheSize);\n    }\n}"
+    },
+    {
+      "type": "p",
+      "en": "This may not be the most optimal grid partition, but the method still performs pretty well in those cases. Here are the results for a cache with 16 entries:",
+      "zh": "这未必是最优的网格划分，但在这些情况下这个方法的表现仍然相当好。下面是缓存有 16 个条目时的结果："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Method           ACMR   ATVR\nScanline         1.062  1.882\nNVTriStrip       0.775  1.374\nK-Cache-Reorder  0.766  1.356\nHilbert          0.754  1.336\nMorton           0.750  1.329\nTipsy            0.711  1.260\nForsyth          0.699  1.239\nOptimal          0.598  1.059"
+    },
+    {
+      "type": "p",
+      "en": "And for a cache with only 12 entries:",
+      "zh": "而缓存只有 12 个条目时："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Method           ACMR   ATVR\nScanline         1.062  1.882\nNVTriStrip       0.875  1.550\nForsyth          0.859  1.522\nK-Cache-Reorder  0.807  1.491\nMorton           0.812  1.439\nHilbert          0.797  1.412\nTipsy            0.758  1.343\nOptimal          0.600  1.062"
+    },
+    {
+      "type": "p",
+      "en": "In all cases, the proposed algorithm is significantly faster than the other approaches. In the future it would interesting to take into account some of these observations in a general mesh optimization algorithm.",
+      "zh": "在所有情况下，这里提出的算法都明显快于其它做法。以后把其中一些观察纳入通用的网格优化算法里，应该会很有意思。"
+    }
+  ]
+}

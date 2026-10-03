@@ -1,0 +1,448 @@
+{
+  "id": "casey-0023",
+  "title": {
+    "zh": "Lister Panel 问答",
+    "en": "Lister Panel Q&A"
+  },
+  "subtitle": {
+    "en": "Questions and answers from last week’s post on The Witness’s lister panel.",
+    "zh": "回答读者针对上周公开的《The Witness》Lister Panel 源码提出的问题。"
+  },
+  "translator": {
+    "note": "归档把几处代码清单的围栏画错了位置：`++width_index)`、`else`、`case` 标签、`{` 等行被甩到了围栏外面，译文按原顺序把它们并回各自的代码块，代码与注释一律保持英文原文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last week, I posted the source code to the Witness editor's Lister Panel and asked you, the internet at large, for questions.  I received quite a few, and have endeavored to answer them all below.",
+      "zh": "上周我公开了《The Witness》编辑器里 Lister Panel 的源代码，并向你们——整个互联网——征集问题。收到了不少，下面我尽力把每一个都回答掉。"
+    },
+    {
+      "type": "h2",
+      "id": "begin-row-template",
+      "zh": "Q：Panel::Layout.begin_row_template() 是怎么工作的？",
+      "en": "Q: How does Panel::Layout.begin_row_template() work?"
+    },
+    {
+      "type": "p",
+      "en": "Row templates are a simple extension to the column-spacing system I already described.  As you might expect, you often want a row of buttons to have different widths.  Since the Lister Panel UI often has a set of rows that all have the same column layout, I made the UI system understand the concept of a set of column widths that could be repeated on several rows.  Usage code \"begins\" a row template, then adds a bunch of column widths, then \"ends\" the template.  From then on, until the template is reset or cleared, rows will take that shape.  Here is the implementation:",
+      "zh": "行模板是我前面已经讲过的列间距系统的一个简单扩展。你大概也预料得到：一行按钮常常需要不同的宽度。由于 Lister Panel 的 UI 经常有一批采用相同列布局的行，我让 UI 系统理解了「一组可以重复用在多行上的列宽」这个概念。使用方代码先「开始」一个行模板，然后加进一串列宽，最后「结束」模板。从那以后，直到模板被重置或清除，各行都会按这个形状排列。实现如下："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "行模板的完整实现",
+      "captionEn": "The row-template implementation in full",
+      "code": "void Panel_Layout::begin_row_template(void)\n{\n assert(!in_template);\n in_template = true;\n\ntemplate_column_widths.reset();\n}\n\nvoid Panel_Layout::row_template_variable_column(void)\n{\n template_column_widths.add(-1.0f);\n}\n\nvoid Panel_Layout::row_template_fixed_column(float width)\n{\n template_column_widths.add(width);\n}\n\nvoid Panel_Layout::end_and_set_row_template(void)\n{\n assert(in_template);\n\nint variable_width_count = 0;\n float total_fixed_width = 0.0f;\n for(int width_index = 0;\n width_index < template_column_widths.items;\n\n++width_index)\n\n{\n float this_width = template_column_widths[width_index];\n if(this_width == -1.0f)\n{\n ++variable_width_count;\n}\n\nelse\n\n{\n total_fixed_width += this_width;\n}\n}\n\nif(variable_width_count)\n{\n float var_width = (width - total_fixed_width) / (float)variable_width_count;\n for(int width_index = 0;\n width_index < template_column_widths.items;\n\n++width_index)\n\n{\n float &this_width = template_column_widths[width_index];\n if(this_width == -1.0f)\n{\n this_width = var_width;\n}\n}\n}\n}"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "The code is extremely straightforward, but there is one little trick, which is that the *super-secret-don't-tell-anyone* value of negative one is used to mark a column as being variable width.  When the row template is completely specified, the code loops through and sees how many of those variable-width columns there are, and divides the remaining space equally among them.  This allows the user of the code to specify the columns they care about, and let the rest be determined automatically, which is more convenient than forcing them to always specify every column width manually.",
+      "zh": "这段代码极其直白，不过里面有个小把戏：用负一这个*超级机密、别告诉任何人*的取值来标记某一列是可变宽度的。当行模板被完整指定之后，代码会循环一遍，数出其中有多少个可变宽度列，再把剩余空间均分给它们。这样代码的使用者只需要指定自己在意的那些列，其余的自动决定，比逼着他们每次都手动写清每一列宽度方便多了。"
+    },
+    {
+      "type": "h2",
+      "id": "todo-clear-hash-table",
+      "zh": "Q：你写过「// TODO(casey): Why can’t I just _clear_ the hash table?」这条注释——要是你找到了原因，我很想知道，因为这事有点好笑！",
+      "en": "Q: You wrote, \"// TODO(casey): Why can't I just _clear_ the hash table?\"  If you found the reason, I'm interested to know, because it's kinda funny!"
+    },
+    {
+      "type": "p",
+      "en": "Re-reading that comment, I realize that it sounds like perhaps there was a clear() function on the hash table, and I called it, and it didn't work, and so I wrote a comment to remind myself to go see why it didn't work.  But that's not actually what happened.",
+      "zh": "重读那条注释，我意识到它听起来像是：哈希表上也许有个 clear() 函数，我调用了它，但它没起作用，于是我写了条注释提醒自己去看看为什么没用。可实际上并不是这么回事。"
+    },
+    {
+      "type": "p",
+      "en": "What actually happened was that I didn't see a clear() function on the hash table at all, so I didn't (and still don't) think there was any way to clear it short of destroying it completely and creating it anew.  The comment I wrote was just there to remind someone, should they ever look through it, that the code was not intending to destroy and recreate the hash table, but rather just to clear it, so if the hash table code was ever extended to support clearing, that's what the code should call instead.",
+      "zh": "实际情况是：我在哈希表上根本没看到 clear() 函数，所以我当时（现在也一样）认为，除了把它整个销毁再新建一个，没有别的办法清空它。我写那条注释只是提醒后来翻到它的人：这段代码的本意不是销毁再重建哈希表，而只是想清空它；所以如果哪天哈希表代码扩展出清空功能，这里就该改成调用那个函数。"
+    },
+    {
+      "type": "p",
+      "en": "I will often put \"TODO\" comments in code that look like this, where it is not really a thing that I need to do, but rather is a note about the general state of the codebase that I would like someone, during final analysis before shipping, to read, consider, and then either remove or act on.  In my own codebase, I actually have a few different keywords that I use to differentiate comment types.  Every single comment begins with one of them.  They are:",
+      "zh": "我经常会在代码里写这种样子的「TODO」注释：它并不是我真的要去做什么，而是关于代码库总体状态的一条笔记，我希望有人在发布前的最终检查阶段读一读、想一想，然后要么删掉它，要么照着做。在我自己的代码库里，我其实用了几个不同的关键词来区分注释类型，每一条注释都以其中之一开头。它们是："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "我用来区分注释类型的几个关键词",
+      "captionEn": "The keywords I use to differentiate comment types",
+      "code": "// NOTE(casey): A comment by me that does not fall into any other category (most comments are this kind).\n\n// IMPORTANT(casey): A key comment that describes a very important idea about the code that must be read and fully understood by anyone who is going to touch it.\n\n// TODO(casey): Something I need to do.\n\n// STUDY(casey): Something I need to look at in more detail in the future, because I believe the code contains an opportunity to advance the way I program."
+    },
+    {
+      "type": "h2",
+      "id": "allow-developer",
+      "zh": "Q：关于「#if ALLOW_DEVELOPER」，我想不出这个条件编译有什么用。我在 Apple 上班，这让我想到我们每天都得忍受的那些披露流程和保密协议的破事。",
+      "en": "Q: Regarding \"#if ALLOW_DEVELOPER\", I cannot think of any use of this conditional.  I work at Apple and this made me think of all the disclosure/NDA bullshit that we live with everyday."
+    },
+    {
+      "type": "p",
+      "en": "That conditional is there to ensure all editor code is compiled out in builds that are not used by the developers or beta testers of the game.  In the development version of the game, ALLOW_DEVELOPER is defined to be 1, and all the editor code and other developer tools are built into it.  In the shipping version of the game, ALLOW_DEVELOPER will be defined to be 0, so all the tools are stripped out.  That's really the only reason it's there.  It helps make the shipping executable smaller on platforms that are resource-constrained (like the one you guys ship, the iPad!), and also prevents users from inadvertently invoking developer commands that would ruin their play experience (like popping up a console or launching the editor).",
+      "zh": "那个条件的作用是：在开发者和 beta 测试者不用的构建里，把所有编辑器代码编译掉。在游戏的开发版里，ALLOW_DEVELOPER 被定义为 1，所有编辑器代码和其他开发者工具都会编进去。在游戏的发行版里，ALLOW_DEVELOPER 会被定义为 0，于是所有工具都被剥离掉。它存在的理由其实就这一个。它能让资源受限平台（比如你们发布的那个平台——iPad！）上的发行版可执行文件更小，也能防止用户误触开发者命令、毁掉自己的游戏体验（比如弹出一个控制台，或者把编辑器启动起来）。"
+    },
+    {
+      "type": "h2",
+      "id": "resource-ptr",
+      "zh": "Q：「Resource_Ptr」在底层到底做了什么？",
+      "en": "Q: What's happening under the hood with \"Resource_Ptr\"?"
+    },
+    {
+      "type": "p",
+      "en": "My rather disappointing answer here is \"I have no idea\".  That is part of the rendering system, which to the best of my knowledge is the only system in The Witness that uses these sorts of things.  The game and editor portions of the code don't use wrapped pointers as far as I remember, although I may just be forgetting (it's been a while since I was editing any code in [The Witness](http://the-witness.net/news/) that wasn't my own, and I never use wrapped pointers myself).  [Ignacio Castano](http://www.ludicon.com/castano/blog/) is probably the right person to ask, and he [also has a blog](http://www.ludicon.com/castano/blog), so I will point him at this question and he may write up a more complete answer for you!",
+      "zh": "我这里相当令人失望的回答是「我不知道」。那属于渲染系统，而据我所知，渲染系统是《The Witness》里唯一用这类东西的系统。就我记忆所及，游戏部分和编辑器部分的代码都不使用包装过的指针，不过也可能只是我忘了（我已经有段时间没改过 [The Witness](http://the-witness.net/news/) 里不属于我自己的代码了，而我自己是从不用包装指针的）。[Ignacio Castaño](http://www.ludicon.com/castano/blog/) 大概是该问的人，他[也写博客](http://www.ludicon.com/castano/blog)，所以我会把这个问题转给他，他也许会给你们写一个更完整的回答！"
+    },
+    {
+      "type": "p",
+      "en": "*Update: Ignacio wrote in with a more complete answer.  He said:*",
+      "zh": "*更新：Ignacio 写来了一份更完整的回答。他说：*"
+    },
+    {
+      "type": "p",
+      "en": "\"Resource_Ptr is just an auto_ptr that invokes release(owner, resource) at the end of the scope. The resource is usually obtained with acquire_*(owner, name), so it's just a way of not forgetting to invoke release after the resource is not being used anymore. Similar to the Free_On_Return/Delete_On_Return macros, that create such an object under the hood.",
+      "zh": "「Resource_Ptr 就是一个 auto_ptr，在作用域结束时调用 release(owner, resource)。资源通常是用 acquire_*(owner, name) 取得的，所以它只是一种「别忘了在资源不再被使用后调用 release」的办法。类似于 Free_On_Return/Delete_On_Return 宏，它们在底层也是创建这样一个对象。"
+    },
+    {
+      "type": "p",
+      "en": "\"Why is it so verbose? I don't really know. I think a better solution would be to have Resource_Ptr take the entity owner and name directly, but the acquire_* functions are not parameterized based on the resource type.",
+      "zh": "「为什么它这么啰嗦？我其实也不知道。我觉得更好的做法是让 Resource_Ptr 直接接收实体 owner 和名字，但 acquire_* 那些函数并不是按资源类型参数化的。"
+    },
+    {
+      "type": "p",
+      "en": "\"I would have just used intrusive reference counting for all resources and a more general acquire/release mechanism, but Jon was opposed to that at the time, so when we really needed to add referenced counting for streamed resources it was done in a somewhat ugly way.\"",
+      "zh": "「换成我，我会对所有资源都用侵入式引用计数，再加一套更通用的 acquire/release 机制，但当时 Jon 反对这么做，所以等到我们真的需要给流式资源加引用计数时，用的是一种有点难看的方式。」"
+    },
+    {
+      "type": "h2",
+      "id": "thick-line-loop",
+      "zh": "Q：为什么不在第 533 行的循环里直接调用 thick_line？",
+      "en": "Q: Why not just call thick_line in the loop at lines 533?"
+    },
+    {
+      "type": "p",
+      "en": "Purely an oversight, I believe.  I probably pulled out the thick-line code and forgot to collapse that case.",
+      "zh": "我相信纯粹是疏忽。我大概是把粗线那段代码抽出去之后，忘了把这个分支也一并合并掉。"
+    },
+    {
+      "type": "h2",
+      "id": "qsort-vs-stdsort",
+      "zh": "Q：为什么用 qsort？std::sort 能做内联，通常更快。",
+      "en": "Q: Why use qsort? std::sort can do inlining and so is usually faster."
+    },
+    {
+      "type": "p",
+      "en": "I use the sort that is available in the codebase I'm in.  In my own code, I have my own sorting solutions that involve neither of these two functions.  But in foreign codebases, I must use what is available.  [The Witness](http://the-witness.net/news/) codebase does not use the C++ standard library as far as I know, so I did not want to introduce any new dependencies there.  Thus, std::sort was out of the question, and qsort was the only existing option of which I was aware.",
+      "zh": "我用的是所在代码库里现成的排序函数。在我自己的代码里，我有自己的一套排序方案，这两个函数都不用。但在别人的代码库里，我只能有什么用什么。据我所知，[The Witness](http://the-witness.net/news/) 的代码库并不使用 C++ 标准库，所以我不想在那里引入任何新的依赖。因此 std::sort 免谈，而 qsort 是我知道的唯一现成选择。"
+    },
+    {
+      "type": "h2",
+      "id": "stl",
+      "zh": "Q：我猜你们在 [The Witness](http://the-witness.net/news/) 里没有用 [STL](https://en.wikipedia.org/wiki/Standard_Template_Library)。这个编程选择有什么理由吗？",
+      "en": "Q: I guess you are not using [STL](https://en.wikipedia.org/wiki/Standard_Template_Library) in [The Witness](http://the-witness.net/news/).  Is there a reason for this programming choice?"
+    },
+    {
+      "type": "p",
+      "en": "I'm not sure if there was a reason or not, since it was decided long before I arrived on the project.  However, I can tell you from personal experience that I think the [STL](https://en.wikipedia.org/wiki/Standard_Template_Library) is total poopsauce and I never use it in any of my projects either.  I find that it puts a high level of unnecessary stress on the compiler pipeline and results in a number of unpleasant consequences for projects that use it.  These include ugly and inflexible syntax, long compile times, hard-to-understand error messages, flakey debug symbols, bloated symbol files, and even just flat-out bugs (back in the 90s, when I still used the [STL](https://en.wikipedia.org/wiki/Standard_Template_Library), I recall finding more than one bug in Microsoft's implementation, for example).",
+      "zh": "我不确定当初有没有理由，因为那是在我加入这个项目很久之前就定下来的。不过我可以凭个人经验告诉你：我觉得 [STL](https://en.wikipedia.org/wiki/Standard_Template_Library) 完全是一坨烂酱，我自己在任何项目里也从来不用它。我发现它会给编译器的处理流程加上大量没必要的压力，并给使用它的项目带来一堆不愉快的后果：丑陋又死板的语法、漫长的编译时间、难以理解的报错信息、时灵时不灵的调试符号、臃肿的符号文件，甚至干脆就是 bug（比如 90 年代我还在用 [STL](https://en.wikipedia.org/wiki/Standard_Template_Library) 的时候，我记得在微软的实现里就不止找到过一个 bug）。"
+    },
+    {
+      "type": "p",
+      "en": "In short, I have nothing positive to say about the STL and think it, combined with C++'s template specification, form one of the worst attempts at generic programming I've ever seen.  This saddens me greatly because I personally love generic programming and would have loved it if anyone on the C++ committee had understood it well enough to deliver real support for it in the language and standard library.  As it is, in my own codebase, I make extensive use of old-school metaprogramming to avoid resorting to depravities like C++ templates and the STL.",
+      "zh": "总之，关于 STL 我一句好话都没有，我认为它加上 C++ 的模板规范，是我见过的最糟糕的泛型编程尝试之一。这让我非常难过，因为我个人很喜欢泛型编程，要是 C++ 委员会里有谁真正理解它、能在语言和标准库里给出真正的支持，我会非常高兴。可现实是，在我自己的代码库里，我大量使用老派的元编程，就是为了避免沦落到 C++ 模板和 STL 这种堕落的做法上去。"
+    },
+    {
+      "type": "h2",
+      "id": "foreach-vs-array-foreach",
+      "zh": "Q：Foreach 和 Array_Foreach 有什么区别？它们为什么存在？",
+      "en": "Q: What's the difference between Foreach and Array_Foreach? Why do they even exist?"
+    },
+    {
+      "type": "p",
+      "en": "These are [Jon](http://number-none.com/blow/) and [Ignacio](http://www.ludicon.com/castano/blog/)'s special sauces, and I'm not really qualified to comment on them.  The impetus is straightforward: to not have to type full for() syntax when you want to iterate over something.  Array_Foreach() was the first one defined in [The Witness](http://the-witness.net/news/) codebase, well before I arrived, and was used in most places.  It did not support scoping the variable inside the loop, as you can see in the code.  Foreach() came later, while I was on the project, and was a replacement that allows you to scope the variable inside the loop.  There's nothing particular interesting about either of them.",
+      "zh": "这两样是 [Jon](http://number-none.com/blow/) 和 [Ignacio](http://www.ludicon.com/castano/blog/) 的独门配方，我没资格评论。动机很直白：想在遍历某个东西时不必敲完整的 for() 语法。Array_Foreach() 是 [The Witness](http://the-witness.net/news/) 代码库里最早定义的那个，远在我来之前就有了，而且用得最多。它不支持把变量限定在循环内部，这一点你在代码里能看到。Foreach() 是后来我在项目里的时候才有的，是一个允许你把变量限定在循环里的替代品。这两个都没什么特别有意思的地方。"
+    },
+    {
+      "type": "h2",
+      "id": "editor-var-macros",
+      "zh": "Q：EDITOR_VAR/EDITOR_VAR_INDEXED/EDITOR_VAR_SUBNAME 这些宏是某种序列化系统吗？它们是怎么工作的？",
+      "en": "Q: Are the EDITOR_VAR/EDITOR_VAR_INDEXED/EDITOR_VAR_SUBNAME macros some kind of serialization system? How do they work?"
+    },
+    {
+      "type": "p",
+      "en": "Yes, they are for serialization.  They are a complete hack that I added.",
+      "zh": "是的，它们就是用来做序列化的。它们是我加进去的一个彻头彻尾的权宜之计。"
+    },
+    {
+      "type": "p",
+      "en": "When I came on the project, The Witness had no concept of persistent editor state.  Things like the placement of panels and user input preferences were not stored, so artists had to reset things when they started work for the day.  I wanted to fix this, so I asked Jon how he would like editor settings to be stored.  He said he preferred they be stored via the game's variable serialization system, so that's what I did.",
+      "zh": "我加入这个项目的时候，《The Witness》完全没有「编辑器状态持久化」这个概念。面板摆在哪里、用户输入偏好之类的都不保存，所以美术每天早上开工时都得重新设置一遍。我想把这件事修掉，就去问 Jon 希望编辑器设置怎么存。他说他更希望用游戏的变量序列化系统来存，于是我就照办了。"
+    },
+    {
+      "type": "p",
+      "en": "The definitions of the EDITOR_VAR macros are:",
+      "zh": "EDITOR_VAR 这些宏的定义是："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "EDITOR_VAR 系列宏的定义",
+      "captionEn": "The definitions of the EDITOR_VAR macros",
+      "code": "// NOTE(casey): To use the EDITOR_VAR macros, you need to define EDITOR_PANEL_NAME\n\n// in your file so it can be auto-prepended\n\n#define EDITOR_VAR(member, default_value) member = default_value; \\\n    editor_variable_service->attach(EDITOR_PANEL_NAME \"_\" #member, &member);\n\n#define EDITOR_VAR_PTR(ptr, name) editor_variable_service->attach( \\\n    EDITOR_PANEL_NAME \"_\" name, ptr);\n\n#define EDITOR_VAR_INDEXED(ptr, name, index) \\\n\n{ \\\n\n    char *composite_name = mprintf(\"%s_%d_%s\", EDITOR_PANEL_NAME, index, name); \\\n    editor_variable_service->attach(composite_name, ptr); \\\n\ngamelib_free_string(composite_name); \\\n\n}\n\n#define EDITOR_VAR_SUBNAME(ptr, name, index, sub_name) \\\n\n{   \\\n\n    char *composite_name = mprintf(\"%s_%d_%s_%s\", EDITOR_PANEL_NAME, index, name, sub_name); \\\n    editor_variable_service->attach(composite_name, ptr); \\\n\ngamelib_free_string(composite_name); \\\n\n}"
+    },
+    {
+      "type": "p",
+      "en": "These macros allow any panel that wants to save its state to do so in a relatively simple way.  It is not as nice as a fully automated system, but it was something I could get working in a few hours.  It seems to have held up well over the course of the project, and to the best of my knowledge it is still being used to store all editor state.",
+      "zh": "这些宏让任何想保存自身状态的面板都能用相对简单的方式做到。它不如全自动的系统漂亮，但这是我在几个小时里能弄出来的东西。在整个项目过程中它似乎一直很稳，据我所知，现在所有编辑器状态仍然是用它来存的。"
+    },
+    {
+      "type": "h2",
+      "id": "selected-hash",
+      "zh": "Q：为什么 selected_hash 不是 Lister_Panel 的成员？Lister_Panel::update 每帧都把它删掉，所以如果你有两个面板，就会出问题。",
+      "en": "Q: Why is selected_hash not a member of Lister_Panel?  Lister_Panel::update deletes it every frame, so if you have two panels you'll be in trouble."
+    },
+    {
+      "type": "p",
+      "en": "As hinted by the TODO above it, the reason for this is actually because I wanted to (at some point) move the hash out into the selection system itself, since lots of panels do lookups on the selection and they were all getting pushed through a very slow O(n) path.  So if there were going to be multiple Lister panels, I would finish that work, since that is the superior option and pays additional dividends.  There is no need for each panel to store their own hash, since the selection is universal and it would be exactly the same in each.",
+      "zh": "就像它上面那条 TODO 暗示的，真正的原因是我（在某个时候）想把哈希表挪到选择系统本身里去，因为很多面板都要在选择集上做查找，而它们全都被塞进了一条极慢的 O(n) 路径。所以如果真要有多个 Lister 面板，我会把那项工作做完，因为那是更好的方案，还有额外的好处。每个面板没必要各存一份自己的哈希表，因为选择集是全局的，在每个面板里都会完全一样。"
+    },
+    {
+      "type": "p",
+      "en": "As to your suggestion that I would be \"in trouble\" with multiple panels, I do not see why.  Multiple panels would just result in a bunch of redundant work done by the second panel for no reason, but it wouldn't actually yield erroneous results.  The only cause for trouble would be if the two panels were running on separate threads at the same time, but The Witness's editor is not multithreaded in that way, so that is not a concern here.",
+      "zh": "至于你说有多个面板我「就会出问题」，我看不出问题在哪。多个面板只会让第二个面板毫无理由地做一堆重复工作，但并不会真的产生错误结果。唯一会出问题的情况是两个面板同时跑在不同的线程上，而《The Witness》的编辑器并不是那种多线程结构，所以这里不必担心。"
+    },
+    {
+      "type": "h2",
+      "id": "scrollable-section-layout",
+      "zh": "Q：有一个神奇的系统能在可滚动区域里做布局，但一行的元素个数得手动指定。这是为什么？",
+      "en": "Q: There is a magic system to do the layout in a scrollable section, but you have to specify the number of elements in a row manually. Why?"
+    },
+    {
+      "type": "p",
+      "en": "[The Witness](http://the-witness.net/news/)'s GUI is relatively bare-bones, and does not do deferred hit-testing.  Thus the width and height of buttons must be known at the time the button is drawn, so that it can be hit-tested immediately and the results returned to the caller.  Scrollable sections present no problems for this, because scrolling is simply a y offset that is applied to the buttons as they are drawn.  Multi-button rows, on the other hand, do present a problem.  If the user didn't pass in the number of buttons that were going to be in the row, only after completing all the button calls for that row would the UI system know how big each one should be.  At that point it would be too late to return hit-test information to the caller.",
+      "zh": "《The Witness》的 GUI 相对简陋，不做延迟命中测试。因此按钮的宽高必须在绘制它的那一刻就已知，这样才能立刻对它做命中测试、并把结果返回给调用方。可滚动区域对此没有问题，因为滚动不过是在绘制按钮时施加的一个 y 偏移。但多按钮行就确实有麻烦了。如果使用者没有把这一行里按钮的数量传进来，那么只有等那一行的所有按钮调用都执行完之后，UI 系统才知道每个按钮该多大——而到那时再把命中测试信息返回给调用方就已经太晚了。"
+    },
+    {
+      "type": "p",
+      "en": "Of course, one could work around this limitation by having an EndRow() function that returns some kind of code indicating which of the buttons in the row was hit, but since it is trivial to just pass the button count, this seemed like an unnecessary complication beyond the nicer format of being able to individually if() each button call to handle its operation.",
+      "zh": "当然，也可以用一个 EndRow() 函数绕过这个限制，让它返回某种代码表示这一行里哪个按钮被点到了；但既然顺手传个按钮数量就完事了，那这么做只是平添麻烦，还会破坏「能对每个按钮调用单独写 if() 来处理其操作」这种更漂亮的写法。"
+    },
+    {
+      "type": "h2",
+      "id": "id-persistence",
+      "zh": "Q：按钮／输入框／随便什么东西的 id 在帧与帧之间是怎么保持的？是有机制在管，还是说 id 就是按钮在面板里的索引？",
+      "en": "Q: How do you handle button/editbox/whatever id persistence from frame to frame? Is it handled at all or is the id just the index of the button in the panel?"
+    },
+    {
+      "type": "p",
+      "en": "Unless I am misremembering, there are no ids in the Witness editor GUI at all.  It is a fully immediate-mode GUI.  This means that button processing is not delayed to a second pass, it is processed immediately on the pass where the button is defined.  IMGUI systems that require ids are usually doing things that are fancier than what the Witness's editor GUI is doing, and thus need ids to correspond UI elements between passes.  Since the Witness editor GUI doesn't do anything fancy, it can get away with not having ids at all.",
+      "zh": "除非我记错了，《The Witness》编辑器的 GUI 里根本没有 id 这种东西。它是一个彻底的即时模式 GUI。这意味着按钮的处理不会被推迟到第二遍，而是在定义这个按钮的那一遍里就立刻处理掉。需要 id 的 IMGUI 系统通常在做事后更花哨的事情，因此需要 id 在多遍之间对应 UI 元素。而《The Witness》编辑器的 GUI 不做任何花哨的事，所以完全可以不要 id。"
+    },
+    {
+      "type": "h2",
+      "id": "sub-function-threshold",
+      "zh": "Q：把一段代码拆成子函数，你有没有什么长度／复杂度／随便什么的标准——不是为了「[语义压缩](https://caseymuratori.com/blog_0015)」，而是为了让父函数更容易扫读？",
+      "en": "Q: Do you have a length/complexity/whatever threshold for breaking out a sub-function not for \"[semantic compression](https://caseymuratori.com/blog_0015),\" but for making it easier to scan the parent function?"
+    },
+    {
+      "type": "p",
+      "en": "Not really.  In general, it is just \"to taste\".  Typically I try to keep code together in one function if it is executed in order and is not reused.  This makes it clear to everyone reading the code that, well, it is executed in order and it not reused!  But sometimes, if a function gets excessively large and becomes hard to understand, I will break it up into smaller functions, even though those functions will never be called by anyone else.  This is primarily to leverage the cognitive convenience of substituting, say, several hundred lines of code with just a descriptive function call like \"ReticulateSplines()\".  This lets someone reading the code know that splines are reticulated there, and they can understand that more easily than trying to pour through the several hundred lines and look for comments to that effect.",
+      "zh": "谈不上有。一般来说就是「凭手感」。通常只要一段代码是按顺序执行的、又没被复用，我就尽量让它待在一个函数里。这样读代码的人一眼就清楚：它是按顺序执行的，而且没被复用！但有时候，如果一个函数变得过分庞大、难以理解，我就会把它拆成更小的函数——哪怕这些小函数永远不会被别的代码调用。这主要是为了利用认知上的便利：用一句有描述性的函数调用、比如 `ReticulateSplines()`，去替换掉几百行代码。这样读代码的人就知道那里在「编织样条」，比硬啃那几百行、再从注释里找线索要容易理解得多。"
+    },
+    {
+      "type": "h2",
+      "id": "passes-filter",
+      "zh": "Q：我注意到在 passes_filter 里，LISTER_FILTER_MODE_POSITIVE 和 LISTER_FILTER_MODE_NEGATIVE 两个分支几乎一样，只差「==」和「!=」。把 POSITIVE 合并进 NEGATIVE 分支，你觉得怎么样？",
+      "en": "Q: I noticed that in passes_filter, the LISTER_FILTER_MODE_POSITIVE and LISTER_FILTER_MODE_NEGATIVE cases are almost the same. differing only by \"==\" versus \"!=\". What do you think about collapsing the POSITIVE into the NEGATIVE case?"
+    },
+    {
+      "type": "p",
+      "en": "For quick reference, the original code looked like this:",
+      "zh": "先给个方便对照：原来的代码长这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "原来的 POSITIVE 分支",
+      "captionEn": "The original POSITIVE case",
+      "code": "case LISTER_FILTER_MODE_POSITIVE:\n\n{\n int handler_result = NOT_APPLICABLE;\n special.handler(special.param, e, 0, false, &handler_result);\n if(handler_result != NOT_APPLICABLE)\n{\n passes_special = (handler_result != 0);\n}\n} break;"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "原来的 NEGATIVE 分支",
+      "captionEn": "The original NEGATIVE case",
+      "code": "case LISTER_FILTER_MODE_NEGATIVE:\n\n{\n int handler_result = NOT_APPLICABLE;\n special.handler(special.param, e, 0, false, &handler_result);\n if(handler_result != NOT_APPLICABLE)\n{\n passes_special = (handler_result == 0);\n}\n} break;"
+    },
+    {
+      "type": "p",
+      "en": "And the person asking the question is asking about changing it to something like this:",
+      "zh": "而提问的人想问的是把它改成差不多这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "提问者设想的合并写法",
+      "captionEn": "The collapsed version the questioner proposes",
+      "code": "case LISTER_FILTER_MODE_POSITIVE: // fall through, NEGATIVE case handles both POSITIVE and NEGATIVE\n\ncase LISTER_FILTER_MODE_NEGATIVE:\n\n{\n int handler_result = NOT_APPLICABLE;\n special.handler(special.param, e, 0, false, &handler_result);\n if(handler_result != NOT_APPLICABLE)\n{\n // check filter mode matches result of filter handler\n passes_special = (handler_result == 0) == (filter_mode == LISTER_FILTER_MODE_NEGATIVE);\n}\n} break;"
+    },
+    {
+      "type": "p",
+      "en": "I'm not sure I have strong feelings about either of these.  Personally, I prefer the original form, because it is very clear what is going on and there is no real intricacy or bulk to the code that would make it fragile to future updates.  So collapsing it just introduces errors in comprehension or updating where someone would make a mistake in reading or changing the (now more complicated) computation of passes_special.  That said, if someone were to make that change and felt strongly about it, I wouldn't object.",
+      "zh": "这两种写法我都没有什么强烈意见。就个人而言，我更喜欢原来的形式，因为它一眼就能看清在干什么，而且这段代码既没有什么真正的曲折之处，体量也不大，不会让它经不起未来的改动。所以把它合并掉，只会在「理解」和「修改」上引入出错的机会：有人可能在读、或者改那个（现在更复杂的）passes_special 计算时犯错。话虽如此，要是谁真的做了这个改动、并且对此很有感觉，我也不反对。"
+    },
+    {
+      "type": "p",
+      "en": "If the cases were longer, and had more shared code that was intricate and likely to change, I would definitely prefer collapsing the two, even at the cost of legibility.  So really this is a case of the code being small enough that I prefer the duplication, but anything bigger and I would probably change my preference.",
+      "zh": "如果这两个分支更长、共享的代码更多、更曲折、也更可能变动，那我肯定会倾向把它们合并，哪怕牺牲可读性。所以这其实是「代码足够小，我宁愿重复」的一个例子；再大一点，我的偏好大概就会反过来。"
+    },
+    {
+      "type": "h2",
+      "id": "muratori-style-for-loop",
+      "zh": "Q：这段代码里所有的 for 循环都被包在一个块里。为什么？",
+      "en": "Q: All the for loops in this code are encapsulated within a block.  Why?"
+    },
+    {
+      "type": "p",
+      "en": "Well… yeah.  That's a \"Muratori-style for loop\", so named because I am literally the only person anyone's ever seen write a for loop this way.  Nowadays, there is little or no reason to use this bracketing style.  It is a habit of mine that I picked up in 1995 when working on a cross-platform codebase that had to compile under both Microsoft Visual C++ and GNU C++ (among others).  At the time, GNU C++ had adopted the convention that a variable declaration inside the for's parentheses was scoped to the loop (as per the spec), but Visual C++ did the opposite, considering the declaration to be in the outer scope.  This lead to a no-win situation where code written properly under GNU C++ would have multiply-defined symbol errors under Visual C++, and code written in Visual C++ would have undefined-symbol errors in GNU C++.  My solution to this problem was to devise the double-bracket style you see in this code, which solved the problem rather elegantly in my opinion, but was apparently too ugly for anyone else to adopt.  Later, Visual C++ fixed their compiler to have proper scoping rules, and the bracketing style was no longer necessary, but by that point I had gotten so used to doing it that I still haven't stopped.",
+      "zh": "嗯……对。那叫「Muratori 式 for 循环」，之所以这么叫，是因为大家见过的这么写 for 循环的人，真的就只有我一个。如今已经几乎或完全没有理由再用这种加括号的风格了。这是我 1995 年养成的习惯，当时我在做一个跨平台代码库，得同时（在各种编译器里）通过 Microsoft Visual C++ 和 GNU C++ 的编译。那时 GNU C++ 已经采用了一条约定：写在 for 括号里的变量声明，作用域限在这个循环内（按标准就该如此）；而 Visual C++ 恰恰相反，认为这个声明属于外层作用域。这就导致了一个怎么都赢不了的局面：按 GNU C++ 正确写出来的代码，在 Visual C++ 下会报符号重定义；而在 Visual C++ 下写出来的代码，在 GNU C++ 下会报符号未定义。我的解决办法就是想出了你在这段代码里看到的双括号风格——在我看来它相当优雅地解决了问题，但显然在别人眼里丑得没人愿意采用。后来 Visual C++ 修好了编译器，作用域规则变正常了，这种加括号的风格也就不再必要；但到那时我已经用得太顺，至今没停下来。"
+    },
+    {
+      "type": "h2",
+      "id": "c-style-comments",
+      "zh": "Q：我注意到你们禁用所有 /* */ 注释块。这挺奇怪的。有什么原因吗？",
+      "en": "Q: I noticed that you guys were banning all /* */ comment blocks. That's rather odd. Any reason for this?"
+    },
+    {
+      "type": "p",
+      "en": "They are not banned, they probably just didn't happen to get used in this file for whatever reason.  I definitely do use them sometimes for longer comments, both in my own code and in the code I wrote for The Witness.  My editor (GNU Emacs) handles commenting automatically, so it's \"free\" for me to make long comments with //'s instead of /* */, so sometimes I just don't notice that I have made a very long comment entirely in the former.",
+      "zh": "并没有禁用，只是这个文件里恰好在各种原因下没用到而已。我自己在写更长的注释时确实有时会用它们，无论是我自己的代码还是我为《The Witness》写的代码。我的编辑器（GNU Emacs）会自动处理注释，所以用 // 写长注释、而不是用 /* */，对我来说是「免费」的，于是有时候我根本没注意到自己整条很长的注释都用了前一种。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "That said, I do tend to avoid using C-style comments for disabling code, because comments usually don't nest properly under most compiler's default settings.  For this reason, I tend to prefer #if 0 blocks for code, since I can #if 0 a block of code that already has a #if 0 in it and it will work, whereas I cannot comment out a block of code that already has a commented-out block of code in it without it breaking most compilers on their default settings.",
+      "zh": "话虽如此，我在「用注释来屏蔽代码」这件事上确实倾向于回避 C 风格注释，因为在大多数编译器的默认设置下，注释通常不能正确嵌套。因此我更喜欢用 #if 0 块来屏蔽代码：我可以把一个里面已经有 #if 0 的代码块再 #if 0 起来，它照样能工作；但如果一个代码块里已经有一段被注释掉的代码，我就没法把它整个注释掉——在大多数编译器的默认设置下这会直接崩掉。"
+    },
+    {
+      "type": "h2",
+      "id": "forward-declarations",
+      "zh": "Q：lister_panel.h 开头有一个 struct Entity_Panel 的前向声明，但你在 lister_panel.cpp 里又 include 了「entity_panel.h」，那里面想必有它的定义。为什么？",
+      "en": "Q: lister_panel.h begins with a forward declaration of struct Entity_Panel, but you include \"entity_panel.h\" in lister_panel.cpp which presumably has the definition. Why?"
+    },
+    {
+      "type": "p",
+      "en": "To be honest, I have no idea what those forward declarations are doing there.  The .h file doesn't reference them anymore as far as I can tell.  I suspect it was historical, where at one point the .h file was referring to those structs and needed them to be declared, but didn't want to include the whole .h file with their definition.",
+      "zh": "说实话，我完全不知道那些前向声明放在那儿是要干什么。据我所知，这个 .h 文件已经不再引用它们了。我猜这是历史遗留：某个时候这个 .h 文件里用到了那些结构体，需要它们被声明，但又不想把带有定义的整个 .h 文件给 include 进来。"
+    },
+    {
+      "type": "p",
+      "en": "I try never to include .h files in a .h file unless I absolutely have to, since each .h file is usually included by multiple .cpp files, so the more .h files you include from an .h file, the more that multiplies the number of files processed by the compiler for each compilation unit.  This leads to higher compile times, and I hate higher compile times.",
+      "zh": "除非绝对必要，我尽量从不在 .h 文件里 include 别的 .h 文件，因为每个 .h 文件通常会被多个 .cpp 文件 include，所以你从一个 .h 文件里 include 的 .h 文件越多，每个编译单元里编译器要处理的文件数量就被乘得越大。这会拉长编译时间，而我痛恨编译时间变长。"
+    },
+    {
+      "type": "p",
+      "en": "These days, in my own codebase, I actually don't compile files separately anymore, I just include all the .cpp files into one big .cpp file and compile that.  So forward declarations are rarely necessary.  But in other codebases where files are compiled separately, I tend to adhere to most of the compile-time-minimizing practices I learned long ago from Lakos' [Large Scale C++ Software Design](http://www.amazon.com/Large-Scale-Software-Design-John-Lakos/dp/0201633620).  The only one I don't tend to do in foreign codebases is redundant include guards, but that is solely because I rarely know if there are consistently named include guards in the target .h files I'm referencing, and I don't usually want to spend the time to exhaustively check.",
+      "zh": "如今在我自己的代码库里，我其实已经不再分开编译各个文件了，而是把所有 .cpp 文件都 include 进一个大 .cpp 文件里一起编译。所以前向声明很少有必要。但在那些分开编译文件的其他代码库里，我倾向于遵守我很早以前从 Lakos 的 [Large Scale C++ Software Design](http://www.amazon.com/Large-Scale-Software-Design-John-Lakos/dp/0201633620) 里学到的大部分「压缩编译期」的做法。唯一我不太在别人的代码库里做的是冗余的 include 保护，这纯粹是因为我很少知道我要引用的那些 .h 文件里有没有命名一致的 include 保护，而且我通常不想花时间把它逐一彻底查一遍。"
+    },
+    {
+      "type": "h2",
+      "id": "macros-for-constants",
+      "zh": "Q：为什么你用宏来定义常量，而不是用 const 变量或 enum？",
+      "en": "Q: Why do you use macros for constants instead of const variables/enums?"
+    },
+    {
+      "type": "p",
+      "en": "I don't have a strong opinion about this, and I do use enums sometimes.  It tends to be whatever strikes my fancy.  There are reasons to use macros instead of enums, namely that there can be situations where a macro works and an enum doesn't.  The example would be assigning the value 5 to a float.  If you make the 5 an enum, some compilers may emit a precision warning because you are converting an integer to a float.  If you make the 5 a macro, the same compiler may not warn because it can see that 5 can be perfectly represented as a float, unlike other integers which cannot be.  This may not be true for today's compilers, which might do analysis of the enum value just like it would with an expanded macro, but I haven't played around much with that recently so I can't say for certain.",
+      "zh": "对此我没什么强烈意见，我有时候也用 enum。基本上是哪种顺眼用哪种。用宏而不是 enum 是有理由的，也就是说，确实存在宏能用而 enum 不行的场合。例子是给一个 float 赋值为 5。如果你把 5 做成 enum，有些编译器可能会报精度警告，因为你是在把整数转成 float。而如果你把 5 做成宏，同一个编译器可能就不报警告了，因为它能看出 5 可以被 float 精确表示，而别的整数不行。今天的编译器可能已经不是这样了——它们也许会像展开宏那样去分析 enum 的值——但最近我没怎么折腾这个，所以不敢打包票。"
+    },
+    {
+      "type": "p",
+      "en": "As for why I might want a constant to be assignable to both a float and an int, this is typical of my thinking about programming.  It is the opposite of how most C++ programmers think.  I usually prefer the option that supports the widest possible code use, whereas most C++ programmers seem to prefer the option that supports the narrowest.  They are all about \"protected\" and \"private\" and \"const\" and so on, because those language features restrict the number of ways in which a piece of code can be used.  But I prefer to make code that can be used in the widest number of ways, and so I tend to prefer practices that are as permissive as possible.  Had I grown up in the sixties, I probably would have been a happy LISP programmer :)",
+      "zh": "至于我为什么会想要一个常量既能赋给 float 又能赋给 int，这很能代表我对编程的想法，而且和大多数 C++ 程序员的思路正好相反。我通常偏好「让这段代码能被尽可能多种方式使用」的那个选项，而大多数 C++ 程序员似乎偏好「支持最少用法」的那个。他们满脑子都是「protected」「private」「const」之类的东西，因为这些语言特性会限制一段代码被使用的方式数量。而我喜欢让代码能被尽可能多种方式使用，所以我倾向于尽可能宽松的做法。要是我生在六十年代长大，大概会是个快乐的 LISP 程序员 :)"
+    },
+    {
+      "type": "p",
+      "en": "The reason I differ in opinion here is that I tend to find that the primary development cost in codebases to lie in working out the interoperation of large amounts of code, not in the debugging of that code.  I think people often perceive the cost of debugging to be much higher than it actually is, probably because it is not much fun to do.  I believe many modern programmers spend an inordinate amount of time using things like \"const\" and \"private\" to try to prevent possible misuses of a piece of code, all the while making the code less usable in a number of circumstances that would have worked just fine, thus costing even more development time than the time already spent \"designing in\" these restrictions.",
+      "zh": "我在这里之所以有不同看法，是因为我倾向于认为：代码库里主要的开发成本在于把大量代码之间的相互配合理清楚，而不在于调试这些代码。我觉得人们往往把调试的成本想得比实际高得多，大概是因为调试没什么乐趣。我相信很多现代程序员花了过多的精力用「const」「private」之类的东西去防止一段代码被误用，同时却让这段代码在许多本来完全能用的情况下变得不那么好用——结果花的开发时间比当初「把这些限制设计进去」所花的时间还要多。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, who is right and who is wrong about these sorts of things is not really a question anyone can definitively answer because we don't have the kind of metrics that we would need to accurately assess it.  I can't say for sure that my way is the right way.  But I would definitely encourage people to think deeply about every programming practice they currently do in the name of bug prevention and consider how much debugging time it is actually saving, and to jettison those for which there is no strong evidence for an overall time savings.",
+      "zh": "可惜，这类事情上谁对谁错，并不是谁能给出确定答案的问题，因为我们没有能准确评估它所需的那种度量数据。我不能断言我的做法就是对的。但我一定会鼓励大家深入想一想：自己现在以「防 bug」为名做的每一个编程实践，究竟实际省下了多少调试时间？对那些没有强有力证据表明整体上省了时间的做法，就把它扔掉。"
+    },
+    {
+      "type": "h2",
+      "id": "editor-only-code",
+      "zh": "Q：你写了「这同样是只在编辑器里用的代码，也就是说它不打算被用在发布的产品里」。这是否意味着有一整套代码库是专门给编辑器用的？",
+      "en": "Q: You wrote, \"this is also editor-only code, which means it is not meant to be used in a released product.\"  Does that mean that there's an entire codebase dedicated uniquely to the editor?"
+    },
+    {
+      "type": "p",
+      "en": "Not exactly.  There is a directory full of editor-only code, but it is something that adds on to the game's source code rather than replacing it entirely.  The point of my comment was just to indicate that lister_panel.cpp, along with all the other editor-specific add-ons, does not get compiled into the shipping version of the game, and thus does not have to be as robust as code that users will interact with directly.",
+      "zh": "不完全是。确实有一个装满「只在编辑器里用的代码」的目录，但它是附加在游戏源代码之上的东西，而不是把游戏代码整个替换掉。我那条注释的意思只是说：lister_panel.cpp 以及所有其他编辑器专用的附加部分，不会被编译进游戏的发行版里，因此不必像用户会直接打交道的代码那样健壮。"
+    },
+    {
+      "type": "h2",
+      "id": "imgui",
+      "zh": "Q：你是不是故意不写这个 UI 的「即时模式」性质，好让它显得像是件平常事？",
+      "en": "Q: Do you purposefully avoid writing about the IM-ness of the UI to make it seem like it's something ordinary?"
+    },
+    {
+      "type": "p",
+      "en": "No, I avoid writing about it because I didn't write it :)  In general, I try to avoid talking about code I didn't write, because I don't feel like I will be able to accurately represent the thought process that went into crafting the code.",
+      "zh": "不是，我不写它是因为不是我写的 :) 一般来说，我尽量避免谈论不是我写的代码，因为我觉得自己没法准确还原当初做这段代码时的思考过程。"
+    },
+    {
+      "type": "p",
+      "en": "[Jon](http://number-none.com/blow/) wrote the GUI for the Witness editor.  It is a very old GUI codebase written before [Braid](https://en.wikipedia.org/wiki/Braid_%28video_game%29) that Jon has used on a number of projects.  He would be the appropriate person to write about it, since he's the only one who knows why he made the decisions he made and why it works the way it does.",
+      "zh": "《The Witness》编辑器的 GUI 是 [Jon](http://number-none.com/blow/) 写的。那是一个非常古老的 GUI 代码库，早在 [Braid](https://en.wikipedia.org/wiki/Braid_%28video_game%29) 之前就写了，Jon 在好几个项目里都用过它。写它的人才是合适的作者，因为只有他知道自己当初为什么做那些决定、以及它为什么是这样工作的。"
+    },
+    {
+      "type": "h2",
+      "id": "linux-development",
+      "zh": "Q：你在 [Linux](https://www.linux.org) 上开发吗？我问这个是因为我很想在博客上看到一篇文章，讲讲你的工作机、PC（还是 Mac？）的配置、操作系统、（IDE、编辑器）之类的。",
+      "en": "Q: Do you develop on [Linux](https://www.linux.org)?  I ask because I would love to see an article on the blog about your workstation, the specs of the PC (Mac?), OS, (IDE, editor) whatever."
+    },
+    {
+      "type": "p",
+      "en": "I am often on Linux and I do use it for programming my own code.  That said, though I did get [The Witness](http://the-witness.net/news/) compiling under [Linux](https://www.linux.org), the majority of the Witness development I did was on a Windows machine.  At the time when I got things building on Linux, [Ignacio](http://www.ludicon.com/castano/blog/) and [Andy](https://www.linkedin.com/in/andy-smith-8472b933) hadn't yet finished the port of [The Witness](http://the-witness.net/news/) to [OpenGL](https://www.opengl.org/).  Since Linux doesn't have [Direct3D](https://en.wikipedia.org/wiki/Direct3D) support (apart from [Wine](https://www.winehq.org/)), I didn't try to get things running completely.  I just set up a dedicated Windows machine for development while working on The Witness and used that.",
+      "zh": "我经常在 Linux 上，也确实用它来写自己的代码。话虽如此，虽然我确实让 [The Witness](http://the-witness.net/news/) 能在 [Linux](https://www.linux.org) 下编译，但我做的 Witness 开发工作大部分是在 Windows 机器上完成的。我把东西在 Linux 上编译起来的时候，[Ignacio](http://www.ludicon.com/castano/blog/) 和 [Andy](https://www.linkedin.com/in/andy-smith-8472b933) 还没有完成 [The Witness](http://the-witness.net/news/) 向 [OpenGL](https://www.opengl.org/) 的移植。由于 Linux 不支持 [Direct3D](https://en.wikipedia.org/wiki/Direct3D)（除非借助 [Wine](https://www.winehq.org/)），我就没试着把它完全跑起来。做《The Witness》期间，我专门配了一台 Windows 机器用于开发，就用那台。"
+    },
+    {
+      "type": "p",
+      "en": "For my own code, I try to keep everything running on at least two platforms at all times, so I have Linux on all my laptops and Windows on my (much older) desktop.  I use [Emacs](https://www.gnu.org/software/emacs/) as my editor, so that is the same on both platforms, as is cmirror, my custom-made sync and backup utility.  I do not use a build system, I just have a .bat on Windows and a shell script on Linux.  For debugging, I use [Microsoft Visual Studio](https://www.visualstudio.com/) on Windows, which sucks, and [QtCreator](https://www.qt.io/) on Linux, which somehow sucks even more.  Sometimes I think they get together and have competitions to see who can make the shittier debugger, and [QtCreator](https://www.qt.io/) comes out on top, but its neck-and-neck right to the finish.",
+      "zh": "至于我自己的代码，我尽量让所有东西始终至少能在两个平台上跑，所以我的所有笔记本上都是 Linux，而（老得多的）台式机上则是 Windows。我的编辑器是 [Emacs](https://www.gnu.org/software/emacs/)，所以两个平台上都一样，我自己做的同步备份工具 cmirror 也一样。我不用构建系统，Windows 上就一个 .bat，Linux 上就一个 shell 脚本。调试方面，Windows 上我用 [Microsoft Visual Studio](https://www.visualstudio.com/)，它很烂；Linux 上我用 [QtCreator](https://www.qt.io/)，不知怎么还更烂。有时候我觉得这两家会凑到一起比赛谁的调试器更烂，结果 [QtCreator](https://www.qt.io/) 胜出，但一直到终点线都是紧咬不放。"
+    },
+    {
+      "type": "p",
+      "en": "On the whole, I am very interested in trying to make alternatives like Linux viable.  I'm not sure how realistic that is, given the fractured nature of Linux and its hardware compatibility difficulties.  But I feel like I should at least be trying to help, rather than sitting idly by while [Microsoft](https://microsoft.com), through a combination of selfishness and incompetence, flushes my home computing platform straight down the drain.",
+      "zh": "总的来说，我非常希望能让 Linux 这类替代方案变得可行。考虑到 Linux 本身的碎片化以及它在硬件兼容上的种种困难，我不确定这有多现实。但我觉得自己至少应该试着帮点忙，而不是干坐着看 [Microsoft](https://microsoft.com) 凭借自私与无能的组合，把我家里的计算平台直接冲进下水道。"
+    },
+    {
+      "type": "h2",
+      "id": "oop-where-to-use",
+      "zh": "Q：要是能读到一些「OOP 才是正确做法」的案例就好了。你已经讲清楚了*不该*在哪儿用 OOP，那*该*在哪儿用呢？",
+      "en": "Q: It would be great to read about cases where OOP is the proper way to go.  You've made it clear where *not* to use OOP, but where *should* we use it?"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Honestly, I feel like the answer is \"in some other language\".  My position on object-oriented programming is generally that it does not work well in C++ because C++ does not have any of the features you might want to allow you to get a benefit out of thinking of things in terms of objects.",
+      "zh": "老实说，我觉得答案是「换一门别的语言」。我对面向对象编程的基本立场是：它在 C++ 里效果不好，因为 C++ 并不具备那些能让你从「用对象来思考」中获得好处的特性。"
+    },
+    {
+      "type": "p",
+      "en": "To expand on that answer a little bit: there are two reasons that I think object-oriented programming usually doesn't work.  The first reason is that I think people try to apply the methodology to a wide variety of circumstances, when really it is only appropriate for a very narrow set of circumstances.  But the second reason is that C++ doesn't have good object-oriented programming support, so even if you did find a circumstance where object-oriented design was going to be optimal, you would still end up with bad results if you tried to use C++ to do the actual implementation.",
+      "zh": "把这个回答稍微展开一点：我认为面向对象编程通常不奏效有两个原因。第一个原因是，人们总想把这套方法论套用到各种各样的场合，而它真正只适用于非常窄的一类场合。第二个原因是，C++ 对面向对象编程的支持并不好，所以即使你确实找到了一个「面向对象设计最优」的场合，只要你用 C++ 去做实际实现，最终结果依然很糟。"
+    },
+    {
+      "type": "p",
+      "en": "I would say that if you are programming in C++, you should basically never use object-oriented programming.  If you are programming in some other language, perhaps there are times when object-oriented programming might be a good idea.  Unfortunately, since I have thirty years of experience programming C and C++, and only a small fraction of that experience in any other language, I feel it would be out of place for me to speculate on anything specific, since I really can't speak from experience in any of the more traditional object-oriented languages.",
+      "zh": "我要说的是：如果你在用 C++ 编程，那你基本上永远不该用面向对象编程。如果你在用别的语言编程，也许有时候面向对象编程是个好主意。可惜我有三十年写 C 和 C++ 的经验，其他语言的经验只占其中很小一部分，所以我觉得自己不适合去具体猜测些什么，因为我实在无法凭经验谈论那些更传统的面向对象语言。"
+    },
+    {
+      "type": "p",
+      "en": "And, just to make sure the point isn't lost, as I said in the previous articles, the phrase \"never use object-oriented programming\" doesn't mean that I don't think you will have data structures in your code that can have multiple types, or which might contain extensions or different data members based on some notion of their type.  Instead, what I mean is that you should never be thinking in terms of \"objects\" and \"members\" and \"encapsulation\".  You should be thinking strictly in terms of the actual code and the algorithms that you are creating, and then you should build the backing data to fit those algorithms.  If something like an object should then arise, that is totally fine.  But at least as far as C++ is concerned, never start by thinking in terms of objects!  It is always the wrong approach.",
+      "zh": "另外，为了确保这点不被误解：正如我在前面几篇文章里说的，「永远不要用面向对象编程」这个说法，并不是说我认为你的代码里不会出现可以有多种类型的数据结构，或者那种会按某种类型概念带有扩展、或不同数据成员的结构。我的意思是：你永远不该以「对象」「成员」「封装」的思路去想问题。你应该严格地按你正在写的实际代码和算法去思考，然后按这些算法来搭背后的数据。如果之后自然浮现出某种类似对象的东西，那完全没问题。但至少就 C++ 而言，永远不要从对象的角度开始想！那永远是错误的做法。"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "official-2012-11-29-very-limited-very-closed-beta",
+  "title": { "zh": "非常有限、非常封闭的内测", "en": "Very Limited, Very Closed Beta" },
+  "subtitle": {
+    "en": "The first extremely closed beta goes out over Steam to a few testers — and it does not mean the game is almost done.",
+    "zh": "第一个极度封闭的内测版通过 Steam 发给了少数测试者——而这并不意味着游戏快做完了。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last Wednesday night, just before Thanksgiving, we shipped our first extremely closed beta over Steam to a few limited testers.",
+      "zh": "上周三晚上，就在感恩节前，我们通过 Steam 把第一个极度封闭的内测版发给了少数几个测试者。"
+    },
+    {
+      "type": "p",
+      "en": "Today we shipped an update, still to the same limited group. We have some initial tech issues to work out before we go wider (game packaging issues, graphics card incompatibilities, and the like).",
+      "zh": "今天我们发布了一次更新，仍然只给同一小批人。在扩大范围之前，我们有一些初期的技术问题要解决（游戏打包问题、显卡不兼容之类的）。"
+    },
+    {
+      "type": "p",
+      "en": "Here's a desktop screenshot from one of the testers, with someone chiding him about what he's playing:",
+      "zh": "这是一位测试者的桌面截图，有人正在拿他在玩什么打趣："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/11/tease.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "(The Witness window in this shot is artificially resized to make room on the desktop; by default we launch at 1280x720.)",
+      "zh": "（截图中《The Witness》的窗口被人为缩放了，以便在桌面上腾出地方；默认情况下我们以 1280x720 启动。）"
+    },
+    {
+      "type": "p",
+      "en": "I know that the impulse is to think \"oh wow they are almost done!\" Don't think that, it's not the case. We still have a gigantic amount of work to do and it'll be a while before the game is done.",
+      "zh": "我知道大家会忍不住想「哇，他们快做完了！」别这么想，不是这样的。我们还有巨量的活要干，离游戏做完还有一段时间。"
+    },
+    { "type": "h2", "id": "trivia", "zh": "随机的冷知识问答", "en": "Random Trivia Q&A" },
+    {
+      "type": "p",
+      "en": "**Q:** How many footstep sound effects are in *The Witness?*",
+      "zh": "**问：***The Witness* 里有多少个脚步声音效？"
+    },
+    {
+      "type": "p",
+      "en": "**A:** 1,119 so far. They sound really good! We will probably be in the Guinness Book of World Records as the game with the most footstep sounds...",
+      "zh": "**答：** 到目前为止 1,119 个。听起来真的很棒！我们大概会作为脚步声最多的游戏被写进《吉尼斯世界纪录大全》……"
+    }
+  ]
+}

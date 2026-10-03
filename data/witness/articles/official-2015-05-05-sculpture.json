@@ -1,0 +1,28 @@
+{
+  "id": "official-2015-05-05-sculpture",
+  "title": { "zh": "雕塑", "en": "Sculpture" },
+  "subtitle": {
+    "en": "We brought in sculptor Andrea Blasich, who just finished the giant lady sculpted into the mountainside.",
+    "zh": "我们请来了雕塑家 Andrea Blasich，他刚做完那座雕进山体里的巨大女性像。"
+  },
+  "translator": {
+    "note": "原文 2 张图，排在同一行；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "As some of you may have noticed in [old screenshots](http://the-witness.net/news/2012/02/island-snapshot-4/), we had a few placeholder statues around the island. I designed these when I joined the project almost four years ago, and a while back Luis sculpted a couple of nice final ones. However, as we were finalizing some areas, we wanted to add even more statues. We realized that Luis would never have the time to sculpt all of them as well as help me finish the rest of the art, so we searched for a sculptor.",
+      "zh": "有些人可能已经在[早先的截图](http://the-witness.net/news/2012/02/island-snapshot-4/)里注意到，岛上曾经有几座占位用的雕像。它们是我快四年前加入项目时设计的，前一阵 Luis 雕刻了几座不错的最终版本。不过在给一些区域收尾时，我们还想再加更多雕像。我们意识到 Luis 不可能既雕完所有雕像，又帮我做完剩下的美术，于是我们去找了一位雕塑家。"
+    },
+    {
+      "type": "p",
+      "en": "We managed to find Andrea Blasich, a most excellent artist skilled at both traditional and 3D sculpture. He is blowing through the statues and continues to wow us with his stuff. He just finished this giant lady sculpted into the mountainside, and it turned out so beautiful, I wanted to share it:",
+      "zh": "我们找到了 Andrea Blasich——一位非常出色的艺术家，传统雕塑和 3D 雕塑都很擅长。他做雕像的速度快得惊人，作品也一直让我们惊叹。他刚做完这座雕进山体里的巨大女性像，成品太美了，我想拿出来分享："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/05/shot_2015.05.05__time_18_24_n011.png) ![图](http://the-witness.net/news/wp-content/uploads/2015/05/shot_2015.05.05__time_18_25_n02.png)",
+      "zh": "（原文此处有两张图）"
+    }
+  ]
+}

@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>scope(exit) in C++11 &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; scope(exit) in C++11 Comments Feed" href="http://the-witness.net/news/2012/11/scopeexit-in-c11/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2843,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_041.png","alt":"","desc":"","caption":"Banner_04","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_041-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/1865" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2012/11/scopeexit-in-c11/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=1865' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2012%2F11%2Fscopeexit-in-c11%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=83B55E99E5DE66122F115E6970FC3FA6');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<link rel="author" href="http://castano.ludicon.com/blog/"><style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_041.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-1865 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-1865" class="post-1865 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">scope(exit) in C++11</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/castano/" title="View all posts by Ignacio Castaño">Ignacio Castaño</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2012-11-19T18:38:01-07:00">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/" rel="bookmark">November 19, 2012</a>
+				</time>
+			   </span><time class="updated"  datetime="2015-03-26T14:49:17-07:00">March 26, 2015</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>I really like the <a href="http://dlang.org/statement.html#ScopeGuardStatement" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://dlang.org/statement.html#ScopeGuardStatement', 'scope(exit) statements in D']);" >scope(exit) statements in D</a>. They allow you to keep the cleanup code next to the initialization code making it much easier to maintain and understand. I wish we had them in C++.</p>
+<p>Turns out this can be implemented easily using some of the new C++ features. I'm not a big fan of C++11; for the most part I think it adds even more complexity to an already complex language. However, I have to admit that some of the features can be useful, when used with care and moderation.</p>
+<p>I think this is one of such cases. If you can get past the weird syntax, lambdas can be very powerful. What I find most useful is to be able to define local functions (closures) that can access the local variables of the enclosing scope.</p>
+<p>In our case, what we want to do is to define some code that is executed at the end of the scope to cleanup objects allocated in the current scope. This is easily achieved allocating an object on the stack that invokes a lambda function that wraps our custom cleanup code:</p>
+<pre>#include &lt;functional&gt;
+
+struct ScopeExit {
+    ScopeExit(std::function f) : f(f) {}
+    ~ScopeExit() { f(); }
+    std::function f;
+};
+
+#define STRING_JOIN2(arg1, arg2) DO_STRING_JOIN2(arg1, arg2)
+#define DO_STRING_JOIN2(arg1, arg2) arg1 ## arg2
+#define SCOPE_EXIT(code) \
+    ScopeExit STRING_JOIN2(scope_exit_, __LINE__)([=](){code;})
+</pre>
+<p>Then you can write code like:</p>
+<pre>int * ip = new int[16];
+SCOPE_EXIT(delete [] ip);
+
+FILE * fp = fopen("test.out", "wb");
+SCOPE_EXIT(fclose(fp));
+</pre>
+<p>I know you can go to greater lengths to mimic the D syntax, and that Boost also provides similar functionality, but this does all we need in less than 10 lines of code.</p>
+<p>Sadly we cannot really use this on The Witness, because I'm not sure we are yet ready to drop support for platforms and compilers that do not implement the required C++11 functionality.</p>
+<p><em><strong>Update:</strong></em></p>
+<p>As mentioned by Daniel in the comments, you don't really want to use std::function in this case. A quick look at the assembly output confirms that the generated code is horrible. It makes a lot more sense to wrap the closure explicitly and rely on type inference to allocate the wrapper object on the stack:</p>
+<pre>template &lt;typename F&gt;
+struct ScopeExit {
+    ScopeExit(F f) : f(f) {}
+    ~ScopeExit() { f(); }
+    F f;
+};
+
+template &lt;typename F&gt;
+ScopeExit&lt;F&gt; MakeScopeExit(F f) {
+    return ScopeExit&lt;F&gt;(f);
+};
+
+#define SCOPE_EXIT(code) \
+    auto STRING_JOIN2(scope_exit_, __LINE__) = MakeScopeExit([=](){code;})
+</pre>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/" title="Permalink to scope(exit) in C++11" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2012/11/you-know-the-game-is-coming-along/" rel="prev"><i class="meta-nav-prev"></i> You know the game is coming along&#8230;</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2012/11/very-limited-very-closed-beta/" rel="next">Very Limited, Very Closed Beta <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				61 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-82554">
+		<div id="comment-82554">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c940f2dce578e9131f66827bef43eb2a?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c940f2dce578e9131f66827bef43eb2a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">cb</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-82554">
+					November 19, 2012 at 7:02 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m sure you know this, but for the record : while C++11 Lambdas make this a lot easier &amp; neater, it certainly can be done in older C++ , you just have to put the arguments into a template functor object.  </p>
+<p>(of course this is just what Lambdas are doing for you)</p>
+<p>For example in cblib/Callback.h you can use </p>
+<p>ON_DESTRUCT1(fclose,fp);</p>
+<p>to get the same thing.  (Boost has the same kind of thing)</p>
+<p>It requires a mess of template wiring, because old C++ is missing the very basic feature of being able to store a function + all its arguments in a struct for later use.</p>
+<p>I do think it&#8217;s worth investing in that wiring though, because it lets you do things like run functions at later times, or on other threads, etc.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=82554#respond' data-commentid="82554" data-postid="1865" data-belowelement="comment-82554" data-respondelement="respond" data-replyto="Reply to cb" aria-label='Reply to cb'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-82612">
+		<div id="comment-82612">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/be6ee9bebde05dc29f6232407088a939?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/be6ee9bebde05dc29f6232407088a939?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Mark</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-82612">
+					November 19, 2012 at 7:54 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Ignacio,</p>
+<p>Core language support on gcc, msvc and clang seem to be getting there, although their STL implementations are lagging.  I&#8217;m stuck with gcc 4.5 in production, but the features I do have access to I&#8217;d find it hard to live without now.  In particular, r-value references and auto have had a huge impact on my coding style.</p>
+<p>I&#8217;m curious &#8211; are there any C++11 features that you have found to be well enough supported for use in your production code?  Are there any new language features that you&#8217;d be especially keen to use if platform support was not an issue?</p>
+<p>&#8211; Mark</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=82612#respond' data-commentid="82612" data-postid="1865" data-belowelement="comment-82612" data-respondelement="respond" data-replyto="Reply to Mark" aria-label='Reply to Mark'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-82790">
+		<div id="comment-82790">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/55ee19d0dd775596dbca5ba1cd92d6ad?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/55ee19d0dd775596dbca5ba1cd92d6ad?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://beesbuzz.biz/' rel='external nofollow ugc' class='url'>fluffy</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-82790">
+					November 19, 2012 at 8:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>You can do this using a function inner class.  I could have sworn I wrote a blog entry about this a while ago but I&#8217;m not finding it now.</p>
+<p>Boost has some wrappers to make it easier.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=82790#respond' data-commentid="82790" data-postid="1865" data-belowelement="comment-82790" data-respondelement="respond" data-replyto="Reply to fluffy" aria-label='Reply to fluffy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-82809">
+		<div id="comment-82809">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/55ee19d0dd775596dbca5ba1cd92d6ad?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/55ee19d0dd775596dbca5ba1cd92d6ad?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://beesbuzz.biz/' rel='external nofollow ugc' class='url'>fluffy</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-82809">
+					November 19, 2012 at 8:33 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Oh, here we go: <a href="http://beesbuzz.biz/blog/e/2010/03/19-using_inner_classes_to_simplify_complex_cleanup_in.php" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://beesbuzz.biz/blog/e/2010/03/19-using_inner_classes_to_simplify_complex_cleanup_in.php', 'http://beesbuzz.biz/blog/e/2010/03/19-using_inner_classes_to_simplify_complex_cleanup_in.php']);" rel="nofollow ugc">http://beesbuzz.biz/blog/e/2010/03/19-using_inner_classes_to_simplify_complex_cleanup_in.php</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=82809#respond' data-commentid="82809" data-postid="1865" data-belowelement="comment-82809" data-respondelement="respond" data-replyto="Reply to fluffy" aria-label='Reply to fluffy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-84030">
+		<div id="comment-84030">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog' rel='external nofollow ugc' class='url'>Ignacio</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84030">
+					November 20, 2012 at 1:41 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Charles: I hadn&#8217;t thought about doing it that way. Relying on the virtual destructor for the cleanup is an interesting idea. I had been trying to allocate the Callback object on the stack directly, which requires some form of type inference and complicates things too much.</p>
+<p>Mark: I&#8217;ve just started playing with C++11. Native type inference is long overdue (decltype). A few years ago I would have been very excited about it. Today I use a very small subset of C++ and don&#8217;t have that many uses for it anymore. Personally, I&#8217;d take support for modules and faster compile times over any of the new C++ features.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84030#respond' data-commentid="84030" data-postid="1865" data-belowelement="comment-84030" data-respondelement="respond" data-replyto="Reply to Ignacio" aria-label='Reply to Ignacio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-84111">
+		<div id="comment-84111">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0e047e76c127533512591059e54e9b69?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0e047e76c127533512591059e54e9b69?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">danielw</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84111">
+					November 20, 2012 at 2:51 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>You really don&#8217;t want to use </p>
+<pre>std::function</pre>
+<p> for anything like this. It will almost certainly incur a heap allocation, since capturing all the locals will exceed any small buffer size that your implementation might use internally. In C++03 you had to resort to using the fact that a const reference to a temporary will keep it alive for the duration of the scope, but in C++11 you can just use </p>
+<pre>auto</pre>
+<p> instead:</p>
+<p><code><br />
+template<br />
+class ScopeExit {<br />
+public:<br />
+  ScopeExit (F f) : m_active(true), m_f(f) {}<br />
+  ScopeExit(ScopeExit const&amp; other)<br />
+    : m_active(true), m_f(other.m_f) {<br />
+    other.m_active = false;<br />
+  }</p>
+<p>  ~ScopeExit () {<br />
+    if (m_active)<br />
+      m_f();<br />
+  }</p>
+<p>private:<br />
+  mutable bool m_active;<br />
+  F m_f;<br />
+};</p>
+<p>template<br />
+ScopeExit MakeScopeExit(F f) {<br />
+  return ScopeExit(f);<br />
+}</p>
+<p>#define SCOPE_EXIT(code) \<br />
+    auto STRING_JOIN2(scope_exit_, __LINE__) = MakeScopeExit([&amp;](){code;})<br />
+</code></p>
+<p>Note the use of </p>
+<pre>[&amp;]</pre>
+<p> for the lamda capture. You don&#8217;t want to capture by value (</p>
+<pre>[=]</pre>
+<p>) here since copying locals can be very expensive (and often incorrect).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84111#respond' data-commentid="84111" data-postid="1865" data-belowelement="comment-84111" data-respondelement="respond" data-replyto="Reply to danielw" aria-label='Reply to danielw'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-2" id="li-comment-86136">
+		<div id="comment-86136">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog' rel='external nofollow ugc' class='url'>Ignacio</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86136">
+					November 20, 2012 at 9:12 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>No, you really want to capture by value, otherwise imagine what would happen if:</p>
+<p>ip = new int;<br />
+SCOPE_EXIT(delete ip);</p>
+<p>ip = new int;<br />
+SCOPE_EXIT(delete ip);</p>
+<p>You would delete the same pointer twice.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86136#respond' data-commentid="86136" data-postid="1865" data-belowelement="comment-86136" data-respondelement="respond" data-replyto="Reply to Ignacio" aria-label='Reply to Ignacio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-86873">
+		<div id="comment-86873">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/b493f71de32bf76293c047d0c9d27d0a?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/b493f71de32bf76293c047d0c9d27d0a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zenju</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86873">
+					November 21, 2012 at 3:31 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p><code><br />
+ip = new int;<br />
+SCOPE_EXIT(delete ip);</p>
+<p>ip = new int;<br />
+SCOPE_EXIT(delete ip);<br />
+</code></p>
+<p>This code is conceptually invalid, since the first &#8220;SCOPE_EXIT&#8221; takes ownership of &#8220;ip&#8221;, which leads to a race-condition with the second assignment &#8220;ip = new int;&#8221;. So you generally want to use a reference capture for the scope exit (and scope guard) idioms.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86873#respond' data-commentid="86873" data-postid="1865" data-belowelement="comment-86873" data-respondelement="respond" data-replyto="Reply to Zenju" aria-label='Reply to Zenju'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even depth-3" id="li-comment-87309">
+		<div id="comment-87309">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c0804ce31cdece873f02bdf33c03bb0d?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c0804ce31cdece873f02bdf33c03bb0d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.aaronmcdaid.com' rel='external nofollow ugc' class='url'>Aaron McDaid</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-87309">
+					November 21, 2012 at 6:21 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>By value doesn&#8217;t work in some cases either.  For example</p>
+<p>        ifstream stdin(&#8220;/dev/stdin&#8221;);<br />
+        SCOPE_EXIT(stdin.close());</p>
+<p>This fails because you are not allowed to copy ifstream objects.  Maybe you need two forms of the macro, one that uses [&#8216;&amp;&#8217;] and another that uses &#8216;[=]&#8217;.  In the specific case where you are using pointers which you must delete, then it makes sense to take the pointer by value.  But the reference form is very useful too.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=87309#respond' data-commentid="87309" data-postid="1865" data-belowelement="comment-87309" data-respondelement="respond" data-replyto="Reply to Aaron McDaid" aria-label='Reply to Aaron McDaid'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-2" id="li-comment-86189">
+		<div id="comment-86189">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86189">
+					November 20, 2012 at 9:33 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>BTW, I just took a look at the generated assembly and it&#8217;s horrific. For some reason I thought std::function would do some type inference magic internally, but that&#8217;s clearly not the case. Better to do it explicitly. Thanks for pointing it out!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86189#respond' data-commentid="86189" data-postid="1865" data-belowelement="comment-86189" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-84281">
+		<div id="comment-84281">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d2804b4d6f5bf6fd36aff920f646c93a?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d2804b4d6f5bf6fd36aff920f646c93a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Luke</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84281">
+					November 20, 2012 at 3:54 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Cool &#8211; that&#8217;s a really nice syntax &#8211; keep deallocation / cleanup together with the declaration. Wonder if there&#8217;s a way to set that with C# (their using{} statement is a similar idea but less elegant, requiring an indented block). Something to try whenever I get motivated for game development again&#8230; :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84281#respond' data-commentid="84281" data-postid="1865" data-belowelement="comment-84281" data-respondelement="respond" data-replyto="Reply to Luke" aria-label='Reply to Luke'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-84389">
+		<div id="comment-84389">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d0596861ee07c4e6bed6eecd3731ca60?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d0596861ee07c4e6bed6eecd3731ca60?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://slackito.com' rel='external nofollow ugc' class='url'>Jorge</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84389">
+					November 20, 2012 at 4:50 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>You can also use std::unique_ptr and specify a custom deleter to deal with resources that are not dynamic memory (see <a href="http://asawicki.info/news_1494_unique_ptr_in_visual_c_2010.html" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://asawicki.info/news_1494_unique_ptr_in_visual_c_2010.html', ' this post ']);" rel="nofollow"> this post </a>). So your examples could be like:<br />
+<code><br />
+unique_ptr ip = new int[16]; // no need to specify the "delete[]" at the end<br />
+</code><code><br />
+and<br />
+</code><code><br />
+class FileDeleter {<br />
+  void operator()(FILE* fp) { fclose(fp); }<br />
+};<br />
+unique_ptr fp = fopen("blah");<br />
+</code></p>
+<p>or even<br />
+<code><br />
+unique_ptr fp( fopen("blah"), fclose)<br />
+</code></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84389#respond' data-commentid="84389" data-postid="1865" data-belowelement="comment-84389" data-respondelement="respond" data-replyto="Reply to Jorge" aria-label='Reply to Jorge'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-84391">
+		<div id="comment-84391">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d0596861ee07c4e6bed6eecd3731ca60?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d0596861ee07c4e6bed6eecd3731ca60?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://slackito.com' rel='external nofollow ugc' class='url'>Jorge</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84391">
+					November 20, 2012 at 4:52 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Sorry for the broken HTML in my previous reply, reposting.</p>
+<p>You can also use std::unique_ptr and specify a custom deleter to deal with resources that are not dynamic memory (see <a href="http://asawicki.info/news_1494_unique_ptr_in_visual_c_2010.html" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://asawicki.info/news_1494_unique_ptr_in_visual_c_2010.html', ' this post ']);" rel="nofollow"> this post </a>). So your examples could be like:<br />
+<code><br />
+unique_ptr&lt;int[]&gt; ip = new int[16]; // no need to specify the "delete[]" at the end<br />
+</code><br />
+and<br />
+<code><br />
+class FileDeleter {<br />
+  void operator()(FILE* fp) { fclose(fp); }<br />
+};<br />
+unique_ptr&lt;FILE, FileDeleter&gt; fp = fopen("blah");<br />
+</code></p>
+<p>or even<br />
+<code><br />
+unique_ptr&lt;FILE, int(*)(FILE*)&gt; fp( fopen("blah"), fclose)<br />
+</code></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84391#respond' data-commentid="84391" data-postid="1865" data-belowelement="comment-84391" data-respondelement="respond" data-replyto="Reply to Jorge" aria-label='Reply to Jorge'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-84641">
+		<div id="comment-84641">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/dbf8c9f5d249fdd3556e16cf091d6415?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/dbf8c9f5d249fdd3556e16cf091d6415?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.thirdpartyninjas.com' rel='external nofollow ugc' class='url'>Jesse</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84641">
+					November 20, 2012 at 7:16 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>std::unique_ptr will take care of this for you. You&#8217;ll need to define a one line structure to handle custom deleters like fclose, but it&#8217;s really pretty simple. (I&#8217;m sure they had a good reason to go that route instead of bringing over boost::scoped_ptr, but I really liked scoped_ptr.)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84641#respond' data-commentid="84641" data-postid="1865" data-belowelement="comment-84641" data-respondelement="respond" data-replyto="Reply to Jesse" aria-label='Reply to Jesse'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-84795">
+		<div id="comment-84795">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6d3419e685c17d359a9a43ec7035ba7f?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6d3419e685c17d359a9a43ec7035ba7f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://entland.homelinux.com/blog/' rel='external nofollow ugc' class='url'>Ent</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84795">
+					November 20, 2012 at 9:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi ignacio,</p>
+<p>we have been using this for the last 3 year in &#8220;old&#8221; c++ code. It can be definitely implemented:</p>
+<p><a href="http://www.ddj.com/cpp/184403758" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.ddj.com/cpp/184403758', 'http://www.ddj.com/cpp/184403758']);" rel="nofollow ugc">http://www.ddj.com/cpp/184403758</a><br />
+<a href="http://www.zete.org/people/jlehrer/scopeguard.html" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.zete.org/people/jlehrer/scopeguard.html', 'http://www.zete.org/people/jlehrer/scopeguard.html']);" rel="nofollow ugc">http://www.zete.org/people/jlehrer/scopeguard.html</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84795#respond' data-commentid="84795" data-postid="1865" data-belowelement="comment-84795" data-respondelement="respond" data-replyto="Reply to Ent" aria-label='Reply to Ent'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-84840">
+		<div id="comment-84840">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/427f38934427768a928848b68d8fa826?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/427f38934427768a928848b68d8fa826?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Saage</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84840">
+					November 20, 2012 at 10:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi, I have a question about that syntax. Why are you using 2 #defines instead of  something like that #define STRING_JOIN2(arg1, arg2) arg1 ## arg2 ?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84840#respond' data-commentid="84840" data-postid="1865" data-belowelement="comment-84840" data-respondelement="respond" data-replyto="Reply to Saage" aria-label='Reply to Saage'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor even depth-2" id="li-comment-86240">
+		<div id="comment-86240">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86240">
+					November 20, 2012 at 10:16 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p><a href="http://stackoverflow.com/questions/1597007/creating-c-macro-with-and-line-token-concatenation-with-positioning-macr" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://stackoverflow.com/questions/1597007/creating-c-macro-with-and-line-token-concatenation-with-positioning-macr', 'http://stackoverflow.com/questions/1597007/creating-c-macro-with-and-line-token-concatenation-with-positioning-macr']);" rel="nofollow ugc">http://stackoverflow.com/questions/1597007/creating-c-macro-with-and-line-token-concatenation-with-positioning-macr</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86240#respond' data-commentid="86240" data-postid="1865" data-belowelement="comment-86240" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-84980">
+		<div id="comment-84980">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/a16b050739669214fbef108e285e3e54?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/a16b050739669214fbef108e285e3e54?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Tim</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-84980">
+					November 20, 2012 at 11:13 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Go has defer which is handy.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=84980#respond' data-commentid="84980" data-postid="1865" data-belowelement="comment-84980" data-respondelement="respond" data-replyto="Reply to Tim" aria-label='Reply to Tim'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-85143">
+		<div id="comment-85143">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6da9993d8784d5bfacf9f781dfa8ea39?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6da9993d8784d5bfacf9f781dfa8ea39?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://twitter.com/tomkirbygreen' rel='external nofollow ugc' class='url'>Tom Kirby-Green</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-85143">
+					November 20, 2012 at 12:09 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Maybe for an arbitrary chunk of logic, but in the case of the examples given std::vector and pick your favourite RAII file handle wrapper. </p>
+<p>For my taste the solution given uses far too much (read: any at all) pre-processor machinery.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=85143#respond' data-commentid="85143" data-postid="1865" data-belowelement="comment-85143" data-respondelement="respond" data-replyto="Reply to Tom Kirby-Green" aria-label='Reply to Tom Kirby-Green'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-85411">
+		<div id="comment-85411">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4d142a9e3dd58e63e35556b9f6335306?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4d142a9e3dd58e63e35556b9f6335306?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Adam</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-85411">
+					November 20, 2012 at 1:48 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;ve usually found it better to just use shared_ptr for this sort of thing:</p>
+<p>typedef std::shared_ptr FilePtr;<br />
+FilePtr f(fopen(&#8220;test.out&#8221;, &#8220;wb&#8221;), fclose);</p>
+<p>When it goes out of scope, it will call fclose instead of delete, but if you did decide to pass that file pointer around or store it somewhere, the custom deallocator goes with it as a hidden implementation detail.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=85411#respond' data-commentid="85411" data-postid="1865" data-belowelement="comment-85411" data-respondelement="respond" data-replyto="Reply to Adam" aria-label='Reply to Adam'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-85413">
+		<div id="comment-85413">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4d142a9e3dd58e63e35556b9f6335306?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4d142a9e3dd58e63e35556b9f6335306?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Adam</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-85413">
+					November 20, 2012 at 1:49 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>**That should be:<br />
+typedef std::shared_ptr FilePtr;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=85413#respond' data-commentid="85413" data-postid="1865" data-belowelement="comment-85413" data-respondelement="respond" data-replyto="Reply to Adam" aria-label='Reply to Adam'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-85759">
+		<div id="comment-85759">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-85759">
+					November 20, 2012 at 5:36 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I have to say, this is the worst C++ code I&#8217;ve seen in a long time. C++ does not need this language feature, RAII does this for us. (HAIL RAII!) I cannot come around the fact that writing a simple wrapper seems so much more elegant than a bunch of magic macros, which I have to think about every time, and which aren&#8217;t even necessarily exception safe, as someone could easily write<br />
+int* a1 = new int[100];<br />
+int* a2 = new int[100];<br />
+SCOPE_EXIT(delete [] a1);<br />
+SCOPE_EXIT(delete [] a2);<br />
+which is obviously not exception safe.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=85759#respond' data-commentid="85759" data-postid="1865" data-belowelement="comment-85759" data-respondelement="respond" data-replyto="Reply to IKnowImOffensive" aria-label='Reply to IKnowImOffensive'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon even depth-2" id="li-comment-85775">
+		<div id="comment-85775">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-85775">
+					November 20, 2012 at 5:47 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Well, for one, I personally do not like exceptions and do not ever use them, because I think they lead to bad code. So if you disagree on that, we are just coming from different worldviews.</p>
+<p>All I can say is, hey, with The Witness we are successfully writing a pretty complicated game and engine, with a small team, that most people (including most language-opinion-pundits) would find difficult to get working at all. So we can&#8217;t be doing things *too* wrong. Empirical results are the ultimate judge.</p>
+<p>If I want to be offensive, my standard reply is to ask how much real code you have written, what is the largest/most complex program, etc. In my experience these &#8220;your code sucks!!&#8221; comments come from people who are relatively new to programming (I used to make those kinds of comments, back when I was recently out of college, etc). </p>
+<p>People who have dealt with big and complex programs tend to be more chill about these kinds of issues because they know what real technical problems look like, and they know that while language and feature choices can create or remove friction, the biggest problem is not the O(n) friction, but the super-linear growth in program complexity that quickly dwarfs friction.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=85775#respond' data-commentid="85775" data-postid="1865" data-belowelement="comment-85775" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-85793">
+		<div id="comment-85793">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-85793">
+					November 20, 2012 at 6:19 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>If you&#8217;d follow the simple rules that everything you want to do any time you leave the scope should stand in a destructor, and every destructor should only be responsible for one manual delete, your code would be safe and easy without any macros whatsoever.<br />
+The program complexity should actually grow much slower this way, as all the classes are reusable, safe, and one doesn&#8217;t have to write the same cleanup code over and over again. If you work with many different handles and don&#8217;t want to repeat the move/copy boilerplate code, I suggest using std::unique_ptr and maybe a small self written unique_handle class. (I assume you&#8217;re familiar with the arguably best C++11 feature there is: move semantics.) Wrappers like that provide a safe and convenient way to deal with almost every resource there is. (From file handles over window handles over device contexts to OpenGL handles.)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=85793#respond' data-commentid="85793" data-postid="1865" data-belowelement="comment-85793" data-respondelement="respond" data-replyto="Reply to IKnowImOffensive" aria-label='Reply to IKnowImOffensive'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon even depth-4" id="li-comment-87717">
+		<div id="comment-87717">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-87717">
+					November 21, 2012 at 11:33 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Here is what I am trying to say:</p>
+<p>Suppose the function for overall complexity of your code is a * (N ** b), where N is the number of functional components (measured in some very vague way), and 1 < b < 2.
+
+You are talking about ways of reducing a. I am saying, sure, it is fine to reduce a, but it is way more important to reduce N or b, and often, proposed methods of reducing a actually increase N at the same time (or even increase b), leaving you in a worse situation for large programs. It is a delicate situation.
+</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=87717#respond' data-commentid="87717" data-postid="1865" data-belowelement="comment-87717" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-5" id="li-comment-88106">
+		<div id="comment-88106">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88106">
+					November 21, 2012 at 3:10 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>How could you even possibly come to the conclusion that my method reduces a? In any scenario, the creation of reusable classes reduces the exponent, since one may has to write more code up front, but relatively less the more the class gets used. But honestly, since there is not really an popular &#8220;code-complexity-model&#8221; whatsoever, any discussion on this level seems totally useless. I could now just say the complexity gets modeled by a^x+bx^2+cx+d or whatever, and my method reduces x and yours d. No facts involved, just bullshitting. So please lets keep it straight near the facts, that are:<br />
+With RAII:<br />
+ &#8211; the cleanup code only has to be written once.<br />
+ &#8211; the cleanup is exception safe.<br />
+ &#8211; one cannot forget to write the cleanup. (Or the mistake will be caught very early since nothing gets freed, and it only has to be corrected once.)<br />
+ &#8211; The ownership relationships are already modeled through the class, so the resource protection works over simple scope boundaries.</p>
+<p>After all, RAII with a few simple rules (already named those in my first post) makes it almost impossible, if not completely impossible, to get resource leaks or anything like that; at the expense of a few lines of code for the class boilerplate. Your method offers none of these benefits.</p>
+			<div class="reply">
+							</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon even depth-5" id="li-comment-88754">
+		<div id="comment-88754">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88754">
+					November 21, 2012 at 8:37 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I am going to give up on explaining this. The model I mentioned has very specific motivation. Of course it is not some kind of precise model, but if you are a good programmer you will be able to understand the motivation by looking at it. It&#8217;s not a random polynomial. Why, for example, do you think that 1 < b < 2? Think about it. If you understand what that means, really, then we can have a productive discussion.
+</p>
+			<div class="reply">
+							</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-2" id="li-comment-86226">
+		<div id="comment-86226">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86226">
+					November 20, 2012 at 10:07 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Did you read the article? The macro is precisely creating an object that takes ownership of the pointer and executes the cleanup code in the destructor at the end of the scope. You can of course do the same explicitly, but my point is that using closures with the proposed macro makes this a lot easier, more succinct, and much less error prone.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86226#respond' data-commentid="86226" data-postid="1865" data-belowelement="comment-86226" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-3" id="li-comment-86284">
+		<div id="comment-86284">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/99c25494e6ca7ac61741d1b5b845314c?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/99c25494e6ca7ac61741d1b5b845314c?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Hascat</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86284">
+					November 20, 2012 at 10:56 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Using an fstream is even less error-prone because you don&#8217;t have to remember any cleanup code.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86284#respond' data-commentid="86284" data-postid="1865" data-belowelement="comment-86284" data-respondelement="respond" data-replyto="Reply to Hascat" aria-label='Reply to Hascat'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt depth-3" id="li-comment-87310">
+		<div id="comment-87310">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-87310">
+					November 21, 2012 at 6:25 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>No, it is much _more_ error prone, because one has to think about writing the cleanup stuff every time a resource is used! And it&#8217;s even easy to make mistakes if you _don&#8217;t_ forget to write the cleanup code, because the code doesn&#8217;t enforce coupling between reservation and release of a resource, so the cleanup code may not even be triggered with exceptions. (As I&#8217;ve shown before. And yeah, you don&#8217;t like exceptions, lol.) It makes absolutely no sense. C++ already has a very good, if not even the best currently known way of handling resources. This macro gets totally useless as soon as you have resources inside a container or any ownership transfer whatsoever by the way; while RAII just works fine &#8211; always.<br />
+By the way: You do realize that new can throw? Do you guys always use the nothrow version in your project? Did you turn off exception handling in the compiler, so you at least get the small speed benefit from not having exceptions?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=87310#respond' data-commentid="87310" data-postid="1865" data-belowelement="comment-87310" data-respondelement="respond" data-replyto="Reply to IKnowImOffensive" aria-label='Reply to IKnowImOffensive'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-86365">
+		<div id="comment-86365">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9be0247966e2f294c9ee6451be545a92?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9be0247966e2f294c9ee6451be545a92?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://icefallgames.com' rel='external nofollow ugc' class='url'>Phil Fortier</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-86365">
+					November 20, 2012 at 11:30 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I think it would make more sense to use something like the solution Jorge pointed out (unique_ptr with custom deleter). It&#8217;s basically accomplishing the same thing, but lets you define a few different classes for common resource types (HANDLE, etc&#8230;).</p>
+<p>This way you no longer need to write the explicit custom clean up code for each resource you&#8217;re allocating. That&#8217;s one less thing to get wrong.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=86365#respond' data-commentid="86365" data-postid="1865" data-belowelement="comment-86365" data-respondelement="respond" data-replyto="Reply to Phil Fortier" aria-label='Reply to Phil Fortier'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-87011">
+		<div id="comment-87011">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/ff382acdb0dbf2113d02587c9c85bc4b?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/ff382acdb0dbf2113d02587c9c85bc4b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mbevin.wordpress.com/' rel='external nofollow ugc' class='url'>Michael Bevin</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-87011">
+					November 21, 2012 at 4:13 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I agree &#8211; it&#8217;s like he&#8217;s realised the need for RAII, but not understood how C++ already provides more elegant solutions for it.</p>
+<p>So instead of using C++11 as intended (or even C++98, though it&#8217;s with C++11 that this really becomes easy) &#8211; all resources encapsulated in classes which free them in their destructors, and making use of unique_ptr/shared_ptr for simple cases) &#8211; he&#8217;s continuing a C-like approach, but making use of advanced C++11 features to make it not quite so dangerous, but still requiring a more error-prone+verbose multi-line pattern to be followed everywhere than would be required with RAII (plus preprocessor tricky which unlike you I believe there is a case for sometimes, but only when needed, which given the better solutions it isn&#8217;t here)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=87011#respond' data-commentid="87011" data-postid="1865" data-belowelement="comment-87011" data-respondelement="respond" data-replyto="Reply to Michael Bevin" aria-label='Reply to Michael Bevin'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-87748">
+		<div id="comment-87748">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d84911b785d65627c7d386749944a8dc?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d84911b785d65627c7d386749944a8dc?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">thefatredguy</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-87748">
+					November 21, 2012 at 12:04 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Some problems I see with this approach :<br />
+&#8211; it separates the moment of binding between the resource and its destructor. The code is very fragile under maintenance, since it&#8217;s very easy for someone to do something like this :<br />
+<code><br />
+// before<br />
+FILE* fp = fopen(...);<br />
+SCOPE_EXIT(fclose(fp));<br />
+//<br />
+// Later, a time pressed programmer, needs to make sure the file meets certain requirements before // being used<br />
+FILE* fp = fopen(...);<br />
+if (!file_requirements_are_met(fp))<br />
+   return false; // oops, fp leaks now<br />
+SCOPE_EXIT(fclose(fp));<br />
+</code><br />
+This problem is eliminated with unique_ptr.<br />
+&#8211; ugly macros, meaning harder to debug<br />
+&#8211; cannot be used in pre C++11 code, unlike unique_ptr<br />
+&#8211; probably some loss of speed, since the lambda must ref capture all locals (maybe the compiler can optimize this, I wasn&#8217;t curious enough to look at generated assembly code)</p>
+<p>Applying resource management idioms from other languages to C++ is really the wrong way. C++ has always had great resource management capabilities. It only took people about 10-15 years to discover that :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=87748#respond' data-commentid="87748" data-postid="1865" data-belowelement="comment-87748" data-respondelement="respond" data-replyto="Reply to thefatredguy" aria-label='Reply to thefatredguy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-88112">
+		<div id="comment-88112">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">sebastian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88112">
+					November 21, 2012 at 3:17 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>IKnowImOffensive, are you trying to be helpful here or just trolling, I really can&#8217;t tell.</p>
+<p>Sometimes you sound like you&#8217;re really trying to help out, and other times it sounds like you&#8217;re just  trying to save face.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88112#respond' data-commentid="88112" data-postid="1865" data-belowelement="comment-88112" data-respondelement="respond" data-replyto="Reply to sebastian" aria-label='Reply to sebastian'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-2" id="li-comment-88234">
+		<div id="comment-88234">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88234">
+					November 21, 2012 at 4:56 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I can&#8217;t really do something with this comment.. please refer to something I wrote if you think it&#8217;s wrong or worth discussing.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88234#respond' data-commentid="88234" data-postid="1865" data-belowelement="comment-88234" data-respondelement="respond" data-replyto="Reply to IKnowImOffensive" aria-label='Reply to IKnowImOffensive'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-88549">
+		<div id="comment-88549">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">sebastian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88549">
+					November 21, 2012 at 7:24 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I hear you, but I have a few problems with what you&#8217;ve said. I don&#8217;t know that anything you&#8217;ve said is actually wrong, and certainly don&#8217;t know if finding out whether you&#8217;re genuinely trying to help is worth discussing. I did consider it to be worth asking you directly, but you don&#8217;t seem to want to answer it.</p>
+<p>The reason I&#8217;m confused is that you entered the conversation about this post with &#8220;I have to say, this is the worst C++ code I’ve seen in a long time.&#8221; Maybe it&#8217;s just me but this doesn&#8217;t seem constructive at all. I could certainly write worse C++ code any time.</p>
+<p>It seems its only purpose is to imply that the Witness team need lecturing from you so they can be set right. Even that on its own wouldn&#8217;t bother me so much if that team weren&#8217;t so clearly a group of friendly, fantastic people. I don&#8217;t know Ingacio at all but he seems like an extremely gracious dude, and beginning your lecture like that doesn&#8217;t leave much room to take you constructively.</p>
+<p>On top of that, programming is only one part of what they&#8217;re trying to accomplish here. It&#8217;s possibly analogous to arguing with a film crew about their equipment. It&#8217;s important that it&#8217;s good, but it&#8217;s not important that it&#8217;s flawless (Witness crew: feel free to disagree with me on that!) </p>
+<p>There are also matters of story, artwork and gameplay they have to build. You seem positively outraged by their code, but I can almost guarentee that when we&#8217;re all playing the Witness, not a single one of us will be able to tell what the programmers finally did in the end.</p>
+<p>That&#8217;s not to say that this issue Ignacio is writing about is not important, absolutely it is, but to call his code the worst you&#8217;ve seen truly does seem to offer little to anybody except possibly your own ego.</p>
+<p>I could certainly be wrong about that, and you could be offering your help here contructively. I didn&#8217;t want to just accuse you of doing so, which is why I asked the question in the first place.</p>
+<p>I hope that helps clarify my first comment.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88549#respond' data-commentid="88549" data-postid="1865" data-belowelement="comment-88549" data-respondelement="respond" data-replyto="Reply to sebastian" aria-label='Reply to sebastian'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon even depth-4" id="li-comment-88751">
+		<div id="comment-88751">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88751">
+					November 21, 2012 at 8:32 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>sebastian, the thing is, this kind of response is common among young programmers. You can&#8217;t take it too seriously. I used to do the same thing. In this lecture there&#8217;s an anecdote, from back when I was in college or just out, where I tell one of the Id Software guys that they are lazy programmers and their code is bad, because they weren&#8217;t doing things the way I had been taught was The Right Way&#8230;</p>
+<p><a href="http://mort8088.com/2011/08/10/jonathan-blow-talks-to-csua/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://mort8088.com/2011/08/10/jonathan-blow-talks-to-csua/', 'http://mort8088.com/2011/08/10/jonathan-blow-talks-to-csua/']);" rel="nofollow ugc">http://mort8088.com/2011/08/10/jonathan-blow-talks-to-csua/</a></p>
+<p>&#8230; while, of course, they were programming stuff that was way cooler than I was able to program.</p>
+<p>So, I have learned to expect this kind of thing. It&#8217;s the circle of life. </p>
+<p>But, now that we have the Internet, I would hope that people have enough self-awareness to see this happening over and over, notice it in themselves, and chill out a bit. Maybe that is too optimistic to expect, I don&#8217;t know!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88751#respond' data-commentid="88751" data-postid="1865" data-belowelement="comment-88751" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon odd alt depth-5" id="li-comment-88753">
+		<div id="comment-88753">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88753">
+					November 21, 2012 at 8:35 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>(and this talk may also explain why my idea of &#8216;bad code&#8217; doesn&#8217;t necessarily coincide with conventional, popular ideas).</p>
+			<div class="reply">
+							</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon even depth-4" id="li-comment-88752">
+		<div id="comment-88752">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88752">
+					November 21, 2012 at 8:34 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Also, if this is the worst code he has seen, he really hasn&#8217;t seen much code.</p>
+<p>I mean, seriously.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88752#respond' data-commentid="88752" data-postid="1865" data-belowelement="comment-88752" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-5" id="li-comment-88907">
+		<div id="comment-88907">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">sebastian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88907">
+					November 21, 2012 at 10:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I just listened to that talk, and I have to say it must be surreal for you to now be Id, fielding complaints from young Jonathan Blow&#8217;s!</p>
+<p>But yes, it&#8217;s uncanny how much that talk describes this conversation so precisely.</p>
+			<div class="reply">
+							</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even depth-4" id="li-comment-90062">
+		<div id="comment-90062">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-90062">
+					November 22, 2012 at 8:42 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I never made a comment about the game whatsoever. I also don&#8217;t think that things like that will necessarily make the game much worse or even bother anyone if the game is released. To be completely honest, when I wrote my first comment, I didn&#8217;t even realize that this blog is about a game. I just got redirected from isocpp.org, and I certainly do _not_ think that this is good C++ and I don&#8217;t think it&#8217;s a good thing to teach this as good C++ to beginners. That&#8217;s why my first comment was so offensive. I don&#8217;t like it when people write about things which are obviously out of their expertise. I don&#8217;t have a problem if a games programmer writes something about graphics, spatial partitioning, physics in games, etc., and the code in the article isn&#8217;t exactly neat. But if you&#8217;re going to write about how to write good code, you should know how to write good code. _And_, maybe even more important, you should really care about what you write, because otherwise it doesn&#8217;t really make much sense discussing it. This whole &#8220;yeah I don&#8217;t really care about the theory and I just want to get things done&#8221; argument is fine, as long as the whole purpose of your article isn&#8217;t about how to write good, idiomatic code.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=90062#respond' data-commentid="90062" data-postid="1865" data-belowelement="comment-90062" data-respondelement="respond" data-replyto="Reply to IKnowImOffensive" aria-label='Reply to IKnowImOffensive'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-88382">
+		<div id="comment-88382">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f64914b68ff9076e46156c07c96e890f?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f64914b68ff9076e46156c07c96e890f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://rmartinho.github.com' rel='external nofollow ugc' class='url'>R. Martinho</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88382">
+					November 21, 2012 at 5:47 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Careful! That last snippet is allowed to invoke the cleanup function more than once, even though I doubt it will happen in any mainstream implementation. It appears to be working right now because of copy elision. If copy elision were not to happen, there would be two copies of the ScopeExit object around, and then the cleanup function would be called once when the function return and again at the expected time. To fix this you should add a move constructor and a way to track if the object has been moved.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88382#respond' data-commentid="88382" data-postid="1865" data-belowelement="comment-88382" data-respondelement="respond" data-replyto="Reply to R. Martinho" aria-label='Reply to R. Martinho'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor even depth-2" id="li-comment-89016">
+		<div id="comment-89016">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-89016">
+					November 22, 2012 at 12:06 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This is a very good point. Yes, I&#8217;m relying on copy elision, which in theory the compiler is not guaranteed to perform. However, it&#8217;s unclear to me how would you correctly implement the move constructor of ScopeExit. Lambdas have implicitly deleted default constructors so there&#8217;s no obvious way of reseting the lambda of the rvalue after it&#8217;s been copied. Can you shed some light on this? It&#8217;s kind of strange, because it seems that without copy elision optimization the code would fail to compile. Since code elision is permitted by the standard the code is actually valid, but only on compilers that support it. This is the kind of thing why I say C++ is too complex and C++0x doesn&#8217;t do much to alleviate that.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=89016#respond' data-commentid="89016" data-postid="1865" data-belowelement="comment-89016" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-735189">
+		<div id="comment-735189">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d64d652e9e96ad3300a4fef839a75137?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d64d652e9e96ad3300a4fef839a75137?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://john.mcfarlane.name' rel='external nofollow ugc' class='url'>JohnMcF</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-735189">
+					April 30, 2013 at 1:42 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Can it be done by writing an alternative class which doesn&#8217;t have a c&#8217;tor or would that simply push the problem along? Here&#8217;s how it might work:<br />
+1) create a copy of <code>ScopeExit</code> (e.g. <code>class ScopeExitTransfer</code>) which doesn&#8217;t call <code>f</code> in its d&#8217;tor;<br />
+2) return a <code>ScopeExitTransfer</code> &#8211; instead of <code>ScopeExit</code> &#8211; from <code>MakeScopeExit</code>;<br />
+3) add a c&#8217;tor to <code>ScopeExit</code> which receives a reference to <code>ScopeExitTransfer</code> and copies <code>f</code> over.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=735189#respond' data-commentid="735189" data-postid="1865" data-belowelement="comment-735189" data-respondelement="respond" data-replyto="Reply to JohnMcF" aria-label='Reply to JohnMcF'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-88996">
+		<div id="comment-88996">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d84911b785d65627c7d386749944a8dc?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d84911b785d65627c7d386749944a8dc?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">thefatredguy</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-88996">
+					November 21, 2012 at 11:37 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I think any decent compiler can do RVO here.<br />
+A great use for this idiom (among others) would be to implement some form of design by contract :<br />
+<code></p>
+<p>int func(int *arg1, int *arg2, const char** arg3)  {<br />
+    ON_SCOPE_ENTER(<br />
+        assert(arg1),<br />
+        assert(*arg1 == -1),<br />
+        assert(arg2),<br />
+        assert(*arg2 == -1),<br />
+        assert(arg3),<br />
+        assert(*arg3 == nullptr)<br />
+        );</p>
+<p>    ON_SCOPE_EXIT(<br />
+        assert(*arg1 &gt; 0),<br />
+        assert(*arg2 &lt; 0),<br />
+        assert(*arg3 != nullptr)<br />
+        );</p>
+<p>    *arg1 = +24;<br />
+    *arg2 = -10;<br />
+    *arg3 = &quot;whatever&quot;;</p>
+<p>    return 0;<br />
+}<br />
+</code></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=88996#respond' data-commentid="88996" data-postid="1865" data-belowelement="comment-88996" data-respondelement="respond" data-replyto="Reply to thefatredguy" aria-label='Reply to thefatredguy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-89460">
+		<div id="comment-89460">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d84911b785d65627c7d386749944a8dc?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d84911b785d65627c7d386749944a8dc?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">thefatredguy</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-89460">
+					November 22, 2012 at 2:31 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Well, there&#8217;s two types of code :<br />
+&#8211; theoretically corect code<br />
+&#8211; practically correct code.<br />
+This piece of code is practically correct, on every decent compiler out there. Theoretically it may not work as expected. Alas, in the real life, practicality wins over theory, otherwise it would be very difficult to get things done. There&#8217;s no black and white stuff, only shades of grey.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=89460#respond' data-commentid="89460" data-postid="1865" data-belowelement="comment-89460" data-respondelement="respond" data-replyto="Reply to thefatredguy" aria-label='Reply to thefatredguy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-90246">
+		<div id="comment-90246">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">sebastian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-90246">
+					November 22, 2012 at 10:13 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This is like a small itch I just can&#8217;t resist scratching. If you truly are a troll, you&#8217;re a very good one. I want very much to just ignore your comments and apparent ignorance, but the promise of how good it will feel to scratch the itch is just too great.</p>
+<p>I read over the original blog post three times since reading your response, just to be absolutely sure I was seeing what I was seeing. And, sure enough, right above the beginning of the post, in quite large typeface, are the words &#8220;The Witness: An exploration puzzle game&#8230;&#8221; and I have to say I&#8217;m just completely baffled why you would find this post and be compelled to insult the author with no knowledge of what he was trying to accomplish with his code. </p>
+<p>But, even if you truly did just not see the clear header indicating this is a game, I can&#8217;t find a single part of the original blog post where Ignacio claims to be teaching anything. It&#8217;s little more than writing about his discoveries and frustrations and being open about it. To attack somebody for that just seems so petty. But, that aside, Ignacio is making an ACTUAL videogame. One which I&#8211; and I would imagine every single other person reading this blog&#8211; am going to happily give money for when they&#8217;re done.</p>
+<p>Incidentally, the entire conversation that took place in the comments (besides your own input) has clearly been extremely helpful for the team, AND for anybody who happens to want to learn how to code. I mean, my god, the pettiness you&#8217;re displaying.</p>
+<p>Man it feels nice to scratch.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=90246#respond' data-commentid="90246" data-postid="1865" data-belowelement="comment-90246" data-respondelement="respond" data-replyto="Reply to sebastian" aria-label='Reply to sebastian'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-90247">
+		<div id="comment-90247">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">sebastian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-90247">
+					November 22, 2012 at 10:14 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>oh no&#8230; sorry thefatredguy, I think I just replied to you, instead of IKnowImOffensive.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=90247#respond' data-commentid="90247" data-postid="1865" data-belowelement="comment-90247" data-respondelement="respond" data-replyto="Reply to sebastian" aria-label='Reply to sebastian'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even depth-2" id="li-comment-92315">
+		<div id="comment-92315">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/881b1d7acfea1eb4585e5998c3493e1d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">IKnowImOffensive</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-92315">
+					November 23, 2012 at 2:57 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I still don&#8217;t get your point, the code is bad, I&#8217;m right, and I even was so kind to show how to do it better. You don&#8217;t seem to realize I really don&#8217;t care about the game, it may be good, but that will probably have nothing to do with how they handle resource cleanup in their code. PS: I never read blog titles, I&#8217;m just interested in the article itself.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=92315#respond' data-commentid="92315" data-postid="1865" data-belowelement="comment-92315" data-respondelement="respond" data-replyto="Reply to IKnowImOffensive" aria-label='Reply to IKnowImOffensive'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-93560">
+		<div id="comment-93560">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1a1629a238e9e8bd8bb5e0cd237ba057?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">sebastian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-93560">
+					November 23, 2012 at 3:12 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I regret becoming involved with this conversation. My response yesterday was silly and I see now that I should have just listened to Jonathan and not taken it all seriously.</p>
+<p>I&#8217;m bewildered by your ability to not get anything but your own messages, but I foresee some serious diminishing returns if I continue to engage, and those returns were quite fleeting to begin with.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=93560#respond' data-commentid="93560" data-postid="1865" data-belowelement="comment-93560" data-respondelement="respond" data-replyto="Reply to sebastian" aria-label='Reply to sebastian'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-92593">
+		<div id="comment-92593">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/15a365fef941cf4086d1b00e64aafb17?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/15a365fef941cf4086d1b00e64aafb17?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Gian</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-92593">
+					November 23, 2012 at 6:20 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>My personal feelings about new features in programming languages, after 15 years of experience in C++, C#, and 2 years of java, is that they can be useful but often it&#8217;s difficult to know that they exists, you need to think about the best use for them (because usually real examples are few) and many times the algorithms are difficult to port to other languages or other enviroments if they use uncommon practises. Another aspect is sharing the code with other people: if you use more and more (new or less popular) features, will people understand why there&#8217;s that snippet of code there? Certainly you can document/comment everything and people need to update their knowledge but in the real world, in my experience, things are less ideal.</p>
+<p>A similar situation to the various new C++ features has happened when Microsoft has released C# 3.0. There are so many new features like anonymous classes that can speed up coding but are they really necessary? Usually a better analysis of the problem is better than using something that feels, to me, hacks. This is confirmed when you need to improve the software with new features and those lines of code need to be (totally) refactored. </p>
+<p>For reducing errors in initialization and cleanup of objects i try to encapsulate the most critical operations in common classes, and separate the real computation in another class.<br />
+For example we need to read/write a file: i usually create a class that implements opening/reading/writing/closing/IO error handing. The class receives the specific parsing/writing class instance i want to execute. The first class will open the stream, than it will use the second class to execute calculations. The inner class can access to the IO functions of the outer class. After than it will cleanup instances.<br />
+If something fails at IO level the outer class will manage the IO objects cleanup, the inner class the calculation cleanup. The cleanup is used also when all is successfull, always separated. So things to manage are better focused to the scope of the class itself.<br />
+Another example is wanting to create a thread that calculates something and that shows a progress bar. The outer class will manage thread creation/cleanup, interfacing with the UI, the inner class just perform the calculation, signalling the outer class for progress, error, end of the processing. </p>
+<p>I&#8217;d love to see some kind of compatibility profile in C++. At default you can use any classes and features from C to newest C++ but an option can limit the compiler to accept only the most updated/ANSI features (someway similar to OpenGL profiles). So it&#8217;d force people to program with better standards and compilers would optimize those features instead of having to mix both old and new. Now you can have only deprecation warnings for some old unsafe functions.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=92593#respond' data-commentid="92593" data-postid="1865" data-belowelement="comment-92593" data-respondelement="respond" data-replyto="Reply to Gian" aria-label='Reply to Gian'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-100553">
+		<div id="comment-100553">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/56c686a03ead35148e3559d58fa357e9?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/56c686a03ead35148e3559d58fa357e9?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">young_programmer</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-100553">
+					November 27, 2012 at 2:22 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>From the perspective of a young programmer I must say it&#8217;s easy to influence my opinion. In my mind nothing is set in stone and following advice of other experienced programmers is hmm&#8230; desirable. It&#8217;s always harder to enter a world full of features than enter a very simple world and grow your experience alongside feature expansion.</p>
+<p>I have to admit, that the idea of simplifying coding rules is close to my heart. Reading code full of ornaments and obscurity is quite hard. That&#8217;s why I find beauty in code like the bitsquid foundation library, that was recently released and in coding styles proposed by Noel Llopis. However there is some boundary I wouldn&#8217;t like to cross. One of such things are global variables. Why am I hesitant to use such things for development? Again because reading &amp; reasoning about code, that uses it, is really hard. Also removing functions because raw code is more readable is a dangerous topic to me. I find small functions really readable, I like when a function has no side-effects and it does exactly the job it&#8217;s name describes. So if a higher level function is suppose to just invoke two other functions then perhaps there is no reason for this function to exist, but just maybe it should be there because all these functions are semantically from different systems? I am wandering off here, away from Jonathan&#8217;s presentation &amp; back to my text.</p>
+<p>In this post Ignacio suggests D-style closures to solve the problem of scope cleanup. My observation is, that c++ is not D, and maybe, just maybe a scope exit statement in C++ is present but in a different form?</p>
+<p>I don&#8217;t know the first thing about D but I find it very hard to see the proposed solution to be any superior to smart pointers (not referring to boost smart_ptr).</p>
+<p>I mean I know, that you guys play by the KISS(Keep it simple, stupid) methodology. But isn&#8217;t the proposed solution of C++ MACROS, lambdas, hidden RAII classes doing just the opposite thing? Is it actually, not against your ideology?</p>
+<p>Why not choose the simplest mechanism c++ has to offer? Either built-in std::unique_ptr or witness::scoped_ptr ? Why abstract the difference between C++ &amp; D, shouldn&#8217;t we embrace it? Every abstraction has it&#8217;s strings attached, and I see several strings attached to the method proposed. It doesn&#8217;t transplant to c++ without sacrifices and if there are methods in c++ without sacrifices, why not use them?</p>
+<p>This is my first impression, but bear in mind I am in no way as experienced as You guys are and have never coded anything as large, complicated or cool as You have.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=100553#respond' data-commentid="100553" data-postid="1865" data-belowelement="comment-100553" data-respondelement="respond" data-replyto="Reply to young_programmer" aria-label='Reply to young_programmer'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-104272">
+		<div id="comment-104272">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c5d0b0703db8fe732021dfe4512433db?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c5d0b0703db8fe732021dfe4512433db?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">yourlover</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-104272">
+					November 28, 2012 at 7:27 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I would use a wrench&#8230; OR maybe a fork. But, i trust in you guys!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=104272#respond' data-commentid="104272" data-postid="1865" data-belowelement="comment-104272" data-respondelement="respond" data-replyto="Reply to yourlover" aria-label='Reply to yourlover'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-733502">
+		<div id="comment-733502">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0f3263584633d771fbbd3c1f0243c2d2?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0f3263584633d771fbbd3c1f0243c2d2?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Dotun R</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-733502">
+					April 29, 2013 at 8:00 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>While I like the article I kinda agree with IKnowImOffensive, not in that the code is some how bad (it works, although it&#8217;s not the most straight forward), but I do think it&#8217;s much cleaner and safer to use RAII from a maintainability perspective that what&#8217;s described here.</p>
+<p>(On reflection however, IKnowImOffensive&#8217;s exception-safety argument may not hold much water however since, if the PS4 compiler is anything like the PS3 one, exceptions wouldn&#8217;t really be supported very well (&amp; typically haven&#8217;t been in console game dev for a very long time), if at all, and thus are likely not something game developers can hope to rely on in production code. So considerations towards this requirement are kinda moot.)</p>
+<p>You could still pass your custom d&#8217;tor code (if required) as a lambda into the RAII object constructor, effectively again leveraging the benefits of C++11 but also make your code far simpler (you only write your single line c&#8217;tor statement and any scope-based cleanup just magically works without you having to write a single line of extra code).</p>
+<p>It&#8217;s an interesting idea though however not quite one I&#8217;d go for.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=733502#respond' data-commentid="733502" data-postid="1865" data-belowelement="comment-733502" data-respondelement="respond" data-replyto="Reply to Dotun R" aria-label='Reply to Dotun R'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-4500481">
+		<div id="comment-4500481">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/22ca8e11d07e6333c5ce7a414d905dfc?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/22ca8e11d07e6333c5ce7a414d905dfc?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://iki.fi/bisqwit/' rel='external nofollow ugc' class='url'>Bisqwit</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-4500481">
+					May 18, 2014 at 1:24 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I prefer my solution involving std::unique_ptr (and I hope your HTML parser in the comments form doesn&#8217;t destroy the template syntax):</p>
+<pre lang="c++">    /* Open file */
+    struct fcloser { void operator() (std::FILE* fp) { if(fp) std::fclose(fp); } };
+    /* The std::unique_ptr ensures that the file is automatically closed, */
+    /* no matter which path this function is exited.                      */
+    std::unique_ptr fp { std::fopen(fn, "rb") };
+</pre>
+<p>Or if you don&#8217;t care about the null-pointer check, just call fclose directly:</p>
+<pre lang="c++">    std::unique_ptr fp( std::fopen(fn, "rb"), std::fclose );</pre>
+<p>No #defines needed.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=4500481#respond' data-commentid="4500481" data-postid="1865" data-belowelement="comment-4500481" data-respondelement="respond" data-replyto="Reply to Bisqwit" aria-label='Reply to Bisqwit'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-4500503">
+		<div id="comment-4500503">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/22ca8e11d07e6333c5ce7a414d905dfc?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/22ca8e11d07e6333c5ce7a414d905dfc?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://iki.fi/bisqwit/' rel='external nofollow ugc' class='url'>Bisqwit</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-4500503">
+					May 18, 2014 at 1:26 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Well, of course your blog&#8217;s comment section&#8217;s HTML parser destroyed the templates in my previous post. Let&#8217;s try again more inconveniently. This time you have to read and understand that the [ and ] are actually angled brackets. The post content is otherwise the same.<br />
+&#8212;-<br />
+I prefer my solution involving std::unique_ptr (and I hope your HTML parser in the comments form doesn&#8217;t destroy the template syntax):</p>
+<pre lang="c++">    /* Open file */
+    struct fcloser { void operator() (std::FILE* fp)
+        { if(fp) std::fclose(fp); } };
+    /* The std::unique_ptr ensures that the file is automatically closed, */
+    /* no matter which path this function is exited.                      */
+    std::unique_ptr[std::FILE, fcloser] fp { std::fopen(fn, "rb") };
+</pre>
+<p>Or if you don&#8217;t care about the null-pointer check, just call fclose directly:</p>
+<pre lang="c++">    std::unique_ptr[std::FILE, int(*)(FILE*)] fp
+        ( std::fopen(fn, "rb"), std::fclose );</pre>
+<p>No #defines needed.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=4500503#respond' data-commentid="4500503" data-postid="1865" data-belowelement="comment-4500503" data-respondelement="respond" data-replyto="Reply to Bisqwit" aria-label='Reply to Bisqwit'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8322642">
+		<div id="comment-8322642">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/bb43743ac7e4b559165efbc5c3aeacd2?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/bb43743ac7e4b559165efbc5c3aeacd2?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">L8_4_TheParty</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-8322642">
+					April 19, 2015 at 12:08 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Been reading lots about Blow&#8217;s aversion of RAII, and people not getting it.<br />
+I think it&#8217;s a failure of context-filling on Blow&#8217;s part, and I think I get it:<br />
+&#8211; RAII is really good for scenarios of many short-lived &#8216;resources&#8217; that are sprinkled all over a large code-base, with many possible exit-points for the scopes in which they are allocated. That is the general use-case of most resources in a code-base that is NON-performant-critical.<br />
+&#8211; In performance-critical code, you tend to have a very different and disciplined resource-allocation story, in which you try to do the greatest-majority of resource-allocation that you possibly can &#8220;up front&#8221;, in very long-lived objects, that have very limited/constrained/well-defined allocation-point and release points, that are meticulously/strategically placed/planned.</p>
+<p>These are 2 very different memory-allocation patterns, which means they have very different solutions that cater to them best.</p>
+<p>Blow is talking about how RAII entails a complication that is unjustified in his domain, since RAII doesn&#8217;t benefit that much for his domain, yet demands a lot from the developer. For the use-cases that RAII is helping, it more than compensated for the complexity-cost, by paying-off dividends in reduced overall-complexity of having to manage resource-releases manually &#8220;repeatedly&#8221; in many places. In Blow&#8217;s use-case, it can actually interfere, since that use-case actually does NOT need the resources to be released on every block-exit, since re-allocation for that same resources a while later (say, in the next frame), would be too expensive (especially when multiplied times the number of resources that need to be allocated). Game-developers are fighting over nanoseconds to be able to finish rendering a complex frame in &lt;16ms. These reallocations just pile-up very quickly, so they should be avoided &#8211; and RAII just pulls in the complete opposite direction, su it is a bad fit for the use-case &#8211; you want to be able to reuse as much resources as you can, so you don&#039;t want them to even be &#039;accidentally&#039; released by RAII rules, when some developer is not paying attention&#8230;</p>
+<p>Anyways, I&#039;m not a game developer, and do not consider myself a C++ expert, but that is how I understand it.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=8322642#respond' data-commentid="8322642" data-postid="1865" data-belowelement="comment-8322642" data-respondelement="respond" data-replyto="Reply to L8_4_TheParty" aria-label='Reply to L8_4_TheParty'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon odd alt depth-2" id="li-comment-8323381">
+		<div id="comment-8323381">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-8323381">
+					April 20, 2015 at 9:01 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Not really.</p>
+<p>The issue isn&#8217;t that &#8220;my domain&#8221; is so much different from most other domains (though it is a bit different). The real issue is what standards people have over how good their work has to be.</p>
+<p>A lot of code that ships today is soft-real-time code. For example, every app that runs on a phone. But then, you go and try to use Android and it is bloated and horrible, yet the hardware it&#8217;s running on is a very very fast computer compared to what I had to work with in the year 2000 early in my game-making career. What is wrong here? Pretty clearly something is horribly wrong. </p>
+<p>I don&#8217;t see that you can seriously claim that people are successfully building software using RAII. Phones are horrible and slow. The Web is horrible and slow and buggy and barely works. etc, etc. You can only make these claims if you have very low standards for working software.</p>
+<p>In reality, RAII (especially when combined with some other things like exceptions) bloats your code and makes it much harder to understand, which exacerbates all of the in-real-life performance problems listed above.</p>
+<p>I think that by the time we solve these performance problems, the solution we end up with does not look much like RAII.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=8323381#respond' data-commentid="8323381" data-postid="1865" data-belowelement="comment-8323381" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon even depth-3" id="li-comment-8323395">
+		<div id="comment-8323395">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-8323395">
+					April 20, 2015 at 9:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>If I can be even more clear:</p>
+<p>This is not a case of me saying &#8220;People using RAII are doing a totally great job in their domain, but that is different from my domain&#8221;. </p>
+<p>I think people using RAII are doing a bad job in most domains. They are not being good programmers. They have mistaken ideas about what successful programming is and what good code is like. Yes, it will make a lot of programmers mad to hear I think this. That is fine.</p>
+<p>There are probably a few domains where I&#8217;d consider RAII a reasonable idea: for example, maybe you are building medical equipment or the Space Shuttle, and you are using a language like Rust, and you are optimizing your code so seriously that there is no question about performance being an issue (note that for these really serious applications, like medical equipment or the space shuttle, good performance is absolutely critical). In a language like Rust, that is trying very very hard to ensure safety all the time, RAII makes more sense. In a language like C++, RAII is just kind of a joke and you can&#8217;t use it the way the language intends without writing kind-of-terrible code. In my opinion.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=8323395#respond' data-commentid="8323395" data-postid="1865" data-belowelement="comment-8323395" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-8363840">
+		<div id="comment-8363840">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/964ec4c8bb8de2b45d6f6841c5f57437?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/964ec4c8bb8de2b45d6f6841c5f57437?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://crascit.com' rel='external nofollow ugc' class='url'>Craig Scott</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-8363840">
+					June 9, 2015 at 2:34 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hey guys, seems this article is still getting the odd view despite its age, so thought I&#8217;d chime in. Some interesting discussion in the comments here (ignoring the trolling). If you are now at the point where you can use C++11 in your code, then the comments from danielw and the ScopeGuard link from Ent are pointing you in the right direction. The ScopeGuard stuff in particular deserves some closer scrutiny, especially the revised version of it which uses C++11.</p>
+<p>I recently wrote a detailed pair of blog posts about this whole area, starting from a similar place as you with std::function and working through the steps to arrive at why the ScopeGuard-like approach is generally superior in all respects. The end result of those articles has the following features:</p>
+<p>&#8211; It is efficient, avoiding any dynamic memory allocation and minimises memory footprint.<br />
+&#8211; It is robust, using an RAII-based technique to ensure cleanup code is executed<br />
+&#8211; It results in concise code with a high degree of readability. No macros are required.</p>
+<p>You can find the two articles here:</p>
+<p><a href="http://crascit.com/2015/05/27/on-leaving-scope-part-1/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://crascit.com/2015/05/27/on-leaving-scope-part-1/', 'Let your compiler do your housekeeping']);" rel="nofollow">Let your compiler do your housekeeping</a></p>
+<p><a href="" rel="nofollow">OnLeavingScope: The sequel</a></p>
+<p>The latter of these two includes links to the original work by Andrei Alexandrescu and an active proposal to the C++ standards committee for scope_exit which is essentially the same as Andrei&#8217;s latest ScopeGuard implementation. I hope you and others find these two articles useful.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=8363840#respond' data-commentid="8363840" data-postid="1865" data-belowelement="comment-8363840" data-respondelement="respond" data-replyto="Reply to Craig Scott" aria-label='Reply to Craig Scott'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-2" id="li-comment-8363846">
+		<div id="comment-8363846">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/964ec4c8bb8de2b45d6f6841c5f57437?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/964ec4c8bb8de2b45d6f6841c5f57437?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://crascit.com' rel='external nofollow ugc' class='url'>Craig Scott</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/11/scopeexit-in-c11/#comment-8363846">
+					June 9, 2015 at 2:36 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Sorry, screwed up the link to the second article. Here&#8217;s the correct one:</p>
+<p><a href="http://crascit.com/2015/06/03/on-leaving-scope-part-2/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://crascit.com/2015/06/03/on-leaving-scope-part-2/', 'OnLeavingScope: The sequel']);" rel="nofollow">OnLeavingScope: The sequel</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/11/scopeexit-in-c11/?replytocom=8363846#respond' data-commentid="8363846" data-postid="1865" data-belowelement="comment-8363846" data-respondelement="respond" data-replyto="Reply to Craig Scott" aria-label='Reply to Craig Scott'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2012/11/scopeexit-in-c11/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1865' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="3a7c1c5a7f" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="137"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.254 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-09-10 05:37:29 -->
+
+<!-- super cache -->

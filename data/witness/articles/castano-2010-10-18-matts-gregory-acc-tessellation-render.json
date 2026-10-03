@@ -1,0 +1,32 @@
+{
+  "id": "castano-2010-10-18-matts-gregory-acc-tessellation-render",
+  "title": {
+    "zh": "Matt 的 Gregory ACC 曲面细分渲染",
+    "en": "Matt’s Gregory ACC Tessellation Render"
+  },
+  "subtitle": {
+    "zh": "我们放出的 Gregory ACC 代码里有个 bug，Matt 绕过去了，还录了段视频。",
+    "en": "There was a bug in the Gregory ACC code we released; Matt worked around it and posted a video."
+  },
+  "translator": {
+    "note": "`Gregory`、`ACC`、`Matt Davidson`、`NVIDIA` 保留英文；`patch` 作「面片」，`stencil` 作「模板」。",
+    "source": "archive/castano-blog/2010-10-18-matts-gregory-acc-tessellation-render.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "A while ago Matt Davidson contacted me to discuss a few issues with the [Gregory ACC source code that we released](http://code.google.com/p/nvidia-mesh-tools/). Turns out there were some issues in the code that determines whether two patches have the same neighbor configuration and therefore can share the stencils. The code that compares the configurations is not very robust and sometimes reports that two patches have the same configuration, while in practice they do not. In retrospect, it would have been a better idea to simply compute the stencils independently and merge them afterwards.",
+      "zh": "前一阵 Matt Davidson 联系我，讨论[我们放出的 Gregory ACC 源码](http://code.google.com/p/nvidia-mesh-tools/)里的一些问题。结果是，判断两个面片是否具有相同邻居配置、因而可以共享模板的那段代码有问题。比较配置的代码不太健壮，有时会报告两个面片配置相同，而实际上并不相同。事后看来，更简单的做法本应是各自独立地算出模板，事后再合并。"
+    },
+    {
+      "type": "p",
+      "en": "In any case, he managed to work around the problem and posted a video showing the results:",
+      "zh": "不管怎样，他绕过这个问题，还发了一段展示结果的视频："
+    },
+    {
+      "type": "p",
+      "en": "I’m glad that despite the bugs somebody is actually making use of that code and finding it useful! Cool work Matt!",
+      "zh": "尽管有这些 bug，还是真的有人在用那份代码、还觉得它有用，我很高兴！干得漂亮，Matt！"
+    }
+  ]
+}

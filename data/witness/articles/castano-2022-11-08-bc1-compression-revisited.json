@@ -1,0 +1,415 @@
+{
+  "id": "castano-2022-11-08-bc1-compression-revisited",
+  "title": {
+    "zh": "再谈 BC1 压缩",
+    "en": "BC1 Compression Revisited"
+  },
+  "subtitle": {
+    "zh": "把 NVTT 的 BC1 编码器重写成单头文件库 icbc：簇拟合、最小二乘求解，以及用 AVX512 / NEON / SSSE3 做的查表向量化。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文里的行内公式是 WordPress 的 `latex.php` 图片（`![{0, \\frac13, \\frac23, 1}](https://s0.wp.com/latex.php?latex=…)` 这种），归档把它们各自拆成独立一行，把句子切碎。译文把公式还原成行内数学记号写回句子里（`\\alpha`/`\\beta`/`\\sum` 按术语表写成 Unicode 希腊字母 `α`/`β`/`Σ`，`\\frac13` 写成 `1/3`，上下标记号保持 `_`/`^`），并把被图片拆散的句子合并回整段；那个 2×2 矩阵求逆的显示公式也按原结构线性化为 `[a; b] = [Σα_i², Σα_iβ_i; Σα_iβ_i, Σβ_i²]⁻¹ [Σα_i x_i; Σβ_i x_i]`。原文的两处插图（两张 `Pasted-image-…png` 折线图）按全站口径归一化为 `![图](原图URL)`。第一张折线图下面那张「Unique Colors / Cluster Combinations」表在归档 md 里被压成 34 行「一行一个单元格」，译文对照原始 HTML（`archive/raw/castano/html/1359-bc1-compression-revisited.json`）还原为一个 `code` 块（`lang: \"text\"`）、空格对齐列，数值逐字未改。`### ` 级小标题一律降级为 `h2`。所有代码围栏在源文里都没有语言标注，内容为伪代码或 C/内联函数，分别标为 `text` 与 `cpp`，围栏内容逐字保留、注释也未译。术语：`endpoint` 作「端点」、`cluster` 作「簇」、`palette` 作「调色板」、`block` 作「块」、`swizzle the alpha` 作「把 alpha 通道重排」、`prefix sum` 作「前缀和」、`texel` 作「纹素」、`least squares` 作「最小二乘」、`lightmap` 作「光照贴图」、`chart` 作「图块」；格式与工具名（BC1、BC7、ASTC、DXT、R5G6B5、RGBM、ICBC、NVTT、NVIDIA Texture Tools、`stb_dxt.h`、`rgbcx`、CUDA、SSE2、SSSE3、AVX2、AVX512、NEON、VMX、VTL、TBL、`pshufb`、`_mm512_maskz_permutexvar_ps`、`_mm256_permutevar8x32_ps`、`_mm256_blendv_ps`）一律保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The [NVIDIA Texture Tools](https://github.com/castano/nvidia-texture-tools) (NVTT) had the highest quality BC1 encoder that was openly available, but the rest of the code was mediocre: The remaining encoders had not received much attention, the CUDA code paths were not maintained, and the accompanying image processing and serialization code was conventional. There was too much code that was not particularly interesting, it was a hassle to build, and required too much maintenance.",
+      "zh": "[NVIDIA Texture Tools](https://github.com/castano/nvidia-texture-tools)（NVTT）拥有当时公开可用的质量最高的 BC1 编码器，但其余代码只能算平庸：其他编码器没怎么被照顾过，CUDA 代码路径无人维护，附带的图像处理和序列化代码也很常规。里面有太多并不特别有意思的代码，构建起来麻烦，维护成本又高。"
+    },
+    {
+      "type": "p",
+      "en": "This compelled me to package the BC1 compressor independently as a single header library:",
+      "zh": "这促使我把 BC1 压缩器单独打包成一个单头文件库："
+    },
+    {
+      "type": "p",
+      "en": "[https://github.com/castano/icbc](https://github.com/castano/icbc)",
+      "zh": "[https://github.com/castano/icbc](https://github.com/castano/icbc)"
+    },
+    {
+      "type": "p",
+      "en": "While doing that I also took the opportunity to revisit the encoder and change the way it was vectorized. I wanted to write about that, but before getting into the details let’s overview how a BC1 compressor works.",
+      "zh": "顺手我也借这个机会重新审视了这个编码器，并改变了它的向量化方式。我本想就此写点东西，不过在进入细节之前，先概览一下 BC1 压缩器是怎么工作的。"
+    },
+    {
+      "type": "h2",
+      "id": "overview",
+      "en": "Overview",
+      "zh": "概述"
+    },
+    {
+      "type": "p",
+      "en": "A BC1 block is a 4×4 group texels that is represented with 2 16 bit colors and 16 2 bit indices. The colors are encoded in R5G6B5 format and define a 4 or 3 color palette. The entries of the palette are a convex combination of the 2 colors, for this reason they are usually referred as endpoints. The indices select one of the colors of the palette.",
+      "zh": "一个 BC1 块是 4×4 个纹素，用 2 个 16 位颜色和 16 个 2 位索引来表示。颜色以 R5G6B5 格式编码，并定义出一个包含 4 种或 3 种颜色的调色板。调色板的条目是两个颜色的凸组合，因此通常被称为端点。索引则从调色板中选出一种颜色。"
+    },
+    {
+      "type": "p",
+      "en": "Nathan Reed provides [a good overview of this and other block compression formats](https://www.reedbeta.com/blog/understanding-bcn-texture-compression-formats/) and Fabian Giesen has [more lower level details](https://fgiesen.wordpress.com/2021/10/04/gpu-bcn-decoding/) about how the endpoints are interpolated on different GPU architectures.",
+      "zh": "Nathan Reed 写了[一篇很好的综述](https://www.reedbeta.com/blog/understanding-bcn-texture-compression-formats/)，介绍这个格式以及其他块压缩格式；Fabian Giesen 也写了[更多底层细节](https://fgiesen.wordpress.com/2021/10/04/gpu-bcn-decoding/)，讲不同 GPU 架构上的端点是如何插值的。"
+    },
+    {
+      "type": "p",
+      "en": "In order to encode a BC1 block we need to choose the two endpoints `a, b` that minimize the error. We could think about this problem as solving a system of 16 equations, one for each texel `x_i`:",
+      "zh": "为了编码一个 BC1 块，我们需要选择两个端点 `a, b`，使误差最小。可以把这个问题看成求解一个包含 16 个方程的方程组，每个纹素一个 `x_i`："
+    },
+    {
+      "type": "p",
+      "en": "`α_i a + β_i b = x_i`",
+      "zh": "`α_i a + β_i b = x_i`"
+    },
+    {
+      "type": "p",
+      "en": "In the 4 color block mode the values of `α_i` and `β_i` are constrained to one of `{0, 1/3, 2/3, 1}` depending on the index (or selector) assigned to each texel.",
+      "zh": "在 4 色块模式下，`α_i` 和 `β_i` 的取值被限制为 `{0, 1/3, 2/3, 1}` 之一，具体取哪个取决于分配给每个纹素的索引（也就是选择子）。"
+    },
+    {
+      "type": "p",
+      "en": "If we know the index assigned to each texel, then we can solve the above equation system in the least squares sense and obtain the optimal values for the `a, b` endpoints. That is, we just need to solve the following equation:",
+      "zh": "如果我们已知每个纹素被分配的索引，就可以在最小二乘意义下求解上面的方程组，得到 `a, b` 两个端点的最优取值。也就是说，我们只需要解下面这个方程："
+    },
+    {
+      "type": "p",
+      "en": "`[a; b] = [Σα_i², Σα_iβ_i; Σα_iβ_i, Σβ_i²]⁻¹ [Σα_i x_i; Σβ_i x_i]`",
+      "zh": "`[a; b] = [Σα_i², Σα_iβ_i; Σα_iβ_i, Σβ_i²]⁻¹ [Σα_i x_i; Σβ_i x_i]`"
+    },
+    {
+      "type": "p",
+      "en": "That is, given a set of indices we need to compute two weighted sums of the colors, three weighted sums of the weights, and a 2×2 matrix inverse. An important observation is that if the indices are known in advance, the weighted sums of the weights is fixed and then the matrix inverse can be precomputed.",
+      "zh": "也就是说，给定一组索引，我们需要计算两个颜色的加权和、三个权重的加权和，以及一个 2×2 矩阵的逆。一个重要观察是：如果索引事先已知，权重的加权和就是固定的，那么矩阵的逆也可以预先算好。"
+    },
+    {
+      "type": "p",
+      "en": "A simple BC1 encoding strategy is to compute the initial indices using a simple heuristic, to then recompute the endpoints solving the above equation, and finally to update the indices based on the most recent endpoints. This process can be repeated multiple times until the error does not go down anymore. This is the strategy employed by the [stb_dxt.h](https://github.com/nothings/stb/blob/master/stb_dxt.h) encoder, and just as I was writing this article Fabien Giesen wrote [another blog post describing that implementation in more detail](https://fgiesen.wordpress.com/2022/11/08/whats-that-magic-computation-in-stb__refineblock/).",
+      "zh": "一个简单的 BC1 编码策略是：先用一个简单的启发式算出初始索引，然后求解上面的方程重新算出端点，最后根据最新的端点更新索引。这个过程可以重复多次，直到误差不再下降。这正是 [stb_dxt.h](https://github.com/nothings/stb/blob/master/stb_dxt.h) 编码器采用的策略；而就在我写这篇文章的时候，Fabien Giesen 又写了一篇[更详细描述该实现的博客文章](https://fgiesen.wordpress.com/2022/11/08/whats-that-magic-computation-in-stb__refineblock/)。"
+    },
+    {
+      "type": "p",
+      "en": "Another approach would be to solve the optimization problem for all possible index combinations. In a 4×4 block with 2 bit indices per-texel the total number of possible index combinations is `2^32` and solving this equation for each one of them would be overkill. To make the problem tractable [Simon Brown’s clever idea](https://www.sjbrown.co.uk/posts/dxt-compression-techniques/) was to only consider the index combinations that preserve the “total order”. That is, we project the colors over a line, we sort them and cluster them in 4 groups assigning an index to each of the groups, the number of ways in which we can do that is much smaller as the index assignment is now constrained by the order of the colors on the line.",
+      "zh": "另一种思路是对所有可能的索引组合求解这个优化问题。在一个每纹素 2 位索引的 4×4 块里，可能的索引组合总数是 `2^32`，对每一种都解一遍这个方程就太夸张了。为了让问题可解，[Simon Brown 的巧妙想法](https://www.sjbrown.co.uk/posts/dxt-compression-techniques/)是只考虑那些保持「全序」的索引组合。也就是说，把颜色投影到一条直线上、排序，再把它们聚成 4 组、给每组分配一个索引；这样做的方式数要少得多，因为索引的分配现在受颜色在直线上的顺序约束。"
+    },
+    {
+      "type": "p",
+      "en": "To count and enumerate the clusters that are possible with 16 indices and 4 colors we could use code like this:",
+      "zh": "要统计并枚举 16 个索引、4 种颜色下的所有可能簇划分，可以用下面这样的代码："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "cluster_count = 0\nfor c0: 0..15 {\n  for c1: 0..15-c0 {\n    for c2: 0..15-(c0 + c1) {\n      cluster_count += 1\n      c3 = 16 - (c0 + c1 + c2)\n      println c0, c1, c2, c3\n    }\n  }\n}"
+    },
+    {
+      "type": "p",
+      "en": "The number of resulting indices is just 969. Solving the resulting 969 equations gives us a nearly optimal solution. I say nearly, because the resulting endpoints $a, b$ are not stored exactly, but clamped and quantized. That is, in reality we have a discrete optimization problem (box-constrained integer least squares) and we are approximating it solving a continuous optimization problem and clamping and quantizing the solution.",
+      "zh": "得到的索引组合数只有 969 种。求解这 969 个方程就能得到一个近乎最优的解。我说「近乎」，是因为算出的端点 `a, b` 并不是被精确存储的，而是被钳制并量化过。也就是说，现实中我们面对的是一个离散优化问题（箱约束整数最小二乘），而我们的做法是先解一个连续优化问题，再对解做钳制和量化来近似它。"
+    },
+    {
+      "type": "p",
+      "en": "The line that is used to determine the sort order of the colors is fairly important. The most obvious choice is to use the best fit line and that seems to work best in practice. It’s important to compute it with enough precision. I proposed to use power iterations in order to compute the direction of the first eigenvector of the covariance matrix, but this is very sensitive to the initial approximation. In an early implementation I simply used the `(1, 1, 1)` vector, which failed miserably when the best fit line was perpendicular to the luminance axis. I have a neat strategy to avoid this that I’ll document another time.",
+      "zh": "用来确定颜色排序的那条直线相当重要。最显而易见的选择是用最佳拟合直线，而实践中它似乎效果最好。重要的是要以足够的精度把它算出来。我曾提出用幂迭代来计算协方差矩阵第一个特征向量的方向，但这对初始近似值非常敏感。在早期的一个实现里，我干脆用了 `(1, 1, 1)` 这个向量，结果当最佳拟合直线与亮度轴垂直时惨败。我有一个巧妙的办法来避免这个问题，以后再写。"
+    },
+    {
+      "type": "p",
+      "en": "Simon Brown tried to repeat the optimization process by using the direction of the segment connecting the endpoints and repeating this iteratively, but in practice this often produced lower quality results than the solution found in the first iteration, so it’s not recommended.",
+      "zh": "Simon Brown 试过用连接两个端点的线段方向来重复这个优化过程、迭代进行，但实践中这往往比第一次迭代得到的解质量更低，所以不推荐这么做。"
+    },
+    {
+      "type": "p",
+      "en": "This same process works with any numbers of clusters. For example, in the 3 color mode we have 3 clusters and the weights have the following values: `{0, 1/2, 1}`. We can use the same procedure to enumerate the equations:",
+      "zh": "同一套流程对任意数量的簇都适用。比如在 3 色模式下我们有 3 个簇，权重的取值是：`{0, 1/2, 1}`。我们可以用同样的步骤来枚举方程："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "cluster_count = 0\nfor c0: 0..15 {\n  for c1: 0..15-c0 {\n    cluster_count += 1\n    c2 = 16 - (c0 + c1)\n    println c0, c1, c2\n  }\n}"
+    },
+    {
+      "type": "p",
+      "en": "And in this case the result is much smaller, just 153. Even though the optimization cost is smaller, the 3 color mode rarely produces higher quality results than the 4 color mode, so the additional cost rarely justifies the effort unless you want to squeeze as much quality as possible out of the format.",
+      "zh": "而在这种情况下结果要小得多，只有 153。尽管优化代价更小，但 3 色模式很少能比 4 色模式产出更高质量的结果，所以除非你想把这个格式的质量榨到极致，额外的代价很少值得。"
+    },
+    {
+      "type": "p",
+      "en": "That said, the 3 color mode shines when the block has texels close to black. The 4th color in this mode is used to represent transparencies. The alpha is expected to be premultiplied, and for this reason the corresponding RGB component is black. By ignoring all the texels that are near black, we can compute a best fit line that approximates the remaining colors much more accurately and that results in a much lower error. For this strategy to work, though, we need to be aware that the resulting texture may have unexpected alpha values. Some platforms allow us to swizzle the alpha to 255, but otherwise we have to be careful the shaders don’t assume opaque alpha.",
+      "zh": "不过话又说回来，当块里的纹素接近黑色时，3 色模式就大放异彩了。这个模式下的第 4 种颜色被用来表示透明。alpha 被假定为已预乘，因此对应的 RGB 分量是黑色。把所有接近黑色的纹素忽略掉，我们就能算出一条更准确地拟合其余颜色的最佳拟合直线，从而得到低得多的误差。不过要让这个策略奏效，我们得意识到生成的纹理可能会有意料之外的 alpha 值。有些平台允许我们把 alpha 通道重排成 255，否则就得小心别让着色器假定 alpha 是不透明的。"
+    },
+    {
+      "type": "p",
+      "en": "For other formats with higher number of palette entries, this optimization strategy is not particularly useful as the number of cluster combinations goes up very quickly:",
+      "zh": "对其他调色板条目更多的格式来说，这个优化策略就不太有用了，因为簇组合的数量增长得非常快："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "2 ->      17\n3 ->     153\n4 ->     969\n5 ->   4,845\n6 ->  20,349\n7 ->  74,613\n8 -> 245,157"
+    },
+    {
+      "type": "p",
+      "en": "One of the optimization strategies in Rich’s BC1 compressor ([rgbcx](https://github.com/richgel999/bc7enc_rdo/blob/master/rgbcx.cpp)) is to reduce the number of cluster combinations to be considered. If you compute a histogram to visualize the distribution of clusters, you will notice that some of them are much more likely to occur than others. By pruning the list of clusters it’s possible to trade quality for increased speed in the encoder. I do not employ this strategy for reasons that I’ll describe later.",
+      "zh": "Rich 的 BC1 压缩器（[rgbcx](https://github.com/richgel999/bc7enc_rdo/blob/master/rgbcx.cpp)）里的优化策略之一，是减少需要考虑的簇组合数量。如果你统计一个直方图来观察簇的分布，就会注意到有些簇比其他簇出现得频繁得多。通过裁剪簇的列表，就可以用质量换取编码器速度的提升。我没有采用这个策略，原因后面会讲。"
+    },
+    {
+      "type": "p",
+      "en": "So far I have assumed the hardware interpolates the colors using the ideal weights `{0, 1/3, 2/3, 1}`, but in practice, as [Fabian describes](https://fgiesen.wordpress.com/2021/10/04/gpu-bcn-decoding/), each GPU uses a different approximation. If you are targeting a specific platform you can obtain higher quality results by using the corresponding weights when solving the least squares problem.",
+      "zh": "到目前为止，我都假定硬件是用理想的权重 `{0, 1/3, 2/3, 1}` 来插值颜色的；但正如 [Fabian 所描述的](https://fgiesen.wordpress.com/2021/10/04/gpu-bcn-decoding/)，实践中每块 GPU 用的都是一种不同的近似。如果你面向某个特定平台，可以在求解最小二乘问题时使用该平台对应的权重，从而获得更高质量的结果。"
+    },
+    {
+      "type": "h2",
+      "id": "vectorization",
+      "en": "Vectorization",
+      "zh": "向量化"
+    },
+    {
+      "type": "p",
+      "en": "In the original cluster fit implementation Simon and I used SSE2 and VMX instructions to speedup the solver. These vector instructions can operate on 4 floats at a time. We used them to operate on RGB colors and increased their utilization by storing weights in the alpha component and operating on them simultaneously. Readability of the code suffered and performance was only 2.3 times faster than the scalar implementation.",
+      "zh": "在最初的 cluster fit 实现里，Simon 和我用 SSE2 和 VMX 指令来加速求解器。这些向量指令一次能处理 4 个浮点数。我们用它们来同时处理 RGB 颜色，并把权重存进 alpha 分量一起运算，以此提高利用率。代价是代码可读性变差，而性能只比标量实现快 2.3 倍。"
+    },
+    {
+      "type": "p",
+      "en": "In that implementation we iterated over all the possible cluster combinations using three nested loops and incrementally computed the color sums that are necessary to solve the least squares system:",
+      "zh": "在那个实现里，我们用三重嵌套循环遍历所有可能的簇组合，并增量式地计算求解最小二乘方程组所需的颜色和："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "vec4 x0 = 0;\nfor c0: 0..15 {\n  vec4 x1 = 0;\n    for c1: 0..15-c0 {\n      vec4 x2 = 0;\n      for c2: 0..15-c1-c0 {\n        alphax_sum = x0 + x1 * (2.0f / 3.0f) + x2 * (1.0f / 3.0f);\n        ...\n        x2 += color[c0+c1+c2];\n      }\n      x1 += color[c0+c1];\n  }\n  x0 += color[c0];\n}"
+    },
+    {
+      "type": "p",
+      "en": "This worked well, but this approach didn’t scale to larger vector sizes that are increasingly common in current CPUs and the incremental nature of the computations created many pipeline dependencies.",
+      "zh": "这招很管用，但这种做法无法扩展到当前 CPU 上越来越常见的大向量宽度，而且增量式计算的特性造成了大量流水线依赖。"
+    },
+    {
+      "type": "p",
+      "en": "In my[CUDA implementation](https://developer.download.nvidia.com/compute/cuda/1.1-Beta/x86_website/projects/dxtc/doc/cuda_dxtc.pdf) I used a different approach: I solved a least squares system on each thread. To do that I precomputed the indices of every cluster combination and loaded each one in a separate thread.",
+      "zh": "在我的 [CUDA 实现](https://developer.download.nvidia.com/compute/cuda/1.1-Beta/x86_website/projects/dxtc/doc/cuda_dxtc.pdf)里，我用了另一种做法：让每个线程各自求解一个最小二乘方程组。为此我预先算好每一种簇组合的索引，再把它们分别加载到不同的线程里。"
+    },
+    {
+      "type": "p",
+      "en": "The incremental approach I used before was not possible in this setting, so instead I looped over the 16 colors in order to compute the corresponding sums:",
+      "zh": "我之前用的增量式做法在这种场景下行不通，所以改为遍历 16 个颜色来计算相应的和："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "parallel for i: 0..968 {\n  indices = total_indices[i];\n  alphax_sum = {0, 0, 0};\n  for j: 0..15 {\n    index = (indices >> (2*j)) & 0x3;\n    alpha = weight(index);\n    alphax_sum += alpha * colors[j];    \n    ...\n  }\n  ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "I was planning to do something along these lines when I revisited my CPU implementation, but instead I borrowed a trick from Rich Geldreich: to use summation tables to quickly compute partial color sums.",
+      "zh": "我重新审视 CPU 实现时本来打算沿着这个思路做，但后来从 Rich Geldreich 那里借了一个技巧：用求和表快速计算颜色的部分和。"
+    },
+    {
+      "type": "p",
+      "en": "If we compute the sums of the sorted colors as follows:",
+      "zh": "如果我们按下面这样计算排好序的颜色的和："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "color_sum[0] = { .r = 0, .g = 0, .b = 0 };\nfor (int i = 1; i <= color_count; i++) {\n    color_sum[i].r = color_sum[i - 1].r + colors[i].r;\n    color_sum[i].g = color_sum[i - 1].g + colors[i].g;\n    color_sum[i].b = color_sum[i - 1].b + colors[i].b;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Then we can easily compute the partial sums of the colors in any of the clusters by subtracting two entries from that table:",
+      "zh": "那么只要从这张表里减去两项，就能轻松算出任意一个簇里颜色的部分和："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "parallel for i: 0..968 {\n  c0, c1, c2 = total_clusters[i];\n  x0 = color_sum[c0] - 0;\n  x1 = color_sum[c1+c0] - color_sum[c0];\n  x2 = color_sum[c2+c1+c0] - color_sum[c1+c0];\n  alphax_sum = x0 + x1 * (2.0f / 3.0f) + x2 * (1.0f / 3.0f);\n  ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "In practice we load the prefix sum of the cluster counts and compute the color sums with just a couple of subtractions.",
+      "zh": "实践中我们会预先把簇计数的前缀和加载好，只用几次减法就得到颜色的和。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "parallel for i: 0..968 {\n  c0, c1, c2 = total_clusters[i];\n  x0 = color_sum[c0];\n  x1 = color_sum[c1];\n  x2 = color_sum[c2];\n  x2 -= x1;\n  x1 -= x0;\n  alphax_sum = x0 + x1 * (2.0f / 3.0f) + x2 * (1.0f / 3.0f);\n  ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "Note also that we don’t need to compute `x3`, the sum of the colors in the 4th cluster, because it’s only necessary in order to compute `Σ β_i x_i` and since we know the weights are symmetric, we can simply compute it as follows:",
+      "zh": "还要注意，我们不需要计算 `x3`，也就是第 4 个簇里颜色的和，因为它只在计算 `Σ β_i x_i` 时才需要；而既然我们知道权重是对称的，就可以直接这样算出来："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "betax_sum = color_sum[15] - alphax_sum"
+    },
+    {
+      "type": "p",
+      "en": "In order to do this efficiently with vector instructions it’s necessary to lookup the values from the summation tables without falling back to scalar loads.",
+      "zh": "要用向量指令高效地做到这一点，就必须在不退回标量加载的前提下从求和表里查值。"
+    },
+    {
+      "type": "p",
+      "en": "This can be done very easily with the AVX512 instruction set. The summation tables have 17 entries, but we know the first entry is always zero, so the entire table can be loaded in a 512 bit register, the index decreased by 1 and the loaded value zeroed when the index is negative. To perform the lookup we can use `_mm512_maskz_permutexvar_ps` and take advantage of the mask argument to zero the first index.",
+      "zh": "用 AVX512 指令集可以非常轻松地做到。求和表有 17 个条目，但我们知道第一个条目永远是零，所以整张表可以装进一个 512 位寄存器，把索引减 1，并在索引为负时把加载到的值清零。要做这次查表，我们可以用 `_mm512_maskz_permutexvar_ps`，并利用掩码参数把第一个索引清零。"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "__m512 vfltmax = _mm512_set1_ps(FLT_MAX);\n__m512 vr_sum = _mm512_mask_load_ps(vfltmax, loadmask, r_sum);\n__m512 vg_sum = _mm512_mask_load_ps(vfltmax, loadmask, g_sum);\n__m512 vb_sum = _mm512_mask_load_ps(vfltmax, loadmask, b_sum);\n\nvx0.x = _mm512_maskz_permutexvar_ps(c0 >= 0, c0, vr_sum);\nvx0.y = _mm512_maskz_permutexvar_ps(c0 >= 0, c0, vg_sum);\nvx0.z = _mm512_maskz_permutexvar_ps(c0 >= 0, c0, vb_sum);\n\nvx1.x = _mm512_maskz_permutexvar_ps(c1 >= 0, c1, vr_sum);\nvx1.y = _mm512_maskz_permutexvar_ps(c1 >= 0, c1, vg_sum);\nvx1.z = _mm512_maskz_permutexvar_ps(c1 >= 0, c1, vb_sum);\n\nvx2.x = _mm512_maskz_permutexvar_ps(c2 >= 0, c2, vr_sum);\nvx2.y = _mm512_maskz_permutexvar_ps(c2 >= 0, c2, vg_sum);\nvx2.z = _mm512_maskz_permutexvar_ps(c2 >= 0, c2, vb_sum);"
+    },
+    {
+      "type": "p",
+      "en": "NEON does not have packed scalar permutes, nor 512 bit registers, but supports [vqtbl4q_u8](https://developer.arm.com/architectures/instruction-sets/intrinsics/#q=vqtbl4q_u8), a form of the TBL instruction that performs a vector lookup from 4 source registers. This is not as convenient as the AVX512 instruction, because it operates at the byte level. But that only means we need to do a bit more precomputation and transform the sums of cluster sums into byte offsets. Conveniently, if an index is out of range, the result for that lookup is 0, so we don’t have to worry about masking negative indices.",
+      "zh": "NEON 没有打包的标量 permute，也没有 512 位寄存器，但它支持 [vqtbl4q_u8](https://developer.arm.com/architectures/instruction-sets/intrinsics/#q=vqtbl4q_u8)——TBL 指令的一种形式，可以从 4 个源寄存器做向量查表。它不如 AVX512 那条指令方便，因为它在字节层面操作。但这只意味着我们需要多做一点预计算，并把「簇的和」变换成字节偏移。方便的是，如果索引越界，查表结果就是 0，所以我们不必操心给负索引做掩码。"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "vx0.x = vreinterpretq_f32_u8(vqtbl4q_u8(r_sum, idx0));\nvx0.y = vreinterpretq_f32_u8(vqtbl4q_u8(g_sum, idx0));\nvx0.z = vreinterpretq_f32_u8(vqtbl4q_u8(b_sum, idx0));\n\nvx1.x = vreinterpretq_f32_u8(vqtbl4q_u8(r_sum, idx1));\nvx1.y = vreinterpretq_f32_u8(vqtbl4q_u8(g_sum, idx1));\nvx1.z = vreinterpretq_f32_u8(vqtbl4q_u8(b_sum, idx1));\n\nvx2.x = vreinterpretq_f32_u8(vqtbl4q_u8(r_sum, idx2));\nvx2.y = vreinterpretq_f32_u8(vqtbl4q_u8(g_sum, idx2));\nvx2.z = vreinterpretq_f32_u8(vqtbl4q_u8(b_sum, idx2));\n```"
+    },
+    {
+      "type": "p",
+      "en": "At first I struggled to implement these with AVX2 and SSE2 instructions.",
+      "zh": "起初我用 AVX2 和 SSE2 指令来实现这些时颇为费劲。"
+    },
+    {
+      "type": "p",
+      "en": "My first attempt with AVX2 to perform a masked lookup was to load the table in two registers, use `_mm256_permutevar8x32_ps` on each one, combine the result with `_mm256_blendv_ps` and mask the zero elements:",
+      "zh": "我第一次用 AVX2 做带掩码查表的尝试，是把表加载进两个寄存器，对每个分别用 `_mm256_permutevar8x32_ps`，再用 `_mm256_blendv_ps` 合并结果，并把零元素掩掉："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "```\nvlo = _mm256_permutevar8x32_ps(vlo, idx);\nvhi = _mm256_permutevar8x32_ps(vhi, idx);\nv = _mm256_blendv_ps(vlo, vhi, idx > 7);\nv = _mm256_and_ps(v, mask);\n```"
+    },
+    {
+      "type": "p",
+      "en": "This worked well, but Fabian Giesen [pointed out](https://twitter.com/rygorous/status/1255432840348647424) that permutes and blends conflict for the same port and instead suggested to first `xor` the upper part of the table:",
+      "zh": "这招效果不错，但 Fabian Giesen [指出](https://twitter.com/rygorous/status/1255432840348647424) permute 和 blend 会争用同一个端口，并建议改为先对表的高半部分做 `xor`："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "```\nvhi = _mm256_xor_ps(vhi, vlo);\n```"
+    },
+    {
+      "type": "p",
+      "en": "So that the `blend` can be emulated with a sequence of `cmp`, `and` and `xor`:",
+      "zh": "这样 `blend` 就可以用一串 `cmp`、`and` 和 `xor` 来模拟："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "```\nvlo = _mm256_permutevar8x32_ps(vlo, idx);\nvhi = _mm256_permutevar8x32_ps(vhi, idx);\nv = _mm256_xor_ps(vlo, _mm256_and_ps(vhi, idx > 7));\nv = _mm256_and_ps(v, mask);\n```"
+    },
+    {
+      "type": "p",
+      "en": "This resulted in a significant speedup, but the cool thing is that the same idea extends to larger tables or to architectures with smaller register sizes. For example, in SSSE3 we can use the `pshufb` instruction with the same tables we used in the VTL NEON code path, but first we `xor` the upper part of the table as follow:",
+      "zh": "这带来了显著的提速；但最妙的是，同样的思路可以推广到更大的表，或者寄存器更小的架构上。比如在 SSSE3 里，我们可以用 `pshufb` 指令配合 VTL NEON 代码路径里用过的那几张表，只是要先对表的高半部分做 `xor`："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "```\ntab3 = _mm_xor_ps(tab3, tab2);\ntab2 = _mm_xor_ps(tab2, tab1);\ntab1 = _mm_xor_ps(tab1, tab0);\n```"
+    },
+    {
+      "type": "p",
+      "en": "and then at runtime we can use `pshufb` to emulate our lookup combining multiple permutations:",
+      "zh": "然后在运行时用 `pshufb` 把多次 permute 组合起来，模拟我们想要的查表："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "```\nv = _mm_shuffle_epi8(tab0, idx);\nidx = _mm_sub_epi8(idx, _mm_set1_epi8(16));\n\nv = _mm_xor_si128(v, _mm_shuffle_epi8(tab1, idx));\nidx = _mm_sub_epi8(idx, _mm_set1_epi8(16));\n\nv = _mm_xor_si128(v, _mm_shuffle_epi8(tab2, idx));\nidx = _mm_sub_epi8(idx, _mm_set1_epi8(16));\n\nv = _mm_xor_si128(v, _mm_shuffle_epi8(tab3, idx));\n```"
+    },
+    {
+      "type": "p",
+      "en": "Note that `pshufb` sets the destination to zero when the second argument is negative. This eliminates the need to perform an `and` and a comparison as we did in the AVX2 case, and also handles automatically the indexing of the zero element of the summation table.",
+      "zh": "注意，当第二个参数为负时 `pshufb` 会把目标置零。这省掉了 AVX2 情形下必须做的 `and` 和比较，还顺带自动处理了求和表里那个零元素的索引。"
+    },
+    {
+      "type": "p",
+      "en": "I’ve glossed over many of the implementation details to focus on the aspects that I think are most interesting, but if you are curious [here’s the whole implementation](https://github.com/castano/icbc/blob/master/icbc.h#L2347).",
+      "zh": "为了把重点放在我认为最有意思的部分，我省略了许多实现细节；不过如果你好奇，[这里是完整实现](https://github.com/castano/icbc/blob/master/icbc.h#L2347)。"
+    },
+    {
+      "type": "h2",
+      "id": "weighted-cluster-fit",
+      "en": "Weighted Cluster Fit",
+      "zh": "加权簇拟合"
+    },
+    {
+      "type": "p",
+      "en": "An important difference between the ICBC compressor and most other compressors out there is that it supports per-texel weights. What this means is that rather than solving the least squares equation in the ordinary way, I scale the equation corresponding to each texel with the associated weight.",
+      "zh": "ICBC 压缩器和外面大多数压缩器的一个重要区别是，它支持逐纹素权重。也就是说，我不是按常规方式求解最小二乘方程，而是用相关的权重去缩放每个纹素对应的方程。"
+    },
+    {
+      "type": "p",
+      "en": "This improves the quality of alpha maps significantly allowing the compressor to approximate opaque texels much more accurately than transparent or semi-transparent ones. It’s also important when compressing lightmaps; texels outside of the chart footprint do not need to be considered by the compressor and can be ignored. This also offers a convenient way of supporting block sizes that are not exactly 4×4 and it’s also useful when compressing textures encoded in RGBM. Since the M multiplies the RGB components, the errors associated to texels with lower M values are less important than those associated to texels with high M values. Another application incorporate perceptual metrics to adjust these weight maps based on the smoothness or other features of the image.",
+      "zh": "这显著改善了 alpha 贴图的质量，让压缩器对不透明纹素的逼近比对透明或半透明纹素准确得多。压缩光照贴图时这一点也很重要：图块轮廓之外的纹素不需要被压缩器考虑，可以直接忽略。它还提供了一种便利的方式来支持并非恰好 4×4 的块尺寸，在压缩以 RGBM 编码的纹理时也很有用。由于 M 会乘到 RGB 分量上，M 值较低的纹素带来的误差，比 M 值较高的纹素带来的误差更不重要。另一个应用方向是引入感知指标，根据图像的平滑程度或其他特征来调整这些权重图。"
+    },
+    {
+      "type": "p",
+      "en": "On the other hand this introduces some additional cost. That’s is not just because you have to scale the `α_i` and `β_i` terms when computing the sums of the least squares matrix, but because without the texel weights the inverse of the least squares matrix corresponding to each cluster combination would be known in advance and could be precomputed. With fixed weights, to solve the equation system you just need to load the precomputed inverse and perform a vector/matrix multiply.",
+      "zh": "另一方面，这也引入了额外的开销。这不仅仅是因为在计算最小二乘矩阵的各项和时你得把 `α_i` 和 `β_i` 缩放一遍，更因为如果没有逐纹素权重，每一种簇组合对应的最小二乘矩阵的逆都是事先已知、可以预先算好的。权重固定时，解这个方程组你只需要加载预先算好的逆，再做一次向量与矩阵的乘法。"
+    },
+    {
+      "type": "p",
+      "en": "This is so much faster than evaluating the inverse, that for a while I maintained two versions of the code. One for use when the input was weighted and another when it wasn’t.",
+      "zh": "这比求逆快得多，所以有一段时间我维护了两份代码：一份用于输入带权重的情形，另一份用于不带权重的情形。"
+    },
+    {
+      "type": "p",
+      "en": "However, an advantage of the weighted cluster fit method that I initially overlooked is that color blocks often have some texels with the same value. In those cases, the number of colors in the block can be reduced and their weights adjusted accordingly. This improves performance significantly, because the number of cluster combinations depends on the number of input colors and grows faster than linearly:",
+      "zh": "不过，加权簇拟合方法有一个我最初忽略的优势：颜色块里常常有一些纹素取值相同。这种时候块里的颜色数量可以减少，权重也相应调整。这会显著提升性能，因为簇组合的数量取决于输入颜色的数量，而且增长快于线性："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2022/11/Pasted-image-20221108152814-700x481.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Unique Colors           1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16\nCluster Combinations    3    9   19   34   55   83  119  164  219  285  363  454  559  679  815  968"
+    },
+    {
+      "type": "p",
+      "en": "For example, with 16 colors there are 969 combinations, but with 12 colors there are 454 combinations (roughly half), and with 8 colors there are only 164 combinations (17% of the total). The precomputation method is only faster when the number of colors is exactly 16. With 15 colors the weighted method already runs at about the same speed and color blocks with 16 unique colors are actually very rare.",
+      "zh": "举个例子：16 种颜色时有 969 种组合，12 种颜色时是 454 种（大约一半），8 种颜色时只有 164 种（占总数的 17%）。预计算方法只有在颜色数恰好为 16 时才更快。到 15 种颜色时，加权方法的速度已经和它差不多，而实际上有 16 种唯一颜色的颜色块非常罕见。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, another interesting advantage of the weighted cluster fit method is that it also provides a simple way to adjust the quality of the output and reduce the time it takes to encode a block. The only thing that we need to do is to cluster or snap together some of the input colors to reduce the total number of colors in the block.",
+      "zh": "最后，加权簇拟合方法还有一个有意思的优势：它同时也提供了一种简单的方式来调节输出的质量、缩短编码一个块所需的时间。我们要做的只是把某些输入颜色聚类、或者吸附到一起，以减少块里颜色的总数。"
+    },
+    {
+      "type": "p",
+      "en": "The following graph shows how the quality and compression time changes as we adjust the clustering threshold:",
+      "zh": "下图展示了质量和压缩时间如何随聚类阈值的变化而改变："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2022/11/Pasted-image-20221108170848-700x432.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It may be possible to combine this strategy with Rich’s, but his requires precomputing subsets of cluster combinations that is specific to the number of colors in the block. With a variable number of colors the amount of data to tune and precompute would go up significantly.",
+      "zh": "也许可以把这一策略和 Rich 的结合起来，但他的方法需要为块里的颜色数量单独预计算簇组合的子集。颜色数量可变的话，需要调参和预计算的数据量会大幅增加。"
+    },
+    {
+      "type": "h2",
+      "id": "last-words",
+      "en": "Last words",
+      "zh": "最后的话"
+    },
+    {
+      "type": "p",
+      "en": "There are many aspects of my implementation that are at bit sloppy and I’m sure it’s possible to squeeze a bit more performance out of it. Significant parts of the code are not vectorized, and this becomes very noticeable at low quality settings (look at all that empty space to the left of the curve in the graph above!). Algorithmic improvements are still possible, and I’ll be writing about some of them in the future.",
+      "zh": "我的实现里有很多地方还比较马虎，我相信还能再榨出一点性能。代码中有相当一部分没有向量化，这在低质量档下会非常明显（看看上面那张图里曲线左侧那一大片空白！）。算法上的改进仍然是可能的，将来我会写一些出来。"
+    },
+    {
+      "type": "p",
+      "en": "The BC1 format is not particularly relevant today, but many of the techniques employed here can be useful in other settings. In modern formats such as BC7 and ASTC the search space is so much larger that most encoders don’t put a lot of effort into optimizing the solution for a specific partition or mode, some of these techniques can still be relevant.",
+      "zh": "BC1 这个格式在今天已经不那么重要了，但这里用到的许多技术在其他场景里仍然有用。在 BC7、ASTC 这类现代格式里，搜索空间大得多，大多数编码器不会花很大力气去为某个特定分区或模式优化解，不过其中一些技术仍然有意义。"
+    }
+  ]
+}

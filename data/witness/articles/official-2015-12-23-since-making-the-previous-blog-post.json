@@ -1,0 +1,25 @@
+{
+  "id": "official-2015-12-23-since-making-the-previous-blog-post",
+  "title": { "zh": "距上一篇博客文章发出之后……", "en": "Since making the previous blog post …" },
+  "subtitle": {
+    "en": "Arabic text rendering has been fixed.",
+    "zh": "阿拉伯语的显示问题修好了。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Arabic is fixed!",
+      "zh": "阿拉伯语修好了！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/12/shot_2015.12.23__time_15_04_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/12/shot_2015.12.23__time_15_04_n04.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

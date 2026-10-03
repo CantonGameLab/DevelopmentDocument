@@ -1,0 +1,22 @@
+{
+  "id": "castano-2010-02-04-opennl-3-0",
+  "title": {
+    "zh": "OpenNL 3.0",
+    "en": "OpenNL 3.0"
+  },
+  "subtitle": {
+    "zh": "新版支持 CUDA 固然有意思，但对我来说最大的新闻是它换成了 BSD 许可。",
+    "en": "CUDA support is nice, but the real news is the switch to the BSD license."
+  },
+  "translator": {
+    "note": "`OpenNL`、`GPGPU.org`、`CUDA`、`BSD` 保留英文；`sparse matrix solver` 作「稀疏矩阵求解器」。源文里两个相邻链接（`[sparse matrix](…)` 与 `[solvers](…)`）在英文里合成「sparse matrix solvers」，中文相应写成「稀疏矩阵[求解器](…)」，链接与原文一一对应。",
+    "source": "archive/castano-blog/2010-02-04-opennl-3-0.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "[GPGPU.org](http://gpgpu.org/2010/02/14/opennl-cuda-sparse-linear-solvers) takes note that [OpenNL 3.0](http://alice.loria.fr/index.php/software/4-library/23-opennl.html) has just been released and that this new version comes with support for CUDA. That’s certainly interesting, but for me the biggest news is that the library is now under the BSD license and thus can be used in a wider range of projects. I guess it’s time to drop my own [sparse matrix](http://code.google.com/p/nvidia-mesh-tools/source/browse/trunk/src/nvmath/Sparse.h) [solvers](http://code.google.com/p/nvidia-mesh-tools/source/browse/trunk/src/nvmath/Solver.h).",
+      "zh": "[GPGPU.org](http://gpgpu.org/2010/02/14/opennl-cuda-sparse-linear-solvers) 注意到 [OpenNL 3.0](http://alice.loria.fr/index.php/software/4-library/23-opennl.html) 刚刚发布，而且这个新版本带来了对 CUDA 的支持。这当然有意思，但对我来说最大的新闻是这个库换成了 BSD 许可，因此可以用在更广泛的项目里。看来是时候丢掉我自己那套[稀疏矩阵](http://code.google.com/p/nvidia-mesh-tools/source/browse/trunk/src/nvmath/Sparse.h)[求解器](http://code.google.com/p/nvidia-mesh-tools/source/browse/trunk/src/nvmath/Solver.h)了。"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "castano-2009-01-29-acmr-2",
+  "title": {
+    "zh": "ACMR",
+    "en": "ACMR"
+  },
+  "subtitle": {
+    "zh": "衡量顶点缓存效率，ACMR 不是个好指标：它依赖网格拓扑。换成平均变换顶点比（ATVR）会直观得多。",
+    "en": "ACMR is a poor efficiency metric because it depends on mesh topology; the average transform to vertex ratio is far more intuitive."
+  },
+  "translator": {
+    "note": "源文末段的圆括号里归档脚本漏掉了一个逗号（`([Vertex Cache Optimisation](…) Tom Forsyth has to clarify…`），译文按显然的读法补上，语义没有改动。`ACMR`（Average Cache Miss Ratio）、`ATVR`（average transform to vertex ratio）、`GrannyRocks`、`Tom Forsyth`、论文名 *Vertex Cache Optimisation* 一并保留英文；首次出现处给出中文译名与英文原词；transform 作「变换」，vertex cache 作「顶点缓存」，primitive 作「图元」。",
+    "source": "archive/castano-blog/2009-01-29-acmr-2.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I think that the Average Cache Miss Ratio (ACMR) is not the best way of measuring the efficiency of the vertex cache under different mesh optimization algorithms. The ACMR is basically the number of vertex transforms divided by the number of primitives, and greatly depends on the topology of the mesh. For a triangle mesh the theoretical optimal is 0.5, but if the mesh has boundaries, or disconnected triangles, then the optimal value is much higher. So, you have to compare the ACMR against the vertex to triangle ratio of the mesh.",
+      "zh": "我认为平均缓存未命中率（Average Cache Miss Ratio，ACMR）并不是衡量不同网格优化算法下顶点缓存效率的最好办法。ACMR 基本上就是顶点变换次数除以图元数，而它极大程度上取决于网格的拓扑。对三角形网格来说，理论最优值是 0.5，但如果网格有边界，或者有彼此不连通的三角形，最优值就会高得多。所以你还得把 ACMR 和网格的顶点三角形比放在一起看。"
+    },
+    {
+      "type": "p",
+      "en": "I think that a better way of measuring how well a mesh optimization algorithm or a cache implementation performs is using the average transform to vertex ratio (ATVR), that is, the number of vertex transforms divided by the number of vertices. In the optimal case it’s always 1, independently of the mesh and the primitive type. I think it provides a much more intuitive a much more intuitive idea of the cost of rendering a mesh. For example, if the transform to vertex ratio is 2, it means that each vertex is transformed an average of 2 times.",
+      "zh": "我认为衡量一个网格优化算法或者一个缓存实现表现如何，更好的办法是用平均变换顶点比（average transform to vertex ratio，ATVR），也就是顶点变换次数除以顶点数。在最优情况下它总是 1，与网格和图元类型都无关。我觉得它对渲染一个网格的开销给出了直观得多的概念。举个例子，如果变换顶点比是 2，就意味着平均每个顶点被变换了 2 次。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s another example: In his article about [Vertex Cache Optimisation](http://home.comcast.net/~tom_forsyth/papers/fast_vert_cache_opt.html), Tom Forsyth has to clarify that the results for the GrannyRocks mesh (between 0.797 and 0.765) are actually quite good, because the best ACMR possible is 0.732. That clarification would not be necessary when using the metric that I propose. Instead, you would say that the transform to vertex ratio is between 1.09 and 1.05, and it’s instantly obvious that it’s a good result.",
+      "zh": "再举一个例子：在讲 [Vertex Cache Optimisation](http://home.comcast.net/~tom_forsyth/papers/fast_vert_cache_opt.html) 的那篇文章里，Tom Forsyth 不得不专门说明 GrannyRocks 网格的结果（在 0.797 到 0.765 之间）其实相当不错，因为 ACMR 可能达到的最好值是 0.732。用我提出的指标就不需要这种说明了。你只要说变换顶点比在 1.09 到 1.05 之间，一眼就能看出这是个好结果。"
+    }
+  ]
+}

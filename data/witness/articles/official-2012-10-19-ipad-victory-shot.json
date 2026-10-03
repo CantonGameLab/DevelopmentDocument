@@ -1,0 +1,48 @@
+{
+  "id": "official-2012-10-19-ipad-victory-shot",
+  "title": {
+    "zh": "iPad 上的胜利截图",
+    "en": "iPad Victory Shot"
+  },
+  "subtitle": {
+    "en": "The engine is now running on the iPad; the odd colors are surface normals, because the iPad shaders do not exist yet.",
+    "zh": "引擎第一次跑在 iPad 上；颜色之所以怪，是因为 iPad 的着色器还没写。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "For the past few weeks Andy has been working on the iPad port of the game, and we now have the engine running on that device:",
+      "zh": "过去几周 Andy 一直在做游戏 iPad 版的移植，现在我们的引擎已经能在那台设备上跑起来了："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/10/ipad.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The colors are all funny because we haven't written the shaders for the iPad yet, so what you are seeing is the surface normals of the objects in the scene.",
+      "zh": "颜色看起来都怪怪的，是因为我们还没给 iPad 写着色器，所以你看到的是场景中各物体的表面法线。"
+    },
+    {
+      "type": "p",
+      "en": "We haven't written the shaders yet because they need to be OpenGL ES shaders, and the shaders we have right now are HLSL shaders all written for medium-to-high-end PCs. As the first part of the porting work, Andy made the engine work on OpenGL on the PC, and for that we converted our HLSL shaders to GLSL automatically. But the jump to ES on an embedded device is big enough that it doesn't make sense to try and use the same shaders. Instead we'll have to have some simpler shaders that we substitute.",
+      "zh": "我们还没写着色器，是因为它们必须是 OpenGL ES 的着色器，而我们现在手上的着色器全是为中高端 PC 写的 HLSL 着色器。作为移植工作的第一步，Andy 让引擎在 PC 上跑起了 OpenGL，为此我们把 HLSL 着色器自动转换成了 GLSL。但从 PC 跳到嵌入式设备上的 ES，跨度足够大，想沿用同一套着色器并不合理。我们得准备一些更简单的着色器来替换。"
+    },
+    {
+      "type": "p",
+      "en": "As you can see from my previous post, I have been working on touch controls (not on the iPad, but on a touchscreen Windows PC). A very rough first cut of that is now working. It's nice to play the game with touch controls, as it feels more immediate than mouse and keyboard (and I have been a first-person shooter player forever!)",
+      "zh": "从前一篇帖子你能看出，我一直在做触控操作（不是在 iPad 上，而是在一台带触屏的 Windows PC 上）。一个非常粗糙的初版现在能用了。用触控玩这个游戏感觉不错，比鼠标键盘更直接（而我从很久以前起就一直是第一人称射击游戏玩家！）"
+    },
+    {
+      "type": "p",
+      "en": "So in order to have the game fully interactive on the iPad, we just need to write the bit that translates iPad touch controls to feed them into the rest of the gameplay code, which should not take long.",
+      "zh": "所以，要让游戏在 iPad 上完全可交互，我们只需要写一段把 iPad 的触控输入翻译出来、喂给其余游戏逻辑代码的部分，这应该花不了太久。"
+    },
+    {
+      "type": "p",
+      "en": "Then, after that, we have to work out exactly how we are going to crunch all the graphical assets down to portable versions and do the streaming in an appropriate way... which is going to be a bit of work. Salvador built a streaming asset system a while back, and we have been using that daily on the PC, but we haven't tried to set it up on a lighter-weight portable system like the iPad yet. We'll see how it goes!",
+      "zh": "然后，在那之后，我们得想清楚到底怎么把所有的图形资源压成便携版，并以合适的方式做流式加载……这得花些功夫。Salvador 早些时候做过一个流式资源系统，我们在 PC 上每天都在用它，但还没试过把它搭在像 iPad 这样更轻量的便携系统上。看看会怎么样吧！"
+    }
+  ]
+}

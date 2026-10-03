@@ -1,0 +1,33 @@
+{
+  "id": "official-2014-06-06-road-to-e3-day-5",
+  "title": { "zh": "通往 E3 之路 · 第 5 天", "en": "Road to E3 – Day 5" },
+  "subtitle": {
+    "en": "The final day: more small fixes than expected, but the build is in good shape for E3.",
+    "zh": "最后一天：要修的小东西比预想的多，但整体状态已经能拿去 E3 见人了。"
+  },
+  "translator": {
+    "note": "原文 1 张图；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Final day and a lot more little things to polish than I expected. Every time I got something fixed another problem would pop up.",
+      "zh": "最后一天，要打磨的小东西比我预想的多得多。每次我修好一个，就会冒出另一个问题。"
+    },
+    {
+      "type": "p",
+      "en": "We got everything in a good state for E3 but there are quite a few more ideas we want to try for the castle visuals, probably 2 or 3 more days of work.",
+      "zh": "我们把一切都收拾到了可以给 E3 用的状态，但城堡的视觉效果还有不少想法想试，大概还得再花两三天。"
+    },
+    {
+      "type": "p",
+      "en": "Here is a screenshot from another angle:",
+      "zh": "这是另一个角度的截图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.06__time_19_11_n01.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

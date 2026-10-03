@@ -1,0 +1,175 @@
+{
+  "id": "start-here-lighting",
+  "title": {
+    "zh": "先读这篇：《The Witness》的光照系统是怎么搭起来的",
+    "en": "Start here: how The Witness's lighting system was built"
+  },
+  "subtitle": {
+    "zh": "把散在四个来源里的 20 多篇技术文章串成一条线：为什么要预计算、怎么烘、怎么压、怎么上各个平台。",
+    "en": "Threading two dozen technical posts from four sources into one line: why precompute, how to bake, how to compress, how to ship."
+  },
+  "translator": {
+    "note": "本篇不是翻译，是编者写的导览。所有事实都出自本库里的原文（the-witness.net 与 ludicon.com/castano/blog），没有外部推测；文中标出的篇名都能在左侧目录里找到全文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This page is a map, not a translation. It exists because the lighting technology of The Witness is documented across more than twenty separate posts, written by three different people over twelve years, spread across two websites — and reading them in publication order is a bad way to learn how the system actually works. Everything below is drawn from the sources collected in this library; each named post has its full bilingual text in the left-hand index.",
+      "zh": "这一页是地图，不是译文。之所以需要它，是因为《The Witness》的光照技术在二十多篇文章里才有完整记录，作者是三个人，时间跨度十二年，还分散在两个网站上——按发表顺序读，并不是理解这套系统的好办法。下面所有内容都出自本库收录的原文，文中点名的每一篇都能在左侧目录里找到完整的中英对照全文。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "The single most important fact about The Witness's lighting: none of it happens at runtime. The whole island is lit offline, baked into lightmap textures, and the shipped game just samples them. Everything else in these twenty posts is a consequence of that one decision.",
+      "zh": "关于《The Witness》光照最重要的一件事：它完全不在运行时计算。整座岛的光照都是离线烘好的，存进光照贴图，游戏运行时只做采样。这二十来篇文章里的其他所有内容，都是这一个决定的下游后果。"
+    },
+
+    { "type": "h2", "id": "cast", "en": "Who built what", "zh": "谁做了哪一部分" },
+    {
+      "type": "p",
+      "en": "[Jonathan Blow](http://number-none.com/blow/) designed the game and, early on, made the engine-level decisions — including the one to use precomputed global illumination. He wrote the framing posts that explain *why*: what he wanted the island to look like, and what that ruled out.",
+      "zh": "[Jonathan Blow](http://number-none.com/blow/) 设计了这款游戏，早期也做引擎层面的决策——包括「用预计算全局光照」这个决定。他写的是那些解释「为什么」的定调文章：他希望这座岛看起来是什么样，以及这排除了哪些做法。"
+    },
+    {
+      "type": "p",
+      "en": "[Ignacio Castaño](http://www.ludicon.com/castano/blog/) built the lighting system itself, and documented it in unusual depth — first on the official blog, later on his own. If you only read one author about The Witness's lighting, it should be him. His series covers parameterization, final gathering, irradiance caching with gradients, lightmap compression, and the iOS port.",
+      "zh": "[Ignacio Castaño](http://www.ludicon.com/castano/blog/) 把这套光照系统做了出来，并且以少见的深度把它写了下来——先写在官方博客上，后来写在自己的博客上。如果关于《The Witness》的光照你只读一个人的文章，那就读他的。他的系列覆盖参数化、最终采集、带梯度的辐照度缓存、光照贴图压缩，以及 iOS 移植。"
+    },
+    {
+      "type": "p",
+      "en": "[Casey Muratori](https://caseymuratori.com/) was not on the rendering side (his work was movement, collision, grass, and the editor), but his \"Witness Wednesday\" series is worth knowing about here for one reason: it is where Blow and Castaño explain, in passing, how the rendering team's conventions and tools worked. Casey's answer about wrapped pointers, for instance, is a direct pointer at Castaño: *\"Ignacio is probably the right person to ask, and he also has a blog.\"*",
+      "zh": "[Casey Muratori](https://caseymuratori.com/) 不在渲染这条线上（他做的是移动、碰撞、草地和编辑器），但他的「Witness Wednesday」系列在这里值得知道，原因只有一个：Blow 和 Castaño 会在里面顺带说明渲染团队的习惯与工具。比如 Casey 回答「包装指针」那个问题时，直接就把人指向了 Castaño：「大概是该问 Ignacio，他也写博客。」"
+    },
+
+    { "type": "h2", "id": "why", "en": "Step 0: why precomputed at all", "zh": "第 0 步：为什么非得预计算" },
+    {
+      "type": "p",
+      "en": "Read these two first, in this order. They are short, and they set every constraint that follows.",
+      "zh": "先读这两篇，按这个顺序。它们很短，但后面所有的约束条件都是它们定下的。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "**Graphics Tech: Precomputed Lighting** (2010-03-01) — the direction: real-time global illumination was not going to happen on the target hardware, so the island's light would be computed once, offline, and stored.",
+          "zh": "**Graphics Tech: Precomputed Lighting**（2010-03-01）——定方向：目标硬件上做不了实时全局光照，所以岛上的光照只算一次、离线算，然后存起来。"
+        },
+        {
+          "en": "**Graphics Tech: Lighting Comparison** (2010-03-29) — the trade-offs between the available approaches, and why the chosen one fits the art style.",
+          "zh": "**Graphics Tech: Lighting Comparison**（2010-03-29）——把当时可选的做法摆在一起比，并说明为什么选中的那个合乎美术风格。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "One consequence worth holding on to: because the light is baked into textures rather than computed from the geometry, the *pipeline that produces those textures* becomes a first-class part of the engine. Most of the rest of this reading path is about that pipeline.",
+      "zh": "有一个后果值得先记住：因为光照是烘进贴图、而不是从几何体算出来的，「生产这些贴图的流水线」就变成了引擎的一等公民。这条阅读路径剩下的部分，基本都在讲这条流水线。"
+    },
+
+    { "type": "h2", "id": "bake", "en": "Step 1: how the light gets baked", "zh": "第 1 步：光是怎么烘出来的" },
+    {
+      "type": "p",
+      "en": "Castaño's global-illumination series is three articles, written over four years, and they are the technical core of this whole library. Read them in this order:",
+      "zh": "Castaño 的全局光照系列是三篇文章，写了四年，是整个库的技术核心。按这个顺序读："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "**Lightmap Parameterization** (2010-03-30) — before you can store light in a texture, you need a texture that maps onto the object. How to cut a mesh into charts and pack them into an atlas, and what he would do differently.",
+          "zh": "**Lightmap Parameterization**（2010-03-30）——想把光存进贴图，先得有一张能贴到物体上的贴图。这篇讲怎么把网格切成图块、再排布进图集，以及他事后觉得自己哪里做得不对。"
+        },
+        {
+          "en": "**Hemicube Rendering and Integration** (2010-09-29) — final gathering. How to actually compute the irradiance at a point: render a hemicube around it, integrate it, and deal with the error that this introduces.",
+          "zh": "**Hemicube Rendering and Integration**（2010-09-29）——最终采集。一个点上的辐照度到底怎么算出来：在它周围渲染一个半立方体、做积分，以及处理这么做带来的误差。"
+        },
+        {
+          "en": "**Irradiance Caching – Part 1** (2011-07-14) — the heart of it. Sampling irradiance adaptively instead of per-texel, and the derivation he had to do himself: extending irradiance gradients to the hemicube sample distribution.",
+          "zh": "**Irradiance Caching – Part 1**（2011-07-14）——最核心的一篇。不做逐纹素采样，而是自适应地采辐照度；以及一段他不得不自己推的推导：把辐照度梯度扩展到 hemicube 的采样分布上。"
+        },
+        {
+          "en": "**Irradiance Caching – Continued** (2014-07-10) — the loose end: how to place the cache records, using differences in the gradients (second-order changes) rather than the gradient magnitude itself.",
+          "zh": "**Irradiance Caching – Continued**（2014-07-10）——收尾：缓存记录该放在哪里。用的是梯度之间的差异（二阶变化），而不是梯度的大小本身。"
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Why irradiance caching matters here: baking every lightmap texel independently is prohibitively slow. Irradiance caching computes the expensive integral only where it is needed and interpolates everywhere else — and the gradient estimate is what makes the interpolation good enough to ship.",
+      "zh": "辐照度缓存在这里为什么重要：逐个纹素独立烘焙慢得不可接受。辐照度缓存只在需要的地方算那个昂贵的积分，其余地方插值——而梯度估算正是让这份插值好到能出货的原因。"
+    },
+
+    { "type": "h2", "id": "ship", "en": "Step 2: making it fit in memory, and on every platform", "zh": "第 2 步：塞进显存，跑上每个平台" },
+    {
+      "type": "p",
+      "en": "Baking the light is only half the problem. The result has to be compressed into a format the hardware can sample, without visible banding in smooth gradients — a much harder problem for lightmaps than for ordinary textures, because lightmaps carry a wider range than LDR textures but have no high-frequency detail to hide the error in.",
+      "zh": "把光烘出来只是一半问题。结果还得压成硬件能采样的格式，而且平滑渐变里不能出现可见的色带——这件事对光照贴图比对普通贴图难得多，因为光照贴图的动态范围比 LDR 贴图宽，却又没有高频细节可以藏住误差。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "**Graphics Tech: Multi-lightmaps** (2010-04-12) — splitting the lighting into several textures so that different parts can be updated or faded independently.",
+          "zh": "**Graphics Tech: Multi-lightmaps**（2010-04-12）——把光照拆成多张贴图，好让不同部分能各自更新或淡入淡出。"
+        },
+        {
+          "en": "**Graphics Tech: Shadow Maps, parts 1 and 2** (2010-03, 2010-04) — direct light from static sources goes through shadow maps; part 2 is a concrete texture-memory saving.",
+          "zh": "**Graphics Tech: Shadow Maps, parts 1 and 2**（2010-03、2010-04）——静态光源的直接光走阴影贴图；part 2 给了一个很实在的显存节省办法。"
+        },
+        {
+          "en": "**Shadow Mapping Summary – Part 1** (2013-09-23) — the same ground, revisited years later with what actually shipped.",
+          "zh": "**Shadow Mapping Summary – Part 1**（2013-09-23）——多年后回头看同一块内容，讲的是实际出货时用的东西。"
+        },
+        {
+          "en": "**Lightmap Compression in The Witness** (2016-09-30) — the long answer to the compression problem: why RGBM, how the colour distribution of lightmaps differs indoors and outdoors, and how to measure whether an encoder is any good.",
+          "zh": "**Lightmap Compression in The Witness**（2016-09-30）——对压缩问题的完整回答：为什么用 RGBM、室内和室外光照贴图的颜色分布差在哪、以及怎么衡量一个编码器到底好不好。"
+        },
+        {
+          "en": "**Lightmap optimizations for iOS** (2017-10-05) — the port: choosing a compressed format that iOS actually supports, and getting the decode cost low enough to be worth it.",
+          "zh": "**Lightmap optimizations for iOS**（2017-10-05）——移植：挑一个 iOS 真正支持的压缩格式，并把解码开销压到划算的程度。"
+        }
+      ]
+    },
+
+    { "type": "h2", "id": "edges", "en": "Step 3: the pieces that feed into it", "zh": "第 3 步：喂给这套系统的那些东西" },
+    {
+      "type": "p",
+      "en": "A few posts in this library are not *about* lighting but are load-bearing for it. Worth reading if you intend to implement anything similar:",
+      "zh": "库里还有几篇不是「讲光照」的文章，但它是承重的。如果你打算自己实现类似的东西，值得一读："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "**Computing Alpha Mipmaps** (2010-09-09) — the mip-chain problem that shows up the moment your lightmap has an alpha channel.",
+          "zh": "**Computing Alpha Mipmaps**（2010-09-09）——光照贴图一带 alpha 通道就会遇到的 mip 链问题。"
+        },
+        {
+          "en": "**Kriging is cool** (2010-05-24) — Blow's own note on the interpolation maths that irradiance caching leans on.",
+          "zh": "**Kriging is cool**（2010-05-24）——Blow 自己写的笔记，讲辐照度缓存所依赖的那套插值数学。"
+        },
+        {
+          "en": "**HLSLParser** (2014-08-29) — the shader toolchain, which is how the same lighting code reaches every target platform.",
+          "zh": "**HLSLParser**（2014-08-29）——着色器工具链，同一份光照代码靠它到达每个目标平台。"
+        },
+        {
+          "en": "**scope(exit) in C++11** (2012-11-19) and the editor series — not lighting, but they document the codebase the lighting lives in.",
+          "zh": "**scope(exit) in C++11**（2012-11-19）与编辑器系列——不是光照，但记录了光照代码所在的那个代码库。"
+        }
+      ]
+    },
+
+    { "type": "h2", "id": "after", "en": "After The Witness: where Castaño went next", "zh": "《The Witness》之后：Castaño 去了哪" },
+    {
+      "type": "p",
+      "en": "The compression work he did for the game's lightmaps turned into a research programme of its own. His own blog — all 66 posts of it are in this library — follows that line from RGBM lightmaps to a SIMD BC1 encoder, then to ASTC, Metal's lossy formats, and finally to spark.js, a texture codec stack for the web.",
+      "zh": "他为游戏光照贴图做的压缩工作，后来长成了一条自己的研究路线。他自己的博客——66 篇全在库里——就沿着这条线走：从 RGBM 光照贴图，到 SIMD 的 BC1 编码器，再到 ASTC、Metal 的有损格式，最后到 spark.js，一套给 Web 用的纹理编解码栈。"
+    },
+    {
+      "type": "p",
+      "en": "If you came for the lighting system, you can stop after Step 2. If you want to see where the ideas went once the game was done, the chapters 「十 · Castaño：纹理压缩与编码」 and 「十一 · Castaño：曲面、采样与其他」 are the continuation.",
+      "zh": "如果你是为光照系统来的，读完第 2 步就可以停。如果你想知道游戏做完之后这些想法去了哪，「十 · Castaño：纹理压缩与编码」和「十一 · Castaño：曲面、采样与其他」这两章就是后续。"
+    }
+  ]
+}

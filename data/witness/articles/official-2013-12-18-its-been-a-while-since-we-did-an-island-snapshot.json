@@ -1,0 +1,35 @@
+{
+  "id": "official-2013-12-18-its-been-a-while-since-we-did-an-island-snapshot",
+  "title": { "zh": "好久没发岛屿快照了", "en": "It’s been a while since we did an Island Snapshot" },
+  "subtitle": {
+    "en": "One more island snapshot, plus the current puzzle count.",
+    "zh": "再来一张岛屿快照，外加目前的谜题数量。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "... so here one is.",
+      "zh": "……所以这就来一张。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/12/shot_2013.12.18__time_18_30_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Luis has been doing a lot of work lately on the mountain and especially the stuff at the top.",
+      "zh": "Luis 最近在山体上做了很多工作，尤其是山顶那部分。"
+    },
+    {
+      "type": "p",
+      "en": "Other folks have been doing a bunch of work on things that are not as obvious in this picture!",
+      "zh": "其他人也在忙一堆在这张图里不太看得出来的东西！"
+    },
+    {
+      "type": "p",
+      "en": "Current puzzle count: 595",
+      "zh": "目前的谜题数量：595"
+    }
+  ]
+}

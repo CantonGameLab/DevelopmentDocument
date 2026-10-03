@@ -1,0 +1,23 @@
+{
+  "id": "castano-2009-11-15-biking",
+  "title": { "zh": "骑车", "en": "Biking" },
+  "subtitle": {
+    "en": "A new road bike, the country roads around Davis, and a daydream about commuting all the way to San Francisco.",
+    "zh": "一辆新公路车、Davis 周边的乡间小路，以及一路骑到旧金山去上班的白日梦。"
+  },
+  "translator": {
+    "note": "源文两段，无插图，标题为译者所加。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’ve been biking around Davis since I bought my new road bike. It’s a very nice experience. There are many nice country roads around here (see [this great map of the area](http://www.solanolinks.com/pdfs/Plans/bikelinks_map.pdf)) and the weather is always friendly. I really like biking towards the mountains, because I can easily see my progress. I’m now able to reach the foothills of the north coast range and next time I should be able to get to Lake Berryessa.",
+      "zh": "自从买了新公路车，我就在 Davis 周边骑来骑去，感觉非常好。这附近有很多不错的乡间小路（可以看看[这张区域地图](http://www.solanolinks.com/pdfs/Plans/bikelinks_map.pdf)），天气也总是很配合。我特别喜欢朝着山的方向骑，因为进度一目了然。现在我能骑到北海岸山脉的山麓了，下一次应该能骑到 Lake Berryessa。"
+    },
+    {
+      "type": "p",
+      "en": "I love the feeling of being able to go almost anywhere just by the sheer strength of my legs. I’ve even been thinking about commuting to San Francisco by bike. I could easily go to Vallejo and take the Ferry to San Francisco, but a more ambitious route would be to go through the north bay, of course, I would do that on a Sunday, spend the night in the city and return by train.",
+      "zh": "我很喜欢那种单凭两条腿的力气就能去几乎任何地方的感觉。我甚至想过骑自行车通勤去旧金山。可以先轻松骑到 Vallejo，再坐渡轮去旧金山；不过更有野心的路线是穿过北湾——当然，那得挑个星期天，在城里过一夜，然后坐火车回来。"
+    }
+  ]
+}

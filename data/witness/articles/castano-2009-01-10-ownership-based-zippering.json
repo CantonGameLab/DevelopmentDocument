@@ -1,0 +1,161 @@
+{
+  "id": "castano-2009-01-10-ownership-based-zippering",
+  "title": {
+    "zh": "基于归属的拉链缝合",
+    "en": "Ownership-based Zippering"
+  },
+  "subtitle": {
+    "zh": "靠预先指定「谁拥有」共享的角与边，把每个面片的纹理坐标从 20 个压到 16 个，并给出可向量化的写法。",
+    "en": "Pre-assigning ownership of shared corners and edges cuts per-patch texture coordinates to 16, with a branch-free formulation."
+  },
+  "translator": {
+    "note": "源文每段代码都被归档脚本多包了一层反引号（`` ` `` 单独成行，里面才是 ``` 围栏），属已知格式噪音；译文按标准 `code` 块还原：去掉外层反引号、去掉围栏内首行的空行、保留代码缩进与英文注释，行尾 CRLF 归一化为 LF，语言标注按内容补为 `hlsl`（HLSL 风格的着色器代码）。源文 `[missing picture]` 是归档脚本对丢失插图的标记，不是正文内容，未保留（保真核验会报出这一行）。`zippering` 在标题译作「拉链缝合」，正文首次出现处保留英文原词并写作「基于归属的拉链缝合（ownership-based zippering）」；texture coordinate 作「纹理坐标」，patch 作「面片」，barycentric coordinates 作「重心坐标」。",
+    "source": "archive/castano-blog/2009-01-10-ownership-based-zippering.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Since [my Gamefest talk](http://developer.nvidia.com/object/gamefest-2008-subdiv.html) I’ve received numerous questions about the ownership-based zippering algorithm that I proposed. So, I’ll try to explain it in more detail. See my previous article on [watertight texture sampling](http://castano.ludicon.com/blog/?p=416) for more background info.",
+      "zh": "自从[我在 Gamefest 上的演讲](http://developer.nvidia.com/object/gamefest-2008-subdiv.html)之后，我收到了很多关于我提出的基于归属的拉链缝合（ownership-based zippering）算法的问题。所以我打算把它讲得更细一些。背景知识可以看我之前那篇讲[无缝纹理采样](http://castano.ludicon.com/blog/?p=416)的文章。"
+    },
+    {
+      "type": "p",
+      "en": "In the averaging method we would have to store the texture coordinate of every patch that contributes to a shared feature. Edges are shared by only two patches, but corners can be shared by many patches. By defining the ownership of the shared features (corners and edges), we only have to store the texture coordinates of the patch that owns the corresponding feature.",
+      "zh": "如果用取平均的做法，我们得把每一个对共享特征有贡献的面片的纹理坐标都存下来。边只被两个面片共享，但角可能被很多面片共享。通过给共享特征（角和边）指定归属，我们只需存下拥有该特征的那个面片的纹理坐标。"
+    },
+    {
+      "type": "p",
+      "en": "So, we have:",
+      "zh": "于是我们有："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "4 texture coordinates for the interior (4).",
+          "zh": "内部 4 个纹理坐标（4 个）。"
+        },
+        {
+          "en": "2 texture coordinates for each edge (8).",
+          "zh": "每条边 2 个纹理坐标（8 个）。"
+        },
+        {
+          "en": "1 texture coordinate for each corner (4).",
+          "zh": "每个角 1 个纹理坐标（4 个）。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Therefore, the total number of texture coordinates per patch is: 4+8+4 = 16",
+      "zh": "因此，每个面片的纹理坐标总数是：4+8+4 = 16"
+    },
+    {
+      "type": "p",
+      "en": "Deciding what patch owns a certain edge or corner is done as a pre-process, so that the patch texture coordinates can be computed in advance. The way I store these texture coordinates is as follows:",
+      "zh": "哪条边或哪个角属于哪个面片，是在预处理阶段定下来的，这样面片的纹理坐标就能提前算好。我存这些纹理坐标的方式如下："
+    },
+    {
+      "type": "p",
+      "en": "Each vertex has:",
+      "zh": "每个顶点有："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "1 interior texture coordinate. (index 0)",
+          "zh": "1 个内部纹理坐标。（索引 0）"
+        },
+        {
+          "en": "1 edge texture coordinate for each of the edges. (index 1 and 2)",
+          "zh": "每条边各 1 个边纹理坐标。（索引 1 和 2）"
+        },
+        {
+          "en": "1 corner texture coordinate. (index 3)",
+          "zh": "1 个角纹理坐标。（索引 3）"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "On the interior, we interpolate the interior texture coordinates bilinearly:",
+      "zh": "在内部，我们对内部纹理坐标做双线性插值："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "float2 tc = bar.x * texCoord[0][0] +\n            bar.y * texCoord[1][0] +\n            bar.z * texCoord[2][0] +\n            bar.w * texCoord[3][0];"
+    },
+    {
+      "type": "p",
+      "en": "where bar stands for the barycentric coordinates:",
+      "zh": "其中 bar 表示重心坐标："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "bar.x = (    uv.x) * (    uv.y);\nbar.y = (1 - uv.x) * (    uv.y);\nbar.z = (1 - uv.x) * (1 - uv.y);\nbar.w = (    uv.x) * (1 - uv.y);"
+    },
+    {
+      "type": "p",
+      "en": "On the edges we interpolate the edge texture coordinates linearly:",
+      "zh": "在边上，我们对边纹理坐标做线性插值："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "if (uv.y == 1) tc = texCoord[0][1] * bar.x + texCoord[1][2] * bar.y;\nif (uv.y == 0) tc = texCoord[2][1] * bar.z + texCoord[3][2] * bar.w;\nif (uv.x == 1) tc = texCoord[3][1] * bar.w + texCoord[0][2] * bar.x;\nif (uv.x == 0) tc = texCoord[1][1] * bar.y + texCoord[2][2] * bar.z;"
+    },
+    {
+      "type": "p",
+      "en": "And at the corners we simply select the appropriate corner texture coordinate:",
+      "zh": "而在角上，我们只需选出对应的角纹理坐标："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "if (bar.x == 1) tc = texCoord[0][3];\nif (bar.y == 1) tc = texCoord[1][3];\nif (bar.z == 1) tc = texCoord[2][3];\nif (bar.w == 1) tc = texCoord[3][3];"
+    },
+    {
+      "type": "p",
+      "en": "The same thing can be done more efficiently using a single bilinear interpolation preceded by some predicated assignments:",
+      "zh": "同样的事情可以做得更高效：先做几个谓词赋值，再执行一次双线性插值："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "// Interior\nfloat2 t0 = texCoord[0][0];\nfloat2 t1 = texCoord[1][0];\nfloat2 t2 = texCoord[2][0];\nfloat2 t3 = texCoord[3][0];\n\n// Edges\nif (uv.y == 1) { t0 = texCoord[0][1]; t1 = texCoord[1][2]; }\nif (uv.y == 0) { t2 = texCoord[2][1]; t3 = texCoord[3][2]; }\nif (uv.x == 1) { t3 = texCoord[3][1]; t0 = texCoord[0][2]; }\nif (uv.x == 0) { t1 = texCoord[1][1]; t2 = texCoord[2][2]; }\n\n// Corners\nif (bar.x == 1) t0 = texCoord[0][3];\nif (bar.y == 1) t1 = texCoord[1][3];\nif (bar.z == 1) t2 = texCoord[2][3];\nif (bar.w == 1) t3 = texCoord[3][3];\n\nfloat2 tc = bar.x * t0 + bar.y * t1 + bar.z * t2 + bar.w * t3;"
+    },
+    {
+      "type": "p",
+      "en": "And finally, the predicated assignments can be simplified and replaced by an index calculation as I proposed in my previous article:",
+      "zh": "最后，这些谓词赋值还可以简化，换成我上一篇文章里提出的索引计算："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "// Compute texture coordinate indices (0: interior, 1,2: edges, 3: corner)\nint idx0 = 2 * (uv.x == 1) + (uv.y == 1);\nint idx1 = 2 * (uv.y == 1) + (uv.x == 0);\nint idx2 = 2 * (uv.x == 0) + (uv.y == 0);\nint idx3 = 2 * (uv.y == 0) + (uv.x == 1);\n\nfloat2 tc = bar.x * texCoord[0][idx0] +\n            bar.y * texCoord[1][idx1] +\n            bar.z * texCoord[2][idx2] +\n            bar.w * texCoord[3][idx3];"
+    },
+    {
+      "type": "p",
+      "en": "The same idea also applies to triangles:",
+      "zh": "同样的思路也适用于三角形："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "// Interior\nfloat2 t0 = texCoord[0][0];\nfloat2 t1 = texCoord[1][0];\nfloat2 t2 = texCoord[2][0];\n\n// Edges\nif (bar.x == 0) { t1 = texCoord[1][1]; t2 = texCoord[2][2]; }\nif (bar.y == 0) { t2 = texCoord[2][1]; t0 = texCoord[0][2]; }\nif (bar.z == 0) { t0 = texCoord[0][1]; t1 = texCoord[1][2]; }\n\n// Corners\nif (bar.x == 1) t0 = texCoord[0][3];\nif (bar.y == 1) t1 = texCoord[1][3];\nif (bar.z == 1) t2 = texCoord[2][3];\n\nfloat2 tc = bar.x * t0 + bar.y * t1 + bar.z * t2;"
+    },
+    {
+      "type": "p",
+      "en": "And the resulting code can be optimized the same way:",
+      "zh": "得到的代码也可以用同样的方式优化："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "int idx0 = 2 * (bar.z == 0) + (bar.y == 0);\nint idx1 = 2 * (bar.x == 0) + (bar.z == 0);\nint idx2 = 2 * (bar.y == 0) + (bar.x == 0);\n\nfloat2 tc = bar.x * texCoord[0][idx0] +\n            bar.y * texCoord[1][idx1] +\n            bar.z * texCoord[2][idx2];"
+    }
+  ]
+}

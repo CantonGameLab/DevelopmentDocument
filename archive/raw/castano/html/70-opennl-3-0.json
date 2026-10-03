@@ -1,0 +1,14 @@
+{
+  "id": 70,
+  "slug": "opennl-3-0",
+  "date": "2010-02-04T23:51:41",
+  "modified": "2010-09-07T16:26:49",
+  "link": "https://www.ludicon.com/castano/blog/2010/02/opennl-3-0/",
+  "title": "OpenNL 3.0",
+  "excerpt": "<p>GPGPU.org takes note that OpenNL 3.0 has just been released and that this new version comes with support for CUDA. That’s certainly interesting, but for me the biggest news is that the library is now under the BSD license and thus can be used in a wider range of projects. I guess it’s time to&#8230;</p>\n",
+  "content": "<p><a href=\"http://gpgpu.org/2010/02/14/opennl-cuda-sparse-linear-solvers\">GPGPU.org</a> takes note that <a href=\"http://alice.loria.fr/index.php/software/4-library/23-opennl.html\">OpenNL 3.0</a> has just been released and that this new version comes with support for CUDA. That’s certainly interesting, but for me the biggest news is that the library is now under the BSD license and thus can be used in a wider range of projects. I guess it’s time to drop my own <a href=\"http://code.google.com/p/nvidia-mesh-tools/source/browse/trunk/src/nvmath/Sparse.h\">sparse matrix</a> <a href=\"http://code.google.com/p/nvidia-mesh-tools/source/browse/trunk/src/nvmath/Solver.h\">solvers</a>.</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": []
+}

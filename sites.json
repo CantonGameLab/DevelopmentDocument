@@ -1,0 +1,63 @@
+{
+  "defaultSite": "witness",
+
+  "sites": {
+    "witness": {
+      "label": "The Witness 技术文档",
+      "labelEn": "The Witness tech docs",
+      "langs": ["zh", "en"],
+      "defaultLang": "bi",
+      "dataDir": "data/witness",
+      "stripPrefix": "archive/",
+      "archivePrefix": "/readalong/src/witness/",
+      "showProgress": true,
+      "accent": "#5b46a8",
+
+      "title": {
+        "zh": "《The Witness》技术文档：光照系统与开发全记录",
+        "en": "The Witness tech docs — lighting system & full dev record"
+      },
+      "intro": {
+        "zh": "四个来源合并成一条学习路径：Thekla 官方博客（2010–2022）、2010–2012 年的图形技术帖、Casey Muratori 的「Witness Wednesday」系列，以及 Ignacio Castaño 个人博客的全部文章。前三个章节是光照系统专线——从「为什么全部光照都预计算」，到光照贴图参数化、hemicube 最终采集、辐照度缓存与梯度推导，再到压缩、iOS 移植与阴影贴图。每篇都提供 中文 / English / 中英对照 三种读法。",
+        "en": "Four sources recombined into one learning path: the Thekla dev blog (2010–2022), the 2010–2012 graphics-tech posts, Casey Muratori's \"Witness Wednesday\" series, and all of Ignacio Castaño's own blog. The first three chapters are a dedicated lighting-system track."
+      },
+      "askPrefix": {
+        "zh": "我在读《The Witness》技术文档，想就下面这段向你提问。",
+        "en": "I'm reading The Witness tech docs and want to ask about this passage."
+      },
+
+      "labels": {
+        "zh": {
+          "articles": "篇文章",
+          "words": "英文词数",
+          "chapters": "主题章节",
+          "translated": "已翻译",
+          "core": "核心长文",
+          "read": "标记为已读",
+          "copyCtx": "复制本篇上下文",
+          "untitled": "未命名",
+          "pendingTitle": "本篇尚未翻译",
+          "pendingBody": "下面是归档的英文原文（已自动排版）。",
+          "backHome": "首页",
+          "sourceLink": "原文",
+          "crossPosted": "官方博客交叉发布"
+        },
+        "en": {
+          "articles": "articles",
+          "words": "English words",
+          "chapters": "chapters",
+          "translated": "translated",
+          "core": "long reads",
+          "read": "Mark as read",
+          "copyCtx": "Copy this article's context",
+          "untitled": "Untitled",
+          "pendingTitle": "Not translated yet",
+          "pendingBody": "Showing the archived English source below.",
+          "backHome": "Home",
+          "sourceLink": "Source",
+          "crossPosted": "also posted on the official blog"
+        }
+      }
+    }
+  }
+}

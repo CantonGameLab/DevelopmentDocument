@@ -1,0 +1,4161 @@
+{
+  "generatedAt": "2026-10-03T07:08:30.218Z",
+  "corpus": {
+    "articles": 201,
+    "words": 175590,
+    "stubs": 70,
+    "coreArticles": 56,
+    "dedupedCrossPosts": 4
+  },
+  "chapters": [
+    {
+      "key": "intro",
+      "zh": "开始：这些人是谁",
+      "en": "Start here",
+      "desc": "先搞清楚谁做了《The Witness》的哪一部分，以及这批文章该怎么读。",
+      "articles": [
+        "start-here-lighting"
+      ]
+    },
+    {
+      "key": "precomputed",
+      "zh": "一 · 光照系统：为什么是预计算",
+      "en": "Lighting 1: why precomputed",
+      "desc": "《The Witness》全部光照都是离线烘焙的——Jon 定下这个方向的原因，以及光照贴图方案的取舍。",
+      "articles": [
+        "light-graphics-tech-precomputed-lighting",
+        "light-graphics-tech-lighting-comparison",
+        "light-graphics-tech-texture-parameterization"
+      ]
+    },
+    {
+      "key": "irradiance",
+      "zh": "二 · 光照系统：辐照度缓存",
+      "en": "Lighting 2: irradiance caching",
+      "desc": "Ignacio 的 GI 三部曲：光照贴图参数化 → hemicube 最终采集 → 辐照度缓存与梯度估算。",
+      "articles": [
+        "light-hemicube-rendering-and-integration",
+        "castano-2010-09-29-hemicube-rendering-and-integration",
+        "light-irradiance-caching-part-1",
+        "castano-2011-07-14-irradiance-caching-part-1",
+        "official-2014-07-10-irradiance-caching-continued",
+        "castano-2014-07-10-irradiance-caching-continued"
+      ]
+    },
+    {
+      "key": "lightmap-shipping",
+      "zh": "三 · 光照系统：压缩、平台与阴影",
+      "en": "Lighting 3: compression, platforms, shadows",
+      "desc": "把光照贴图压到能上 iOS、用阴影贴图补直接光，以及 Blow 的三篇阴影贴图笔记。",
+      "articles": [
+        "light-graphics-tech-shadow-maps-part-1",
+        "light-graphics-tech-multi-lightmaps",
+        "light-graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more",
+        "light-a-pleasant-lightmapping-update",
+        "official-2013-09-23-shadow-mapping-summary-part-1",
+        "castano-2016-09-30-lightmap-compression-in-the-witness",
+        "castano-2017-10-05-lightmap-optimizations-ios"
+      ]
+    },
+    {
+      "key": "movement",
+      "zh": "四 · 玩家移动与碰撞",
+      "en": "Movement & collision",
+      "desc": "沉浸感的成败系于「不被注意到」——Casey 的 Walk Monster 系列。",
+      "articles": [
+        "casey-0005",
+        "casey-0006",
+        "casey-0007",
+        "casey-0008"
+      ]
+    },
+    {
+      "key": "renderer",
+      "zh": "五 · 渲染管线与显存",
+      "en": "Renderer & memory",
+      "desc": "着色器改写、立方体贴图、色彩分级、水体、纹理实验——画面之外的工程量。",
+      "articles": [
+        "light-kriging-is-cool",
+        "light-computing-alpha-mipmaps",
+        "light-experiments-in-texturing",
+        "light-seamless-cube-map-filtering",
+        "light-fun-with-in-engine-color-grading",
+        "light-regarding-water",
+        "official-2012-11-19-scope-exit-in-c-11",
+        "casey-0009",
+        "casey-0010",
+        "official-2014-08-29-hlslparser",
+        "official-2022-02-10-a-shader-trick"
+      ]
+    },
+    {
+      "key": "nature",
+      "zh": "六 · 草地与植被",
+      "en": "Grass & vegetation",
+      "desc": "散布、分布均匀性、噪点着色——让荒野看起来不像程序生成的。",
+      "articles": [
+        "casey-0012",
+        "casey-0013",
+        "casey-0014",
+        "official-2014-05-23-caseys-witness-wednesday-on-interpolation"
+      ]
+    },
+    {
+      "key": "editor",
+      "zh": "七 · 编辑器与代码手艺",
+      "en": "Editor & code craft",
+      "desc": "压缩导向编程，以及一个真实商业代码库里的重构全记录。",
+      "articles": [
+        "casey-0011",
+        "casey-0015",
+        "official-2014-05-28-witness-wednesday-on-how-to-program",
+        "casey-0016",
+        "casey-0017",
+        "casey-0018",
+        "casey-0019",
+        "casey-0021",
+        "casey-0022",
+        "casey-0023"
+      ]
+    },
+    {
+      "key": "art",
+      "zh": "八 · 美术与设计减法",
+      "en": "Art & subtraction",
+      "desc": "艺术总监怎么把一座岛「减」到只剩必要的东西。",
+      "articles": [
+        "official-2013-06-07-a-long-overdue-tree-update",
+        "official-2014-03-24-the-art-of-the-witness-gdc-2014",
+        "official-2014-06-02-road-to-e3-day-1",
+        "official-2014-06-03-road-to-e3-day-2",
+        "official-2014-06-04-road-to-e3-day-3",
+        "official-2014-06-05-road-to-e3-day-4",
+        "official-2014-06-06-road-to-e3-day-5",
+        "official-2015-05-05-sculpture",
+        "official-2015-06-03-polishing-the-architecture",
+        "official-2015-10-13-architecture-in-video-games"
+      ]
+    },
+    {
+      "key": "process",
+      "zh": "九 · 上市与复盘",
+      "en": "Ship & reflect",
+      "desc": "里程碑、音乐取舍、销售与发售后修补。",
+      "articles": [
+        "light-engine-tech-concurrent-world-editing",
+        "official-2012-10-14-wm-touch-is-totally-bananas",
+        "official-2012-10-19-ipad-victory-shot",
+        "official-2012-12-30-what-i-did-on-my-christmas-vacation",
+        "official-2013-01-15-thoughts-about-app-store-curation",
+        "official-2013-02-19-the-witness-audio-1000-subtle-layers",
+        "official-2013-02-22-a-clarification-about-our-ps4-exclusivity",
+        "official-2013-11-19-a-trip-to-new-york-and-some-huge-artwork",
+        "casey-0020",
+        "official-2014-09-10-what-weve-been-working-on-lately",
+        "official-2015-08-05-bugs",
+        "official-2015-11-19-on-music-sound-effects-story",
+        "official-2015-12-22-entering-the-home-stretch",
+        "official-2016-01-11-whose-voices-are-in-the-witness",
+        "official-2016-01-19-price-and-pre-orders",
+        "official-2016-01-22-pre-order-widget-test",
+        "official-2016-02-02-fun-sales-fakts",
+        "official-2016-09-08-were-doing-a-ps4-pro-patch-here-are-the-technical-details",
+        "official-2016-09-19-the-witness-is-out-on-the-xbox-one",
+        "official-2016-11-02-ps4-pro-patch-update",
+        "official-2016-11-18-the-ps4-patch-is-out",
+        "official-2017-05-01-help-us-get-the-witness-on-ios",
+        "official-2017-06-09-macos-system-requirements",
+        "official-2017-09-25-the-witness-is-finally-on-ios",
+        "official-2018-03-14-testing-the-jai-compiler"
+      ]
+    },
+    {
+      "key": "castano-textures",
+      "zh": "十 · Castaño：纹理压缩与编码",
+      "en": "Castaño: texture compression",
+      "desc": "他离开 Thekla 之后的主线研究：BC1/ASTC/ETC 编码、GPU 编解码工具、spark.js。",
+      "articles": [
+        "castano-2009-01-01-watertight-texture-sampling",
+        "castano-2009-03-19-gpu-dxt-decompression",
+        "castano-2009-03-20-nvidia-texture-tools-2-0-6",
+        "castano-2009-04-24-nvtt-quote",
+        "castano-2009-09-30-continuity-mapping-for-multi-chart-textures",
+        "castano-2014-12-05-d3dx-uvatlas-released",
+        "castano-2022-11-08-bc1-compression-revisited",
+        "castano-2024-12-31-tools-for-gpu-codec-development",
+        "castano-2025-02-20-gpu-texture-compression-everywhere",
+        "castano-2025-03-06-spark-1-2",
+        "castano-2025-08-06-spark-1-3-and-spark-js",
+        "castano-2025-09-08-three-js-spark-js",
+        "castano-2026-01-26-choosing-texture-formats-for-webgpu-applications",
+        "castano-2026-02-04-normal-map-compression-revisited",
+        "castano-2026-02-09-an-updated-sponza-gltf",
+        "castano-2026-02-18-runtime-mipmap-generation",
+        "castano-2026-03-05-announcing-spark-js-0-1",
+        "castano-2026-03-28-hardware-image-compression",
+        "castano-2026-04-10-writing-to-compressed-textures-in-metal",
+        "castano-2026-04-15-the-true-size-of-astc-textures",
+        "castano-2026-04-24-metal-lossy-compression-format",
+        "castano-2026-05-04-image-loading-on-the-web",
+        "castano-2026-06-04-spark-for-unity",
+        "castano-2026-09-17-spark-1-4"
+      ]
+    },
+    {
+      "key": "castano-graphics",
+      "zh": "十一 · Castaño：曲面、采样与其他",
+      "en": "Castaño: surfaces, sampling & misc",
+      "desc": "细分曲面、水密采样、伽罗瓦域与 GPU 解码、kriging 插值等非光照主题。",
+      "articles": [
+        "castano-2008-08-25-moving",
+        "castano-2008-08-26-nvidia-widgets",
+        "castano-2008-09-09-gamefest-presentations",
+        "castano-2008-12-10-the-foie-gras-parable",
+        "castano-2009-01-07-approximate-subdivision-shading",
+        "castano-2009-01-10-ownership-based-zippering",
+        "castano-2009-01-10-10-fun-things-to-do-with-tessellation",
+        "castano-2009-01-27-real-time-creased-approximate-subdivision-surfaces",
+        "castano-2009-01-29-acmr-2",
+        "castano-2009-02-02-optimal-grid-rendering",
+        "castano-2009-03-18-ham-and-beans",
+        "castano-2009-04-24-standing-desk-2",
+        "castano-2009-05-12-efficient-substitutes-for-subdivision-surfaces",
+        "castano-2009-07-10-salmorejo-means-food-in-summer",
+        "castano-2009-07-21-rice-with-milk",
+        "castano-2009-09-12-camping-in-the-redwoods",
+        "castano-2009-09-30-davis-aquatic-masters",
+        "castano-2009-11-09-new-job",
+        "castano-2009-11-15-biking",
+        "castano-2009-12-19-pate",
+        "castano-2010-02-04-opennl-3-0",
+        "castano-2010-03-05-the-witness",
+        "castano-2010-05-04-life",
+        "castano-2010-09-14-back-online",
+        "castano-2010-09-16-precise",
+        "castano-2010-10-18-matts-gregory-acc-tessellation-render",
+        "castano-2010-11-30-software-patents-are-programmers-responsibility",
+        "castano-2011-04-05-we-are-hiring",
+        "castano-2014-08-29-hlslparser",
+        "castano-2014-09-17-first-backpacking-trip",
+        "castano-2019-01-19-2018-recap",
+        "castano-2019-01-28-castle-peak-2015-2019",
+        "castano-2019-03-13-ladybugs",
+        "castano-2019-04-25-climbing-a-big-mountain-is-hard",
+        "castano-2019-12-21-dmv",
+        "castano-2022-11-13-crossing-the-ludicon",
+        "castano-2026-09-25-encoding-render-targets-for-free-with-tile-shaders"
+      ]
+    },
+    {
+      "key": "snapshots",
+      "zh": "附录 · 开发日志快照",
+      "en": "Appendix: dev-log snapshots",
+      "desc": "当年以截图/视频为主的短贴，按时间保留，作为气氛与时间线材料。",
+      "articles": [
+        "light-island-paint-over",
+        "light-more-island-color-experiments-shadow-update",
+        "light-the-depth-jam",
+        "official-2012-10-23-island-snapshot-two-for-one",
+        "official-2012-11-06-we-are-going-map-crazy",
+        "official-2012-11-15-post-shrink-screenshots",
+        "official-2012-11-17-you-know-the-game-is-coming-along",
+        "official-2012-11-29-very-limited-very-closed-beta",
+        "official-2012-12-02-collecting-playtest-data",
+        "official-2012-12-10-island-snapshot",
+        "official-2013-01-03-island-snapshot",
+        "official-2013-01-16-island-partition",
+        "official-2013-02-01-if-you-like-first-person-puzzle-games",
+        "official-2013-02-01-interview-about-the-witness-and-related-design-topics",
+        "official-2013-02-20-first-official-trailer-for-the-witness",
+        "official-2013-03-04-island-snapshot",
+        "official-2013-03-13-ipad-video-update-1",
+        "official-2013-04-09-island-snapshot",
+        "official-2013-05-07-poster-ideas",
+        "official-2013-05-17-island-snapshot",
+        "official-2013-06-15-heres-that-poster",
+        "official-2013-06-19-island-snapshot",
+        "official-2013-07-04-wallpapers",
+        "official-2013-08-05-more-screenshots",
+        "official-2013-09-04-on-the-rocks",
+        "official-2013-09-12-the-shipwreck",
+        "official-2013-10-16-pictures-from-a-demo-day-at-sony",
+        "official-2013-10-24-recent-coverage-of-the-witness",
+        "official-2013-11-04-a-speech-about-free-to-play-game-design",
+        "official-2013-11-29-what-could-it-mean",
+        "official-2013-12-18-its-been-a-while-since-we-did-an-island-snapshot",
+        "official-2014-01-24-what-that-vr-post-was-about",
+        "official-2014-01-30-last-minute-area",
+        "official-2014-02-04-hey-look-steam-controller-support",
+        "official-2014-02-04-hey-look-oculus-support-plus-steam-controller-support",
+        "official-2014-02-20-marsh-update",
+        "official-2014-04-16-working-on-the-witness-parts-5-and-6",
+        "official-2014-04-25-whats-this",
+        "official-2014-05-03-witness-friday-post-on-caseys-blog",
+        "official-2014-05-29-island-snapshot-what-year-is-this-edition",
+        "official-2014-08-15-getting-things-done",
+        "official-2014-09-24-close-up",
+        "official-2014-11-20-wallpaper",
+        "official-2014-12-10-playstation-experience",
+        "official-2015-01-25-progress",
+        "official-2015-02-20-thekla",
+        "official-2015-03-25-island-snapshot",
+        "official-2015-07-10-witness-in-limbo",
+        "official-2015-09-05-workin-on-a-new-trailer",
+        "official-2015-09-17-new-trailer-and-interviews",
+        "official-2015-12-23-since-making-the-previous-blog-post",
+        "official-2016-01-25-the-game-is-doing-great-on-steam",
+        "official-2016-01-26-the-witness-is-now-up-on-psn-in-the-americas-and-europe",
+        "official-2016-02-09-ill-be-having-a-reddit-ama-on-friday-the-12th-of-february",
+        "official-2016-02-13-the-witness-long-screenshot-3",
+        "official-2016-02-29-printable-panels",
+        "official-2016-05-10-jobs",
+        "official-2017-01-28-anniversary",
+        "official-2018-06-27-congratulations-to-the-grant-recipients"
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "castano-2008-08-25-moving",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Moving",
+        "zh": "搬家"
+      },
+      "date": "2008-08-25",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2008/08/moving/",
+      "words": 53,
+      "mdPath": "archive/castano-blog/2008-08-25-moving.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "另一半被 UC Davis 录取，一家人要搬去 Davis，那里离内华达山脉也更近。"
+    },
+    {
+      "id": "castano-2008-08-26-nvidia-widgets",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "nvidia-widgets",
+        "zh": "nvidia-widgets"
+      },
+      "date": "2008-08-26",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2008/08/nvidia-widgets/",
+      "words": 190,
+      "mdPath": "archive/castano-blog/2008-08-26-nvidia-widgets.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把最新一批 OpenGL SDK 示例里用的 IMGUI 工具包放了出来，附一个两个控件的示例。"
+    },
+    {
+      "id": "castano-2008-09-09-gamefest-presentations",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Gamefest Presentations",
+        "zh": "Gamefest 讲座资料"
+      },
+      "date": "2008-09-09",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2008/09/gamefest-presentations/",
+      "words": 30,
+      "mdPath": "archive/castano-blog/2008-09-09-gamefest-presentations.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Microsoft 放出了 Gamefest 2008 的讲座资料，大多附带录音，其中包括他讲曲面细分的那一场。"
+    },
+    {
+      "id": "castano-2008-12-10-the-foie-gras-parable",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "The foie gras parable",
+        "zh": "鹅肝的寓言"
+      },
+      "date": "2008-12-10",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2008/12/the-foie-gras-parable/",
+      "words": 123,
+      "mdPath": "archive/castano-blog/2008-12-10-the-foie-gras-parable.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "主厨 Dan Barber 的一场 TED 演讲，引出他对食物生产方式的思考，以及回西班牙务农的幻想。"
+    },
+    {
+      "id": "castano-2009-01-01-watertight-texture-sampling",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Watertight Texture Sampling",
+        "zh": "水密的纹理采样"
+      },
+      "date": "2009-01-01",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/01/watertight-texture-sampling/",
+      "words": 1972,
+      "mdPath": "archive/castano-blog/2009-01-01-watertight-texture-sampling.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "位移贴图在接缝处会裂开：从无缝参数化、浮点精度到拉链法与单位分解的一趟综述。"
+    },
+    {
+      "id": "castano-2009-01-07-approximate-subdivision-shading",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Approximate Subdivision Shading",
+        "zh": "近似细分曲面着色"
+      },
+      "date": "2009-01-07",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/01/approximate-subdivision-shading/",
+      "words": 446,
+      "mdPath": "archive/castano-blog/2009-01-07-approximate-subdivision-shading.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用求位置的同一套流程去插值法线，既省算力，又顺手解决了位移贴图的接缝问题。"
+    },
+    {
+      "id": "castano-2009-01-10-ownership-based-zippering",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Ownership-based Zippering",
+        "zh": "基于归属的拉链缝合"
+      },
+      "date": "2009-01-10",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/01/ownership-based-zippering/",
+      "words": 794,
+      "mdPath": "archive/castano-blog/2009-01-10-ownership-based-zippering.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "靠预先指定「谁拥有」共享的角与边，把每个面片的纹理坐标从 20 个压到 16 个，并给出可向量化的写法。"
+    },
+    {
+      "id": "castano-2009-01-10-10-fun-things-to-do-with-tessellation",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "10 Fun Things to do with Tessellation",
+        "zh": "用曲面细分做的 10 件好玩的事"
+      },
+      "date": "2009-01-10",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/01/10-fun-things-to-do-with-tessellation/",
+      "words": 2022,
+      "mdPath": "archive/castano-blog/2009-01-10-10-fun-things-to-do-with-tessellation.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一份没能在 GDC’09 讲成的提纲：从 PN-Triangles 到头发、地形、全景与非线形投影，硬件曲面细分能拿来干些什么。"
+    },
+    {
+      "id": "castano-2009-01-27-real-time-creased-approximate-subdivision-surfaces",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Real-Time Creased Approximate Subdivision Surfaces",
+        "zh": "Real-Time Creased Approximate Subdivision Surfaces"
+      },
+      "date": "2009-01-27",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/01/real-time-creased-approximate-subdivision-surfaces/",
+      "words": 195,
+      "mdPath": "archive/castano-blog/2009-01-27-real-time-creased-approximate-subdivision-surfaces.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Denis 把 I3D 论文放上网了——讲的是 Valve 把 ACC 集成进 Source 引擎的真实经验。"
+    },
+    {
+      "id": "castano-2009-01-29-acmr-2",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "ACMR",
+        "zh": "ACMR"
+      },
+      "date": "2009-01-29",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/01/acmr-2/",
+      "words": 264,
+      "mdPath": "archive/castano-blog/2009-01-29-acmr-2.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "衡量顶点缓存效率，ACMR 不是个好指标：它依赖网格拓扑。换成平均变换顶点比（ATVR）会直观得多。"
+    },
+    {
+      "id": "castano-2009-02-02-optimal-grid-rendering",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Optimal Grid Rendering",
+        "zh": "最优网格渲染"
+      },
+      "date": "2009-02-02",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/02/optimal-grid-rendering/",
+      "words": 1132,
+      "mdPath": "archive/castano-blog/2009-02-02-optimal-grid-rendering.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "面片转换后顶点缓存的性能取决于三角形顺序。把所有顶点都恰好变换一次的网格遍历顺序长什么样？"
+    },
+    {
+      "id": "castano-2009-03-18-ham-and-beans",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Ham and Beans",
+        "zh": "火腿与蚕豆"
+      },
+      "date": "2009-03-18",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/03/ham-and-beans/",
+      "words": 892,
+      "mdPath": "archive/castano-blog/2009-03-18-ham-and-beans.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "从家里在西班牙经营养猪场说起，讲为什么在美国很难吃到好火腿，最后是一道火腿蚕豆的做法。"
+    },
+    {
+      "id": "castano-2009-03-19-gpu-dxt-decompression",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "GPU DXT Decompression",
+        "zh": "GPU 上的 DXT 解压"
+      },
+      "date": "2009-03-19",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/03/gpu-dxt-decompression/",
+      "words": 1139,
+      "mdPath": "archive/castano-blog/2009-03-19-gpu-dxt-decompression.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "同一份 DXT 数据在不同 GPU 上解压结果并不相同：NVIDIA 的近似公式、D3D10 的误差界，以及单色压缩器为什么会踩到这个坑。"
+    },
+    {
+      "id": "castano-2009-03-20-nvidia-texture-tools-2-0-6",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "NVIDIA Texture Tools 2.0.6",
+        "zh": "NVIDIA Texture Tools 2.0.6"
+      },
+      "date": "2009-03-20",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/03/nvidia-texture-tools-2-0-6/",
+      "words": 460,
+      "mdPath": "archive/castano-blog/2009-03-20-nvidia-texture-tools-2-0-6.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "NVTT 2.0.6 稳定版发布说明：多 GPU 选择、CUDA 驱动兼容性、小 mipmap 改在 CPU 压缩等。"
+    },
+    {
+      "id": "castano-2009-04-24-standing-desk-2",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Standing Desk 2",
+        "zh": "站立办公桌 2"
+      },
+      "date": "2009-04-24",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/04/standing-desk-2/",
+      "words": 250,
+      "mdPath": "archive/castano-blog/2009-04-24-standing-desk-2.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "整整一周全时用站立办公桌：脚疼、睡眠变好，以及终于用上了更强的止痛药和物理治疗。"
+    },
+    {
+      "id": "castano-2009-04-24-nvtt-quote",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "NVTT quote",
+        "zh": "一句关于 NVTT 的评语"
+      },
+      "date": "2009-04-24",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/04/nvtt-quote/",
+      "words": 51,
+      "mdPath": "archive/castano-blog/2009-04-24-nvtt-quote.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "转引 Ivan-Assen Ivanov 对 NVIDIA Texture Tools 的一句吐槽。"
+    },
+    {
+      "id": "castano-2009-05-12-efficient-substitutes-for-subdivision-surfaces",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Efficient Substitutes for Subdivision Surfaces",
+        "zh": "细分曲面的高效替代方案"
+      },
+      "date": "2009-05-12",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/05/efficient-substitutes-for-subdivision-surfaces/",
+      "words": 113,
+      "mdPath": "archive/castano-blog/2009-05-12-efficient-substitutes-for-subdivision-surfaces.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "SIGGRAPH 课程被接受了——把游戏、电影、硬件厂商和学术界的人凑到一块儿，各讲各的实践经验。"
+    },
+    {
+      "id": "castano-2009-07-10-salmorejo-means-food-in-summer",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Salmorejo means food in summer",
+        "zh": "Salmorejo 就是夏天的饭"
+      },
+      "date": "2009-07-10",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/07/salmorejo-means-food-in-summer/",
+      "words": 499,
+      "mdPath": "archive/castano-blog/2009-07-10-salmorejo-means-food-in-summer.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "太太和儿子去了巴西，硬膜外注射终于见效，于是来做安达卢西亚的番茄冷汤；菜园荒了，只好寄望来年。"
+    },
+    {
+      "id": "castano-2009-07-21-rice-with-milk",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Rice with milk",
+        "zh": "牛奶米饭"
+      },
+      "date": "2009-07-21",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/07/rice-with-milk/",
+      "words": 410,
+      "mdPath": "archive/castano-blog/2009-07-21-rice-with-milk.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "小时候用农场生牛奶做的甜点，断了多年，到了允许卖生牛奶的加州又找了回来。"
+    },
+    {
+      "id": "castano-2009-09-12-camping-in-the-redwoods",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Camping in the Redwoods",
+        "zh": "在红杉林里露营"
+      },
+      "date": "2009-09-12",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/09/camping-in-the-redwoods/",
+      "words": 632,
+      "mdPath": "archive/castano-blog/2009-09-12-camping-in-the-redwoods.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "带 Nachito 露营的第二次尝试终于成功：Mill Creek、蕨类峡谷、Stout Grove，还有一个走完了七英里里六英里的小男孩。"
+    },
+    {
+      "id": "castano-2009-09-30-davis-aquatic-masters",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Davis Aquatic Masters",
+        "zh": "Davis Aquatic Masters"
+      },
+      "date": "2009-09-30",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/09/davis-aquatic-masters/",
+      "words": 289,
+      "mdPath": "archive/castano-blog/2009-09-30-davis-aquatic-masters.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "四个月的大师游泳：体重上去了，背不疼了，代价是右肩查出了问题。"
+    },
+    {
+      "id": "castano-2009-09-30-continuity-mapping-for-multi-chart-textures",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Continuity Mapping for Multi-Chart Textures",
+        "zh": "多图块纹理的 Continuity Mapping"
+      },
+      "date": "2009-09-30",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/09/continuity-mapping-for-multi-chart-textures/",
+      "words": 379,
+      "mdPath": "archive/castano-blog/2009-09-30-continuity-mapping-for-multi-chart-textures.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "评一篇 Siggraph Asia 2009 论文：多图块纹理的 Continuity Mapping，以及它在切线空间法线贴图上说不清的地方。"
+    },
+    {
+      "id": "castano-2009-11-09-new-job",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "New Job",
+        "zh": "新工作"
+      },
+      "date": "2009-11-09",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/11/new-job/",
+      "words": 193,
+      "mdPath": "archive/castano-blog/2009-11-09-new-job.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "在 NVIDIA 做了四年多曲面细分之后，他转去和 Jon Blow 一起做《The Witness》。"
+    },
+    {
+      "id": "castano-2009-11-15-biking",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Biking",
+        "zh": "骑车"
+      },
+      "date": "2009-11-15",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/11/biking/",
+      "words": 151,
+      "mdPath": "archive/castano-blog/2009-11-15-biking.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一辆新公路车、Davis 周边的乡间小路，以及一路骑到旧金山去上班的白日梦。"
+    },
+    {
+      "id": "castano-2009-12-19-pate",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Pâté",
+        "zh": "肉酱（Pâté）"
+      },
+      "date": "2009-12-19",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2009/12/pate/",
+      "words": 613,
+      "mdPath": "archive/castano-blog/2009-12-19-pate.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "肉酱在美国为什么没什么人认识、西班牙菜谱里的度量有多含糊，以及一份用鸡肝做的家传做法。"
+    },
+    {
+      "id": "castano-2010-02-04-opennl-3-0",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "OpenNL 3.0",
+        "zh": "OpenNL 3.0"
+      },
+      "date": "2010-02-04",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/02/opennl-3-0/",
+      "words": 61,
+      "mdPath": "archive/castano-blog/2010-02-04-opennl-3-0.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "新版支持 CUDA 固然有意思，但对我来说最大的新闻是它换成了 BSD 许可。"
+    },
+    {
+      "id": "light-graphics-tech-precomputed-lighting",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Graphics Tech: Precomputed Lighting",
+        "zh": "图形技术：预计算光照"
+      },
+      "date": "2010-03-01",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/graphics-tech-precomputed-lighting/",
+      "words": 890,
+      "mdPath": "archive/witness-graphics/graphics-tech-precomputed-lighting.md",
+      "crossPostedAs": [],
+      "chapter": "precomputed",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "《The Witness》为什么不用全实时方案，而选择预计算全局光照，以及这套系统第一版是怎么做出来的。"
+    },
+    {
+      "id": "light-graphics-tech-shadow-maps-part-1",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Graphics Tech: Shadow Maps (part 1)",
+        "zh": "图形技术：阴影贴图（上）"
+      },
+      "date": "2010-03-03",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/graphics-tech-shadow-maps-part-1/",
+      "words": 2044,
+      "mdPath": "archive/witness-graphics/graphics-tech-shadow-maps-part-1.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Jonathan Blow 谈《The Witness》为什么需要一套在相机运动下保持稳定、又能覆盖极远视距的阴影系统，以及已发表的文献不会告诉你的事。"
+    },
+    {
+      "id": "castano-2010-03-05-the-witness",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "The Witness",
+        "zh": "《The Witness》"
+      },
+      "date": "2010-03-05",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/03/the-witness/",
+      "words": 60,
+      "mdPath": "archive/castano-blog/2010-03-05-the-witness.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Jon 为《The Witness》开了开发博客，我也快会写点全局光照实现上的细节。"
+    },
+    {
+      "id": "light-graphics-tech-lighting-comparison",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Graphics Tech: Lighting Comparison",
+        "zh": "图形技术：光照方案对比"
+      },
+      "date": "2010-03-29",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/graphics-tech-lighting-comparison/",
+      "words": 347,
+      "mdPath": "archive/witness-graphics/graphics-tech-lighting-comparison.md",
+      "crossPostedAs": [],
+      "chapter": "precomputed",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "同一组三个视角，在四种采样设置、以及 1、2、3 级光照反弹下的渲染结果，以及各自的计算耗时。"
+    },
+    {
+      "id": "light-graphics-tech-texture-parameterization",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Lightmap Parameterization",
+        "zh": "光照贴图参数化"
+      },
+      "date": "2010-03-30",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/graphics-tech-texture-parameterization/",
+      "words": 2256,
+      "mdPath": "archive/witness-graphics/graphics-tech-texture-parameterization.md",
+      "crossPostedAs": [],
+      "chapter": "precomputed",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "《The Witness》如何把网格自动切成图块、用 LSCM 做参数化，再排布进光照贴图集。"
+    },
+    {
+      "id": "light-graphics-tech-multi-lightmaps",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Graphics Tech: Multi-lightmaps",
+        "zh": "图形技术：多张光照贴图"
+      },
+      "date": "2010-04-12",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/graphics-tech-multi-lightmaps/",
+      "words": 246,
+      "mdPath": "archive/witness-graphics/graphics-tech-multi-lightmaps.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Ignacio 加上了对会变化的光源的支持：每个状态各烘一张光照贴图，运行期在它们之间切换。"
+    },
+    {
+      "id": "light-graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Graphics Tech: Shadow Maps (part 2): Save 25% texture memory, and possibly much more.",
+        "zh": "图形技术：阴影贴图（下）：省下 25% 的纹理内存，可能还远不止"
+      },
+      "date": "2010-04-21",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more/",
+      "words": 1962,
+      "mdPath": "archive/witness-graphics/graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把每个级联各自旋转 90 度、把它们的包围矩形向左推、再让贴图在纹理图集里环绕：看《The Witness》如何把稳定的级联阴影贴图浪费掉的纹理空间收回一部分。"
+    },
+    {
+      "id": "castano-2010-05-04-life",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Life",
+        "zh": "近况"
+      },
+      "date": "2010-05-04",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/05/life/",
+      "words": 396,
+      "mdPath": "archive/castano-blog/2010-05-04-life.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "第二个孩子快出生了，春天带 Nachito 在户外消磨时间，游泳变成纯爱好，还租了间办公室躲开家里的干扰。"
+    },
+    {
+      "id": "light-kriging-is-cool",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Kriging is cool.",
+        "zh": "Kriging 很酷。"
+      },
+      "date": "2010-05-24",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/kriging-is-cool/",
+      "words": 2572,
+      "mdPath": "archive/witness-graphics/kriging-is-cool.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用 Kriging 插值的无结构地形控制点，让一座山丘能像别的物体一样被拿起来、旋转、拖动。"
+    },
+    {
+      "id": "light-island-paint-over",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Island Paint-Over",
+        "zh": "岛屿上色初稿"
+      },
+      "date": "2010-08-24",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/island-paint-over/",
+      "words": 48,
+      "mdPath": "archive/witness-graphics/island-paint-over.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Shannon 给岛屿地形做的第一版上色已经像点样子了。"
+    },
+    {
+      "id": "light-computing-alpha-mipmaps",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Computing Alpha Mipmaps",
+        "zh": "计算 Alpha 的 Mipmap"
+      },
+      "date": "2010-09-09",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/computing-alpha-mipmaps/",
+      "words": 605,
+      "mdPath": "archive/witness-graphics/computing-alpha-mipmaps.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "缩放 alpha 以保持原本的 alpha 测试覆盖率，就能让用 alpha 测试做的植被不再随距离淡出。"
+    },
+    {
+      "id": "castano-2010-09-14-back-online",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Back Online",
+        "zh": "重新上线"
+      },
+      "date": "2010-09-14",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/09/back-online/",
+      "words": 305,
+      "mdPath": "archive/castano-blog/2010-09-14-back-online.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "博客塌了几个月又回来了：丢掉的帖子、没恢复的抱怨贴、搬到 the-witness.net 的技术文章，还有那个夏天。"
+    },
+    {
+      "id": "castano-2010-09-16-precise",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Watertight Tessellation: precise and fma",
+        "zh": "无缝曲面细分：precise 与 fma"
+      },
+      "date": "2010-09-16",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/09/precise/",
+      "words": 1452,
+      "mdPath": "archive/castano-blog/2010-09-16-precise.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "为什么一个普通的 Bezier 求值函数会破坏面片间的无缝性，以及 `precise` 和 `fma` 是怎么把它救回来的。"
+    },
+    {
+      "id": "light-hemicube-rendering-and-integration",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Hemicube Rendering and Integration",
+        "zh": "半立方体的渲染与积分"
+      },
+      "date": "2010-09-29",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/hemicube-rendering-and-integration/",
+      "words": 2203,
+      "mdPath": "archive/witness-graphics/hemicube-rendering-and-integration.md",
+      "crossPostedAs": [],
+      "chapter": "irradiance",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用现有的渲染引擎、按固定顺序的最终采集步骤来估算全局光照：投影方法的取舍、半立方体的重叠、阴影渲染与积分。"
+    },
+    {
+      "id": "castano-2010-09-29-hemicube-rendering-and-integration",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Hemicube Rendering and Integration",
+        "zh": "半立方体渲染与积分"
+      },
+      "date": "2010-09-29",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/09/hemicube-rendering-and-integration/",
+      "words": 42,
+      "mdPath": "archive/castano-blog/2010-09-29-hemicube-rendering-and-integration.md",
+      "crossPostedAs": [],
+      "chapter": "irradiance",
+      "isStub": true,
+      "status": "done"
+    },
+    {
+      "id": "castano-2010-10-18-matts-gregory-acc-tessellation-render",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Matt’s Gregory ACC Tessellation Render",
+        "zh": "Matt 的 Gregory ACC 曲面细分渲染"
+      },
+      "date": "2010-10-18",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/10/matts-gregory-acc-tessellation-render/",
+      "words": 129,
+      "mdPath": "archive/castano-blog/2010-10-18-matts-gregory-acc-tessellation-render.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "我们放出的 Gregory ACC 代码里有个 bug，Matt 绕过去了，还录了段视频。"
+    },
+    {
+      "id": "light-experiments-in-texturing",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Experiments in Texturing",
+        "zh": "贴图实验"
+      },
+      "date": "2010-11-05",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/experiments-in-texturing/",
+      "words": 991,
+      "mdPath": "archive/witness-graphics/experiments-in-texturing.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用极简风格的混合着色器去衬托建筑的形体，同时不落进「丑陋贴图」的坑里。"
+    },
+    {
+      "id": "castano-2010-11-30-software-patents-are-programmers-responsibility",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Software Patents are Programmer’s Responsibility",
+        "zh": "软件专利是程序员的责任"
+      },
+      "date": "2010-11-30",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2010/11/software-patents-are-programmers-responsibility/",
+      "words": 538,
+      "mdPath": "archive/castano-blog/2010-11-30-software-patents-are-programmers-responsibility.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "「他只是个程序员，不该被骂」——这个说法我不认同。没有愿意去申请专利的发明人，就没有专利。"
+    },
+    {
+      "id": "castano-2011-04-05-we-are-hiring",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "We are hiring!",
+        "zh": "我们在招人！"
+      },
+      "date": "2011-04-05",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2011/04/we-are-hiring/",
+      "words": 544,
+      "mdPath": "archive/castano-blog/2011-04-05-we-are-hiring.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "在 Thekla 干了一年多，说说我的体会——工作条件、要解决的问题，以及为什么这活儿值得干。"
+    },
+    {
+      "id": "light-more-island-color-experiments-shadow-update",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "More island color experiments; shadow update",
+        "zh": "更多岛屿配色实验；阴影更新"
+      },
+      "date": "2011-05-18",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/more-island-color-experiments-shadow-update/",
+      "words": 605,
+      "mdPath": "archive/witness-graphics/more-island-color-experiments-shadow-update.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用一张 2048x2048 的颜色贴图铺满整座岛，取代原先的混合映射方案；阴影贴图也换上了更柔和的滤波。"
+    },
+    {
+      "id": "light-irradiance-caching-part-1",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Irradiance Caching – Part 1",
+        "zh": "辐照度缓存（第一部分）"
+      },
+      "date": "2011-07-14",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/irradiance-caching-part-1/",
+      "words": 2739,
+      "mdPath": "archive/witness-graphics/irradiance-caching-part-1.md",
+      "crossPostedAs": [],
+      "chapter": "irradiance",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把辐照度梯度的公式扩展到半立方体采样分布上：纹理空间方法为何失败，以及旋转梯度与平移梯度是怎么推导出来的。"
+    },
+    {
+      "id": "castano-2011-07-14-irradiance-caching-part-1",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Irradiance Caching – Part 1",
+        "zh": "辐照度缓存（第一部分）"
+      },
+      "date": "2011-07-14",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2011/07/irradiance-caching-part-1/",
+      "words": 129,
+      "mdPath": "archive/castano-blog/2011-07-14-irradiance-caching-part-1.md",
+      "crossPostedAs": [],
+      "chapter": "irradiance",
+      "isStub": true,
+      "status": "done"
+    },
+    {
+      "id": "light-a-pleasant-lightmapping-update",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "A pleasant lightmapping update",
+        "zh": "一次令人愉快的光照贴图更新"
+      },
+      "date": "2011-09-07",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/a-pleasant-lightmapping-update/",
+      "words": 255,
+      "mdPath": "archive/witness-graphics/a-pleasant-lightmapping-update.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把 RGBM 里的 M 钳制到不小于 1，光照贴图上的色带就没了。"
+    },
+    {
+      "id": "light-engine-tech-concurrent-world-editing",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Engine Tech: Concurrent world editing",
+        "zh": "引擎技术：并发编辑世界"
+      },
+      "date": "2011-12-25",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/engine-tech-concurrent-world-editing/",
+      "words": 6571,
+      "mdPath": "archive/witness-graphics/engine-tech-concurrent-world-editing.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把每个实体各存成一个文本文件，好让老掉牙的 Subversion 也能合并七个人、18 台机器对世界的并发编辑。"
+    },
+    {
+      "id": "light-seamless-cube-map-filtering",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Seamless Cube Map Filtering",
+        "zh": "无缝的立方体贴图过滤"
+      },
+      "date": "2012-02-27",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/seamless-cube-map-filtering/",
+      "words": 1295,
+      "mdPath": "archive/witness-graphics/seamless-cube-map-filtering.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "与其依赖纹理边界或边缘修补，不如在运行期用与离线生成时相同的方式修改立方体贴图的查找坐标。"
+    },
+    {
+      "id": "light-the-depth-jam",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "The Depth Jam",
+        "zh": "Depth Jam"
+      },
+      "date": "2012-05-29",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/the-depth-jam/",
+      "words": 3542,
+      "mdPath": "archive/witness-graphics/the-depth-jam.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一场为期四天、四名设计者兼程序员的闭门设计聚会，每人带一个有着深层待解问题的游戏来——这是对会议和 game jam 这些活动种种不足的回应。"
+    },
+    {
+      "id": "light-fun-with-in-engine-color-grading",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Fun with in-engine color grading",
+        "zh": "引擎内色彩分级的乐趣"
+      },
+      "date": "2012-08-03",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/fun-with-in-engine-color-grading/",
+      "words": 420,
+      "mdPath": "archive/witness-graphics/fun-with-in-engine-color-grading.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "截图时把一条色条一起烘进图里，在 Photoshop 里随便折腾颜色，再把结果作为查找表加载回游戏。"
+    },
+    {
+      "id": "light-regarding-water",
+      "source": "official-2010s",
+      "series": "The Witness graphics tech",
+      "title": {
+        "en": "Regarding Water",
+        "zh": "关于水"
+      },
+      "date": "2012-08-24",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/regarding-water/",
+      "words": 656,
+      "mdPath": "archive/witness-graphics/regarding-water.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Ignacio 关于新水面着色器的内部邮件：消光颜色、岸线泡沫，以及高光指数的近似。"
+    },
+    {
+      "id": "official-2012-10-14-wm-touch-is-totally-bananas",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "WM_TOUCH is totally bananas.",
+        "zh": "WM_TOUCH 简直是疯了。"
+      },
+      "date": "2012-10-14",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/10/wm_touch-is-totally-bananas/",
+      "words": 815,
+      "mdPath": "archive/witness-official/by-year/2012-001-wm-touch-is-totally-bananas.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Jon 着手在 Windows 上设计触摸接口，并把这套毫无文档可查的 WM_TOUCH 疯癫行为记录下来。"
+    },
+    {
+      "id": "official-2012-10-19-ipad-victory-shot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "iPad Victory Shot",
+        "zh": "iPad 上的胜利截图"
+      },
+      "date": "2012-10-19",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/10/ipad-victory-shot/",
+      "words": 336,
+      "mdPath": "archive/witness-official/by-year/2012-002-ipad-victory-shot.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "引擎第一次跑在 iPad 上；颜色之所以怪，是因为 iPad 的着色器还没写。"
+    },
+    {
+      "id": "official-2012-10-23-island-snapshot-two-for-one",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot two-for-one",
+        "zh": "买一送一的岛屿快照"
+      },
+      "date": "2012-10-23",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/10/island-snapshot-two-for-one/",
+      "words": 0,
+      "mdPath": "archive/witness-official/by-year/2012-003-island-snapshot-two-for-one.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "岛上目前样子的两张视图。"
+    },
+    {
+      "id": "official-2012-11-06-we-are-going-map-crazy",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "We are going Map Crazy.",
+        "zh": "我们为地图疯了"
+      },
+      "date": "2012-11-06",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/11/we-are-going-map-crazy/",
+      "words": 384,
+      "mdPath": "archive/witness-official/by-year/2012-004-we-are-going-map-crazy.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "细节一多，世界就显大了；于是我们重画岛屿规划，把它再压缩一轮。"
+    },
+    {
+      "id": "official-2012-11-15-post-shrink-screenshots",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Post-Shrink Screenshots",
+        "zh": "缩小之后的截图"
+      },
+      "date": "2012-11-15",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/11/post-shrink-screenshots/",
+      "words": 52,
+      "mdPath": "archive/witness-official/by-year/2012-005-post-shrink-screenshots.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "把岛缩小一点之后，它现在是什么样子。"
+    },
+    {
+      "id": "official-2012-11-17-you-know-the-game-is-coming-along",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "You know the game is coming along…",
+        "zh": "你就知道这游戏进展不错……"
+      },
+      "date": "2012-11-17",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/11/you-know-the-game-is-coming-along/",
+      "words": 18,
+      "mdPath": "archive/witness-official/by-year/2012-006-you-know-the-game-is-coming-along.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "当连最粗糙的草稿都让人觉得值得一逛——外加目前的谜题数量。"
+    },
+    {
+      "id": "official-2012-11-19-scope-exit-in-c-11",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "scope(exit) in C++11",
+        "zh": "C++11 里的 scope(exit)"
+      },
+      "date": "2012-11-19",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/2012/11/scopeexit-in-c11/",
+      "words": 315,
+      "mdPath": "archive/witness-official/by-year/2012-007-scope-exit-in-c-11.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "依靠在栈上分配一个 lambda 包装对象，在 C++11 里实现 D 风格的 scope(exit) 语句。"
+    },
+    {
+      "id": "official-2012-11-29-very-limited-very-closed-beta",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Very Limited, Very Closed Beta",
+        "zh": "非常有限、非常封闭的内测"
+      },
+      "date": "2012-11-29",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/11/very-limited-very-closed-beta/",
+      "words": 172,
+      "mdPath": "archive/witness-official/by-year/2012-008-very-limited-very-closed-beta.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "第一个极度封闭的内测版通过 Steam 发给了少数测试者——而这并不意味着游戏快做完了。"
+    },
+    {
+      "id": "official-2012-12-02-collecting-playtest-data",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Collecting Playtest Data",
+        "zh": "收集试玩测试数据"
+      },
+      "date": "2012-12-02",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/12/collecting-playtest-data/",
+      "words": 839,
+      "mdPath": "archive/witness-official/by-year/2012-009-collecting-playtest-data.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把一连串自动存档持续存到磁盘上，这样不用守在玩家背后也能回看一次试玩测试。"
+    },
+    {
+      "id": "official-2012-12-10-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2012-12-10",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/12/island-snapshot-7/",
+      "words": 47,
+      "mdPath": "archive/witness-official/by-year/2012-010-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "岛上当前样子的两张视图，外加目前的谜题数量。"
+    },
+    {
+      "id": "casey-0005",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Walk Monster",
+        "zh": "行走怪物"
+      },
+      "date": "2012-12-12",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0005",
+      "words": 4088,
+      "mdPath": "archive/casey-muratori/2012-12-12-0005-walk-monster.md",
+      "crossPostedAs": [
+        {
+          "title": "Mapping the Island’s Walkable Surfaces",
+          "url": "http://the-witness.net/news/2012/12/mapping-the-islands-walkable-surfaces/",
+          "date": "2012-12-12"
+        }
+      ],
+      "chapter": "movement",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把整座岛的可行走表面测绘出来，作为「让玩家移动代码坚不可摧」的第一步。"
+    },
+    {
+      "id": "casey-0006",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Finding and Fixing a Five-Second Stall",
+        "zh": "找出并修掉那个五秒卡顿"
+      },
+      "date": "2012-12-17",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0006",
+      "words": 3135,
+      "mdPath": "archive/casey-muratori/2012-12-17-0006-finding-and-fixing-a-five-second-stall.md",
+      "crossPostedAs": [
+        {
+          "title": "Finding and Fixing a Five Second Stall",
+          "url": "http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/",
+          "date": "2012-12-18"
+        }
+      ],
+      "chapter": "movement",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "《The Witness》启动流程里一段诡异的停顿，把调查引向了 Windows 的热键处理机制。"
+    },
+    {
+      "id": "casey-0007",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "A Cliffside Cliffhanger",
+        "zh": "悬崖边的悬念"
+      },
+      "date": "2012-12-24",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0007",
+      "words": 3178,
+      "mdPath": "archive/casey-muratori/2012-12-24-0007-a-cliffside-cliffhanger.md",
+      "crossPostedAs": [
+        {
+          "title": "A Cliffside Cliffhanger",
+          "url": "http://the-witness.net/news/2012/12/a-cliffside-cliffhanger/",
+          "date": "2012-12-24"
+        }
+      ],
+      "chapter": "movement",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一块死活不肯动的石头引发的小谜案——我以为自己解决了，其实直到下一篇才真正解决。"
+    },
+    {
+      "id": "official-2012-12-30-what-i-did-on-my-christmas-vacation",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "What I Did on My Christmas Vacation",
+        "zh": "我圣诞假期干了什么"
+      },
+      "date": "2012-12-30",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2012/12/what-i-did-on-my-christmas-vacation/",
+      "words": 2695,
+      "mdPath": "archive/witness-official/by-year/2012-014-what-i-did-on-my-christmas-vacation.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一篇又长又散的随笔：关于倦怠、为什么假期是 Jon 状态最好的时候，以及他在圣诞假期里重做的那片可选区域。"
+    },
+    {
+      "id": "official-2013-01-03-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2013-01-03",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/01/2034/",
+      "words": 4,
+      "mdPath": "archive/witness-official/by-year/2013-001-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "岛上的一张视图，外加目前的谜题数量。"
+    },
+    {
+      "id": "official-2013-01-15-thoughts-about-app-store-curation",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Thoughts about App Store ‘Curation’",
+        "zh": "关于 App Store「策展」的几点想法"
+      },
+      "date": "2013-01-15",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/01/thoughts-about-app-store-curation/",
+      "words": 447,
+      "mdPath": "archive/witness-official/by-year/2013-002-thoughts-about-app-store-curation.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Apple 为什么能把游戏当成浅薄的娱乐——以及为什么这笔账该算在游戏开发者自己头上。"
+    },
+    {
+      "id": "official-2013-01-16-island-partition",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Partition",
+        "zh": "岛屿分区"
+      },
+      "date": "2013-01-16",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/01/island-partition/",
+      "words": 310,
+      "mdPath": "archive/witness-official/by-year/2013-003-island-partition.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "进入生产模式，并用 Luis 那张去掉剧透的地图拆分建模工作。"
+    },
+    {
+      "id": "casey-0008",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "How do you say “plane” in The Witness?",
+        "zh": "「plane」在《The Witness》里怎么说？"
+      },
+      "date": "2013-01-20",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0008",
+      "words": 2149,
+      "mdPath": "archive/casey-muratori/2013-01-20-0008-how-do-you-say-plane-in-the-witness.md",
+      "crossPostedAs": [
+        {
+          "title": "How do you say “plane” in The Witness?",
+          "url": "http://the-witness.net/news/2013/01/how-do-you-say-plane-in-the-witness/",
+          "date": "2013-01-20"
+        }
+      ],
+      "chapter": "movement",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "那块不肯动的石头之谜的激动人心的结局。"
+    },
+    {
+      "id": "official-2013-02-01-if-you-like-first-person-puzzle-games",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "If you like first-person puzzle games…",
+        "zh": "如果你喜欢第一人称解谜游戏……"
+      },
+      "date": "2013-02-01",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/02/if-you-like-first-person-puzzle-games/",
+      "words": 64,
+      "mdPath": "archive/witness-official/by-year/2013-005-if-you-like-first-person-puzzle-games.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "推荐一下刚在 Steam 上发售的 Antichamber。"
+    },
+    {
+      "id": "official-2013-02-01-interview-about-the-witness-and-related-design-topics",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Interview about The Witness and related design topics",
+        "zh": "关于《The Witness》及相关设计话题的采访"
+      },
+      "date": "2013-02-01",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/02/interview-about-the-witness-and-related-design-topics/",
+      "words": 26,
+      "mdPath": "archive/witness-official/by-year/2013-006-interview-about-the-witness-and-related-design-topics.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Gamespot 的 Tom McShea 为「Break Room」采访系列采访 Jonathan Blow。"
+    },
+    {
+      "id": "official-2013-02-19-the-witness-audio-1000-subtle-layers",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Witness Audio: 1000 Subtle Layers",
+        "zh": "《The Witness》音频：1000 层微妙之处"
+      },
+      "date": "2013-02-19",
+      "author": "Andrew Lackey",
+      "url": "http://the-witness.net/news/2013/02/the-witness-audio-1000-subtle-layers/",
+      "words": 348,
+      "mdPath": "archive/witness-official/by-year/2013-007-the-witness-audio-1000-subtle-layers.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "声音设计师 Andrew Lackey 谈：在一个「没有任何东西是多余的」的世界里，为什么噪声成了敌人、而沉默成了一种假话。"
+    },
+    {
+      "id": "official-2013-02-20-first-official-trailer-for-the-witness",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "First official trailer for The Witness",
+        "zh": "《The Witness》首支官方预告片"
+      },
+      "date": "2013-02-20",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/02/first-official-trailer-for-the-witness/",
+      "words": 19,
+      "mdPath": "archive/witness-official/by-year/2013-008-first-official-trailer-for-the-witness.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "首支官方预告片，随 PlayStation 4 发布会一同亮相。"
+    },
+    {
+      "id": "official-2013-02-22-a-clarification-about-our-ps4-exclusivity",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "A clarification about our PS4 exclusivity.",
+        "zh": "关于我们 PS4 独占的澄清"
+      },
+      "date": "2013-02-22",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/02/a-clarification-about-our-ps4-exclusivity/",
+      "words": 610,
+      "mdPath": "archive/witness-official/by-year/2013-009-a-clarification-about-our-ps4-exclusivity.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一份只针对竞争主机的限时独占：没有金钱交易，也不妨碍发售当天上 PC 或 iOS。"
+    },
+    {
+      "id": "official-2013-03-04-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2013-03-04",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/03/island-snapshot-8/",
+      "words": 89,
+      "mdPath": "archive/witness-official/by-year/2013-010-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "1 月以来的第一张岛屿快照，外加目前 499 个谜题。"
+    },
+    {
+      "id": "official-2013-03-13-ipad-video-update-1",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "iPad video update #1",
+        "zh": "iPad 视频更新 #1"
+      },
+      "date": "2013-03-13",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/03/ipad-video-update-1/",
+      "words": 122,
+      "mdPath": "archive/witness-official/by-year/2013-011-ipad-video-update-1.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "iPad 移植版的短视频——跑在一些基础凑合做法上，但已经勉强能玩了。"
+    },
+    {
+      "id": "official-2013-04-09-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2013-04-09",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/04/island-snapshot-9/",
+      "words": 45,
+      "mdPath": "archive/witness-official/by-year/2013-012-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "一张新的岛屿快照；最明显的变化在左侧的森林和海滩。"
+    },
+    {
+      "id": "official-2013-05-07-poster-ideas",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Poster Ideas",
+        "zh": "海报方案"
+      },
+      "date": "2013-05-07",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/05/poster-ideas/",
+      "words": 83,
+      "mdPath": "archive/witness-official/by-year/2013-013-poster-ideas.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "几个落选的《The Witness》海报方案——最终选定的那张暂时还留着不发。"
+    },
+    {
+      "id": "official-2013-05-17-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2013-05-17",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/05/island-snapshot-10/",
+      "words": 129,
+      "mdPath": "archive/witness-official/by-year/2013-014-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "两个角度的岛屿快照，外加一周触控操作、一周重写面板连线代码。"
+    },
+    {
+      "id": "official-2013-06-07-a-long-overdue-tree-update",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "A Long Overdue Tree Update",
+        "zh": "迟来太久的树木更新"
+      },
+      "date": "2013-06-07",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2013/06/2157/",
+      "words": 1217,
+      "mdPath": "archive/witness-official/by-year/2013-015-a-long-overdue-tree-update.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "做树的美术 Orsi 讲她怎么把岛上清一色的橡树林，换成一片片各有性格的林子。"
+    },
+    {
+      "id": "official-2013-06-15-heres-that-poster",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Here’s That Poster",
+        "zh": "这就是那张海报"
+      },
+      "date": "2013-06-15",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/06/heres-that-poster/",
+      "words": 128,
+      "mdPath": "archive/witness-official/by-year/2013-016-heres-that-poster.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "最终定稿的那张海报设计——就是 PlayStation 4 宣传片里短暂露过面的那张。"
+    },
+    {
+      "id": "official-2013-06-19-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2013-06-19",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/06/island-snapshot-11/",
+      "words": 248,
+      "mdPath": "archive/witness-official/by-year/2013-017-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一张岛屿快照，附带目前的谜题数与脚步声数，以及 E3 上的一批报道。"
+    },
+    {
+      "id": "official-2013-07-04-wallpapers",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Wallpapers!",
+        "zh": "壁纸！"
+      },
+      "date": "2013-07-04",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2013/07/wallpapers/",
+      "words": 86,
+      "mdPath": "archive/witness-official/by-year/2013-018-wallpapers.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "几张由早先那些海报方案改编而成的桌面壁纸。"
+    },
+    {
+      "id": "official-2013-08-05-more-screenshots",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "More Screenshots",
+        "zh": "更多截图"
+      },
+      "date": "2013-08-05",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/08/more-screenshots/",
+      "words": 163,
+      "mdPath": "archive/witness-official/by-year/2013-019-more-screenshots.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "这次不发岛屿快照，改发一片位于中心的湖和一片沼泽区域的截图——两者都还在做。"
+    },
+    {
+      "id": "official-2013-09-04-on-the-rocks",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "On the Rocks…",
+        "zh": "在岩石上……"
+      },
+      "date": "2013-09-04",
+      "author": "Eric A. Anderson",
+      "url": "http://the-witness.net/news/2013/09/on-the-rocks/",
+      "words": 658,
+      "mdPath": "archive/witness-official/by-year/2013-020-on-the-rocks.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "美术团队如何学会用干净、简化的几何体做崖壁——并让硬边从问题变成工具。"
+    },
+    {
+      "id": "official-2013-09-12-the-shipwreck",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Shipwreck",
+        "zh": "沉船"
+      },
+      "date": "2013-09-12",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2013/09/the-shipwreck/",
+      "words": 487,
+      "mdPath": "archive/witness-official/by-year/2013-021-the-shipwreck.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用简单的模块搭出一艘巨大的、正在朽坏的货轮——并学会让朴素的表面就那样朴素着。"
+    },
+    {
+      "id": "official-2013-09-23-shadow-mapping-summary-part-1",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Shadow Mapping Summary – Part 1",
+        "zh": "阴影贴图总结（第一部分）"
+      },
+      "date": "2013-09-23",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/2013/09/shadow-mapping-summary-part-1/",
+      "words": 1718,
+      "mdPath": "archive/witness-official/by-year/2013-022-shadow-mapping-summary-part-1.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "在优化《The Witness》的阴影过滤、痤疮消除与各项深度偏移的过程中，我试过什么、什么没用，以及最后选定了什么。"
+    },
+    {
+      "id": "official-2013-10-16-pictures-from-a-demo-day-at-sony",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Pictures from a Demo Day at Sony",
+        "zh": "Sony 试玩日的照片"
+      },
+      "date": "2013-10-16",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/10/pictures-from-a-demo-day-at-sony/",
+      "words": 120,
+      "mdPath": "archive/witness-official/by-year/2013-023-pictures-from-a-demo-day-at-sony.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Sony 在 Foster City 办的活动现场照片，媒体在那里试玩了即将上市的 PS4 游戏。"
+    },
+    {
+      "id": "official-2013-10-24-recent-coverage-of-the-witness",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Recent coverage of The Witness:",
+        "zh": "《The Witness》近期的媒体报道："
+      },
+      "date": "2013-10-24",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/10/recent-coverage-of-the-witness/",
+      "words": 87,
+      "mdPath": "archive/witness-official/by-year/2013-024-recent-coverage-of-the-witness.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "PlayStation 活动上的采访与播客讨论，外加一段 Gametrailers 的采访。"
+    },
+    {
+      "id": "official-2013-11-04-a-speech-about-free-to-play-game-design",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "A speech about Free-to-Play game design",
+        "zh": "一场关于 Free-to-Play 游戏设计的演讲"
+      },
+      "date": "2013-11-04",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/11/a-speech-about-free-to-play-game-design/",
+      "words": 65,
+      "mdPath": "archive/witness-official/by-year/2013-025-a-speech-about-free-to-play-game-design.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "把游戏比作电视，看 Free-to-Play 这种商业模式如何影响游戏设计。"
+    },
+    {
+      "id": "official-2013-11-19-a-trip-to-new-york-and-some-huge-artwork",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "A Trip to New York and Some Huge Artwork",
+        "zh": "纽约之行与巨型美术作品"
+      },
+      "date": "2013-11-19",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2013/11/a-trip-to-new-york-and-some-huge-artwork/",
+      "words": 485,
+      "mdPath": "archive/witness-official/by-year/2013-026-a-trip-to-new-york-and-some-huge-artwork.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "在 PS4 发售活动上向记者展示游戏、Sony 的晚宴与派对，以及我们的美术作品被放到 17 层酒店外墙上。"
+    },
+    {
+      "id": "official-2013-11-29-what-could-it-mean",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "What could it mean??",
+        "zh": "这可能是什么意思？？"
+      },
+      "date": "2013-11-29",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/11/what-could-it-mean/",
+      "words": 0,
+      "mdPath": "archive/witness-official/by-year/2013-027-what-could-it-mean.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "两张截图，没有任何解释。"
+    },
+    {
+      "id": "official-2013-12-18-its-been-a-while-since-we-did-an-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "It’s been a while since we did an Island Snapshot",
+        "zh": "好久没发岛屿快照了"
+      },
+      "date": "2013-12-18",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2013/12/its-been-a-while-since-we-did-an-island-snapshot/",
+      "words": 47,
+      "mdPath": "archive/witness-official/by-year/2013-028-its-been-a-while-since-we-did-an-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "再来一张岛屿快照，外加目前的谜题数量。"
+    },
+    {
+      "id": "official-2014-01-24-what-that-vr-post-was-about",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "What that VR post was about",
+        "zh": "那篇 VR 帖子是怎么回事"
+      },
+      "date": "2014-01-24",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/01/what-that-vr-post-was-about/",
+      "words": 401,
+      "mdPath": "archive/witness-official/by-year/2014-001-what-that-vr-post-was-about.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "那篇神秘的 11 月帖子确实和立体渲染有关：《The Witness》将支持 Valve 的 VR 系统。"
+    },
+    {
+      "id": "official-2014-01-30-last-minute-area",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Last Minute Area",
+        "zh": "最后一刻的区域"
+      },
+      "date": "2014-01-30",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/01/last-minute-area/",
+      "words": 138,
+      "mdPath": "archive/witness-official/by-year/2014-002-last-minute-area.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "岛中心新增的一批装满谜题的板式建筑，由整个美术团队一起做出来。"
+    },
+    {
+      "id": "official-2014-02-04-hey-look-steam-controller-support",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Hey look, Steam controller support:",
+        "zh": "快看，Steam Controller 支持："
+      },
+      "date": "2014-02-04",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/02/hey-look-steam-controller-support/",
+      "words": 12,
+      "mdPath": "archive/witness-official/by-year/2014-003-hey-look-steam-controller-support.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "只有一张照片，展示 Steam Controller 支持。"
+    },
+    {
+      "id": "official-2014-02-04-hey-look-oculus-support-plus-steam-controller-support",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Hey look, Oculus support *plus* Steam Controller support.",
+        "zh": "快看，Oculus 支持*加上* Steam Controller 支持。"
+      },
+      "date": "2014-02-04",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/02/hey-look-oculus-support-plus-steam-controller-support/",
+      "words": 24,
+      "mdPath": "archive/witness-official/by-year/2014-004-hey-look-oculus-support-plus-steam-controller-support.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "两张照片：游戏同时跑在 Oculus 头显和 Steam Controller 上。"
+    },
+    {
+      "id": "official-2014-02-20-marsh-update",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Marsh Update",
+        "zh": "沼泽更新"
+      },
+      "date": "2014-02-20",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/02/marsh-update/",
+      "words": 125,
+      "mdPath": "archive/witness-official/by-year/2014-005-marsh-update.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "整个美术团队重做沼泽：从主体结构到藻类水池的颜色。"
+    },
+    {
+      "id": "official-2014-03-24-the-art-of-the-witness-gdc-2014",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Art of “The Witness” – GDC 2014",
+        "zh": "《The Witness》的美术——GDC 2014"
+      },
+      "date": "2014-03-24",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2014/03/the-art-of-the-witness-gdc-2014/",
+      "words": 138,
+      "mdPath": "archive/witness-official/by-year/2014-006-the-art-of-the-witness-gdc-2014.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "技术细节留给别人讲，这次讲座谈的是我们做过的哪些决定，才走到现在这种美术风格。"
+    },
+    {
+      "id": "official-2014-04-16-working-on-the-witness-parts-5-and-6",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Working on The Witness, Parts 5 and 6.",
+        "zh": "《Working on The Witness》第五、第六篇"
+      },
+      "date": "2014-04-16",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/04/working-on-the-witness-part-5/",
+      "words": 59,
+      "mdPath": "archive/witness-official/by-year/2014-007-working-on-the-witness-parts-5-and-6.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Casey Muratori 又发了两篇关于他在这个项目上所做工作的文章。"
+    },
+    {
+      "id": "official-2014-04-25-whats-this",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "What’s this??",
+        "zh": "这是什么？？"
+      },
+      "date": "2014-04-25",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/04/whats-this-2/",
+      "words": 9,
+      "mdPath": "archive/witness-official/by-year/2014-008-whats-this.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "三张截图，拍的是一件暂时还不能说的事。"
+    },
+    {
+      "id": "casey-0011",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "The Nebraska Problem",
+        "zh": "内布拉斯加问题"
+      },
+      "date": "2014-05-02",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0011",
+      "words": 4513,
+      "mdPath": "archive/casey-muratori/2014-05-02-0011-the-nebraska-problem.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "寻找一种对地面覆盖最有利的「随机」分布。"
+    },
+    {
+      "id": "official-2014-05-03-witness-friday-post-on-caseys-blog",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Witness Friday post on Casey’s blog",
+        "zh": "Casey 博客上的 Witness Friday 帖"
+      },
+      "date": "2014-05-03",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/05/witness-friday-post-on-caseys-blog/",
+      "words": 42,
+      "mdPath": "archive/witness-official/by-year/2014-009-witness-friday-post-on-caseys-blog.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Casey Muratori 接着谈种草——当你真的很在意结果质量的时候。"
+    },
+    {
+      "id": "casey-0012",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "A Brief Addendum on Staggered Concentric Intersection",
+        "zh": "关于交错同心圆相交模式的简短补遗"
+      },
+      "date": "2014-05-07",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0012",
+      "words": 2627,
+      "mdPath": "archive/casey-muratori/2014-05-07-0012-a-brief-addendum-on-staggered-concentric-intersection.md",
+      "crossPostedAs": [],
+      "chapter": "nature",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "汇总并回应读者围绕「交错同心圆相交」图案发来的邮件。"
+    },
+    {
+      "id": "casey-0013",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Assorted grass system features",
+        "zh": "草地系统的若干功能"
+      },
+      "date": "2014-05-14",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0013",
+      "words": 3457,
+      "mdPath": "archive/casey-muratori/2014-05-14-0013-assorted-grass-system-features.md",
+      "crossPostedAs": [],
+      "chapter": "nature",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "聊聊草地系统的若干功能，以及它们各自是怎么实现的。"
+    },
+    {
+      "id": "casey-0009",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Visually pleasing distributions",
+        "zh": "视觉上令人愉悦的分布"
+      },
+      "date": "2014-05-16",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0009",
+      "words": 1890,
+      "mdPath": "archive/casey-muratori/2014-05-16-0009-visually-pleasing-distributions.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "从《The Witness》的草地系统出发，聊聊什么样的「随机」分布才让人的视觉系统觉得舒服。"
+    },
+    {
+      "id": "casey-0014",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Interpolation",
+        "zh": "插值"
+      },
+      "date": "2014-05-21",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0014",
+      "words": 310,
+      "mdPath": "archive/casey-muratori/2014-05-21-0014-interpolation.md",
+      "crossPostedAs": [],
+      "chapter": "nature",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一段视频，介绍线性插值与贝塞尔插值背后的基本概念。"
+    },
+    {
+      "id": "casey-0010",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "The Color of Noise",
+        "zh": "噪声的颜色"
+      },
+      "date": "2014-05-23",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0010",
+      "words": 4399,
+      "mdPath": "archive/casey-muratori/2014-05-23-0010-the-color-of-noise.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "游戏开发里的那些图形工作，到底适合用什么样的随机分布？"
+    },
+    {
+      "id": "official-2014-05-23-caseys-witness-wednesday-on-interpolation",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Casey’s Witness Wednesday on Interpolation",
+        "zh": "Casey 的 Witness Wednesday：谈插值"
+      },
+      "date": "2014-05-23",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/05/caseys-witness-wednesday-on-interpolation/",
+      "words": 49,
+      "mdPath": "archive/witness-official/by-year/2014-010-caseys-witness-wednesday-on-interpolation.md",
+      "crossPostedAs": [],
+      "chapter": "nature",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Casey Muratori 的 Witness Wednesday（每周三连载）离开种草这个具体话题，转向更通用的插值问题。"
+    },
+    {
+      "id": "casey-0015",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Semantic Compression",
+        "zh": "语义压缩"
+      },
+      "date": "2014-05-28",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0015",
+      "words": 3488,
+      "mdPath": "archive/casey-muratori/2014-05-28-0015-semantic-compression.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一篇导论：写代码时应当抱着对它做语义压缩的心态，而不是围绕对象来组织它。"
+    },
+    {
+      "id": "official-2014-05-28-witness-wednesday-on-how-to-program",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Witness Wednesday on How to Program",
+        "zh": "关于如何编程的 Witness Wednesday"
+      },
+      "date": "2014-05-28",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/05/witness-wednesday-on-how-to-program/",
+      "words": 50,
+      "mdPath": "archive/witness-official/by-year/2014-011-witness-wednesday-on-how-to-program.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "指向 Casey 那篇关于如何编程的建议。"
+    },
+    {
+      "id": "official-2014-05-29-island-snapshot-what-year-is-this-edition",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot: What-year-is-this Edition",
+        "zh": "岛屿快照：今年是哪年版"
+      },
+      "date": "2014-05-29",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/05/island-snapshot-what-year-is-this-edition/",
+      "words": 98,
+      "mdPath": "archive/witness-official/by-year/2014-012-island-snapshot-what-year-is-this-edition.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "离 E3 不到两周，E3 上所有人都会玩到的起始区域正被推倒、从零重建。"
+    },
+    {
+      "id": "official-2014-06-02-road-to-e3-day-1",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Road to E3 – Day 1",
+        "zh": "通往 E3 之路 · 第 1 天"
+      },
+      "date": "2014-06-02",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2014/06/road-to-e3-day-1/",
+      "words": 261,
+      "mdPath": "archive/witness-official/by-year/2014-013-road-to-e3-day-1.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "E3 前只剩一周，Luis Antonio 每天记录入口区域从草图到成型的过程。"
+    },
+    {
+      "id": "official-2014-06-03-road-to-e3-day-2",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Road to E3 – Day 2",
+        "zh": "通往 E3 之路 · 第 2 天"
+      },
+      "date": "2014-06-03",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2014/06/road-to-e3-day-2/",
+      "words": 89,
+      "mdPath": "archive/witness-official/by-year/2014-014-road-to-e3-day-2.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "墙体、塔楼和窗户都加上了细节，城垛的风格则还在争论中。"
+    },
+    {
+      "id": "casey-0016",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Complexity and Granularity",
+        "zh": "复杂度与粒度"
+      },
+      "date": "2014-06-04",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0016",
+      "words": 3689,
+      "mdPath": "archive/casey-muratori/2014-06-04-0016-complexity-and-granularity.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "考察高效编程背后的两条基本原则：复杂度与粒度。"
+    },
+    {
+      "id": "official-2014-06-04-road-to-e3-day-3",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Road to E3 – Day 3",
+        "zh": "通往 E3 之路 · 第 3 天"
+      },
+      "date": "2014-06-04",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2014/06/road-to-e3-day-3/",
+      "words": 123,
+      "mdPath": "archive/witness-official/by-year/2014-015-road-to-e3-day-3.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "高产的一天，活儿大多花在看不见的地方——碰撞和遮挡物——外加几处新的内部空间。"
+    },
+    {
+      "id": "official-2014-06-05-road-to-e3-day-4",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Road to E3 – Day 4",
+        "zh": "通往 E3 之路 · 第 4 天"
+      },
+      "date": "2014-06-05",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2014/06/road-to-e3-day-4/",
+      "words": 258,
+      "mdPath": "archive/witness-official/by-year/2014-016-road-to-e3-day-4.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "废墟墙体收尾，外加 Orsi 的植被进展。"
+    },
+    {
+      "id": "official-2014-06-06-road-to-e3-day-5",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Road to E3 – Day 5",
+        "zh": "通往 E3 之路 · 第 5 天"
+      },
+      "date": "2014-06-06",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2014/06/road-to-e3-day-5/",
+      "words": 65,
+      "mdPath": "archive/witness-official/by-year/2014-017-road-to-e3-day-5.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "最后一天：要修的小东西比预想的多，但整体状态已经能拿去 E3 见人了。"
+    },
+    {
+      "id": "casey-0017",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Defining a Single Enumerant",
+        "zh": "定义单个枚举值"
+      },
+      "date": "2014-06-11",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0017",
+      "words": 3511,
+      "mdPath": "archive/casey-muratori/2014-06-11-0017-defining-a-single-enumerant.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "深入剖析一小段简单代码背后的决策过程。"
+    },
+    {
+      "id": "casey-0018",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Type Filtering",
+        "zh": "类型过滤"
+      },
+      "date": "2014-06-18",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0018",
+      "words": 2530,
+      "mdPath": "archive/casey-muratori/2014-06-18-0018-type-filtering.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "实现 Lister Panel 按实体主类型进行过滤。"
+    },
+    {
+      "id": "casey-0019",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Special Filters",
+        "zh": "特殊过滤器"
+      },
+      "date": "2014-06-25",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0019",
+      "words": 2781,
+      "mdPath": "archive/casey-muratori/2014-06-25-0019-special-filters.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "为 Lister Panel 实现按任意实体属性进行过滤的功能。"
+    },
+    {
+      "id": "casey-0020",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Displaying Groups Hierarchically",
+        "zh": "分层显示 group"
+      },
+      "date": "2014-07-02",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0020",
+      "words": 2245,
+      "mdPath": "archive/casey-muratori/2014-07-02-0020-displaying-groups-hierarchically.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "对 Lister Panel 的代码做几处小改动，让它的显示支持层级结构。"
+    },
+    {
+      "id": "casey-0021",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Lister Panel Demonstration",
+        "zh": "Lister Panel 演示"
+      },
+      "date": "2014-07-09",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0021",
+      "words": 192,
+      "mdPath": "archive/casey-muratori/2014-07-09-0021-lister-panel-demonstration.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一段简短的视频，演示《The Witness》里 Lister Panel 的工作方式。"
+    },
+    {
+      "id": "official-2014-07-10-irradiance-caching-continued",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Irradiance Caching – Continued",
+        "zh": "辐照度缓存（续）"
+      },
+      "date": "2014-07-10",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/07/irradiance-caching-continued/",
+      "words": 39,
+      "mdPath": "archive/witness-official/by-year/2014-018-irradiance-caching-continued.md",
+      "crossPostedAs": [],
+      "chapter": "irradiance",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Ignacio 发完了他的辐照度缓存系列，并放出了源代码。"
+    },
+    {
+      "id": "castano-2014-07-10-irradiance-caching-continued",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Irradiance Caching – Continued",
+        "zh": "辐照度缓存（续）"
+      },
+      "date": "2014-07-10",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/",
+      "words": 680,
+      "mdPath": "archive/castano-blog/2014-07-10-irradiance-caching-continued.md",
+      "crossPostedAs": [],
+      "chapter": "irradiance",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "给这个系列收尾：用梯度的二阶差来控制记录密度（类似邻域钳制），以及为什么后来的论文让这些技巧过时。"
+    },
+    {
+      "id": "casey-0022",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "The Source Code",
+        "zh": "源代码"
+      },
+      "date": "2014-07-16",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0022",
+      "words": 670,
+      "mdPath": "archive/casey-muratori/2014-07-16-0022-the-source-code.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "《The Witness》Lister Panel 的完整源码清单，约 2000 行，头文件与实现文件俱全。"
+    },
+    {
+      "id": "casey-0023",
+      "source": "casey",
+      "series": "Witness Wednesday",
+      "title": {
+        "en": "Lister Panel Q&A",
+        "zh": "Lister Panel 问答"
+      },
+      "date": "2014-07-23",
+      "author": "Casey Muratori",
+      "url": "https://caseymuratori.com/blog_0023",
+      "words": 4870,
+      "mdPath": "archive/casey-muratori/2014-07-23-0023-lister-panel-q-a.md",
+      "crossPostedAs": [],
+      "chapter": "editor",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "回答读者针对上周公开的《The Witness》Lister Panel 源码提出的问题。"
+    },
+    {
+      "id": "official-2014-08-15-getting-things-done",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Getting Things Done",
+        "zh": "把事情做完"
+      },
+      "date": "2014-08-15",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/08/getting-things-done/",
+      "words": 67,
+      "mdPath": "archive/witness-official/by-year/2014-019-getting-things-done.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "团队已进入「把游戏做完」的模式；附中心枢纽区域定稿后的截图。"
+    },
+    {
+      "id": "official-2014-08-29-hlslparser",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "HLSLParser",
+        "zh": "HLSLParser"
+      },
+      "date": "2014-08-29",
+      "author": "Ignacio Castaño",
+      "url": "http://the-witness.net/news/2014/08/hlslparser/",
+      "words": 1138,
+      "mdPath": "archive/witness-official/by-year/2014-020-hlslparser.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把着色器统一到 HLSL 的一个固定子集上，再通过变换语法树来生成目标平台所用的着色语言。"
+    },
+    {
+      "id": "castano-2014-08-29-hlslparser",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "HLSLParser",
+        "zh": "HLSLParser"
+      },
+      "date": "2014-08-29",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2014/08/hlslparser/",
+      "words": 42,
+      "mdPath": "archive/castano-blog/2014-08-29-hlslparser.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "我把 Max McGuire 的 HLSLParser 用到了《The Witness》里，改动都发布在 Thekla 的仓库上了。"
+    },
+    {
+      "id": "official-2014-09-10-what-weve-been-working-on-lately",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "What we’ve been working on lately.",
+        "zh": "最近我们在做什么"
+      },
+      "date": "2014-09-10",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2014/09/what-weve-been-working-on-lately/",
+      "words": 314,
+      "mdPath": "archive/witness-official/by-year/2014-021-what-weve-been-working-on-lately.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "DirectX 11 渲染后端、游戏后段区域的建模与贴图修订、粒子特效，以及更顺滑的自动存档。"
+    },
+    {
+      "id": "castano-2014-09-17-first-backpacking-trip",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "First Backpacking Trip",
+        "zh": "第一次背包徒步"
+      },
+      "date": "2014-09-17",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2014/09/first-backpacking-trip/",
+      "words": 597,
+      "mdPath": "archive/castano-blog/2014-09-17-first-backpacking-trip.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "带 Nachito 走 Pacific Crest Trail，从 Echo Lake 到 Lake Aloha——他背睡袋，我背锅。"
+    },
+    {
+      "id": "official-2014-09-24-close-up",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Close-up",
+        "zh": "特写"
+      },
+      "date": "2014-09-24",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/09/close-up/",
+      "words": 13,
+      "mdPath": "archive/witness-official/by-year/2014-022-close-up.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "几张不涉及剧透的建筑细节图，来自 Orsi Spanyol 最近在做的一个地方。"
+    },
+    {
+      "id": "official-2014-11-20-wallpaper",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Wallpaper",
+        "zh": "壁纸"
+      },
+      "date": "2014-11-20",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/11/wallpaper/",
+      "words": 37,
+      "mdPath": "archive/witness-official/by-year/2014-023-wallpaper.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "大家都在忙，于是加一张新壁纸，谢谢大家的好话。"
+    },
+    {
+      "id": "castano-2014-12-05-d3dx-uvatlas-released",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "D3DX UVAtlas released",
+        "zh": "D3DX UVAtlas 开源"
+      },
+      "date": "2014-12-05",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2014/12/d3dx-uvatlas-released/",
+      "words": 112,
+      "mdPath": "archive/castano-blog/2014-12-05-d3dx-uvatlas-released.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Microsoft 和 Xin Huang 放出了 D3DX 网格参数化库的源码，其中的聚类与参数化都比 Thekla 自己的方案更好。"
+    },
+    {
+      "id": "official-2014-12-10-playstation-experience",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "PlayStation Experience",
+        "zh": "PlayStation Experience"
+      },
+      "date": "2014-12-10",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2014/12/psx/",
+      "words": 175,
+      "mdPath": "archive/witness-official/by-year/2014-024-playstation-experience.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "在拉斯维加斯的 PlayStation Experience 上，第一次把游戏展示给公众。"
+    },
+    {
+      "id": "official-2015-01-25-progress",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Progress!",
+        "zh": "进展！"
+      },
+      "date": "2015-01-25",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/01/progress/",
+      "words": 157,
+      "mdPath": "archive/witness-official/by-year/2015-001-progress.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "达成「Puzzle Complete」里程碑：发售时会有的一切谜题，现在都已经在游戏里了。"
+    },
+    {
+      "id": "official-2015-02-20-thekla",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Thekla!",
+        "zh": "Thekla！"
+      },
+      "date": "2015-02-20",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2015/02/thekla/",
+      "words": 155,
+      "mdPath": "archive/witness-official/by-year/2015-002-thekla.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一个阳光明媚的周日，用来重新整理《The Witness》即将完工的地方——办公室。"
+    },
+    {
+      "id": "official-2015-03-25-island-snapshot",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Island Snapshot",
+        "zh": "岛屿快照"
+      },
+      "date": "2015-03-25",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2015/03/island-snapshot-near-completion/",
+      "words": 62,
+      "mdPath": "archive/witness-official/by-year/2015-003-island-snapshot.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "岛上的样子基本定下来了，于是再发一张看看。"
+    },
+    {
+      "id": "official-2015-05-05-sculpture",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Sculpture",
+        "zh": "雕塑"
+      },
+      "date": "2015-05-05",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2015/05/sculpture/",
+      "words": 140,
+      "mdPath": "archive/witness-official/by-year/2015-004-sculpture.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "我们请来了雕塑家 Andrea Blasich，他刚做完那座雕进山体里的巨大女性像。"
+    },
+    {
+      "id": "official-2015-06-03-polishing-the-architecture",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Polishing the Architecture",
+        "zh": "打磨建筑"
+      },
+      "date": "2015-06-03",
+      "author": "Luis Antonio",
+      "url": "http://the-witness.net/news/2015/06/polishing-the-architecture/",
+      "words": 272,
+      "mdPath": "archive/witness-official/by-year/2015-005-polishing-the-architecture.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "内容定稿之后，建筑师 Deanna 回来复查我们做过的每一处结构，把当初为玩法妥协出来的毛病修掉。"
+    },
+    {
+      "id": "official-2015-07-10-witness-in-limbo",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Witness in Limbo",
+        "zh": "Limbo 里的《The Witness》"
+      },
+      "date": "2015-07-10",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2015/07/witness-in-limbo/",
+      "words": 70,
+      "mdPath": "archive/witness-official/by-year/2015-006-witness-in-limbo.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "用编辑器的深度模式拍的截图，整座岛看上去像《Limbo》。"
+    },
+    {
+      "id": "official-2015-08-05-bugs",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Bugs!",
+        "zh": "Bug！"
+      },
+      "date": "2015-08-05",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2015/08/bugs/",
+      "words": 572,
+      "mdPath": "archive/witness-official/by-year/2015-007-bugs.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "全面剿灭 bug 阶段的一批美术类 bug，以及 Casey 加的碰撞可视化工具如何让它们变得可查。"
+    },
+    {
+      "id": "official-2015-09-05-workin-on-a-new-trailer",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Workin’ on a new trailer.",
+        "zh": "在做一部新预告片。"
+      },
+      "date": "2015-09-05",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/09/workin-on-a-new-trailer/",
+      "words": 136,
+      "mdPath": "archive/witness-official/by-year/2015-008-workin-on-a-new-trailer.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "新预告片的几张静帧——用的还是非最终素材。"
+    },
+    {
+      "id": "official-2015-09-17-new-trailer-and-interviews",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "New trailer and interviews!",
+        "zh": "新预告片和采访！"
+      },
+      "date": "2015-09-17",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/09/new-trailer-and-interviews/",
+      "words": 39,
+      "mdPath": "archive/witness-official/by-year/2015-009-new-trailer-and-interviews.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "一支新预告片，外加一批关于这款游戏的采访与前瞻。"
+    },
+    {
+      "id": "official-2015-10-13-architecture-in-video-games",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Architecture in Video Games",
+        "zh": "电子游戏中的建筑"
+      },
+      "date": "2015-10-13",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/10/architecture-in-video-games/",
+      "words": 34,
+      "mdPath": "archive/witness-official/by-year/2015-010-architecture-in-video-games.md",
+      "crossPostedAs": [],
+      "chapter": "art",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "Deanna Van Buren 在 Gamasutra 上的文章：从建筑师的眼中看电子游戏。"
+    },
+    {
+      "id": "official-2015-11-19-on-music-sound-effects-story",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "On Music, Sound Effects, Story",
+        "zh": "关于音乐、音效与故事"
+      },
+      "date": "2015-11-19",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/11/on-music-sound-effects-story/",
+      "words": 839,
+      "mdPath": "archive/witness-official/by-year/2015-011-on-music-sound-effects-story.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "为什么《The Witness》几乎没有音乐、要让一座空岛听起来有生气需要付出什么，以及本地化的进展。"
+    },
+    {
+      "id": "official-2015-12-22-entering-the-home-stretch",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Entering the Home Stretch",
+        "zh": "进入最后冲刺"
+      },
+      "date": "2015-12-22",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/12/entering-the-home-stretch/",
+      "words": 542,
+      "mdPath": "archive/witness-official/by-year/2015-012-entering-the-home-stretch.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "最终旁白录制、实体盒装版的打算，以及阿拉伯语和俄语本地化的进展。"
+    },
+    {
+      "id": "official-2015-12-23-since-making-the-previous-blog-post",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Since making the previous blog post …",
+        "zh": "距上一篇博客文章发出之后……"
+      },
+      "date": "2015-12-23",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2015/12/since-making-that-post/",
+      "words": 3,
+      "mdPath": "archive/witness-official/by-year/2015-013-since-making-the-previous-blog-post.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "阿拉伯语的显示问题修好了。"
+    },
+    {
+      "id": "official-2016-01-11-whose-voices-are-in-the-witness",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Whose voices are in The Witness?",
+        "zh": "《The Witness》里的声音都是谁？"
+      },
+      "date": "2016-01-11",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/01/whose-voices-are-in-the-witness/",
+      "words": 462,
+      "mdPath": "archive/witness-official/by-year/2016-001-whose-voices-are-in-the-witness.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "配音录制收工，公布你会在游戏那些录音里听到的演员名单。"
+    },
+    {
+      "id": "official-2016-01-19-price-and-pre-orders",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Price and Pre-Orders",
+        "zh": "价格与预购"
+      },
+      "date": "2016-01-19",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/01/price-and-pre-orders/",
+      "words": 247,
+      "mdPath": "archive/witness-official/by-year/2016-002-price-and-pre-orders.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Steam 与 PSN 上的定价、预购的上线时间，以及 Humble Store 那笔捐给 Against Malaria Foundation 的分成。"
+    },
+    {
+      "id": "official-2016-01-22-pre-order-widget-test",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Pre-Order Widget Test",
+        "zh": "预购小部件测试"
+      },
+      "date": "2016-01-22",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/01/preorder-widget-test/",
+      "words": 24,
+      "mdPath": "archive/witness-official/by-year/2016-003-pre-order-widget-test.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "在把它放到首页之前，先测试一下 Humble Store 购买小部件的嵌入。"
+    },
+    {
+      "id": "official-2016-01-25-the-game-is-doing-great-on-steam",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The game is doing great on Steam …",
+        "zh": "游戏在 Steam 上表现很好……"
+      },
+      "date": "2016-01-25",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/01/the-game-is-doing-great-on-steam/",
+      "words": 36,
+      "mdPath": "archive/witness-official/by-year/2016-004-the-game-is-doing-great-on-steam.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "而这还只是预购——游戏要到明天才能玩。"
+    },
+    {
+      "id": "official-2016-01-26-the-witness-is-now-up-on-psn-in-the-americas-and-europe",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Witness is now up on PSN in the Americas and Europe.",
+        "zh": "《The Witness》已在美洲和欧洲的 PSN 上架。"
+      },
+      "date": "2016-01-26",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/01/the-witness-is-now-up-on-psn-in-the-americas-and-europe/",
+      "words": 23,
+      "mdPath": "archive/witness-official/by-year/2016-005-the-witness-is-now-up-on-psn-in-the-americas-and-europe.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "PSN 版已经上架，Steam 版预计同一天上午放出。"
+    },
+    {
+      "id": "official-2016-02-02-fun-sales-fakts",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Fun Sales Fakts",
+        "zh": "有趣的销量 Fakts"
+      },
+      "date": "2016-02-02",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/02/fun-sales-fakts/",
+      "words": 725,
+      "mdPath": "archive/witness-official/by-year/2016-006-fun-sales-fakts.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "发售一周的财务小结：首周收入有多少、和《Braid》怎么比，以及为什么这还谈不上回本。"
+    },
+    {
+      "id": "official-2016-02-09-ill-be-having-a-reddit-ama-on-friday-the-12th-of-february",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "I’ll be having a reddit AMA on Friday the 12th of February",
+        "zh": "我将在 2 月 12 日星期五开一场 reddit AMA"
+      },
+      "date": "2016-02-09",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/02/ill-be-having-a-reddit-ama-on-friday-the-12th-of-february/",
+      "words": 93,
+      "mdPath": "archive/witness-official/by-year/2016-007-ill-be-having-a-reddit-ama-on-friday-the-12th-of-february.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "2 月 12 日星期五在 reddit 上的 AMA，东部时间下午 1 点开始。"
+    },
+    {
+      "id": "official-2016-02-13-the-witness-long-screenshot-3",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Witness Long Screenshot #3",
+        "zh": "《The Witness》长截图 #3"
+      },
+      "date": "2016-02-13",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/02/the-witness-long-screenshot-3/",
+      "words": 3,
+      "mdPath": "archive/witness-official/by-year/2016-008-the-witness-long-screenshot-3.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "第三支长截图视频，结尾附 ESRB 分级标识。"
+    },
+    {
+      "id": "official-2016-02-29-printable-panels",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Printable Panels!",
+        "zh": "可打印的面板！"
+      },
+      "date": "2016-02-29",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2016/02/printable-panels/",
+      "words": 219,
+      "mdPath": "archive/witness-official/by-year/2016-009-printable-panels.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把我们用来印办公室墙上那些装裱面板的图免费放出来。"
+    },
+    {
+      "id": "official-2016-05-10-jobs",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Jobs!",
+        "zh": "招聘！"
+      },
+      "date": "2016-05-10",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2016/05/jobs-2/",
+      "words": 157,
+      "mdPath": "archive/witness-official/by-year/2016-010-jobs.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "我们在找一位资深角色美术，全职或合同皆可，最好在旧金山一带。"
+    },
+    {
+      "id": "official-2016-09-08-were-doing-a-ps4-pro-patch-here-are-the-technical-details",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "We’re doing a PS4 Pro patch! Here are the technical details.",
+        "zh": "我们要做 PS4 Pro 补丁！技术细节如下。"
+      },
+      "date": "2016-09-08",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/09/were-doing-a-ps4-pro-patch-here-are-the-technical-details/",
+      "words": 522,
+      "mdPath": "archive/witness-official/by-year/2016-011-were-doing-a-ps4-pro-patch-here-are-the-technical-details.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "《The Witness》PS4 Pro 补丁的渲染分辨率、抗锯齿与 HDR 支持计划。"
+    },
+    {
+      "id": "official-2016-09-19-the-witness-is-out-on-the-xbox-one",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Witness is out on the Xbox One!",
+        "zh": "《The Witness》已经在 Xbox One 上架了！"
+      },
+      "date": "2016-09-19",
+      "author": "admin",
+      "url": "http://the-witness.net/news/2016/09/the-witness-is-out-on-the-xbox-one/",
+      "words": 54,
+      "mdPath": "archive/witness-official/by-year/2016-012-the-witness-is-out-on-the-xbox-one.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "游戏已在 Xbox One 上架，但澳大利亚和新西兰除外——那里的分级手续还在走。"
+    },
+    {
+      "id": "castano-2016-09-30-lightmap-compression-in-the-witness",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Lightmap Compression in The Witness",
+        "zh": "《The Witness》里的光照贴图压缩"
+      },
+      "date": "2016-09-30",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2016/09/lightmap-compression-in-the-witness/",
+      "words": 2654,
+      "mdPath": "archive/castano-blog/2016-09-30-lightmap-compression-in-the-witness.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "从 RGBA16F 到 R10G10B10A2、再到 RGBM，最后落到为光照贴图颜色分布专门调优的 RGBM-DXT5 编码器。"
+    },
+    {
+      "id": "official-2016-11-02-ps4-pro-patch-update",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "PS4 Pro patch update",
+        "zh": "PS4 Pro 补丁更新"
+      },
+      "date": "2016-11-02",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/11/ps4-pro-patch-update/",
+      "words": 242,
+      "mdPath": "archive/witness-official/by-year/2016-013-ps4-pro-patch-update.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "PS4 Pro 补丁的最终规格：支持 HDR，以及可以挑选的分辨率与帧率模式。"
+    },
+    {
+      "id": "official-2016-11-18-the-ps4-patch-is-out",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The PS4 patch is out!",
+        "zh": "PS4 补丁上线了！"
+      },
+      "date": "2016-11-18",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2016/11/the-ps4-patch-is-out/",
+      "words": 9,
+      "mdPath": "archive/witness-official/by-year/2016-014-the-ps4-patch-is-out.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "带 PS4 Pro 与 HDR 支持的 PS4 补丁已经上线。"
+    },
+    {
+      "id": "official-2017-01-28-anniversary",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Anniversary!",
+        "zh": "周年！"
+      },
+      "date": "2017-01-28",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2017/01/anniversary/",
+      "words": 73,
+      "mdPath": "archive/witness-official/by-year/2017-001-anniversary.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "《The Witness》满一岁：Steam 打折，MacOS 与 iOS 移植也在做。"
+    },
+    {
+      "id": "official-2017-05-01-help-us-get-the-witness-on-ios",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Help Us Get The Witness on iOS!",
+        "zh": "帮我们把《The Witness》弄到 iOS 上！"
+      },
+      "date": "2017-05-01",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2017/05/help-us-get-the-witness-on-ios/",
+      "words": 145,
+      "mdPath": "archive/witness-official/by-year/2017-002-help-us-get-the-witness-on-ios.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "我们在找一位合同工，在 Maya 里为《The Witness》的 iOS 版优化美术资源。"
+    },
+    {
+      "id": "official-2017-06-09-macos-system-requirements",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "MacOS System Requirements",
+        "zh": "MacOS 系统需求"
+      },
+      "date": "2017-06-09",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2017/06/macos-system-requirements/",
+      "words": 214,
+      "mdPath": "archive/witness-official/by-year/2017-003-macos-system-requirements.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "《The Witness》在 MacOS 上的系统需求，以及支持 Metal 的 Mac 机型完整列表。"
+    },
+    {
+      "id": "official-2017-09-25-the-witness-is-finally-on-ios",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "The Witness is finally on iOS!",
+        "zh": "《The Witness》终于上 iOS 了！"
+      },
+      "date": "2017-09-25",
+      "author": "Orsi Spanyol",
+      "url": "http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/",
+      "words": 80,
+      "mdPath": "archive/witness-official/by-year/2017-004-the-witness-is-finally-on-ios.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "经过将近一年的优化，完整版游戏已登陆 iOS，售价 $9.99。"
+    },
+    {
+      "id": "castano-2017-10-05-lightmap-optimizations-ios",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Lightmap optimizations for iOS",
+        "zh": "面向 iOS 的光照贴图优化"
+      },
+      "date": "2017-10-05",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2017/10/lightmap-optimizations-ios/",
+      "words": 718,
+      "mdPath": "archive/castano-blog/2017-10-05-lightmap-optimizations-ios.md",
+      "crossPostedAs": [],
+      "chapter": "lightmap-shipping",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把 RGBM 光照贴图搬到 iOS 上：用 ETC2 取代 DXT5、planar mode 为什么几乎没胜出，以及顶点烘焙如何把光照贴图内存压到四分之一。"
+    },
+    {
+      "id": "official-2018-03-14-testing-the-jai-compiler",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Testing the Jai Compiler",
+        "zh": "测试 Jai 编译器"
+      },
+      "date": "2018-03-14",
+      "author": "Abner Coimbre",
+      "url": "http://the-witness.net/news/2018/03/testing-the-jai-compiler/",
+      "words": 2134,
+      "mdPath": "archive/witness-official/by-year/2018-001-testing-the-jai-compiler.md",
+      "crossPostedAs": [],
+      "chapter": "process",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用 Jai 这门语言本身做一个自动化框架，来测试 Jai 编译器自己。"
+    },
+    {
+      "id": "official-2018-06-27-congratulations-to-the-grant-recipients",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "Congratulations to the grant recipients!",
+        "zh": "恭喜获得资助的开发者们！"
+      },
+      "date": "2018-06-27",
+      "author": "kenzie",
+      "url": "http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/",
+      "words": 82,
+      "mdPath": "archive/witness-official/by-year/2018-002-congratulations-to-the-grant-recipients.md",
+      "crossPostedAs": [],
+      "chapter": "snapshots",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "资助的入选名单已经评出。"
+    },
+    {
+      "id": "castano-2019-01-19-2018-recap",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "2018 Recap",
+        "zh": "2018 年回顾"
+      },
+      "date": "2019-01-19",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2019/01/2018-recap/",
+      "words": 1627,
+      "mdPath": "archive/castano-blog/2019-01-19-2018-recap.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "36 趟出行、63 天、16 夜，孩子同去了 24 趟——把这一年最值得记的几次挑出来讲讲。"
+    },
+    {
+      "id": "castano-2019-01-28-castle-peak-2015-2019",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Castle Peak 2015 – 2019",
+        "zh": "Castle Peak，2015 – 2019"
+      },
+      "date": "2019-01-28",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2019/01/castle-peak-2015-2019/",
+      "words": 421,
+      "mdPath": "archive/castano-blog/2019-01-28-castle-peak-2015-2019.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "相隔将近四年，Nacho 和 Maia 先后在八岁那年踩着雪登上了 Castle Peak。"
+    },
+    {
+      "id": "castano-2019-03-13-ladybugs",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Ladybugs",
+        "zh": "瓢虫"
+      },
+      "date": "2019-03-13",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2019/03/ladybugs/",
+      "words": 665,
+      "mdPath": "archive/castano-blog/2019-03-13-ladybugs.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "去 Feather Falls 找越冬的瓢虫群，听说它们大多是被商业采集走的，以及结尾处一个意外的惊喜。"
+    },
+    {
+      "id": "castano-2019-04-25-climbing-a-big-mountain-is-hard",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "“Climbing a big mountain is hard”",
+        "zh": "「爬大山很难」"
+      },
+      "date": "2019-04-25",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2019/04/climbing-a-big-mountain-is-hard/",
+      "words": 926,
+      "mdPath": "archive/castano-blog/2019-04-25-climbing-a-big-mountain-is-hard.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "带 Nacho 去爬 Pyramid Peak，在 9000 英尺的地方停下——离山顶不到 1000 英尺。"
+    },
+    {
+      "id": "castano-2019-12-21-dmv",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "My DMV Experience",
+        "zh": "我在 DMV 的经历"
+      },
+      "date": "2019-12-21",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2019/12/dmv/",
+      "words": 281,
+      "mdPath": "archive/castano-blog/2019-12-21-dmv.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "为了改驾照上的一个姓名错误跑了四趟，结果新驾照寄回来还是错的。"
+    },
+    {
+      "id": "official-2022-02-10-a-shader-trick",
+      "source": "official",
+      "series": "Thekla dev blog",
+      "title": {
+        "en": "A Shader Trick",
+        "zh": "一个着色器小技巧"
+      },
+      "date": "2022-02-10",
+      "author": "Jonathan Blow",
+      "url": "http://the-witness.net/news/2022/02/a-shader-trick/",
+      "words": 1044,
+      "mdPath": "archive/witness-official/by-year/2022-001-a-shader-trick.md",
+      "crossPostedAs": [],
+      "chapter": "renderer",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把着色器里的时间变量每 10 的整数次幂秒重置一次以保证精度，以及雾为什么会跳变。"
+    },
+    {
+      "id": "castano-2022-11-08-bc1-compression-revisited",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "BC1 Compression Revisited",
+        "zh": "再谈 BC1 压缩"
+      },
+      "date": "2022-11-08",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2022/11/bc1-compression-revisited/",
+      "words": 3240,
+      "mdPath": "archive/castano-blog/2022-11-08-bc1-compression-revisited.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把 NVTT 的 BC1 编码器重写成单头文件库 icbc：簇拟合、最小二乘求解，以及用 AVX512 / NEON / SSSE3 做的查表向量化。"
+    },
+    {
+      "id": "castano-2022-11-13-crossing-the-ludicon",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Crossing the Ludicon",
+        "zh": "跨越 Ludicon"
+      },
+      "date": "2022-11-13",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2022/11/crossing-the-ludicon/",
+      "words": 113,
+      "mdPath": "archive/castano-blog/2022-11-13-crossing-the-ludicon.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": true,
+      "status": "done",
+      "subtitleZh": "我开公司了：做图形与游戏技术的研究开发，第一个产品是实时 ASTC 编码器。"
+    },
+    {
+      "id": "castano-2024-12-31-tools-for-gpu-codec-development",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Tools for GPU Codec Development",
+        "zh": "开发 GPU 编解码器的工具"
+      },
+      "date": "2024-12-31",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2024/12/tools-for-gpu-codec-development/",
+      "words": 2650,
+      "mdPath": "archive/castano-blog/2024-12-31-tools-for-gpu-codec-development.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "虽然几天内就做出了概念验证，但随着时间推移，很明显我需要更好的工具才能维持那种快速的开发节奏。"
+    },
+    {
+      "id": "castano-2025-02-20-gpu-texture-compression-everywhere",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "GPU Texture Compression Everywhere",
+        "zh": "GPU 纹理压缩，处处都要能跑"
+      },
+      "date": "2025-02-20",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2025/02/gpu-texture-compression-everywhere/",
+      "words": 2567,
+      "mdPath": "archive/castano-blog/2025-02-20-gpu-texture-compression-everywhere.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "一个想法从 2006 年 NVIDIA 的内部推动，一路走到 Vulkan、Direct3D 12 和 Metal 上各不相同、且大多没被实现对的能力。"
+    },
+    {
+      "id": "castano-2025-03-06-spark-1-2",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Spark 1.2",
+        "zh": "Spark 1.2"
+      },
+      "date": "2025-03-06",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2025/03/spark-1-2/",
+      "words": 3070,
+      "mdPath": "archive/castano-blog/2025-03-06-spark-1-2.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Spark 1.2 正式发布：大幅优化、新的压缩格式，以及更广的平台支持。"
+    },
+    {
+      "id": "castano-2025-08-06-spark-1-3-and-spark-js",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Spark 1.3 and spark.js",
+        "zh": "Spark 1.3 与 spark.js"
+      },
+      "date": "2025-08-06",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2025/08/spark-1-3-and-spark-js/",
+      "words": 1556,
+      "mdPath": "archive/castano-blog/2025-08-06-spark-1-3-and-spark-js.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "这个版本的亮点是完整的 WebGPU 支持，以及面向 Web 的实时 GPU 纹理压缩 JavaScript API：spark.js。"
+    },
+    {
+      "id": "castano-2025-09-08-three-js-spark-js",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "three.js + spark.js",
+        "zh": "three.js + spark.js"
+      },
+      "date": "2025-09-08",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2025/09/three-js-spark-js/",
+      "words": 1879,
+      "mdPath": "archive/castano-blog/2025-09-08-three-js-spark-js.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "three.js r180 加入 ExternalTexture 支持，让 spark.js 编码的纹理可以直接使用——而且结果比默认加载器还快。"
+    },
+    {
+      "id": "castano-2026-01-26-choosing-texture-formats-for-webgpu-applications",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Choosing Texture Formats for WebGPU applications",
+        "zh": "为 WebGPU 应用选择纹理格式"
+      },
+      "date": "2026-01-26",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/01/choosing-texture-formats-for-webgpu-applications/",
+      "words": 857,
+      "mdPath": "archive/castano-blog/2026-01-26-choosing-texture-formats-for-webgpu-applications.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把纹理作为标准 Web 图像分发，同时最终在 GPU 内存里得到高效的块压缩纹理。"
+    },
+    {
+      "id": "castano-2026-02-04-normal-map-compression-revisited",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Normal Map Compression Revisited",
+        "zh": "重谈法线贴图压缩"
+      },
+      "date": "2026-02-04",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/02/normal-map-compression-revisited/",
+      "words": 1735,
+      "mdPath": "archive/castano-blog/2026-02-04-normal-map-compression-revisited.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "法线贴图表示的不是颜色，依赖几何假设，而且编码或解码上的小细节就可能造成细微瑕疵。"
+    },
+    {
+      "id": "castano-2026-02-09-an-updated-sponza-gltf",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "An Updated Sponza glTF",
+        "zh": "更新过的 Sponza glTF"
+      },
+      "date": "2026-02-09",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/02/an-updated-sponza-gltf/",
+      "words": 1190,
+      "mdPath": "archive/castano-blog/2026-02-09-an-updated-sponza-gltf.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "用 KTX ETC1S 纹理的 glTF 模型体积非常小，但画质下降得这么厉害，值得吗？"
+    },
+    {
+      "id": "castano-2026-02-18-runtime-mipmap-generation",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Runtime Mipmap Generation",
+        "zh": "运行期生成 mipmap"
+      },
+      "date": "2026-02-18",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/02/runtime-mipmap-generation/",
+      "words": 2708,
+      "mdPath": "archive/castano-blog/2026-02-18-runtime-mipmap-generation.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "运行期纹理压缩的好处之一是：mipmap 也可以在运行期算出来，不需要传输。"
+    },
+    {
+      "id": "castano-2026-03-05-announcing-spark-js-0-1",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Announcing spark.js 0.1",
+        "zh": "发布 spark.js 0.1"
+      },
+      "date": "2026-03-05",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/03/announcing-spark-js-0-1/",
+      "words": 1050,
+      "mdPath": "archive/castano-blog/2026-03-05-announcing-spark-js-0-1.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "我很高兴地宣布 spark.js 0.1 发布，现在支持 WebGL 了！"
+    },
+    {
+      "id": "castano-2026-03-28-hardware-image-compression",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Hardware Image Compression",
+        "zh": "硬件图像压缩"
+      },
+      "date": "2026-03-28",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/03/hardware-image-compression/",
+      "words": 2675,
+      "mdPath": "archive/castano-blog/2026-03-28-hardware-image-compression.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "如今有三种相互竞争的硬件图像压缩格式：ARM 的 AFRC、ImgTec 的 PVRIC4，以及 Apple 的 lossy。"
+    },
+    {
+      "id": "castano-2026-04-10-writing-to-compressed-textures-in-metal",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Writing to Compressed Textures in Metal",
+        "zh": "在 Metal 里写入压缩纹理"
+      },
+      "date": "2026-04-10",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/",
+      "words": 1583,
+      "mdPath": "archive/castano-blog/2026-04-10-writing-to-compressed-textures-in-metal.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Metal 没有资源视图转换，那就用 heap 让纹理和缓冲区别名同一块内存，并按 Morton 序把块写进正确的位置。"
+    },
+    {
+      "id": "castano-2026-04-15-the-true-size-of-astc-textures",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "The True Size of ASTC Textures",
+        "zh": "ASTC 纹理的真实大小"
+      },
+      "date": "2026-04-15",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/",
+      "words": 1755,
+      "mdPath": "archive/castano-blog/2026-04-15-the-true-size-of-astc-textures.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "名义 bpp 骗人：从早期 Apple、PowerVR 到 Adreno 与 Mali，各家 GPU 对 ASTC 块尺寸的对齐方式决定了纹理实际占多少内存。"
+    },
+    {
+      "id": "castano-2026-04-24-metal-lossy-compression-format",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Metal Lossy Compression Format",
+        "zh": "Metal 的有损压缩格式"
+      },
+      "date": "2026-04-24",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/04/metal-lossy-compression-format/",
+      "words": 3250,
+      "mdPath": "archive/castano-blog/2026-04-24-metal-lossy-compression-format.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "逆向 Apple 那个没有文档的 1:2 有损纹理格式：8×4 的块、逐块元数据、互不相同的块大小，以及七种块模式的比特级细节。"
+    },
+    {
+      "id": "castano-2026-05-04-image-loading-on-the-web",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Image Loading on the Web",
+        "zh": "在 Web 上加载图像"
+      },
+      "date": "2026-05-04",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/05/image-loading-on-the-web/",
+      "words": 2300,
+      "mdPath": "archive/castano-blog/2026-05-04-image-loading-on-the-web.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把图片喂给 WebGL/WebGPU 有多麻烦：createImageBitmap、HTMLImageElement、ImageDecoder 三条路径的实测、坑与绕行办法。"
+    },
+    {
+      "id": "castano-2026-06-04-spark-for-unity",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Spark for Unity",
+        "zh": "Spark for Unity"
+      },
+      "date": "2026-06-04",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/",
+      "words": 1727,
+      "mdPath": "archive/castano-blog/2026-06-04-spark-for-unity.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把 Spark 的纹理编解码器带进 Unity：GPU 上的运行时纹理压缩，以及它和内置 Texture2D.Compress 的对比。"
+    },
+    {
+      "id": "castano-2026-09-17-spark-1-4",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Spark 1.4",
+        "zh": "Spark 1.4"
+      },
+      "date": "2026-09-17",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/09/spark-1-4/",
+      "words": 1854,
+      "mdPath": "archive/castano-blog/2026-09-17-spark-1-4.md",
+      "crossPostedAs": [],
+      "chapter": "castano-textures",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "Spark 1.4 发布：BC6H 与 ASTC HDR 两个新编解码器，另有 BC1 Ultra、BC7 NRM 和 ASTC 5×5。"
+    },
+    {
+      "id": "castano-2026-09-25-encoding-render-targets-for-free-with-tile-shaders",
+      "source": "castano",
+      "series": "ludicon.com/castano/blog",
+      "title": {
+        "en": "Encoding Render Targets for Free with Tile Shaders",
+        "zh": "用 tile shader 免费编码渲染目标"
+      },
+      "date": "2026-09-25",
+      "author": "Ignacio Castaño",
+      "url": "https://www.ludicon.com/castano/blog/2026/09/encoding-render-targets-for-free-with-tile-shaders/",
+      "words": 1380,
+      "mdPath": "archive/castano-blog/2026-09-25-encoding-render-targets-for-free-with-tile-shaders.md",
+      "crossPostedAs": [],
+      "chapter": "castano-graphics",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把 Spark 编解码器搬进 Metal 的 tile shader：直接从图块内存编码，省掉未压缩纹理的写入与回读。"
+    },
+    {
+      "id": "start-here-lighting",
+      "source": "guide",
+      "series": "编者导览",
+      "title": {
+        "en": "Start here: how The Witness's lighting system was built",
+        "zh": "先读这篇：《The Witness》的光照系统是怎么搭起来的"
+      },
+      "date": "2026-10-03",
+      "author": "编者",
+      "url": "",
+      "words": 0,
+      "mdPath": null,
+      "isGuide": true,
+      "crossPostedAs": [],
+      "chapter": "intro",
+      "isStub": false,
+      "status": "done",
+      "subtitleZh": "把散在四个来源里的 20 多篇技术文章串成一条线：为什么要预计算、怎么烘、怎么压、怎么上各个平台。"
+    }
+  ]
+}

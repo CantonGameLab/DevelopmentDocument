@@ -1,0 +1,38 @@
+{
+  "id": "official-2013-02-01-if-you-like-first-person-puzzle-games",
+  "title": { "zh": "如果你喜欢第一人称解谜游戏……", "en": "If you like first-person puzzle games…" },
+  "subtitle": {
+    "en": "A pointer to Antichamber, which has just been released on Steam.",
+    "zh": "推荐一下刚在 Steam 上发售的 Antichamber。"
+  },
+  "translator": {
+    "note": "原文是一句半的话接几个链接；嵌入视频按全站约定收为媒体占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "... you may wish to see Antichamber, which has just been released on Steam.",
+      "zh": "……你或许会想看看 Antichamber，它刚在 Steam 上发售。"
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/aGsnm2nOnso?amp;modestbranding=1&fs=0&rel=0&wmode=opaque)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "[The game's web site.](http://www.antichamber-game.com/)",
+      "zh": "[游戏的官方网站。](http://www.antichamber-game.com/)"
+    },
+    {
+      "type": "p",
+      "en": "[The Steam page.](http://store.steampowered.com/app/219890/)",
+      "zh": "[Steam 页面。](http://store.steampowered.com/app/219890/)"
+    },
+    {
+      "type": "p",
+      "en": "The game is primarily the work of one designer, Alexander Bruce, who has been working on it for six years. Players seem to be really into the game, and it's been the top-selling game on Steam for two days so far.",
+      "zh": "这款游戏基本上出自一位设计师之手，Alexander Bruce 已经做了六年。玩家看起来非常吃这一套，到目前为止它已经连着两天是 Steam 上最畅销的游戏。"
+    }
+  ]
+}

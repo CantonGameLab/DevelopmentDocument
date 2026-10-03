@@ -1,0 +1,93 @@
+{
+  "id": "official-2014-06-02-road-to-e3-day-1",
+  "title": { "zh": "通往 E3 之路 · 第 1 天", "en": "Road to E3 – Day 1" },
+  "subtitle": {
+    "en": "With one week before E3, Luis Antonio posts a daily diary of the entry area coming together.",
+    "zh": "E3 前只剩一周，Luis Antonio 每天记录入口区域从草图到成型的过程。"
+  },
+  "translator": {
+    "note": "原文 7 张图。原文里图片有时和文字连在同一段，译文按原顺序保留在同一段内；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Since we have only one week to get the entry area ready before E3 I was thinking it could be interesting to have a post at the end of each day to show how we are progressing.",
+      "zh": "因为我们只有一周时间把入口区域准备好迎接 E3，我想着每天结束时发一篇帖子、展示我们的进展，应该会挺有意思。"
+    },
+    {
+      "type": "p",
+      "en": "It will balance out the high programming post count we've had the past few days and hopefully show a bit of how the art team works!",
+      "zh": "这样也能平衡一下前几天帖子里编程内容占比过高的情况，顺便让大家看看美术团队是怎么干活的！"
+    },
+    {
+      "type": "p",
+      "en": "Last week, as you could see from previous screenshot, we got a rough layout of the area in the engine and tried to find answers to any remaining issues.",
+      "zh": "上周，正如之前的截图里能看到的那样，我们在引擎里搭出了这片区域的粗略布局，并试着为剩下的问题找到答案。"
+    },
+    {
+      "type": "p",
+      "en": "Today the goal was to sort out the design and navigation of the main entrance and the small towers.",
+      "zh": "今天的目标是理清主入口和几座小塔楼的设计与动线。"
+    },
+    {
+      "type": "p",
+      "en": "This is one of my first mockups that didn't look quite right.",
+      "zh": "这是我最早的一版草图，看着不太对。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/image.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The architects took a look at it and provided some 3d models of how castle stairs are usually assembled as well as sketches of how it should look:",
+      "zh": "建筑师看过后，给了一些展示城堡楼梯通常怎么拼装的 3D 模型，还有它应该长什么样的草图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/stairs.jpg) ![图](http://the-witness.net/news/wp-content/uploads/2014/06/EntranceEdits1.jpeg)",
+      "zh": "（原文此处有两张图）"
+    },
+    {
+      "type": "p",
+      "en": "After, I tried to figure out the details from references and what \"pieces\" I would need to build the structure.",
+      "zh": "之后，我试着从参考资料里弄清细节，以及搭这个结构需要哪些「部件」。"
+    },
+    {
+      "type": "p",
+      "en": "Two years ago I went for vacations in Portugal and tried to see some castles. One of them in Guimaraes struck me as very similar to the entry yard. I made sure I got some pictures and now they are proving to be useful with angles that would be hard to get from online research.",
+      "zh": "两年前我去葡萄牙度假，顺便去看了几座城堡。Guimaraes 的那座让我觉得和这个入口庭院非常像。我当时特意拍了不少照片，现在它们派上用场了——里面有些角度在网上很难找到。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/DSC_0168.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Here is the current result using different modular stairs/floor/battlement pieces:",
+      "zh": "下面是使用不同的模块化楼梯/地板/城垛部件做出来的当前结果："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.02__time_18_31_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And the current overall look by the end of today:",
+      "zh": "以及今天收工时整体的样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/Day_01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Tomorrow I'll be tackling the rest of the exterior walls and the 3 other towers.",
+      "zh": "明天我会处理剩下的外墙，还有另外 3 座塔楼。"
+    }
+  ]
+}

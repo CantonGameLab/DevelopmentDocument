@@ -1,0 +1,54 @@
+{
+  "id": "official-2013-02-19-the-witness-audio-1000-subtle-layers",
+  "title": { "zh": "《The Witness》音频：1000 层微妙之处", "en": "The Witness Audio: 1000 Subtle Layers" },
+  "subtitle": {
+    "en": "Sound designer Andrew Lackey on why a world where nothing is superfluous makes noise the enemy and silence a lie.",
+    "zh": "声音设计师 Andrew Lackey 谈：在一个「没有任何东西是多余的」的世界里，为什么噪声成了敌人、而沉默成了一种假话。"
+  },
+  "translator": {
+    "note": "作者 Andrew Lackey 是 WabiSabi Sound 的声音设计师，本文由他的工作室博客转贴到《The Witness》官方博客；标题里的「1000 层」呼应他篇末说的 1000′s of layers of sonic subtly。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "*(This is a crosspost from [WabiSabi Sound's blog](http://wabisabisound.com/blog/)).*",
+      "zh": "*（本文转贴自 [WabiSabi Sound 的博客](http://wabisabisound.com/blog/)。）*"
+    },
+    {
+      "type": "p",
+      "en": "I didn’t think Witness was going to be an easy project by any stretch, but I certainly didn’t expect it to be one of our biggest creative challenges. I’ve worked on nearly 80 projects spanning feature film, games, ads and other sorts, and my job as sound designer had always been to broaden the experience in every possible way. The Witness inverts this notion.",
+      "zh": "我压根没觉得《The Witness》会是个轻松的项目，但也绝对没想到它会成为我们最大的创作挑战之一。我做过将近 80 个项目，横跨剧情长片、游戏、广告以及其他各种门类，而作为声音设计师，我的工作一向是用一切可能的方式去拓宽这段体验。《The Witness》把这一观念倒了过来。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/01/shot_2013.01.03__time_17_05_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A tree of any significance in a film or game will have a bird perched on its branches chirping away. Cicadas will buzz. Wind will rustle its leaves. Branches will creak, stress and morph right before your ears. All this happening without you actually seeing it…or really expecting to, interestingly.",
+      "zh": "在电影或游戏里，任何一棵有点分量的树，枝头都会停着一只鸟，一直在叫。蝉会鸣。风会吹得树叶沙沙响。树枝会在你耳边吱呀、绷紧、变形。而这一切发生时，你其实并没有看见它……或者说，有意思的是，你也并不真的期待看见。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "In The Witness every element has purpose. A key game mechanic, in fact, relies on the player’s perception as they explore. So, we’re not just talking aesthetics…noise (literally stated) ruins the game’s playability. Noticing, as a buddhist would call it, is key to discovering solutions and even finding the puzzles themselves. Nothing in the Witness is superfluous.",
+      "zh": "在《The Witness》里，每一个元素都有用意。事实上，一个关键的游戏机制就依赖于玩家在探索过程中的感知。所以我们谈的不只是美学……噪声（字面意义上的）会毁掉这款游戏的可玩性。用佛教徒的说法，「觉察」是找到解法、乃至找到谜题本身的关键。《The Witness》里没有任何多余的东西。"
+    },
+    {
+      "type": "p",
+      "en": "All this said, the island is a tangible living breathing organic place following roughly the same laws of our universe. The trees exist. They have mass and energy. My eyes receive bands of light reflecting off them, and in fact they are quite beautiful. So then what do my ears hear? Silence is not only a bad artistic choice, it's untrue.",
+      "zh": "话虽如此，这座岛仍是一个可触可感、活着、会呼吸的有机之地，大致遵循与我们这个宇宙相同的规律。那些树是存在的。它们有质量，也有能量。我的眼睛接收到从它们身上反射过来的光带，而且它们确实相当美。那么我的耳朵听到的又是什么呢？沉默不只是个糟糕的艺术选择，它本身就是不真实的。"
+    },
+    {
+      "type": "p",
+      "en": "At this point, you’ve probably asked, “What about music?” It’s no spoiler that there isn’t a gigantic speaker system in the sky fed by a mic’d orchestra. So….",
+      "zh": "说到这里，你大概已经问了：「那音乐呢？」天上并没有一套巨大的扬声器系统，由一支接着麦克风的管弦乐队给它供声——这算不上剧透。所以……"
+    },
+    {
+      "type": "p",
+      "en": "None the less, the island is a fascinating place, with lots to see, hear and do. Geoff and I ‘the audio team’ have had an interesting time exploring 1000′s of layers of sonic subtly, and finding ways to engage players to listen ever deeper. This is a unique project for game sound, and we though it would be of interest to share our challenges and discoveries since starting with Jon in 2010 (and of course the challenges yet to meet).",
+      "zh": "尽管如此，这座岛仍然是个迷人的地方，有很多可看、可听、可做的事。Geoff 和我——「音频团队」——在探索 1000 层细微之声、寻找让玩家越听越深的办法这件事上，度过了一段很有意思的时光。对游戏声音来说，这是个独一无二的项目，我们觉得，把我们从 2010 年开始跟 Jon 合作以来的挑战与发现分享出来会很有意思（当然，还有尚未遇到的挑战）。"
+    }
+  ]
+}

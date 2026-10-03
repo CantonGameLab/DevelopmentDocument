@@ -1,0 +1,143 @@
+{
+  "id": "official-2014-12-10-playstation-experience",
+  "title": { "zh": "PlayStation Experience", "en": "PlayStation Experience" },
+  "subtitle": {
+    "en": "Showing the game to the public for the first time, at PlayStation Experience in Las Vegas.",
+    "zh": "在拉斯维加斯的 PlayStation Experience 上，第一次把游戏展示给公众。"
+  },
+  "translator": {
+    "note": "原文末尾的图集控件（Play / Fullscreen）与「gallery wordpress plugin」署名链接属于归档残留的页面部件，不属于正文，故未收录；正文里的图片按顺序逐张收录为占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last weekend, Jon, Andy and Luis headed to Vegas to show the game to the public for the first time!",
+      "zh": "上周末，Jon、Andy 和 Luis 去了拉斯维加斯，第一次把游戏展示给公众！"
+    },
+    {
+      "type": "p",
+      "en": "We spent over  a week play testing,  bug fixing, designing the booth, printing banners, and re-designing the website. It was encouraging to see that the game was already in very good shape  and nothing major was broken...getting it ready for the event almost took less effort than getting decent prints of the banners from a print shop.",
+      "zh": "我们花了一周多的时间做试玩测试、修 bug、设计展位、印横幅，还重新设计了网站。看到游戏状态已经很好、没有大的东西坏掉，这很让人受鼓舞……为这次活动做准备花的力气，几乎比让打印店印出像样的横幅还少。"
+    },
+    {
+      "type": "p",
+      "en": "Here are some images of the booth:",
+      "zh": "下面是展位的一些图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/2014-12-09.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/2014-12-05.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/bookmarks.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "People loved the game! Even those  who came in with doubts ended up playing  for long periods of time, and we got all very positive comments. The line in front of the booth was huge, it would have been great to have a bigger area with more PS4s.",
+      "zh": "大家很喜欢这个游戏！就连那些带着怀疑过来的人，最后也玩了很长时间，我们得到的全是正面评价。展位前排的队特别长，要是能有块更大的地方、摆更多 PS4 就好了。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/2014-12-09-1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/line.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We made some new posters while preparing the booth:",
+      "zh": "准备展位的时候，我们还做了一些新海报："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low01.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low02.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low03.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low04.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low05.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low06.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low07.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low08.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low09.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low10.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low111.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low14.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low12.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/12/VerticalBanners_Low13.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "If you  wanted to print your own posters or bookmarks, you can download the huge versions [here](https://www.dropbox.com/s/5ye9o3taakyfzk3/Banners.zip?dl=0).",
+      "zh": "如果你想自己打印这些海报或书签，可以在[这里](https://www.dropbox.com/s/5ye9o3taakyfzk3/Banners.zip?dl=0)下载大尺寸版本。"
+    },
+    {
+      "type": "p",
+      "en": "Jon also did a short Twitch stream, it's on YouTube [here.](https://www.youtube.com/watch?v=RZbRBen7rCc)",
+      "zh": "Jon 还做了一次简短的 Twitch 直播，可以在 YouTube 上[这里](https://www.youtube.com/watch?v=RZbRBen7rCc)看。"
+    }
+  ]
+}

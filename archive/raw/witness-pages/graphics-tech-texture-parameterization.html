@@ -1,0 +1,708 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Lightmap Parameterization &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Lightmap Parameterization Comments Feed" href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2840,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_021.png","alt":"","desc":"","caption":"Banner_02","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_021-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/120" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=120' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2010%2F03%2Fgraphics-tech-texture-parameterization%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=03914617C052A144745A89B087AFCBEA');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<link rel="author" href="http://castano.ludicon.com/blog/"><style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_021.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-120 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-120" class="post-120 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">Lightmap Parameterization</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/castano/" title="View all posts by Ignacio Castaño">Ignacio Castaño</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2010-03-30T08:05:57-07:00">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/" rel="bookmark">March 30, 2010</a>
+				</time>
+			   </span><time class="updated"  datetime="2011-07-06T23:56:04-07:00">July 6, 2011</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>As explained by Jon <a href="http://the-witness.net/news/?p=50">in his previous post</a>, we are using precomputed global illumination in <em>The Witness</em>, and one of my first tasks was to work on that system.</p>
+<p>I have developed some interesting technology to compute automatic paramaterizations, to formulate the lighting computations in a way that can be easily mapped to the GPU, and to speed them up performing them at a lower frequency by using irradiance caching. None of these things are very cutting edge, but I run into some interesting problems that are usually overlooked in the literature and came up with some creative solutions that I think would be interesting to share. However, in retrospect, I think I also made some mistakes, but I hope that being honest about them will help me avoid them in the future.</p>
+<p>In this first post I will describe the lightmap parameterization algorithm that I have implemented and in the next few posts I'll cover other details of our lighting system such as our approach to perform final gathering using hemicubes and our implementation of irradiance caching.</p>
+<p><span id="more-120"></span></p>
+<p>In order to use precomputed lighting we need a way of mapping these lighting computations to the surfaces. One possibility is to store them per vertex, but in many cases that does not provide enough resolution and the interpolation of the lighting makes the triangulation of the mesh fairly obvious. Many games get away with that by compensating the lack of detail in the lighting with high texture and normal map detail, but that does not go along well with the graphical style that Jon wants to achieve. So, instead of that we decided to create full parameterizations of our objects in order to store the precomputed lighting into lightmap textures.</p>
+<p>Creating these parameterizations by hand is possible, but it is time consuming and I'd rather have our artists work on something more enjoyable. So, we decided to create the parameterizations automatically. However, the greatest mistake I've made so far is to not look more carefully at the available solutions to accomplish that. I had some pieces of the implementation already available, and I overestimated how much effort it would take to put them together and produce robust results. While talking about this to some friends at GDC one of them asked why I wasn't using <a href="http://msdn.microsoft.com/en-us/library/ee422528(VS.85).aspx" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://msdn.microsoft.com/en-us/library/ee422528(VS.85).aspx', 'Microsoft\'s UVAtlas']);" >Microsoft's UVAtlas</a> tool, and to my dismay and embarrassment my only answer was that it had not occurred to me. I think that goes to prove how valuable it is to be open about our development in a small team like ours.</p>
+<p>Now that I got that out of the way, let's talk about the tech. We only use lightmaps to represent indirect illumination and the direct illumination of static area lights. So, our expectation was that lightmaps would be fairly smooth and that seams would not be a huge problem. For this reason we decided not to invest in a solution that guaranteed seamless parameterizations and instead used a fairly traditional approach: We first divide the input geometry into charts with disk topology, parameterize them individually, and finally pack them into a rectangular texture.</p>
+<h3>Segmentation</h3>
+<p>Dividing the mesh into charts is by far the most complex step of the process. In the past I had tried using hierarchical clustering without much success, so this time around I decided to use an iterative clustering algorithm similar to Lloyd's algorithm, in the same vein as the algorithm used in the <a href="http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/', 'Multi-chart geometry images (MCGI)']);" >Multi-chart geometry images (MCGI)</a> paper.</p>
+<p>Like Lloyd's clustering algorithm, the MCGI algorithm iterates between chart growing and reseeding stages. The growth of the charts is guided by a metric based on the normal deviation and the distance between the face centroids. After each chart growing iteration a new seed is selected taking the most central face of the chart, and the process is repeated until the seed location does not change anymore.</p>
+<p>My implementation of the MCGI algorithm worked moderately well, but it didn't always produce good results. It was possible to tweak the number and location of the seeds to obtain the desired output, but that required a certain amount of user intervention that was not desired.</p>
+<p>Part of the problem is that the meaning of "good" in this setting is very subjective. It usually means nicely shaped charts, that fit well to the surface, produce parameterizations with little distortion, have fairly straight and convex boundaries and are more or less equaly sized.</p>
+<p>In order to adapt the algorithm to our purposes I did two things, modified the bootstraping method so that the initial number of seeds is chosen automatically and used a combination of metrics to obtain better control over the results.</p>
+<p>In order to select the initial number of seeds, I simply insert the seeds one by one, and grow the respective charts until a threshold is met. At that point I pick an arbitrary face that is not assigned to any chart yet and repeat the process. When no faces are left, the growing process is restarted from all seeds in parallel.</p>
+<p>A common strategy to remove the sensitivity to the initial conditions is to use the farthest point heuristic. However, instead of doing that I found that an approach that works well is to pick the worst candidate face of the already chosen charts as the next seed.</p>
+<p>The second important change to the algorithm was to use a different set of metrics. The MCGI paper proposes a metric that combines normal deviation with distance between face centroids. I found that using absolute distances made the algorithm very dependent on the tessellation of the mesh and that measuring the distances from the centroids favored triangles with low aspect ratios.</p>
+<p>Instead of using distance between faces I considered only the normal deviation and combined it with other metrics similar to the ones proposed in <a href="http://www.cs.ubc.ca/labs/imager/tr/2005/Vlad_DCharts/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.cs.ubc.ca/labs/imager/tr/2005/Vlad_DCharts/', 'D-Charts: Quasi-Developable Mesh Segmentation']);" >D-Charts: Quasi-Developable Mesh Segmentation</a> and that take roundness and straightness into account.</p>
+<p>These metrics also had their own problems and I had to tweak them in various ways. The most significant issue is that they constrained the chart growth in undesired ways. For example, to encourage chart convexity you would associate a high factor to the corresponding metric, but that would result in a large number of almost convex charts, as soon as a convex configuration was found no additional faces could be added to the chart. So, instead of using these metrics to constrain the growth I only use them to favor convex charts or straight boundaries; that allowed the charts to grow freely, but still retain the most convex and most straight shape possible.</p>
+<p>A trick that helped in many cases was to incorporate some input from the artist, but without imposing any additional burden to them. A simple way of doing that is taking into account the existing parameterization of the mesh. Our objects already have a parameterization that is used for texturing and the artists tend to place texture seams at locations that are not easily visible. Snapping the boundaries of our charts to the existing seams did not only reduce the overall number of seams, but also caused the charts to evolve in a way that matches better what the artist would have done manually.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/03/charts02.png"><img class="aligncenter size-medium wp-image-221" src="http://the-witness.net/news/wp-content/uploads/2010/03/charts02-300x168.png" alt="" width="300" height="168" /></a></p>
+<p>I considered texture and normal seams independently. Since our parameterization is used for lighting I follow normal seams more strictly and proportionally to their angle, not doing so would cause the corners to appear less defined or more blurry. That also helps the process to converge much more quickly in architectural meshes that have many hard edges.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/03/charts00.png"><img class="aligncenter size-medium wp-image-178" src="http://the-witness.net/news/wp-content/uploads/2010/03/charts00-300x168.png" alt="normal seam fitting" width="300" height="168" /></a></p>
+<p>Finally, I don't impose any chart topology constrains. I specially wanted charts go grow around holes in the mesh as long as the metric was below the desired threshold. I was tempted to use a better proxy fitting metric instead of the normal deviation metric, but that would have generated cylindrical or conical charts that would have to be cut, and I did not want to deal with that. Closing holes on the other side is fairly easy, it's just matter of detecting the boundaries and closing all, but the longest one.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/03/charts01.png"><img class="aligncenter size-medium wp-image-179" src="http://the-witness.net/news/wp-content/uploads/2010/03/charts01-300x168.png" alt="charts with holes" width="300" height="168" /></a></p>
+<h3>Parameterization</h3>
+<p>For the chart parameterization algorithm we simply use <a href="http://alice.loria.fr/index.php/publications.html?Paper=lscm@2002" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://alice.loria.fr/index.php/publications.html?Paper=lscm@2002', 'Least Squares Conformal Maps']);" >Least Squares Conformal Maps</a> since I had an implementation already available. My implementation is based on the description of the algorithm in the <a href="http://www.inf.usi.ch/hormann/parameterization/CourseNotes.pdf" onclick="_gaq.push(['_trackEvent','download','http://www.inf.usi.ch/hormann/parameterization/CourseNotes.pdf']);" >notes</a> of the <a href="http://www.inf.usi.ch/hormann/parameterization/index.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.inf.usi.ch/hormann/parameterization/index.html', 'SIGGRAPH 2007 Mesh Parameterization course']);" >SIGGRAPH 2007 Mesh Parameterization course</a>, which I found much more accessible than the one in the original paper. Particularly useful is the chapter about numerical optimization, although if I had to write a sparse matrix solver again I would probably use <a href="http://alice.loria.fr/index.php/software/4-library/23-opennl.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://alice.loria.fr/index.php/software/4-library/23-opennl.html', 'OpenNL']);" >OpenNL</a>, since it has now been released under a liberal BSD license.</p>
+<p>LSCM is not the best parameterization algorithm out there. It worked pretty well in most cases, although in some rare situations it resulted in small self-overlaps. That happened in two cases:</p>
+<ul style="margin-bottom: 1em">
+<li>Zero area triangles in the input sometimes flipped in the parameterization.</li>
+<li>Charts with complex boundaries that self-intersect when parameterized.</li>
+</ul>
+<p>The first case turned out that was caused by T-junctions in the input mesh that were detected as holes and filled with a degenerate triangle. In practice the small overlaps in the parameterization were not really an issue so instead of fixing the input we simply plan to report these problems to the artist in the exporter and have him fix the them if it turns out it's causing artifacts.</p>
+<p>In the second case, increasing the weight of the convexity metric used during the clustering process allowed us to prevent these errors. So, I didn't really do anything to handle this problem, but so far it has not been an issue.</p>
+<p>Even after that we had some problematic cases remaining. I noticed that the implementation in Blender was not having this same issues and was handling these cases more gracefully. So, I asked Brecht Van Lommel, who suggested the use of alternate matrix weights based on the ABF formulation of LSCM, and that seemed to eliminate the remaining issues.</p>
+<p>While LSCM is very easy to implement, it's definitely not the best parameterization method out there. If I were to implement something better I would probably look at <a href="http://alice.loria.fr/index.php/publications.html?Paper=LinABF@2007" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://alice.loria.fr/index.php/publications.html?Paper=LinABF@2007', 'LinABF']);" >LinABF</a> or <a href="http://mgarland.org/files/papers/param.pdf" onclick="_gaq.push(['_trackEvent','download','http://mgarland.org/files/papers/param.pdf']);" >Fitting to Guidance Gradient Fields</a>. However, since parameterization of the individual charts is currently the fastest step it may make sense to also look at more expensive deformation analysis methods.</p>
+<h3>Packing</h3>
+<p>Our packing algorithm is fairly simple. Like many other implementations we first sort the charts by parametric area, rotate them to align the charts with their best fit rectangle and greedily introduce them in the atlas one by one. Ideally I should test all 4 possible orientations, but currently I simply pick one of the orientations randomly.</p>
+<p>Instead of using a tetris-like scheme to find the best location for each chart, I use a more brute force approach in which all the possible locations are considered. I achieve that using a conservative rasterizer that tags all the texels touched by a chart, plus an extra texel for padding. I progressively increase the texture extents as new charts are inserted. If the a location within the current extents is found, the chart is automatically accepted, otherwise a metric is evaluated to determine the location that least increases the extents of the atlas. Since I use a greedy algorithm, minimizing area resulted in atlases with very high aspect ratios. So, instead I minimize a metric that combines extent and perimeter and results in mostly square atlases.</p>
+<p>Here are some examples of the results:</p>
+<p><img class="aligncenter size-full wp-image-145" style="border: 1px solid black" src="http://the-witness.net/news/wp-content/uploads/2010/03/packing_cottage00.png" alt="" width="448" height="452" /></p>
+<p><img class="aligncenter size-full wp-image-153" style="border: 1px solid black" src="http://the-witness.net/news/wp-content/uploads/2010/03/packing_tower00.png" alt="" width="435" height="421" /></p>
+<p>Once we use lightmap compression it will probably make sense to align the charts to DXT block boundaries in order to prevent bleeding artifacts.</p>
+<h3>Future Improvements</h3>
+<p>This is one of the areas where I think there's a lot of room for improvement, but at the same time, there's not much !/$ in spending more time improving the results. Even though it has not been tested in production, I think that our current solution works fairly well. It would be nice to have larger charts with less distortion or a lower number of seams, and I would certainly have fun working on that. However, that's not going to make the game run significantly faster or look dramatically better. We plan to release the source code of these algorithms at some point so my hope is that the implementation will progressively get better as other people adopt it and improve it to fit their needs.</p>
+<p>That said, if there's one area where I think it's worth investing, that is in the use of signal specialized parameterizations. The research papers on the subject (<a href="http://research.microsoft.com/en-us/um/people/hoppe/proj/ssp/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://research.microsoft.com/en-us/um/people/hoppe/proj/ssp/', 'Signal-specialized parametrization']);" >Signal-specialized parametrization</a> and <a href="http://research.microsoft.com/en-us/um/people/hoppe/proj/ssplinear/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://research.microsoft.com/en-us/um/people/hoppe/proj/ssplinear/', 'Signal-specialized parameterization for piecewise linear reconstruction']);" >Signal-specialized parameterization for piecewise linear reconstruction</a>) are probably overkill in our setting, and I'm not sure they would work very well with our low resolution meshes.</p>
+<p>Half-Life 2 achieved that that by using artist specified sampling rates for each surface, but I think it's worth doing that automatically using an approach like <a href="http://www.bungie.net/images/Inside/publications/presentations/Lightmap_Compression_2008_02_22.pptx" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.bungie.net/images/Inside/publications/presentations/Lightmap_Compression_2008_02_22.pptx', 'the one proposed by Bungie']);" >the one proposed by Bungie</a>, which seems fairly simple and provides most of the gains the more complex approaches would give us.</p>
+<p>My expectation is that the current implementation won't suffer significant changes, other than small tweaks and slight adjustments to deal with problematic cases that may show up in the future. If someone has any experience with these kind of algorithms, I would love to hear about it. In particular I'd like to know if there's anything you would have done differently, or if there's any optimization or improvement that I may have overlooked and you think is worth considering.</p>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/" title="Permalink to Lightmap Parameterization" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2010/03/graphics-tech-lighting-comparison/" rel="prev"><i class="meta-nav-prev"></i> Graphics Tech: Lighting Comparison</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/" rel="next">Graphics Tech: Multi-lightmaps <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				13 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-184">
+		<div id="comment-184">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/313a4c6b0bafe052bd361b401e57baf3?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/313a4c6b0bafe052bd361b401e57baf3?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Alexey Orlov</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-184">
+					March 31, 2010 at 10:22 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Ignacio,<br />
+As a quick note, you can think of linABF as a pre-process for LSCM. It gives you angles for ideal parametrization, which needs to be converted to uvs. You can feed them to lscm when creating constraints matrix. That way you&#8217;ll get less distortion. As a plus, linABF is really fast, so it won&#8217;t hurt, and as you have solver/matrices in-place &#8211; it would be pretty straightforward to implement</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=184#respond' data-commentid="184" data-postid="120" data-belowelement="comment-184" data-respondelement="respond" data-replyto="Reply to Alexey Orlov" aria-label='Reply to Alexey Orlov'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-190">
+		<div id="comment-190">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Reginald</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-190">
+					April 1, 2010 at 8:29 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>great article. I really like the brute force packing results, the Purelight people could really learn from that.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=190#respond' data-commentid="190" data-postid="120" data-belowelement="comment-190" data-respondelement="respond" data-replyto="Reply to Reginald" aria-label='Reply to Reginald'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-193">
+		<div id="comment-193">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c35ea26a47cb485ecfd7f1e17b027b21?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c35ea26a47cb485ecfd7f1e17b027b21?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Benoit FOULETIER</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-193">
+					April 6, 2010 at 8:28 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Wow&#8230; this is the first article where I just about didn&#8217;t understand a word :) ! Though I like how technical this blog can get, the cascading shadows article was my limit I think: didn&#8217;t understand everything but gave me an overview.<br />
+This one&#8230; I don&#8217;t even get the premise; maybe a couple graphs in the beginning would have helped?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=193#respond' data-commentid="193" data-postid="120" data-belowelement="comment-193" data-respondelement="respond" data-replyto="Reply to Benoit FOULETIER" aria-label='Reply to Benoit FOULETIER'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-391">
+		<div id="comment-391">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/bba15945b84e0c19bc8a3dd7d75b77a4?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/bba15945b84e0c19bc8a3dd7d75b77a4?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.shalinshodhan.com' rel='external nofollow ugc' class='url'>Shalin Shodhan</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-391">
+					May 19, 2010 at 8:56 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hey,<br />
+Have a look at Ptex:<br />
+<a href="http://ptex.us/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://ptex.us/', 'http://ptex.us/']);" rel="nofollow ugc">http://ptex.us/</a></p>
+<p>It&#8217;s a per-face UV mapping format that provides high quality filtering.<br />
+The hard part is of course doing this at run time&#8230; but it&#8217;s worth a look!</p>
+<p>Cheers!<br />
+Shalin</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=391#respond' data-commentid="391" data-postid="120" data-belowelement="comment-391" data-respondelement="respond" data-replyto="Reply to Shalin Shodhan" aria-label='Reply to Shalin Shodhan'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-480">
+		<div id="comment-480">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c940f2dce578e9131f66827bef43eb2a?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c940f2dce578e9131f66827bef43eb2a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">cb</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-480">
+					June 9, 2010 at 11:00 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It seems to me a simplified version of SSP would be very easy.</p>
+<p>Make your charts at higher res initially and do a temporary packing.</p>
+<p>Now render the lightmaps.</p>
+<p>For each chart, try downsampling it to lower res and measure the error; take the smallest downsample you can within error bound.</p>
+<p>Repack the now shrunken charts to final texture packing.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=480#respond' data-commentid="480" data-postid="120" data-belowelement="comment-480" data-respondelement="respond" data-replyto="Reply to cb" aria-label='Reply to cb'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-649">
+		<div id="comment-649">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6a886180cb92ad614a3ac47cb0009834?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6a886180cb92ad614a3ac47cb0009834?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Cody Burrow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-649">
+					August 9, 2010 at 9:11 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Amusingly, I use a similarly colored checkerboard texture to check my UVs! I like the idea of fading between lightmaps for ambient light according to aperture states &#8211; will have to try that.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=649#respond' data-commentid="649" data-postid="120" data-belowelement="comment-649" data-respondelement="respond" data-replyto="Reply to Cody Burrow" aria-label='Reply to Cody Burrow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-1063">
+		<div id="comment-1063">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/734eb4421bccf955966cab123fd5053f?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/734eb4421bccf955966cab123fd5053f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Carl</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-1063">
+					September 17, 2010 at 6:53 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This may be a dumb question, but is it standard practice to not use mip maps on lightmaps? Otherwise not having much of a gutter at all would be a problem.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=1063#respond' data-commentid="1063" data-postid="120" data-belowelement="comment-1063" data-respondelement="respond" data-replyto="Reply to Carl" aria-label='Reply to Carl'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-castano bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-1090">
+		<div id="comment-1090">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-1090">
+					September 20, 2010 at 11:09 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@Carl: Lightmaps generally have low resolution and as a result are almost always magnified. However, for a game like this with large open spaces we would probably have some minification for objects that are far from the camera. My current plan to address that is to change the lightmap resolution according to the geometric LOD. For the lighting to stay coherent with the geometry we need to recompute lightmaps based on the LOD anyway, so instead of doing so at full res, we would use smaller lightmaps.</p>
+<p>That said, the padding between charts is easily configurable so if we end up using mipmaps, we could tweak that easily.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=1090#respond' data-commentid="1090" data-postid="120" data-belowelement="comment-1090" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3126">
+		<div id="comment-3126">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/111652e3c0fcc1cb0ee722a59996d14a?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/111652e3c0fcc1cb0ee722a59996d14a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">nexekho</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-3126">
+					May 13, 2011 at 10:53 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Dude, if you can port that packing algorithm to Blender or Max&#8230; that&#8217;s just godlike, I&#8217;ve never seen a machine pack do such a good job!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=3126#respond' data-commentid="3126" data-postid="120" data-belowelement="comment-3126" data-respondelement="respond" data-replyto="Reply to nexekho" aria-label='Reply to nexekho'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-1014021">
+		<div id="comment-1014021">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7173b201f52e9f7a4b0d6831896589c0?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7173b201f52e9f7a4b0d6831896589c0?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Alexis Naveros</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-1014021">
+					July 5, 2013 at 6:28 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I fully agree with nexekho, that lightmap packing is very impressive! You said you planned to release the source at some point, 3 years have passed, how long must we suffer? :) Seriously, I really wish we could integrate such a nice algorithm within Blender, preferably without duplicating all the excellent work you have done&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=1014021#respond' data-commentid="1014021" data-postid="120" data-belowelement="comment-1014021" data-respondelement="respond" data-replyto="Reply to Alexis Naveros" aria-label='Reply to Alexis Naveros'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-2634014">
+		<div id="comment-2634014">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/5909658d949615b3740ddb4611cdbd69?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/5909658d949615b3740ddb4611cdbd69?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Matthew Kenneally</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-2634014">
+					October 21, 2013 at 12:41 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I too am interested in this algorithm.  I guess this isn&#8217;t going to get released?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=2634014#respond' data-commentid="2634014" data-postid="120" data-belowelement="comment-2634014" data-respondelement="respond" data-replyto="Reply to Matthew Kenneally" aria-label='Reply to Matthew Kenneally'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon odd alt depth-2" id="li-comment-2636181">
+		<div id="comment-2636181">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-2636181">
+					October 21, 2013 at 5:01 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>We intend to release it, but I think Ignacio wants to be perfectionist about it&#8230; and we have a lot going on.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=2636181#respond' data-commentid="2636181" data-postid="120" data-belowelement="comment-2636181" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8614584">
+		<div id="comment-8614584">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/2c07fc9822df63031eaaf11eb622a242?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/2c07fc9822df63031eaaf11eb622a242?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Scott</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/#comment-8614584">
+					May 16, 2016 at 1:58 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Two more years have passed and I too am interested in the light map packing algorithm. Looks like it works really well!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/?replytocom=8614584#respond' data-commentid="8614584" data-postid="120" data-belowelement="comment-8614584" data-respondelement="respond" data-replyto="Reply to Scott" aria-label='Reply to Scott'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2010/03/graphics-tech-texture-parameterization/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='120' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="61bc06464a" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="198"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.208 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:39:17 -->
+
+<!-- super cache -->

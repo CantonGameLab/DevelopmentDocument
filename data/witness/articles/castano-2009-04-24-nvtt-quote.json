@@ -1,0 +1,31 @@
+{
+  "id": "castano-2009-04-24-nvtt-quote",
+  "title": {
+    "zh": "一句关于 NVTT 的评语",
+    "en": "NVTT quote"
+  },
+  "subtitle": {
+    "zh": "转引 Ivan-Assen Ivanov 对 NVIDIA Texture Tools 的一句吐槽。",
+    "en": ""
+  },
+  "translator": {
+    "note": "本篇是短贴，正文只有三段：一句引言、一段引用块、一个表情符号。归档源文用 `> ` 前缀标出引用块，译文按 schema 放进 `quote` 块。`nvcompress`、`CUDA`、`7600`（指 NVIDIA GeForce 7600 显卡）按原文保留；`NVIDIA Texture Tools` 保留英文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I love this quote from [Ivan-Assen Ivanov](http://twitter.com/ivanassen) about the NVIDIA Texture Tools:",
+      "zh": "我很喜欢 [Ivan-Assen Ivanov](http://twitter.com/ivanassen) 评价 NVIDIA Texture Tools 的这句话："
+    },
+    {
+      "type": "quote",
+      "en": "We switched to CUDA nvcompress in our pipeline and totally forgot about it. Until yesterday, when an artist had to work on a 7600 for a while, and raised hell about how slow the export has become.",
+      "zh": "我们在管线里换用了 CUDA 版 nvcompress，然后就彻底把它忘了。直到昨天，有位美术要在一台 7600 上工作一阵子，才对导出变得这么慢大发牢骚。"
+    },
+    {
+      "type": "p",
+      "en": ":-)",
+      "zh": ":-)"
+    }
+  ]
+}

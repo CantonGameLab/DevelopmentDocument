@@ -1,0 +1,30 @@
+{
+  "id": "official-2015-01-25-progress",
+  "title": { "zh": "进展！", "en": "Progress!" },
+  "subtitle": {
+    "en": "The Puzzle Complete milestone is reached: every puzzle that will ship is now in the game.",
+    "zh": "达成「Puzzle Complete」里程碑：发售时会有的一切谜题，现在都已经在游戏里了。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "On Friday  we officially reached the Puzzle Complete milestone. This means that all puzzles that will be in the game when it ships are in the game now.",
+      "zh": "周五我们正式达成了 Puzzle Complete 里程碑。这意味着发售时游戏里会有的所有谜题，现在都已经在游戏里了。"
+    },
+    {
+      "type": "p",
+      "en": "It does *not* mean that the game is done. We still have a lot to do! But it *does* mean that the nature of the work changes and becomes simpler, because we don't have to be making high-level creative decisions any more. It is now much more about turning the finish-the-game crank (making sure stuff plays well and polishing it up) for anything related to game design, modeling and texturing.",
+      "zh": "这*不*意味着游戏做完了。我们还有很多事要做！但它*确实*意味着工作的性质变了、变简单了，因为我们不再需要做高层的创作决策。对于游戏设计、建模和贴图相关的事情，现在更多就是把「做完这个游戏」的曲柄摇起来（确保东西玩起来手感好，并把它打磨光亮）。"
+    },
+    {
+      "type": "p",
+      "en": "There are a few categories that still need creative decisions (story stuff, the menu system, etc), but for those of you who are awaiting the game's release, this is pretty good news.",
+      "zh": "还有几类事情仍然需要创作决策（故事方面的东西、菜单系统等等），但对那些在等游戏发售的人来说，这是个相当好的消息。"
+    },
+    {
+      "type": "p",
+      "en": "There are currently 677 puzzles in the game. That number might be slightly different when it ships (we might cut a few, for example!)",
+      "zh": "目前游戏里有 677 个谜题。发售时这个数字可能会略有不同（比如说，我们可能会砍掉几个！）"
+    }
+  ]
+}

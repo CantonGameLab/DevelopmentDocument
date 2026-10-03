@@ -1,0 +1,240 @@
+{
+  "id": "casey-0012",
+  "title": { "zh": "关于交错同心圆相交模式的简短补遗", "en": "A Brief Addendum on Staggered Concentric Intersection" },
+  "subtitle": {
+    "en": "Summaries and responses to emails received regarding the “Staggered Concentric Intersection” pattern.",
+    "zh": "汇总并回应读者围绕「交错同心圆相交」图案发来的邮件。"
+  },
+  "translator": {
+    "note": "术语处理：staggered concentric intersection 统一译作「交错同心圆相交」，scalloping 译作「扇贝状」伪影，cornrow 译作「玉米垄」。原文有 9 张示意图，未收录影像，只按原文位置保留占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Yes, I had planned to cover a bunch of artist-oriented grass features this week, but due to the number of questions and comments I received about last week's noise pattern, it seemed like a good idea to postpone things in favor of a brief addendum.  Without further ado:",
+      "zh": "没错，我本来打算这周讲一批面向美术的草地功能，但上周那篇噪点图案引来的问题和评论实在太多，所以还是先把原计划放一放、写一篇简短补遗比较好。废话少说："
+    },
+    { "type": "h2", "id": "code-and-scale", "zh": "代码与尺度", "en": "Code and Scale" },
+    {
+      "type": "p",
+      "en": "First I'd like to address two questions from [Sean Barrett](http://nothings.org/), who of course gets special treatment here because he is a founding member of Wild Wednesday, and that confers upon him special request-priority privileges.  First, he wanted to know precisely what code I was using to create the pattern, because as he (correctly) pointed out, in my rush to get the article out before it became Witness Saturday, I had neglected to include the relevant details.",
+      "zh": "先回答 [Sean Barrett](http://nothings.org/) 的两个问题——他当然在这里享受特殊待遇，因为他是 Wild Wednesday 的创始成员，这就赋予了他特殊的需求优先权。第一，他想确切知道我生成这个图案用的是什么代码，因为他（正确地）指出：我当时急着赶在文章变成「Witness Saturday」之前发出来，忘了附上相关细节。"
+    },
+    {
+      "type": "p",
+      "en": "So here is (almost literally) the code I used to generate the staggered concentric intersection pattern:",
+      "zh": "下面就是我用来生成交错同心圆相交图案的代码（几乎一字不差）："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "f32 PointRadius = 0.025f;\n v2 Ac = {-2, -2}; // Center of circle A\n f32 ArBase = 1.0f; // Starting radius of circle\n v2 Bc = {-2, 2}; // Center of circle B\n f32 BrBase = 1.0f; // Starting radius of circle B\n f32 dR = 2.5f*PointRadius; // Distance between concentric rings\n for(s32x RadiusStepA = 0; RadiusStepA < 128; ++RadiusStepA)\n{\n f32 Ar = ArBase + dR*(f32)RadiusStepA;\n for(s32x RadiusStepB = 0; RadiusStepB < 128; ++RadiusStepB)\n{\n f32 Br = BrBase + dR*(real32)RadiusStepB;\n\nf32 UseAr = Ar + ((RadiusStepB % 3) ? 0.0f : 0.3f*dR);\n f32 UseBr = Br + ((RadiusStepA % 3) ? 0.0f : 0.3f*dR);\n\n// Intersect circle Ac,UseAr and Bc,UseBr\n // Add the resulting points if they are within the pattern bounds (the bounds were [[-1,1]] on both axes for all prior screenshots)\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "Obviously, for suitably small values of PointRadius, the lazy constant \"128\" for the number of circles to check would have to be increased.  Better yet, if one were a super duper programmer  —  like, we're talking healthcare.gov-level programmers here  —  you could even change the for loops to properly compute the starting and ending radii from the first intersection with the sample region (major hint for programmers who aren't quite at that vaulted tier yet: the minimum and maximum distance from a point to an axis-aligned box in any number of dimensions can be computed separably).",
+      "zh": "显然，当 PointRadius 取到足够小的值时，那个偷懒写死的常数「128」（要检查的圆的数量）就得往上调。更好的是，如果你是个超级厉害的程序员——我说的是 healthcare.gov 那种级别的程序员——你甚至可以把 for 循环改掉，从与采样区域的第一次相交出发，正确地算出起始半径和结束半径（给还没到那个高不可攀档位的程序员一个重要提示：任意维数下，一个点到轴对齐盒子的最小距离和最大距离都可以分离地计算）。"
+    },
+    {
+      "type": "p",
+      "en": "I did not include the circle intersection routine, because it is not specific to this algorithm.  Whatever circle intersection you have lying or download off the net will compute the necessary pair of points.",
+      "zh": "我没有附上圆的求交例程，因为它不是这个算法特有的。你手头现成的、或者从网上下载的任何一个圆求交代码，都能算出需要的那一对点。"
+    },
+    {
+      "type": "p",
+      "en": "Here is a diagram that shows the circles themselves overlaid on top of the concentric intersection and staggered concentric intersection:",
+      "zh": "下面这张图把圆本身叠在了同心圆相交图案和交错同心圆相交图案之上："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_00_cf5f9397f1dddec0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, both circles are placed to the left of the pattern region, with one circle above and one circle below.  I picked these locations because I wanted dual curvature (as explained in the previous article), so my intention was to place the circles such that their arcs would combine to form a curving grid.",
+      "zh": "如你所见，两个圆都放在图案区域的左侧，一个在上、一个在下。我选这两个位置是因为我想要双重曲率（上一篇里解释过），所以我本意就是让两个圆的圆弧合起来形成一张弯曲的网格。"
+    },
+    {
+      "type": "p",
+      "en": "In addition to being interested in the specifics, Sean was also wondering if the pattern would work for larger scales of patterns, meaning (I'm assuming) that the pattern should be able to cover a very large region and still look good everywhere.  At one point he even used the word \"infinite\".",
+      "zh": "除了想知道具体细节，Sean 还想知道这个图案在大尺度上是否成立，也就是说（我猜）这个图案应该能覆盖非常大的区域，而且在每个地方看起来都不错。有一处他甚至用到了「无限」这个词。"
+    },
+    {
+      "type": "p",
+      "en": "To answer that, first I would point out that really, you can make a fairly large pattern without actually changing this setup in any way.  All you have to do is change the PointRadius parameter in the code to something smaller.  This will properly adjust the radial stepping to produce a denser \"circle intersection grid\".  Here is what it looks like with a 0.009, for example:",
+      "zh": "要回答这个问题，我首先要指出：其实你完全不用改动这套设置，就能做出相当大的图案。你要做的只是把代码里的 PointRadius 参数改小。这会正确地调整半径步进，产出一张更密的「圆相交网格」。比如下面这是取 0.009 时的样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_01_76c717929938e507.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And here's 0.005, standing right on the ground so you can see what a large expanse of the pattern would look like locally to a player:",
+      "zh": "这是取 0.005、人直接站在地面上看的效果，可以看出一大片图案在玩家近处是什么样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_02_e8b961a8bc858fa0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Somewhere around that density, my crappy test app stops being competent enough to really render that much grass at a reasonable speed.",
+      "zh": "差不多到那个密度，我那破测试程序就撑不住了，没法以合理的速度真正渲染那么多草。"
+    },
+    {
+      "type": "p",
+      "en": "Because all the points are generated from the intersections of circles, I would have assumed that the pattern would degrade more rapidly as the density was increased.  However, for reasons that I don't yet understand but that would presumably be clear upon further study, the staggering appears to make the pattern hold up more robustly.  How far this extends, I'm not sure, but based on my brief testing it clearly does not break down even at densities far greater than any single patch of grass we would ever generate in something like [The Witness](http://the-witness.net/news/), where ground cover is localized to regions that contain around 8000 points or so.",
+      "zh": "由于所有点都来自圆与圆的相交，我本来以为密度一提高，图案会退化得更快。然而，出于一些我还不理解、但进一步研究后大概就能弄明白的原因，交错的做法似乎让图案保持得更稳。这个范围能延伸到多远我并不确定，但就我简短的测试来看，即便密度远高于我们在 [The Witness](http://the-witness.net/news/) 这类项目里会生成的任何一片草——那里的地被植物局限在大约 8000 个点的区域里——图案显然也没有垮掉。"
+    },
+    {
+      "type": "p",
+      "en": "As for that dirty word \"infinite\", I'm afraid I don't have much insight to offer there, as I only just discovered this pattern on Friday and I spent the weekend playing [Faster than Light: Advanced Edition](https://subsetgames.com/ftl.html) and a beta build of [Daniel Benmergui](http://ludomancy.com/)'s [Ernesto](http://ernestogame.com/) in between diabetic naps induced by old-fashioned glazed donuts (Sunday was donut day).  I admit that these activities did not advance the state of the art in computer graphics as much as if I had actually sat down and done some work, but at the same time, these games aren't exactly going to play themselves, people!",
+      "zh": "至于「无限」那个刺耳的词，恐怕我给不出什么洞见：我这周五才发现这个图案，而周末的时间都花在玩 [Faster than Light: Advanced Edition](https://subsetgames.com/ftl.html) 和 [Daniel Benmergui](http://ludomancy.com/) 的 [Ernesto](http://ernestogame.com/) beta 版上了，中间还穿插着被老式糖霜甜甜圈引发的糖尿病式小睡（周日是甜甜圈日）。我承认，这些活动对计算机图形学前沿的推进，远不如我真坐下来干点活来得多；但话说回来，这些游戏又不会自己把自己玩掉，各位！"
+    },
+    {
+      "type": "p",
+      "en": "That said, for infinite patterns, the simple procedure of just sampling the pattern everywhere definitely doesn't work.  Because it is based on circles, once you are in a region where the intersections of circular curvature is unfavorable, the pattern will break.  Here is the original pattern extended rightward for another three squares, for example:",
+      "zh": "话虽如此，对无限图案来说，那种「到处都按图案采样一遍」的简单做法肯定是行不通的。因为它是基于圆的，一旦进入某个「圆的曲率相交情况不利」的区域，图案就会崩掉。比如下面这是把原始图案向右再延伸三个方格的样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_03_a08fcccd8c08c0f2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That is not fancy at all, and I think it's safe to say that no one should use that kind of pattern for mission-critical websites like [healthcare.gov](https://www.healthcare.gov/).",
+      "zh": "这可一点都不漂亮，我想可以放心地说：没人该把这种图案用在 [healthcare.gov](https://www.healthcare.gov/) 这种关键任务网站上。"
+    },
+    {
+      "type": "p",
+      "en": "Now, if I was tasked with making an infinite generator for this pattern, I'd probably try two separate avenues of exploration and see where I get.  The first would be to analyze a pleasing portion of the pattern (some subset of the [-1,1] square), determine the what the relative point locations were, and see if I could regularize it into something periodic.  My guess is that this would be very difficult, because \"the problem with curvature is that it's always curving\", for lack of a better way to say it, so it seems to me that the requirement for dual curvature is such that it precludes an easy attempt to regularize it.  Similarly, I might increase the density dramatically and then look at a very small region, to see what it looks like when the arcs of the circles are essentially linear.  Is it still a useful pattern?  What fails?  Can the failures be corrected?",
+      "zh": "如果让我来为这个图案做一个无限生成器，我大概会试两条不同的路子，看看能走到哪一步。第一条是分析图案中一段好看的部分（[-1,1] 正方形里的某个子集），确定各点的相对位置，看能不能把它规则化成某种周期性的东西。我猜这会非常难，因为——找不到更好的说法——「曲率的问题就在于它总在弯」，所以在我看来，「需要双重曲率」这个要求本身就排除了轻松把它规则化的可能。类似地，我也可能把密度大幅提高，然后只看很小的一块区域，看看当圆的弧线基本成直线时它是什么样。它还是个有用的图案吗？哪里会失效？失效能被修正吗？"
+    },
+    {
+      "type": "p",
+      "en": "The second avenue would be to investigate curves that were not circles.  The problem with circles is that they have a finite size, so they necessarily induce change on a scale related to their radii.  There are curvatures that go on forever without even inducing a major change, such as a sine wave, where one axis can be extended infinitely while the curvature repeats.  The difficulty I see in this approach is that any periodic curve is going to have inflection points at different orders, such as the crest of a sine wave or its axis-crossing point, which I fear would produce gaps or clumps of some kind in the pattern since the qualities of the curvature are weak around those points.",
+      "zh": "第二条路子是研究非圆的曲线。圆的问题在于尺寸有限，因此必然会在与其半径相关的尺度上引发变化。有些曲率能一直延伸下去而不引发大的变化，比如正弦波：它可以沿一个轴无限延伸，而曲率只是重复。这条路子在我看来困难在于：任何周期曲线都会有不同阶的拐点，比如正弦波的波峰或它与轴的交叉点；我担心这些位置会在图案里造成某种空隙或结团，因为在这些点附近曲率的性质很弱。"
+    },
+    {
+      "type": "p",
+      "en": "The secret, unannounced third avenue I'd investigate if both those two avenues failed would be to figure out some way to \"tile\" this pattern.  As an example, here is the tile repeated 9 times:",
+      "zh": "如果前两条路都失败了，我还会去试一条没对外宣布的第三条秘密路子：想办法把这个图案「平铺」起来。举个例子，下面是把这块「瓦片」重复 9 次的样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_04_11f7ced1b4c2e3be.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "On the left is the full pattern repeated 9 times, and on the right is a slightly cropped version of the pattern repeated 9 times.  As you can see, it's not inconceivable that one could create a fixup for the seams and produce a stable tiling pattern here.  From the grounds-eye view, there's not that much of an apparent abberation of the pattern at the seam, so it could be within the realm of possibility that a fixup near edges would be all that's required to \"go infinite\":",
+      "zh": "左边是完整图案重复 9 次，右边是稍微裁剪过的图案重复 9 次。如你所见，为接缝做一点修正、从而得到一个稳定的平铺图案，并不是不可想象的事。从贴近地面的视角看，接缝处图案的异样并不明显，所以「走向无限」也许真的只需要在边缘附近做个修正就够了："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_05_2ededeecc7c796d.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Whether or not such a fixup actually is possible, or whether the results would garner the coveted rating of \"fine\" from Sean, are questions that will have to wait for another day.",
+      "zh": "这样的修正到底可不可行，或者结果能不能拿到 Sean 那句令人垂涎的「还行」评价，这些问题只能留到改天再说了。"
+    },
+    { "type": "h2", "id": "scalloping-and-a-birds-eye-view", "zh": "扇贝状伪影与俯瞰视角", "en": "Scalloping and a Bird's Eye View" },
+    {
+      "type": "p",
+      "en": "Multiple people wrote in to ask about the \"scalloping\" artifacts and whether or not these would be problematic from a higher vantage point.  One of these people was [Jon Olick](http://www.jonolick.com), whom I remembered because I've corresponded with him before.  I apologize for not remembering the other people who commented, but let's face it, it's really your responsibility to be a memorable person, and obviously you failed at that.  It's nothing personal.  Just try to be a bit more memorable next time.  Perhaps include one of those \"Up Close and Personal\" videos like they show during the Olympics, so I can get a feel for the hardships and struggles that brought you to the point where you wrote me an e-mail.  You know… the human element.",
+      "zh": "有几个人写信来问「扇贝状」伪影，以及从更高的视点看这些伪影会不会有问题。其中一位是 [Jon Olick](http://www.jonolick.com)，我记得他，因为之前和他通过信。其他留言的人我没记住，在此致歉——不过面对现实吧，能不能让人记住本来就是你自己的责任，而你显然没做到。这不是针对你。下次尽量让人记住一点。也许可以附一段奥运会上那种「走近你我」的小片子，好让我体会一下是什么样的艰难与挣扎把你推到了给我写邮件这一步。你懂的……人性的一面。"
+    },
+    {
+      "type": "p",
+      "en": "Anyway, I think perhaps people got the wrong impression from the first article about the quality of this pattern.  At the risk of putting words into everyone's mouths and then telling them that those words are wrong, I would like to argue that the pattern is actually much better than people thought it was.",
+      "zh": "总之，我觉得大家可能从第一篇文章里对图案的质量得出了错误的印象。冒着「先替所有人编好台词、再说这些台词是错的」的风险，我想主张：这个图案其实比大家以为的要好得多。"
+    },
+    {
+      "type": "p",
+      "en": "Because I was working on coverage, I intentionally rendered dark green grass sprites against a pure white background, so I could explicitly see where the coverage was breaking down.  This is because coverage is a lot more about how things look in motion than it is about still images, so to save myself from having to extensively \"walk around\" every pattern to see how nicely it parallaxed or how often I saw objectionable rows, I intentionally rendered things to accentuate gaps in coverage when viewing a single point of view.  I strongly suspect that nobody would have noticed artifacts at all if I had rendered the shots against a ground texture, like this:",
+      "zh": "因为我在意覆盖，所以我故意把深绿色的草精灵渲染在纯白背景上，好让我能清楚地看到覆盖在哪里断掉。这是因为覆盖更多取决于东西动起来的样子，而不是静止画面；为了省去「绕着」每个图案走上一大圈、去看视差效果好不好、可厌的成排草出现得频不频繁的麻烦，我故意把画面渲染成在单一视角下会凸显覆盖空隙的样子。我强烈怀疑，如果我把这些截图渲染在地面贴图之上，根本没人会注意到伪影，就像这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_06_3819590116f995bf.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Obviously, the pattern is the same, so the scalloping is still there, and since you're aware of it, you can certainly find it again.  But hopefully you will agree that it's difficult to notice when presented against a ground texture.  It's extremely subtle.  To some degree, this even holds true when the pattern is viewed from above, as shown on the right hand side of the image.  This surprised even me, as I thought the pattern would be more obvious when viewed from high vantage points, since that was not a goal of this endeavor and I was never measuring that aspect of the pattern explicitly.  But the truth is that it is only blatantly obvious when viewed against a very high-contrast background, which presumably you would not be doing in any real-world usage.  The most immediately objectionable artifact for bird's-eye views when viewed against a reasonable ground texture is, honestly, the flatness of the sprite cards, since I'm not doing anything in this test harness to handle the case where they're viewed at a steep angle.  But even ignoring that and focusing on the distribution, I still can't see much in the way of objectionable artifacts from this pattern in overhead images unless I turn off the ground.  Furthermore, usually in games the rendering engine doesn't render ground cover when you're far away from the terrain like you would be in any situation where you could look at the grass from this kind of angle.",
+      "zh": "显然，图案没变，所以扇贝状效果还在；而既然你已经知道它了，你当然还能再把它找出来。但希望你也会同意：把它放在地面贴图上时，它很难被注意到，极其细微。某种程度上，从上方看这个图案时也是如此，就像图片右半部分那样。这一点连我自己都感到意外——我本来以为从高视点看图案会更明显，毕竟这本来就不是这项工作的目标，我也从没专门去度量图案在这方面的表现。但事实是：只有在非常高对比度的背景上，它才会显眼得一塌糊涂，而在任何实际使用中，你大概都不会这么做。说实话，从俯瞰视角看、放在一个正常的地面贴图上时，最刺眼的伪影其实是精灵面片的「平」——我在这套测试程序里没做任何处理，来应对它们被以很陡的角度观察的情况。但就算先不管这一点、只看分布本身，在俯视图像里我也看不出这个图案有什么刺眼的伪影——除非我把地面关掉。而且通常游戏里，当你离地形很远时，渲染引擎根本不会渲染地被植物，而你能从这个角度看草的任何情形，都属于「离得很远」。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "That said, the pattern definitely looks less random when viewed from above, and I find that it is easier for wiggly lines in the pattern to jump out at you and so on.  So if the visual quality of the pattern when viewed from above was a primary concern, I suspect blue noise would still be the smartest option.",
+      "zh": "话虽如此，从上方看时这个图案确实显得没那么随机，我也觉得图案里那些扭来扭去的线更容易跳到你眼前，等等。所以如果俯瞰时图案的视觉质量是首要考虑，我猜蓝噪声仍然是最聪明的选择。"
+    },
+    { "type": "h2", "id": "other-patterns", "zh": "其他图案", "en": "Other Patterns" },
+    {
+      "type": "p",
+      "en": "[Won Chun](https://twitter.com/won3d), world's most voracious reader and veritable walking compendium of computer science literature, wrote in shortly after my article went live to say that the final pattern reminded him of \"phyllotaxis and Fermat spirals\".  For those of you who don't know what \"[phyllotaxis](https://en.wikipedia.org/wiki/Phyllotaxis)\" is  —  a set of people that included me until I just now typed it into [Wikipedia](https://www.wikipedia.org/)  —  it's the fancy word for how the leaves grow on a plant.  [Fermat spirals](https://en.wikipedia.org/wiki/Fermat%27s_spiral) are related in that they have been used to create patterns that resemble those found in real plants, such as the pattern found on a sunflower.",
+      "zh": "文章上线后不久，[Won Chun](https://twitter.com/won3d)——世界上最贪婪的读者、一部真正的行走版计算机科学文献汇编——写信来说，最终的图案让他想起了「叶序和费马螺线」。不知道「[叶序](https://en.wikipedia.org/wiki/Phyllotaxis)」是什么的人——在我刚把它敲进 [Wikipedia](https://www.wikipedia.org/) 之前，这个集合里也包括我——可以这样理解：它就是「植物叶子怎么长」的高级说法。[费马螺线](https://en.wikipedia.org/wiki/Fermat%27s_spiral)与之相关，因为人们用这种螺线做出过类似真实植物上的图案，比如向日葵上的那种。"
+    },
+    {
+      "type": "p",
+      "en": "I had briefly considered using spirals when I was playing with patterns last week, but I wasn't sure how to use them to get dual curvature, and I quickly moved on.  Looking at the Fermat spirals, the [sunflower model proposed by Vogel](https://thatsmaths.com/2014/06/05/sunflowers-and-fibonacci-models-of-efficiency/) did look intriguing, so I put it into my test harness to see what it would look like:",
+      "zh": "上周玩图案的时候我短暂考虑过用螺线，但不确定怎么用它拿到双重曲率，很快就放下了。看费马螺线时，[Vogel 提出的向日葵模型](https://thatsmaths.com/2014/06/05/sunflowers-and-fibonacci-models-of-efficiency/) 确实挺有意思，于是我把它放进测试程序里看看什么样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_08_b1b95dfbb2c70383.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, as I suspected from looking at the pattern on Wikipedia, it turns out not to be a very good pattern for grass planting because it suffers from the same sort of \"curved cornrow\" artifacts as non-staggered concentric intersection.  However, it does seem theoretically possible that one could devise a stagger pattern on top of it that would rectify this, much like how the staggered version fixed the concentric intersection's cornrows.",
+      "zh": "可惜，正如我在 Wikipedia 上看那个图案时所怀疑的，它并不是一个很适合种草的图案，因为它有着和非交错同心圆相交一样的「弯曲玉米垄」伪影。不过从理论上说，似乎有可能在它之上设计出一种交错规则来纠正这一点，就像交错版修正了同心圆相交的玉米垄那样。"
+    },
+    {
+      "type": "p",
+      "en": "That said, I have absolutely no idea what that pattern would be.  Nothing sprang (sprung?  springed, clearly) to mind when looking at the way the points were laid down.  Basically the pattern adds one new point to each spiral every 21 iterations:",
+      "zh": "话虽如此，我完全不知道那种规则会是什么样。看着这些点铺下去的方式，我脑子里什么也没蹦出来（sprang？sprung？显然是 springed 嘛）。基本上，这个图案每 21 次迭代往每条螺线上加一个新点："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_04_09_b900a61a574a4b45.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "While it is easy to shift any given spiral in much the same way I shifted the concentric intersection pattern, I can't say I know how much you would shift each point by, or whether you even want to shift on a spiral basis in the first place.  I think it would take me a little while to study this pattern and understand how it works more deeply before I could recommend a good jitter, and that's not something I have time to do at the moment.  If anyone plays around with it and gets good results, I'd love to hear about it.",
+      "zh": "虽然像我在同心圆相交图案上做的那样去偏移任意一条给定的螺线并不难，但我说不上来每个点该偏移多少，甚至不知道一开始该不该以螺线为单位来偏移。我想，我得先花点时间研究这个图案、更深入地理解它怎么运作，才能推荐一个好的抖动方案，而我现在没时间做这件事。如果有人拿它试玩出了好结果，我很想听听。"
+    },
+    { "type": "h2", "id": "this-is-not-real-grass", "zh": "这不是真的草", "en": "This is Not Real Grass" },
+    {
+      "type": "p",
+      "en": "Several people commented that it would be a good idea to look at real grass and understand how it grows in order to better design the pattern for planting it.  While I commend this suggestion for being exactly how one should go about solving a different problem, unfortunately it is not relevant for solving this problem.",
+      "zh": "有几个人评论说，应该去看看真实的草、理解它怎么生长，从而更好地设计种草用的图案。这个建议我赞赏——它恰恰是解决另一个问题的正确做法——但可惜，它对解决这个问题并不相关。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "The reason is because this is not a simulation of actual grass.  Actual grass grows in actual blades whose numbers vastly outstrip the number we could feasibly render on the target platforms of [The Witness](http://the-witness.net/news/).  The pattern I am trying to create isn't at all related to how real grass grows because it's not trying to mimic that pattern.  It's simply trying to figure out a way to best cover an area without you noticing the places that aren't covered.  The fact that there's some grass on the texture map is about the extent to which the properties of grass are related to this endeavor.",
+      "zh": "原因在于：这不是对真实草的模拟。真实的草长在一片片真实的草叶上，其数量远远超过我们在 [The Witness](http://the-witness.net/news/) 的目标平台上实际能渲染的数量。我要做的图案跟真实草怎么长毫无关系，因为它并不试图模仿那种图案。它只是想找出一种办法，最好地覆盖一片区域，同时让你注意不到那些没被覆盖的地方。贴图上有点草的样子，大概就是「草的性质」与这件事相关的全部程度了。"
+    },
+    {
+      "type": "p",
+      "en": "However, I will point out that I did write some grass generation code for an off-line rendering project many years ago (circa 2006) where I did do exactly what was being suggested.  I took my camera outside and took pictures of various grasses around town myself, and looked at the clumping and clustering.  That's an article for another day, but I can say definitively that it greatly informed the biggest feature of that algorithm that I had not thought to do previously, which was to focus on the fact that grasses in human-controlled environments mostly grows sideways, not upward, and capturing that goes a long way towards making something that looks like a \"lawn\".",
+      "zh": "不过我要指出，很多年前（大约 2006 年）我确实为一个离线渲染项目写过一些草生成代码，那时我做的正是这里被建议的事。我拿着相机出门，亲自拍了城里各处的草，观察它们结团和聚集的情况。那是另一篇文章的题材了，但我可以明确地说：它极大地启发了那个算法里我之前没想到的最大特性——关注「人工维护环境里的草大多往旁边长，而不是往上长」这一点，而抓住这一点，对做出像「草坪」的东西大有帮助。"
+    },
+    { "type": "h2", "id": "back-on-track", "zh": "回到正题", "en": "Back on Track" },
+    {
+      "type": "p",
+      "en": "I do apologize for spending two weeks now on something that, technically, is not even related to [The Witness](http://the-witness.net/news/) apart from the fact that it motivated me to look into it.  Next week, I will properly resume talking about things that are actually in [The Witness](http://the-witness.net/news/), and will include the previously promised riveting video footage of a place  —  and I am not making this up for effect  —  called CaseyTown.  How can you pass up an opportunity to (virtually) visit a place called CaseyTown?  I suspect you cannot pass up such an opportunity, and as such, I will see you back here next week for another wonderful Witness Wednesday.",
+      "zh": "我确实要道个歉：这两周我都在讲一件严格说来跟 [The Witness](http://the-witness.net/news/) 毫无关系的事——唯一的联系是它促使我去研究了一下。下周我会正经回到 [The Witness](http://the-witness.net/news/) 里真实存在的东西上，并且会附上之前答应过的那段扣人心弦的视频影像，拍的是一个叫 CaseyTown 的地方——我不是为了效果才这么说的。一个能（虚拟地）造访名为 CaseyTown 的地方的机会，你怎么可能放过？我猜你不可能放过这样的机会，所以下周同一时间，另一期精彩的 Witness Wednesday 见。"
+    }
+  ]
+}

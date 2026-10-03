@@ -1,0 +1,14 @@
+{
+  "id": 816,
+  "slug": "d3dx-uvatlas-released",
+  "date": "2014-12-05T12:11:28",
+  "modified": "2014-12-05T12:11:28",
+  "link": "https://www.ludicon.com/castano/blog/2014/12/d3dx-uvatlas-released/",
+  "title": "D3DX UVAtlas released",
+  "excerpt": "<p>I think it&#8217;s really awesome that Microsoft and Xin Huang released the source code of their D3DX mesh parameterization library. Chuck announced it on his blog. There&#8217;s a lot of good stuff in there, more than in any of the previous D3DX source code releases. I was never too happy with the k-means style clustering&#8230;</p>\n",
+  "content": "<p>I think it&#8217;s really awesome that Microsoft and Xin Huang released the <a href=\"https://uvatlas.codeplex.com/\">source code of their D3DX mesh parameterization library</a>. Chuck announced it on <a href=\"http://blogs.msdn.com/b/chuckw/archive/2014/11/14/uvatlas-return-of-the-isochart.aspx\">his blog</a>. </p>\n<p>There&#8217;s a lot of good stuff in there, more than in any of the previous D3DX source code releases. I was never too happy with the k-means style clustering that we use in The Witness, top-down spectral clustering seems a much better approach. Also their stretch-minimization parameterization is certainly better than our plain LSCM.</p>\n<p>I wrote about our implementation in <a href=\"http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/\">this article</a>. A few people asked for our code and we released it <a href=\"https://github.com/Thekla/thekla_atlas\">here</a>. However, today I&#8217;d recommend using Xin Huang&#8217;s as a better starting point.</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": []
+}

@@ -1,0 +1,128 @@
+{
+  "id": "official-2012-12-02-collecting-playtest-data",
+  "title": { "zh": "收集试玩测试数据", "en": "Collecting Playtest Data" },
+  "subtitle": {
+    "en": "Streaming a series of autosaves to disk, so a playtest session can be reviewed without sitting behind the player.",
+    "zh": "把一连串自动存档持续存到磁盘上，这样不用守在玩家背后也能回看一次试玩测试。"
+  },
+  "translator": {
+    "note": "原文里的图片一律按占位段落收录，图在原文链接里可以点开。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In *The Witness*, when progress in your game is saved, we also save a thumbnail that shows you where you were. This makes it easier to load a particular game later if you had multiple saves. Here is our current, very unpolished load screen:",
+      "zh": "在《The Witness》里，保存游戏进度时，我们还会存一张缩略图，显示你当时所在的位置。这样以后有多个存档时，就更容易挑出想要载入的那个。下面是我们目前这个非常没打磨过的载入界面："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/load_game_screen.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Right now, we save the thumbnail and the game data as separate files, but the names are mostly the same; so if you go into your game data folder in Windows you can see them living there very plainly:",
+      "zh": "目前我们把缩略图和游戏数据存成两个独立的文件，但文件名基本相同；所以如果你打开 Windows 里的游戏数据文件夹，就能很直白地看到它们躺在那儿："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/file_window.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "(It might be interesting to do it like *Spore* and embed the save data in the image file, so that there's only one file per save. Maybe we'll do this, though it's not a no-brainer; right now the image file is usually bigger than the save data, so this would involve tying a relatively small amount of crucial data to a relatively large amount of cosmetic data. Maybe that doesn't matter, though.)",
+      "zh": "（像 *Spore* 那样把存档数据嵌进图片文件里，让每个存档只对应一个文件，也许挺有意思。我们可能会这么做，不过这不是个一眼就能拍板的决定；目前图片文件通常比存档数据还大，所以这相当于把相对少量的关键数据绑在相对大量的装饰性数据上。不过也许这没什么关系。）"
+    },
+    {
+      "type": "p",
+      "en": "As I mentioned in [the previous post](http://the-witness.net/news/2012/11/very-limited-very-closed-beta/), we are starting to get the game out to a limited number of players. It's been a long time since I've had anyone new play through the game as a whole, so I really have no idea how it plays now, and it's important to find out. However, it's not so easy, because if you sit behind someone and watch them play a game, they are going to play it differently than if you weren't there. You invalidate your own playtest data.",
+      "zh": "正如我在[上一篇](http://the-witness.net/news/2012/11/very-limited-very-closed-beta/)里提到的，我们开始把游戏发给一小批玩家了。已经很久没有新人把整个游戏从头到尾玩一遍了，所以我完全不知道它现在玩起来是什么样，而弄清这一点很重要。可这事并不容易，因为如果你坐在别人背后看他玩游戏，他的玩法就和你不在场时不一样。你会让自己收集到的试玩测试数据失效。"
+    },
+    {
+      "type": "p",
+      "en": "So, I wanted to set up the game to record some minimal playtest data, that would be easy for me to browse through later on, and that would get recorded without me being there to directly watch the play session.",
+      "zh": "所以我想让游戏自己记录一些最低限度的试玩测试数据：以后我能很方便地翻看，而且不用我坐在旁边直接盯着玩的过程，它也会被记录下来。"
+    },
+    {
+      "type": "p",
+      "en": "One of the first approaches that programmers often consider is an input recording method. You just journal a stream of all the player's inputs, and you can play that back deterministically to reproduce the entire game session. I have never liked this method. Firstly, you need to play back using exactly the same version of the game executable that the player used, which is a pain; secondly, this kind of playback code is brittle and breaks often. An uninitialized memory read bug can render your playback data useless! (Of course, one reason you might want playback data is to track down an uninitialized memory read bug... so... there's a problem here.)",
+      "zh": "程序员最先考虑的方案之一，通常是输入录制法。你只要把玩家的所有输入流水记录下来，就能确定性地回放，重现整个游戏过程。我从不喜欢这个办法。首先，回放必须使用和玩家当时完全相同的游戏可执行文件版本，很麻烦；其次，这类回放代码很脆，经常坏掉。一个未初始化内存读取的 bug 就能让你的回放数据彻底失效！（当然，你想要回放数据的理由之一，可能正是为了追查未初始化内存读取的 bug……所以……这里头有个问题。）"
+    },
+    {
+      "type": "p",
+      "en": "For these reasons I didn't want to use input journaling. It seemed to me that our saved games are small enough, and the thumbnails are nice enough, that together they almost solve the problem. All I need to do is save a series of snapshots / game states over time, without overwriting previous saves:",
+      "zh": "因为这些原因，我不想用输入录制。在我看来，我们的存档足够小，缩略图也足够好看，两者合起来几乎就解决了问题。我要做的只是随时间保存一系列快照／游戏状态，而不覆盖之前的存档："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/streamsave.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Whereas the earlier folder contained a collection of different play sessions, this one contains one play session at different moments in time. Every time the game made an autosave for this play session (overwriting the old one in the normal way), it also also copied the autosave here. The date and time that are in each filename just indicate when that game was started; the number at the end tells you which snapshot this is.",
+      "zh": "前面那个文件夹里装的是一次次不同的游玩过程，而这个文件夹里装的是同一次游玩在不同时间点的样子。每当游戏为这次游玩做一次自动存档（按常规方式覆盖掉旧的那个），它同时也会把这个自动存档复制一份到这里。每个文件名里的日期和时间只表示那局游戏是何时开始的；末尾的数字告诉你这是第几张快照。"
+    },
+    {
+      "type": "p",
+      "en": "There's one immediate, very nice property of this: I don't even need to run the game in order to get a general idea of how someone's playtest went. Once they send me the files, I can just click on the first one in Windows to invoke the image viewer, and then click the forward/backward buttons in the image viewer to animate my way through the game.",
+      "zh": "这么做有一个立竿见影的好处：我甚至不用运行游戏，就能大致了解某个人的试玩测试进行得怎么样。等他把文件发给我，我在 Windows 里点开第一张调出图片查看器，然后点查看器里的前进／后退按钮，就能像放动画一样把整局游戏过一遍。"
+    },
+    {
+      "type": "p",
+      "en": "But, if I have questions about what was going on, I can also dig into the save file that corresponds to any given image. I made a mode that lets me browse these saves in-game, load up any particular one into the current world state, and play from there. I invoke it by running a console command:",
+      "zh": "但如果我对当时发生了什么有疑问，我还可以去深挖任意一张图所对应的存档文件。我做了个模式，能在游戏里浏览这些存档，把其中任意一个载入当前世界状态，然后从那里接着玩。我通过执行一条控制台命令来调用它："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.02__time_19_36_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This loads all the saved games and thumbnails and pops them into a scrolling list at the top of the screen, in chronological order:",
+      "zh": "它会载入所有存档和缩略图，按时间顺序把它们排到屏幕顶部一个可滚动的列表里："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.02__time_19_36_n02.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I just scroll to the one I want:",
+      "zh": "我滚到想要的那个："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.02__time_19_36_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "... then press Enter to load that game state:",
+      "zh": "……然后按 Enter 载入那个游戏状态："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.02__time_19_36_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It's very fast to use and it only took a few hours to program.",
+      "zh": "用起来非常快，而写它只花了几个小时。"
+    },
+    {
+      "type": "p",
+      "en": "This whole system is also pretty cool because it's much more robust than the input-recording method. If I want to look into some detail that is super-nitpicky, I may need to use the same build of the game executable that the player used, but this will almost never be necessary. Usually I won't even need to use the in-game browser -- as I mentioned, I can just click through the thumbnails in Windows to get a basic sense of what's going on.",
+      "zh": "整套系统还有个好处：它比输入录制法健壮得多。如果我想追究某个极其琐碎的细节，也许还是得用玩家当时那个版本的可执行文件，但这几乎永远没必要。通常我连游戏内的浏览器都用不上——就像我说的，只要在 Windows 里挨个点缩略图，就能大致知道发生了什么。"
+    },
+    {
+      "type": "p",
+      "en": "The fact that we only have discrete snapshots is sort of a side-bonus: because we only snapshot every minute or so, the data is not so creepy and spy-like; players can relax while they are playtesting and know that we won't later be obsessing over their every move.",
+      "zh": "我们只有离散的快照，这算是额外的福利：因为我们大约每分钟才拍一次快照，这些数据就不那么瘆人、不那么像监视；玩家在做试玩测试时可以放松，知道我们之后不会揪着他的一举一动反复研究。"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "official-2014-06-04-road-to-e3-day-3",
+  "title": { "zh": "通往 E3 之路 · 第 3 天", "en": "Road to E3 – Day 3" },
+  "subtitle": {
+    "en": "A productive day of mostly invisible work — collision and occluders — plus some new interior spaces.",
+    "zh": "高产的一天，活儿大多花在看不见的地方——碰撞和遮挡物——外加几处新的内部空间。"
+  },
+  "translator": {
+    "note": "原文 3 张图；图片链接指向原文上传的最大尺寸原图。原文里图片与后一句话连在同一段，译文按原顺序保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This was a very productive day but visually less noticeable.",
+      "zh": "这天的产出很高，但视觉上不太看得出来。"
+    },
+    {
+      "type": "p",
+      "en": "A lot of \"invisible' stuff got done like collision and occluders to make the area decently playable:",
+      "zh": "做了很多「看不见」的东西，比如碰撞和遮挡物，好让这片区域能正常玩起来："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_33_n03.png) The center building is now complete and we got the layout for the ruined walls so the major task for tomorrow is to get them all detailed (very time consuming!)",
+      "zh": "（原文此处有一张图）中央建筑现在完成了，废墟墙体的布局也定下来了，所以明天的主要任务就是给它们全都加上细节（非常耗时间！）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_29_n02.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And finally some new interior spaces that you can't really see from the previous angles.",
+      "zh": "最后是一些从之前那些角度看不到的新内部空间。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_38_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Orsi is in charge of the vegetation (she is amazing at it) so that is one big chunk of work I don't have to worry about!",
+      "zh": "植被由 Orsi 负责（她做得非常棒），所以这一大块工作我不用操心！"
+    },
+    {
+      "type": "p",
+      "en": "I'll be aiming to have everything done by tomorrow so I can use Friday for polishing and any major issues that I might have missed.",
+      "zh": "我的目标是在明天把一切都做完，这样周五就能用来打磨，以及处理任何我可能漏掉的大问题。"
+    }
+  ]
+}

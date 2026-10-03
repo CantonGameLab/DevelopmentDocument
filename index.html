@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Witness 技术文档 · 中英对照学习手册</title>
+<link rel="stylesheet" href="style.css">
+<!-- KaTeX 本地自带（vendor/katex），不走 CDN：断网也要能读公式 -->
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="#/" id="brand">伴读 <span class="brand-sub">开发文档 · 中英对照</span></a>
+
+  <div class="bar-group">
+    <span class="bar-label">语言</span>
+    <div class="seg" id="seg-lang">
+      <button data-lang="zh">中文</button>
+      <button data-lang="en">English</button>
+      <button data-lang="bi" class="on">中英对照</button>
+    </div>
+  </div>
+
+  <div class="bar-group">
+    <a class="ghost" id="btn-learn" href="#" title="学习路径总览">学习路径</a>
+    <button class="ghost" id="btn-toc">目录</button>
+    <button class="ghost" id="btn-context" title="把当前阅读位置与选中文字复制成一段 Markdown，可直接粘给 agent 提问">复制上下文</button>
+    <button class="ghost" id="btn-help" title="快捷键">?</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="side" id="side"></aside>
+  <main class="main" id="main"></main>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<!--
+  用原生 <dialog> + showModal()：它进入浏览器的 top layer，
+  任何 z-index、任何 iframe 堆叠上下文都盖不住它。
+  之前用普通 div 时，嵌在伴读面板的 iframe 里会被面板本身遮住。
+-->
+<dialog class="modal" id="modal">
+  <div class="modal-box">
+    <button class="modal-x" id="modal-x" aria-label="关闭">×</button>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</dialog>
+
+<!--
+  KaTeX 本地自带（vendor/katex），不走 CDN：断网也要能读公式。
+  两个脚本都 defer，顺序保持：katex 先于 app.js（defer 保证按出现顺序执行）。
+-->
+<script defer src="vendor/katex/katex.min.js"></script>
+<script defer src="app.js"></script>
+</body>
+</html>

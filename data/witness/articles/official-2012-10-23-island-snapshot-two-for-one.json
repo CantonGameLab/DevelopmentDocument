@@ -1,0 +1,23 @@
+{
+  "id": "official-2012-10-23-island-snapshot-two-for-one",
+  "title": { "zh": "买一送一的岛屿快照", "en": "Island Snapshot two-for-one" },
+  "subtitle": {
+    "en": "Two views of the island as it stands.",
+    "zh": "岛上目前样子的两张视图。"
+  },
+  "translator": {
+    "note": "源文件为 2012-003-island-snapshot-two-for-one.md，与本批次另一篇同名的 Island Snapshot 不是同一篇。正文没有文字，只有两张图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/10/shot_2012.10.23__time_17_20_n02.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/10/shot_2012.10.23__time_17_17_n01.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

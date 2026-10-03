@@ -1,0 +1,28 @@
+{
+  "id": "official-2014-01-30-last-minute-area",
+  "title": { "zh": "最后一刻的区域", "en": "Last Minute Area" },
+  "subtitle": {
+    "en": "A new cluster of slab buildings full of puzzles in the center of the island, built out by the whole art team.",
+    "zh": "岛中心新增的一批装满谜题的板式建筑，由整个美术团队一起做出来。"
+  },
+  "translator": {
+    "note": "原文正文只有两段，配图排在两段正文之前；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/01/shot_2014.01.30__time_14_46_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Around Christmas time, Jon surprised us with a bunch of new slab buildings full of puzzles in the center of the island.",
+      "zh": "圣诞节前后，Jon 用岛中心一批装满谜题的新板式建筑给了我们一个惊喜。"
+    },
+    {
+      "type": "p",
+      "en": "Previously, there were only some empty ruins here, so the whole area was redesigned by the architects to accommodate the new puzzles. I attacked it first, about 3 weeks ago, adding a couple of puzzles myself and starting to model the three buildings on the right. Now, the entire art team is working on it. Luis is taking care of the entire left portion, which is still mostly low ruins, Eric is tackling the tower in the middle, and Alex is working on the building behind the tower, with the orange box sticking out of it. There is still one slab building up for grabs, but it's coming together very quickly for such a huge area!",
+      "zh": "以前这里只有一些空荡荡的废墟，所以整片区域由建筑师们重新设计，好容纳这些新谜题。大约 3 周前我第一个下手，自己加了几个谜题，并开始给右边的三栋建筑建模。现在整个美术团队都在做这块。Luis 负责整个左侧部分——那里现在基本还是低矮的废墟；Eric 啃中间那座塔；Alex 在做塔后面那栋探出一个橙色方块的建筑。还剩一栋板式建筑没人认领，但对这么大一片区域来说，它成形得已经非常快了！"
+    }
+  ]
+}

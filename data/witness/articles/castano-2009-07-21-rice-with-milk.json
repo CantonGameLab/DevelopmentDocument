@@ -1,0 +1,85 @@
+{
+  "id": "castano-2009-07-21-rice-with-milk",
+  "title": { "zh": "牛奶米饭", "en": "Rice with milk" },
+  "subtitle": {
+    "en": "A childhood dessert made with raw milk from the farm, lost for years and found again in California, where selling raw milk is legal.",
+    "zh": "小时候用农场生牛奶做的甜点，断了多年，到了允许卖生牛奶的加州又找了回来。"
+  },
+  "translator": {
+    "note": "源文里「插图 + 正文」挤在同一行的两处（第 12 行、第 18 行）已在原位置拆分：图片归一化成占位块，正文各自成段，顺序不变。度量单位（cups、fl oz）保留原文，摄氏度换算见需要处。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "When I was a kid I lived in the city, but once a week we got a large milk delivery from the farm. The milk was raw and fresh. I remember we had to boil it ourselves and remove the excess of fat. One of the greatest treats of my childhood was eating the freshly skimmed cream of the raw milk mixed with sugar.",
+      "zh": "我小时候住在城里，但每周都会从农场送来一大批牛奶。那牛奶是生的、新鲜的。我记得得自己把它煮开，再撇掉多余的脂肪。我童年最大的享受之一，就是把刚撇下来的生牛奶奶油拌上糖吃。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm4.static.flickr.com/3298/3625740503_c866c43ec4.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Since we got more milk than we could actually drink ourselves in a week, my grandmother used to make deserts with it. My favorite was rice with milk. However, at some point somebody decided that the few cows in the farm were too much of a hassle to maintain, the cows were sold, and our supply of raw milk ended. We tried to keep making the same recipes with pasteurized milk, but it was not the same. So, I spent years without enjoying this desert until I came to the US.",
+      "zh": "因为送来的牛奶一星期里根本喝不完，我奶奶就拿它做甜点。我最喜欢的是牛奶米饭。但后来不知什么时候，有人觉得农场里那几头牛太难伺候，牛就被卖掉了，我们的生牛奶供应也就断了。我们试过用巴氏杀菌奶继续做同样的食谱，但味道不一样了。于是我有好多年没再吃到这道甜点，直到来了美国。"
+    },
+    {
+      "type": "p",
+      "en": "One of the nice things about living in California is that it’s legal to sell raw milk. Probably the most popular producer is [Organic Pastures](http://www.organicpastures.com/); I’ve found their products at the local coop, but I wouldn’t be surprised if they are also available at Nuggets, New Leaf or Whole Foods.",
+      "zh": "住在加州的一个好处是，卖生牛奶是合法的。最有名的生产商大概是 [Organic Pastures](http://www.organicpastures.com/)；我在本地合作社见过他们的产品，要是 Nuggets、New Leaf 或 Whole Foods 也有卖，我一点都不会意外。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://castano.ludicon.com/blog/wp-content/uploads/2009/07/P5300482-300x225.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The remaining ingredients are easy to find:",
+      "zh": "剩下的食材都很好找："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "8 cups of milk (64 fl oz)", "zh": "8 cups 牛奶（64 fl oz）" },
+        { "en": "1 cup of rice", "zh": "1 cup 米" },
+        { "en": "1 cup of sugar", "zh": "1 cup 糖" },
+        { "en": "A pinch of salt", "zh": "一小撮盐" },
+        { "en": "1 lemon zest", "zh": "1 个柠檬的皮屑" },
+        { "en": "2 cinnamon sticks", "zh": "2 根肉桂棒" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The preparation is very simple, but in order to get good results the key is to use the right ingredients. Raw milk is essential and the rice needs to be a starchy rice such as arborio.",
+      "zh": "做法非常简单，但想要做好，关键是用对食材。生牛奶必不可少，米则要用 arborio 这种淀粉含量高的。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Put all the ingredients except the sugar in a large sauce pan and bring to boil. Stir constantly so that the rice doesn’t stick at the bottom.",
+          "zh": "把除糖以外的所有食材放进一个大深锅，煮开。要不停搅拌，免得米粘在锅底。"
+        },
+        {
+          "en": "Reduce the heat to low and let it simmer during 15 minutes.",
+          "zh": "转小火，让它微沸 15 分钟。"
+        },
+        {
+          "en": "Add the sugar and cook for 10 more minutes or until the rice is well done.",
+          "zh": "加入糖，再煮 10 分钟，或者煮到米完全熟透。"
+        },
+        {
+          "en": "Let it cool for a few hours and refrigerate.",
+          "zh": "放凉几个小时，然后冷藏。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "It may seem that the rice has too much milk, but most of it will be absorbed as it cool downs and in the end it should have a creamy texture. By adding the sugar later the rice is boiled in milk and retains its natural flavor, in contrast with the sweetness of the condensed milk that surrounds it. If you prefer a more homogeneous sugary flavor, just add the sugar sooner.",
+      "zh": "看着好像牛奶太多了，但放凉的过程中大部分都会被吸收，最后应该是奶油般的口感。晚放糖的好处是米是在牛奶里煮透的，能保住自己的本味，跟外面裹着一层炼乳似的甜形成对比。要是你更喜欢那种均匀的甜味，那就早点放糖。"
+    }
+  ]
+}

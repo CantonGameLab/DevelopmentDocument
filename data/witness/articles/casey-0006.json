@@ -1,0 +1,261 @@
+{
+  "id": "casey-0006",
+  "title": { "zh": "找出并修掉那个五秒卡顿", "en": "Finding and Fixing a Five-Second Stall" },
+  "subtitle": {
+    "en": "A strange pause in The Witness's startup sequence leads to an investigation of Windows' hotkey handling.",
+    "zh": "《The Witness》启动流程里一段诡异的停顿，把调查引向了 Windows 的热键处理机制。"
+  },
+  "translator": {
+    "note": "归档源码里有两段正文被误标成了 cpp 代码块（已按正文段落译出），另有一行代码注释被拆到代码块之外（已并回同一个代码块）；文中引自 Microsoft 官方文章的那段用 quote 块呈现（原文未加引用标记）；原文插图未收录。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The great thing about programming on Windows is that it is the only commercially viable platform where you can ship software to users without getting approval from a giant bureaucracy (well, perhaps I should say [it used to be](https://caseymuratori.com/blog_0004)).  The not-so-great thing about programming on Windows is that, well, the Windows API is a horrific nightmare.",
+      "zh": "在 Windows 上编程最棒的一点是：它是唯一一个商业上可行、能让你把软件直接送到用户手里而无需某个庞大官僚机构批准的平台（好吧，也许我该说[它曾经是](https://caseymuratori.com/blog_0004)）。在 Windows 上编程不那么棒的一点是，嗯，Windows API 是一场可怕的噩梦。"
+    },
+    {
+      "type": "p",
+      "en": "Granted, it is not uniformly horrific.  It ranges from only slightly scarey (xinput, comdlg32) to full psycho (DirectShow, Event Tracing, TabletPC, etc.).  But no matter which part of the spectrum you encounter, programming on Windows tends to be about doing a lot of unnecessary research, experimentation, and debugging due to a confluence of poorly designed APIs.",
+      "zh": "当然，它也不是一律可怕。它从只是稍微有点吓人（xinput、comdlg32）到彻底发疯（DirectShow、Event Tracing、TabletPC 等等）都有。但不管你碰上光谱上的哪一段，Windows 编程往往就意味着做大量不必要的研究、试验和调试——这都是一堆设计糟糕的 API 凑到一起的结果。"
+    },
+    {
+      "type": "p",
+      "en": "Since time spent debugging Windows issues isn't often chronicled, I thought I'd go ahead and describe my experience this Saturday of tracking down a Windows bug in [The Witness](http://the-witness.net/news/).",
+      "zh": "既然花在调试 Windows 问题上的时间很少被记录下来，我索性把这个周六在《The Witness》里追查一个 Windows bug 的经历写出来。"
+    },
+    { "type": "h2", "id": "symptom", "zh": "症状", "en": "The Symptom" },
+    {
+      "type": "p",
+      "en": "Apparently, not everyone on [The Witness](http://the-witness.net/news/) team was seeing the symptom.  But trust me, it was there.",
+      "zh": "显然，《The Witness》团队里不是每个人都能看到这个症状。但相信我，它就在那里。"
+    },
+    {
+      "type": "p",
+      "en": "On both [Jon](http://number-none.com/blow/) and my machines, there was a period during the initial loading of the game where you couldn't do things like ALT-TAB back to the debugger.  If you set a breakpoint then ran the game, when the breakpoint eventually hit and the debugger came to the front, it would wait about five seconds before it allowed you to actually interact with it.  Sometimes, in rare cases, it would go into some sort of psycho mode whereby mouse movements stuttered, and the computer would literally beep at you as the mouse moved, for several seconds.  Then everything would return to normal.",
+      "zh": "在 [Jon](http://number-none.com/blow/) 和我的机器上，游戏初始加载期间都有一段时间没法做 ALT-TAB 切回调试器这类事情。如果你设个断点再运行游戏，等断点最终命中、调试器切到前台之后，它要等上大约 5 秒才允许你真正操作它。偶尔、极少数情况下，它还会进入某种发疯模式：鼠标移动一顿一顿的，而且鼠标一动，电脑就真的会「嘀」你一声，持续好几秒。然后一切又恢复正常。"
+    },
+    {
+      "type": "p",
+      "en": "While not technically a showstopper, this is the kind of bug that's worth fixing if you can, because it costs you real development time every day.  Five seconds wasted every breakpoint is bad news, and people often underestimate the effects of frustration that can build up over time due to flaky and unpleasant development environments.  So I decided to try to track it down.",
+      "zh": "严格来说它算不上什么致命问题，但这就是那种「能修就该修」的 bug，因为它每天都在实实在在吃掉你的开发时间。每个断点浪费 5 秒可不是好消息，而且人们往往低估了那种因为开发环境不稳定、用着难受而日积月累起来的烦躁感有多大影响。所以我决定把它揪出来。"
+    },
+    {
+      "type": "p",
+      "en": "Because Windows is a closed-source platform, there's no great way to track down problems of this nature.  However, having programmed on Windows for over twenty years now, I have a nose for it, so I felt like I knew the best place to start: since there was definitely a UI blackout somewhere during startup, there had to be something occurring early in the execution of the program that was causing at least that particular symptom.  So before doing anything else, I started stepping through the entire startup sequence of the program to see if anything out of the ordinary struck me.",
+      "zh": "由于 Windows 是闭源平台，这类问题没有什么好的追查办法。不过我已经在 Windows 上写了二十多年程序，对它有直觉，所以我觉得自己知道该从哪儿下手：既然启动过程中肯定存在某处 UI 停摆，那就一定有什么东西发生在程序执行的早期，至少造成了这个特定症状。于是在做别的事之前，我先单步走了一遍程序的整个启动序列，看看有没有什么不寻常的地方会引起我的注意。"
+    },
+    {
+      "type": "p",
+      "en": "I very quickly came upon this code:",
+      "zh": "我很快就撞上了这段代码："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// @@ The hook appears to install properly, but is never invoked :(\n keyboard_hook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);"
+    },
+    {
+      "type": "p",
+      "en": "Now, I don't want to make it sound like the \"find the source of the problem\" phase of Windows debugging is straightforward.  It usually takes a very long time, sometimes multiple days.  But as luck would have it, this was literally the first piece of code I suspected, and it turned out to be the culprit.",
+      "zh": "我不想把 Windows 调试里「找到问题根源」这个阶段说得好像很轻松。它通常要花很长时间，有时要花上好几天。但运气就是这么好：这恰恰是我怀疑的第一段代码，而它就是罪魁祸首。"
+    },
+    {
+      "type": "p",
+      "en": "I commented out the [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx), ran the program, and poof!  All the symptoms were gone.",
+      "zh": "我把这行 [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) 注释掉，运行程序——噗！所有症状都消失了。"
+    },
+    { "type": "h2", "id": "problem", "zh": "问题所在", "en": "The Problem" },
+    {
+      "type": "p",
+      "en": "From experience, I've learned that it's always best to fully understand a problem before you fix it.  If you just patch over its symptoms but never figure out what the problem really was, it will often come back to haunt you.",
+      "zh": "经验告诉我，最好永远是在完全理解一个问题之后再动手修它。如果你只是在症状上打补丁，却从没弄清问题究竟是什么，它往往会回来找你麻烦。"
+    },
+    {
+      "type": "p",
+      "en": "In this context, that meant two things: first, I should figure out specifically why the keyboard hook was causing the UI stalls; second, I should determine why the code had been trying to call [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) in the first place, even though apparently it never quite worked (according to the \"is never invoked\" comment).",
+      "zh": "在这个语境下，这意味着两件事：第一，我要弄清键盘钩子具体为什么会造成 UI 停摆；第二，我要弄清这段代码当初为什么要调用 [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx)，明明它看起来从来没真正生效过（按那句「从未被调用」的注释所说）。"
+    },
+    {
+      "type": "p",
+      "en": "The first part turns out to be obvious in hindsight, but it took me a little while to put all the pieces together and be sure I had a solid explanation for what we were seeing.  As with any puzzle, looking at the finished picture is easy, but figuring out what that picture might be when all you have are little pieces coming in one at a time is much more difficult.  Here's the best picture I could come up with, but of course there's no way to completely verify it external to Microsoft:",
+      "zh": "第一部分事后看是显然的，但我还是花了一小会儿才把所有碎片拼起来，确认自己对所见现象有一个站得住脚的解释。任何谜题都是这样：看拼好的图很容易，可当你手里只有一块块陆续送来的小碎片时，要推断出这张图是什么就难得多。下面是我能拼出的最好版本，当然，在 Microsoft 之外根本没有办法完全验证它："
+    },
+    {
+      "type": "p",
+      "en": "Normal Windows hooks are pieces of code which execute in the address space of the eventual message recipient, not the installer of the hook.  It is for this reason that, normally, if you want to install a global hook, you must put the hook code in a DLL, because that DLL must be mapped into the address space of every running executable on the machine that can receive Windows messages.",
+      "zh": "普通的 Windows 钩子是运行在「最终接收消息的那个进程」地址空间里的代码，而不是运行在安装钩子的进程里。正因如此，通常你想装一个全局钩子，就必须把钩子代码放进 DLL，因为那个 DLL 得被映射进机器上每一个能接收 Windows 消息的正在运行的进程的地址空间。"
+    },
+    {
+      "type": "p",
+      "en": "But low-level hooks are completely different.  A low-level hook like WH_KEYBOARD_LL is a piece of code that resides in only the process that registers the hook.  Windows remembers which thread registered the hook, and when any other executable is about to have a hooked message posted to its message queue, Windows actually waits until it can switch contexts back to the hook thread, run the hook in that context, and then finally deliver the message.",
+      "zh": "但低级钩子完全不同。像 WH_KEYBOARD_LL 这样的低级钩子，只驻留在注册这个钩子的那个进程里。Windows 会记住是哪个线程注册了钩子；当任何其他可执行程序即将有一条被钩的消息投递到自己的消息队列时，Windows 实际上会一直等到能把上下文切回那个钩子线程、在该上下文中运行钩子，然后才最终投递这条消息。"
+    },
+    {
+      "type": "p",
+      "en": "This leads directly to the symptom that we were experiencing.  When the game is loading, its main thread isn't yielding to Windows frequently like it is during normal play.  Since the main thread is the one that registered the hook, Windows must wait for that thread to finish all the load-time work it was doing and call a function which yields to Windows in order for Windows to actually call the hook procedure.  Since no keyboard processing can occur until the hook procedure has run, the keyboard becomes unresponsive as messages back up waiting to be processed through the hook.  This completely explains the UI problems during startup, and fits with the oddity that the mouse never seemed to be affected, just the keyboard.",
+      "zh": "这就直接导致了我们遇到的症状。游戏加载时，它的主线程不像正常游玩时那样频繁地把控制权交还给 Windows。而注册钩子的正是主线程，所以 Windows 必须等这个线程把手头所有加载期的工作做完、调用一个会让出控制权的函数，才能真正调用钩子过程。既然在钩子过程运行之前任何键盘处理都无法进行，随着消息不断堆积、排队等着过钩子，键盘就变得毫无响应。这完全解释了启动期的 UI 问题，也吻合「受影响的似乎只有键盘、从来没有鼠标」这个怪现象。"
+    },
+    {
+      "type": "p",
+      "en": "When the game hit a breakpoint, the keyboard hook couldn't execute at all because the debugger had halted the thread required to execute it.  This would have meant that keyboard input would be completely halted, and the debugger would never be able to receive keystrokes, if it weren't for the fact that Windows actually uses a timeout on hook calls.  If the timeout value is exceeded waiting for the hook thread to become available, the hooking executable is assumed to have crashed, and it will silently remove that hook and continue with normal operation.",
+      "zh": "当游戏命中一个断点时，键盘钩子根本没法执行，因为调试器已经让「执行它所必需的那个线程」停住了。要不是 Windows 实际上给钩子调用设了超时，这本该意味着键盘输入彻底停摆、调试器永远收不到按键。如果在等待钩子线程变为可用时超出了超时值，Windows 就认定那个安装钩子的可执行程序已经崩溃，于是悄悄移除这个钩子，继续正常工作。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "That timeout value?  Five seconds  —  right in line with our observed pause (technically, it's whatever is set in the registry under HKEY_LOCAL_MACHINE\\Control Panel\\Desktop\\LowLevelHooksTimeout, but the default is five seconds).",
+      "zh": "那个超时值是多少？5 秒——正好和我们观察到的停顿吻合（严格说，它是注册表里 HKEY_LOCAL_MACHINE\\Control Panel\\Desktop\\LowLevelHooksTimeout 下设置的值，但默认就是 5 秒）。"
+    },
+    {
+      "type": "p",
+      "en": "So, no mystery as to the pathology.  But what about the second part?  What was the code actually trying to do?",
+      "zh": "所以，病理上已经没有谜团了。但第二部分呢？这段代码本来到底想干什么？"
+    },
+    { "type": "h2", "id": "logo-keys", "zh": "Windows 徽标键", "en": "The Windows Logo Keys" },
+    {
+      "type": "p",
+      "en": "Although [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) might seem like an odd call to make in a game executable, it's actually quite common.  It's there to prevent the Windows logo keys on modern keyboards from ruining full-screen games.  Because the keys are placed in a location that's easy to hit by mistake, many gamers would accidentally hit them, causing their games to be instantly deactivated by Windows in favor of bringing up the start menu.  So widely acknowledged was this problem that, when these keys were first introduced, Microsoft itself published a recommended work-around.  From [Disabling Shortcut Keys in Games](http://msdn.microsoft.com/en-us/library/windows/desktop/ee416808%28v=vs.85%29.aspx):",
+      "zh": "虽然在一个游戏可执行程序里调用 [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) 看起来有点奇怪，但其实相当常见。它在那儿是为了防止现代键盘上的 Windows 徽标键毁掉全屏游戏。因为这两个键的位置很容易误按，很多玩家会不小心按到，于是游戏被 Windows 立刻停用、转而去弹开始菜单。这个问题被公认得太普遍了，以至于这些键刚出现时，Microsoft 自己就发布了一个推荐的绕行方案。摘自 [Disabling Shortcut Keys in Games](http://msdn.microsoft.com/en-us/library/windows/desktop/ee416808%28v=vs.85%29.aspx)："
+    },
+    {
+      "type": "quote",
+      "en": "This article describes how to temporarily disable keyboard shortcuts in Microsoft Windows to prevent disruption of game play for full screen games… Use a low-level keyboard hook to filter out the Windows key from being processed.",
+      "zh": "本文介绍如何在 Microsoft Windows 中临时禁用键盘快捷键，以免全屏游戏过程中受到干扰……使用低级键盘钩子把 Windows 键过滤掉，使其不被处理。"
+    },
+    {
+      "type": "p",
+      "en": "The article goes on to show sample code that is basically the same code that was being used in [The Witness](http://the-witness.net/news/).  It's a simple [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) call with WH_KEYBOARD_LL whose hook routine does nothing but block VK_LWIN and VK_RWIN keys from being processed.  The only difference between the code in [The Witness](http://the-witness.net/news/) and the code in the sample is that [The Witness](http://the-witness.net/news/) would conscientiously remove the hook when it no longer had focus, and then reinstall the hook when focus was regained.  The sample code, by contrast, just set a global variable.",
+      "zh": "文章接着给出示例代码，它基本上就是《The Witness》里在用的那段代码。一个简单的 [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) 调用加上 WH_KEYBOARD_LL，其钩子例程除了阻止 VK_LWIN 和 VK_RWIN 键被处理之外什么都不做。《The Witness》的代码和示例代码唯一的区别是：《The Witness》会在失去焦点时自觉地把钩子移除，重新获得焦点时再把钩子装回去；相比之下，示例代码只是设了一个全局变量。"
+    },
+    {
+      "type": "p",
+      "en": "So if this was what the code was doing, why the frowny face?  If you look back at the comment, it states very clearly that the hook was never being invoked, even though no error message came back from Windows.  And, although I normally remap my Windows keys via the registry, I went ahead and mapped them back to see if [The Witness](http://the-witness.net/news/) was properly blocking their effects.",
+      "zh": "那么，既然代码干的是这件事，为什么还摆个苦脸？回头看那句注释，它说得很清楚：钩子从未被调用过，尽管 Windows 没有返回任何错误信息。另外，虽然我平时是通过注册表重映射 Windows 键的，这次我还是把它们改回了原样，想看看《The Witness》是否真的挡住了它们的效果。"
+    },
+    {
+      "type": "p",
+      "en": "Much as the frowny face foretold, it wasn't.",
+      "zh": "正如那张苦脸所预言的：并没有。"
+    },
+    { "type": "h2", "id": "static-discipline", "zh": "遵守静态纪律", "en": "Obeying the Static Discipline" },
+    {
+      "type": "p",
+      "en": "I don't know anything about digital circuit design, but I once watched a lecture by [Gill Pratt](http://www.olin.edu/about/presidents-council/gill-pratt/) where he explained something called \"the static discipline\".  In essence, it is the requirement that any component in a circuit must accept voltages with a certain range for \"1\" and \"0\", and then must output its own results in a certain range.  These ranges are defined so as to require that components always produce equal or better conditioned voltages than their inputs, thus ensuring that the digital signals being propagated through the circuit don't degrade into noise due to lots of tiny losses.",
+      "zh": "我对数字电路设计一无所知，但我看过一次 [Gill Pratt](http://www.olin.edu/about/presidents-council/gill-pratt/) 的讲座，他讲了一个叫「静态纪律」（the static discipline）的东西。本质上，它要求电路里的任何元件都必须接受落在某个范围内的「1」和「0」电压，并且必须把自己的结果输出在某个范围内。这些范围的定义方式，要求元件输出的电平总是等于或优于它输入的电平，从而保证在电路中传播的数字信号不会因为大量微小损耗而退化成噪声。"
+    },
+    {
+      "type": "p",
+      "en": "For some reason, I took this concept to heart in a programming sense and have found it is a good rule to code by.  My version of the static discipline, adapted for software, is that whenever you are making a modification to a piece of code, you should always leave it in a state of stability equal to or better than how you found it.  And preferably the latter.",
+      "zh": "出于某种原因，我把这个概念当成编程上的信条记在了心里，并发现这是一条很好的编码准则。我改编给软件用的静态纪律是这样的：每当你改动一段代码时，都应该让它在你离开时的稳定程度不低于、最好是高于你接手时的样子。而且最好是后者。"
+    },
+    {
+      "type": "p",
+      "en": "All too often, people go in to fix a problem or add a feature to a piece of code, and they just hammer on it until it does that one new thing.  The resulting code is then usually more fragile, less well designed, more unnecessarily complex, etc.  To try to prevent myself from having this effect, I try to observe the static discipline.",
+      "zh": "太多时候，人们去修一个问题、或给一段代码加一个功能，就只是对着它一通猛敲，直到它能做出那件新事情为止。结果得到的代码往往更脆弱、设计更差、没必要地更复杂，等等。为了尽量不让自己造成这种后果，我努力遵守静态纪律。"
+    },
+    {
+      "type": "p",
+      "en": "And so it was with this Windows key situation.  I could see what the code was supposed to be doing, and although I could reasonably fix my bug by just commenting out the hook (because it didn't work), I felt it was the more disciplined thing to do to figure out why the hook wasn't working, and to implement something that did what it was trying to do.  Since there was no obvious bug, I had to start experimenting.",
+      "zh": "Windows 键这件事也是如此。我看得出这段代码本该做什么；虽然我只要把钩子注释掉（反正它没生效）就算合理地修掉了自己的 bug，但我觉得更守纪律的做法是弄清钩子为什么没生效，然后实现一个真能做到它想做的事的东西。既然没有明显的 bug，我就只能开始做实验。"
+    },
+    {
+      "type": "p",
+      "en": "After adding some debug outputs and running [Spy](https://msdn.microsoft.com/en-us/library/dd460756.aspx) to keep an eye on the window messages, the first thing I tried was removing the part of the code that unregistered the hook when his window lost focus.  Since I didn't know exactly how his windowing code worked at all levels, I figured it wasn't entirely out of the question that it could be getting disabled prematurely.",
+      "zh": "在加了一些调试输出、并运行 [Spy](https://msdn.microsoft.com/en-us/library/dd460756.aspx) 盯着窗口消息之后，我试的第一件事是把「窗口失去焦点时注销钩子」那部分代码删掉。因为我不完全清楚他那套窗口代码在各个层面上是怎么运作的，我觉得「钩子可能被过早地停用了」并非完全不可能。"
+    },
+    {
+      "type": "p",
+      "en": "Although that turned out not to be the case, this experiment did pay off unexpectedly (as many do): although the keyboard hook still never got called when [The Witness](http://the-witness.net/news/) window had focus, the hook did start getting called when it lost focus.  Yes, oddly enough, the hook was working just fine for everyone else's window, but on the one window where it actually needed to work, it wasn't working.",
+      "zh": "虽然事实并非如此，但这个实验出人意料地有了收获（很多实验都这样）：当《The Witness》的窗口有焦点时，键盘钩子依然从未被调用；可窗口一失去焦点，钩子反倒开始被调用了。没错，够奇怪的——钩子在其他所有窗口上都工作得好好的，偏偏在唯一真正需要它工作的那个窗口上不工作。"
+    },
+    {
+      "type": "p",
+      "en": "This lead to the obvious question, what was [The Witness](http://the-witness.net/news/) doing differently?",
+      "zh": "这就引出了那个显然的问题：《The Witness》有什么地方做得不一样？"
+    },
+    { "type": "h2", "id": "raw-input", "zh": "Raw Input", "en": "Raw Input" },
+    {
+      "type": "p",
+      "en": "This was a case where having lots of Windows programming experience probably saved a lot of time.  Instead of having to experiment blindly, I knew right off the bat that Windows Raw Input probably had something to do with the situation.  I've debugged lots of Windows front end code in the past, and any time Raw Input, DirectInput, XInput, or anything else with the word \"input\" in it is involved, you know that things are going to be going a little haywire.",
+      "zh": "在这一点上，大量的 Windows 编程经验大概省了我很多时间。我不必盲目乱试——一上来我就知道，Windows Raw Input 很可能和这个情况有关。我过去调试过很多 Windows 前端代码，而只要牵扯到 Raw Input、DirectInput、XInput 或者任何名字里带「input」的东西，你就知道事情要开始乱套了。"
+    },
+    {
+      "type": "p",
+      "en": "I commented out the device registration call for Raw Input, and lo and behold, the hook started working for [The Witness](http://the-witness.net/news/) window, no problem.  So, although I was completely unable to find any documentation on MSDN that discussed what was going on under the hood, it must be the case that Raw Input processing happens before low-level keyboard hook processing in such a way as to prevent the keyboard hook processing from ever seeing keyboard messages on a Raw Input-registered window.  Normally, this wouldn't be a problem, but in our case, the Microsoft-recommended fix for the Windows logo key problem relies on keyboard hooks.  [The Witness](http://the-witness.net/news/) needs Raw Input to get good low-level relative mouse movements, but it also needs to disable the Windows logo keys; sadly, this is the kind of situation that is all too routine for anyone who programs Windows professionally.",
+      "zh": "我把 Raw Input 的设备注册调用注释掉，你瞧，钩子在《The Witness》窗口上就开始工作了，毫无问题。所以，尽管我在 MSDN 上完全找不到任何文档来讨论底层究竟发生了什么，情况一定是这样：Raw Input 的处理发生在低级键盘钩子的处理之前，其方式使得在注册了 Raw Input 的窗口上，键盘钩子处理根本看不到键盘消息。通常这不算问题，但在我们这里，Microsoft 官方推荐的 Windows 徽标键解决方案恰恰依赖键盘钩子。《The Witness》需要 Raw Input 来获得良好的低级相对鼠标移动，同时它又需要禁用 Windows 徽标键；遗憾的是，对任何专业做 Windows 编程的人来说，这种情况实在太常见了。"
+    },
+    {
+      "type": "p",
+      "en": "I couldn't think of any plausible ways that I could convince Raw Input to start using the Windows keyboard hook, since I don't have access to any of the Windows source code and I have no idea how it works internally.  So I focused my efforts on Raw Input.",
+      "zh": "我想不出任何可行的办法能让 Raw Input 改用 Windows 的键盘钩子——我拿不到 Windows 的源代码，也完全不知道它内部是怎么运作的。所以我把力气集中到 Raw Input 上。"
+    },
+    {
+      "type": "p",
+      "en": "I experimented with just about everything I could think of.  I tried not calling DefWindowProc on WM_INPUT calls, to see if it was the default window processing that was using the Windows logo key events to switch to the start menu.  No such luck.  I tried using RIDEV_NOLEGACY during Raw Input initialization to see if preventing keyboard messages from being generated would solve the problem.  It didn't.  After many failed attempts, and finding no relevant information on the web, I decided to call it a night and sleep on it.",
+      "zh": "我几乎把能想到的东西都试了一遍。我试过在处理 WM_INPUT 时不调用 DefWindowProc，想看看是不是默认的窗口处理在用 Windows 徽标键事件切换到开始菜单。没这个运气。我试过在初始化 Raw Input 时使用 RIDEV_NOLEGACY，想看看阻止生成键盘消息能不能解决问题。也不行。在多次失败、又在网上找不到任何相关信息之后，我决定收工睡觉，明天再说。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "When I woke the next morning, for some reason I remembered the most important thing anyone programming Windows must remember: never, ever trust the documentation.  It's always either inaccurate or incomplete.  So when I sat down at my keyboard, the first thing I did was try using the RIDEV_NOHOTKEYS flag when initializing Raw Input.",
+      "zh": "第二天早上醒来，不知为何我想起了任何做 Windows 编程的人都必须记住的最重要的一条：永远、永远不要相信文档。它不是不准确，就是不完整。于是我坐到键盘前做的第一件事，就是试着在初始化 Raw Input 时使用 RIDEV_NOHOTKEYS 标志。"
+    },
+    {
+      "type": "p",
+      "en": "You see, the previous day I hadn't bothered to try this flag, because it explicitly says in the documentation that it does not block system-level hotkeys, only application-level hotkeys (like the kind you create yourself with RegisterHotKey).  But why was I believing that?  That was just something somebody wrote down when they needed to create a documentation page.  They probably never even saw the actual code for Raw Input in the first place.",
+      "zh": "要知道，前一天我没费心去试这个标志，因为文档里明确写着它不阻止系统级热键，只阻止应用程序级热键（比如你自己用 RegisterHotKey 创建的那种）。可我凭什么信它？那不过是某个人需要凑出一个文档页面时随手写下的东西。他们多半压根没看过 Raw Input 的实际代码。"
+    },
+    {
+      "type": "p",
+      "en": "Surprise surprise, RIDEV_NOHOTKEYS worked.  After all the fussing, all that had to be done to make [The Witness](http://the-witness.net/news/) impervious to Windows Logo keys was one little flag during Raw Input initialization.  No keyboard hook necessary.",
+      "zh": "惊喜惊喜，RIDEV_NOHOTKEYS 管用。折腾了这么一大圈，要让《The Witness》对 Windows 徽标键免疫，只需要在初始化 Raw Input 时加一个小小的标志。根本不需要键盘钩子。"
+    },
+    { "type": "h2", "id": "zero-sum", "zh": "零和博弈", "en": "Zero-Sum Game" },
+    {
+      "type": "p",
+      "en": "It's worth taking a step back for a moment and asking the question, why did all of this happen?  Why did I have to spend several hours working on code that has nothing to do with my project, is not valuable in any intrinsic way, and whose specifics are relevant only in a fleeting temporal sense (there will be no need to know anything about RIDEV_NOHOTKEYS when the next user input model for Windows is invariably introduced)?",
+      "zh": "值得退后一步问一句：这一切为什么会发生？我为什么非得花好几个小时，去处理和我项目无关、本身没有任何价值、其细节只在短暂的时间意义上才有用的代码（等 Windows 下一次必然推出新的用户输入模型时，就再也不需要知道任何关于 RIDEV_NOHOTKEYS 的事了）？"
+    },
+    {
+      "type": "p",
+      "en": "The answer is the same on Windows as it is on most every other platform that exists today: the platform providers just don't spend real resources designing and improving their APIs.  If there had simply been an API call, WindowIgnoresWindowsLogoKeys(HWND), then everyone would always just call that, and the platform developers and Microsoft could field it and do the right thing, no matter how many times they revised their platform and its infrastructure.",
+      "zh": "这个答案在 Windows 上和今天几乎所有其他平台上都一样：平台提供方根本不愿意投入真正的资源去设计和改进他们的 API。如果只要有一个 WindowIgnoresWindowsLogoKeys(HWND) 这样的 API 调用，那所有人都会直接调它，平台开发者和 Microsoft 也就能在底层实现它、把这件事做对——无论他们把平台及其基础设施改版多少次。"
+    },
+    {
+      "type": "p",
+      "en": "Better yet, way back when they first started catering to games with Windows 95, they could have introduce a call like BeginFullScreenGame(), and that could have done literally everything for you: initialize the window, set up the input stream, prepare the sound device, etc.  Then they wouldn't have had to ever worry about the Windows logo keys at all, because they would have been automatically disabled in any application that initialized itself with that call.",
+      "zh": "更妙的是，早在他们用 Windows 95 开始迎合游戏开发者的时候，本可以引入一个像 BeginFullScreenGame() 这样的调用，它能替你把所有事情都做完：初始化窗口、建立输入流、准备好音频设备等等。那样他们根本就不用操心 Windows 徽标键，因为任何用这个调用初始化自己的应用程序都会自动把它禁用掉。"
+    },
+    {
+      "type": "p",
+      "en": "But instead of any of these things, Microsoft chose to ship a new feature (the Windows logo hotkey) without ever thinking about the consequences.  Then they patched over its problems by telling developers to install a keyboard hook ([SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx)), something that has nothing to do with the actual problem but which was the most expedient way for them to get the problem solved without doing any real work on their platform.  Then they broke that method, which they'd previously advocated, when they introduce Raw Input, so (presumably) they introduced a new way to do the same thing (RIDEV_NOHOTKEYS), although they failed to document it.  Then they didn't even bother to publish an obvious tech article explaining this change, or even revise their old documents saying that [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) was the preferred solution.",
+      "zh": "但 Microsoft 没有做这些事中的任何一件，而是选择在从不考虑后果的情况下推出一个新特性（Windows 徽标热键）。接着他们用「让开发者装一个键盘钩子（[SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx)）」来盖住它带来的问题——这东西和真正的问题毫无关系，却是他们不用在平台上做任何实际工作就能把问题「解决」掉的最省事的办法。后来他们引入 Raw Input 时，又把自己当初提倡的这套方法弄坏了，于是（想必）他们引入了做同一件事的新方法（RIDEV_NOHOTKEYS），却没有把它写进文档。再后来，他们连一篇解释这个变化的、本该有的技术文章都懒得发，甚至懒得去修订那些写着 [SetWindowsHookEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx) 是首选方案的老文档。"
+    },
+    {
+      "type": "p",
+      "en": "As broken as all that sounds, it is absolutely par for the course.  On every project, in every discipline, developers just like me spend hundreds of hours doing nothing but diagnosing and repairing problems with the platforms on which we ship our software.  It may sound like it's just \"part of the job\", but the pernicious thing about it is that development resources are always finite.  External to the platform, development is always a zero-sum game.  The hours I spent tracking down this bug were hours that won't get spent making parts of [The Witness](http://the-witness.net/news/) better, and there's nothing me or the team can do about that.  If we want to ship a polished project, it's a sacrifice we have to make.",
+      "zh": "听起来虽然烂透了，但这完全是家常便饭。在每个项目、每个领域里，和我一样的开发者都要花上几百个小时，什么都不干，只是诊断和修复「我们发布软件所依赖的那些平台」的问题。听起来这也许只是「工作的一部分」，但它真正有害的地方在于：开发资源永远是有限的。在平台之外，开发永远是一场零和博弈。我花在追查这个 bug 上的那些小时，就是不会用来把《The Witness》某些部分做得更好的小时，而我或团队对此无能为力。如果我们想交出一个打磨到位的项目，这就是必须付出的牺牲。"
+    },
+    {
+      "type": "p",
+      "en": "And it's a sacrifice that's not just made by us, but by thousands of teams on thousands of projects every year.  The cost of obtuse, easy to misuse APIs is multiplied across all these projects, turning the hundreds of hours we will spend on [The Witness](http://the-witness.net/news/) platform work (across multiple platforms) into hundreds of thousands of hours when you consider that this same work has to be done by every other developer, too.  It's really thousands of zero-sum games being played, all across the industry, and the end result is universally worse software because the underlying platforms take up too much effort.",
+      "zh": "而且做出这个牺牲的不只是我们，每年还有成千上万个团队、成千上万个项目。晦涩难懂、容易被误用的 API 的代价，会在所有这些项目上成倍放大：考虑到同样的活每个其他开发者也都要干一遍，我们花在《The Witness》平台相关工作上（还要跨多个平台）的那几百个小时，就变成了几十万个小时。这实际上是整个行业都在进行的成千上万场零和博弈，而最终结果是普遍更差的软件——因为底层平台占用了太多精力。"
+    },
+    {
+      "type": "p",
+      "en": "But there is a way for this not to be a zero-sum game, and that's if there's a shift in thinking internal to the platform providers.  If Microsoft, for example, started realizing that software on Windows gets better if their APIs are clear, concise, and difficult to misuse, they might start changing their development processes to make API quality a priority.  They might try to hire and cultivate good API designers, and have real, talented developers who do nothing but work on the APIs to the internal systems.",
+      "zh": "但有一种办法能让它不再是零和博弈，那就是平台提供方内部发生思维转变。比如说，如果 Microsoft 开始意识到：只要他们的 API 清晰、简洁、难以误用，Windows 上的软件就会更好——他们也许就会开始改变开发流程，把 API 质量当作优先事项。他们也许会试着招聘和培养优秀的 API 设计师，让真正有才华的开发者专门去做内部系统的 API。"
+    },
+    {
+      "type": "p",
+      "en": "If that happened, the relatively small amount of hours spent on this endeavor internal to Microsoft (or Sony, or Apple, or Nintendo, or Google) would have a massively leveraged effect.  If nobody has to think about things like the Windows keys again, that's four hours right there that every software project gets back.  That is literally thousands of hours, just that.  Don't need to worry about task switching or window minimization?  That's a day, at least  —  which makes it *thousands of days* saved.  Straightforward user input?  Easy access to camera inputs?  Each little thing adds up until every developer is getting weeks of their schedule back to devote to working on their actual software, not to mention all the bugs that wouldn't slip through the cracks because the developers may not have been experienced enough with the particular platform to know to look for them.",
+      "zh": "如果真能这样，Microsoft（或者 Sony、Apple、Nintendo、Google）内部为这件事投入的相对少量的时间，就会产生巨大的杠杆效应。如果没有人需要再去想 Windows 键这类事情，那每个软件项目立刻就能拿回 4 个小时。光这一项就是几千个小时。不用再操心任务切换或者窗口最小化？那又是至少一天——也就是省下*几千天*。用户输入变得直接？摄像头输入容易接？每一件小事累积起来，直到每个开发者都能拿回好几周的日程，用来写他们真正的软件；更别提那些本来会从缝隙里漏过去的 bug——因为开发者对某个特定平台的经验不够，压根不知道要去找它们。"
+    },
+    {
+      "type": "p",
+      "en": "So how do we get there?  Honestly, I have no idea.  In the meantime, I guess we just keep writing articles like this one that detail the right solutions as we find them, and hope that saves everyone some of the vast amount of time that we all lose to platform-related problems each year.  Beyond that, it's really up to the platform providers to start taking these issues more seriously.",
+      "zh": "那么怎么才能走到那一步？老实说，我也不知道。在此期间，我想我们就继续写这类文章，在找到正确做法时把它详细写下来，希望这能替大家省下一点我们每年因平台问题而失去的巨量时间。除此之外，就真的只能靠平台提供方自己开始更严肃地对待这些问题了。"
+    }
+  ]
+}

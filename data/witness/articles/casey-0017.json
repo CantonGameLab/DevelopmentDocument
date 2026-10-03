@@ -1,0 +1,357 @@
+{
+  "id": "casey-0017",
+  "title": {
+    "zh": "定义单个枚举值",
+    "en": "Defining a Single Enumerant"
+  },
+  "subtitle": {
+    "en": "An in-depth look at the decision-making process behind a small, simple piece of code.",
+    "zh": "深入剖析一小段简单代码背后的决策过程。"
+  },
+  "translator": {
+    "note": "代码块逐字保留英文原文。档案转写把若干完整代码块拆成了片段（中间夹杂若干裸行），译文按原代码合并还原为完整代码块。文中「七行代码」指的就是那段只有两个实际取值的 enum。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In the previous two articles I showed some examples of how coding can be made more efficient and intuitive by focusing on incremental compression rather than up-front design.  However, implicit in that process is the assumption that the programmer actually knows all the options they have available for compressing things at each point in the development process.  For inexperienced programmers, that's often not the case, because they simply haven't seen that many different techniques for structuring code, so they may not know the most efficient way to compress something down.",
+      "zh": "前两篇文章里，我举了一些例子，说明把注意力放在「逐步压缩」而不是「预先设计」上，能让写代码变得更高效、更直观。不过这个过程中隐含了一个假设：在每个开发节点上，程序员确实知道自己手头所有可用的压缩选项。对经验不足的程序员来说，这往往并不成立——他们见过的代码组织技巧本来就不多，所以可能不知道该用哪种方式把东西压得最紧凑。"
+    },
+    {
+      "type": "p",
+      "en": "In these next few articles, I'm going to address that part of the process directly.  I have selected a piece of code that I wrote for The Witness which does a lot of operations in a relatively small amount of code, and I'm going to go through it step by step, describing in detail why I chose to structure the code in the way that I did.",
+      "zh": "接下来这几篇文章，我要直接处理过程中的这一环。我挑了一段我为《The Witness》写的代码，它用相对很少的代码完成了很多操作；我会一步步过一遍，详细说明我为什么选择这样组织代码。"
+    },
+    {
+      "type": "h2",
+      "id": "the-lister-panel",
+      "zh": "Lister Panel",
+      "en": "The Lister Panel"
+    },
+    {
+      "type": "p",
+      "en": "I rewrote a UI element in The Witness editor called the \"Lister Panel\".  Originally, it was just a list of \"layers\" in the Witness editor that could be hidden or shown by clicking on them in a list.  Technically it also had the ability to list all the objects in the game of a certain type, but nobody used that anymore because it didn't even have scroll bar support, and the list of objects in the game of any type you might pick had long ago surpassed the number that could fit on the screen at once.  My primary purpose in rewriting the panel was to add scrolling support, but while I was at it I wanted to upgrade the panel to be much more powerful.",
+      "zh": "我重写了《The Witness》编辑器里一个叫「Lister Panel」的 UI 元素。它原本只是《The Witness》编辑器里的一张「图层」列表，点击列表项就能隐藏或显示对应图层。严格说来，它也有能力列出游戏里某一类型的所有对象，但已经没人用它了——它连滚动条都不支持，而游戏里不管你挑哪种类型，对象数量早就超出了屏幕一次能放下的上限。我重写这个面板的首要目的是加上滚动支持，但既然动手了，我也想顺便把它升级得强大得多。"
+    },
+    {
+      "type": "p",
+      "en": "In particular, I wanted it to be able to do basic queries, like \"show me all the grass entities that are hidden\" or \"show me all doors and cables that are not locked\".  But I was only going to spend two or three days total working on it, so I needed to make sure that I kept everything nice and simple so it did not turn into a \"project\", as it were.",
+      "zh": "具体来说，我希望它能做基本的查询，比如「把所有隐藏的 grass 实体给我列出来」或者「把所有没上锁的门和缆线列出来」。但我总共只打算在这上面花两三天，所以我得确保把一切保持在简单好懂的范围内，免得它变成一个「项目」。"
+    },
+    {
+      "type": "p",
+      "en": "I knew that the new panel had to do at least as much as the old panel did.  Since the old panel could act as either a layer lister or a list of entities of the type selected by the \"entity panel\" (another UI element in The Witness editor), that meant the new lister panel would have to be somewhat modal as well.  So I began the rewrite with a simple enum, so I could do different things depending on the mode of the panel:",
+      "zh": "我知道新面板至少要能做到旧面板做到的事。旧面板既能充当图层列表，也能列出由「Entity Panel」（《The Witness》编辑器里的另一个 UI 元素）所选类型的实体，这意味着新的 lister panel 也必须有某种模态性。于是我从一个简单的 enum 开始重写，这样就能根据面板的模式做不同的事："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "enum Lister_Type_Mode\n{\n LISTER_TYPE_MODE_LIST, // normal listing of entities\n LISTER_TYPE_MODE_ENTITY_PANEL, // listing of entities sync'd to the entity panel\n\nLISTER_TYPE_MODE_COUNT,\n};"
+    },
+    {
+      "type": "p",
+      "en": "That's about as simple a piece of code as it gets, but already there's a ton of experience baked in here.",
+      "zh": "这大概是能想象的最简单的一段代码了，但里面已经烤进了大量的经验。"
+    },
+    {
+      "type": "p",
+      "en": "First, the most obvious: I always put a \"count\" enumerant at the end of every set of enumerants.  Why?  Because that way you can trivially iterate over all of them later by just doing:",
+      "zh": "第一点也最明显：我在每一组枚举值末尾总是放一个「计数」枚举值。为什么？因为这样一来，你之后要遍历全部枚举值就非常简单，只要写："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "for(int Mode = 0;\n Mode < LISTER_TYPE_MODE_COUNT;\n++Mode)\n{\n // ... do something for each mode here ...\n}"
+    },
+    {
+      "type": "p",
+      "en": "Since enums are considered constant by the compiler, you can also easily define arrays with the same size as the number of enums:",
+      "zh": "由于编译器把 enum 视为常量，你还可以轻松定义大小等于枚举数量的数组："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int OneIntPerMode[LISTER_TYPE_MODE_COUNT];"
+    },
+    {
+      "type": "p",
+      "en": "Since unspecified enumerants in C++ are required to always go in order, starting from 0, and increasing by 1 each time, this means as long as I always put a count enum at the end of the enumerants, no matter what I do to the enumerants on the inside, I'll always have an easy and accurate way to know how many there are.  Of course, this only works for simple sequential enumerants  —  if you start defining the values of enumerants, all bets are off.  But unfortunately, there's no way in C++ to say that an enum is required to only be sequential, so you just have to know what you're doing.",
+      "zh": "C++ 里未指定取值的枚举值必须始终按顺序排列：从 0 开始，每次加 1。这意味着，只要我总是在枚举值末尾放一个计数枚举，那么无论我对中间的枚举值做些什么，我总有一个简单而准确的办法知道一共有多少个。当然，这只对简单的顺序枚举值成立——一旦你开始手动指定枚举值的取值，一切就都不作数了。可惜 C++ 里没有办法声明「这个 enum 只能顺序取值」，所以你只能靠自己心里有数。"
+    },
+    {
+      "type": "p",
+      "en": "I also used the starts-from-zero property of enumerants here, even though it doesn't look like it.  I am a big fan of initializing variables to prevent the bugs that crop up when you don't.  I feel like it's always a win, because if you find that initializing variables is too slow later, you can always trim during optimization.  But up until very recently, there was no way to specify how things were initialized in C++ at the point of declaration.  You always had to manually write a constructor that initialized variables in a struct or class, and you could easily forget to initialize something in the constructor when you add it to the struct definition.",
+      "zh": "我还用到了枚举值「从 0 开始」这个性质，尽管表面上不太看得出来。我非常推崇初始化变量，以此避免不初始化时冒出来的 bug。我觉得这永远是赚的：如果后来发现初始化变量太慢，优化时再砍掉也不迟。但直到不久之前，C++ 里还没有办法在声明处指定怎么初始化。你总是得手写一个构造函数来初始化 struct 或 class 里的变量，而当你往 struct 定义里加新字段时，很容易忘了在构造函数里初始化它。"
+    },
+    {
+      "type": "p",
+      "en": "So I basically never use constructors for this purpose.  Instead, I try very hard to ensure that all my code always uses 0 as the proper initial value for everything.  That way, I can just do:",
+      "zh": "所以为了这个目的，我基本不用构造函数。相反，我会极力确保自己的代码里，所有东西的「正确初始值」都是 0。这样我只要写："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "some_type_of_mine Var = {};"
+    },
+    {
+      "type": "p",
+      "en": "and I will be assured that it is initialized properly, regardless of how many new fields I add to it.  I never have to worry that I may have forgotten to add an initializer to its constructor.  Furthermore, any dynamic memory usage involving a struct knows it can initialize it with a simple memset-to-zero of the entire size, and that makes it really easy to write code that works with arbitrary types without having to use templates or other constructs that push the type information around so that the appropriate constructor can be called.",
+      "zh": "就能确保它被正确初始化，无论我后来往里面加了多少新字段。我永远不必担心自己是不是忘了给它的构造函数加初始化。更进一步，任何涉及这个 struct 的动态内存使用，都知道可以用一次「整块 memset 清零」来初始化它；这让人非常容易写出能处理任意类型的代码，而不必动用模板或其他把类型信息推来推去、只为能调用到合适构造函数的构造手段。"
+    },
+    {
+      "type": "p",
+      "en": "So, with this enum, I have implicitly used the starts-from-zero property to make LISTER_TYPE_MODE_LIST the default.  Its value is zero, so when the lister panel is initialized, the mode field will be cleared to zero, which is LISTER_TYPE_MODE_LIST, the default mode.",
+      "zh": "所以在这个 enum 上，我隐含地用到了「从 0 开始」这个性质，让 LISTER_TYPE_MODE_LIST 成为默认值。它的取值是 0，所以当 lister panel 被初始化时，mode 字段会被清零，也就是 LISTER_TYPE_MODE_LIST，即默认模式。"
+    },
+    {
+      "type": "p",
+      "en": "Those are the two straightforward things I did with the Lister_Type_Mode enum, but there is a third, more subtle thing to note here as well: I didn't create a virtual base class with derived classes for each mode.",
+      "zh": "这就是我在 Lister_Type_Mode 这个 enum 上做的两件直白的事，但还有第三件更微妙的事值得指出：我没有为每种模式建一个虚基类加派生类。"
+    },
+    {
+      "type": "h2",
+      "id": "segregation-obfuscation-proliferation",
+      "zh": "隔离、混淆、增殖",
+      "en": "Segregation, Obfuscation, Proliferation"
+    },
+    {
+      "type": "p",
+      "en": "If you're the type of person who really likes object hierarchies, instead of starting with an enum for a mode specifier, you might have started typing something more like this:",
+      "zh": "如果你是那种特别喜欢对象继承体系的人，那么你不会从「用一个 enum 表示模式」开始，而可能一开始敲的是这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "class Lister_Type_Mode\n{\n virtual void update();\n // ...\n};"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "class Lister_Type_Mode_List : public Lister_Type_Mode\n{\n virtual void update();\n // ...\n};"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "class Lister_Type_Mode_Entity_Panel : public Lister_Type_Mode\n{\n virtual void update();\n // ...\n};"
+    },
+    {
+      "type": "p",
+      "en": "So you're probably wondering why I didn't do the same.  There are a lot of reasons, but they all fold into one primary one: it's a lot more typing for a lot less flexibility.  As a simple example, how would you switch between modes?",
+      "zh": "你大概在想，我为什么不也这么干。理由很多，但都能归到一个主要的上面：打更多的字，换来更少的灵活性。举个简单的例子：你要怎么切换模式？"
+    },
+    {
+      "type": "p",
+      "en": "In the simple enum way, there's just something like",
+      "zh": "用简单的 enum 方式，只需要写类似这样的东西"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Lister_Type_Mode mode; // cleared to zero on init\n // ...\n mode = LISTER_TYPE_MODE_ENTITY_PANEL;"
+    },
+    {
+      "type": "p",
+      "en": "and you're done.  It obeys zero-is-default, so I can use clear-to-zero to initialize the Lister Panel.  It is a simple piece of data, so you can copy it, pass it around, do whatever you want with it, write it out as a block, serialize it.  It's all trivial.",
+      "zh": "就完事了。它遵守「0 即默认」，所以我可以靠清零来初始化 Lister Panel。它是一份简单的数据，所以你可以复制它、到处传它、想拿它干什么都行、把它整块写出去、序列化它。全都轻而易举。"
+    },
+    {
+      "type": "p",
+      "en": "By comparison, if you went the hierarchy route, changing the mode looks more like this:",
+      "zh": "相比之下，如果你走继承体系那条路，切换模式看起来更像这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Lister_Type_Mode *mode; // cleared to zero on init\n // ...\n if(mode) delete mode;\n mode = new Lister_Type_Mode_Entity_Panel;"
+    },
+    {
+      "type": "p",
+      "en": "Well, OK, that's not too ugly yet.  But how would I serialize this, for example, or pass a mode in from something that wanted to specify which mode to use?  I'd have to add another virtual function to all my derived class that returns or writes out a particular ID from which they could be reconstructed, perhaps.  And then I'd also have to make a \"factory\" function somewhere that can create the right derived class by taking that ID and doing the appropriate new.  And if I don't want to use RTTI, because that's not necessarily well defined across compilers and platforms, I would have to define that ID myself, and it would probably look something like… wait for it… this:",
+      "zh": "好吧，这还不算太丑。可我要怎么序列化它呢？或者怎么从某个「想指定用哪种模式」的地方传入一个模式？我大概得给所有派生类再加一个虚函数，让它返回或写出一个特定的 ID，好据此重建对象；然后我还得在某处写一个「工厂」函数，接受这个 ID，执行相应的 new，从而创建正确的派生类。而如果我不想用 RTTI——因为它在不同编译器和平台上的行为未必有明确定义——那我就得自己定义那个 ID，而它大概会长成……等着看吧……这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "enum Lister_Type_Mode_ID\n{\n LISTER_TYPE_MODE_LIST, // normal listing of entities\n LISTER_TYPE_MODE_ENTITY_PANEL, // listing of entities sync'd to the entity panel\n\nLISTER_TYPE_MODE_COUNT,\n};"
+    },
+    {
+      "type": "p",
+      "en": "Look familiar?",
+      "zh": "眼熟吗？"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Yes, the sad truth is that most of the time, if you think you are going to replace something simple like an enum that's used to control a mode with a class hierarchy where you have one class per mode, you often end up implementing the enum scheme inside it anyway.  So it's not only more typing to implement, but you still have to do all the typing from the enum method as well!",
+      "zh": "可悲的事实是：大多数时候，如果你以为可以用「一种模式一个类」的类继承体系，去替代 enum 这种简单东西来控制模式，你最后往往还是得在体系里面把 enum 那套方案实现一遍。所以它不只是要多打很多字来实现，而且你还得把 enum 方式的那些字也全打一遍！"
+    },
+    {
+      "type": "p",
+      "en": "Now, I would like to point out that, although it sounds like it, this is actually not me dissing object-oriented programming again (I'll do that a bit later).  This diss is more specifically targeted at C++, because there are plenty of object-oriented languages out there where it would not be necessary to implement the enum yourself  —  it could be created from the hierarchy itself automatically in a stable and useful way that is not janky like C++'s feeble RTTI.  And as C++ continues to bloat to [Stay-Puft Marshmallow Man](https://en.wikipedia.org/wiki/Stay_Puft_Marshmallow_Man) proportions with every passing spec, it will probably be the case eventually (if it is not already) that you can use a bunch of new language features to perhaps eventually get to the point where it is not so onerous to use the class-based method even in C++.  But honestly, even at that point, it would still be a lot more typing than just the simple enum list.",
+      "zh": "这里我想指出，虽然听起来像是，但这其实不是我又在踩面向对象编程（那个稍后再说）。这次的矛头更具体地指向 C++，因为外面有很多面向对象语言并不需要你自己去实现那个 enum——它们能自动、稳定、且以有用的方式从继承体系本身生成出来，不像 C++ 那套孱弱的 RTTI 那样别扭。而随着 C++ 每出一个新标准就继续膨胀到 [Stay-Puft Marshmallow Man](https://en.wikipedia.org/wiki/Stay_Puft_Marshmallow_Man) 的体量，大概终有一天（也许已经如此），你能靠一堆新语言特性，最终做到即使在 C++ 里用基于类的方式也不那么累人。但老实说，即便到了那时候，它打的字还是比简单列个 enum 多得多。"
+    },
+    {
+      "type": "p",
+      "en": "And we haven't even gotten to the biggest problem yet.  The biggest problem is that hierarchies severely limit your options for code compression.  The point of an object hierarchy, and traditional object-oriented design in general, is to segregate code.  It is about taking things that look like this:",
+      "zh": "而我们还没讲到最大的问题。最大的问题是：继承体系会严重限制你压缩代码的选项。对象继承体系、以及整个传统面向对象设计的要点，就是隔离代码。它是把这样的一些东西："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "switch(mode)\n{\ncase LISTER_MODE_TYPE_LIST:\n{\n // do the stuff for list mode\n} break;\ncase LISTER_MODE_TYPE_ENTITY_PANEL:\n{\n // do the stuff for entity panel mode\n} break;\n}"
+    },
+    {
+      "type": "p",
+      "en": "and turning it into this:",
+      "zh": "变成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// In Lister_Mode_Type_List.cpp\n void Lister_Mode_Type_List::do()\n{\n // do the stuff for list mode\n}\n\n// ...\n\n// In Lister_Mode_Type_Entity_Panel.cpp\n void Lister_Mode_Type_Entity_Panel::do()\n{\n // do the stuff for entity panel mode\n}"
+    },
+    {
+      "type": "p",
+      "en": "This type of code transformation does only two things: it creates a hell of a lot of typing (you need to match declarations in the .h files now, one for every type, plus one in the base class), and it segregates the code.  Segregating code is heralded as a good thing by OOP-advocates, but they rarely (never?) actually look at the practical costs of doing so.  Those practical costs are actually quite high.  As a simple example, suppose I wanted to do this:",
+      "zh": "这种代码变换只做了两件事：制造出多到见鬼的打字量（现在你还要在 .h 文件里对应声明，每种类型一个，再加上基类里那个），以及把代码隔离开。隔离代码被 OOP 拥护者吹成好事，但他们很少（从来没有？）真正去看这么做的实际代价。那些实际代价其实相当高。举个简单的例子，假设我想做这件事："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int shared_x = 32 + get_base_x();\n switch(mode)\n{\ncase LISTER_MODE_TYPE_LIST:\n{\n set_my_x(shared_x);\n} break;\ncase LISTER_MODE_TYPE_ENTITY_PANEL:\n{\n set_my_x(shared_x+5);\n} break;\n}"
+    },
+    {
+      "type": "p",
+      "en": "In the enum scheme, that shared_x is trivial, costs one line of typing to share, and is extremely easy to read and understand.  Anyone coming to this code for the first time sees exactly what's happening.  But what happens if we do it \"the OOP way\"?",
+      "zh": "在 enum 方案里，这个 shared_x 毫不费力，共享它只需要多打一行，而且极易阅读和理解。第一次看这段代码的人一眼就能看清发生了什么。但如果换成「OOP 的做法」，会变成什么样？"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// In Lister_Mode_Type.cpp\n void Lister_Mode_Type::get_shared_x()\n{\n return (32 + get_base_x());\n}\n\n// ...\n\n// In Lister_Mode_Type_List.cpp\n void Lister_Mode_Type_List::do()\n{\n set_my_x(get_shared_x());\n}\n\n// ...\n\n// In Lister_Mode_Type_Entity_Panel.cpp\n void Lister_Mode_Type_Entity_Panel::do()\n{\n set_my_x(get_shared_x()+5);\n}"
+    },
+    {
+      "type": "p",
+      "en": "What was previously a single, easy-to-read function that anyone could understand has now been fractured into a proliferating set of functions that likely require jumping around through multiple source files to understand.  You can't even fall back to the debugger to watch what happens conveniently, because only one type of object is being worked with at a time, so you would have to trace through two separate mode behaviors and then mentally fuse them together to understand how they were related.  This may not seem like such a big deal in this trivial example, but try to imagine how this extends out to a fully implemented, complex system and hopefully you will agree that it creates a substantial burden to legibility.",
+      "zh": "原本一个人人都能看懂、易读的单一函数，现在被拆散成一大堆不断增殖的函数，要理解它大概得在多个源文件之间跳来跳去。你甚至没法顺手依赖调试器来观察发生了什么，因为同一时刻只处理一种类型的对象，你就得分别跟踪两种模式的行为，再在脑子里把它们拼起来，才能明白它们之间是什么关系。在这个微不足道的例子里，这也许不算什么大事，但请想象一下它延伸到一套完整实现的复杂系统里会是什么样——希望你会同意：这给代码的可读性造成了沉重的负担。"
+    },
+    {
+      "type": "p",
+      "en": "This kind of code segregation often goes by positive-sounding names, depending on the particulars (code vs. data, etc.), such as \"abstraction\", \"encapsulation\", \"division of responsibility\", etc.  But what it really should be called is \"obfuscation\", because that's the one thing that it definitely always does.  It makes it very hard to see what something actually is doing.  It makes the behavior of the program hard to understand in exchange for the supposed benefit of making each \"object\" segregated from the rest.",
+      "zh": "这类代码隔离往往顶着各种好听的名字，视具体情形而定（代码与数据之分等等），比如「抽象」「封装」「职责划分」。但它真正该叫的名字是「混淆」，因为这是它必定始终在做的一件事：它让人极难看清某样东西究竟在做什么。它让程序的行为难以理解，换来的所谓好处，只是让每个「对象」与其余部分隔离开。"
+    },
+    {
+      "type": "p",
+      "en": "It might also be more accurately called \"proliferation\", since you end up writing a lot more code to do the same thing.  Instead of common pre and post code just going before and after a switch statement, you're now talking about having to make entire shared functions which, if you're lucky, can be structured such that there is (yet another) function in the base class that dispatches them automatically, or if you're unlucky, have to be remembered every time a new class is implemented because they need to be called inside the derived class's operation function.",
+      "zh": "它也许还更该叫「增殖」，因为做同样的事，你最后写出了多得多的代码。原本公共的前置与后置代码只要放在 switch 语句前后就行，现在你谈论的却是得写出完整的共享函数；运气好的话，可以把它们组织成基类里（又多一个）自动分发的函数；运气不好的话，每次实现新类时都得记着它们，因为它们需要在派生类的操作函数里被调用。"
+    },
+    {
+      "type": "h2",
+      "id": "organization-criteria",
+      "zh": "组织代码的标准",
+      "en": "Organization Criteria"
+    },
+    {
+      "type": "p",
+      "en": "At the end of the day, it's always worth noting that the CPU executes some instructions.  That's what your program does.  An \"object-oriented program\" is no different than any other program in the end, especially if we aren't talking about the performance of the program.",
+      "zh": "说到底，我们必须记住：CPU 执行的是若干条指令。你的程序做的就是这件事。归根结底，「面向对象的程序」和别的程序没什么不同——尤其是在我们不谈程序性能的时候。"
+    },
+    {
+      "type": "p",
+      "en": "So doing things like segregating operations into multiple functions that belong to separate classes doesn't really have anything to do with the actual act of programming the CPU.  Performance aside, it is strictly about how you choose to organize your code.  The typical OOP way to organize your code is to consider the \"objects\" in the system as primal, and to segregate code into files that correspond to the operation of each of them.  This implicitly optimizes programmer access to cross-procedural information as it relates to the object, so that they can see everything that is unique to a particular object quickly and easily.  Conversely, it makes it substantially more difficult for the programmer to access procedural information quickly, forcing them to look across potentially dozens of source files just to piece together what a single function might do, as it dispatches to objects in any number of ways, each of which being potentially virtualized.",
+      "zh": "所以，把操作拆进分属不同类的多个函数这类做法，和「给 CPU 编程」这件事本身并没有真正的关系。撇开性能不谈，它严格来说只关乎你选择怎样组织代码。典型的 OOP 组织方式，是把系统中的「对象」视为本源，再把代码隔离进与各个对象的行为相对应的文件里。这隐含地优化了程序员对「与某个对象相关的跨过程信息」的访问，让他们能快速容易地看到某个特定对象独有的全部内容。反过来，它让程序员快速获取过程性信息变得困难得多，逼得他们可能要翻过几十个源文件，才能拼凑出一个函数到底做了什么——因为这个函数会以各种方式分派到对象上，而每一种分派都可能被虚化。"
+    },
+    {
+      "type": "p",
+      "en": "Similarly, modifications to a single object are made more optimal in OOP.  If I want to change the behavior of a specific object, everything is usually in one place in the source code and I can make that change easily.  However, changes to the behavior of a function that uses those objects may be extremely costly, potentially requiring a change to every object involved if, say, new information needs to be propagated to the objects in order for them to do what they need to do.",
+      "zh": "同样，在 OOP 里，修改单个对象变得更「最优」。如果我想改某个特定对象的行为，相关内容通常都在源码的同一处，我可以轻松改掉。然而，修改「使用这些对象的某个函数」的行为，代价可能极其高昂：比如说，如果需要把新信息传递给各个对象、它们才能完成该做的事，那可能就得改到所有牵扯进来的对象。"
+    },
+    {
+      "type": "p",
+      "en": "For at least a certain period of time, and to some degree still today, the object-oriented way of organizing a program was very popular.  So it's definitely true that there is at least some mental appeal to this form of organization.  The problem with it comes when you actually look at what sorts of code modifications you tend to make most often, the cost of OOP organization (at least in C++) is much too expensive for any conceptual benefit you may feel it confers.",
+      "zh": "至少在某一段时期里，直到今天某种程度上依然如此，用面向对象的方式组织程序非常流行。所以这种组织方式至少在心理上确实有某种吸引力，这是肯定的。问题出在你真正去看「你最常做的是哪类代码修改」的时候：OOP 式组织的代价（至少在 C++ 里）远比你感觉它能带来的任何概念上的好处都要昂贵得多。"
+    },
+    {
+      "type": "p",
+      "en": "Most of the time, how an object is implemented internally is usually not the thing that changes most frequently, yet this is what OOP organization optimizes for (in file locality only  —  it does not actually change the amount of code that has to be modified).  Instead, usually the thing that changes most frequently is how an object is used and what information it needs to have in order to do its job, and these are things that the OOP organization is uniquely bad at.",
+      "zh": "大多数时候，一个对象内部是怎么实现的，通常并不是变化最频繁的东西，而这恰恰是 OOP 式组织所优化的对象（而且只在「文件位置集中」这一点上——它并不真的减少必须修改的代码量）。通常变化最频繁的，是一个对象如何被使用、以及它为了完成工作需要拿到哪些信息；而 OOP 式组织恰好在这些事情上格外糟糕。"
+    },
+    {
+      "type": "p",
+      "en": "Just to be more concrete, consider something as simple as changing the number of parameters that an operation might need.  For example, the non-OOP function:",
+      "zh": "为了更具体一点，考虑一个简单到不能再简单的变化：改动某个操作需要的参数个数。比如这个非 OOP 的函数："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void do(thing *a)\n{\n switch(a->type)\n{\n // ... cases for 5 different objects here ...\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "If that needs to have an additional parameter, one line has to change.  You just add \", int b\" to the end of the do() parameter list and you're done.  Anyone in the switch can use it, or not, at their discretion.  If instead we do it the object-oriented way, now we have two choices.  Either we change six separate do() function prototypes (the base class and the five derived classes) and their six separate definitions in twelve different files to take \", int b\" at the end, or we introduce a new virtual function that \"thunks\" to the old function, introducing cognitive and computational overhead to avoid having to change code in lots of places.",
+      "zh": "如果它需要多一个参数，只有一行要改。你只要在 do() 的参数表末尾加上一个 `int b`（前面带个逗号）就完事了，switch 里任何人都可以自己决定用不用它。而如果我们改用面向对象的做法，就有两个选择：要么修改 6 个各自独立的 do() 函数原型（基类加 5 个派生类）以及它们在 12 个不同文件里的 6 份独立定义，让它们末尾都多接受一个 `int b` 参数；要么引入一个新的虚函数，向旧函数做一次「thunk」，用认知和计算上的额外开销来换取「不必在很多地方改代码」。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Essentially, what you get when you structure things in the virtual dispatch way is an O(n) instead of O(1) cost for changing functions.  That might be interesting if you got something back, but you really don't.  It's not as if you have reduced an O(n) cost elsewhere.  If you want to introduce a new type to the system, for example, in the non-OOP case you have to add a new case to each switch statement you cared about.  In the OOP case, you'd have to add a new function for each virtual function you cared about.  Both are O(n), although the OOP case is still a bit worse, being O(2n) since you have to add both the header and the implementation.",
+      "zh": "本质上，用虚函数分派的方式组织代码，你在修改函数时付出的代价就从 O(1) 变成了 O(n)。如果这么做能换回点什么，那也许还有点意思，但你其实什么也没换回来。你在别处并没有把某个 O(n) 的代价降下来。比如你想往系统里引入一种新类型，在非 OOP 的情况下，你得给自己关心的每个 switch 语句加一个 case；在 OOP 的情况下，你得给自己关心的每个虚函数加一个新函数。两者都是 O(n)，而 OOP 还要更差一点，是 O(2n)，因为头文件和实现你都得加。"
+    },
+    {
+      "type": "p",
+      "en": "I could go on for quite some time about all the ways in which OOP creates more work in these scenarios, but hopefully you can extrapolate from here.",
+      "zh": "关于 OOP 在这些场景里制造出更多工作量的种种方式，我还能讲上很久，但希望到这里你已经能自行推演下去了。"
+    },
+    {
+      "type": "p",
+      "en": "Now, I know a lot of people are probably thinking something like, \"yes, OOP costs more to maintain, but the benefit is that people can't misuse the objects\" or something like this.  It is a very common thing that I hear, especially in reference to \"large teams\", about OOP helping to reduce the number of mistakes that programmers make when using other people's code.  I find this to be a rather nebulous and specious argument.",
+      "zh": "我知道很多人大概正在想：「是，OOP 维护成本更高，但好处是别人没法滥用这些对象」之类的话。我经常听到这种说法，特别是在谈到「大团队」的时候：OOP 有助于减少程序员在使用别人的代码时犯的错误。我觉得这个论调相当含糊，而且似是而非。"
+    },
+    {
+      "type": "p",
+      "en": "The reason is because I'm not really sure what kind of mistakes people are talking about.  They're rarely specific about these \"mistakes\" that are being \"prevented\" by OOP.  I strongly suspect that what they're actually talking about doesn't have anything to do with the transformation of things from O(1) switch functions to O(n) virtual functions, which is expensive, but rather just the fact that hiding an implementation can be beneficial if there is a clear API boundary.",
+      "zh": "原因是我不太确定人们说的究竟是哪类错误。他们很少具体说明 OOP「防止」的到底是些什么「错误」。我强烈怀疑，他们真正想说的，其实和「把 O(1) 的 switch 函数变成 O(n) 的虚函数」这件昂贵的事无关，而只是：当存在一条清晰的 API 边界时，把实现藏起来可能是有益的。"
+    },
+    {
+      "type": "p",
+      "en": "That is to say, if I believe there is a point in the code where there is no benefit to be gained by mixing it with the code that uses it, I can draw a hard line there and have a strictly opaque boundary between the two.  I certainly wouldn't knock this programming construct  —  I use it all the time.  I'll make a header file with some functions in it and a forward-delcared struct that houses the data, and then I'll define the struct and the functions in the actual code file so that nobody who includes it will actually touch them.  It's a nice technique, and it certainly falls under the category of \"encapsulation\".",
+      "zh": "也就是说，如果我认为代码里某个位置和它的使用方混在一起没有任何好处，我就可以在那里划一条硬线，在两者之间建立严格不透明的边界。我当然不会否定这种编程构造——我一直在用它。我会写一个头文件，里面放几个函数，再放一个前置声明的 struct 来承载数据；然后在真正的代码文件里定义那个 struct 和那些函数，这样任何 include 它的人都碰不到这些内部东西。这是个好技巧，它当然属于「封装」的范畴。"
+    },
+    {
+      "type": "p",
+      "en": "But it is important not to apply this technique to everything, which is what OOP advocates.  Much of the time, you actually want code to be miscible.  Most parts of your program really do depend on each other, and it makes the code extremely difficult to manage if you try to artificially separate it into \"objects\" where there are no natural lines of separation.  This is specifically the case with the \"mode\" concept I illustrated in the previous section.",
+      "zh": "但重要的是不要把这个技巧用到所有东西上——而 OOP 的鼓吹者恰恰主张那样。很多时候，你其实希望代码是可混合的。你程序里的大部分内容确实互相依赖；如果在本来没有天然分界线的地方硬要把代码切成「对象」，代码会变得极难管理。我上一节里演示的「模式」概念就正是这种情况。"
+    },
+    {
+      "type": "p",
+      "en": "The key thing to understand is that it is not worth trying to \"prevent mistakes\" if you are also preventing good, maintainable code!  Preventing mistakes should only be a focus if you know you can do so without producing bad code as a result.  Otherwise you might say that you went ahead and already made a coding mistake in the name of preventing some potential future coding mistake.",
+      "zh": "关键是要明白：如果「防错误」的同时也把好维护的代码给防掉了，那就不值得！只有当你知道自己能在不因此产生烂代码的前提下做到时，防错误才该是重点。否则可以说，你为了防住未来某个可能的编码错误，眼下就已经先犯了一个编码错误。"
+    },
+    {
+      "type": "h2",
+      "id": "three-thousand-words-on-seven-lines",
+      "zh": "为七行代码写了三千字",
+      "en": "Three Thousand Words on Seven Lines"
+    },
+    {
+      "type": "p",
+      "en": "Yes, that was about three thousands words about nothing other than defining a single enum with only two actual values in it.  When I said I was going to go over the implementation of this code in detail, I was not exaggerating.",
+      "zh": "是的，上面大约三千字，讲的只是定义一个实际取值只有两个的 enum。我说过要详细过一遍这段代码的实现，我并没有夸张。"
+    },
+    {
+      "type": "p",
+      "en": "Putting things in perspective, the fact that I can write so much about such a small piece of code is a good example of why it's hard to learn how to program well, and also why good programmers don't always write good programs.  There's so many things to think about at every turn, sometimes you just can't afford the extra mental focus and push forward without considering everything and managing the tradeoffs as well as you should.  I know this certainly happens to me all the time, and I've written many a piece of crappy code that, if I were to look at it in a calmer circumstance, I would find disgusting.",
+      "zh": "把它放到更大的视野里看：我能就这么一小段代码写出这么多字，这本身就很好地说明了为什么「学好编程」很难，也说明了为什么好程序员并不总能写出好程序。每个转弯处都有那么多要考虑的东西，有时候你实在拿不出额外的精力，只能不去考虑周全、也不去把取舍处理到应有的程度，就那么往前推。我知道这种事经常发生在我身上；我写过不少烂代码，如果换到更从容的处境下再看，我自己都会觉得恶心。"
+    },
+    {
+      "type": "p",
+      "en": "Furthermore, it is almost certain that my lengthy discussion of this simple enum is far from complete.  I bet there are a bunch of experienced programmers reading this right now who have a number of points they'd like to add to the discussion.  And that's not even counting the object-oriented programming aficionados who are livid right now at my dismissal of their preferred methods, and would certainly have a lot to say about that.",
+      "zh": "而且几乎可以肯定，我对这个简单 enum 的长篇讨论远远谈不上完整。我敢打赌，现在正读到这里的有经验程序员里，有一堆人想往讨论里加上若干点。这还没算上那些面向对象编程的爱好者——他们此刻正因为我对他们所偏爱的方法的轻视而怒火中烧，肯定有很多话要说。"
+    },
+    {
+      "type": "p",
+      "en": "So really, everything here just underscores the point with which I began the first article: good programmers need to talk more about how they actually code and what they think about when writing code.  To that end, I'll be back next week to continue examining the Lister Panel code, and I hope other folks out there will take some time to write about how they structure their programs and what they find to be efficient ways to write code, too!",
+      "zh": "所以，这一切恰恰印证了我在第一篇文章开头提出的观点：好程序员需要更多地谈自己实际上怎么写代码、写代码时在想什么。为此，下周我会回来继续解剖 Lister Panel 的代码；我也希望别处的同行能抽点时间，写写他们如何组织自己的程序、以及他们认为哪些写代码的方式是高效的！"
+    }
+  ]
+}

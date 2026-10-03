@@ -1,0 +1,1130 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Computing Alpha Mipmaps &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Computing Alpha Mipmaps Comments Feed" href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2894,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_03.png","alt":"","desc":"","caption":"Banner_03","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_03-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/484" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=484' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2010%2F09%2Fcomputing-alpha-mipmaps%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=EE453E2099DBF59317C2F78B36AF4A05');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<link rel="author" href="http://castano.ludicon.com/blog/"><style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-484 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-484" class="post-484 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">Computing Alpha Mipmaps</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/castano/" title="View all posts by Ignacio Castaño">Ignacio Castaño</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2010-09-09T17:59:02-07:00">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/" rel="bookmark">September 9, 2010</a>
+				</time>
+			   </span><time class="updated"  datetime="2017-01-11T11:38:22-07:00">January 11, 2017</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>A little problem that we had when we started to create trees and vegetation is that the standard mipmap generation algorithms produced surprisingly bad results on alpha tested textures. As the trees moved farther away from the camera, the leafs faded out becoming almost transparent.</p>
+<p>Here's an example. The following tree looked OK close to the camera:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/09/near_nocoverage.png"><img class="aligncenter size-large wp-image-495" src="http://the-witness.net/news/wp-content/uploads/2010/09/near_nocoverage-512x320.png" alt="" width="512" height="320" /></a></p>
+<p><span id="more-484"></span></p>
+<p>but as we moved away, the leafs started to fade and thin out:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/09/mid_nocoverage.png"><img class="aligncenter size-large wp-image-493" src="http://the-witness.net/news/wp-content/uploads/2010/09/mid_nocoverage-512x320.png" alt="" width="512" height="320" /></a></p>
+<p>until they almost disappeared:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/09/far_nocoverage.png"><img class="aligncenter size-large wp-image-491" src="http://the-witness.net/news/wp-content/uploads/2010/09/far_nocoverage-512x320.png" alt="" width="512" height="320" /></a></p>
+<p>I had never encountered this problem before, neither had I heard much about it, but after a few google searches I found out that artists are often frustrated by it and usually work around the issue using <a href="http://www.polycount.com/forum/showthread.php?t=65261" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.polycount.com/forum/showthread.php?t=65261', 'various']);" >various</a> <a href="http://www.gamedev.net/community/forums/topic.asp?topic_id=540726" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gamedev.net/community/forums/topic.asp?topic_id=540726', 'hacks']);" >hacks</a>. These are some of the proposed solutions that are usually suggested:</p>
+<ul>
+<li>Manually adjusting contrast and sharpening the alpha channel of each mipmap in Photoshop.</li>
+<li>Scaling the alpha in the shader based on distance or on an lod factor estimated using texture gradients.</li>
+<li>Limiting the number of mipmaps, so that the lowest ones aren't used by the game.</li>
+</ul>
+<p><P><br />
+These solutions may work around the problem in one way or another, but none of them is entirely correct and in some cases add a significant overhead.</p>
+<p>In order to address the problem it's important to understand why the geometry fades out in the distance. That is because when computing alpha mipmaps using the standard algorithms, each mipmap has a different alpha test coverage. That is, the proportion of pixels that pass the alpha test changes, in most cases going down and causing the texture to become more transparent.</p>
+<p>A simple solution to the problem is to find a scale factor that preserves the original alpha test coverage as best as possible. We define the coverage of the first mipmap as follows:</p>
+<p><code>coverage = Sum(a_i &gt; A_r) / N</code></p>
+<p>where <code>A_r</code> is the alpha test value used in your application, <code>a_i</code> are the alpha values of the mipmap, and <code>N</code> is the number of texels in the mipmap. Then, for the following mipmaps you want to find a scale factor that causes the resulting coverage to stay the same:</p>
+<p><code>Sum(scale * a_i &gt; A_r) / N == coverage</code></p>
+<p>However, finding this <code>scale</code> directly is tricky because it's a discrete problem, in general, there's no exact solution, and the range of <code>scale</code> is unbounded. Instead, what you can do is to find a new alpha reference value <code>a_r</code> that produces the desired coverage:</p>
+<p><code>Sum(a_i &gt; a_r) / N = coverage</code></p>
+<p>This is much easier to solve, because <code>a_r</code> is bounded between 0 and 1. So, it's possible to use a simple bisection search to find the best solution. Once you know <code>a_r</code> the scale is simply:</p>
+<p><code>scale = A_r / a_r</code></p>
+<p>An implementation of this algorithm is publicly available in <a href="http://code.google.com/p/nvidia-texture-tools/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://code.google.com/p/nvidia-texture-tools/', 'NVTT']);" >NVTT</a>. The relevant code can be found in the following methods of the FloatImage class:</p>
+<p><code>float FloatImage::<a href="http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#985" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#985', 'alphaTestCoverage']);" >alphaTestCoverage</a>(float alphaRef, int alphaChannel) const;<br />
+void FloatImage::<a href="http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#1002" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#1002', 'scaleAlphaToCoverage']);" >scaleAlphaToCoverage</a>(float desiredCoverage, float alphaRef, int alphaChannel);<br />
+</code></p>
+<p>And here's a simple example of how this feature can be used through NVTT's public API:</p>
+<pre>
+// Output first mipmap.
+context.compress(image, compressionOptions, outputOptions);
+
+// Estimate original coverage.
+const float coverage = image.alphaTestCoverage(A_r);
+
+// Build mipmaps and scale alpha to preserve original coverage.
+while (image.buildNextMipmap(nvtt::MipmapFilter_Kaiser))
+{
+    image.scaleAlphaToCoverage(coverage, A_r);
+    context.compress(tmpImage, compressionOptions, outputOptions);
+}
+</pre>
+<p>As seen in the following screenshot, this solves the problem entirely:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/09/mid_coverage.png"><img class="aligncenter size-large wp-image-492" src="http://the-witness.net/news/wp-content/uploads/2010/09/mid_coverage-512x320.png" alt="" width="512" height="320" /></a></p>
+<p>even when the trees are far away from the camera:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2010/09/far_coverage.png"><img class="aligncenter size-large wp-image-490" src="http://the-witness.net/news/wp-content/uploads/2010/09/far_coverage-512x320.png" alt="" width="512" height="320" /></a></p>
+<p>Note that this problem does not only show up when using alpha testing, but also when using alpha to coverage (as in these screenshots) or alpha blending in general. In those cases you don't have a specific alpha reference value, but this algorithm still works fine if you choose a value that is close to 1, since essentially what you want is to preserve the percentage of texels that are nearly opaque.</p>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/" title="Permalink to Computing Alpha Mipmaps" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2010/09/we-showed-the-witness-secretly-at-pax/" rel="prev"><i class="meta-nav-prev"></i> We showed The Witness secretly at PAX&#8230; in plain sight.</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2010/09/hemicube-rendering-and-integration/" rel="next">Hemicube Rendering and Integration <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				32 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-937">
+		<div id="comment-937">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/92219389fb63d97bdce9064b5e02ca00?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/92219389fb63d97bdce9064b5e02ca00?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Dani</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-937">
+					September 10, 2010 at 12:58 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>You lost me about half way through that post&#8230; but the screenshots are very nice indeed. I think its fair to leave the programming to others, but as long as you keep dropping pretty pictures, I&#8217;m gonna keep reading.</p>
+<p>why is there one small  grey scud/cumulus cloud in the sky?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=937#respond' data-commentid="937" data-postid="484" data-belowelement="comment-937" data-respondelement="respond" data-replyto="Reply to Dani" aria-label='Reply to Dani'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-938">
+		<div id="comment-938">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/3f7d2bc7e4e7ca5781d9a28c9d9c4b26?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/3f7d2bc7e4e7ca5781d9a28c9d9c4b26?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://evilsuperbrain.com' rel='external nofollow ugc' class='url'>Ben Weston</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-938">
+					September 10, 2010 at 2:17 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Useful algorithm, thanks for sharing.</p>
+<p>Have you considered distance fields? <a href="http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf" onclick="_gaq.push(['_trackEvent','download','http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf']);" rel="nofollow ugc">http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf</a></p>
+<p> A friend of mine was playing with them and the results were remarkable. They&#8217;re great for magnification, but they&#8217;d also maintain a remarkable amount of detail as you reduce the mip level.</p>
+<p>The other thing to use is anisotropic filtering. I found this made a huge difference to alpha-tested transparencies when viewed from a shallow angle.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=938#respond' data-commentid="938" data-postid="484" data-belowelement="comment-938" data-respondelement="respond" data-replyto="Reply to Ben Weston" aria-label='Reply to Ben Weston'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-939">
+		<div id="comment-939">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/98f5affe496383b163e36f318ef71047?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/98f5affe496383b163e36f318ef71047?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Georg Kolling</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-939">
+					September 10, 2010 at 3:36 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Looks quite nice.</p>
+<p>However, a simple and correct solution when using alpha blending is to use premultiplied alpha. Linear interpolation works fine on premultiplied values, thus generating mipmaps using a box filter is ok. When using alpha to coverage you could un-premultiply the color values (i.e. divide by alpha) in the shader to get the desired result.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=939#respond' data-commentid="939" data-postid="484" data-belowelement="comment-939" data-respondelement="respond" data-replyto="Reply to Georg Kolling" aria-label='Reply to Georg Kolling'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-941">
+		<div id="comment-941">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Reginald</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-941">
+					September 10, 2010 at 6:06 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>this is really useful information, I&#8217;ve always hated this problem. if only I had the programming skills to actually open up the hood and change this kind of thing in the engine I&#8217;m using. </p>
+<p>more api developers need to read this blog, you guys have graciously  shared a lot of solutions to common (and apparently avoidable) problems.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=941#respond' data-commentid="941" data-postid="484" data-belowelement="comment-941" data-respondelement="respond" data-replyto="Reply to Reginald" aria-label='Reply to Reginald'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-943">
+		<div id="comment-943">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/5b511db5a05e6913b39d15943d30fff1?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/5b511db5a05e6913b39d15943d30fff1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Won</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-943">
+					September 10, 2010 at 7:27 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Reminds me of this:</p>
+<p><a href="http://www.humus.name/index.php?page=3D&#038;ID=61" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.humus.name/index.php?page=3D&#038;ID=61', 'http://www.humus.name/index.php?page=3D&#038;ID=61']);" rel="nofollow ugc">http://www.humus.name/index.php?page=3D&#038;ID=61</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=943#respond' data-commentid="943" data-postid="484" data-belowelement="comment-943" data-respondelement="respond" data-replyto="Reply to Won" aria-label='Reply to Won'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-946">
+		<div id="comment-946">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-946">
+					September 10, 2010 at 11:38 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@Won As I note at the end of the post, this technique works with alpha to coverage, which is in fact what we use in the game when multisampling is available.</p>
+<p>@Georg Premultiplied alpha does not really solve this problem, it does not prevent the alpha test coverage to change. However, you can still use this technique with premultiplied alpha, you just have to premultiply the colors after the mipmap generation.</p>
+<p>@Ben Distance Fields could solve the problem, but they are more expensive to evaluate at runtime, while this technique has no extra cost. Something that might be interesting to investigate is to generate the mipmaps using distance fields, I believe that would preserve the original coverage better.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=946#respond' data-commentid="946" data-postid="484" data-belowelement="comment-946" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-2" id="li-comment-8755945">
+		<div id="comment-8755945">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/eb8c1e50d5aa412b99a75337d31304ad?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/eb8c1e50d5aa412b99a75337d31304ad?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://shaderbits.com/blog' rel='external nofollow ugc' class='url'>Ryan Brucks</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-8755945">
+					September 2, 2017 at 3:14 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Actually the distance fields don&#8217;t have to be any more expensive at runtime as its only a different way to encode the data itself. They can be alpha tested just like normal alphas. The only difference is you will usually want to set the default clip threshold to 0.5. I have a simple shader that can convert any hard edged mask into a signed distance field with the edge at 0.5. This isn&#8217;t completely solve the coverage problem, but it does seem to look nicer. And one added benefit is animated frames can also morph edges a bit, up to the gradient width.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=8755945#respond' data-commentid="8755945" data-postid="484" data-belowelement="comment-8755945" data-respondelement="respond" data-replyto="Reply to Ryan Brucks" aria-label='Reply to Ryan Brucks'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-947">
+		<div id="comment-947">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/5b511db5a05e6913b39d15943d30fff1?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/5b511db5a05e6913b39d15943d30fff1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Won</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-947">
+					September 10, 2010 at 1:13 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Yeah. The Humus article talks about contrast-boosting to maintain edges for alpha textures, but for the easier case of magnification rather than minification.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=947#respond' data-commentid="947" data-postid="484" data-belowelement="comment-947" data-respondelement="respond" data-replyto="Reply to Won" aria-label='Reply to Won'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-castano bypostauthor even thread-odd thread-alt depth-1" id="li-comment-948">
+		<div id="comment-948">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-948">
+					September 10, 2010 at 1:26 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@Won Ah, I overlooked that. It seems that&#8217;s a good solution to keep edges sharp after magnification, but yeah, that&#8217;s an entirely different problem.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=948#respond' data-commentid="948" data-postid="484" data-belowelement="comment-948" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-951">
+		<div id="comment-951">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://silverspaceship.com/' rel='external nofollow ugc' class='url'>Sean Barrett</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-951">
+					September 10, 2010 at 7:53 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I don&#8217;t understand why this is a problem for regular alpha blending.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=951#respond' data-commentid="951" data-postid="484" data-belowelement="comment-951" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor even depth-2" id="li-comment-953">
+		<div id="comment-953">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-953">
+					September 10, 2010 at 11:02 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><blockquote cite="comment-951"><p>
+<strong><a href="#comment-951" rel="nofollow">Sean Barrett</a></strong>: I don’t understand why this is a problem for regular alpha blending.
+</p></blockquote>
+<p>It depends on what you want to achieve. In the case of vegetation you have some areas of the texture that are fully opaque, others fully transparent and a short smooth transitions between them. As the texture is minimized, you don&#8217;t want the small/thin features to become more transparent. A tree isn&#8217;t transparent no matter how far it is! The results are much better if the small features either disappear entirely or cluster together and remain solid while still having smooth edges around them.</p>
+<p>That&#8217;s what the proposed algorithm achieves. However, you can obtain similar results in many different ways. For example, you can apply a fractional dilation or erosion filter until you achieve the desired coverage, or as mentioned before you could use distance fields to compute the mipmaps and then transform them to an alpha mask finding the isoline that preserves best the coverage.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=953#respond' data-commentid="953" data-postid="484" data-belowelement="comment-953" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-982">
+		<div id="comment-982">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-982">
+					September 13, 2010 at 4:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><blockquote cite="comment-953"><p><strong><a href="#comment-953" rel="nofollow">Ignacio Castaño</a></strong>:<br />
+As the texture is minimized, you don’t want the small/thin features to become more transparent. A tree isn’t transparent no matter how far it is! The results are much better if the small features either disappear entirely</p></blockquote>
+<p>The high concept makes sense in the abstract, sure, but it doesn&#8217;t seem very convincing. Yes, a tree should stay opaque and if you make all the leaves 50% transparent it won&#8217;t stay 100% opaque. But making the leaves go away entirely has got to be worse; at least the mipmapped alpha blended tree is 90-95% opaque, instead of 0% opaque.</p>
+<p>And at least the mipmapped alpha represents coverage and produces something resembling anti-aliasing, whereas without alpha-to-coverage and a decent MSAA your alpha-tested foliage looks like crap. So I&#8217;d argue that while alpha-blending has some defects in full opacity, they&#8217;re far less objectionable than any other defect on typical hardware in non-Siggraph contexts.</p>
+<p>I mean, the proof is in the pudding. If it looks worse, it looks worse. But I can&#8217;t tell if you actually tried this or were just tossing off a guestimate-y aside.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=982#respond' data-commentid="982" data-postid="484" data-belowelement="comment-982" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor even depth-4" id="li-comment-1004">
+		<div id="comment-1004">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1004">
+					September 14, 2010 at 6:03 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><blockquote cite="comment-982"><p>
+<strong><a href="#comment-982" rel="nofollow">Sean Barrett</a></strong>: I mean, the proof is in the pudding. If it looks worse, it looks worse.
+</p></blockquote>
+<p>I think the results speak for themselves:</p>
+<p>With alpha coverage adjustment:<br />
+<a href="http://img251.imageshack.us/img251/1540/blendcoverage.png" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://img251.imageshack.us/img251/1540/blendcoverage.png', 'http://img251.imageshack.us/img251/1540/blendcoverage.png']);" rel="nofollow ugc">http://img251.imageshack.us/img251/1540/blendcoverage.png</a></p>
+<p>Without:<br />
+<a href="http://img227.imageshack.us/img227/1391/blendnocoverage.png" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://img227.imageshack.us/img227/1391/blendnocoverage.png', 'http://img227.imageshack.us/img227/1391/blendnocoverage.png']);" rel="nofollow ugc">http://img227.imageshack.us/img227/1391/blendnocoverage.png</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1004#respond' data-commentid="1004" data-postid="484" data-belowelement="comment-1004" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-960">
+		<div id="comment-960">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/98f5affe496383b163e36f318ef71047?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/98f5affe496383b163e36f318ef71047?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Georg Kolling</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-960">
+					September 11, 2010 at 10:23 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@Ignacio I did not mean to imply that premultiplied alpha would solve the problem for alpha test  (it only does if your alpha threshold is 0.5). However, as I mentioned premultiplied works fine for both alpha blending and alpha to coverage. It simply is the correct way of linearly filtering textures with alpha.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=960#respond' data-commentid="960" data-postid="484" data-belowelement="comment-960" data-respondelement="respond" data-replyto="Reply to Georg Kolling" aria-label='Reply to Georg Kolling'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-1011">
+		<div id="comment-1011">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1011">
+					September 15, 2010 at 2:07 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The only flaw I see there is the shadows, which are another alpha tested case, and I do I agree about the improvement for the alpha test case. The farther away stuff looks different, but it&#8217;s not clear to me which one is more right or wrong; this doesn&#8217;t seem to be testing the case I thought we were talking about, looking through a tree or other multiple layers of foilage that ought to be opaque.</p>
+<p>Also relevant is the approach to foliage in Pure: <a href="http://www2.disney.co.uk/cms_res/blackrockstudio/pdf/Foliage_Rendering_in_Pure.pdf" onclick="_gaq.push(['_trackEvent','download','http://www2.disney.co.uk/cms_res/blackrockstudio/pdf/Foliage_Rendering_in_Pure.pdf']);" rel="nofollow ugc">http://www2.disney.co.uk/cms_res/blackrockstudio/pdf/Foliage_Rendering_in_Pure.pdf</a><br />
+although they don&#8217;t talk about shadows at all. They don&#8217;t do alpha testing or regular blending; they do some hacky blending that weights between adding up all the alpha (which will go opaque with multiple non-opaque layers) and taking the max of all the alpha (which is only opaque if some alpha is opaque). The whole thing is super hacky, but then I&#8217;ve yet to see good-looking foliage that didn&#8217;t smack of a hack.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1011#respond' data-commentid="1011" data-postid="484" data-belowelement="comment-1011" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-2" id="li-comment-1037">
+		<div id="comment-1037">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1037">
+					September 16, 2010 at 4:44 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@Sean it&#8217;s not trivial to test this on trees since in our case, they have many self intersections and don&#8217;t look good when rendered with alpha blending. What I was trying to show is that without coverage preservation the leaves become almost transparent when minimized, while with coverage preservation they stay significantly more opaque. I don&#8217;t think that adding multiple layers of foliage would make that any different.</p>
+<p>The shadows are a separate issue, but that&#8217;s not what I was trying to show&#8230;</p>
+<p>I&#8217;m moderately satisfied with how foliage looks on PC, but on consoles it&#8217;s hard to afford MSAA, so it might make sense to use hacks like that. It does seem to look quite good, but I&#8217;ll have to try the game to convince myself.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1037#respond' data-commentid="1037" data-postid="484" data-belowelement="comment-1037" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-1030">
+		<div id="comment-1030">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/671e4e1d06c784b039d97cb58a0908e7?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/671e4e1d06c784b039d97cb58a0908e7?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">kj12345</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1030">
+					September 16, 2010 at 5:53 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Thanks for sharing, this its looking really good. Do you know if those trees are being generated by something like SpeedTree or just custom modeling? That process might be an interesting blog post.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1030#respond' data-commentid="1030" data-postid="484" data-belowelement="comment-1030" data-respondelement="respond" data-replyto="Reply to kj12345" aria-label='Reply to kj12345'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-1032">
+		<div id="comment-1032">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c76490510e0d95a61621b89f18f75ec7?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c76490510e0d95a61621b89f18f75ec7?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">cb</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1032">
+					September 16, 2010 at 10:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>&#8220;The high concept makes sense in the abstract, sure, but it doesn’t seem very convincing. Yes, a tree should stay opaque and if you make all the leaves 50% transparent it won’t stay 100% opaque. But making the leaves go away entirely has got to be worse; at least the mipmapped alpha blended tree is 90-95% opaque, instead of 0% opaque.&#8221;</p>
+<p>A technique I&#8217;ve used in the past is to simply randomly choose one of the 4 parent pixels instead of blending them together.  Even *that* horrible hack often looks better than regular mip-mapped alpha blending on things like leaves and chain link fences, etc.  (in fact lots of artists use this hack by disabling mip-mapping on alpha-tested textures).  But IC&#8217;s method is surely better than those.</p>
+<p>ps. premultiplied alpha. lol.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1032#respond' data-commentid="1032" data-postid="484" data-belowelement="comment-1032" data-respondelement="respond" data-replyto="Reply to cb" aria-label='Reply to cb'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-1043">
+		<div id="comment-1043">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1043">
+					September 16, 2010 at 7:20 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Like I said, they look more transparent, but I don&#8217;t know what&#8217;s actually right. E.g. we&#8217;d really need a 256-sample SSAA that we downsample and compare against to be sure &#8212; and no, I&#8217;m not saying you should go do that work, I&#8217;m just saying it&#8217;s one thing to say one or the other is &#8216;aesthetically superior&#8217; in your context, and another to say it&#8217;s actually &#8216;more right&#8217;.</p>
+<p>If you can send me your tree model I&#8217;d be curious to play with it a little.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1043#respond' data-commentid="1043" data-postid="484" data-belowelement="comment-1043" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon odd alt thread-even depth-1" id="li-comment-1091">
+		<div id="comment-1091">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1091">
+					September 20, 2010 at 12:01 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Well, wait, no.  Because it doesn&#8217;t matter what the results of 256-sample SSAA would be, because we are not trying to duplicate the results of an abstract high-res rendering process; we are trying to use 3D rendering to generate a specific effect.</p>
+<p>That effect is trees that don&#8217;t look like cellophane when you are far away from them &#8212; as they do not in the real world.   This does that.  Therefore, it&#8217;s &#8220;right&#8221;.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1091#respond' data-commentid="1091" data-postid="484" data-belowelement="comment-1091" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-1092">
+		<div id="comment-1092">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7899459db3625b553ea8b6a38b105f0f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Reginald</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1092">
+					September 20, 2010 at 1:15 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>@ Sean Barett: can you somehow blackmail casey and jeff into doing more podcasts ?  I hear tell that Casey&#8217;s got quite the pastry fetish, and if that news were made public, well, he could lose some prestige.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1092#respond' data-commentid="1092" data-postid="484" data-belowelement="comment-1092" data-respondelement="respond" data-replyto="Reply to Reginald" aria-label='Reply to Reginald'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-1093">
+		<div id="comment-1093">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/ea5767e5421dd38b96bb3fc7a0b0060b?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/ea5767e5421dd38b96bb3fc7a0b0060b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Marc</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1093">
+					September 20, 2010 at 5:56 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m wondering, what&#8217;s the poly count on the trees?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1093#respond' data-commentid="1093" data-postid="484" data-belowelement="comment-1093" data-respondelement="respond" data-replyto="Reply to Marc" aria-label='Reply to Marc'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-1114">
+		<div id="comment-1114">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1114">
+					September 22, 2010 at 9:56 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Jon, your trees in the game don&#8217;t look anything like this screenshot I&#8217;m discussing, <i>and</i> you&#8217;re not currently doing alpha blended trees in your game, so I don&#8217;t think your comment has much to do with what I&#8217;m talking about in context.</p>
+<p>In general (though not always) we want rendering to approximate the same effect that would obtain in the real world. Now it is true that these are trees which are supposed to be simulacra of such things as they exist in the real world, and to the degree that they are inaccurate from real trees you might nevertheless want them to have certain properties as you got further away from them that wouldn&#8217;t be accurate from a standpoint of The Rendering Equation, but which would be true to the thing you had intended to simulate. (This is what I meant by &#8220;aesthetically superior in your context&#8221;). But I don&#8217;t think that&#8217;s even what&#8217;s going on here, because clearly if they are opaque up close according to the rendering equation, they are opaque far away according to the rendering equation. The problem is that alpha testing is a hack that&#8217;s very far from the results of the rendering equation, so the (naive) alpha testing results deviate as discussed.</p>
+<p>And while I am fine with the idea that the proposed solution is aesthetically superior in your context &#8212; rock on! &#8212; Ignacio originally expressed the issue as &#8220;Note that this problem does not only show up when using alpha testing, but also when using alpha to coverage (as in these screenshots) or alpha blending in general&#8221;, implying that it is perhaps something of interest <i>outside</i> the context of rendering the Witness. Thus we were in fact talking about alpha-blended trees, and this generality, not the Witness in particular, so this is further part of why I am doubtful of your reply.</p>
+<p>So, sticking to correctness: if the original art was actually opaque, and then you get farther away from it, it should look the same as when you were close to it but downsampled &#8212; that downsampling will preserve opacity wherever it was opaque in a large enough region. High-pixel-count SSAA is equivalent to downsampling the &#8220;closer&#8221; image. Thus such a test would be both mathematically correct *and* addresses the opacity issue with which he was concerned.</p>
+<p>Anyway, given that the opacity-preservation would be preserved by downsampling the original composited image (this is just &#8220;blend does not distribute over lerp&#8221; again), I stand by my claim: I can&#8217;t tell in Ignacio&#8217;s example for alpha blending which of the two images actually reproduces the visibility effect you would see at that distance; I&#8217;d need to see a &#8220;correct&#8221; reference to tell that. But that wouldn&#8217;t even necessarily address the actual question; since the actual problematic effect is one of an interaction of multiple layers (with alpha blending an alpha value representing coverage, normal mipmapping clearly does do the right thing for single layers), and the example he tested doesn&#8217;t seem to demonstrate multiple overlapping with some significant depth complexity, I don&#8217;t even know what&#8217;s right. I just see one lighter than the other but neither looks more right. And I can&#8217;t necessarily tell whether that amount of lightness is appropriate algorithmically; e.g. is two layers of 90% opacity really visibility non-opaque? Three? And what are the actual numbers here?</p>
+<p>Which is why, you know, it would be a lot simpler if I could just play with the tree model and figure it out for myself.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1114#respond' data-commentid="1114" data-postid="484" data-belowelement="comment-1114" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-1121">
+		<div id="comment-1121">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7fa8632e0940b9f3fddabeb2b3894ff7?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7fa8632e0940b9f3fddabeb2b3894ff7?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Puran</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1121">
+					September 23, 2010 at 9:01 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>[QUOTE]Jon, your trees in the game don’t look anything like this screenshot I’m discussing, and  you’re not currently doing alpha blended trees in your game, so I don’t think your comment has much to do with what I’m talking about in context.[/QUOTE]</p>
+<p>I think this is the problem&#8230; Everyone else is talking in context to the game, you are talking about something else entirely.</p>
+<p>Alpha map mip maps : After a certain level, there significantly less 100% opaque pixel values anymore because it is averaged with the neighbouring 0% pixels. So after a bit you end up with a mip map that is mostly 50%. That shouldn&#8217;t happen, ignacio found a pretty cool solution and now the leaves don&#8217;t get semi transparent when you move away.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1121#respond' data-commentid="1121" data-postid="484" data-belowelement="comment-1121" data-respondelement="respond" data-replyto="Reply to Puran" aria-label='Reply to Puran'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-1277">
+		<div id="comment-1277">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/3b8b643f5439a9a75732cbfb10d4045b?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/3b8b643f5439a9a75732cbfb10d4045b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zenemo</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-1277">
+					October 6, 2010 at 8:18 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Why about jumping to a complete procedural engine?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=1277#respond' data-commentid="1277" data-postid="484" data-belowelement="comment-1277" data-respondelement="respond" data-replyto="Reply to Zenemo" aria-label='Reply to Zenemo'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-3348">
+		<div id="comment-3348">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/ef5acdf6d35612041ba1116b29ebd41f?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/ef5acdf6d35612041ba1116b29ebd41f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Alan Chambers</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-3348">
+					June 4, 2011 at 3:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Ignacio, great article. Can I ask what version of NVTT the algorithm implementations can be found in? I&#8217;ve gone back as far as Dec 2008 but can&#8217;t find them in the FloatImage.cpp or .h. I&#8217;d be keen to check out the routines you mention to see if they were viable for my current project. I&#8217;ve encountered this problem before but I overcame it by using nearest point sampling during the downsampling for the mipmap generation. It&#8217;s fast but obviously a solution that accepts linear filtering would look a lot nicer. Cheers, Al.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=3348#respond' data-commentid="3348" data-postid="484" data-belowelement="comment-3348" data-respondelement="respond" data-replyto="Reply to Alan Chambers" aria-label='Reply to Alan Chambers'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-castano bypostauthor even thread-odd thread-alt depth-1" id="li-comment-3351">
+		<div id="comment-3351">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-3351">
+					June 5, 2011 at 12:39 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Alan, the implementation is only available in trunk, it still haven&#8217;t gotten around to packaging a new official release yet. You can browse its code here:</p>
+<p><a href="http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/']);" rel="nofollow ugc">http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/</a></p>
+<p>The FloatImage class is defined in src/nvimage/FloatImage.cpp, here are the links to the specific functions referenced above:</p>
+<p><a href="http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#988" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#988', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#988']);" rel="nofollow ugc">http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#988</a><br />
+<a href="http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#1005" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#1005', 'http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#1005']);" rel="nofollow ugc">http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/src/nvimage/FloatImage.cpp#1005</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=3351#respond' data-commentid="3351" data-postid="484" data-belowelement="comment-3351" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-3363">
+		<div id="comment-3363">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/ef5acdf6d35612041ba1116b29ebd41f?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/ef5acdf6d35612041ba1116b29ebd41f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Alan Chambers</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-3363">
+					June 7, 2011 at 7:03 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Ignacio, thank you for sharing this, much appreciated. The solution looks excellent for creating mipmap textures offline that maintain great alpha test coverage. I&#8217;d certainly use it for foliage and other such paraphernalia. I&#8217;ve been hoping for a viable real-time solution to appear that I could use on PlayStation 3. Thanks again for releasing the code, and keep up the great work! Al.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=3363#respond' data-commentid="3363" data-postid="484" data-belowelement="comment-3363" data-respondelement="respond" data-replyto="Reply to Alan Chambers" aria-label='Reply to Alan Chambers'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-3735">
+		<div id="comment-3735">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/208bd2f308129c525aea26b89b17d88a?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/208bd2f308129c525aea26b89b17d88a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Ben</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-3735">
+					June 30, 2011 at 4:06 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>How are you mipmapping normal maps? The solutions I&#8217;ve found online involve averaging x,y,z values and re-normalizing, but these don&#8217;t work in extreme cases ( averaging (1,0,0) and (-1,0,0) gives the zero vector) and seem not to take the specific properties of normal maps into account.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=3735#respond' data-commentid="3735" data-postid="484" data-belowelement="comment-3735" data-respondelement="respond" data-replyto="Reply to Ben" aria-label='Reply to Ben'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-507785">
+		<div id="comment-507785">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d268ac57ee85b75c1d50a1b0f01ff4e1?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d268ac57ee85b75c1d50a1b0f01ff4e1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">morando</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-507785">
+					February 12, 2013 at 5:37 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Could you PLEASE, compile your code example into executable form, since i have tried to download NVTT library and some parameters are different and i don&#8217;t know how to bind image (Surface) to load from input file. What is a &#8220;tmpImage&#8221; and how is it related to &#8220;image&#8221; variable?<br />
+Can you show whole source?</p>
+<p>Thank you for your time.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=507785#respond' data-commentid="507785" data-postid="484" data-belowelement="comment-507785" data-respondelement="respond" data-replyto="Reply to morando" aria-label='Reply to morando'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-2849202">
+		<div id="comment-2849202">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/62f7e163027bbfa4c13ec4c9d8ce37de?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/62f7e163027bbfa4c13ec4c9d8ce37de?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">ptr</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-2849202">
+					December 14, 2013 at 2:18 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m not a programmer, but I&#8217;ve noticed forcing alpha to coverage combined with FXAA on my NV config pannel gives very smooth and stable AA for alpha tested textures, better than super sampling even.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=2849202#respond' data-commentid="2849202" data-postid="484" data-belowelement="comment-2849202" data-respondelement="respond" data-replyto="Reply to ptr" aria-label='Reply to ptr'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-2849204">
+		<div id="comment-2849204">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/62f7e163027bbfa4c13ec4c9d8ce37de?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/62f7e163027bbfa4c13ec4c9d8ce37de?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">ptr</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/09/computing-alpha-mipmaps/#comment-2849204">
+					December 14, 2013 at 2:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>To be more specific, msaa on alpha gives a dithering pattern, and running FXAA hides it. Sounds hacky but it gives surprisingly robust results.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/09/computing-alpha-mipmaps/?replytocom=2849204#respond' data-commentid="2849204" data-postid="484" data-belowelement="comment-2849204" data-respondelement="respond" data-replyto="Reply to ptr" aria-label='Reply to ptr'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2010/09/computing-alpha-mipmaps/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='484' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="c29b321d93" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="22"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.223 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:41:19 -->
+
+<!-- super cache -->

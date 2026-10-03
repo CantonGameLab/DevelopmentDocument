@@ -1,0 +1,113 @@
+{
+  "id": "official-2013-06-07-a-long-overdue-tree-update",
+  "title": { "zh": "迟来太久的树木更新", "en": "A Long Overdue Tree Update" },
+  "subtitle": {
+    "en": "Orsi Spanyol on how a side project turned into re-foresting the island, one tree set at a time.",
+    "zh": "做树的美术 Orsi 讲她怎么把岛上清一色的橡树林，换成一片片各有性格的林子。"
+  },
+  "translator": {
+    "note": "原文有 8 张截图，wiki 未收录图片本身；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Hello! I'm Orsi, the girl who ended up modeling most of the trees for this game. When I joined the team two years ago, I didn't think I would be doing much serious environment modeling. I was fresh out of school, hired to develop some interesting, hidden things around the island. For the first six months or so, I did a lot of brainstorming and playing around in the engine, but nothing that improved the aesthetics of the island in any significant way. However, since some of my projects involved mocking up certain types of trees, I realized that tree modeling is one of my favorite ways to unwind. So, when I got burned out working on a particularly challenging project, I started to volunteer to make tree sets.",
+      "zh": "大家好！我是 Orsi，就是那个最后给这个游戏做了大部分树的人。两年前加入团队的时候，我没想到自己会做这么多正经的环境建模。我那时刚从学校出来，被招进来做岛上一些有趣的、藏起来的东西。头半年左右，我做了很多头脑风暴、在引擎里到处乱试，但没有哪件事对岛的美观有过实质性的改善。不过，因为我手上有些项目要搭几类树的草模，我意识到做树的模型是我最喜欢的放松方式之一。所以，每当我在某个特别难搞的项目上做到精疲力尽时，我就开始主动揽下成组的树模。"
+    },
+    {
+      "type": "p",
+      "en": "Back then, most of the trees around the island were variations of an oak-like tree, seen in the [previous tree updates](http://the-witness.net/news/2011/06/witness-trees/). The landscape architects had plans for different tree species for each unique area, but the other artists didn't seem to enjoy modeling vegetation, so they mostly focused on the buildings and paths, and used the old trees we already had to complete the scene. The result was a lot of architecturally distinct areas, set mostly in the same generic oak forest environment.",
+      "zh": "那时候，岛上大部分树都是一种橡树的变体，就是[之前的树木更新](http://the-witness.net/news/2011/06/witness-trees/)里出现过的那些。景观建筑师为每一片独特的区域都规划了不同的树种，但其他美术似乎都不喜欢做植被，所以他们主要专心做建筑和道路，然后用现成的老树把场景补齐。结果就是：许多建筑风格迥异的区域，被安放在差不多同一片千篇一律的橡树林环境里。"
+    },
+    {
+      "type": "p",
+      "en": "When I added my first few tree sets, the other artists grew excited and started letting me model or modify trees for them, and certain places started to really pop out as unique, coherent areas. Here are some examples of the trees I created:",
+      "zh": "我加进最初几组树之后，其他美术也兴奋起来，开始让我替他们做树、改树，有些地方开始真正显露出独特而统一的面貌。下面是我做的一些树："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.07__time_09_55_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Near the starting point of the game, there is an agricultural field lined with birch trees. Luis, an other artist on the project, made some birches of his own. They looked nice, but they had short, stubby trunks covered up by with big circular clumps of foliage. When they were placed around the area, they just didn't feel like a birch forest to me. I missed the defining characteristic of a birch forest: the thin, graceful trunks that parallax beautifully as you walk past them. I asked Luis if he would mind if I made some birches of my own, and he was happy to let me do it. You can see the result above.",
+      "zh": "游戏起点附近有一片农业田地，边上种着白桦。项目里的另一位美术 Luis 自己也做过一些白桦。它们看着不错，但树干又短又粗，上面盖着一大团一大团的圆形树冠。把这些树种到那片区域之后，我总觉得不像白桦林。我想念白桦林最标志性的特征：那些细长优雅的树干，你从旁边走过时会看到非常漂亮的视差。我问 Luis 介不介意我自己也做几棵白桦，他很乐意让我做。上面就是结果。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.07__time_10_02_n06.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The autumn forest existed way before I joined the team, but also used to consist of differently colored generic oak trees. I made a set of maple trees instead, with dark, tall trunks and thin sprays of foliage positioned loosely around the branches. These were probably the most controversial trees I made. We spent a long time debating whether the impressionistic way the leaves were scattered around the branches was working with the style of the game or not. In the end, everybody seemed to like them too much to change them. I think this way of modeling the foliage allowed for the airy, glowing, golden feel I was trying to achieve. This was also the place I first realized what a big impact trees had in defining the area. Once I placed the trees, all I had to do was create some ground textures and grasses to create the forest you see above.",
+      "zh": "秋天的森林在我加入团队之前很久就存在了，但当时也是由换个颜色就上的普通橡树组成的。我改做了一套枫树：树干高而深色，细碎的叶簇松松地挂在枝条周围。这大概是我做过的最有争议的树。我们花了很长时间争论这种把叶子按印象派手法散落在枝条周围的做法，到底跟游戏的风格搭不搭。最后大家似乎都太喜欢它们了，舍不得改。我觉得这种做树冠的方式正好能做出我想追求的那种轻盈、发光、金色的感觉。也是在这里，我第一次意识到树对定义一个区域有多大的影响。把树种下之后，我只需要再做几张贴图和一些草，就做出了你上面看到的这片森林。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.07__time_10_06_n08.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In this screenshot, you can see some oaks I made to replace Shannon's old ones. I created a set of three, in different stages of growth, which is usually the way I approach tree making. It is the best way to create an area that feels like it is alive and still growing. The huge oak in the foreground was one of the few modular trees I actually had to sculpt more detail into, since the trunk got so huge it needed to be broken up a little.",
+      "zh": "这张截图里能看到我做的几棵橡树，用来替换 Shannon 以前做的那批。我做了一组三棵，处于不同的生长阶段——这通常是我做树的方式。这是让一片区域显得有生命、还在生长最好的办法。前景里那棵巨大的橡树，是我少数几棵真的需要额外雕细节的模块化树之一，因为树干变得太大，需要把它稍微打碎一点。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.06__time_15_22_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The pine forest is very dear to my heart, because it's my project...and I don't mean just the modeling. Jonathan had three puzzles in a mostly empty area, and I decided to explore the concept behind them a bit more. I ended up designing and modeling this whole area, including the puzzles (with tons of feedback and guidance from Jon, of course). The pine trees here were the landscape  architect's idea, and I was very excited to model them. I tried to stay away from making them all look too Christmas tree shaped, so I found reference images of older, taller pines with saggy, less regularly spaced branches, and decided to go with that. I especially love the way the light bounces around in the messy foliage.",
+      "zh": "松树林对我来说特别亲切，因为那是我的项目……而且我说的不只是建模。Jonathan 在一个几乎空着的区域放了三个谜题，我决定把它们背后的构想再多挖一挖。最后我设计并建模了整个区域，包括那些谜题（当然，Jon 给了大量的反馈和指导）。这里的松树是景观建筑师的想法，我非常兴奋地去做它们的模型。我尽量避免让它们全都长得太像圣诞树，于是找了一些更老、更高的松树参考图——枝条下垂、间距更不规律——决定照那个来做。我特别喜欢光在乱糟糟的叶簇里四处弹跳的样子。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.07__time_10_07_n09.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The landscape architects also asked for some mangled, old olive trees in the agricultural area. This was a nightmare to figure out how to model to fit our style, since we don't usually have a lot of detail in objects, and the reference images they provided had crazy twisted trunks full of holes and cracks. I ended up sculpting the trunks in Zbrush, and decimating them, leaving some hard edges. We use this process a lot for other things around the island, but it was the first time I used it for trees. I made the branches modular, and created two significantly different trunks, which the artists can use to combine into even more messed up, mangled shapes. I am still not entirely sure whether I like these or not.",
+      "zh": "景观建筑师还要求在农业区域做一些残缺扭曲的老橄榄树。要按我们的风格想清楚怎么给它们建模简直是场噩梦，因为我们通常不会在物件上放太多细节，而他们给的参考图里全是扭得乱七八糟、满是空洞和裂缝的树干。我最后在 Zbrush 里雕了这些树干，再做减面，留下一些硬边。这个流程我们在岛上别的东西上用得很多，但用来做树还是第一次。我把树枝做成模块化的，并做了两种差别很大的树干，美术可以把它们组合成更破败、更扭曲的形状。到现在我也不太确定自己喜不喜欢它们。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.07__time_09_54_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "These flowering apple trees took me a while, and they are still not very efficiently textured, but they are getting there. The challenge was to get the silhouette looking like there are branches coated with flowers poking out all over the place. I feel far from finished with these trees, but they seem to be getting a lot of positive feedback, which surprises me constantly.",
+      "zh": "这些开花的苹果树花了我不少时间，贴图效率到现在也还是不高，但总算在往好的方向走。难点在于让轮廓看起来像是枝条上裹满了花、到处冒出来。我觉得这些树离完成还差得远，但它们似乎得到了很多好评，这总让我意外。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.05__time_18_43_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The eucalyptus forest is a little transitional area I decided to dress up when I had a week to spare. I didn't get very far with the trees, there is actually only one eucalyptus model, and it's not very detailed. I had some difficulty with the very directional foliage. All the leaves had to point down, which was very different form the way I used to make foliage before, where I'd just place planes at random angles in a big bunch. I'm sort of glad I left it where I did, however, because I learned a lot from the following plant I made, and I can apply it to the problem when I revisit these trees during polish.",
+      "zh": "桉树林是一小片过渡区域，我手上刚好多出一周，就决定把它打扮一下。树没做多少，实际上只有一棵桉树模型，而且细节不多。我在这种方向性极强的叶簇上遇到了点困难：所有叶子都得朝下，这和我以前做叶簇的方式差得很远——以前我只是把一堆面片按随机角度摆成一大团。不过我倒有点庆幸当时就在那儿停下了，因为我从后面那株植物上学到了很多，等打磨阶段回头处理这些树时就能用上。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.07__time_10_03_n07.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This last tree is more of a vine, but it's one of my latest creations, and I'm very happy with it. It's a modular wisteria set. There are two bunches of flowers, two trunks (for a corner and for a flat wall), and an independent bunch of vines. All these different pieces can be placed to create varied shapes, to make each plant look unique and and adapt to the surface it's climbing on. The way I created the flowers is how I'm going to re-do the eucalyptus foliage in the future, and I imagine that will make those trees a lot more interesting and beautiful.",
+      "zh": "最后一棵其实更像是藤蔓，但它是我最近的作品之一，我很满意。这是一套模块化的紫藤：两簇花、两种树干（一种用在墙角、一种用在平整墙面），还有一簇独立的藤蔓。这些不同的部件可以摆出各种形状，让每一株都显得独一无二，也能适应它攀爬的表面。我这次做花的方式，就是我以后重做桉树叶簇要用的方式，我猜那会让那些树有趣、好看得多。"
+    },
+    {
+      "type": "p",
+      "en": "Well, these are just some of the trees I made, and the other artists have made some of their own, but these seemed to be a good variety to show off and talk about. Hopefully I didn't ramble on too long, I am just always excited to talk about any aspect of the game I can!",
+      "zh": "好啦，这些只是我做的一部分树，其他美术也做了他们自己的，但这几种看起来足够多样，适合拿出来展示和聊聊。希望我没有啰嗦太久——我只是总忍不住想聊聊这游戏的任何一个方面！"
+    }
+  ]
+}

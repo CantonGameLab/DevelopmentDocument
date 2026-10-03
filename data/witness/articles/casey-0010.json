@@ -1,0 +1,411 @@
+{
+  "id": "casey-0010",
+  "title": { "zh": "噪声的颜色", "en": "The Color of Noise" },
+  "subtitle": {
+    "en": "What kinds of random distributions are good for the sorts of graphics work we do in game development?",
+    "zh": "游戏开发里的那些图形工作，到底适合用什么样的随机分布？"
+  },
+  "translator": {
+    "note": "原文有 11 张示意图，未收录影像，只按原文位置保留占位段落；末尾那段整段引用自作者自己的第一篇 Witness 文章，按引用块处理。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Everyone knows what \"white noise\" is, at least intuitively.  People say \"white noise\" to refer to the static on an analog radio or the sound of ocean waves breaking on the beach.  But have you ever wondered why the term \"white noise\" is common, yet you never hear noise referred to as being any other color, like \"red noise\" or \"green noise\"?",
+      "zh": "「白噪声」是什么，人人都知道，至少凭直觉知道。人们用「白噪声」来指模拟收音机的沙沙声，或者海浪拍岸的声音。但你是否想过：为什么「白噪声」这个说法很常见，却从没听过有人用别的颜色来称呼噪声，比如「红噪声」或「绿噪声」？"
+    },
+    {
+      "type": "p",
+      "en": "Surprisingly enough, although they've never made it into the vernacular, there actually are all sorts of different colors of noise.  You'd think that most programmers would know about this, given how often we all use randomly generated things that are based on \"noise\".  But the fact is that most programmers don't know much about randomness beyond how to call the random number generator in the standard library of their favorite programming language.",
+      "zh": "说来意外，虽然这些说法从未进入日常用语，但噪声确实有各种不同的颜色。你大概会以为大多数程序员都知道这件事，毕竟我们都在频繁使用基于「噪声」的随机生成物。但事实是，大多数程序员对随机性的了解，仅限于怎么调用自己常用语言标准库里的随机数生成器。"
+    },
+    {
+      "type": "p",
+      "en": "And to be honest, the same was totally true for me until I happened to render an image with some very ugly artifacts…",
+      "zh": "说实话，我自己也完全是这样——直到我碰巧渲染出一张带着非常难看伪影的图……"
+    },
+    { "type": "h2", "id": "the-ugly-cabinet-stairs", "zh": "难看的柜子楼梯", "en": "The Ugly Cabinet Stairs" },
+    {
+      "type": "p",
+      "en": "\"Wait, what the hell is a blue noise pattern?\"",
+      "zh": "「等等，蓝噪声图案到底他妈是什么东西？」"
+    },
+    {
+      "type": "p",
+      "en": "To be fair, that may not be the precise quote.  It's entirely possible that I used a different expletive.  It's been about a decade since I said it, so you'll have to cut me some slack.",
+      "zh": "公平地说，这未必是原话。我用的脏字完全可能是另一个。这话是大约十年前说的，你就别苛求我了。"
+    },
+    {
+      "type": "p",
+      "en": "It was the spring of 2005, and I was sitting in [Don Mitchell](http://mentallandscape.com)'s study.  We were looking at this image on his computer's monitor:",
+      "zh": "那是 2005 年春天，我坐在 [Don Mitchell](http://mentallandscape.com) 的书房里。我们正看着他电脑显示器上的这张图："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_00_852f93a849057262.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That's a raytraced image of a Japanese cabinet stairway.  I'd modeled it in [3DSMAX](http://www.autodesk.com/products/autodesk-3ds-max/overview), and I'd written an exporter and a raytracer so that I could play around with doing some photorealistic rendering code.  Once I'd gotten all the basics working, it was time to sweat the details, but I really didn't know very much about how to do realistic lighting calculations.  They're not all that complicated at the end of the day, but if you don't have a firm grasp on the subject, you can easily omit a crucial term or combine things in the wrong way that will leave your image looking not quite right, but you'll have no idea why.",
+      "zh": "这是一张光线追踪渲染出来的日式柜子楼梯图。我在 [3DSMAX](http://www.autodesk.com/products/autodesk-3ds-max/overview) 里建的模型，还写了一个导出器和一个光线追踪器，好让自己玩玩写照片级渲染代码。等所有基础部分都能跑之后，就该抠细节了，但我对怎么做真实的光照计算实在所知甚少。说到底这些计算也没那么复杂，可如果你没有牢牢掌握这个主题，很容易就漏掉一个关键项、或者把东西以错误的方式组合起来，结果图像看起来就是不太对，而你又完全不知道为什么。"
+    },
+    {
+      "type": "p",
+      "en": "One option was to start wading through books and papers and eventually come up to speed on everything I needed to know to get the lighting right.  But realistically, going that route, it might take several days before I even gleaned what was important to study and what wasn't.  The body of literature on the subject is rather massive.",
+      "zh": "一种选择是开始啃书和论文，最终把「把光照做对」所需的知识补齐。但现实一点说，走这条路的话，光是弄清哪些该学、哪些不该学，可能就要好几天。这个主题的文献体量相当庞大。"
+    },
+    {
+      "type": "p",
+      "en": "The other option was to accelerate the process by asking an expert to clue me in ahead of time, so that I'd know what to focus on and what to skip.  That requires knowing an expert, but luckily for me, I did: [Don Mitchell](http://mentallandscape.com).",
+      "zh": "另一种选择是加快这个过程：请一位专家提前给我透个底，让我知道该重点看什么、该跳过什么。这需要你认识一位专家，而我很走运，我认识：[Don Mitchell](http://mentallandscape.com)。"
+    },
+    {
+      "type": "p",
+      "en": "I'd known Don for many years  —  we'd met through mutual friends at Microsoft  —  and I knew he had done a lot of seminal raytracing research.  I sent an e-mail to him asking if he'd be up for teaching an impromtu \"Intro to Physically-Based Lighting\" course, and attached the image of the cabinet stairs.  Perhaps sensing how dire the situation was given the poor lighting in the image, he agreed, and the next day I drove to the outskirts of Redmond to meet him at his house.",
+      "zh": "我认识 Don 很多年了——我们是在 Microsoft 通过共同的朋友认识的——我也知道他做过很多开创性的光线追踪研究。我给他发了封邮件，问他愿不愿意临时开一门「基于物理的光照入门」课，并附上了那张柜子楼梯的图。也许是察觉到图上糟糕的光照说明情况有多危急，他答应了；第二天我开车到 Redmond 郊区，去他家见他。"
+    },
+    {
+      "type": "p",
+      "en": "Over the course of about two hours, Don taught me the right way to think about lighting, and I felt pretty confident that I could go back and start coding something reasonable.  But as we were wrapping up, I remembered one other thing I wanted to ask him about: how to properly deal with edge aliasing artifacts.",
+      "zh": "在大约两个小时里，Don 教了我应该怎样正确地思考光照，我也挺有信心回去就能动手写点像样的代码。但就在我们要收尾时，我想起还有一件事想问他：该怎么恰当地处理边缘锯齿伪影。"
+    },
+    {
+      "type": "p",
+      "en": "If you look closely at those cabinet stairs, you will notice how ugly the sharp edges look:",
+      "zh": "如果仔细看那些柜子楼梯，你会注意到那些锐利的边缘有多难看："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_01_6ce3e2b01afddbf4.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I suspected the majority of the ugliness came from how I was sampling the image  —  how my raytracer chose which sub-pixel locations it would cast rays through.  If you're familiar with modern GPUs, you know that they often sport antialiasing technologies specifically designed to eliminate ugly edges like these.  But those are for real-time applications, and raytracers have the luxury of being off-line, so I wanted to know what sorts of schemes you'd use if you have the computing resources necessary to do whatever you want.",
+      "zh": "我怀疑这些难看主要出在我对图像的采样方式上——也就是我的光线追踪器如何选择从哪些子像素位置发射光线。如果你熟悉现代 GPU，就会知道它们往往带有专门为消除这种难看边缘而设计的抗锯齿技术。但那些是给实时应用用的；光线追踪器有离线的奢侈，所以我想知道：如果你拥有想做任何事都够用的计算资源，会用什么样的方案。"
+    },
+    {
+      "type": "p",
+      "en": "So I asked Don, \"What kind of sub-pixel sampling pattern should I use?\"",
+      "zh": "于是我这样问 Don：「我该用什么样的子像素采样图案？」"
+    },
+    {
+      "type": "p",
+      "en": "He replied, \"Well, the best thing would be a blue noise pattern.\"",
+      "zh": "他回答：「嗯，最好的选择是蓝噪声图案。」"
+    },
+    {
+      "type": "p",
+      "en": "As you can infer from the quote at the beginning of this section, that was the first time I'd ever heard that term.",
+      "zh": "从本节开头那句引文你就能推断出来，那是我第一次听到这个说法。"
+    },
+    { "type": "h2", "id": "white-noise-red-noise-green-noise-blue-noise", "zh": "白噪声、红噪声、绿噪声、蓝噪声", "en": "White Noise, Red Noise, Green Noise, Blue Noise" },
+    {
+      "type": "p",
+      "en": "Now, here is the part where I have to apologize that it's me writing the article and not Don.  Image sampling analysis, power spectra, periodograms  —  these sorts of things are not my specialty, because fundamentally, I've never been a rendering guy.  I'm more of an animation and systems guy.  So while I would love to give you a great explanation of noise at its most fundamental level, you're just going to have to take my word that you really don't want me to do that, because it would probably be either too confusing or partially wrong.  Or both.",
+      "zh": "接下来这一段我得道个歉：写文章的是我，不是 Don。图像采样分析、功率谱、周期图——这些不是我的专业领域，因为从根本上说，我从来不是一个做渲染的人，我更像做动画和系统的人。所以，虽然我很想在最基础的层面上给你一个漂亮的噪声讲解，但你只能相信我的话：你其实并不想让我来讲，因为它很可能要么太让人晕，要么部分讲错。要么两者兼有。"
+    },
+    {
+      "type": "p",
+      "en": "What I can do is give you the high-level overview: the reason those edges looked so ugly was because they were sampled regularly.  For each pixel of the image, I was subdividing the space it covered into a regular 4x4 grid.  I used the raytracer to determine what the colors of those 16 points were, then averaged them together to get the final color for the pixel.",
+      "zh": "我能做的是给你一个高层次的概述：那些边缘之所以那么难看，是因为它们被规则地采样了。对图像里的每个像素，我都把它覆盖的空间细分成一个规则的 4x4 网格。我用光线追踪器求出这 16 个点的颜色，再把它们平均起来，作为这个像素的最终颜色。"
+    },
+    {
+      "type": "p",
+      "en": "Using lots of samples for each pixel guarantees that you get a nice smooth image.  It computes plenty of information about the scene behind that pixel, so it doesn't produce errant results like you would get if you just did one raytrace per pixel.  If you just did one, that ray might just happen to hit some small feature in the scene, and because it's the only sample you took for that pixel, the whole pixel becomes the color of that very small feature.  By using lots of samples and taking the average, you're guaranteed not to have this problem.",
+      "zh": "每个像素用大量采样，能保证你得到一张漂亮平滑的图。它计算了该像素背后场景的充足信息，所以不会像「每像素只做一次光线追踪」那样产生离谱的结果。如果只做一次，那条光线可能恰好打中场景里某个很小的特征，而因为它就是这个像素唯一的采样，整个像素就变成了那个极小特征的颜色。用大量采样再取平均，就能保证不出现这个问题。"
+    },
+    {
+      "type": "p",
+      "en": "But, you quickly run into a different kind of problem when you use regular sampling.  Because all the pixels are subsampled from identical 4x4 sub-grids, any edge that passes through multiple pixels will smoothly drop its contribution as it passes from one pixel to the next.  Across a whole row of pixels, an off-angle edge will result in a constant amount of color change from pixel to pixel as it covers less and less of the 4x4 grid in each pixel.",
+      "zh": "但是，一旦你用规则采样，很快就会撞上另一类问题。因为所有像素都是从完全相同的 4x4 子网格里取子样本的，任何穿过多个像素的边缘，在从一个像素进入下一个像素时，它的贡献会平滑地递减。沿着一整行像素看，一条倾斜的边缘在每个像素里覆盖的 4x4 网格越来越少，于是相邻像素之间会出现恒定量的颜色变化。"
+    },
+    {
+      "type": "p",
+      "en": "It is precisely this effect that looks so objectionable in my cabinet stairs rendering.",
+      "zh": "我的柜子楼梯渲染里，看起来那么刺眼的正是这个效应。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "As counterintuitive as it may seem, the way you fix this is by using an irregular sampling pattern.  Instead of a nicely repetitive grid, you actually pick a scattered set of points inside each pixel, where no two neighboring pixels use the same set.  This actually introduces noise into the image, breaking up the smoothness, and although we normally think of noise as undesirable, in this case it's actually what we need to prevent the eye from being drawn to the regularly changing pattern produced by regular sampling.",
+      "zh": "听起来可能很反直觉，但解决它的办法是使用不规则的采样图案。不再用那种漂亮重复的网格，而是在每个像素内部挑一组散开的点，并且相邻两个像素用的点集不相同。这实际上就是往图像里引入噪声、打散平滑性；虽然我们通常认为噪声是不好的东西，但在这里，它恰恰是我们需要的——用来防止眼睛被规则采样所产生的、规律变化的图案吸引过去。"
+    },
+    {
+      "type": "p",
+      "en": "So, the natural question would then be, how do you produce these scattered point patterns?  Well, most people actually did this in a very ad hoc fashion at first.  And to be fair, any randomized pattern will probably work to some extent.  But according to people like Don who've studied the matter extensively, if you really want the highest quality possible, you want to use a very specific kind of pattern.",
+      "zh": "那么，接下来自然要问：这些散开的点图案是怎么产生的？嗯，大多数人一开始其实都是用非常临时凑合的办法做的。公平地说，任何随机化的图案大概都能在某种程度上起作用。但据 Don 这类深入研究过此事的人说，如果你真的想要尽可能最高的质量，你就得用某种非常特定的图案。"
+    },
+    {
+      "type": "p",
+      "en": "The pattern comes originally from an observation  —  and I swear I'm not making this up, this is what you will find if you read the early papers  —  that the light-sensitive cells in our eyes are actually arranged in a pattern that is irregular, meaning it does not have any clear orderly structure to it like a grid, but also low frequency, meaning that there are never any tight clusters of cells, they are always somewhat evenly spaced.  Researchers hypothesized that this pattern might account for why the human visual system is so good at avoiding the kind of regular sampling artifacts that I had in my raytracer, and this lead them to try employing such a pattern for image synthesis.",
+      "zh": "这个图案最初来自一个观察——我发誓这不是我编的，你去读早期的论文就会看到——即我们眼睛里感光的细胞实际上排列成一种不规则的图案：所谓不规则，是指它没有网格那样清晰有序的结构；同时它还是低频的，意思是从来不会出现细胞紧密成团的情况，它们之间总是保持着大致均匀的间距。研究者猜想，这个图案或许能解释为什么人类视觉系统如此善于避开我光线追踪器里的那类规则采样伪影，这促使他们尝试把这样的图案用于图像合成。"
+    },
+    {
+      "type": "p",
+      "en": "And here is where the strange name \"blue noise\" comes in.  As it appears in the visible spectrum, blue, as compared to green or red, is in the highest frequency part of the spectrum.  So blue noise refers to the fact that the pattern has high frequency noise, but no low frequency noise.  It's a type of pattern now familiar to graphics researchers everywhere and which is employed for all sorts of purposes.",
+      "zh": "「蓝噪声」这个古怪名字的由来就在这儿。在可见光谱里，与绿和红相比，蓝位于光谱中频率最高的部分。所以「蓝噪声」指的是这种图案只有高频噪声、没有低频噪声。如今这类图案已为各地的图形研究者所熟知，并被用于各种各样的用途。"
+    },
+    {
+      "type": "p",
+      "en": "By extension, you can probably figure out why \"white noise\" is \"white\": it's the kind of noise that has all frequencies in equal parts.  So while a blue noise pattern looks like random points spaced consistently, a white noise pattern looks like purely random points, complete with big clumps and wide open gaps.  No consistent spacing.  Here's a comparison of the two  —  both images have the same number of points:",
+      "zh": "由此类推，你大概也能想明白「白噪声」为什么是「白」的：它是各种频率等量齐备的那种噪声。所以蓝噪声图案看起来是间距一致的随机点，而白噪声图案看起来是纯粹随机的点，既有大团聚集，也有大片空白，间距毫不一致。下面是两者的对比——两张图的点数相同："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_02_29c8774eeba8394.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "(I should state, parenthetically, that none of the images in this article, including these, are actually real noise, because I am using a standard, simple random number generator like the kind you would generally get if you used a common standard library.  Real noise has certain requirements of the random series on which it is based, and most standard libraries don't meet those requirements.  More on that next week.  Now back to the topic at hand…)",
+      "zh": "（顺便说明一下：本文里所有图，包括这两张，其实都不是真正的噪声，因为我用的是标准、简单的随机数生成器，也就是你用常见标准库一般会得到的那种。真正的噪声对它所基于的随机序列有某些要求，而大多数标准库并不满足这些要求。下周再细说。现在回到正题……）"
+    },
+    {
+      "type": "p",
+      "en": "All the other colors have their own kind of noise as well.  Red noise is the opposite of blue noise: it has only low frequency noise but no high frequency.  Green noise has middle frequency noise but no high or low.  In fact, people have actually made spatial pattern generators that allow you to input the frequency profile that you want, and get the corresponding point pattern out.  It's really quite neat, and I highly recommend reading [this paper](http://graphics.cs.umass.edu/pubs/sig12_gns.pdf) so you can see some other possible noise parameters, like anisotropy.",
+      "zh": "其他颜色也各有自己那类噪声。红噪声与蓝噪声相反：它只有低频噪声，没有高频。绿噪声有中频噪声，没有高频也没有低频。事实上，人们已经做出了空间图案生成器，你可以输入想要的频谱分布，然后输出对应的点图案。这真的相当巧妙，我强烈推荐读一下[这篇论文](http://graphics.cs.umass.edu/pubs/sig12_gns.pdf)，看看还有哪些可能的噪声参数，比如各向异性。"
+    },
+    {
+      "type": "p",
+      "en": "Amusingly enough, after learning about blue noise from Don, I never actually implemented it in an image synthesis scheme.  I never bothered to do it in my raytracer, and I've never done any other image sampling work, so I never had the occasion.  But I have used it in just about everything else.",
+      "zh": "有意思的是，从 Don 那里了解蓝噪声之后，我其实从没把它用在图像合成方案里。我懒得在光线追踪器里做它，之后也没做过别的图像采样工作，所以一直没有机会。但除此之外的几乎一切东西，我都用上了它。"
+    },
+    {
+      "type": "p",
+      "en": "Not being a rendering guy, it was hard for me to get excited about the nitty gritty of image sampling.  It's just not something I spend a lot of time working on.  But once I saw the blue noise patterns, I immediately realized that I had been doing a lousy job on all the procedural placement code I'd ever done.  I'd even written grass placement code prior to that talk with Don, and I just used white noise, and it never occurred to me that I might want to stop and think about the kind of random distribution I was using, and whether that distribution properly modeled the kinds of distributions in the actual physical phenomenon I was trying to simulate.",
+      "zh": "既然不是做渲染的，我很难对图像采样的细枝末节感到兴奋。这不是我会花很多时间去搞的东西。但一看到那些蓝噪声图案，我立刻意识到：我以前做过的所有程序化摆放代码都干得很烂。我甚至在与 Don 那场谈话之前就写过草地摆放代码，当时我用的就是白噪声，而且我从没想过应该停下来想一想：我用的是哪种随机分布，这个分布是否恰当地模拟了我想模拟的真实物理现象中的那种分布。"
+    },
+    {
+      "type": "p",
+      "en": "In the years between talking to Don and working on [The Witness](http://the-witness.net/news/), I'd written several pieces of code that used blue noise, so I was well versed in the do's and don'ts.  Really, I owe a big thanks to Don for the fact that I was at all prepared for dealing with the oddities of the grass planting system.",
+      "zh": "从与 Don 谈话到参与 [The Witness](http://the-witness.net/news/) 之间的那些年里，我写过好几段用到蓝噪声的代码，所以对它的宜与忌相当熟悉。说实话，我能对草地种植系统那些古怪之处有所准备，全都要好好感谢 Don。"
+    },
+    {
+      "type": "p",
+      "en": "Which brings me back to where we were last week.",
+      "zh": "这就把我们带回到了上周所在的地方。"
+    },
+    { "type": "h2", "id": "white-minus-yellow-makes-blue", "zh": "白减去黄等于蓝", "en": "White Minus Yellow Makes Blue" },
+    {
+      "type": "p",
+      "en": "If you read last week's post, you know that we left off with me looking at this image:",
+      "zh": "如果你读了上周那篇，就知道我们停在我盯着这张图看的地方："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_01_01_b32ef03339250422.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Thanks to having had plenty of experience with blue noise, I actually knew roughly what I was looking at even before touching the code.  After seeing the comparison between blue noise and white noise in the previous section, I suspect you already know what kind of pattern you're looking at, too: blue noise.",
+      "zh": "多亏在蓝噪声上经验丰富，我其实还没碰代码就大致知道自己在看什么了。看过上一节里蓝噪声与白噪声的对比之后，我猜你也已经知道这是个什么样的图案了：蓝噪声。"
+    },
+    {
+      "type": "p",
+      "en": "So I knew the code in [The Witness](http://the-witness.net/news/)'s grass planting system was at least nominally trying to produce blue noise, but it was having trouble with errant gaps.  It was time to take a closer look at the specific choice of blue noise generation algorithm.  Only a few minutes into reading the code I could see it was using a very standard method: just start with white noise, and throw out points that aren't blue.",
+      "zh": "所以我知道 [The Witness](http://the-witness.net/news/) 草地种植系统里的代码至少在名义上是在尝试产出蓝噪声，但它在那些不该有的空隙上出了问题。该仔细看看它具体选用了哪种蓝噪声生成算法了。读了没几分钟代码，我就看出它用的是一种非常标准的方法：先生成白噪声，然后把「不蓝」的点扔掉。"
+    },
+    {
+      "type": "p",
+      "en": "That may sound ridiculously abstract, but it's actually simple in practice.  If you think about it, the primary characteristic of a blue noise pattern is that points remain evenly spaced despite being random.  If we just picked purely random points, we'd get white noise, which is distinct from blue noise in that it has clumps and gaps.  But what if we just take the white noise and remove points that are too close together?  That would take care of the clumps, and we'd just be left with the problem of gaps.  But if we just generated enough white noise, it would be dense enough that there wouldn't be any gaps larger than the size we actually want to keep our point evenly spaced.",
+      "zh": "这听起来可能抽象得离谱，实际上却很简单。想一想，蓝噪声图案的首要特征就是：点虽然是随机的，但彼此间距保持均匀。如果我们只取纯随机的点，得到的是白噪声，它与蓝噪声的区别就在于有结团也有空隙。但如果我们拿白噪声、把彼此靠得太近的点去掉呢？这样就解决了结团，只剩空隙的问题。而如果我们生成足够多的白噪声，它就会足够密，密到不存在比「我们想让点保持均匀间距的那个尺度」更大的空隙。"
+    },
+    {
+      "type": "p",
+      "en": "That leads directly to the standard algorithm for generating blue noise.  It's often called Poisson disk sampling, and although I'll spare you the details, I believe it's actually a misnomer since, although there are disks involved, almost nobody actually guarantees they have a Poisson distribution.  So while there is such a thing as an actual Poisson disk sampling, most of the time people are actually just doing a pseudo Poisson disk sampling, you might say.",
+      "zh": "这就直接引出了生成蓝噪声的标准算法。它通常被叫作泊松盘采样；细节我就不展开了，但我认为这个名字其实用词不当：虽然里面确实有「盘」，但几乎没人真的保证自己得到的是泊松分布。所以说，真正的泊松盘采样这种东西是存在的，但大多数时候，人们其实只是在做一种「伪泊松盘采样」，可以这么说。"
+    },
+    {
+      "type": "p",
+      "en": "But ignoring the misapplied name, the algorithm is very simple.  Pick a minimum spacing for your points.  Start adding random points.  Every time you go to add a new point, if it's less than the minimum spacing from some other point, reject it.  Otherwise, keep it.  Run the algorithm for long enough to fill in the space, and you've got your blue noise pattern.",
+      "zh": "不过先不管这个用错的名字，算法本身非常简单：给你的点挑一个最小间距；开始往里加随机点；每次要加一个新点时，如果它与某个已有点的距离小于最小间距，就拒绝它，否则就留下它。让算法跑足够久，把空间填满，你就得到了自己的蓝噪声图案。"
+    },
+    {
+      "type": "p",
+      "en": "That's the entire algorithm, and it works reasonably well.  It's what [The Witness](http://the-witness.net/news/) was using.  But there are two fundamental problems with this algorithm, one computational and one theoretical.  The computational one is straightforward, and accounts for the larger of the remaining gaps in the distributions.  The theoretical one is much subtler, and I'll save it for next week when we're ready to start getting a little more badass.",
+      "zh": "整个算法就这些，而且效果还算不错。[The Witness](http://the-witness.net/news/) 用的就是它。但这个算法有两个根本性的问题，一个是计算上的，一个是理论上的。计算上的那个很直接，它解释了分布中剩下那些较大的空隙。理论上的那个则微妙得多，我留到下周讲——那时我们准备开始变得再狠一点。"
+    },
+    {
+      "type": "p",
+      "en": "OK, so I just stated, quite literally, the entirety of this algorithm: pick random points, throw out ones that are too close to any existing point.  When the algorithm first starts running, this poses no computational problem, because most of the points you randomly pick will not be close to anything at all, since most of the space is empty.  But, as the space fills up, more and more of the random points you pick will land too close to existing points, and have to be thrown out.",
+      "zh": "好，我刚才一字不差地把这个算法全部讲完了：随机取点，把离任何已有点太近的扔掉。算法刚开始跑时，这在计算上不成问题，因为你随机取的大部分点周围空空如也，离任何东西都不近，毕竟空间大部分是空的。但随着空间被填满，你取到的随机点会越来越多地落在离已有点太近的地方，因而不得不被扔掉。"
+    },
+    {
+      "type": "p",
+      "en": "To illustrate this, here are some snapshots of the algorithm at work.  Valid points are shown in orange, whereas points that had to be thrown out are marked in blue.  Here we see the difference between going from 100 points to 200 points and going from 1000 points to 1100 points:",
+      "zh": "为了说明这一点，下面是算法运行中的几张快照。有效的点用橙色显示，而被扔掉的点标成蓝色。这里我们看到的是「从 100 个点增加到 200 个点」与「从 1000 个点增加到 1100 个点」的差别："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_03_634d921b88bcd892.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "See what I mean?  The number of rejected samples in the 100 to 200 case is miniscule.  You barely even notice there are any blue marks at all.  But in the 1000 to 1100 case, the increase is massive.  Both cases add 100 points, but the difference in work necessary to do so is dramatic.",
+      "zh": "明白我的意思了吗？100 到 200 那组里被拒绝的采样点数量微不足道，你几乎注意不到有蓝色标记。但在 1000 到 1100 那组里，增加的量极其巨大。两组都增加了 100 个点，但为此所需的计算量差别可以说是天壤之别。"
+    },
+    {
+      "type": "p",
+      "en": "What's happening here is very logical when you think about it: you are trying to fill up this entire space with points.  At first, anywhere you pick will be empty.  But as you add more points, the places where it's valid to put them shrinks and shrinks.  Because you are always picking random points across the entire space, as the algorithm progresses it becomes less and less likely that a random point will land somewhere valid.",
+      "zh": "细想一下，这里发生的事非常合乎逻辑：你想用点把整个空间填满。起初你随便挑哪里都是空的。但随着你加入更多的点，能合法放点的位置越来越少。因为你始终是在整个空间里随机取点，所以随着算法推进，一个随机点落在合法位置的概率越来越低。"
+    },
+    {
+      "type": "p",
+      "en": "And this is where the gaps come from.  Eventually, the algorithm fills the space with points until there are only few extremely tiny regions of space where a new point could fit.  The algorithm must pick a massive number of random points before it gets lucky and lands in one of those tiny regions.  This leads to an extremely nasty computational cost curve that looks like this:",
+      "zh": "空隙就是这么来的。最终算法把空间填得只剩下极少数、极微小的区域还能塞进一个新点。算法必须取数量庞大的随机点，才可能走运落在这些微小区域之一里。这就导致了一条极其难看的计算成本曲线，长这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_04_14e9841c013b2e94.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That is the number of random points the algorithm has to go through for each new point it adds successfully.  The computational problem is pretty hard to miss.  And that's cropped so that you can see detail in the run-up.  Here's the full scale version:",
+      "zh": "这是算法每成功加入一个新点所需经过的随机点数量。这个计算上的问题很难被忽略。这张图是裁剪过的，好让你看清前期上升阶段的细节。下面是完整尺度的版本："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_05_42aebe9b26789100.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "Not good.  Not good at all.  Basically what this says is that if you don't run the algorithm for an extremely large number of random samples, you are likely to end up with gaps that the algorithm just never randomly got the chance to fill.  There won't be many of them, but there'll be a few, and that's exactly what we're seeing.",
+      "zh": "不好。一点也不好。这基本上是在说：如果你不把算法跑上数量极多的随机采样，你最后就很可能剩下一些空隙——算法从没随机地得到机会去填它们。这样的空隙不会很多，但总会有几个，而我们看到的现象正是如此。"
+    },
+    {
+      "type": "p",
+      "en": "In [The Witness](http://the-witness.net/news/)'s grass planting system, this situation was actually worse than I'm making it sound, because there's an additional factor at play in a game world that doesn't apply if you're just generating point patterns in an abstract space.",
+      "zh": "在 [The Witness](http://the-witness.net/news/) 的草地种植系统里，情况其实比我说的还要糟，因为在游戏世界中还有一个额外因素在起作用，而如果你只是在抽象空间里生成点图案，这个因素并不存在。"
+    },
+    {
+      "type": "p",
+      "en": "The problem is that [The Witness](http://the-witness.net/news/)'s grass planting code was written in such a fashion as to pick the actual 3D position of grass points before checking whether or not they were valid for the distribution.  This makes some sense if you are trying to cover very steep or uneven terrain, because you may want to allow things to be closer together laterally when they are further apart vertically (although it is unclear that this works well with grass rendering, but that's a separate issue  —  it would certainly be a reasonable idea with scattered objects like rocks, which the system also was used to place).  But it means you pay a large computation cost per random point, not just per point that you actually keep, because every random point you pick has to first be raycast against the world to find out where the ground is underneath it and so on.  So as the number of random points per accepted point skyrockets as per the graph, the computational cost required to find each new point becomes massive, since each one is expensive and you're doing a ton of them.  Nobody's going to want to run the grass planter for that long, so you're basically guaranteed to have gaps.",
+      "zh": "问题在于，[The Witness](http://the-witness.net/news/) 的草地种植代码是这样写的：先选出草点在三维空间中的实际位置，然后再检查它对这个分布是否有效。如果你要覆盖非常陡峭或不平整的地形，这有一点道理，因为当物体在垂直方向相隔更远时，你可能希望允许它们在水平方向靠得更近（虽然这对草地渲染是否好用并不清楚，但那是另一个问题——对石头这类散布物体来说，这肯定是个合理的想法，这套系统也用来摆石头）。但这也意味着你为每个随机点都要付出一大笔计算开销，而不只是为每个真正留下的点付费，因为你取的每个随机点都得先对世界做一次射线投射，弄清它下面的地面在哪，诸如此类。于是，当「每个被接受的点所对应的随机点数」如图中那样一飞冲天时，找出每个新点所需的计算开销就变得极其巨大——因为每一个都很贵，而你要做一大堆。没人会愿意让草地种植器跑那么久，所以你基本上注定会有空隙。"
+    },
+    {
+      "type": "p",
+      "en": "Alright.  I know it sounds bad, but we can handle this, we're all professionals here.  OK, technically I was not a professional on this project, because I was volunteering, and the definition of a professional is that they get paid for their work.  But let's ignore that for right now and remind ourselves that we could be professionals.  And not only are we could-be professionals, but we're could-be professionals who have already determined one clear-cut source of gaps in the grass planting algorithm.  How do we go about eliminating it?",
+      "zh": "好吧。我知道这听起来很糟，但我们能应付，在座各位都是专业人士。好吧，严格来说我在这项目里不算专业人士，因为我是在做志愿服务；而专业人士的定义就是「干活拿钱的人」。但我们现在先不管这个，提醒自己一句：我们有可能是专业人士。而且我们不只是「有可能是专业人士」，我们还是「已经确定了草地种植算法里一个确凿的空隙来源」的那种有可能是专业人士。那该怎么把它消除掉？"
+    },
+    {
+      "type": "p",
+      "en": "That last question was not rhetorical.  I am literally asking you how to go about eliminating the source of gaps I just described, because I fully expect you to know the answer.",
+      "zh": "最后那个问题不是修辞。我真的是在问你：该怎么消除我刚描述的那个空隙来源，因为我完全指望你知道答案。"
+    },
+    {
+      "type": "quote",
+      "en": "Although this may not seem like a huge problem, it is actually critical. The entire goal of an algorithm like this is to concentrate the samples in the areas where they are most likely to yield productive results. The more time you spend sampling and resampling wide open regions, the less time you spend mapping the actual edges of that region, which is the information you actually wanted. Because this is a continuous space and only an infinite number of samples can truly reveal its exact shape, your ratio of meaningful to meaningless samples is literally the measure of how effective your algorithm is at producing the walkable area.",
+      "zh": "这看起来也许不算大问题，但实际上非常关键。这类算法的全部目的，就是把采样集中在最可能产生有用结果的地方。你在空旷区域上采样、重复采样花的时间越多，用来测绘那片区域真实边界的时间就越少——而边界才是你真正想要的信息。由于这是连续空间，只有无限多的采样才能真正揭示它的确切形状，所以「有意义的采样」与「无意义的采样」之比，其实正是衡量你这个算法在产出可行走区域上有多有效的指标。",
+      "noteZh": "这一段是 Casey 从自己第一篇 Witness 文章（《行走怪物》）里整段引回来的。"
+    },
+    {
+      "type": "p",
+      "en": "Remember that?  It's from the very first [Witness](http://the-witness.net/news/) article I posted, [the one about Walk Monster](https://caseymuratori.com/blog_0005).  If you recall, the problem with the earlier Walk Monster algorithms were that they weren't concentrating their samples where the samples were most valuable.  Fixing it so it concentrated the samples where they were valuable made a huge difference to the speed and quality of the results.",
+      "zh": "还记得吗？这段话出自我发在 [Witness](http://the-witness.net/news/) 上的第一篇文章，[那篇讲 Walk Monster 的](https://caseymuratori.com/blog_0005)。如果你还记得，早期 Walk Monster 算法的问题就在于它们没有把采样集中在最有价值的地方。改成把采样集中在有价值的地方之后，结果的速度和质量都有了巨大改善。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "This is exactly the same kind of problem we're facing here.  We are picking random points across an entire space that we want to fill, but as the possible valid places in that space become smaller and smaller, we are not adjusting our sampling to account for it.  To improve the situation dramatically, all we'd really have to do is figure out some way to stop looking for points in the areas we've already covered.",
+      "zh": "我们现在面对的正是同一类问题。我们在想要填满的整个空间里随机取点，但随着该空间中合法的位置越来越小，我们并没有相应地调整采样。要大幅改善局面，我们真正要做的，就是想出某种办法，不再去已经覆盖过的区域里找点。"
+    },
+    {
+      "type": "p",
+      "en": "And really, didn't Walk Monster already have a method for doing this?  It was trying to produce a regular grid, but it employed a very simple concept for making sure it only concentrated on new areas: instead of sampling the space randomly, maintain a list of points you've already sampled, and only sample the neighborhood around those points.  Once you're satisfied that the neighborhood around a point no longer has any empty space, forget that point and move on to a new one.  That way the sampling is always concentrated around points that we know lie on a sort of expanding front (commonly called a wavefront), where we forget about sampling in areas that we've already exhausted, and concentrate on new areas that haven't been as completely covered.",
+      "zh": "而且说真的，Walk Monster 不就已经有办法做到这一点了吗？它想产出的是规则网格，但它用一个非常简单的概念来确保自己只关注新区域：不去随机采样整个空间，而是维护一份已经采样过的点的列表，只在这些点周围的邻域里采样。一旦你确认某个点周围的邻域里不再有空位，就把这个点忘掉，换下一个。这样采样就始终集中在那些我们知道位于某个不断扩张的前沿（通常叫波前）上的点周围，我们会不再去已经采透的区域采样，而把精力放在还没被覆盖完全的新区域上。"
+    },
+    {
+      "type": "p",
+      "en": "This worked great for Walk Monster, and we can use the same technique here.",
+      "zh": "这在 Walk Monster 上效果极佳，我们在这里也可以用同样的技术。"
+    },
+    {
+      "type": "p",
+      "en": "So, we pick one point at random, and start there.  Then we test points around that point, adding as many as we can until we can't find anymore.  We then move on to testing the new points we added.  And so on, and so on.  Essentially, we are restricting the area where we look for new points to always be in the neighborhood of some existing point that we have not yet exhausted.",
+      "zh": "于是，我们随机取一个点，从那里开始。然后测试该点周围的点，能加多少就加多少，直到找不到为止。接着我们转去测试我们新加的那些点。如此这般，如此这般。本质上，我们把「寻找新点」的区域限制在「某个我们尚未采透的已有点的邻域」之内。"
+    },
+    {
+      "type": "p",
+      "en": "Thanks to the simple definition of Poisson disk sampling, this is actually quite easy to do.  We already know there is a specified minimum radius, r, so we know that from any given point, we only have to look for points that are at least that far away.  And similarly, we know that we don't want to leave empty spaces where points could fit, so we don't want to look more than twice that distance.  This leaves us with a very straightforward method: pick a random angle, and a random distance between r and 2r.  Go that far at that angle from the base point.  Perform the standard test at this point to ensure that we aren't too close to any other existing points.  Repeat.",
+      "zh": "多亏泊松盘采样的定义很简单，这件事其实相当容易做。我们已经知道有一个指定的最小半径 r，所以知道从任意给定点出发，只需要去找至少有那么远的点。同样地，我们知道不该留下「本来能放点」的空位，所以不该去找超过两倍该距离的地方。这就给了我们一个非常直接的方法：随机取一个角度，再随机取一个 r 到 2r 之间的距离；从基点朝那个角度走那么远；在这个点上做标准的测试，确保它没有离任何已有点太近；重复。"
+    },
+    {
+      "type": "p",
+      "en": "Much like with the original scheme, you \"know when you're done\" sampling a point when you go some specified number of iterations without finding any new valid points.  This number can usually be quite low, like 64, and still produce good results.  Here's an example distribution produced with this algorithm, along with a graph showing the neighbors from which each point was sampled:",
+      "zh": "和原方案很像，当你连续若干次迭代都没找到新的合法点时，你就「知道这个点采完了」。这个次数通常可以相当小，比如 64，仍然能产出好结果。下面是用这个算法产出的一个示例分布，以及一张图，显示每个点是分别从哪些邻居点采样出来的："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_06_1e989d54007f7b98.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We can see how much more efficient this algorithm is by comparing it with the original algorithm in terms of the number of samples taken.  Here's the samples-per-new-point graph again with the new algorithm for comparison:",
+      "zh": "把采样次数拿来和原算法比一比，就能看出这个算法高效了多少。下面是「每个新点所需采样数」的图，加上新算法作为对照："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_07_365ecbfa9bdb034.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_08_3a4466cded19e50f.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And here's a plot of the unused samples of both algorithms when run to completion, so you can see their rejection distributions:",
+      "zh": "下面是把两种算法各自跑完时未被使用的采样点画出来的图，这样你能看到它们的拒绝分布："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_02_09_d426b1079553abaf.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "So, massive number of samples problem: solved.",
+      "zh": "那么，「采样数量极其巨大」的问题：解决了。"
+    },
+    {
+      "type": "p",
+      "en": "This happens to be the simplest way I know of for solving this problem (you can read [this technical sketch](http://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf) for more information), so it's what I chose to do given that I knew it could be implemented trivially.  Remember, my work on the grass planting system was done as part of the quick cleanup work for the Sony PS4 demo.  But there are also a variety of more complicated algorithms you can employ, so if you'd like to learn some other options, I'd highly recommend checking out some papers like [this](http://www.cs.sandia.gov/~samitch/papers/eurographics_mps-final-with-appendix.pdf) or [this](http://www.cs.virginia.edu/~gfx/pubs/antimony/antimony.pdf).",
+      "zh": "这恰好是我所知道解决这个问题最简单的办法（更多信息可以读[这篇技术短文](http://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf)），所以既然我知道它能被轻松实现，就选了它。别忘了，我在草地种植系统上的工作，是作为 Sony PS4 演示的快速收尾工作的一部分做的。不过你也可以采用各种更复杂的算法，所以如果你想了解其他选择，我强烈推荐看看[这篇](http://www.cs.sandia.gov/~samitch/papers/eurographics_mps-final-with-appendix.pdf)或者[这篇](http://www.cs.virginia.edu/~gfx/pubs/antimony/antimony.pdf)论文。"
+    },
+    { "type": "h2", "id": "the-theoretical-problem", "zh": "理论上的问题", "en": "The Theoretical Problem" },
+    {
+      "type": "p",
+      "en": "Like a nimble ninja in the night, swiftly jumping from rooftop to rooftop, we have brandished the throwing star of directed sampling and deftly thrown it at the corrupt magistrate of inefficiency, where it lodged in his… I guess, head?  Is it standard ninja practice to aim for the head?",
+      "zh": "就像夜里身手矫健的忍者，轻快地从一座屋顶跃到另一座屋顶，我们亮出了「定向采样」这枚手里剑，干脆利落地掷向贪腐的「低效」长官，它扎进了他的……我猜，脑袋？瞄准头部是忍者的标准做法吗？"
+    },
+    {
+      "type": "p",
+      "en": "To be honest, I don't really know much about ninjas.  They've never interested me.  I feel like they probably assassinated magistrates at some point, because it seems like the sort of thing that a ninja would do.  But in all honesty, if you asked me to define what a \"magistrate\" was for purposes of this discussion, even outside the analogy, I would probably have to say something like, \"a majestic government official?\" and my pitch would trend upwards at the end in uncertainty.",
+      "zh": "说实话，我对忍者其实了解不多。他们从来没让我感兴趣过。我感觉他们大概在某个时候刺杀过地方长官，因为这像是忍者会干的事。但老实说，如果你让我为这场讨论、甚至抛开这个比喻来定义「地方长官」是什么，我大概只能说出「一位威严的政府官员？」这种话，而且说到最后音调会因为不确定而往上扬。"
+    },
+    {
+      "type": "p",
+      "en": "So let's just agree that it's not a well-researched analogy and move on.  The point is that, yes, we may feel ninja-like, but what kind of ninja are we?  Are we really the kind of badass ninja that jumps from rooftop to rooftop (in a coding sense), or are we a more flaccid kind of ninja, the sort of fellow who mostly just hangs out at fancy parties with other \"ninjas\" and accepts lots of silicon valley venture capital money for his ninja exploits, but really wouldn't know one type of throwing star from the next (also in a coding sense)?",
+      "zh": "所以我们就承认这个比喻没做过什么功课，然后继续吧。要点是：没错，我们也许感觉自己像忍者，但我们是什么样的忍者？我们真的是那种从一座屋顶跃到另一座屋顶的狠角色忍者（在写代码的意义上），还是一种更疲软的忍者——那种大部分时间只是在高级派对上和其他「忍者」厮混、靠自己的忍者事迹从硅谷风投那里拿一大笔钱，但其实分不清两种手里剑有什么不同（同样是在写代码的意义上）的家伙？"
+    },
+    {
+      "type": "p",
+      "en": "You already know the answer.  I specifically said there were two problems with the original algorithm, one computational and one theoretical, and we have only addressed the computational one.  So unless our primary goal is to sell our pre-profitability ninja headwear company to Facebook before anyone figures out that we don't know what we're doing, we're going to have to put on our badass ninja gear and start taking to the rooftops for real.  In a coding sense.",
+      "zh": "你已经知道答案了。我明确说过原算法有两个问题，一个计算上的、一个理论上的，而我只解决了计算上的那个。所以，除非我们的首要目标是在任何人发现我们其实不懂自己在干什么之前，把这家「尚未盈利」的忍者头饰公司卖给 Facebook，否则我们就得穿上狠角色忍者的装备，真正开始上屋顶了。在写代码的意义上。"
+    },
+    {
+      "type": "p",
+      "en": "And that's exactly what we'll be doing on the next Witness Wednesday.",
+      "zh": "而这正是我们下期 Witness Wednesday（每周三连载）要做的事。"
+    }
+  ]
+}

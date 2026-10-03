@@ -1,0 +1,33 @@
+{
+  "id": "official-2014-09-10-what-weve-been-working-on-lately",
+  "title": { "zh": "最近我们在做什么", "en": "What we’ve been working on lately." },
+  "subtitle": {
+    "en": "A DirectX11 rendering backend, revised modeling and texturing near the end of the game, particle effects, and smoother autosaving.",
+    "zh": "DirectX 11 渲染后端、游戏后段区域的建模与贴图修订、粒子特效，以及更顺滑的自动存档。"
+  },
+  "translator": {
+    "note": "原文四段，没有小标题也没有配图；标题与副标题为译者所补。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We built a DirectX11 rendering backend for our engine, which is likely to be the default when running on Windows. Up until now we had been running on DirectX9, which made sense when we thought the game was going to be done a while ago. But these days, DX9 is getting pretty old and busted. So far the DirectX11 version has been very successful; the engine runs much more smoothly, especially on low-end platforms, due to the drastically lowered CPU overhead of draw calls. There's a little work to do here still -- some of our weirder shaders don't work in DX11 yet and there are a couple of lighting bugs -- but this all should be nailed down soon.",
+      "zh": "我们给引擎做了一个 DirectX 11 渲染后端，它很可能会成为在 Windows 上运行时的默认后端。在此之前我们一直跑在 DirectX 9 上——当初以为游戏很快就会做完，用 DX9 是合理的。但如今 DX9 已经相当老朽破败了。到目前为止，DirectX 11 版本非常成功：引擎跑得顺畅多了，在低端平台上尤其明显，因为 draw call 的 CPU 开销大幅降低了。这里还有一点活要干——我们有些比较古怪的着色器在 DX11 下还跑不起来，另外还有几个光照 bug——但这些应该很快就能敲定。"
+    },
+    {
+      "type": "p",
+      "en": "We've been revising the modeling and texturing for areas near the end of the game. There are some nice treats in store!",
+      "zh": "我们一直在修订游戏接近尾声那部分区域的建模和贴图。那里备着一些不错的惊喜！"
+    },
+    {
+      "type": "p",
+      "en": "We've been working on some of the \"special effects\" in the game, most notably particle effects. Our particle system was old and slow, so we are speeding this up, and then we will make some modifications to help make particle authoring an easier process.",
+      "zh": "我们一直在做游戏里的一些「特效」，其中最主要的是粒子效果。我们的粒子系统又老又慢，所以我们正在给它提速，之后还会做一些改动，让粒子的制作过程更轻松。"
+    },
+    {
+      "type": "p",
+      "en": "We've been making some baseline functionality smoother. For example, so that you don't need to think about saving your game, The Witness autosaves your progress every minute or so. On a high-end PC, you don't notice the autosave, but on a low-end PC or on a console (because consoles tend to have different memory access properties than PCs), scanning the world for stuff that needs to be saved can be pretty slow, like, it could take 1/10 of a second, which would result in a hitch in the frame rate happening every minute. So we are hammering on this to make it faster, which should also result in saved game files being smaller, since we'll be excluding a lot of things that don't need to be saved.",
+      "zh": "我们一直在把一些基础功能打磨得更顺。比如说，为了让你完全不必惦记存档这件事，《The Witness》大约每分钟就会自动保存一次进度。在高配 PC 上你察觉不到自动存档，但在低配 PC 或主机上（因为主机的内存访问特性往往和 PC 不同），扫描整个世界、找出需要保存的东西可能相当慢，比如要花掉 1/10 秒，结果就是每分钟都会出现一次帧率卡顿。所以我们正在死磕这一点，让它变快——这应该也会让存档文件更小，因为我们会把大量不需要保存的东西排除在外。"
+    }
+  ]
+}

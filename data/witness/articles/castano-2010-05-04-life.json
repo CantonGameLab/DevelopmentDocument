@@ -1,0 +1,58 @@
+{
+  "id": "castano-2010-05-04-life",
+  "title": { "zh": "近况", "en": "Life" },
+  "subtitle": {
+    "en": "A second child on the way, spring days outdoors with Nachito, swimming for fun, and an office rented to escape the distractions at home.",
+    "zh": "第二个孩子快出生了，春天带 Nachito 在户外消磨时间，游泳变成纯爱好，还租了间办公室躲开家里的干扰。"
+  },
+  "translator": {
+    "note": "源文第 10 行是「插图 + 正文」挤在同一行，按 schema「图文同行」的口径在原位置拆成一个图片块加一个正文块；其余三处插图按全站口径归一化成图片占位块。原文「spread compost and plant the starts」里的 starts 应指菜苗（starts 是美式英语里「菜苗」的说法），照原意译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://farm4.static.flickr.com/3419/4569162663_13d44df007_m.jpg) A lot has been going on in the last few months.",
+      "zh": "（原文此处有一张图）过去这几个月发生了不少事。"
+    },
+    {
+      "type": "p",
+      "en": "Mariana is 14 weeks pregnant, so we are expecting to have another kid by the beginning of November. She has just finished her studies and has found herself a job at [EMQ/FamiliesFirst](http://www.emqff.org/). She works counseling problematic children and loves it so far, but she has a terrible schedule, her shift is on weekend nights, so we don’t get to see each other much over the weekends.",
+      "zh": "Mariana 怀孕 14 周了，我们预计 11 月初会再添一个孩子。她刚结束学业，在 [EMQ/FamiliesFirst](http://www.emqff.org/) 找到了工作，做问题儿童的咨询辅导，到目前为止她很喜欢；但她的排班很糟，上的班在周末夜里，所以我们周末几乎见不着面。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm5.static.flickr.com/4022/4569096595_fde63cc984_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "So, now Nachito and I have plenty of time to spend together. Spring is here and in Davis the weather is great during this time of the year, so we are spending most of our time outdoors. We have been working in our garden again, Nachito helps me spread compost and plant the starts, he loves playing with worms.",
+      "zh": "于是现在我和 Nachito 有大把时间待在一起。春天到了，Davis 这个季节的天气非常好，所以我们大部分时间都在户外。我们又打理起菜园来，Nachito 帮我撒堆肥、种菜苗，他还特别喜欢玩蚯蚓。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm5.static.flickr.com/4072/4569086653_f37974a743_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We have also been exploring the surrounding parks: Berryessa, Cold Canyon, Cache Creek, Capay Valley and various sections of the South Yuba river. The rivers in the foothills are still a bit too cold for swimming, but the creeks in the North Coast Range are just perfect on a hot day. Nachito loves climbing on rocks and he’s getting increasingly good at it.",
+      "zh": "我们也在探索周边的公园：Berryessa、Cold Canyon、Cache Creek、Capay Valley，以及 South Yuba 河的几段。山麓的河水现在游泳还嫌太凉，但北海岸山脉里的溪流在大热天里正合适。Nachito 喜欢爬石头，而且越来越拿手了。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm5.static.flickr.com/4016/4569757982_9432d69141_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I keep swimming, not for rehabilitation anymore, but for recreation and fitness. I’m now in better shape than I’ve ever been and I feel pretty good about it. However, my back is not entirely healed yet; I cannot sit for long periods of time. I still feel a mild pain after driving long hours, biking on a rugged road or going to the movies. So, I keep working on stand-up desk. At this point it feels very natural, I don’t get tired as I used to anymore. Sitting on a chair feels too constraining, they remove too many degrees of freedom, it just feels wrong.",
+      "zh": "我还在游泳，但不再是为了康复，而是为了消遣和健身。我现在的身体状态比以往任何时候都好，我挺满意的。不过背还没完全好，长时间坐着不行。开长途车、在颠簸路上骑车、或者去看场电影之后，我仍会觉得有轻微的疼痛。所以我继续用站立办公桌干活。到这一步它已经很自然了，我不再像以前那样容易累。坐在椅子上反而让人觉得受拘束，它去掉了太多自由度，就是感觉不对。"
+    },
+    {
+      "type": "p",
+      "en": "[The Witness](http://the-witness.net)",
+      "zh": "[《The Witness》](http://the-witness.net) 进展顺利，只是我这边的进度比我希望的慢一点。我得振作起来，把时间用得更有效率。问题一部分出在家里让我分心的事太多，所以我终于租了间办公室，明天就搬进去。这是我这辈子第一次家里不摆电脑，我打算先这么过一阵子，不过我也在想，大概还是该弄台笔记本。"
+    }
+  ]
+}

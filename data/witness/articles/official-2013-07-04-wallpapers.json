@@ -1,0 +1,58 @@
+{
+  "id": "official-2013-07-04-wallpapers",
+  "title": { "zh": "壁纸！", "en": "Wallpapers!" },
+  "subtitle": {
+    "en": "A handful of desktop wallpapers adapted from the earlier poster concepts.",
+    "zh": "几张由早先那些海报方案改编而成的桌面壁纸。"
+  },
+  "translator": {
+    "note": "原文没有小标题；正文中的 7 张插图按源顺序逐张收录为占位段落。原文未夹带页面部件，无需剔除。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Since a lot of you have been asking for them, I put together a few wallpapers based on those poster ideas from a while ago (most of which were created by Luis, who has a great eye for composition. Hopefully I didn't butcher them too badly.)",
+      "zh": "因为很多人来问，我就基于前阵子那些海报方案做了几张壁纸（其中大部分是 Luis 创作的，他对构图很有眼光。希望我没把它们糟蹋得太狠。）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/desktop_Final.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/autumn_desktop_final.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/monastairs_desktop_final.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/Luis_14_Screensaver.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/entry_desktop_final.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/keepstairs_desktop_final.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/07/tunnel_desktop_final.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "My hope is that at some point we will add a media section where we can put more wallpapers, posters, screenshots and such.  We are all working hard to finish the game, however, so it's not exactly a high priority.",
+      "zh": "我希望将来某个时候我们能加一个媒体区，用来放更多的壁纸、海报、截图之类的。不过我们大家都在拼命把游戏做完，所以这事优先级并不算高。"
+    }
+  ]
+}

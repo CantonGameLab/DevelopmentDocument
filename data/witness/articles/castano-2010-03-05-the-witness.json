@@ -1,0 +1,22 @@
+{
+  "id": "castano-2010-03-05-the-witness",
+  "title": {
+    "zh": "《The Witness》",
+    "en": "The Witness"
+  },
+  "subtitle": {
+    "zh": "Jon 为《The Witness》开了开发博客，我也快会写点全局光照实现上的细节。",
+    "en": "Jon starts a development blog for The Witness, and more detail on the global illumination implementation is coming."
+  },
+  "translator": {
+    "note": "这是作者宣布加入《The Witness》项目、并预告自己后续文章的一篇短贴，是个人博客与《The Witness》之间的连接点，如实照译，没有补充背景。`Jon`、`The Witness` 按术语表保留英文/书名号；`global illumination` 按表作「全局光照」。",
+    "source": "archive/castano-blog/2010-03-05-the-witness.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Jon has recently started a [development blog](http://the-witness.net/news/) about The Witness, the game that we have been working on during the last few months. So far there are a few posts about the technology and the aesthetics of the game and I’ll soon write a bit more about the global illumination implementation in some more detail. Keep an eye on it!",
+      "zh": "Jon 最近为《The Witness》开了一个[开发博客](http://the-witness.net/news/)，这就是我们过去几个月一直在做的游戏。目前已经有几篇讲游戏技术和美术风格的帖子，我很快也会更详细地写一点全局光照的实现。记得盯着点！"
+    }
+  ]
+}

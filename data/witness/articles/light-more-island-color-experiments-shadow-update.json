@@ -1,0 +1,81 @@
+{
+  "id": "light-more-island-color-experiments-shadow-update",
+  "title": {
+    "zh": "更多岛屿配色实验；阴影更新",
+    "en": "More island color experiments; shadow update"
+  },
+  "subtitle": {
+    "en": "A single 2048x2048 color map across the whole island replaces the blend-mapping approach, and the shadow map gets a softer filter.",
+    "zh": "用一张 2048x2048 的颜色贴图铺满整座岛，取代原先的混合映射方案；阴影贴图也换上了更柔和的滤波。"
+  },
+  "translator": {
+    "note": "`blend mapping` 译「混合映射」（这是 Uncharted 2 美术流程里的做法，与着色器里的 blend shader「混合着色器」区分开）；`color map` 译「颜色贴图」；`shadow map` 按术语表译「阴影贴图」；`normal map` 译「法线贴图」；`texture memory` 译「纹理内存」。`Poisson disc` 译「泊松圆盘」、`Gaussian` 译「高斯」，函数名保留英文。插图行按全站口径归一化为 `![图](原图URL)`（丢掉缩略图与外层链接）。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Until now, we had been using Uncharted-2-style blend mapping to color our terrain.  This is a way of using a low-resolution texture map to control the blending of high-resolution textures; this gives you the ability to maintain fine pixel-by-pixel detail while also blending between multiple textures in order to create larger-scale patterns.  (This method is in effect in earlier screenshots like [this one](http://the-witness.net/news/?p=835), though keep in mind that we were not using it very seriously in a whole-island kind of way yet.  For some idea of what the blend mapping looks like closer-in, see [this](http://the-witness.net/news/?p=807) or [this](http://the-witness.net/news/?p=784).)",
+      "zh": "到现在为止，我们给地形上色一直用的是 Uncharted 2 式的混合映射。这是一种用低分辨率贴图去控制高分辨率纹理混合的方式；它让你既能保住逐像素的精细细节，又能通过混合多张纹理来造出更大尺度的图案。（早先的截图里，比如[这一张](http://the-witness.net/news/?p=835)，用的就是这种方法，不过要记住那时我们还没认真到全岛铺开的程度。想看看混合映射近处是什么样子，可以看[这里](http://the-witness.net/news/?p=807)或[这里](http://the-witness.net/news/?p=784)。）"
+    },
+    {
+      "type": "p",
+      "en": "But now we are thinking about how to create colorful scenes, like in [the previous post](http://the-witness.net/news/?p=852), and this style of blend-mapping did not seem like a very good idea.  In order to create gradients across the scene, we would need to have a lot of blend layers; this would be slow and use a lot of texture memory (since now we are storing a lot of individual blend maps). Even once we did that, it would be laborious to control, and it's unclear that it would look good.",
+      "zh": "但现在我们在琢磨怎么做出色彩丰富的场景，就像[上一篇](http://the-witness.net/news/?p=852)里那样，而这种风格的混合映射看起来就不是个好主意了。要在场景里造出渐变，我们得有很多个混合层；这会很慢，也很吃纹理内存（因为现在我们要存一大堆单独的混合贴图）。就算真这么做了，控制起来也很费工，而且效果好不好还很难说。"
+    },
+    {
+      "type": "p",
+      "en": "Ignacio mentioned that the Wolfire guys were just dropping one color map across their whole terrain.  That seemed like a good idea to me -- I have done that before, but in contexts where we were trying to really crank up the resolution to levels that were ridiculous at the time, like 8192x8192 texture maps back in 2001.  Rather than doing that, the idea now is to just use what is a reasonable-sized texture on a modern machine, and see what it looks like.  So Shannon painted a 2048x2048 texture of the island (of which we are only really using less than half right now) and here's how it looks from up high:",
+      "zh": "Ignacio 说 Wolfire 那帮人就是往整片地形上直接铺一张颜色贴图。我觉得这主意不错——我以前这么干过，不过那时是想把分辨率推到当时荒唐的程度，比如 2001 年的 8192x8192 贴图。这次不是那样，现在的想法就是用一张对现代机器来说尺寸合理的贴图，然后看看效果。于是 Shannon 画了一张 2048x2048 的岛屿贴图（目前我们实际用到的还不到一半），从高处看是这样的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/05/shot_2011.05.18__time_12_39_n01-300x168.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Immediately this strikes me as much nicer, and much more in-tune with the art direction we want for the game.  The buildings and other meshes now stick out like sore thumbs, but that is just what happens when you improve only a part of the scene.  We'll be working on this.",
+      "zh": "这一下子就显得好看多了，也更贴合我们想要的游戏美术方向。建筑和其他网格现在反倒扎眼得厉害，但只改进场景的一部分时就是这样。我们会继续弄这个。"
+    },
+    {
+      "type": "p",
+      "en": "Here's a scene from closer in:",
+      "zh": "这是一张近处的场景："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/05/shot_2011.05.18__time_12_40_n02-300x168.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, we have less detail close-up on the ground; things look a bit blurry.  However, the colors are a lot better, and I think if we can adapt this scheme into something that permits sharper details up close, we will be able to make something that has a lot of character and looks special.  In these shots, we are still using the old blend map system to tile high-detail normal maps across the terrain; that helps, but by itself it's not enough.  (In recent videos for Overgrowth, [like this one](http://blog.wolfire.com/2011/05/Overgrowth-a131-video-changelog), you can see that they are doing something that provides close-up details, maybe just intensity maps that are being modulated by the color map).  So we'll keep working on this and see how it goes.",
+      "zh": "如你所见，近处地面上的细节变少了，看着有点糊。不过颜色好得多，我想如果我们能把这套方案改造成允许近处有更锐利细节的形式，就能做出很有味道、看起来很特别的东西。在这些截图里，我们仍然在用旧的混合贴图系统给整片地形平铺高细节的法线贴图；这有帮助，但光靠它还不够。（在 Overgrowth 最近的视频里，[比如这个](http://blog.wolfire.com/2011/05/Overgrowth-a131-video-changelog)，你能看到他们做了些能提供近处细节的东西，也许只是用颜色贴图去调制的强度贴图。）所以我们会继续弄这个，看看能走到哪儿。"
+    },
+    {
+      "type": "p",
+      "en": "Meanwhile, Ignacio has been revising the shadow map rendering.  We used to have very speckly shadow maps, as I was using a 4-sample Poisson disc to sample the shadow map.  Ignacio recently switched this to a Gaussian that has more taps, then applied some math tricks to reduce the number of taps.  This results in softer shadows:",
+      "zh": "与此同时，Ignacio 一直在改阴影贴图的渲染。以前我们的阴影贴图斑点很重，因为我当时用的是 4 个采样的泊松圆盘去采样阴影贴图。Ignacio 最近把它换成了采样数更多的高斯，然后用一些数学技巧把采样次数降下来。结果是更柔和的阴影："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/05/shot_2011.05.18__time_12_42_n03-300x168.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "At some angles, shadow map jaggies still show up pretty clearly:",
+      "zh": "在某些角度下，阴影贴图的锯齿还是很明显："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2011/05/shot_2011.05.18__time_12_42_n04-300x168.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This is something we might work around in the final game by changing the scene when this happens!  Or, it's possible the shadows will be modified further so that they look smoother in cases like this.  Who can say?",
+      "zh": "在最终版游戏里，我们没准会靠「出现这种情况时就把场景改一改」来绕开它！或者阴影还会进一步改进，让这种情形下看起来更平滑。谁知道呢？"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "id": "castano-2009-07-10-salmorejo-means-food-in-summer",
+  "title": { "zh": "Salmorejo 就是夏天的饭", "en": "Salmorejo means food in summer" },
+  "subtitle": {
+    "en": "Wife and son are in Brazil, an epidural finally kicked in, so it is time for the Andalusian cold tomato soup, plus notes on the neglected vegetable garden.",
+    "zh": "太太和儿子去了巴西，硬膜外注射终于见效，于是来做安达卢西亚的番茄冷汤；菜园荒了，只好寄望来年。"
+  },
+  "translator": {
+    "note": "源文里第 16 行是「插图 + 正文」挤在同一行，按 schema 的「图文同行」口径拆成一个图片块和一个正文块，顺序不变。三处 Flickr 插图按全站口径归一化成图片占位块，丢掉外层链接与 `_m` 缩略图后缀。度量单位一律保留原文（cups、tablespoons 等），摄氏度换算见需要处。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I don’t know what’s going on with me lately. Mariana and Nachito are in Brazil visiting Mariana’s family, so that leaves me with plenty of free time. I finally got an epidural injection, so physically I’m feeling great. In the past I would have taken this time to code like crazy and get lots of things done, but things are going much slower than I was hoping. Maybe it’s the heat of the summer, or that now that my body feels fine, I need some time to enjoy it and relax.",
+      "zh": "我不知道自己最近是怎么了。Mariana 和 Nachito 去巴西探亲了，所以我有大把空闲时间。我总算做了硬膜外注射，身体上感觉好极了。换作以前，我会趁这段时间疯狂写代码、干完一大堆事，但现在进度比我希望的慢得多。也许是夏天太热，也许是身体既然舒服了，我就需要一点时间来享受和放松。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm4.static.flickr.com/3321/3626584342_500a575588.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Anyhow, today it’s time for some more food blogging, and now that we are in midst of the summer there’s nothing better than Salmorejo. As soon as the tomato season starts, this is something that I have for lunch or dinner almost every day. It’s easy to cook, it’s fast, it’s refreshing, and it’s filling.",
+      "zh": "话说回来，今天该再写点吃的了。既然正值盛夏，就没有什么比 Salmorejo 更合适的了。番茄季一开始，我几乎每天午饭或晚饭都吃这个。好做、快、清爽，还管饱。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm4.static.flickr.com/3609/3626578916_21a210841e_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Salmorejo is actually a different food depending on the region of Spain, but in Andalusia it’s a cold soup made of tomatoes, garlic, and bread; seasoned with salt, vinegar, and oil.",
+      "zh": "其实在西班牙不同地区，Salmorejo 指的东西并不一样；在安达卢西亚，它是一道用番茄、大蒜和面包做的冷汤，用盐、醋和油调味。"
+    },
+    {
+      "type": "p",
+      "en": "Good tomatoes are by far the most important ingredient and here in California these are not hard to find (ie. at farmer markets or at the local coop). I usually use a combination of regular and heirloom tomatoes, which I think give a nice twist to the flavor.",
+      "zh": "好番茄是这里头最重要的食材，而在加州并不难找（比如农夫市集或者本地的合作社）。我通常把普通番茄和传家宝番茄混着用，我觉得这样风味会多一点意思。"
+    },
+    {
+      "type": "p",
+      "en": "I was hoping to grow tomatoes in my backyard this summer, but my back problems prevented me from working on my vegetable garden, which grew out of control during the spring and now almost dried during the summer. I’m tidying it up now, and I’m hoping I’ll be able to harvest something by the end of the summer.",
+      "zh": "本来我指望今年夏天在自家后院种番茄，但背的毛病让我没法打理菜园——春天它疯长得失了控，到了夏天又几乎全干死了。我现在正在收拾，希望能赶在夏天结束前收点什么。"
+    },
+    {
+      "type": "p",
+      "en": "For the bread I recommend a hard bread that is a few days old. Ciabatta or a crusty sourdough baguette work best.",
+      "zh": "面包方面，我推荐放了几天的硬面包。Ciabatta 或者外壳脆的酸面团法棍最好用。"
+    },
+    {
+      "type": "p",
+      "en": "Preparation is as follows:",
+      "zh": "做法如下："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Take the piece of bread and submerge it in water for about 20 minutes until completely soft.",
+          "zh": "把面包泡进水里约 20 分钟，直到完全变软。"
+        },
+        {
+          "en": "In the meantime dice the tomatoes and liquefy in a food processor or a blender. You should get about 6 cups. Then pass the tomatoes through a food mill to remove the skin and the seeds, and place aside. After that you should have about 5 cups of a fairly homogeneous tomato juice.",
+          "zh": "趁这个时间把番茄切块，用食品加工机或搅拌机打成浆，大约能出 6 cups。然后把番茄浆过一遍碾磨器（food mill），去掉皮和籽，放一边备用。这样处理后大约剩 5 cups 比较均匀的番茄汁。"
+        },
+        {
+          "en": "Now take some of the bread, squeeze it to remove some of the water, and add one cup to the food processor with two or three cloves of garlic.",
+          "zh": "现在取一些泡好的面包，挤掉一部分水，取 1 cup 放进食品加工机，再加两三瓣大蒜。"
+        },
+        {
+          "en": "Season the bread and garlic mixture with salt, vinegar and oil, and combine with the tomato juice. Pulse in the food processor a few times until well mixed together.",
+          "zh": "用盐、醋和油给面包大蒜糊调味，再和番茄汁混在一起。用食品加工机点动几次，打到均匀混合。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The Salmorejo can be eaten right away, but it tastes better after 24 hours. It’s typically served with Iberian Ham and boiled eggs. If I don’t have good ham available I usually substitute it with tuna, or you can also spread it over a slice of fresh bread and combine it with smoked salmon or pomfret.",
+      "zh": "Salmorejo 马上就能吃，但放上 24 小时味道更好。它通常配伊比利亚火腿和水煮蛋一起吃。我要是手边没有好火腿，一般就用金枪鱼代替；也可以把它抹在一片新鲜面包上，配上烟熏三文鱼或者鲳鱼。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm4.static.flickr.com/3386/3625765199_491fdc34f7.jpg)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

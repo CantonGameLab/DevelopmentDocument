@@ -1,0 +1,59 @@
+{
+  "id": "official-2013-02-22-a-clarification-about-our-ps4-exclusivity",
+  "title": { "zh": "关于我们 PS4 独占的澄清", "en": "A clarification about our PS4 exclusivity." },
+  "subtitle": {
+    "en": "A limited-time exclusivity covering competing consoles only: no money changed hands, and PC or iOS at launch is unaffected.",
+    "zh": "一份只针对竞争主机的限时独占：没有金钱交易，也不妨碍发售当天上 PC 或 iOS。"
+  },
+  "translator": {
+    "note": "文中说的发布会指 2013 年 2 月 20 日 Sony 公布 PlayStation 4 的那场发布会；Durango 是当时微软下一代主机（后来的 Xbox One）在传闻中使用的代号。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "There has been worry and speculation on the internet about the PS4 exclusivity that we announced during the press conference, so here are some details to help answer those questions.",
+      "zh": "网上对我们在那场发布会上宣布的 PS4 独占一事，一直有各种担忧和猜测，所以这里给出一些细节，来帮忙回答这些问题。"
+    },
+    {
+      "type": "p",
+      "en": "Our deal with Sony is a limited-time exclusivity that applies to competing console platforms. Basically it is that you will see the game on the PlayStation 4 for a while before you will see it on the Wii U or the rumored next Microsoft console. (We haven't been disclosed on Microsoft's next console, so I don't know anything about that platform besides the rumors that are on the internet).",
+      "zh": "我们和 Sony 的协议是一份限时独占，适用范围是与它竞争的主机平台。基本上就是说：你会在 PlayStation 4 上先看到这款游戏一段时间，之后才会在 Wii U 或者传闻中的微软下一代主机上看到它。（微软并没有向我们披露它的下一代主机，所以除了网上流传的那些传闻，我对那个平台一无所知。）"
+    },
+    {
+      "type": "p",
+      "en": "This exclusivity does not prevent us from being on the PC or iOS at launch, for example.",
+      "zh": "举例来说，这份独占并不妨碍我们在发售当天就出现在 PC 或 iOS 上。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "People have been speculating that we got paid for PS4 exclusivity, but that is not the case. There was no money involved.",
+      "zh": "有人一直在猜测我们为 PS4 独占收了钱，但事实并非如此。这里面没有任何金钱往来。"
+    },
+    {
+      "type": "p",
+      "en": "The real situation is that, because we are a small developer, we only have the ability to launch on a small number of platforms at once. We liked the idea of being on a console, and originally we thought we might be on the PS3 or Xbox 360, but eventually we decided not to target either of those, due to the relatively low system specs and the work required to do the ports. After some more time went by, and our release date drifted further into the future, we realized that the next-generation console launch time might be a good time to release the game. (For a while we were hoping to be out substantially earlier than the next consoles, e.g. right now, so we didn't start thinking seriously about this until recently).",
+      "zh": "真实情况是：我们是个小开发团队，一次只有能力在少数几个平台上发售。我们挺喜欢「上主机」这个想法，最初以为会做 PS3 或 Xbox 360，但最终决定这两个都不做，原因是它们的硬件规格相对偏低，而移植又要花不少工夫。又过了一段时间，我们的发售日期越漂越远，于是我们意识到：下一代主机上市的那个时间点，也许正是发售这款游戏的好时机。（有一阵子我们还盼着能比下一代主机早很多就出，比如现在就出，所以直到最近才开始认真考虑这件事。）"
+    },
+    {
+      "type": "p",
+      "en": "To launch a high-spec version of the game on a console, it came down to a choice between the next Microsoft console or the next Sony console. There were people at Sony who really liked the game and were keeping in touch with us about it, and so we naturally started going to their PS4 developer events, got a dev kit, and started playing with it. I don't have good communication with anyone at Microsoft right now, but all our technical people like the PS4 specs a lot more than the leaked Durango specs, and we like the positioning of the PS4 (it's about games) more than what we perceive Microsoft's positioning is going to be.",
+      "zh": "要在主机上推出一个高规格版本的游戏，选择就落在了微软的下一代主机和 Sony 的下一代主机之间。Sony 那边确实有人很喜欢这款游戏，一直就它跟我们保持联系，所以我们自然就开始参加他们的 PS4 开发者活动，拿到一台开发机，动手玩起来。眼下我和微软那边任何人都不算有顺畅的沟通，但我们所有技术人员都更喜欢 PS4 的规格，远胜过泄露出来的 Durango 规格；我们也更喜欢 PS4 的定位（它是关于游戏的），胜过我们预判中微软将要摆出的定位。"
+    },
+    {
+      "type": "p",
+      "en": "So we just found ourselves doing a PS4 port. And once we are doing that, it is not practical for us also to think about another console port. We were going to be a *de facto* console exclusive for Sony no matter what. As I mentioned, there are people at Sony who are very interested in The Witness, so they somehow percolated up through the ranks the idea of showing the game in the launch show.",
+      "zh": "于是我们不知不觉就做起了 PS4 移植。而一旦开始做这件事，再同时去考虑另一个主机平台的移植就不现实了。不管怎样，我们都会*实际上*成为 Sony 的主机独占。就像我提到的，Sony 那边有人对《The Witness》非常感兴趣，于是他们不知怎么把「在发布展示会上展出这款游戏」这个想法，在内部一层层渗透了上去。"
+    },
+    {
+      "type": "p",
+      "en": "Of course, Sony wants that show to point out things that are going to be exclusive or special to their console. If we are in their show, but next week we turn around and announce \"we changed our mind, we are exclusive on Durango forever,\" that would be a bit weird. So to be in the show we signed a timed exclusivity for competing consoles. But this was just a formalization of something that was already going to be the case. We like the PS4 and we like the people at Sony we are working with, so it was an easy choice to make the agreement.",
+      "zh": "当然，Sony 希望那场展示会突出那些将要独占、或者对他们主机有特殊意义的东西。如果我们出现在他们的展示会上，下周却掉头宣布「我们改主意了，我们要永远独占 Durango」，那就有点怪了。所以要上那场展示会，我们就签了一份针对竞争主机的限期独占协议。但这只是把本来就成立的事情正式化而已。我们喜欢 PS4，也喜欢和我们共事的 Sony 的人，所以签这份协议是个很容易做的选择。"
+    },
+    {
+      "type": "p",
+      "en": "Exact timing of our release on launch platforms has yet to be figured out. It just depends on how much we can do and when; we'll know more as we get much closer to the game being done.",
+      "zh": "我们在首发平台上的确切发售时间还没定下来。这只取决于我们能做多少事、以及什么时候做完；等游戏接近完工的时候，我们会知道得更多。"
+    }
+  ]
+}

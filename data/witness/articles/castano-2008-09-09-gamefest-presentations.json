@@ -1,0 +1,18 @@
+{
+  "id": "castano-2008-09-09-gamefest-presentations",
+  "title": { "zh": "Gamefest 讲座资料", "en": "Gamefest Presentations" },
+  "subtitle": {
+    "en": "Microsoft posted the Gamefest 2008 presentations, most of them with audio, including Ignacio's tessellation talk.",
+    "zh": "Microsoft 放出了 Gamefest 2008 的讲座资料，大多附带录音，其中包括他讲曲面细分的那一场。"
+  },
+  "translator": {
+    "note": "源文只有一段，标题为译者所加。Gamefest 是 Microsoft 当年办的游戏开发者大会，保留英文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I just realized that Microsoft recently released the [Gamefest presentations](http://www.xnagamefest.com/presentations08.htm), and that most of them are accompanied with audio recordings, including my talk about [rendering displaced subdivision surfaces using tessellation](http://www.microsoft.com/downloads/details.aspx?FamilyId=A484D275-9360-41DD-ABD4-86D4F1218D0C&displaylang=en).",
+      "zh": "我这才发现 Microsoft 最近放出了 [Gamefest 的讲座资料](http://www.xnagamefest.com/presentations08.htm)，而且大多数都配了录音，其中就有我讲[用曲面细分渲染位移细分曲面](http://www.microsoft.com/downloads/details.aspx?FamilyId=A484D275-9360-41DD-ABD4-86D4F1218D0C&displaylang=en)的那一场。"
+    }
+  ]
+}

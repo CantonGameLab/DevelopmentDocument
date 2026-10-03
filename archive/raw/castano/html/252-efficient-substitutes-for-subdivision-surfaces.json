@@ -1,0 +1,14 @@
+{
+  "id": 252,
+  "slug": "efficient-substitutes-for-subdivision-surfaces",
+  "date": "2009-05-12T16:50:27",
+  "modified": "2019-01-17T23:42:40",
+  "link": "https://www.ludicon.com/castano/blog/2009/05/efficient-substitutes-for-subdivision-surfaces/",
+  "title": "Efficient Substitutes for Subdivision Surfaces",
+  "excerpt": "<p>Our siggraph course has been accepted and is finally up on the siggraph website! Here’s the brief description of the course: An overview of the most recent theoretical results and their implementations on the current and next-generation GPUs, and a demonstration of applications in the gaming and movie industry. We will bring together participants with&#8230;</p>\n",
+  "content": "<p>Our siggraph course has been accepted and is finally up on the siggraph website! Here’s the brief description of the course:</p>\n<blockquote><p>An overview of the most recent theoretical results and their implementations on the current and next-generation GPUs, and a demonstration of applications in the gaming and movie industry.\n</p></blockquote>\n<p>We will bring together participants with different backgrounds: ISV from the game and movie industry, IHVs and academia. Each one will provide their own point of view on the topic and describe their own experiences with these methods. I think that will be very valuable to understand the weaknesses and strengths of these techniques, and will hopefully encourage other developers to adopt them.</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": []
+}

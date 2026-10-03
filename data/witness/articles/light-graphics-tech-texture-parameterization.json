@@ -1,0 +1,220 @@
+{
+  "id": "light-graphics-tech-texture-parameterization",
+  "title": { "zh": "光照贴图参数化", "en": "Lightmap Parameterization" },
+  "subtitle": {
+    "en": "How The Witness automatically cuts a mesh into charts, parameterizes them with LSCM, and packs them into a lightmap atlas.",
+    "zh": "《The Witness》如何把网格自动切成图块、用 LSCM 做参数化，再排布进光照贴图集。"
+  },
+  "translator": {
+    "note": "原文里的 `paramaterizations`、`equaly`、`bootstraping`、`constrains` 均为源文拼写错误，译文按正确的参数化（parameterizations）、等大（equally）、引导（bootstrapping）、约束（constraints）理解。原文那句 `there's not much !/$ in spending more time` 里的 `! / $` 是作者自用的记号，意思大致是「性价比」，译文里保留了这个符号并用括号说明其含义。原文的 `#### Segmentation` 等小标题在源文里是四级标题，译文按本 schema 的 h2 处理。原文插图共 5 张，归档里是「缩略图包永久链接」的形式，已按 schema 归一化为指向原图的 `![图](原图URL)` 占位块（第 2、3 张的 alt 文字是描述性说明，同样按约定压平为「图」，图注内容不另译）。源文归档在正文之后没有读者评论，本篇为全文翻译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "As explained by Jon [in his previous post](http://the-witness.net/news/?p=50), we are using precomputed global illumination in *The Witness*, and one of my first tasks was to work on that system.",
+      "zh": "正如 Jon [在上一篇帖子里](http://the-witness.net/news/?p=50)解释的那样，《The Witness》用的是预计算全局光照，而我最先接手的任务之一，就是做这套系统。"
+    },
+    {
+      "type": "p",
+      "en": "I have developed some interesting technology to compute automatic paramaterizations, to formulate the lighting computations in a way that can be easily mapped to the GPU, and to speed them up performing them at a lower frequency by using irradiance caching. None of these things are very cutting edge, but I run into some interesting problems that are usually overlooked in the literature and came up with some creative solutions that I think would be interesting to share. However, in retrospect, I think I also made some mistakes, but I hope that being honest about them will help me avoid them in the future.",
+      "zh": "我做了几样有意思的技术：自动计算参数化；把光照计算表述成容易映射到 GPU 上的形式；以及用辐照度缓存（irradiance caching）以更低的频率执行这些计算，从而把它们加速。这些都不算特别前沿，但我遇到了几个文献里通常被忽略的有趣问题，也想出了一些我觉得值得分享的巧妙解法。不过回头看，我也犯了一些错误；希望我老实把它们讲出来，能帮自己以后不再犯。"
+    },
+    {
+      "type": "p",
+      "en": "In this first post I will describe the lightmap parameterization algorithm that I have implemented and in the next few posts I'll cover other details of our lighting system such as our approach to perform final gathering using hemicubes and our implementation of irradiance caching.",
+      "zh": "这第一篇里，我会讲我实现的光照贴图参数化算法；接下来几篇会讲我们光照系统的其他细节，比如我们用半立方体（hemicube）做最终采集（final gathering）的做法，以及我们对辐照度缓存的实现。"
+    },
+    {
+      "type": "p",
+      "en": "In order to use precomputed lighting we need a way of mapping these lighting computations to the surfaces. One possibility is to store them per vertex, but in many cases that does not provide enough resolution and the interpolation of the lighting makes the triangulation of the mesh fairly obvious. Many games get away with that by compensating the lack of detail in the lighting with high texture and normal map detail, but that does not go along well with the graphical style that Jon wants to achieve. So, instead of that we decided to create full parameterizations of our objects in order to store the precomputed lighting into lightmap textures.",
+      "zh": "要用预计算光照，我们就得有一套办法把这些光照计算映射到表面上。一种可能的选择是逐顶点存储，但很多情况下那样分辨率不够，而且光照的插值会让网格的三角剖分变得相当明显。很多游戏靠纹理和法线贴图的高度细节去补偿光照细节的不足，以此蒙混过关，但这和 Jon 想要达成的美术风格并不搭。所以我们没那么做，而是决定为物体生成完整的参数化，把预计算光照存进光照贴图纹理里。"
+    },
+    {
+      "type": "p",
+      "en": "Creating these parameterizations by hand is possible, but it is time consuming and I'd rather have our artists work on something more enjoyable. So, we decided to create the parameterizations automatically. However, the greatest mistake I've made so far is to not look more carefully at the available solutions to accomplish that. I had some pieces of the implementation already available, and I overestimated how much effort it would take to put them together and produce robust results. While talking about this to some friends at GDC one of them asked why I wasn't using [Microsoft's UVAtlas](http://msdn.microsoft.com/en-us/library/ee422528(VS.85).aspx) tool, and to my dismay and embarrassment my only answer was that it had not occurred to me. I think that goes to prove how valuable it is to be open about our development in a small team like ours.",
+      "zh": "手工做这些参数化是可行的，但很费时间，我更愿意让我们的美术去做点更好玩的事。于是我们决定自动生成参数化。不过到目前为止我犯的最大错误，是没有更认真地去调研现有的解决方案。当时我手上已经有这个实现的一部分代码，也高估了把它们拼起来、做出稳健结果所需的功夫。在 GDC 上我跟几个朋友聊起这事，有一个人问我为什么不用 [Microsoft 的 UVAtlas](http://msdn.microsoft.com/en-us/library/ee422528(VS.85).aspx) 工具；让我既沮丧又尴尬的是，我唯一的回答是「我没想到它」。我想这恰好证明了，在我们这种小团队里公开开发过程是多么有价值。"
+    },
+    {
+      "type": "p",
+      "en": "Now that I got that out of the way, let's talk about the tech. We only use lightmaps to represent indirect illumination and the direct illumination of static area lights. So, our expectation was that lightmaps would be fairly smooth and that seams would not be a huge problem. For this reason we decided not to invest in a solution that guaranteed seamless parameterizations and instead used a fairly traditional approach: We first divide the input geometry into charts with disk topology, parameterize them individually, and finally pack them into a rectangular texture.",
+      "zh": "把这事说清楚之后，我们来聊技术。我们只用光照贴图来表示间接光照，以及静态面光源的直接光照。所以我们预期光照贴图会相当平滑，接缝（seam）也不会是大问题。出于这个原因，我们决定不去投入做一个能保证无缝参数化的方案，而是用了相当传统的路子：先把输入的几何体切成具有圆盘拓扑（disk topology）的图块（chart），逐一参数化，最后把它们排布（packing）进一张矩形纹理。"
+    },
+    { "type": "h2", "id": "segmentation", "zh": "分割", "en": "Segmentation" },
+    {
+      "type": "p",
+      "en": "Dividing the mesh into charts is by far the most complex step of the process. In the past I had tried using hierarchical clustering without much success, so this time around I decided to use an iterative clustering algorithm similar to Lloyd's algorithm, in the same vein as the algorithm used in the [Multi-chart geometry images (MCGI)](http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/) paper.",
+      "zh": "把网格切成图块，是整个流程里最复杂的一步。以前我试过分层聚类，效果不太好，所以这次我决定用一种类似 Lloyd 算法的迭代聚类算法，思路和 [Multi-chart geometry images（MCGI）](http://research.microsoft.com/en-us/um/people/hoppe/proj/mcgim/) 那篇论文里用的算法一脉相承。"
+    },
+    {
+      "type": "p",
+      "en": "Like Lloyd's clustering algorithm, the MCGI algorithm iterates between chart growing and reseeding stages. The growth of the charts is guided by a metric based on the normal deviation and the distance between the face centroids. After each chart growing iteration a new seed is selected taking the most central face of the chart, and the process is repeated until the seed location does not change anymore.",
+      "zh": "和 Lloyd 的聚类算法一样，MCGI 算法在图块生长（chart growing）和重新选种子（reseeding）两个阶段之间反复迭代。图块的生长由一个度量（metric）来引导，它基于法线偏差和面心之间的距离。每一轮图块生长迭代之后，取该图块最中心的面作为新的种子，这个过程一直重复到种子位置不再变化为止。"
+    },
+    {
+      "type": "p",
+      "en": "My implementation of the MCGI algorithm worked moderately well, but it didn't always produce good results. It was possible to tweak the number and location of the seeds to obtain the desired output, but that required a certain amount of user intervention that was not desired.",
+      "zh": "我对 MCGI 算法的实现效果还算凑合，但并不是每次都能给出好结果。可以通过调整种子的数量和位置来得到想要的输出，但那需要一定的人工干预，而我们并不想要这个。"
+    },
+    {
+      "type": "p",
+      "en": "Part of the problem is that the meaning of \"good\" in this setting is very subjective. It usually means nicely shaped charts, that fit well to the surface, produce parameterizations with little distortion, have fairly straight and convex boundaries and are more or less equaly sized.",
+      "zh": "问题的一部分在于，这里所谓「好」的含义非常主观。它通常指的是：图块形状漂亮、贴合表面、参数化畸变（distortion）小、边界相当直且是凸的，大小也差不多相等。"
+    },
+    {
+      "type": "p",
+      "en": "In order to adapt the algorithm to our purposes I did two things, modified the bootstraping method so that the initial number of seeds is chosen automatically and used a combination of metrics to obtain better control over the results.",
+      "zh": "为了让算法贴合我们的用途，我做了两件事：改掉引导（bootstrapping）方式，让初始种子数量自动选取；并使用一组组合起来的度量，以便更好地控制结果。"
+    },
+    {
+      "type": "p",
+      "en": "In order to select the initial number of seeds, I simply insert the seeds one by one, and grow the respective charts until a threshold is met. At that point I pick an arbitrary face that is not assigned to any chart yet and repeat the process. When no faces are left, the growing process is restarted from all seeds in parallel.",
+      "zh": "为了确定初始种子数量，我只是把种子一个一个地插进去，并让各自的图块生长，直到触达某个阈值。这时我挑一个还没被分配到任何图块的面，重复这个过程。等没有面剩下了，再从所有种子出发并行重新开始生长过程。"
+    },
+    {
+      "type": "p",
+      "en": "A common strategy to remove the sensitivity to the initial conditions is to use the farthest point heuristic. However, instead of doing that I found that an approach that works well is to pick the worst candidate face of the already chosen charts as the next seed.",
+      "zh": "消除对初始条件敏感性的一种常见策略是使用最远点启发式。不过我没那么做：我发现一个效果不错的办法，是把已经选定的图块里最差的候选面挑出来，作为下一个种子。"
+    },
+    {
+      "type": "p",
+      "en": "The second important change to the algorithm was to use a different set of metrics. The MCGI paper proposes a metric that combines normal deviation with distance between face centroids. I found that using absolute distances made the algorithm very dependent on the tessellation of the mesh and that measuring the distances from the centroids favored triangles with low aspect ratios.",
+      "zh": "对算法的第二个重要改动，是换用另一组度量。MCGI 论文提出的度量把法线偏差和面心之间的距离结合起来。我发现用绝对距离会让算法严重依赖网格的曲面细分（tessellation），而从面心出发量距离又会偏向长宽比小的三角形。"
+    },
+    {
+      "type": "p",
+      "en": "Instead of using distance between faces I considered only the normal deviation and combined it with other metrics similar to the ones proposed in [D-Charts: Quasi-Developable Mesh Segmentation](http://www.cs.ubc.ca/labs/imager/tr/2005/Vlad_DCharts/) and that take roundness and straightness into account.",
+      "zh": "我不再用面与面之间的距离，而是只考虑法线偏差，并把它和另外一些度量结合起来——那些度量与 [D-Charts: Quasi-Developable Mesh Segmentation](http://www.cs.ubc.ca/labs/imager/tr/2005/Vlad_DCharts/) 里提出的类似，会把圆度和直度考虑进去。"
+    },
+    {
+      "type": "p",
+      "en": "These metrics also had their own problems and I had to tweak them in various ways. The most significant issue is that they constrained the chart growth in undesired ways. For example, to encourage chart convexity you would associate a high factor to the corresponding metric, but that would result in a large number of almost convex charts, as soon as a convex configuration was found no additional faces could be added to the chart. So, instead of using these metrics to constrain the growth I only use them to favor convex charts or straight boundaries; that allowed the charts to grow freely, but still retain the most convex and most straight shape possible.",
+      "zh": "这些度量本身也有问题，我不得不从各方面对它们做调整。最突出的问题是，它们会以我们不希望的方式去约束图块的生长。举个例子：为了鼓励图块呈凸形，你会给相应的度量配一个很大的系数，但结果就是会产生大量「几乎已经是凸的」图块——一旦找到某种凸的构型，就再也没法往这个图块里加面了。所以我不再用这些度量去约束生长，只用它们来偏向凸形图块或直的边界；这样图块能自由生长，同时还能尽量保持最凸、最直的形状。"
+    },
+    {
+      "type": "p",
+      "en": "A trick that helped in many cases was to incorporate some input from the artist, but without imposing any additional burden to them. A simple way of doing that is taking into account the existing parameterization of the mesh. Our objects already have a parameterization that is used for texturing and the artists tend to place texture seams at locations that are not easily visible. Snapping the boundaries of our charts to the existing seams did not only reduce the overall number of seams, but also caused the charts to evolve in a way that matches better what the artist would have done manually.",
+      "zh": "在很多情况下帮上忙的一个技巧，是把美术的一些输入纳入进来，而又不给他们增加任何额外负担。一个简单的做法是利用网格已有的参数化。我们的物体本来就有一套用于贴图的参数化，而美术习惯把纹理接缝放在不容易看见的地方。把我们图块的边界吸附到已有的接缝上，不仅减少了接缝的总数，还让图块的演化方式更接近美术手工操作会做出的样子。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/charts02.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I considered texture and normal seams independently. Since our parameterization is used for lighting I follow normal seams more strictly and proportionally to their angle, not doing so would cause the corners to appear less defined or more blurry. That also helps the process to converge much more quickly in architectural meshes that have many hard edges.",
+      "zh": "我把纹理接缝和法线接缝分开考虑。由于我们的参数化是给光照用的，我对法线接缝跟得更严格，而且是按它们的角度成比例地跟；不这么做的话，转角会显得不够清晰、或者更模糊。这也能让整个流程在硬边很多的建筑类网格上收敛得快得多。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/charts00.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Finally, I don't impose any chart topology constrains. I specially wanted charts go grow around holes in the mesh as long as the metric was below the desired threshold. I was tempted to use a better proxy fitting metric instead of the normal deviation metric, but that would have generated cylindrical or conical charts that would have to be cut, and I did not want to deal with that. Closing holes on the other side is fairly easy, it's just matter of detecting the boundaries and closing all, but the longest one.",
+      "zh": "最后，我不对图块拓扑（chart topology）施加任何约束。我特别希望图块能绕过网格上的洞继续生长，只要度量低于想要的阈值就行。我一度想用更好的代理拟合度量来代替法线偏差度量，但那样会生成圆柱形或圆锥形的图块，还得再把它们切开，我不想处理这种事。而在另一边补洞其实相当容易：只要检测出边界，然后除了最长的那一条之外，把其余的洞都补上就行。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/charts01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "parameterization", "zh": "参数化", "en": "Parameterization" },
+    {
+      "type": "p",
+      "en": "For the chart parameterization algorithm we simply use [Least Squares Conformal Maps](http://alice.loria.fr/index.php/publications.html?Paper=lscm@2002) since I had an implementation already available. My implementation is based on the description of the algorithm in the [notes](http://www.inf.usi.ch/hormann/parameterization/CourseNotes.pdf) of the [SIGGRAPH 2007 Mesh Parameterization course](http://www.inf.usi.ch/hormann/parameterization/index.html), which I found much more accessible than the one in the original paper. Particularly useful is the chapter about numerical optimization, although if I had to write a sparse matrix solver again I would probably use [OpenNL](http://alice.loria.fr/index.php/software/4-library/23-opennl.html), since it has now been released under a liberal BSD license.",
+      "zh": "图块的参数化算法，我们直接用了[最小二乘保角映射](http://alice.loria.fr/index.php/publications.html?Paper=lscm@2002)（LSCM），因为我手上已经有现成的实现。我的实现依据的是 [SIGGRAPH 2007 Mesh Parameterization 课程](http://www.inf.usi.ch/hormann/parameterization/index.html)的[讲义](http://www.inf.usi.ch/hormann/parameterization/CourseNotes.pdf)里对这个算法的描述，我觉得那份讲义比原论文里的描述好懂得多。其中讲数值优化的那一章特别有用；不过如果让我再写一次稀疏矩阵求解器，我大概会用 [OpenNL](http://alice.loria.fr/index.php/software/4-library/23-opennl.html)，因为它现在已经以宽松的 BSD 许可发布了。"
+    },
+    {
+      "type": "p",
+      "en": "LSCM is not the best parameterization algorithm out there. It worked pretty well in most cases, although in some rare situations it resulted in small self-overlaps. That happened in two cases:",
+      "zh": "LSCM 并不是现有最好的参数化算法。它在大多数情况下效果都不错，不过在某些少见的情形下会产生小的自重叠。这种情况出现在两种场合："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Zero area triangles in the input sometimes flipped in the parameterization.",
+          "zh": "输入里的零面积三角形有时会在参数化过程中翻转。"
+        },
+        {
+          "en": "Charts with complex boundaries that self-intersect when parameterized.",
+          "zh": "边界复杂、参数化后会自交的图块。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The first case turned out that was caused by T-junctions in the input mesh that were detected as holes and filled with a degenerate triangle. In practice the small overlaps in the parameterization were not really an issue so instead of fixing the input we simply plan to report these problems to the artist in the exporter and have him fix the them if it turns out it's causing artifacts.",
+      "zh": "第一种情况后来查明，是输入网格里的 T 型接合（T-junction）被当成了洞，然后用一个退化的三角形填了起来。实际上参数化里那点小重叠并不是真问题，所以我们不打算去修输入，而是计划让导出器把这些情况报告给美术，如果它确实造成了瑕疵，就由美术自己去修。"
+    },
+    {
+      "type": "p",
+      "en": "In the second case, increasing the weight of the convexity metric used during the clustering process allowed us to prevent these errors. So, I didn't really do anything to handle this problem, but so far it has not been an issue.",
+      "zh": "第二种情况，只要提高聚类过程中所用的凸性度量的权重，就能避免这些错误。所以我其实没为处理这个问题做任何事，但到目前为止它也没成为问题。"
+    },
+    {
+      "type": "p",
+      "en": "Even after that we had some problematic cases remaining. I noticed that the implementation in Blender was not having this same issues and was handling these cases more gracefully. So, I asked Brecht Van Lommel, who suggested the use of alternate matrix weights based on the ABF formulation of LSCM, and that seemed to eliminate the remaining issues.",
+      "zh": "即便做了这些，我们还剩一些有问题的例子。我注意到 Blender 里的实现没有这些毛病，处理这些情况也更从容，于是我去问了 Brecht Van Lommel，他建议改用基于 LSCM 的 ABF 表述的替代矩阵权重，这似乎把剩下的问题都消掉了。"
+    },
+    {
+      "type": "p",
+      "en": "While LSCM is very easy to implement, it's definitely not the best parameterization method out there. If I were to implement something better I would probably look at [LinABF](http://alice.loria.fr/index.php/publications.html?Paper=LinABF@2007) or [Fitting to Guidance Gradient Fields](http://mgarland.org/files/papers/param.pdf). However, since parameterization of the individual charts is currently the fastest step it may make sense to also look at more expensive deformation analysis methods.",
+      "zh": "LSCM 虽然很容易实现，但肯定不是现有最好的参数化方法。如果要实现更好的，我大概会去看 [LinABF](http://alice.loria.fr/index.php/publications.html?Paper=LinABF@2007) 或者 [Fitting to Guidance Gradient Fields](http://mgarland.org/files/papers/param.pdf)。不过，既然单个图块的参数化目前是整个流程里最快的一步，也许值得再看看那些更昂贵的形变分析方法。"
+    },
+    { "type": "h2", "id": "packing", "zh": "排布", "en": "Packing" },
+    {
+      "type": "p",
+      "en": "Our packing algorithm is fairly simple. Like many other implementations we first sort the charts by parametric area, rotate them to align the charts with their best fit rectangle and greedily introduce them in the atlas one by one. Ideally I should test all 4 possible orientations, but currently I simply pick one of the orientations randomly.",
+      "zh": "我们的排布算法相当简单。和很多其他实现一样，我们先按参数域面积给图块排序，旋转它们让图块对齐到最佳拟合矩形，然后一个一个贪心地放进图集。理想情况下我应该把 4 种可能的朝向都试一遍，但目前我只是随机挑一个朝向。"
+    },
+    {
+      "type": "p",
+      "en": "Instead of using a tetris-like scheme to find the best location for each chart, I use a more brute force approach in which all the possible locations are considered. I achieve that using a conservative rasterizer that tags all the texels touched by a chart, plus an extra texel for padding. I progressively increase the texture extents as new charts are inserted. If the a location within the current extents is found, the chart is automatically accepted, otherwise a metric is evaluated to determine the location that least increases the extents of the atlas. Since I use a greedy algorithm, minimizing area resulted in atlases with very high aspect ratios. So, instead I minimize a metric that combines extent and perimeter and results in mostly square atlases.",
+      "zh": "找每个图块的最佳位置时，我不用那种类似俄罗斯方块的方案，而是用更暴力的做法：把所有可能的位置都考虑一遍。具体是靠一个保守光栅化器，把图块触碰到的所有纹素都标记出来，再多标一个纹素作为填充间隙。随着新图块插入，我逐步扩大纹理的尺寸范围。如果在当前的尺寸范围内能找到位置，这个图块就直接被接受；否则就评估一个度量，来确定那个让图集尺寸增加最少的位置。因为我用的是贪心算法，最小化面积会得到宽高比极其夸张的图集。所以我改成最小化一个把尺寸和周长结合起来的度量，结果得到的图集大多是方形的。"
+    },
+    {
+      "type": "p",
+      "en": "Here are some examples of the results:",
+      "zh": "下面是几个结果的例子："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/packing_cottage00.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/packing_tower00.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Once we use lightmap compression it will probably make sense to align the charts to DXT block boundaries in order to prevent bleeding artifacts.",
+      "zh": "等我们用上光照贴图压缩之后，把图块对齐到 DXT 块的边界大概就有意义了，这样可以防止渗色瑕疵。"
+    },
+    { "type": "h2", "id": "future-improvements", "zh": "未来的改进", "en": "Future Improvements" },
+    {
+      "type": "p",
+      "en": "This is one of the areas where I think there's a lot of room for improvement, but at the same time, there's not much !/$ in spending more time improving the results. Even though it has not been tested in production, I think that our current solution works fairly well. It would be nice to have larger charts with less distortion or a lower number of seams, and I would certainly have fun working on that. However, that's not going to make the game run significantly faster or look dramatically better. We plan to release the source code of these algorithms at some point so my hope is that the implementation will progressively get better as other people adopt it and improve it to fit their needs.",
+      "zh": "这是我认为还有很大改进空间的领域之一，但与此同时，再花时间提升结果并不划算（原文写的是 `! / $`，大致就是「性价比」的意思）。虽然还没在生产环境里验证过，我认为我们目前的方案已经相当不错了。能有更大的图块、更小的畸变或者更少的接缝当然好，做这件事我也肯定会觉得有意思。但那不会让游戏跑得明显更快，也不会让画面显著变好。我们打算在某个时候把这些算法的源码放出来，所以我希望随着别人采用它、并按自己的需求改进它，这个实现会逐步变得更好。"
+    },
+    {
+      "type": "p",
+      "en": "That said, if there's one area where I think it's worth investing, that is in the use of signal specialized parameterizations. The research papers on the subject ([Signal-specialized parametrization](http://research.microsoft.com/en-us/um/people/hoppe/proj/ssp/) and [Signal-specialized parameterization for piecewise linear reconstruction](http://research.microsoft.com/en-us/um/people/hoppe/proj/ssplinear/)) are probably overkill in our setting, and I'm not sure they would work very well with our low resolution meshes.",
+      "zh": "话虽如此，如果真要说有一个领域值得投入，那就是使用信号专用参数化（signal specialized parameterization）。这个课题的研究论文（[Signal-specialized parametrization](http://research.microsoft.com/en-us/um/people/hoppe/proj/ssp/) 和 [Signal-specialized parameterization for piecewise linear reconstruction](http://research.microsoft.com/en-us/um/people/hoppe/proj/ssplinear/)）在我们这个场景里大概是杀鸡用牛刀，而且我不确定它们在我们这种低分辨率网格上能不能跑得好。"
+    },
+    {
+      "type": "p",
+      "en": "Half-Life 2 achieved that that by using artist specified sampling rates for each surface, but I think it's worth doing that automatically using an approach like [the one proposed by Bungie](http://www.bungie.net/images/Inside/publications/presentations/Lightmap_Compression_2008_02_22.pptx), which seems fairly simple and provides most of the gains the more complex approaches would give us.",
+      "zh": "Half-Life 2 是靠美术为每个表面指定采样率来做到这一点的；但我认为值得用类似 [Bungie 提出的做法](http://www.bungie.net/images/Inside/publications/presentations/Lightmap_Compression_2008_02_22.pptx)来自动完成，那个做法看起来相当简单，却能带来那些更复杂的方案所能给的大部分收益。"
+    },
+    {
+      "type": "p",
+      "en": "My expectation is that the current implementation won't suffer significant changes, other than small tweaks and slight adjustments to deal with problematic cases that may show up in the future. If someone has any experience with these kind of algorithms, I would love to hear about it. In particular I'd like to know if there's anything you would have done differently, or if there's any optimization or improvement that I may have overlooked and you think is worth considering.",
+      "zh": "我预计当前的实现不会有什么大改动，除了一些小修小补，用来应对将来可能冒出来的问题案例。如果谁对这些算法有经验，我很想听听。我尤其想知道：有没有什么地方你会换个做法；或者有没有什么我可能忽略、而你认为值得考虑的优化或改进。"
+    }
+  ]
+}

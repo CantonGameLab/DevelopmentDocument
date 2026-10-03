@@ -1,0 +1,222 @@
+{
+  "id": "light-graphics-tech-lighting-comparison",
+  "title": { "zh": "图形技术：光照方案对比", "en": "Graphics Tech: Lighting Comparison" },
+  "subtitle": {
+    "en": "Renders of the same three views under four sampling settings and one, two and three light bounces, with the time each one took.",
+    "zh": "同一组三个视角，在四种采样设置、以及 1、2、3 级光照反弹下的渲染结果，以及各自的计算耗时。"
+  },
+  "translator": {
+    "note": "原文首句里的 `precoputed` 是源文拼写错误（应为 precomputed），译文按「预计算」理解。原文的小标题是单独一行的粗体文字（`**Front Door:**` 等），译文按 h2 处理，`en` 保留原文文字、`zh` 去掉粗体标记只译文字；`****` 是归档残留的空粗体行，没有内容，未收录。图片行下面的 `32x32 adaptive`、「1 bounce」等是 WordPress 图注，按原顺序各自保留为一个段落。原文插图共 14 张，归档里是「缩略图包永久链接」的形式，已按 schema 归一化为指向原图的 `![图](原图URL)` 占位块。源文归档在正文之后没有评论，本篇为全文翻译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "It seems like time to post some images from the in-progress precoputed lighting tech that Ignacio is working on.  See [here](http://the-witness.net/news/?p=50) for a description of the basics behind what we are doing for lighting.  The lightmaps are now 16-bit and these shots use a simple exponential tone mapper.",
+      "zh": "是时候放一些 Ignacio 正在做的预计算光照技术的中间成果图了。我们这套光照的基本原理，见[这里](http://the-witness.net/news/?p=50)。光照贴图现在是 16 位的，这些截图用了一个简单的指数色调映射器。"
+    },
+    {
+      "type": "p",
+      "en": "First, I've taken shots from 3 positions inside a house, with four different lighting settings.  For all four settings, we are computing only the first lighting bounce.  The parameters are:",
+      "zh": "首先，我在一座房子内部取了 3 个位置截图，用了四种不同的光照设置。这四种设置都只计算第一级光照反弹。参数是："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "32x32 cube maps, adaptive sampling, quality = 0.5. Time to compute: 197 seconds.",
+          "zh": "32x32 立方体贴图，自适应采样，quality = 0.5。计算耗时：197 秒。"
+        },
+        {
+          "en": "32x32 cube maps, non-adaptive sampling. Time to compute: 648 seconds.",
+          "zh": "32x32 立方体贴图，非自适应采样。计算耗时：648 秒。"
+        },
+        {
+          "en": "64x64 cube maps, non-adaptive sampling. Time to compute: 738 seconds.",
+          "zh": "64x64 立方体贴图，非自适应采样。计算耗时：738 秒。"
+        },
+        {
+          "en": "128x128 cube maps, non-adaptive sampling. Time to compute: 1570 seconds.",
+          "zh": "128x128 立方体贴图，非自适应采样。计算耗时：1570 秒。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "(Click for full size).",
+      "zh": "（点击看大图）。"
+    },
+    { "type": "h2", "id": "front-door", "zh": "前门", "en": "Front Door:" },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot1_32_b1_ay.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "32x32 adaptive",
+      "zh": "32x32 自适应"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot1_32_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "32x32",
+      "zh": "32x32"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot1_64_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "64x64",
+      "zh": "64x64"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot1_128_b1_ansn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "128x128",
+      "zh": "128x128"
+    },
+    { "type": "h2", "id": "corner", "zh": "墙角", "en": "Corner:" },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot2_32_b1_ay.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "32x32 adaptive",
+      "zh": "32x32 自适应"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot2_32_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "32x32",
+      "zh": "32x32"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot2_64_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "64x64",
+      "zh": "64x64"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot2_128_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "128x128",
+      "zh": "128x128"
+    },
+    { "type": "h2", "id": "side-wall", "zh": "侧墙", "en": "Side Wall:" },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_32_b1_ay.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "32x32 adaptive",
+      "zh": "32x32 自适应"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_32_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "32x32",
+      "zh": "32x32"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_64_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "64x64",
+      "zh": "64x64"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_128_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "128x128",
+      "zh": "128x128"
+    },
+    {
+      "type": "p",
+      "en": "The hardware used to compute these timings is an Intel Core i7-860 with an ATI Radeon 5870 (most of the process is GPU-bound).",
+      "zh": "测这些耗时用的硬件是一台 Intel Core i7-860，配一块 ATI Radeon 5870（整个过程大部分时间受限于 GPU）。"
+    },
+    {
+      "type": "p",
+      "en": "The non-adaptive sampling renders one cube map for each shadow map texel, whereas the adaptive sampling uses heuristics to place samples and then smoothes the map between them.  At higher quality settings, adaptive sampling provides more-accurate results, but there always seem to be artifacts, so for the time being we are using it as a fast preview mode.  If at some point the quality becomes shippable, then we would switch to adaptive sampling for everything.",
+      "zh": "非自适应采样会为每一个阴影贴图纹素渲染一个立方体贴图，而自适应采样用启发式方法放置采样点，再在采样点之间把贴图平滑掉。在更高的质量设置下，自适应采样给出的结果更准确，但似乎总会有瑕疵，所以目前我们把它当作快速预览模式来用。如果将来它的质量能达到可发布的水准，我们就会全面切换到自适应采样。"
+    },
+    {
+      "type": "p",
+      "en": "We also have a sub-texel sampling mode that improves quality, but I didn't play with that during this run.",
+      "zh": "我们还有一个能提升质量的亚纹素采样模式，但这次跑的时候我没有去试它。"
+    },
+    {
+      "type": "p",
+      "en": "This second set of images shows progressive bounces of the lighting with 64x64 cube maps, non-adaptive sampling.  (The first one is the same 64x64 image as above).  The times are: 1 bounce, 738 seconds; 2 bounces, 1438 seconds; 3 bounces, 2481 seconds.  The precompute time is basically linear in the number of bounces, as one might expect (the algorithm is basically just doing the same thing n times.)",
+      "zh": "第二组图展示的是光照逐级反弹的效果，用的是 64x64 立方体贴图、非自适应采样。（第一张和上面那张 64x64 是同一张图。）耗时分别是：1 级反弹 738 秒；2 级反弹 1438 秒；3 级反弹 2481 秒。预计算耗时基本上与反弹级数成线性关系，这也在意料之中（这个算法基本上就是把同一件事做 n 遍）。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_64_b1_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "1 bounce",
+      "zh": "1 级反弹"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_64_b2_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "2 bounces",
+      "zh": "2 级反弹"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/precomputed-lighting-2/shot3_64_b3_an_sn.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "3 bounces",
+      "zh": "3 级反弹"
+    }
+  ]
+}

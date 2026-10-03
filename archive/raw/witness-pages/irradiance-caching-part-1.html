@@ -1,0 +1,934 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Irradiance Caching &#8211; Part 1 &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Irradiance Caching &#8211; Part 1 Comments Feed" href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2894,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_03.png","alt":"","desc":"","caption":"Banner_03","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_03-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/245" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=245' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2011%2F07%2Firradiance-caching-part-1%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=A7B5751DEC58E33ECCCE99FA0A3A0FA2');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<link rel="author" href="http://castano.ludicon.com/blog/"><style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-245 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-245" class="post-245 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">Irradiance Caching &#8211; Part 1</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/castano/" title="View all posts by Ignacio Castaño">Ignacio Castaño</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2011-07-14T01:21:15-07:00">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/" rel="bookmark">July 14, 2011</a>
+				</time>
+			   </span><time class="updated"  datetime="2015-04-07T10:09:45-07:00">April 7, 2015</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>This is the first article I wanted to publish when I started writing about the technology behind <a href="http://the-witness.net">The Witness</a>. I had just spent a week or so implementing irradiance caching with rotation and translation gradients. Extending the equations of the gradient estimation to the hemicube sample distribution had proven to be tricky and had taken me a considerable amount of effort. So, I thought it would be cool to document my derivation, so that others would not have to do the same. However, for that article to make sense I first had to provide some background, hence the previous two articles:</p>
+<ul>
+<li><a href="http://the-witness.net/news/?p=120">Lightmap Parameterization</a></li>
+<li><a href="http://the-witness.net/news/?p=244">Hemicube Rendering and Integration</a></li>
+</ul>
+<p>Unfortunately, by the time I was done with these, the work I had done on the gradients was not so fresh anymore, which is why it has taken me so long to complete this article.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2011/06/irradiance_gradients_0.jpg"><img class="aligncenter size-large wp-image-1133" src="http://the-witness.net/news/wp-content/uploads/2011/06/irradiance_gradients_0-512x288.jpg" alt="" width="512" height="288" /></a><span id="more-245"></span></p>
+<p>In <a href="http://the-witness.net/news/?p=244">my previous post</a> I mentioned the need to find an algorithm that would allow us to extrapolate the irradiance to fill lightmap texels with invalid samples, to smooth the resulting lightmaps to reduce noise, and to sample the irradiance at a lower frequency to improve performance. As some avid readers suggested <em>Irradiance Caching</em> solves all these problems. However, at the time I didn't know that, and my initial attempts at a solution were misguided.</p>
+<h2>Texture Space Approaches</h2>
+<p>I had some experience writing baker tools to capture normal and displacement maps from high resolution meshes. In that setting it is common to use various image filters to fill holes caused by sampling artifacts and extend sampled attributes beyond the boundaries of the mesh parameterization. <a href="http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm', 'Hugo Elias\' popular article']);" >Hugo Elias' popular article</a> also proposes a texture space hierarchical sampling method, and that persuaded me that working in texture space would be a good idea.</p>
+<p>However, in practice texture space methods had many problems. Extrapolation filters only provide accurate estimates close to chart boundaries, and even then, they only use information from one side of the boundary, which usually results in seams. Also, the effectiveness of irregular sampling and interpolation approaches in texture space is greatly reduced by texture discontinuities and did not reduce the number of samples as much as desired.</p>
+<p>After trying various approaches, it became clear that the solution was to work in object space instead. I was about to implement my own solution, when I learned that this is what irradiance caching was about.</p>
+<h2>Irradiance Caching</h2>
+<p>This technique has such a terrible name that I would have never learned about it if it wasn't due to a friend's suggestion. I think that a much more appropriate name would be adaptive irradiance sampling or irradiance interpolation. In fact, in the <a href="http://radsite.lbl.gov/radiance/papers/sg88/paper.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://radsite.lbl.gov/radiance/papers/sg88/paper.html', 'paper that introduced the technique for the first time']);" >paper that introduced the technique for the first time</a> Greg Ward referred to it as <em>lazy irradiance evaluation</em>, which seems to me a much more appropriate name.</p>
+<p>There's plenty of literature on the subject and I don't want to repeat what you can learn elsewhere. So, in this article I'm only going to provide a brief overview, focus on the unique aspects of our implementation, and point you to other sources for further reference.</p>
+<p>The basic idea behind irradiance caching is to sample the irradiance adaptively based on a metric that predicts changes in the irradiance due to proximity to occluders and reflectors. This metric is based on the split sphere model, which basically models the worst possible illumination conditions in order to predict the necessary distance between irradiance samples based on their distance to the surrounding geometry.</p>
+<p>Interpolation between these samples is then performed using radial basis functions, the radius associated to each sample is also based on this distance. Whenever the contribution of the nearby samples falls below a certain threshold a new irradiance record needs to be generated, in our case this is done by rendering an hemicube at that location. In order to perform interpolation efficiently the irradiance records are inserted in an octree, which allows us to efficiently query the nearby records at any given point.</p>
+<p>For more details, the <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm', 'Siggraph \'08 course']);" >Siggraph '08 course</a> on the topic is probably the most comprehensive reference. There's also a book based on the materials of the course; it's slightly augmented, but in my opinion it does not add much value to the freely available material.</p>
+<p>The <a href="http://www.pbrt.org/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.pbrt.org/', 'Physically Based Rendering book by Matt Pharr &amp; Greg Humphreys']);" ><em>Physically Based Rendering book</em> by Matt Pharr &amp; Greg Humphreys</a> is an excellent resource and the <a href="https://github.com/mmp/pbrt-v2" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/mmp/pbrt-v2', 'accompanying source code']);" >accompanying source code</a> contains a good, albeit basic implementation.</p>
+<p>Finally, Rory Driscoll provides a good introduction from a programmer's point of view: <a href="http://www.rorydriscoll.com/2009/01/18/irradiance-caching-part-1/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.rorydriscoll.com/2009/01/18/irradiance-caching-part-1/', 'part 1']);" >part 1</a>, <a href="http://www.rorydriscoll.com/2009/01/24/irradiance-caching-part-2/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.rorydriscoll.com/2009/01/24/irradiance-caching-part-2/', 'part 2']);" >part 2</a>.</p>
+<p>Our implementation is fairly standard, there are however a two main differences: First, we are sampling the irradiance using hemicubes instead of a stratified Montecarlo distribution. As a result, the way the we compute the irradiance gradients for interpolation is somewhat different. Second, we use a record placement strategy more suited to our setting. In part 1 I'll focus on the estimation of the irradiance gradients, while in part 2 I'll write about our record placement strategies.</p>
+<h2>Irradiance Gradients</h2>
+<p>When interpolating our discrete irradiance samples using radial basis functions the resulting images usually have spotty or smudgy appearance. This can be mitigated by increasing the number of samples and increasing the interpolation threshold, which effectively makes them overlap and smoothes out the result. However, this also increases the number of samples significantly, which defeats the purpose of using irradiance caching.</p>
+<p>One of the most effective approaches to improve the interpolation is estimating the irradiance gradients at the sampling points, which basically tell how the irradiance changes when the position and orientation of the surface changes. We cannot evaluate the irradiance gradients exactly, but we can find reasonable approximations with the information that we already have from rendering an hemicube.</p>
+<p>In my previous article I explained that the irradiance integral was just a weighted sum over the radiance samples, where the contribution of each sample is the product of the radiance through each of the hemicube texels <img src='http://s0.wp.com/latex.php?latex=L_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='L_i' title='L_i' class='latex' />, the solid angle of the texel <img src='http://s0.wp.com/latex.php?latex=A_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='A_i' title='A_i' class='latex' />, and the cosine term <img src='http://s0.wp.com/latex.php?latex=%5Ccos_%7B%5Ctheta_i%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='\cos_{\theta_i}' title='\cos_{\theta_i}' class='latex' />. That is, the irradiance <img src='http://s0.wp.com/latex.php?latex=E%28%5Cmathbf%7Bx%7D%29&#038;bg=T&#038;fg=000000&#038;s=0' alt='E(\mathbf{x})' title='E(\mathbf{x})' class='latex' /> at a point <img src='http://s0.wp.com/latex.php?latex=%5Cmathbf%7Bx%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='\mathbf{x}' title='\mathbf{x}' class='latex' /> is approximated as:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+A_i+L_i+%5Ccos%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='E(\mathbf{x}) \simeq \sum_{i=0}^N A_i L_i \cos\theta_i' title='E(\mathbf{x}) \simeq \sum_{i=0}^N A_i L_i \cos\theta_i' class='latex' /></p>
+<p>The irradiance gradients consider how each these terms change under infinitesimal rotations and translations and can be obtained by differentiating <img src='http://s0.wp.com/latex.php?latex=E%28%5Cmathbf%7Bx%7D%29&#038;bg=T&#038;fg=000000&#038;s=0' alt='E(\mathbf{x})' title='E(\mathbf{x})' class='latex' />.</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+%5Cnabla+A_i+L_i+%5Ccos%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N \nabla A_i L_i \cos\theta_i' title='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N \nabla A_i L_i \cos\theta_i' class='latex' /></p>
+<p>The radiance term is considered to be constant, so the equation reduces to:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+L_i+%5Cnabla+A_i+%5Ccos%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla A_i \cos\theta_i' title='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla A_i \cos\theta_i' class='latex' /></p>
+<p>In reality, the radiance is not really constant, but the goal is to estimate the gradients without using any information in addition to what we have already obtained by rendering the scene on a hemicube. So that we can improve the quality of the interpolation by only doing some additional computations while integrating the hemicube.</p>
+<h3>Rotation Gradient</h3>
+<p>The rotation gradient expresses how the irradiance changes as the hemicube is rotated in any direction:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla_r+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+L_i+%5Cnabla_r+A_i+%5Ccos%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla_r E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla_r A_i \cos\theta_i' title='\nabla_r E(\mathbf{x}) \simeq \sum_{i=0}^N L_i \nabla_r A_i \cos\theta_i' class='latex' /></p>
+<p>The most important observation is that as the hemicube rotates, the solid angle of the texels with respect to the origin remains constant. So, the only factor that influences the gradient is the cosine term:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla_r+A_i+%5Ccos%5Ctheta_i+%3D+A_i+%5Cnabla_r+%5Ccos%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla_r A_i \cos\theta_i = A_i \nabla_r \cos\theta_i' title='\nabla_r A_i \cos\theta_i = A_i \nabla_r \cos\theta_i' class='latex' /></p>
+<p>With this in mind, the rotation gradient is simply the rotation axis scaled by the rate of change, that is, the angle gradient:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cfrac%7B%5Cpartial+%7D%7B%5Cpartial+%5Ctheta_i%7D+%5Ccos%5Ctheta_i+%3D+-%5Csin%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\frac{\partial }{\partial \theta_i} \cos\theta_i = -\sin\theta_i' title='\frac{\partial }{\partial \theta_i} \cos\theta_i = -\sin\theta_i' class='latex' /></p>
+<p>And the rotation axis is given by the cross product of the z axis and the texel direction <img src='http://s0.wp.com/latex.php?latex=%5Cmathbf%7Bd%7D_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\mathbf{d}_i' title='\mathbf{d}_i' class='latex' />:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cmathbf%7Bv%7D_i+%3D+%5Cleft%7C+%5Cmathbf%7Bd%7D_i+%5Ctimes+%280%2C+0%2C+1%29+%5Cright%7C&#038;bg=T&#038;fg=000000&#038;s=0' alt='\mathbf{v}_i = \left| \mathbf{d}_i \times (0, 0, 1) \right|' title='\mathbf{v}_i = \left| \mathbf{d}_i \times (0, 0, 1) \right|' class='latex' /></p>
+<p>Therefore:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla_r+%5Ccos%5Ctheta_i+%3D+-%5Cmathbf%7Bv%7D_i+%5Csin%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla_r \cos\theta_i = -\mathbf{v}_i \sin\theta_i' title='\nabla_r \cos\theta_i = -\mathbf{v}_i \sin\theta_i' class='latex' /></p>
+<p>This can be simplified further by noting that <img src='http://s0.wp.com/latex.php?latex=%5Csin%5Ctheta_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\sin\theta_i' title='\sin\theta_i' class='latex' /> is the length of <img src='http://s0.wp.com/latex.php?latex=%5Cmathbf%7Bv%7D_i&#038;bg=T&#038;fg=000000&#038;s=0' alt='\mathbf{v}_i' title='\mathbf{v}_i' class='latex' /> before normalization and that results in a very simple expression:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla_r+%5Ccos%5Ctheta_i+%3D+%28%5Cmathbf%7Bd%7D_%7Byi%7D%2C+-%5Cmathbf%7Bd%7D_%7Bxi%7D%2C+0%29&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla_r \cos\theta_i = (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' title='\nabla_r \cos\theta_i = (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' class='latex' /></p>
+<p>Finally, the rotation gradient for the hemisphere is the sum of the gradients corresponding to each texel.</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla+E%28%5Cmathbf%7Bx%7D%29+%5Csimeq+%5Csum_%7Bi%3D0%7D%5EN+L_i+A_i+%28%5Cmathbf%7Bd%7D_%7Byi%7D%2C+-%5Cmathbf%7Bd%7D_%7Bxi%7D%2C+0%29&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i A_i (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' title='\nabla E(\mathbf{x}) \simeq \sum_{i=0}^N L_i A_i (\mathbf{d}_{yi}, -\mathbf{d}_{xi}, 0)' class='latex' /></p>
+<p>The resulting code is trivial:</p>
+<p>&nbsp;</p>
+
+<div class="wp_syntax"><table><tr><td class="code"><pre class="cpp" style="font-family:monospace;">foreach texel, color in hemicube <span style="color: #008000;">&#123;</span>
+    Vector2 v <span style="color: #000080;">=</span> texel.<span style="color: #007788;">solid_angle</span> <span style="color: #000040;">*</span> Vector2<span style="color: #008000;">&#40;</span>texel.<span style="color: #007788;">dir</span>.<span style="color: #007788;">y</span>, <span style="color: #000040;">-</span>texel.<span style="color: #007788;">dir</span>.<span style="color: #007788;">x</span><span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>
+    rotation_gradient<span style="color: #008000;">&#91;</span><span style="color: #0000dd;">0</span><span style="color: #008000;">&#93;</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> v <span style="color: #000040;">*</span> color.<span style="color: #007788;">x</span><span style="color: #008080;">;</span>
+    rotation_gradient<span style="color: #008000;">&#91;</span><span style="color: #0000dd;">1</span><span style="color: #008000;">&#93;</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> v <span style="color: #000040;">*</span> color.<span style="color: #007788;">y</span><span style="color: #008080;">;</span>
+    rotation_gradient<span style="color: #008000;">&#91;</span><span style="color: #0000dd;">2</span><span style="color: #008000;">&#93;</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> v <span style="color: #000040;">*</span> color.<span style="color: #007788;">z</span><span style="color: #008080;">;</span>
+<span style="color: #008000;">&#125;</span></pre></td></tr></table></div>
+
+<p>&nbsp;</p>
+<h3>Translation Gradients</h3>
+<p>The derivation of the translation gradients is a bit more complicated than the rotation gradients because the solid angle term is not invariant under translations anymore.</p>
+<p>My first approach was to simplify the expression of the solid angle term by using an approximation that is easier to differentiate. Instead of using the exact texel solid angle like I had been doing so far, I approximated it by the differential solid angle scaled by the constant area of the texel, which is a reasonable approximation if the texels are sufficiently small.</p>
+<p>In general, the differential solid angle in a given direction <img src='http://s0.wp.com/latex.php?latex=%5CTheta&#038;bg=T&#038;fg=000000&#038;s=0' alt='\Theta' title='\Theta' class='latex' /> is given by:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=d%5Comega_%5CTheta+%3D+%5Cfrac%7B%5Cmathbf%7Bn%7D%5Ccdot%5CTheta%7D%7Br%5E2%7D+da&#038;bg=T&#038;fg=000000&#038;s=0' alt='d\omega_\Theta = \frac{\mathbf{n}\cdot\Theta}{r^2} da' title='d\omega_\Theta = \frac{\mathbf{n}\cdot\Theta}{r^2} da' class='latex' /></p>
+<p>For the particular case of the texels of the top face of the hemicube, <strong>n</strong> is equal to the z axis. So, the differential solid angle is:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=d%5Comega_%5CTheta+%3D+%5Cfrac%7B%5Ccos%5Ctheta%7D%7Br%5E2%7D+da&#038;bg=T&#038;fg=000000&#038;s=0' alt='d\omega_\Theta = \frac{\cos\theta}{r^2} da' title='d\omega_\Theta = \frac{\cos\theta}{r^2} da' class='latex' /></p>
+<p>We also know that:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Ccos%5Ctheta+%3D+1%2Fr&#038;bg=T&#038;fg=000000&#038;s=0' alt='\cos\theta = 1/r' title='\cos\theta = 1/r' class='latex' /></p>
+<p>which simplifies the expression further:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=d%5Comega_%5CTheta+%3D+%28%5Ccos%5Ctheta%29%5E3+da&#038;bg=T&#038;fg=000000&#038;s=0' alt='d\omega_\Theta = (\cos\theta)^3 da' title='d\omega_\Theta = (\cos\theta)^3 da' class='latex' /></p>
+<p>Using this result and factoring the area of the texels out of the sum we obtain the following expression for the gradient:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cnabla_t+E_z%28%5Cmathbf%7Bx%7D%29+%5Csimeq+4+%5Csum_%7Bi%3D0%7D%5EN+L_i+%5Cnabla_t+%28%5Ccos%5Ctheta_i%29%5E4&#038;bg=T&#038;fg=000000&#038;s=0' alt='\nabla_t E_z(\mathbf{x}) \simeq 4 \sum_{i=0}^N L_i \nabla_t (\cos\theta_i)^4' title='\nabla_t E_z(\mathbf{x}) \simeq 4 \sum_{i=0}^N L_i \nabla_t (\cos\theta_i)^4' class='latex' /></p>
+<p>The remaining faces have similar expressions, slightly more complex, but still easy to differentiate along the x and y directions. We could continue along this path and we would obtain closed formulas that can be used to estimate the translation gradients. However, this simple approach did not produce satisfactory results. The problem is that these gradients assume that the only thing that changes under translation is the projected solid angle of the texels, but that ignores the parallax effect and the occlusion between neighboring texels. That is, samples that correspond to objects that are close to the origin of the hemicube should move faster than those that that are farther, and as they move they may occlude nearby samples.</p>
+<p>As you can see in the following lightmap, the use of these gradients resulted in smoother results in areas that are away from occluders, but produced incorrect results whenever the occluders are nearby.</p>
+<p><div id="attachment_727" style="width: 610px" class="wp-caption aligncenter"><img aria-describedby="caption-attachment-727" class="size-full wp-image-727" src="http://the-witness.net/news/wp-content/uploads/2011/01/translation_gradient_comparison_a.png" alt="" width="600" height="157" /><p id="caption-attachment-727" class="wp-caption-text">Left: Reference. Middle: Irradiance caching without gradients. Right: Irradiance caching with flawed gradients</p></div></p>
+<p>The hexagonal shape corresponds to the ceiling of a room that has walls along its sides and a window through which the light enters. The image on the left is a reference lightmap with one hemicube sample per pixel. The image on the middle is the same lightmap computed using irradiance caching taking only 2% of the samples. Note that the number of samples is artificially low to emphasize the artifacts. On the right side the same lightmap is computed using the proposed gradients. If you look closely you can notice that on the interior the lightmap looks smoother, but close to the walls the artifacts remain.</p>
+<p>This is exactly the same flaw of the gradients that Krivanek et al proposed in <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/tvcg2005/krivanek05radiance_caching.pdf" onclick="_gaq.push(['_trackEvent','download','http://cgg.mff.cuni.cz/~jaroslav/papers/tvcg2005/krivanek05radiance_caching.pdf']);" >Radiance Caching for Efficient Global Illumination Computation</a>, but was later corrected in the followup paper <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/sccg2005/sccg2005-krivanek.pdf" onclick="_gaq.push(['_trackEvent','download','http://cgg.mff.cuni.cz/~jaroslav/papers/sccg2005/sccg2005-krivanek.pdf']);" >Improved Radiance Gradient Computation</a> by approaching the problem the same way Greg Ward did in the original <a href="http://radsite.lbl.gov/radiance/papers/erw92/paper.pdf" onclick="_gaq.push(['_trackEvent','download','http://radsite.lbl.gov/radiance/papers/erw92/paper.pdf']);" >original <em>Irradiance Gradients</em> paper</a>.</p>
+<p>I then tried follow the same approach. The basic idea is to consider the cosine term invariant under translation so that only the area term needs to be differentiated, and to express the gradient of the cell area in terms of the marginal area changes between adjacent cells. The most important observation is that the motion of the boundary between cells is always determined by the closest sample, so this approach takes occlusion into account.</p>
+<p>Unfortunately we cannot directly use Greg Ward's gradients, because they are closely tied to the stratified Montecarlo distribution and we are using a hemicube sampling distribution. However, we can still apply the same methodology to arrive to a formulation of the gradients that we can use in our setting.</p>
+<p>In our case, the cells are the hemicube texels projected onto the hemisphere and the cell area is the texel solid angle. To determine the translation gradients of the texel's solid angle is equivalent to computing the sum of the marginal gradients corresponding to each of the texel walls.</p>
+<p>These marginal gradients are the wall normals projected onto the translation plane, scaled by the length of the wall, and multiplied by the rate of motion of the wall in that direction.</p>
+<p>Since the hemicube uses a gnomonic projection, where lines in the plane map to great circles in the sphere, the texel boundaries of the hemicubes map to great arcs in the hemisphere. So, the length of these arcs is very easy to compute. Given the direction of the two texel corners <img src='http://s0.wp.com/latex.php?latex=%5Cmathbf%7Bd%7D_0%2C+%5Cmathbf%7Bd%7D_1&#038;bg=T&#038;fg=000000&#038;s=0' alt='\mathbf{d}_0, \mathbf{d}_1' title='\mathbf{d}_0, \mathbf{d}_1' class='latex' />, the length of their hemispherical projection is:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=arclength%28%5Cmathbf%7Bd%7D_0%2C+%5Cmathbf%7Bd%7D_1%29+%3D+%5Carccos%7B%5Cmathbf%7Bd%7D_0+%5Ccdot+%5Cmathbf%7Bd%7D_1%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='arclength(\mathbf{d}_0, \mathbf{d}_1) = \arccos{\mathbf{d}_0 \cdot \mathbf{d}_1}' title='arclength(\mathbf{d}_0, \mathbf{d}_1) = \arccos{\mathbf{d}_0 \cdot \mathbf{d}_1}' class='latex' /></p>
+<p>The remaining problem is to compute the rate of motion of the wall, which as Greg Ward noted has to be proportional to the minimum distance of the two samples.</p>
+<p>The key observation is that we can classify all the hemicube edges in wo categories: Edges with constant longitude (<img src='http://s0.wp.com/latex.php?latex=%5Ctheta&#038;bg=T&#038;fg=000000&#038;s=0' alt='\theta' title='\theta' class='latex' /> is invariant), and edges with constant latitude (<img src='http://s0.wp.com/latex.php?latex=%5Cphi&#038;bg=T&#038;fg=000000&#038;s=0' alt='\phi' title='\phi' class='latex' /> is invariant).</p>
+<p>In each of these cases we can estimate the rate of change of edges with respect to the normal direction by considering the analogous problem in the <a href="http://mathworld.wolfram.com/SphericalCoordinates.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://mathworld.wolfram.com/SphericalCoordinates.html', 'canonical hemispherical parametrization']);" >canonical hemispherical parametrization</a>:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=r+%3D+%5Csqrt%7Bx%5E2%2By%5E2%2Bz%5E2%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='r = \sqrt{x^2+y^2+z^2}' title='r = \sqrt{x^2+y^2+z^2}' class='latex' /><br />
+<img src='http://s0.wp.com/latex.php?latex=%5Cphi+%3D+%5Carctan%5Cfrac%7By%7D%7Bx%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='\phi = \arctan\frac{y}{x}' title='\phi = \arctan\frac{y}{x}' class='latex' /><br />
+<img src='http://s0.wp.com/latex.php?latex=%5Ctheta+%3D+%5Carccos%5Cfrac%7Bz%7D%7Br%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='\theta = \arccos\frac{z}{r}' title='\theta = \arccos\frac{z}{r}' class='latex' /></p>
+<p>For longitudinal edges we can consider how <img src='http://s0.wp.com/latex.php?latex=%5Ctheta&#038;bg=T&#038;fg=000000&#038;s=0' alt='\theta' title='\theta' class='latex' /> changes with respect to motion along the x axis:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cfrac%7B%5Cpartial%5Ctheta%7D%7B%5Cpartial+x%7D+%3D+%5Cfrac%7B-%5Ccos%5Ctheta%7D%7Br%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='\frac{\partial\theta}{\partial x} = \frac{-\cos\theta}{r}' title='\frac{\partial\theta}{\partial x} = \frac{-\cos\theta}{r}' class='latex' /></p>
+<p>and for latitudinal edges we can consider how <img src='http://s0.wp.com/latex.php?latex=%5Cphi&#038;bg=T&#038;fg=000000&#038;s=0' alt='\phi' title='\phi' class='latex' /> changes with respect to motion along the y axis:</p>
+<p><img src='http://s0.wp.com/latex.php?latex=%5Cfrac%7B%5Cpartial%5Cphi%7D%7B%5Cpartial+y%7D+%3D+%5Cfrac%7B-1%7D%7Br+%5Csin%5Ctheta%7D&#038;bg=T&#038;fg=000000&#038;s=0' alt='\frac{\partial\phi}{\partial y} = \frac{-1}{r \sin\theta}' title='\frac{\partial\phi}{\partial y} = \frac{-1}{r \sin\theta}' class='latex' /></p>
+<p>As we noted before, the rate of the motion is dominated by the nearest edge, so <img src='http://s0.wp.com/latex.php?latex=r&#038;bg=T&#038;fg=000000&#038;s=0' alt='r' title='r' class='latex' /> takes the value of the minimum depth of the two samples adjacent to the edge.</p>
+<p>A detailed derivation for these formulas can be found in <a href="http://zurich.disneyresearch.com/~wjarosz/publications/dissertation/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://zurich.disneyresearch.com/~wjarosz/publications/dissertation/', 'Wojciech Jarosz\'s dissertation']);" >Wojciech Jarosz's dissertation</a>, which is now publicly available online. His detailed explanation is very didactic and I highly recommend reading it to get a better understanding of how these formulas are obtained.</p>
+<p>Note that these are just the same formulas used by Greg Ward and others. In practice, the only thing that changes is the layout of the cells and the length of the walls between them.</p>
+<p>As can be seen in the following picture, the new gradients produce much better results. Note that the appearance on the interior of the lightmap is practically the same, but closer to the walls the results are now much smoother. Keep in mind that artifacts are still present, because the number of samples is artificially low.</p>
+<p><div id="attachment_1048" style="width: 610px" class="wp-caption aligncenter"><img aria-describedby="caption-attachment-1048" class="size-full wp-image-1048" src="http://the-witness.net/news/wp-content/uploads/2011/06/translation_gradient_comparison.png" alt="" width="600" /><p id="caption-attachment-1048" class="wp-caption-text">Left: No gradients. Middle: Flawed translation gradients. Right: Improved translation gradients.</p></div></p>
+<p>In order to estimate the translation gradients efficiently we precompute the direction and magnitude of the marginal gradients corresponding to each texel edge without taking the distance to the edge into account:</p>
+<p>&nbsp;</p>
+
+<div class="wp_syntax"><table><tr><td class="code"><pre class="cpp" style="font-family:monospace;"><span style="color: #666666;">// Compute the length of the edge walls multiplied by the rate of motion</span>
+<span style="color: #666666;">// with respect to motion in the normal direction</span>
+foreach edge in hemicube <span style="color: #008000;">&#123;</span>
+    <span style="color: #0000ff;">float</span> wall_length <span style="color: #000080;">=</span> <span style="color: #0000dd;">acos</span><span style="color: #008000;">&#40;</span>dot<span style="color: #008000;">&#40;</span>d0, d1<span style="color: #008000;">&#41;</span><span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>
+    Vector2 projected_wall_normal <span style="color: #000080;">=</span> normalize<span style="color: #008000;">&#40;</span>cross<span style="color: #008000;">&#40;</span>d0, d1<span style="color: #008000;">&#41;</span>.<span style="color: #007788;">xy</span><span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>
+    <span style="color: #0000ff;">float</span> motion_rate <span style="color: #000080;">=</span> <span style="color: #008000;">&#40;</span>constant_altitude<span style="color: #008000;">&#40;</span>d0,d1<span style="color: #008000;">&#41;</span> <span style="color: #008080;">?</span>
+        <span style="color: #000040;">-</span>cos_theta<span style="color: #008000;">&#40;</span>d0,d1<span style="color: #008000;">&#41;</span> <span style="color: #008080;">:</span>      <span style="color: #666666;">// d(theta)/dx = -cos(theta) / depth</span>
+        <span style="color: #000040;">-</span><span style="color: #0000dd;">1</span> <span style="color: #000040;">/</span> sin_theta<span style="color: #008000;">&#40;</span>d0,d1<span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>   <span style="color: #666666;">// d(phi)/dy = -1 / (sin(theta) * depth)</span>
+&nbsp;
+    edge.<span style="color: #007788;">translation_gradient</span> <span style="color: #000080;">=</span> projected_wall_normal <span style="color: #000040;">*</span> wall_length <span style="color: #000040;">*</span> motion_rate<span style="color: #008080;">;</span>
+<span style="color: #008000;">&#125;</span></pre></td></tr></table></div>
+
+<p>&nbsp;</p>
+<p>Then, during integration we split the computations in two steps. First, we accumulate the marginal gradients of each of the edges scaled by the minimum edge distance:</p>
+<p>&nbsp;</p>
+
+<div class="wp_syntax"><table><tr><td class="code"><pre class="cpp" style="font-family:monospace;">foreach edge in hemicube <span style="color: #008000;">&#123;</span>
+    <span style="color: #0000ff;">float</span> depth0 <span style="color: #000080;">=</span> depth<span style="color: #008000;">&#40;</span>edge.<span style="color: #007788;">x0</span>, edge.<span style="color: #007788;">y0</span><span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>
+    <span style="color: #0000ff;">float</span> depth1 <span style="color: #000080;">=</span> depth<span style="color: #008000;">&#40;</span>edge.<span style="color: #007788;">x1</span>, edge.<span style="color: #007788;">y1</span><span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>
+    <span style="color: #0000ff;">float</span> min_depth <span style="color: #000080;">=</span> min<span style="color: #008000;">&#40;</span>depth0, depth1<span style="color: #008000;">&#41;</span><span style="color: #008080;">;</span>
+&nbsp;
+    texel<span style="color: #008000;">&#91;</span>edge.<span style="color: #007788;">x0</span>, edge.<span style="color: #007788;">y0</span><span style="color: #008000;">&#93;</span>.<span style="color: #007788;">translation_gradient</span> <span style="color: #000040;">-</span><span style="color: #000080;">=</span> edge.<span style="color: #007788;">gradient</span> <span style="color: #000040;">/</span> min_depth<span style="color: #008080;">;</span>
+    texel<span style="color: #008000;">&#91;</span>edge.<span style="color: #007788;">x1</span>, edge.<span style="color: #007788;">y1</span><span style="color: #008000;">&#93;</span>.<span style="color: #007788;">translation_gradient</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> edge.<span style="color: #007788;">gradient</span> <span style="color: #000040;">/</span> min_depth<span style="color: #008080;">;</span>
+<span style="color: #008000;">&#125;</span></pre></td></tr></table></div>
+
+<p>&nbsp;</p>
+<p>Once we have the per texel gradient, we compute the final irradiance gradient as the sum of the texel gradients weighted by the texel colors:</p>
+<p>&nbsp;</p>
+
+<div class="wp_syntax"><table><tr><td class="code"><pre class="cpp" style="font-family:monospace;">foreach texel, color in hemicube <span style="color: #008000;">&#123;</span>
+    Vector2 translation_gradient <span style="color: #000080;">=</span> texel.<span style="color: #007788;">translation_gradient</span> <span style="color: #000040;">*</span> texel.<span style="color: #007788;">clamped_cosine</span><span style="color: #008080;">;</span>
+    translation_gradient_sum<span style="color: #008000;">&#91;</span><span style="color: #0000dd;">0</span><span style="color: #008000;">&#93;</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> translation_gradient <span style="color: #000040;">*</span> color.<span style="color: #007788;">x</span><span style="color: #008080;">;</span>
+    translation_gradient_sum<span style="color: #008000;">&#91;</span><span style="color: #0000dd;">1</span><span style="color: #008000;">&#93;</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> translation_gradient <span style="color: #000040;">*</span> color.<span style="color: #007788;">y</span><span style="color: #008080;">;</span>
+    translation_gradient_sum<span style="color: #008000;">&#91;</span><span style="color: #0000dd;">2</span><span style="color: #008000;">&#93;</span> <span style="color: #000040;">+</span><span style="color: #000080;">=</span> translation_gradient <span style="color: #000040;">*</span> color.<span style="color: #007788;">z</span><span style="color: #008080;">;</span>
+<span style="color: #008000;">&#125;</span></pre></td></tr></table></div>
+
+<p>&nbsp;</p>
+<h2>Conclusions</h2>
+<p>Irradiance Caching provides a very significant speedup to our lightmap baker. On typical meshes we only need to render about 10 to 20% of the samples to approximate the irradiance at very high quality, and for lower quality results or fast previews we can get away with as few as 3% of the samples.</p>
+<p>The use of irradiance gradients for interpolation allows reducing the number of samples significantly, or for the same number of samples produces much higher quality results. The following picture compares the results without irradiance gradients and with them, in both cases the number of samples and their location is the same, note how the picture at the bottom has much smoother lightmaps.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2011/06/ic_comparison_1.jpg"><img class="aligncenter size-large wp-image-1139" src="http://the-witness.net/news/wp-content/uploads/2011/06/ic_comparison_1-351x384.jpg" alt="" width="351" height="384" /></a></p>
+<p>I think that without irradiance caching the hemicube rendering approach to global illumination would have not been practical. That said, implementing irradiance caching robustly is tricky and a lot of tuning and tweaking is required in order to obtain good results.</p>
+<p><em>Note: This article is also published on <a href="http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/', '#AltDevBlogADay']);" >#AltDevBlogADay</a>.</em></p>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/" title="Permalink to Irradiance Caching &#8211; Part 1" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2011/07/tree-update/" rel="prev"><i class="meta-nav-prev"></i> Tree Update</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2011/08/previews-of-the-witness-are-now-out-there/" rel="next">Previews of The Witness are now out there. <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				19 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-3842">
+		<div id="comment-3842">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/95510fd9d5e24cff98c81af717630356?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/95510fd9d5e24cff98c81af717630356?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://palgorithm.co.uk' rel='external nofollow ugc' class='url'>Sam Martin</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3842">
+					July 14, 2011 at 5:03 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This is a really great article Ignacio! Thanks very much. I look forward to the second one.</p>
+<p>You already be aware of this, and it doesn&#8217;t really affect your lightmap baker, but I believe one problem with irradiance caching is temporal stability. If you render multiple frames with moving lights you tend to get popping as different adaptation decisions are made. I think there are alternatives for this, but I forget the references. Anyway, just thought I&#8217;d mention it.</p>
+<p>ta,<br />
+Sam</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3842#respond' data-commentid="3842" data-postid="245" data-belowelement="comment-3842" data-respondelement="respond" data-replyto="Reply to Sam Martin" aria-label='Reply to Sam Martin'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-2" id="li-comment-3848">
+		<div id="comment-3848">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3848">
+					July 14, 2011 at 11:45 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Temporal stability is not a great concern for us, because our lightmaps are static. In some areas we have multiple lightmaps for different lighting configurations and simply blend between then. In that case Irradiance Caching could introduce some stability artifacts, but that is not very noticeable as long as the quality of the lightmaps is high enough.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3848#respond' data-commentid="3848" data-postid="245" data-belowelement="comment-3848" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-3850">
+		<div id="comment-3850">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3850">
+					July 14, 2011 at 3:26 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Note that I have no idea what I&#8217;m talking about here and maybe I&#8217;m missing something important. For example, it took me multiple re-reads to decipher what you were saying enough to actually even see where the depth values of the hemicube samples were being used in computing the gradients.</p>
+<p>Anyway, ignoring rotation, I assume what you&#8217;re computing with these gradients is a linear extrapolation, something like: E(X+dx) = E(X) + u*dEdu + v*dEdv. Whatever this formula turns out to be, I would think the task isn&#8217;t actually to compute infinitesimal gradients at X, but to compute the optimal numbers that supposedly are &#8220;dEdu&#8221; and &#8220;dEdv&#8221; that allow you to extrapolate as far as possible (e.g. in a least squares sense).  One could hypothesize some sort of higher-order extrapolation as well, and it might be more tractable under this model where you&#8217;re not looking at gradients, but looking at it as generating approximating polynomials or some such. However I don&#8217;t know what the math would look like for trying to model things this way. It just seems a weird thing to me to <i>start</i> off with the gradients. (I guess this is a basic well-known thing; the gradient is a particular truncated Taylor series to the actual function. But truncating a Taylor series doesn&#8217;t actually give the best approximation for that order.)</p>
+<p>I&#8217;m not sure how gradient rotation can work when you have a hemisphere(cube) of samples instead of a sphere of samples. Is this only used for small rotations (e.g. on a curved surface) and not at large rotations (e.g. a 30-degree joint)? Is it only used at internal angles (where visibility means less than a hemisphere is actually visible anyway, so nothing is missing) and not at external angles (where there can be missed samples &#8220;around the corner&#8221;)?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3850#respond' data-commentid="3850" data-postid="245" data-belowelement="comment-3850" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-2" id="li-comment-3854">
+		<div id="comment-3854">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3854">
+					July 14, 2011 at 5:07 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Yeah, Jon also suggested I added a section explaining how the gradients are used, I thought it was a good idea as it would clarify things a bit, but our implementation is completely standard in that regard, and time for my #AltDevBlogADay post was running out (in fact I was 1.5 hours late), so that got cut out.</p>
+<p>I think you have a good point, but you have to keep in mind that this whole thing is a very crude approximation anyway. As you translate your sampling point new radiance sources that were previously occluded could come into view. The same thing happens with rotations, sources below the horizon may become visible under rotation. These effects are largely ignored, but despite of that the approximation provides better results than using no approximation at all, and it does so at a very small cost.</p>
+<p>Keep in mind that the approximations are only OK with very small rotations and translations. One of the things that are also estimated when analyzing the hemicubes is how accurate are the approximation expected to be, and this is used to guide the record placement.</p>
+<p>Sometimes the estimates fail miserably and that results in artifacts. This usually happens under translations, when a bright radiance source becomes suddenly visible. Existing methods don’t deal very well with this scenario and I think I came up with a innovative solution to the problem. Rotations are usually not an issue, because the radiance samples are cosine weighted, so the new samples that appear near the horizon have near-zero weight.</p>
+<p>I personally think there’s still quite a bit of room for innovation on this area, but I pretty much limited myself to adapt the existing methods to our setting and work around the problems that we found. Once our implementation was working well enough I just moved on, since we have many other things to do that have a much bigger impact on the final game.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3854#respond' data-commentid="3854" data-postid="245" data-belowelement="comment-3854" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-3" id="li-comment-3899">
+		<div id="comment-3899">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3899">
+					July 18, 2011 at 3:23 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Ok, fair enough. In the sample shot at the top the sample points seem pretty far apart, but maybe that was captured with the same &#8220;exagerrated to show you the effect&#8221; settings.</p>
+<p>I guess another question is to what degree the look with correctly tuned settings has any visible mottling which isn&#8217;t actually present if you don&#8217;t do caching. I&#8217;m not experienced enough with radiosity to know what things &#8220;should&#8221; look like. Is it tuned so there&#8217;s no visible effect? Or is it subtly visible but acceptable?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3899#respond' data-commentid="3899" data-postid="245" data-belowelement="comment-3899" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-4" id="li-comment-3900">
+		<div id="comment-3900">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3900">
+					July 18, 2011 at 5:37 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>That shot is actually using our default settings and corresponds to the lightmap view at the end of the post, which I think does not have obvious artifacts. In that shot the minimum distance between samples is limited by the lightmap resolution. The samples that are farther apart, are so, because they are far enough from occluders, and because the irradiance is not expected to change abruptly. I basically tweaked our error thresholds to get the desired visual results at the minimum cost and that results in the sample distribution depicted in the screenshot.</p>
+<p>With our high quality/production settings, artifacts are gone entirely, and at the medium/default settings they are rarely noticeable. Note, that our results are biased, we trade accuracy/correctness for smoothness/good appearance. In fact, some of the scenes that looked noisy without caching (due to the limited hemicube resolution), looked much better with caching enabled.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3900#respond' data-commentid="3900" data-postid="245" data-belowelement="comment-3900" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3861">
+		<div id="comment-3861">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zaphos</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3861">
+					July 15, 2011 at 3:10 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Nice article :)</p>
+<p>fwiw&#8211; the siggraph course link is broken &#8230; looks like it&#8217;s moved to here: <a href="http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm', 'http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm']);" rel="nofollow ugc">http://cgg.mff.cuni.cz/~jaroslav/papers/2008-irradiance_caching_class/index.htm</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3861#respond' data-commentid="3861" data-postid="245" data-belowelement="comment-3861" data-respondelement="respond" data-replyto="Reply to Zaphos" aria-label='Reply to Zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-castano bypostauthor odd alt depth-2" id="li-comment-3866">
+		<div id="comment-3866">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3866">
+					July 15, 2011 at 4:24 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Thanks! I updated the link.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3866#respond' data-commentid="3866" data-postid="245" data-belowelement="comment-3866" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-3906">
+		<div id="comment-3906">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">justin</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-3906">
+					July 19, 2011 at 11:04 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>When developers get all technical&#8230; is good! but i don&#8217;t understand&#8230;<br />
+So this is for saving space? so that the game is not as heavy to download or so that it loads faster or to not include load screens?</p>
+<p>Is this used often? do other games have it? is it popular or used in AAA games or no other game has this, is this revolutionary, will it help games get easier to develop in the future&#8230; ?</p>
+<p>i don&#8217;t know if this is new for real time graphics, but if its not&#8230; you guys have ton of friends in the industry. why not just ask for help? i don&#8217;t know about the ethics of game development or if you can use what someone told you but maybe you just don&#8217;t believe that other games use it right? so you have to go through all this yourself&#8230;</p>
+<p>That would be a cool post to see! &#8220;Ethics of Game Design and Asking for Help&#8221;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=3906#respond' data-commentid="3906" data-postid="245" data-belowelement="comment-3906" data-respondelement="respond" data-replyto="Reply to justin" aria-label='Reply to justin'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-4540">
+		<div id="comment-4540">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c887930d9707a6207ae036f44f94c2e0?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c887930d9707a6207ae036f44f94c2e0?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.uvlist.net/search?sort=name&#038;ftype=&#038;fper' rel='external nofollow ugc' class='url'>zerothis</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-4540">
+					July 26, 2011 at 6:55 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Cool new tech you&#8217;re working on there. But about the game. Is it related to Infocom&#8217;s The Witness. Inspired perhaps, or just a coincidental name? See the link for &#8216;my website&#8217; (not actually mine) for further info.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=4540#respond' data-commentid="4540" data-postid="245" data-belowelement="comment-4540" data-respondelement="respond" data-replyto="Reply to zerothis" aria-label='Reply to zerothis'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-4584">
+		<div id="comment-4584">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">justin</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-4584">
+					July 28, 2011 at 12:10 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>&#8220;We&#8217;ve just started showing the game to the press; after Monday the 8th they may start talking about it. Who can say?&#8221;</p>
+<p>Will links to articles be posted here&#8230; i can never find out about indie games coverage. N4G doesn&#8217;t like indie games and a lot of hub news site never post previews on indies, but if i found news of the game from other sites i will not only share them here but i will try to publish it at N4G and other hubs.</p>
+<p>Also, will The Witness have a story that is heavy on Science and Science Fiction like Braid was?<br />
+I love the story of Braid  and it thought me the importance of science in the world and the importance of getting serious about the objective world, but at the same time looking at things from many angles from a subjective perspective.</p>
+<p>Like making an atomic bomb or going to space, i hope the story is about deep and meaningful things to the human race.  i hope , like Braid can get me even more interested in science!</p>
+<p>Also&#8230; who is the voice actor? is it the same guy that did the tutorial from Raspberry, he had a charming voice! is he your friend or something?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=4584#respond' data-commentid="4584" data-postid="245" data-belowelement="comment-4584" data-respondelement="respond" data-replyto="Reply to justin" aria-label='Reply to justin'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-4631">
+		<div id="comment-4631">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6a886180cb92ad614a3ac47cb0009834?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6a886180cb92ad614a3ac47cb0009834?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Cody</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-4631">
+					August 2, 2011 at 1:46 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Justin &#8211; part of me feels that even if the game hasn&#8217;t any direct storytelling in it, there will be loads of implicit story and meaning in every piece of the puzzle. The Witness as a title reminds me of buddhism &#8211; buddha meaning in many ways &#8220;the witness.&#8221; The awakened one who observes. It is very much part of zen philosophy to be a silent observer, and that may be the player&#8217;s role in this game. I wouldn&#8217;t be surprised if it were up to us to infer meaning on our own&#8230; and if so, I think it will make the game so much more amazing. :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=4631#respond' data-commentid="4631" data-postid="245" data-belowelement="comment-4631" data-respondelement="respond" data-replyto="Reply to Cody" aria-label='Reply to Cody'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-4627">
+		<div id="comment-4627">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">justin</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-4627">
+					August 1, 2011 at 4:07 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Guys&#8230; you are like the most technical people i could think of showing this to. When I first saw this about a year ago i thought it was a scam to make people invest in false technology nut now those guys have come up with another demo.</p>
+<p><a href="http://www.youtube.com/watch?v=00gAbgBu8R4&#038;feature=channel_video_title" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.youtube.com/watch?v=00gAbgBu8R4&#038;feature=channel_video_title', 'http://www.youtube.com/watch?v=00gAbgBu8R4&#038;feature=channel_video_title']);" rel="nofollow ugc">http://www.youtube.com/watch?v=00gAbgBu8R4&#038;feature=channel_video_title</a></p>
+<p>Ignacio, Jonathan&#8230; is this for real? if so why isn&#8217;t anyone talking about it or investing or trying to replicate it? Ignacio worked for Nvidia, right? are those guys looking into anything similar?</p>
+<p>a year ago they showed and earlier demo and they got some attention. mostly from people that said it was not true or just a joke or whatever, but why would they come back? I mean if nothing can run this why bother?</p>
+<p><a href="http://www.youtube.com/watch?v=Q-ATtrImCx4" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.youtube.com/watch?v=Q-ATtrImCx4', 'http://www.youtube.com/watch?v=Q-ATtrImCx4']);" rel="nofollow ugc">http://www.youtube.com/watch?v=Q-ATtrImCx4</a>        (year old demo)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=4627#respond' data-commentid="4627" data-postid="245" data-belowelement="comment-4627" data-respondelement="respond" data-replyto="Reply to justin" aria-label='Reply to justin'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-4632">
+		<div id="comment-4632">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6a886180cb92ad614a3ac47cb0009834?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6a886180cb92ad614a3ac47cb0009834?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Cody</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-4632">
+					August 2, 2011 at 1:59 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p><a href="http://www.baytallaah.com/osholibrary/reader.php?endpos=22012&#038;page=11&#038;book=Kyozan%20-%20A%20True%20Man%20of%20Zen" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.baytallaah.com/osholibrary/reader.php?endpos=22012&#038;page=11&#038;book=Kyozan%20-%20A%20True%20Man%20of%20Zen', 'http://www.baytallaah.com/osholibrary/reader.php?endpos=22012&#038;page=11&#038;book=Kyozan%20-%20A%20True%20Man%20of%20Zen']);" rel="nofollow ugc">http://www.baytallaah.com/osholibrary/reader.php?endpos=22012&#038;page=11&#038;book=Kyozan%20-%20A%20True%20Man%20of%20Zen</a></p>
+<p>Here is a link to a page in a book. I was listening to a reading the other day by its author, Osho, and thought of this game. I can only hope there is some relation. Even if not, I&#8217;m sure the curious player will still be able to create their own interpretation.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=4632#respond' data-commentid="4632" data-postid="245" data-belowelement="comment-4632" data-respondelement="respond" data-replyto="Reply to Cody" aria-label='Reply to Cody'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href='http://www.ludicon.com/castano/blog/2014/07/irradiance-caching-continued/' rel='external nofollow ugc' class='url'>Irradiance Caching &#8211; Continued | Ignacio Castaño</a></p>
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8313253">
+		<div id="comment-8313253">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/797133ec36ae66c0e29b816448a8cd87?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/797133ec36ae66c0e29b816448a8cd87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Daniel</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-8313253">
+					April 6, 2015 at 2:10 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Ignacio this article is one of the best Irradiance caching resources on the internet, unfortunately in its current form with all the equations missing, it&#8217;s also one of the biggest computer graphics troll articles on the internet =)  </p>
+<p>Look at all of these amazing results to this really hard problem you are facing but all the equations are gone!  Is there any way to revive the equations?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=8313253#respond' data-commentid="8313253" data-postid="245" data-belowelement="comment-8313253" data-respondelement="respond" data-replyto="Reply to Daniel" aria-label='Reply to Daniel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-8313261">
+		<div id="comment-8313261">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7ad4bdb851198ed3afa475f584f54158?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7ad4bdb851198ed3afa475f584f54158?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.lowtideproductions.com' rel='external nofollow ugc' class='url'>Matthew VanDevander</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-8313261">
+					April 6, 2015 at 2:32 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>At the moment, it does seem that you can still see the equations on the internet archive version: <a href="https://web.archive.org/web/20130121205251/http://the-witness.net/news/2011/07/irradiance-caching-part-1/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'https://web.archive.org/web/20130121205251/http://the-witness.net/news/2011/07/irradiance-caching-part-1/', 'https://web.archive.org/web/20130121205251/http://the-witness.net/news/2011/07/irradiance-caching-part-1/']);" rel="nofollow ugc">https://web.archive.org/web/20130121205251/http://the-witness.net/news/2011/07/irradiance-caching-part-1/</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=8313261#respond' data-commentid="8313261" data-postid="245" data-belowelement="comment-8313261" data-respondelement="respond" data-replyto="Reply to Matthew VanDevander" aria-label='Reply to Matthew VanDevander'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-luis even thread-odd thread-alt depth-1" id="li-comment-8313862">
+		<div id="comment-8313862">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/fdf871ae875d7606f7265022f4c1da36?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/fdf871ae875d7606f7265022f4c1da36?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.artofluis.com' rel='external nofollow ugc' class='url'>Luis Antonio</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-8313862">
+					April 7, 2015 at 10:13 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Should be fixed now! We are using a plugin that converts LaTeX code into a .png and it was defaulting to white on white. Can you guys read it well now?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=8313862#respond' data-commentid="8313862" data-postid="245" data-belowelement="comment-8313862" data-respondelement="respond" data-replyto="Reply to Luis Antonio" aria-label='Reply to Luis Antonio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-8314849">
+		<div id="comment-8314849">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7ad4bdb851198ed3afa475f584f54158?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7ad4bdb851198ed3afa475f584f54158?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.lowtideproductions.com' rel='external nofollow ugc' class='url'>Matthew VanDevander</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/07/irradiance-caching-part-1/#comment-8314849">
+					April 8, 2015 at 2:50 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Looks good. :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/07/irradiance-caching-part-1/?replytocom=8314849#respond' data-commentid="8314849" data-postid="245" data-belowelement="comment-8314849" data-respondelement="respond" data-replyto="Reply to Matthew VanDevander" aria-label='Reply to Matthew VanDevander'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2011/07/irradiance-caching-part-1/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='245' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="ff65937244" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="156"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.225 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:35:21 -->
+
+<!-- super cache -->

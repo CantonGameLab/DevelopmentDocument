@@ -1,0 +1,33 @@
+{
+  "id": "casey-0021",
+  "title": { "zh": "Lister Panel 演示", "en": "Lister Panel Demonstration" },
+  "subtitle": {
+    "en": "A brief video showing how the lister panel works in The Witness.",
+    "zh": "一段简短的视频，演示《The Witness》里 Lister Panel 的工作方式。"
+  },
+  "translator": {
+    "note": "原文此处是一个内嵌的 YouTube 演示视频，归档里只剩占位链接，译文保留原链接、以占位说明代替视频本身；文中提到的 CaseyTown 是 Casey 自己的测试关卡，不含正式关卡内容，所以没有剧透问题。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I am temporarily slammed with work this week due to a time-critical Linux project that came up unexpectedly, so unfortunately I did not have time to write a full Witness Wednesday.  What I did have time for, however, was recording a video of the Lister Panel in action, which is something I originally wanted to post with the first Lister Panel installment, but couldn't due to spoilers.",
+      "zh": "这周我临时被工作压得喘不过气，因为突然冒出来一个时间很紧的 Linux 项目，所以很遗憾，我没时间写一篇完整的 Witness Wednesday（每周三连载）。不过我有时间做的是：录一段 Lister Panel 实际操作的视频。这件事我原本想在 Lister Panel 系列第一篇时就随文发布，但因为剧透而没能做成。"
+    },
+    {
+      "type": "p",
+      "en": "Yes, since the Lister Panel is capable of seeing a great many things, the original video I had recorded for demoing it to the Witness team had a few too many spoiler moments in it, where potentially people could see the locations of things or hints about what things were, and we didn't want to ruin anyone's play experience.  But I finally got around to firing up the Witness machine and recording a video in CaseyTown where there are no spoilers, so here is a quick demo of the Lister Panel, the UI element whose code I've been detailing for the past few weeks.  This should help give you some perspective on what the code does when it's all put together:",
+      "zh": "是的，由于 Lister Panel 能看到非常多的东西，我当初录给 Witness 团队做演示的那段视频里有太多剧透的地方——人们可能从中看到某些东西的位置，或者猜出它们是什么——而我们不想破坏任何人的游戏体验。不过我终于抽出时间把 Witness 那台机器开起来，在 CaseyTown 里录了一段没有剧透的视频。所以下面就是 Lister Panel 的快速演示——这个 UI 控件的代码，我已经细讲了好几周。这应该能帮你换个角度看看，把这些代码全部拼起来之后它到底在干什么："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入视频/媒体](https://www.youtube.com/embed/XEzCy0c3gEU?t=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3;enablejsapi=1)",
+      "zh": "（原文此处嵌入了一段演示视频）"
+    },
+    {
+      "type": "p",
+      "en": "Until next week…",
+      "zh": "下周见……"
+    }
+  ]
+}

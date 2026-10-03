@@ -1,0 +1,921 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Graphics Tech: Shadow Maps (part 1) &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Graphics Tech: Shadow Maps (part 1) Comments Feed" href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2840,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_021.png","alt":"","desc":"","caption":"Banner_02","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_021-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/77" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=77' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2010%2F03%2Fgraphics-tech-shadow-maps-part-1%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=CC18965B7EDFB10AFAEA425E8811BB97');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_021.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='nextgen_basic_singlepic_style-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_basic_singlepic/static/nextgen_basic_singlepic.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-77 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-77" class="post-77 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">Graphics Tech: Shadow Maps (part 1)</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/jon/" title="View all posts by Jonathan Blow">Jonathan Blow</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2010-03-03T18:22:04-07:00">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/" rel="bookmark">March 3, 2010</a>
+				</time>
+			   </span><time class="updated"  datetime="2010-03-03T18:35:57-07:00">March 3, 2010</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p><em>The Witness</em> contains a mixture of indoor and outdoor scenes, but much of the game takes place outdoors with a very long view distance (you can see the entire island at once if you have a good vantage point).  So I wanted to implement a shadow system that would work robustly, provide high visual quality, and allow the player to see everything at once.  I have some experience with shadow systems of this type, but the last one I designed was for computers and graphics cards circa 2004, so I was interested to see how much more would be possible today.</p>
+<p>We've implemented such a modern shadow map system for <em>The Witness</em>.  In the process, we've made some improvements to shadow mapping algorithms beyond anything we've seen published, so we are going to detail the improvements here.  Also, our shadow map system is still being improved, so I'll talk about what we have yet to try and why we think it's a good idea.</p>
+<p>Before we get to those details, though, I'd like to establish some context so that the motivation for these design decisions is clearly explained.</p>
+<p><strong>The Literature</strong></p>
+<p>I have a somewhat cynical attitude toward graphics research literature: most of it describes techniques that don't generally work, but the authors of the papers do the best they can to "sell" the technique to you anyway (using cherry-picked examples, glossing over or completely ignoring failure cases that would be obvious to anyone who understands the algorithm, etc).  As the reader, eventually you come to understand all the problems, but not after investing a lot of your time and energy (possibly months) implementing and understanding an algorithm that behaves so poorly that you never would have bothered if you had known the truth from the outset.</p>
+<p><span id="more-77"></span></p>
+<p>I've had this experience many times, with many different techniques.  Shadow maps, though, have been one of the big ones.  There are many published shadow map techniques that simply don't work well enough to be taken seriously.  And often when I've heard someone say "so-and-so shadow technique is good," it usually turns out they haven't tried it themselves, so it's just hearsay, or else that person has low quality standards.</p>
+<p>So I'd like to put forth the statement that I have high quality standards and will only endorse things that have been found to robustly function; I will be open and honest about the degree to which things don't work, and what the specific problems are.  In an ideal world this would not be necessary to say, but the situation in the literature today makes it otherwise.</p>
+<p><strong>Quality Goals; Previous System</strong></p>
+<p>Many shadow map schemes have been developed that try to maximize the effective resolution of shadows in the scene by performing transformations that are heavily view-dependent.  An extreme example of this is Perspective Shadow Maps.  I have learned through experience not to use these techniques.  They cause shadows to swim and flicker in annoying ways, and many of the algorithms break down severely as the player approaches certain viewing angles.</p>
+<p>For <a href="http://www.number-none.com/happycake/notes_8/index.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.number-none.com/happycake/notes_8/index.html', 'the 2004 system']);" >the 2004 system</a>, I took as a core design goal that shadows should appear rock-solid on nonmoving objects, regardless of any viewpoint motion.  The clearest way to achieve this was to center the shadow map on the viewpoint at all times, never letting the shadow map scale or rotate.  Because a single shadow map cannot cover the world at high resolution within memory and fill constraints, I used a scheme where 4 or more shadow maps of increasing worldspace size were centered on the viewpoint like square doughnuts.  In order to prevent crawling or shimmering, one just ensures that shadow map worldspace positions are snapped to integer multiples of their texel size.  (A family of related techniques, but which don't necessarily center the maps on the viewpoint, soon came into more-common use and took on the moniker Cascaded Shadow Maps.)</p>
+<p>On fixed-function pipeline hardware, this scheme was never quite satisfying (I had to use clip planes to render the scene in many slices, and there were small 1-pixel artifacts due to the resulting imprecision; rendering all the slices was a bit slow).  Modern hardware is able to do this kind of thing much  better.  Also, this scheme wastes a large amount of shadow map memory, because with all the shadow maps centered on the viewpoint, most of the map texels are going to be out of view at any given time.</p>
+<p>Despite the drawbacks, the visual stability of this technique, and its ability to reach across the entire game world, were extremely appealing to me.  Having seen how nicely shadow mapping could behave in practice, this visual stability became a very-high-priority goal in my mind for any future shadow systems.</p>
+<p>So, going into this new system, the goals were (listed in approximate order of importance):</p>
+<ol>
+<li>High performance</li>
+<li>Complete stability under camera motion</li>
+<li>Long view distance</li>
+<li>Visuals can be controlled to suit the style of the game</li>
+<li>Efficient use of texture memory</li>
+</ol>
+<p><strong>The New System</strong></p>
+<p>I started working on the new system by looking at the 2004 system and trying to make it more memory-efficient.  Most likely this would involve moving the shadow maps around in world space, but it wasn't initially clear to me how to do this without introducing problems.  Ignacio pointed me at Michal Valient's article "Stable Rendering of Cascaded Shadow Maps" in <a href="http://www.shaderx6.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.shaderx6.com/', 'ShaderX 6']);" >ShaderX 6</a>, which was exactly what I wanted.  Valient computes bounding spheres around the slices of the view frustum that tell him how much he can move the shadow maps in world space without introducing gaps.</p>
+<p>To illustrate, here are a couple of figures reproduced from his article.  I don't want to unduly step on anyone's copyright, so if you are interested in cutting-edge shadow map techniques, buy ShaderX 6!  <em>(Click for full size.)</em></p>
+<p style="text-align: center;"><a class="shutterset_" href="http://the-witness.net/news/wp-content/gallery/valient-shaderx6-figures/figure_411.png"><img class="ngg-singlepic ngg-center aligncenter" src="http://the-witness.net/news/wp-content/gallery/valient-shaderx6-figures/thumbs/thumbs_figure_411.png" alt="figure_411" /></a></p>
+<p style="text-align: center;"><a class="shutterset_" href="http://the-witness.net/news/wp-content/gallery/valient-shaderx6-figures/figure_412.png"><img class="ngg-singlepic ngg-center aligncenter" src="http://the-witness.net/news/wp-content/gallery/valient-shaderx6-figures/thumbs/thumbs_figure_412.png" alt="figure_412" /></a></p>
+<p style="text-align: left;">So basically, you take the a frustum slice in worldspace, ensure that it is completely enclosed in a sphere, and then ensure that the sphere is completely enclosed in a square cylinder; the square is your shadow map.</p>
+<p style="text-align: left;">You can render multiple frustum slices for multiple shadow maps, so long as the bounding spheres overlap enough to cover the whole frustum when put together (see 4.1.2 c and d).</p>
+<p style="text-align: left;">The reason they are spheres is: because the shadow map is never allowed to change size (we voluntarily imposed that constraint in order to get solid shadows!), then we need to find a shape that conservatively encloses any possible orientation that a frustum slice could occupy as the camera rotates in space.  That's a sphere.  Then we make sure that our shadow map covers that entire sphere, and we have then guaranteed that every point in the view frustum is covered by a valid shadow map  texel.</p>
+<p style="text-align: left;">On top of this, Valient suggests the very helpful optimization of packing all your shadow maps into one atlas texture, so that when it's time to render the scene, you can draw all your shadowed objects in one pass without having to sample multiple textures; you just figure out which frustum slice each pixel lands in, then use that information to determine the offset into the atlas, add that offset to your texture coordinates, and sample the texture.  This works great.  Valient suggests a 2x2 arrangement of textures, as this is convenient on a wide variety of hardware, for example, GPUs that only support power-of-two textures.  So if a single shadow map would be 1024x1024, then you can create a 2048x2048 texture map that contains 4 shadow maps packed in a 2x2 array:</p>
+<p style="text-align: left;"><a href="http://the-witness.net/news/wp-content/uploads/2010/03/4maps.png"><img class="aligncenter size-medium wp-image-92" title="4maps" src="http://the-witness.net/news/wp-content/uploads/2010/03/4maps-251x300.png" alt="" width="251" height="300" /></a></p>
+<p style="text-align: left;">So my first shot at a new system was basically a reimplementation of everything Valient describes.  It didn't take too long, and when it was done, I was very happy with it -- it was clearly much better than the 2004 system.</p>
+<p style="text-align: left;">But...</p>
+<p style="text-align: left;"><strong>Memory Usage</strong></p>
+<p style="text-align: left;">This technique is still a memory hog.  The image stability constraints, which result in us wrapping the frustum slice in a sphere and then the sphere in a box, add margins of unused and barely-used texture space at each step.  Looking at Figure 4.1.2, you can see that a frustum slice only occupies about 50% or 60% of the area of the square that represents your shadow texture.  This implies that half the square is wasted.  <strong>However, the actual situation is worse than this, because the diagram is misleading.</strong></p>
+<p style="text-align: left;">The problem is that the view frustum represented in the diagram is much narrower than the view frustum used in an actual game, and if you re-draw the diagram in realistic proportions, it looks very different.  For an accurate 2D diagram, you are finding a circle that encloses the widest part of your view frustum, which is the 2D trapezoid you get by cutting your frustum in half diagonally (Valient discusses this in his paper as well).  Suppose your game is rendering at a 16:9 aspect ratio, and your field of view is 90 degrees horizontally (this is what we use for <em>The Witness </em>currently.)  The vertical field of view is then going to be about 59 degrees, and the diagonal field of view will be about <strong>98 degrees</strong> (click on image below for explanation).</p>
+<p style="text-align: left;"><a href="http://the-witness.net/news/wp-content/uploads/2010/03/diagonal_fov.png"><img class="aligncenter size-medium wp-image-89" title="diagonal_fov" src="http://the-witness.net/news/wp-content/uploads/2010/03/diagonal_fov-300x213.png" alt="" width="300" height="213" /></a></p>
+<p style="text-align: left;">The frustum slice in Valient's diagram is only about 30 degrees, a huge difference!  So if we have a 98 degree frustum slice, and inscribe that in a circle, and inscribe that circle in a square, what does that look like?  Something like this:</p>
+<p style="text-align: center;"><img class="aligncenter" title="1slice" src="http://the-witness.net/news/wp-content/uploads/2010/03/1slice-300x295.png" alt="" width="300" height="295" /></p>
+<p style="text-align: left;">Recall that the square is your shadow map texture and the innermost trapezoid is your frustum slice (the texels of your texture that may potentially be used).  It covers only a small  area of that square -- and there's no way to make it bigger!  The reason is that for wide frusta like this, the diagonal at the far plane is so long that it dominates the bounding sphere computation, and so the center of the circle has to land on that diagonal so that its diameter can be just barely large enough to enclose it.  (In <em>The Witness</em>, our frustum slices are not proportional, and the way we divided them up, this isn't exactly true for the first 2 shadow maps -- but it is very close to true).  The fact that the circle is centered on the far plane means that automatically half the map is wasted at this orientation -- but the wide angle ensures that much of the other half is wasted too!</p>
+<p style="text-align: left;">You can rotate the view frustum to other orientations and make it look like you are covering more of the shadow map... for example, if you orient the frustum so that the view vector is going straight down into the page, then the frustum's projection onto the paper will be a rectangle, and it will appear to cover much more of the square.  But then you have to keep in mind that some of this coverage is worth a lot more than other coverage in terms of impact on the scene: think about how much space is covered by the texels toward the middle of the frustum projection, versus how much is covered toward the edges (almost none!)</p>
+<p style="text-align: left;">If I add two more frustum slices, so that the total is 3 slices as in 4.1.2, it looks like this:</p>
+<p style="text-align: left;"><a href="http://the-witness.net/news/wp-content/uploads/2010/03/1slice.png"></a><a href="http://the-witness.net/news/wp-content/uploads/2010/03/3slices.png"><img class="aligncenter size-medium wp-image-101" title="3slices" src="http://the-witness.net/news/wp-content/uploads/2010/03/3slices-300x295.png" alt="" width="300" height="295" /></a></p>
+<p style="text-align: left;">That innermost shadow map is just a tiny smudge (now you know why Valient chose a narrow field of view -- for clarity of his figures!)  But notice what else is going on: each shadow map is fully contained within the next-larger shadow map, as with the concentric-square-doughnut system from 2004!  Valient's scheme is better since it gives you more view distance (the squares are not concentric) -- but it can't give you nearly as much view distance as it would like, due to the wide angle of the frustum.</p>
+<p style="text-align: left;"><strong>For Next Time</strong></p>
+<p style="text-align: left;">So, whereas on one level I was very happy with this shadow system's performance and visual quality, it still seemed somewhat wasteful in terms of memory usage.   Next time I'll talk about how we addressed that problem.  Subsequent postings after that will talk about issues like softening the shadow border, blending between slices, and various other implementation tricks.</p>
+<p style="text-align: left;"><strong><br />
+</strong></p>
+<p style="text-align: left;"><strong>To be continued.</strong></p>
+<div><span style="color: #0000ee; -webkit-text-decorations-in-effect: underline;"><br />
+</span></div>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/" title="Permalink to Graphics Tech: Shadow Maps (part 1)" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2010/03/announcing-indie-fund/" rel="prev"><i class="meta-nav-prev"></i> Announcing Indie Fund</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2010/03/graphics-tech-lighting-comparison/" rel="next">Graphics Tech: Lighting Comparison <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				23 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-100">
+		<div id="comment-100">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/773baff73220a2379dc641a93b10756e?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/773baff73220a2379dc641a93b10756e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Asteao</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-100">
+					March 3, 2010 at 8:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This is awesome, its cool to see developers talk about the technologies behind their games. It inspires people to look into a career in game development and it helps beginners get a grasp of what problems they may encounter and how to go about solving them. I look forward reading more about this stuff.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=100#respond' data-commentid="100" data-postid="77" data-belowelement="comment-100" data-respondelement="respond" data-replyto="Reply to Asteao" aria-label='Reply to Asteao'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-101">
+		<div id="comment-101">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/cf71b222bd2b61b0c59e483a8db9182d?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/cf71b222bd2b61b0c59e483a8db9182d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://gohnotes.wordpress.com' rel='external nofollow ugc' class='url'>Leonard McCoy</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-101">
+					March 3, 2010 at 10:28 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>To say that I&#8217;d understood everything in this article would be a huge exaggeration. But, nonetheless, I find it hugely interesting for the same reason I read EVERY of Richard Leadbetter&#8217;s tech articles: I simply want to know how the clock ticks behind the cover.</p>
+<p>Keep them coming.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=101#respond' data-commentid="101" data-postid="77" data-belowelement="comment-101" data-respondelement="respond" data-replyto="Reply to Leonard McCoy" aria-label='Reply to Leonard McCoy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-103">
+		<div id="comment-103">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f93a15e75f335f6e959c8a534c986aed?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f93a15e75f335f6e959c8a534c986aed?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://bjartr.blogspot.com' rel='external nofollow ugc' class='url'>Benjamin DeLillo</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-103">
+					March 3, 2010 at 11:18 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very nice article, this is nearly the level of technical detail I like to see in a development blog. I hope the next article will really dive into the nuts and bolts of implementation.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=103#respond' data-commentid="103" data-postid="77" data-belowelement="comment-103" data-respondelement="respond" data-replyto="Reply to Benjamin DeLillo" aria-label='Reply to Benjamin DeLillo'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-108">
+		<div id="comment-108">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/b185923fea7358034e7449751f650fc7?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/b185923fea7358034e7449751f650fc7?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Tyler</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-108">
+					March 4, 2010 at 5:54 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I have a question regarding following the developer blogs.<br />
+I am looking forward to think game more than any other game that has ever come out. With that being said, when I play The Witness for the first time, I would like it all to feel fresh and new, I am afraid however that if I follow this blog to closely it wont feel fresh the first time I play it. I am worried I will just start to play through what I have already seen via blogs.<br />
+Do you think that I don&#8217;t have anything to worry about, and the experience wont be hampered by that much of a degree?</p>
+<p>I do realize that following the blog will take some of it away, but if it isn&#8217;t by much I will continue to follow you blog very closely.</p>
+<p>Thank you for your time.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=108#respond' data-commentid="108" data-postid="77" data-belowelement="comment-108" data-respondelement="respond" data-replyto="Reply to Tyler" aria-label='Reply to Tyler'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-109">
+		<div id="comment-109">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-109">
+					March 4, 2010 at 6:34 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It is your call!  I would guess that if you follow this blog from now until the game&#8217;s release, that is a *lot* of information, and there isn&#8217;t any way that the game will feel totally fresh.</p>
+<p>However, I am going to try to stay away from spoilers and that kind of thing.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=109#respond' data-commentid="109" data-postid="77" data-belowelement="comment-109" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-112">
+		<div id="comment-112">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c35ea26a47cb485ecfd7f1e17b027b21?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c35ea26a47cb485ecfd7f1e17b027b21?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Benoit FOULETIER</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-112">
+					March 4, 2010 at 9:40 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Thanks Jonathan, I&#8217;ve been using cascading shadows for years and never knew how they were made! Very clear article, concise and complete.</p>
+<p>For those who want more of these &#8220;open development&#8221; blogs, you might be interested in Wolfire&#8217;s blog that has been going on for over a year&#8230; and btw Tyler, they discussed the dilemma of spoiling the freshness just a few days ago! <a href="http://blog.wolfire.com/2010/03/The-dilemma-of-open-development-and-polish" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://blog.wolfire.com/2010/03/The-dilemma-of-open-development-and-polish', 'http://blog.wolfire.com/2010/03/The-dilemma-of-open-development-and-polish']);" rel="nofollow ugc">http://blog.wolfire.com/2010/03/The-dilemma-of-open-development-and-polish</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=112#respond' data-commentid="112" data-postid="77" data-belowelement="comment-112" data-respondelement="respond" data-replyto="Reply to Benoit FOULETIER" aria-label='Reply to Benoit FOULETIER'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-115">
+		<div id="comment-115">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">justin?</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-115">
+					March 4, 2010 at 4:24 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>i just finished Braid like 3 hours ago and it is the best game ever. and yep the princes is the atomic bomb but also a girl. i think it uses the human relationship as a simbol for&#8230; well alot of stuff, it could be interpret as lot of things because the end is very open ended so people can draw conclusions that are very difirent, but there is always the interpretation of the creator and i think that is the most important one.</p>
+<p>mr. Bowl you must feel realy good that Braid has done so much in so little time, imagine how it will be interprept in the future&#8230; i didn&#8217;t use a guide at all like you said and i&#8217;m glad i didn&#8217;t&#8230; ohh and ofcourse i will get the Witness, i hope it comes to PSN. its looking really mystirius  and that technique you talk about looks as if a human being would look at the real world, i love when developers share what goes into their game</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=115#respond' data-commentid="115" data-postid="77" data-belowelement="comment-115" data-respondelement="respond" data-replyto="Reply to justin?" aria-label='Reply to justin?'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-119">
+		<div id="comment-119">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/58f1445195c866686944cd05d142c40b?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/58f1445195c866686944cd05d142c40b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">SylHar</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-119">
+					March 5, 2010 at 1:54 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>&lt;&gt;<br />
+I&#8217;m happy to hear that. As I always had disappointing result with my own shadow map.<br />
+I&#8217;m using parallel split shadow map. It&#8217;s working but I still have few artifact here and there.<br />
+So I&#8217;m waiting impatiently for the second part.</p>
+<p>Question : how often do you update your shadow map with the movement of your camera ? What kind of bias do you use ?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=119#respond' data-commentid="119" data-postid="77" data-belowelement="comment-119" data-respondelement="respond" data-replyto="Reply to SylHar" aria-label='Reply to SylHar'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-121">
+		<div id="comment-121">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-121">
+					March 5, 2010 at 4:38 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The shadow maps are currently updated every frame.</p>
+<p>There&#8217;s a Z bias in the shadow map depth test that is proportional to that particular shadow map&#8217;s texel size.  I think it is 0.7 of a texel or thereabouts.  Currently we render shadows using the parts of geometry that are front-facing to the light source, so that equates to the front face&#8217;s position plus 0.7 of a texel in Z.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=121#respond' data-commentid="121" data-postid="77" data-belowelement="comment-121" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-131">
+		<div id="comment-131">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f924e29ff3eb0642a3e3d780ee46a084?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f924e29ff3eb0642a3e3d780ee46a084?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Andreas Brinck</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-131">
+					March 9, 2010 at 10:56 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Johan Andersson at DICE has made a presentation of how the shadow map utilization was increased in their frostbite engine:</p>
+<p><a href="http://www.slideshare.net/repii/02-g-d-c09-shadow-and-decals-frostbite-final3flat" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.slideshare.net/repii/02-g-d-c09-shadow-and-decals-frostbite-final3flat', 'http://www.slideshare.net/repii/02-g-d-c09-shadow-and-decals-frostbite-final3flat']);" rel="nofollow ugc">http://www.slideshare.net/repii/02-g-d-c09-shadow-and-decals-frostbite-final3flat</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=131#respond' data-commentid="131" data-postid="77" data-belowelement="comment-131" data-respondelement="respond" data-replyto="Reply to Andreas Brinck" aria-label='Reply to Andreas Brinck'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-137">
+		<div id="comment-137">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/599ebd48d5da2bef52921464ab8751d6?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/599ebd48d5da2bef52921464ab8751d6?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">alastair john jack</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-137">
+					March 16, 2010 at 4:27 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>What size is your monitor Jon? It looks 4:3.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=137#respond' data-commentid="137" data-postid="77" data-belowelement="comment-137" data-respondelement="respond" data-replyto="Reply to alastair john jack" aria-label='Reply to alastair john jack'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-138">
+		<div id="comment-138">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-138">
+					March 16, 2010 at 6:03 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It&#8217;s a 16:10 monitor.  2560&#215;1600.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=138#respond' data-commentid="138" data-postid="77" data-belowelement="comment-138" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-151">
+		<div id="comment-151">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/37bda315827e286dab591226550d1bca?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/37bda315827e286dab591226550d1bca?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Thomas Bowen</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-151">
+					March 17, 2010 at 7:11 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>So Jon, is the engine for this game being written from the ground up or is it based on an existing engine? Really interesting entry btw.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=151#respond' data-commentid="151" data-postid="77" data-belowelement="comment-151" data-respondelement="respond" data-replyto="Reply to Thomas Bowen" aria-label='Reply to Thomas Bowen'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-152">
+		<div id="comment-152">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/887a008b3167d39de3d2824fb6de50e8?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/887a008b3167d39de3d2824fb6de50e8?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Dennis Steller</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-152">
+					March 19, 2010 at 2:49 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It&#8217;s really good to see this kind of information up. I dont understand anything written in this entry but knowing that your taking so much care with the development of your next game is enough assurance for me. I loved how Braid make me think. And hearing about the creation of your next game makes me excited. Keep it up! I know this game will change the way I play games the same way Braid did!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=152#respond' data-commentid="152" data-postid="77" data-belowelement="comment-152" data-respondelement="respond" data-replyto="Reply to Dennis Steller" aria-label='Reply to Dennis Steller'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-166">
+		<div id="comment-166">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/8855f91e22e4ca4cf5ea656facd31ee0?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/8855f91e22e4ca4cf5ea656facd31ee0?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sebastian Sylvan</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-166">
+					March 27, 2010 at 5:26 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The way we arrange our bounding spheres is that we don&#8217;t give you a splitting plane to specify them, the only parameters we give the artists is the radius of each bounding sphere. Then we arrange each of them so that their &#8220;back&#8221; touches the far intersection of the previous one with the frustum. This way you get minimal overlap between bounding spheres, while not having any gaps between them.</p>
+<p>The important realisation was that we don&#8217;t really care that much about having a straight splitting plane involved here at all, so the important thing isn&#8217;t to match a sphere to splitting plane, the important thing is to push all of our spheres forward as much as possible while not leaving any gaps. So the first sphere is pushed forward as much as possible while still containing the near plane. Then we compute the far intersection of this sphere with the frustum, and the second sphere is pushed forward as mush as possible while still containing that intersection, and so on.</p>
+<p>In the shader we just check the shadow-space coordinate for each cascade to see if we need to move to the next one, so you always choose the higher res map when there&#8217;s overlap.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=166#respond' data-commentid="166" data-postid="77" data-belowelement="comment-166" data-respondelement="respond" data-replyto="Reply to Sebastian Sylvan" aria-label='Reply to Sebastian Sylvan'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-168">
+		<div id="comment-168">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-168">
+					March 27, 2010 at 9:39 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Sebastian, that&#8217;s an interesting way to think about it that obviously works.  It might introduce some further dependency on camera orientation, but that already exists in the Valient scheme if one uses view-depth as the way to decide which shadow map to use (as suggested in the GPG6 article).</p>
+<p>Did you guys find a big win doing it this way?</p>
+<p>In terms of checking the coordinates&#8230; how do you do that efficiently?  You need to check if either u or v is outside of either 0 or 1, right?  I guess if you rotate the global shadow map depending on which way the camera is facing, you might be able to just test against 1.  But that may interfere with the other optimization that I am going to post about next&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=168#respond' data-commentid="168" data-postid="77" data-belowelement="comment-168" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-169">
+		<div id="comment-169">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-169">
+					March 27, 2010 at 10:05 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hmm, one could actually just test against the sphere instead of testing texture coordinates.  I wonder if that would be faster.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=169#respond' data-commentid="169" data-postid="77" data-belowelement="comment-169" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-170">
+		<div id="comment-170">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/8855f91e22e4ca4cf5ea656facd31ee0?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/8855f91e22e4ca4cf5ea656facd31ee0?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sebastian Sylvan</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-170">
+					March 27, 2010 at 11:33 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Jonathan, the big win is that we get pretty good shadow map resolution, the downside is that your transition regions are circular (in principle, for any given view it&#8217;s obviously a box since the shadow space will clamp to the sphere) so you could get lower res shadows around the edges of the screen compare to the centre for objects at the same distance but to be honest that&#8217;s actually pretty awesome because important stuff generally happens near the centre of the frustum so you&#8217;d want to skew resolution to that area, and again for any given view you typically get the shadow frustum for the higher res cascade cover a large part of the &#8220;low res&#8221; region in the overlapping area anyway so it&#8217;s not generally a problem except for very specific views (this advantage would go away if you just test the bounding sphere).</p>
+<p>For testing the coordinates I just transform into the space of the first shadow so that the x,y coordinates are in -1,1 range, and the z is in 0,1, then I take the abs (free) which pushes all valid coordinates to the 0,1 range, any invalid coordinate would now be &gt;1, and then I do max4 (Xbox 360) to get the biggest one which avoids checking each of them, if this is greater than 1, then we&#8217;re outside the frustum.</p>
+<p>Currently I just transform the coordinate again for the second cascade (we&#8217;re pretty fetch bound so no need to get fancy with the ALU cycles at the moment), but in since your cascades are all aligned the differences between coordinates in one of them to the next is just a scale and offset, so a single mad would actually do to move to the next one.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=170#respond' data-commentid="170" data-postid="77" data-belowelement="comment-170" data-respondelement="respond" data-replyto="Reply to Sebastian Sylvan" aria-label='Reply to Sebastian Sylvan'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-397">
+		<div id="comment-397">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7058a2eb397c63c967e277a20ab0d89b?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7058a2eb397c63c967e277a20ab0d89b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://tryzbiak.spaces.live.com/blog/' rel='external nofollow ugc' class='url'>Tim</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-397">
+					May 23, 2010 at 10:16 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Great read and is helping me a lot.  I&#8217;ve implemented a PSSM, but I find the shimmering when I move or look around annoying.  This is exactly what I needed to move in the right direction.</p>
+<p>Please keep posting :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=397#respond' data-commentid="397" data-postid="77" data-belowelement="comment-397" data-respondelement="respond" data-replyto="Reply to Tim" aria-label='Reply to Tim'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-506">
+		<div id="comment-506">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d8444640f0368b9ddf56e3042f89a0ca?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d8444640f0368b9ddf56e3042f89a0ca?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.perpetuum-online.com' rel='external nofollow ugc' class='url'>BoyC</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-506">
+					June 24, 2010 at 2:58 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very nice article, there are too few of these &#8211; when you&#8217;re new to the subject you need to do a lot of digging first to find something this clear :)<br />
+I was wondering how you&#8217;d handle the stability issues with a dynamic light say a day-night cycle? I couldn&#8217;t find anything on that subject for now.<br />
+We have a CSM implementation for our outdoor scenes with dynamic lighting and the best solution I could find around the issue was to only update the shadow casting light direction every 15 seconds or so. This introduced highly visible pops in the shadows of course, but it&#8217;s a lot better than the constant shimmering from the moving light.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=506#respond' data-commentid="506" data-postid="77" data-belowelement="comment-506" data-respondelement="respond" data-replyto="Reply to BoyC" aria-label='Reply to BoyC'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-507">
+		<div id="comment-507">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-507">
+					June 25, 2010 at 5:53 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>In this game, we don&#8217;t have a dynamic day cycle, so I just don&#8217;t worry about it.  I have noticed that for example Assassin&#8217;s Creed 2 does what you are talking about (with the accompanying pops).  If you are willing to burn some memory and bandwidth, then you can of course just keep the most recent two sets of shadow maps around and interpolate between them to get rid of those pops.  I think that would feel pretty stable.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=507#respond' data-commentid="507" data-postid="77" data-belowelement="comment-507" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-2168">
+		<div id="comment-2168">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/972af412e2d5829f3e60adcfced2e043?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/972af412e2d5829f3e60adcfced2e043?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Larry_Croft</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-2168">
+					January 3, 2011 at 5:22 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Can anyone here recommend me some beginner&#8217;s literature (preferably a book) about this topic? Looks really interesting, but right now I only get parts of it&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=2168#respond' data-commentid="2168" data-postid="77" data-belowelement="comment-2168" data-respondelement="respond" data-replyto="Reply to Larry_Croft" aria-label='Reply to Larry_Croft'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-2468376">
+		<div id="comment-2468376">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/cca83d66aa6accb78c8bd5ea5918d58f?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/cca83d66aa6accb78c8bd5ea5918d58f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Brocoliser</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/#comment-2468376">
+					September 24, 2013 at 10:59 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Looking at the pictures I realized something. Perspective Shadow Maps attempt to keep its buffers tight, by sacrificing stability, but you could use their same concept of a perspective-distorted projection without necessarely ajusting that distortion dynamically. With that said, you could settle for the optimal projection based on the same frustum slice inside sphere inside square concept of Valient, and tighten you perspective projection around the worst case scenario possible camera frustra (the 98º trapezoid in your pictures) So you get the best shadow map utilization, and stability. Maybe that&#8217;s exaclty our solution? Maybe I&#8217;m missing some limitation that does not make my suggestion practical? The whole thing is actually kind of hard to picture haha.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/03/graphics-tech-shadow-maps-part-1/?replytocom=2468376#respond' data-commentid="2468376" data-postid="77" data-belowelement="comment-2468376" data-respondelement="respond" data-replyto="Reply to Brocoliser" aria-label='Reply to Brocoliser'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2010/03/graphics-tech-shadow-maps-part-1/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='77' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6d1ea2e661" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="212"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.211 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:41:10 -->
+
+<!-- super cache -->

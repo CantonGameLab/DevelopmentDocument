@@ -1,0 +1,16 @@
+{
+  "id": 719,
+  "slug": "hlslparser",
+  "date": "2014-08-29T00:42:12",
+  "modified": "2022-08-23T14:44:36",
+  "link": "https://www.ludicon.com/castano/blog/2014/08/hlslparser/",
+  "title": "HLSLParser",
+  "excerpt": "<p>We are using Max McGuire’s HLSLParser in The Witness and I just published all my changes in Thekla&#8217;s github repository. I also wrote some notes about our motivation, the changes we made and how are we using it at The Witness blog.</p>\n",
+  "content": "<p>We are using Max McGuire’s <a href=\"https://github.com/unknownworlds/hlslparser\">HLSLParser</a> in <a href=\"http://the-witness.net\">The Witness</a> and I just published all my changes in <a href=\"https://github.com/Thekla/hlslparser\">Thekla&#8217;s github repository</a>.</p>\n<p>I also wrote some notes about our motivation, the changes we made and how are we using it at <a href=\"http://the-witness.net/news/2014/08/hlslparser/\">The Witness blog</a>.</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": [
+    20
+  ]
+}

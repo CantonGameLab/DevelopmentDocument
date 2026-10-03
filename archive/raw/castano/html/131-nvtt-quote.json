@@ -1,0 +1,14 @@
+{
+  "id": 131,
+  "slug": "nvtt-quote",
+  "date": "2009-04-24T16:40:13",
+  "modified": "2019-01-17T23:42:57",
+  "link": "https://www.ludicon.com/castano/blog/2009/04/nvtt-quote/",
+  "title": "NVTT quote",
+  "excerpt": "<p>I love this quote from Ivan-Assen Ivanov about the NVIDIA Texture Tools: We switched to CUDA nvcompress in our pipeline and totally forgot about it. Until yesterday, when an artist had to work on a 7600 for a while, and raised hell about how slow the export has become. :-)</p>\n",
+  "content": "<p>I love this quote from <a href=\"http://twitter.com/ivanassen\">Ivan-Assen Ivanov</a> about the NVIDIA Texture Tools:</p>\n<blockquote><p>We switched to CUDA nvcompress in our pipeline and totally forgot<br />\nabout it. Until yesterday, when an artist had to work on a 7600 for a<br />\nwhile, and raised hell about how slow the export has become.\n</p></blockquote>\n<p>:-)</p>\n",
+  "categories": [
+    9
+  ],
+  "tags": []
+}

@@ -1,0 +1,48 @@
+{
+  "id": "official-2014-02-20-marsh-update",
+  "title": { "zh": "沼泽更新", "en": "Marsh Update" },
+  "subtitle": {
+    "en": "The whole art team rebuilds the marsh, from its main structures down to the colors of the algae pools.",
+    "zh": "整个美术团队重做沼泽：从主体结构到藻类水池的颜色。"
+  },
+  "translator": {
+    "note": "原文正文只有一段，后面跟着 6 行配图（共 7 张），其中第 5 行是两张图排在同一行；各图按源顺序逐个保留为占位段落，图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The marsh had been left unresolved for a long time, so we decided to tear it apart and finish it as a team. Eric updated the main structures, Alex adjusted the catwalks, Luis took care of all the lowest structures, and I handled the vegetation and general colors. Color was a big challenge in getting the area to look nice, since it is a marsh research facility with lots of crazy colored algae pools...there was a high risk of making it look like a clown exploded on it. With some careful color choices, attention to every detail and blocking in the views on a step by step basis, however, I think we managed to avoid that risk and succeeded in creating a pleasant, colorful area:",
+      "zh": "沼泽这块被搁置了很久，所以我们决定把它拆开来、以团队的形式做完。Eric 更新了主体结构，Alex 调整了栈道，Luis 负责所有位置最低的结构，我处理植被和整体色彩。要让这片区域好看，色彩是最大的挑战，因为这是一座沼泽研究设施，有很多颜色离谱的藻类水池……很可能看起来就像有小丑在这里炸开了。不过，靠着仔细的色彩取舍、对每一个细节的在意，以及一步一步地遮挡视线，我想我们成功避开了那个风险，做出了一个讨人喜欢、色彩丰富的区域："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_07_n06.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_05_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_05_n03.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_05_n05.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_08_n08.png) ![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_11_n11.png)",
+      "zh": "（原文此处有两张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/shot_2014.02.20__time_13_10_n10.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

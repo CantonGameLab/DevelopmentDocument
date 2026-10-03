@@ -1,0 +1,412 @@
+{
+  "id": "castano-2026-06-04-spark-for-unity",
+  "title": {
+    "zh": "Spark for Unity",
+    "en": "Spark for Unity"
+  },
+  "subtitle": {
+    "zh": "把 Spark 的纹理编解码器带进 Unity：GPU 上的运行时纹理压缩，以及它和内置 Texture2D.Compress 的对比。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文有三处归档压平，均已对照原始 HTML（`archive/raw/castano/html/1837-spark-for-unity.json`）还原：(1) 格式支持表与两张 RMSE 质量表被拆成「一行一个单元格」，译文各还原为一个 `code` 块（`lang: \"text\"`）、空格对齐列并保留表头行，格式名与数值逐字未改（表头首列为空是原文如此）；(2) 两处 `cmp-tabs` 图像对比控件被归档压成「两个页签文字 / 一张图 / 一个当前标签」四行，译文各还原为「一个两项 `list`（页签）+ 一个图片占位 `p` + 一个标签 `p`」；(3) 一段 YouTube 嵌入视频在归档 md 里被写成 `[嵌入媒体](…)`，译文按源文逐字保留该行（`zh` 写「（原文此处嵌入了一段视频）」）。`### `、`#### ` 级小标题一律降级为 `h2`。四处代码围栏在源文里没有语言标注，均为单行内容/表格数据，标为 `text`，内容逐字保留。源文里 `### How Spark compares to Texture2D.Compress` 这一行归档时丢掉了 `*Spark*` 的斜体与反引号，译文按 md 原文保留（未补回标记）；两处列表项在原始 HTML 里带 `<strong>` 强调，归档 md 已无标记，译文同样以 md 为准。术语：`chart`/`texel` 未出现；`endpoint` 未出现；`block` 作「块」、`tile` 作「图块」、`atlas` 作「图集」、`mipmap` 不译；产品与 API 名（Spark、`Spark for Unity`、Unity、`Texture2D`、`Texture2D.Compress`、`Spark.EncodeTexture`、`SparkFormat.RGB`、`RenderTexture`、`StreamingAssets`、`glTF`、`glTFast`、`spark.js`、URP、HDRP、Built-in、Metal、Vulkan、OpenGL ES 3.1、Direct3D、DXC、SPIR-V、SPIRV-Cross、HLSL、`spirv-opt`、`hlsl`、BC1/BC3/BC4/BC5/BC7、ETC2、EAC_R、EAC_RG、ETC2_RGBA、ASTC、PNG、JPEG、RMSE、async compute、EULA）一律保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Today I’m releasing *Spark for Unity*, a Unity package that brings the *Spark* texture codecs to the Unity engine. It’s available now on [GitHub](https://github.com/ludicon/spark-unity) and it’s free for projects with lifetime revenue under $100K.",
+      "zh": "今天我发布 *Spark for Unity*，这是一个把 *Spark* 纹理编解码器带进 Unity 引擎的 Unity 包。它现在已经在 [GitHub](https://github.com/ludicon/spark-unity) 上，并且对终身营收低于 10 万美元的项目免费。"
+    },
+    {
+      "type": "p",
+      "en": "Unity’s built-in runtime texture compression is CPU-bound, limited in format support, and often too slow for real-time use cases. *Spark for Unity* brings GPU-native texture compression to Unity, making it practical to compress textures at runtime in real-time.",
+      "zh": "Unity 内置的运行时纹理压缩受 CPU 限制、支持的格式有限，而且对实时用例来说往往太慢。*Spark for Unity* 把 GPU 原生的纹理压缩带到 Unity，让运行时实时压缩纹理变得可行。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Texture2D compressed = Spark.EncodeTexture(source, SparkFormat.RGB);"
+    },
+    {
+      "type": "p",
+      "en": "That single line takes an existing texture and produces a standard `Texture2D` in a GPU-native format (BC7 or ASTC depending on the device), ready to assign to a material. It runs entirely on the GPU, at least an order of magnitude faster than Unity’s `Texture2D.Compress`, and produces higher quality results.",
+      "zh": "这一行代码取一张已有的纹理，产出一张 GPU 原生格式（视设备而定是 BC7 还是 ASTC）的标准 `Texture2D`，可以直接赋给材质。它完全在 GPU 上运行，至少比 Unity 的 `Texture2D.Compress` 快一个数量级，而且结果质量更高。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/06/unity-screenshot-700x472.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The package works across all Unity render pipelines (URP, HDRP, and Built-in) without modification. It’s been tested on Metal (macOS, iOS), Vulkan (Android, Windows), OpenGL ES 3.1 (Android), and Direct3D (Windows), on Unity versions 6.3 to 6.6.",
+      "zh": "这个包无需改动即可在所有 Unity 渲染管线上工作（URP、HDRP 和 Built-in）。它已在 Metal（macOS、iOS）、Vulkan（Android、Windows）、OpenGL ES 3.1（Android）和 Direct3D（Windows）上测试过，Unity 版本覆盖 6.3 到 6.6。"
+    },
+    {
+      "type": "p",
+      "en": "If you want to see it running, the [demo app](https://ludicon.com/spark/#demo) is available for iOS, Android, macOS, and Windows.",
+      "zh": "想看看它跑起来的样子，[demo app](https://ludicon.com/spark/#demo) 已提供 iOS、Android、macOS 和 Windows 版本。"
+    },
+    {
+      "type": "h2",
+      "id": "how-spark-compares-to-texture2d-compress",
+      "en": "How Spark compares to Texture2D.Compress",
+      "zh": "Spark 与 Texture2D.Compress 的对比"
+    },
+    {
+      "type": "p",
+      "en": "Unity ships with a built-in runtime compressor, [`Texture2D.Compress`](https://docs.unity3d.com/ScriptReference/Texture2D.Compress.html). This is the natural choice for anyone compressing textures at runtime in Unity. However, the built-in compressor runs on the CPU, and uses a single thread.",
+      "zh": "Unity 自带一个运行时压缩器，[`Texture2D.Compress`](https://docs.unity3d.com/ScriptReference/Texture2D.Compress.html)。对任何要在 Unity 里运行时压缩纹理的人来说，它都是自然而然的选择。但这个内置压缩器跑在 CPU 上，而且只用单线程。"
+    },
+    {
+      "type": "p",
+      "en": "Texture compression is intrinsically parallel and therefore maps very well to the GPU. The GPU executes this work much more efficiently, and because it runs off the main thread, it doesn’t block frame execution. On GPUs that support it, *Spark* can also run on the async compute queue, overlapping with rendering work and reducing the total frame cost further.",
+      "zh": "纹理压缩天生就是并行的，因此非常适合放到 GPU 上。GPU 执行这类工作要高效得多；而且因为它跑在主线程之外，不会阻塞帧的执行。在支持的 GPU 上，*Spark* 还能跑在 async compute 队列上，与渲染工作重叠，进一步降低整帧开销。"
+    },
+    {
+      "type": "p",
+      "en": "Runtime-generated textures make the case even stronger. Source texture data is often generated in the GPU (mipmaps, procedural shaders, render targets, virtual texture tiles) and is always consumed by the GPU. Compressing this data on the CPU would require a read-back and upload which would dramatically reduce performance. Encoding on the GPU is the natural fit for the data flow.",
+      "zh": "运行时生成的纹理让这个理由更加充分。源纹理数据往往就是在 GPU 上生成的（mipmap、程序化着色器、渲染目标、虚拟纹理图块），也总是由 GPU 来使用。在 CPU 上压缩这些数据就需要回读再上传，性能会断崖式下降。在 GPU 上编码才是符合数据流向的做法。"
+    },
+    {
+      "type": "h2",
+      "id": "supported-formats",
+      "en": "Supported Formats",
+      "zh": "支持的格式"
+    },
+    {
+      "type": "p",
+      "en": "The compressed formats available through the built-in API are limited. Modern formats like ASTC and BC7 are not supported, and format selection is dictated by the target platform rather than the underlying device.",
+      "zh": "通过内置 API 能用的压缩格式有限。ASTC 和 BC7 这类现代格式不受支持，而且格式的选择由目标平台决定，而不是由实际设备决定。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "      `Texture2D.Compress`  *Spark*\nR     BC4 / EAC_R           BC4 / EAC_R\nRG    BC5 / EAC_RG          BC5 / EAC_RG\nRGB   BC1 / ETC2            BC7 / ASTC / BC1 / ETC2\nRGBA  BC3 / ETC2            BC7 / ASTC"
+    },
+    {
+      "type": "p",
+      "en": "*Spark* supports both high-quality (BC7, ASTC) and low-bitrate (BC1, ETC2) formats for RGB content, letting you choose based on memory and quality requirements. For RGBA, *Spark* targets BC7 and ASTC exclusively. These formats are widely available, have the same memory footprint as BC3 and ETC2_RGBA, and produce higher quality results.",
+      "zh": "*Spark* 对 RGB 内容同时支持高质量格式（BC7、ASTC）和低码率格式（BC1、ETC2），让你按内存和质量需求来选。对 RGBA，*Spark* 只针对 BC7 和 ASTC。这些格式都很普及，内存占用与 BC3、ETC2_RGBA 相同，而结果质量更高。"
+    },
+    {
+      "type": "p",
+      "en": "Note that many iOS and Android devices now support BC formats. The built-in path never targets BC formats on those devices; it defaults to ETC2. *Spark*, in contrast, selects the best format the device supports.",
+      "zh": "注意，现在很多 iOS 和 Android 设备都支持 BC 格式。内置那条路径在这些设备上从不选择 BC 格式，而是默认用 ETC2。相比之下，*Spark* 会选择设备支持的最好格式。"
+    },
+    {
+      "type": "h2",
+      "id": "performance",
+      "en": "Performance",
+      "zh": "性能"
+    },
+    {
+      "type": "p",
+      "en": "Encoding a 1024×1024 texture takes about 1 ms with *Spark* on a budget Android device like the Galaxy A15, compared to over 10ms with the built-in encoder. On desktop and high-end mobile devices, performance is significantly higher.",
+      "zh": "在 Galaxy A15 这类入门级 Android 设备上，用 *Spark* 编码一张 1024×1024 的纹理大约需要 1 ms，而内置编码器要 10 ms 以上。在桌面端和高端移动设备上，性能还要高得多。"
+    },
+    {
+      "type": "p",
+      "en": "The chart below compares performance across desktop, high-end mobile, and budget mobile:",
+      "zh": "下图对比了桌面端、高端移动端和入门级移动端的性能："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/06/unity-builtin-vs-spark-700x393.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The demo app includes a benchmark that runs the full comparison on your own device.",
+      "zh": "demo app 里带一个基准测试，可以在你自己的设备上跑完整的对比。"
+    },
+    {
+      "type": "h2",
+      "id": "quality",
+      "en": "Quality",
+      "zh": "质量"
+    },
+    {
+      "type": "p",
+      "en": "*Spark* and the built-in encoder make different format choices, so a direct comparison isn’t as clean as the throughput chart. Here’s how each performs on the formats they share, measured as RMSE (lower is better) on an 8-bit scale. Note that *Spark*’s codecs are tuned for perceptual quality, which RMSE captures only partially. The visual examples later in the section are a more representative.",
+      "zh": "*Spark* 和内置编码器选择的格式不同，所以直接对比不像吞吐量图表那么干净。下面是两者在共同支持的格式上的表现，以 8 位尺度上的 RMSE 衡量（越低越好）。注意 *Spark* 的编解码器是按感知质量调优的，而 RMSE 只能部分反映这一点。本节后面的视觉示例更有代表性。"
+    },
+    {
+      "type": "h2",
+      "id": "desktop-bc-formats",
+      "en": "Desktop (BC) formats:",
+      "zh": "桌面端（BC）格式："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "          Format     Texture2D.Compress  Spark\nR         BC4        3.96                0.55\nRG        BC5        6.27                1.89\nRGB – lo  BC1        4.91                4.41\nRGB – hi  BC7        N/A                 2.16\nRGBA      BC3 / BC7  3.60                2.74"
+    },
+    {
+      "type": "h2",
+      "id": "mobile-etc-astc-formats",
+      "en": "Mobile (ETC / ASTC) formats:",
+      "zh": "移动端（ETC / ASTC）格式："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "          Format       Texture2D.Compress  Spark\nR         EAC_R        0.69                0.78\nRG        EAC_RG       2.12                2.49\nRGB – lo  ETC2         4.57                4.58\nRGB – hi  ASTC         N/A                 2.32\nRGBA      ETC2 / ASTC  4.29                3.19"
+    },
+    {
+      "type": "p",
+      "en": "The mobile ETC2 codecs in Unity are competitive with *Spark’*s, and slightly better on some single- and dual-channel formats. *Spark for Unity* ships the lower-quality ETC variants by default to maximize throughput on mobile; higher-quality ETC encoders are available in the full *Spark* codec suite, but the difference rarely makes a perceptual impact at runtime.",
+      "zh": "Unity 里移动端的 ETC2 编解码器与 *Spark* 的不相上下，在某些单通道和双通道格式上还略好一些。*Spark for Unity* 默认发布质量较低的 ETC 变体，以在移动端最大化吞吐；更高质量的 ETC 编码器在完整的 *Spark* 编解码器套件里可以拿到，但在运行时，这点差别很少带来可感知的影响。"
+    },
+    {
+      "type": "p",
+      "en": "The BC story is different. Unity’s built-in BC implementations produce visible artifacts on most content, while *Spark*’s output is much closer to the original:",
+      "zh": "BC 的情况就不一样了。Unity 内置的 BC 实现在大多数内容上都会产生肉眼可见的瑕疵，而 *Spark* 的输出要接近原图得多："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Unity built-in",
+          "zh": "Unity 内置编码器"
+        },
+        {
+          "en": "Spark",
+          "zh": "Spark"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/06/unity-builtin-bc1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unity built-in",
+      "zh": "Unity 内置编码器"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Unity built-in",
+          "zh": "Unity 内置编码器"
+        },
+        {
+          "en": "Spark",
+          "zh": "Spark"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/06/unity-builtin-bc4.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Unity built-in",
+      "zh": "Unity 内置编码器"
+    },
+    {
+      "type": "p",
+      "en": "The tables also miss an important advantage. On many modern iOS and Android devices, *Spark* can target BC formats directly, while Unity’s built-in compressor is restricted to ETC2. In practice this often means both higher quality and faster encoding on the same device.",
+      "zh": "这些表还漏掉了一个重要优势。在很多现代 iOS 和 Android 设备上，*Spark* 可以直接选用 BC 格式，而 Unity 的内置压缩器只能用 ETC2。实践中这往往意味着在同一台设备上既有更高质量、又有更快的编码速度。"
+    },
+    {
+      "type": "h2",
+      "id": "the-demo",
+      "en": "The Demo",
+      "zh": "Demo"
+    },
+    {
+      "type": "p",
+      "en": "The demo focuses on two scenarios that exercise *Spark for Unity* in different ways.",
+      "zh": "这个 demo 聚焦两个以不同方式检验 *Spark for Unity* 的场景。"
+    },
+    {
+      "type": "p",
+      "en": "**Procedural virtual texturing.** A simplified virtual texturing pipeline built around a single 16 MB compressed atlas and an indirection texture. The virtual texture itself is 1,048,576 × 1,048,576, far larger than would fit in memory without virtualization. As the camera moves, the system identifies which tiles are visible, evaluates the Mandelbrot fractal on the GPU to render them, compresses them with *Spark*, and copies the results into free slots in the atlas. The indirection texture is updated to point each visible region at its newly-compressed tile.",
+      "zh": "**程序化虚拟纹理。** 一条简化版虚拟纹理管线，围绕一张 16 MB 的压缩图集和一张间接引用纹理搭建。虚拟纹理本身是 1,048,576 × 1,048,576，远超不做虚拟化时内存所能容纳的规模。相机移动时，系统判断哪些图块可见，在 GPU 上用 Mandelbrot 分形渲染它们，用 *Spark* 压缩，再把结果拷进图集里的空槽位。间接引用纹理会更新，把每个可见区域指向它新压缩好的图块。"
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/mGip64OyygU?feature=oembed)",
+      "zh": "（原文此处嵌入了一段视频）"
+    },
+    {
+      "type": "p",
+      "en": "This isn’t a production virtual texturing engine, but the minimum pipeline that exercises the runtime-compression part of the problem. It demonstrates the use case: *Spark* makes it practical to compress tiles on the same frame they’re generated, without leaving the GPU, and without significant impact to quality or performance.",
+      "zh": "这不是一套生产级的虚拟纹理引擎，而是能跑通「运行时压缩」这部分问题的最小管线。它演示了这个用例：*Spark* 让「在图块生成的同一帧里压缩它们」变得可行——既不必离开 GPU，也不会对质量或性能造成明显影响。"
+    },
+    {
+      "type": "p",
+      "en": "**Runtime texture transcoding.** Textures distributed as PNG or JPEG, placed in `StreamingAssets` so they bypass Unity’s build-time processing and ship as-is. At load time, the demo decodes them and uses *Spark* to compress them to the appropriate GPU format. The same approach works for glTF assets: the demo loads them with [glTFast](https://github.com/atteneder/glTFast) and provides a custom image loader that compresses textures at load time.",
+      "zh": "**运行时纹理转码。** 纹理以 PNG 或 JPEG 形式分发，放进 `StreamingAssets` 以绕过 Unity 的构建期处理、原样打包。加载时，demo 解码它们，再用 *Spark* 压缩成合适的 GPU 格式。同样的思路也适用于 glTF 资源：demo 用 [glTFast](https://github.com/atteneder/glTFast) 加载它们，并提供一个自定义的图像加载器，在加载时就压缩纹理。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/06/screenshot-gltf-700x359.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Full source code is in the [GitHub repository](https://github.com/ludicon/spark-unity).",
+      "zh": "完整源码在 [GitHub 仓库](https://github.com/ludicon/spark-unity)里。"
+    },
+    {
+      "type": "h2",
+      "id": "how-it-works",
+      "en": "How it Works",
+      "zh": "工作原理"
+    },
+    {
+      "type": "p",
+      "en": "The basic technique behind GPU texture compression in Unity was demonstrated by Aras Pranckevičius in [UnityGPUTexCompression](https://github.com/aras-p/UnityGPUTexCompression): run the encoder in a compute shader, write the compressed blocks to a UINT `RenderTexture`, copy the `RenderTexture` into a `Texture2D` with the appropriate compressed format. *Spark for Unity* follows the same steps, with support for more platforms and texture formats, and wraps everything in a simple C# API.",
+      "zh": "Unity 里 GPU 纹理压缩背后的基本技术由 Aras Pranckevičius 在 [UnityGPUTexCompression](https://github.com/aras-p/UnityGPUTexCompression) 里演示过：在 compute shader 里跑编码器，把压缩块写进一张 UINT 类型的 `RenderTexture`，再把 `RenderTexture` 拷贝进一张相应压缩格式的 `Texture2D`。*Spark for Unity* 沿用同样的步骤，但支持更多平台和纹理格式，并把一切包进一个简单的 C# API。"
+    },
+    {
+      "type": "p",
+      "en": "The reason I hadn’t released a Unity integration before is that this approach requires the shaders to be distributed as source code. That’s fine for an open-source proof of concept, but not workable for *Spark*. Source code is only available to licensees.",
+      "zh": "我此前一直没发布 Unity 集成，是因为这个做法要求把着色器以源码形式分发。对一个开源的概念验证来说这没问题，但对 *Spark* 就行不通了——源码只提供给授权用户。"
+    },
+    {
+      "type": "p",
+      "en": "The solution is to ship the shaders as pre-compiled HLSL header libraries. The pipeline is:",
+      "zh": "解决办法是把着色器以预编译 HLSL 头文件库的形式发布。管线是这样的："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Compile the codec shaders to a [SPIR-V library](https://github.com/KhronosGroup/SPIRV-Cross/issues/2622) with DXC.",
+          "zh": "用 DXC 把编解码器着色器编译成 [SPIR-V 库](https://github.com/KhronosGroup/SPIRV-Cross/issues/2622)。"
+        },
+        {
+          "en": "Process the SPIR-V with spirv-opt to optimize the code.",
+          "zh": "用 spirv-opt 处理 SPIR-V 以优化代码。"
+        },
+        {
+          "en": "Use SPIRV-Cross to translate the SPIR-V library to a single-file HLSL header library.",
+          "zh": "用 SPIRV-Cross 把 SPIR-V 库翻译成单文件的 HLSL 头文件库。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "You can drop the resulting `.hlsl` files into any Unity project and it just works. Unity translates the HLSL libraries to the appropriate native shader format for each target platform at build time, which is why the same library works across Vulkan, Metal, and Direct3D.",
+      "zh": "你可以把生成的 `.hlsl` 文件丢进任何 Unity 项目，直接就能用。Unity 在构建时会把 HLSL 库翻译成各目标平台相应的原生着色器格式，这也是同一个库能同时用于 Vulkan、Metal 和 Direct3D 的原因。"
+    },
+    {
+      "type": "p",
+      "en": "This pipeline required changes to DXC’s SPIR-V compiler and to SPIRV-Cross. Some of those changes are already upstream in the [KhronosGroup/SPIRV-Cross](https://github.com/KhronosGroup/SPIRV-Cross) repository; others are still under review but stable enough for production use.",
+      "zh": "这条管线需要对 DXC 的 SPIR-V 编译器和 SPIRV-Cross 做修改。其中一些改动已经合并进 [KhronosGroup/SPIRV-Cross](https://github.com/KhronosGroup/SPIRV-Cross) 仓库；另一些还在评审中，但已经足够稳定，可以用于生产。"
+    },
+    {
+      "type": "h2",
+      "id": "licensing",
+      "en": "Licensing",
+      "zh": "授权"
+    },
+    {
+      "type": "p",
+      "en": "*Spark for Unity* is available under the same licensing terms as [spark.js](https://ludicon.com/sparkjs):",
+      "zh": "*Spark for Unity* 采用与 [spark.js](https://ludicon.com/sparkjs) 相同的授权条款："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Free for projects with lifetime revenue under $100,000.",
+          "zh": "对终身营收低于 10 万美元的项目免费。"
+        },
+        {
+          "en": "Indie ($1,000 one-time fee) for commercial projects with development budget under $1 million.",
+          "zh": "Indie（一次性 1,000 美元）：面向开发预算低于 100 万美元的商业项目。"
+        },
+        {
+          "en": "Pro ($10,000 one-time fee) for projects beyond that.",
+          "zh": "Pro（一次性 10,000 美元）：面向超出上述范围的项目。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "All tiers include lifetime distribution rights. The C# code is released under the MIT license; the *Spark* shaders are covered by the [*Spark* EULA](https://ludicon.com/spark/eula.html).",
+      "zh": "所有档位都包含终身分发权。C# 代码以 MIT 许可证发布；*Spark* 的着色器受 [*Spark* EULA](https://ludicon.com/spark/eula.html) 约束。"
+    },
+    {
+      "type": "p",
+      "en": "This release relaxes the free tier from “non-commercial only” to projects under $100K in lifetime revenue. The change applies to spark.js as well. The two products now share the same terms.",
+      "zh": "这次发布把免费档从「仅限非商业」放宽到终身营收低于 10 万美元的项目。这一改动同样适用于 spark.js。两个产品现在采用相同的条款。"
+    },
+    {
+      "type": "p",
+      "en": "Studios with custom pipeline requirements, console targets, source access, or production support needs can license the full *Spark* codec suite under an enterprise agreement. See the [*Spark* licensing page](https://ludicon.com/spark/#licensing) for details.",
+      "zh": "有自定义管线需求、主机平台目标、源码访问或生产支持需求的团队，可以通过企业协议授权完整的 *Spark* 编解码器套件。详情见 [*Spark* 授权页面](https://ludicon.com/spark/#licensing)。"
+    },
+    {
+      "type": "h2",
+      "id": "try-it",
+      "en": "Try it",
+      "zh": "试试看"
+    },
+    {
+      "type": "p",
+      "en": "*Spark for Unity* is on GitHub at [github.com/ludicon/spark-unity](https://github.com/ludicon/spark-unity). To install via Unity Package Manager, add this Git URL to your project’s manifest:",
+      "zh": "*Spark for Unity* 在 GitHub 上：[github.com/ludicon/spark-unity](https://github.com/ludicon/spark-unity)。要通过 Unity Package Manager 安装，把下面这个 Git URL 加到项目的 manifest 里："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "https://github.com/ludicon/spark-unity.git#v0.1.0"
+    },
+    {
+      "type": "p",
+      "en": "The basic API is a single call:",
+      "zh": "基本 API 就是一次调用："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Texture2D compressed = Spark.EncodeTexture(source, SparkFormat.RGB);"
+    },
+    {
+      "type": "p",
+      "en": "For most use cases, that’s everything you need. The lower-level API exposes additional controls for advanced scenarios: batching multiple encodes, scheduling work on the async compute queue, updating individual mip levels or texture regions, and preallocating output textures to avoid per-frame allocations. See the README for more details.",
+      "zh": "大多数用例下，这就是你需要的全部。更低层的 API 为进阶场景提供了额外的控制：批量提交多次编码、把工作调度到 async compute 队列、更新单独的 mip 层级或纹理区域，以及预分配输出纹理以避免逐帧分配。更多细节见 README。"
+    },
+    {
+      "type": "p",
+      "en": "If you want to see Spark for Unity running before integrating it, the [demo app](https://ludicon.com/spark/#demo) is available for iOS, Android, macOS, and Windows. It includes the scenes shown above.",
+      "zh": "如果你想在集成之前先看看 Spark for Unity 跑起来的样子，[demo app](https://ludicon.com/spark/#demo) 已提供 iOS、Android、macOS 和 Windows 版本，其中包含上面展示的那些场景。"
+    },
+    {
+      "type": "h2",
+      "id": "what-s-next",
+      "en": "What’s next?",
+      "zh": "接下来呢？"
+    },
+    {
+      "type": "p",
+      "en": "The same pre-compiled HLSL libraries that power *Spark for Unity* are portable to other engines. Integrations for Unreal, Evergine, and others are within reach, and I’m interested in talking to anyone working in those ecosystems who’d want to collaborate.",
+      "zh": "驱动 *Spark for Unity* 的这套预编译 HLSL 库可以移植到其他引擎。面向 Unreal、Evergine 等的集成并非遥不可及，我也很乐意与在这些生态里工作、愿意合作的人聊聊。"
+    },
+    {
+      "type": "p",
+      "en": "Working through the Unity integration also surfaced a number of cases where *Spark*’s performance is gated by Unity’s compute shader infrastructure rather than by the codecs themselves. Some of these are addressable with source code access; others require changes in Unity. I’m hoping to work with the Unity team on the ones that need their attention, and I’ll write up the technical details in a future post.",
+      "zh": "在打通 Unity 集成的过程中，也暴露出若干情况：*Spark* 的性能受制于 Unity 的 compute shader 基础设施，而不是编解码器本身。其中一些可以通过拿到源码来解决，另一些则需要 Unity 侧做改动。需要 Unity 团队关注的那些，我希望能和他们一起推进，技术细节我会在以后的文章里写。"
+    },
+    {
+      "type": "p",
+      "en": "*Spark for Unity* is available today on GitHub. If you’re building apps with user-generated content, procedural textures, virtual texturing systems, or simply need better runtime texture compression, give it a try and let me know how it works for your project.",
+      "zh": "*Spark for Unity* 今天已在 GitHub 上发布。如果你在做用户生成内容、程序化纹理、虚拟纹理系统，或者只是需要更好的运行时纹理压缩，不妨试一下，并告诉我它在你的项目里表现如何。"
+    },
+    {
+      "type": "p",
+      "en": "If you’d like to talk in person, I’ll be at SIGGRAPH this summer.",
+      "zh": "如果想当面聊，今年夏天我会在 SIGGRAPH。"
+    }
+  ]
+}

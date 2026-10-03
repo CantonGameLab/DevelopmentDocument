@@ -1,0 +1,30 @@
+{
+  "id": "official-2016-01-25-the-game-is-doing-great-on-steam",
+  "title": { "zh": "游戏在 Steam 上表现很好……", "en": "The game is doing great on Steam …" },
+  "subtitle": {
+    "en": "And that is just preorders, since the game is not playable until tomorrow.",
+    "zh": "而这还只是预购——游戏要到明天才能玩。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "... and this is just preorders, the game isn't playable until tomorrow!",
+      "zh": "……而这还只是预购，游戏要到明天才能玩！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/01/steam_cropped.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Thanks to everyone who's been following along on these forums, and everyone who's been interested in the game generally!",
+      "zh": "感谢一直在这几个论坛上跟进的各位，也感谢所有对这款游戏感兴趣的人！"
+    },
+    {
+      "type": "p",
+      "en": "We'll see what happens tomorrow!",
+      "zh": "明天会怎么样，我们等着看！"
+    }
+  ]
+}

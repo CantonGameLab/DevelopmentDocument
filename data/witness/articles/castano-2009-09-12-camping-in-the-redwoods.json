@@ -1,0 +1,83 @@
+{
+  "id": "castano-2009-09-12-camping-in-the-redwoods",
+  "title": { "zh": "在红杉林里露营", "en": "Camping in the Redwoods" },
+  "subtitle": {
+    "en": "A second attempt at camping with Nachito pays off: Mill Creek, Fern Canyon, Stout Grove, and a boy who hiked six of the seven miles.",
+    "zh": "带 Nachito 露营的第二次尝试终于成功：Mill Creek、蕨类峡谷、Stout Grove，还有一个走完了七英里里六英里的小男孩。"
+  },
+  "translator": {
+    "note": "源文里有三行是「插图 + 正文」挤在同一行（第 10、14、24 行），按 schema「图文同行」的口径在原位置拆成一个图片块加一个正文块，顺序不变。五处 Flickr 插图归一化成图片占位块，丢掉外层链接与 `_m`/`_z` 缩略图后缀。原文的笔误「steps steps」按「不增不删」原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2609/4114383338_befe5228ec_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We went camping last weekend. This was our second attempt; the first one last Autumn was a disaster. Nachito would not stay inside the sleep-bag during the night and he was going to get a cold outside, so at 1:00 am I had to pack everything and head back to arrive home three hours later. This time Nachito is almost one year older and his mom came with us, so we had more chances to success, and in fact, it went pretty well; Nachito behaved like a grown up this time.",
+      "zh": "上周末我们去露营了。这是我们的第二次尝试；去年秋天的第一次是一场灾难。夜里 Nachito 死活不肯待在睡袋里，在外面肯定会着凉，所以我凌晨 1 点只好把所有东西打包，开车往回赶，三个小时后才到家。这次 Nachito 大了将近一岁，他妈妈也跟着来了，所以成功的把握大了些；而事实上也确实挺顺利，Nachito 这回表现得像个小大人。"
+    },
+    {
+      "type": "p",
+      "en": "We stayed at the Mill Creek campground in [Del Norte Park](http://www.redwoodhikes.com/DelNorte/DelNorte.html). All the campsites are surrounded by lush vegetation and covered by the canopy of giant redwoods. The weather outside was nice, but the Mill Creek valley was always humid, it rained during the nights, and in the mornings the mist rose and shafts of light came through the trees. We got a secluded site and after setting up the tent it quickly felt like home.",
+      "zh": "我们住在 [Del Norte Park](http://www.redwoodhikes.com/DelNorte/DelNorte.html) 的 Mill Creek 营地。所有营位都被茂密的植被围着，头顶上是巨杉的树冠。外面的天气不错，但 Mill Creek 这条谷地总是很潮，夜里下雨，早晨雾气升起，一道道阳光从树间穿下来。我们挑到一个偏僻的营位，搭好帐篷之后很快就有了家的感觉。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2534/4114392804_58ae9e2c49_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "On the first day we went to [Prairie Creek](http://www.redwoodhikes.com/Prairie%20Creek/Prairie%20Creek.html) and did a section of the [James Irvine and Miner’s ridge trail](http://www.redwoodhikes.com/Prairie%20Creek/Miners.html). We started the trail in Fern Canyon and took the Clintonia trail shortcut to reduce the length down to 7 miles. Fern Canyon was pretty nice, but too crowded to my taste. On the other side Nachito had a great time hiking along the other kids, looking for fishes and snakes, and throwing rocks to the water.",
+      "zh": "第一天我们去了 [Prairie Creek](http://www.redwoodhikes.com/Prairie%20Creek/Prairie%20Creek.html)，走了 [James Irvine 和 Miner’s ridge 步道](http://www.redwoodhikes.com/Prairie%20Creek/Miners.html)的一段。我们从蕨类峡谷（Fern Canyon）起步，抄 Clintonia trail 这条近路，把全程缩短到 7 英里。蕨类峡谷挺漂亮，但在我看来人太多了。另一边，Nachito 跟别的小孩一起徒步、找鱼找蛇、往水里扔石头，玩得非常开心。"
+    },
+    {
+      "type": "p",
+      "en": "The rest of the trail was nice redwood forest, although I think we missed the best part, which is at the beginning of the James Irving trail. After leaving the Fern Canyon the crowds dispersed. We met a few groups during the first few miles, but after entering the Clintonia trail we were left alone during the rest of the day.",
+      "zh": "步道其余部分是很好的红杉林，不过我觉得我们错过了最精彩的一段，那是在 James Irving trail 开头。离开蕨类峡谷之后人群就散开了。前几英里还遇到几组人，但进了 Clintonia trail 之后，一整天剩下的时间里就再没碰到别人。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2740/4114412290_f49834dd34_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Sometimes the vegetation was so lush and so high that the trail became a narrow tunnel under it, sometimes it opened up and we could see the beauty of the redwood forest in all directions.",
+      "zh": "有时植被又密又高，步道就成了它底下的一条窄隧道；有时视野豁然打开，四周红杉林的美景尽收眼底。"
+    },
+    {
+      "type": "p",
+      "en": "Nachito behaved like a champ hiking 6 out the 7 miles. In order to achieve that we had to make frequent stops, or take him in our arms, back and shoulders from time to time. We had to constantly find games to keep him excited. Sometimes there were snakes pursuing us, or swiper the fox was waylaying us. He loves crossing bridges, so we would constantly look forward to the next one, and we counted the number of steps steps in all the stairs along the trail. Every once in a while I would give him a peanut to keep him walking, and on every important milestone he would get a piece of chocolate.",
+      "zh": "Nachito 表现得很棒，7 英里里自己走了 6 英里。为了做到这一点，我们得频繁休息，时不时把他抱在怀里、扛在背上或肩上。还得一路变着法子找游戏让他保持兴奋。有时是有蛇在追我们，有时是狐狸 Swiper 在路上埋伏。他喜欢过桥，所以我们总盼着下一座桥，还会数沿途所有台阶的级数。每隔一会儿我就给他一颗花生哄他继续走，每到一个重要里程碑就奖励他一块巧克力。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2703/4118862648_9782334377_m.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "At the end of the day he was so exhausted that when we arrived to the beach Mariana and Nachito decided to stay there waiting for me to finish the trail and get the car. The day was gorgeous and outside the cover of the forest, the sun shined brightly. We were hoping we could take a quick bath, Nachito didn’t wait much to get naked, but unfortunately the water was too cold and the sea too rough.",
+      "zh": "一天下来他累得不行，所以我们到海滩时，Mariana 和 Nachito 决定留在那儿等我走完步道去取车。那天天气极好，走出森林的遮蔽之后，阳光亮得刺眼。我们本想快速下水洗个澡，Nachito 二话不说就脱光了，可惜水太冷、海浪又太大。"
+    },
+    {
+      "type": "p",
+      "en": "The next day we were planning to do The Boy Scout Tree Trail at the Jedediah State Park before heading back home, but Nachito was too tired for that, and instead we simply wandered around the magnificent redwoods trees at the ancient looking Stout Grove that, despite its small size, is probably one of the most beautiful redwood forests that I’ve ever seen.",
+      "zh": "第二天我们本来打算回家前先去 Jedediah 州立公园走 The Boy Scout Tree Trail，但 Nachito 太累了，于是我们只是在 Stout Grove 那片看起来极为古老的高大红杉之间随意散步——那片林子虽然不大，却可能是我见过的最美的红杉林之一。"
+    },
+    {
+      "type": "p",
+      "en": "We then spent the rest of the day laying under the sun on the quiet shores of the Mill Creek unaware that the Grove of Titans was just a few steps away from us.",
+      "zh": "然后我们就在 Mill Creek 安静的岸边躺着晒太阳，打发掉那天剩下的时间——当时并不知道 Grove of Titans 离我们只有几步之遥。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://farm3.static.flickr.com/2742/4118864550_737770d2ef_z.jpg)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

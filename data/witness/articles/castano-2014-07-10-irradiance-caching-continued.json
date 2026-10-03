@@ -1,0 +1,72 @@
+{
+  "id": "castano-2014-07-10-irradiance-caching-continued",
+  "title": {
+    "zh": "辐照度缓存（续）",
+    "en": "Irradiance Caching – Continued"
+  },
+  "subtitle": {
+    "zh": "给这个系列收尾：用梯度的二阶差来控制记录密度（类似邻域钳制），以及为什么后来的论文让这些技巧过时。",
+    "en": "Wrapping up the series: using second order differences in the gradients to control record density (much like neighbor clamping), and why a later paper made these techniques obsolete."
+  },
+  "translator": {
+    "note": "原文正文没有代码块，也没有归档格式噪音。正文里的两张对比图在归档里是「缩略图包永久链接」之外的普通图片行，按 schema 归一化为指向原图的 `![图](原图URL)` 占位块（`neighbor_clamping_01` / `neighbor_clamping_02`，两行各一张，故是两个图片块）。论文引用与超链接（Krivanek 等人的 Making Radiance and Irradiance Caching Practical、Schwarzhaupt 等人的 Practical Hessian-Based Error Control for Irradiance Caching，以及 hemicube.h / hemicube.cpp / hemicube_integrate.cpp 三个 gist 链接）保留英文标题与原始 URL。原文用了弯引号（`“neighbor clamping”`、`“unaware”`），en 字段保持原样，中文译文按全站口径改用「」。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Looks like I’m getting into the habit of starting article series and abandoning them after the first installment. Where’s part 2 of the [irradiance caching article](http://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/) that I wrote several years ago? Before starting a new series, I think it’s about time to wrap that one up.",
+      "zh": "看来我养成了开系列文章、写完第一篇就撂下的习惯。几年前写的那篇[辐照度缓存文章](http://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/)，第二部分在哪呢？在开一个新系列之前，我想是时候先把那个系列收尾了。"
+    },
+    {
+      "type": "p",
+      "en": "In the final part I wanted to write a bit about our record placement strategy. The main idea was to use the irradiance gradients to control the record density. That was nothing new, in [Making Radiance and Irradiance Caching Practical](http://dcgi.felk.cvut.cz/publications/2006/krivanek-egsr-mricp) Krivanek, et al also propose adjusting the record distribution based on the rate of change in the irradiance.",
+      "zh": "在最后一部分里，我本想写一点我们的记录放置策略。主要思路是用辐照度梯度来控制记录的密度。这并不新鲜，Krivanek 等人在 [Making Radiance and Irradiance Caching Practical](http://dcgi.felk.cvut.cz/publications/2006/krivanek-egsr-mricp) 里也提出，根据辐照度的变化率来调整记录的分布。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "However, the interesting observation is that the scale of the gradient is not that relevant, what we care about are changes in the rate of change, that is, second order differences. If a sample has a small gradient and the one next to it has a large one, that’s an indication that the irradiance between the two changes abruptly and that additional samples may need to be taken in between them.",
+      "zh": "不过有意思的一点是：梯度的绝对大小其实没那么重要，我们在意的是「变化率的变化」，也就是二阶差。如果一个采样的梯度很小、紧挨着它的那个梯度很大，就说明两者之间的辐照度在剧烈变化，可能需要在它们之间再取一些采样。"
+    },
+    {
+      "type": "p",
+      "en": "The way I took that into account when building our record distribution is using a procedure similar to the “neighbor clamping” algorithm described in the same paper. When a new record is inserted in the cache, I look up the neighboring records and if their gradients are significantly different, then I scale the records down to avoid overlaps and make space for additional samples in between them. The following picture shows the result of applying this procedure, you can hover the mouse cursor over it to see the actual records and their radius:",
+      "zh": "我在构建记录分布时把它考虑进去的方式，是采用一套与同一篇论文里描述的「邻域钳制」（neighbor clamping）算法类似的流程。当一条新记录被插入缓存时，我会查出它的邻居记录，如果它们的梯度差异显著，就把这些记录按比例缩小，以免互相重叠，并在它们之间腾出空间给额外的采样。下面这张图展示了应用该流程后的结果，你可以把鼠标悬停在图上，看到实际的记录及其半径："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/06/neighbor_clamping_01.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/06/neighbor_clamping_02.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "On the left is the original method that only uses the split sphere heuristic and the scale of the gradients to determine the record radius and placement. On the right is the method I propose, that adjusts the record scale based on the gradient differences. You can see that on the left side some of the records are too large and are “unaware” of the occlusion due to the wall, the resulting distribution is too sparse for the actual irradiance field and produce choppy results. These artifacts would eventually go away by increasing the global record scale, but with the same number of samples, the image on the right produces much more accurate results.",
+      "zh": "左边是原来的方法，它只用分裂球模型的启发式规则和梯度的绝对大小来确定记录的半径与位置。右边是我提出的方法，它根据梯度差异来调整记录的尺度。可以看到，左边有些记录太大了，对墙造成的遮挡「一无所知」，得到的分布相对于真实的辐照度场过于稀疏，结果就显得斑驳断裂。这些瑕疵最终可以通过整体放大记录尺度来消除，但在采样数相同的情况下，右边那张图的结果准确得多。"
+    },
+    {
+      "type": "p",
+      "en": "I could get into more implementation details, but if you have implemented Krivanek’s record placement strategy and are familiar with neighbor clamping, I hope this modification should be fairly trivial. Back when I implemented these algorithms I lost the motivation to describe them in more detail, because I think these techniques, and the improvements I did were drawn obsolete by a new publication on this subject: [Practical Hessian-Based Error Control for Irradiance Caching](http://zurich.disneyresearch.com/~wjarosz/publications/schwarzhaupt12practical.html)",
+      "zh": "我还可以讲更多实现细节，但如果你已经实现过 Krivanek 的记录放置策略、也熟悉邻域钳制，那么我希望这个改动应该相当简单。当年实现这些算法的时候，我失去了把它们写得更详细的动力，因为我认为这些技术以及我做的那些改进，已经被这个主题上一篇新论文淘汰了：[Practical Hessian-Based Error Control for Irradiance Caching](http://zurich.disneyresearch.com/~wjarosz/publications/schwarzhaupt12practical.html)。"
+    },
+    {
+      "type": "p",
+      "en": "This paper proposes a new formulation to compute the hemispherical integral and evaluate the irradiance gradients. Their main idea is to convert the hemisphere samples (colors and depth) into a triangulated environment that when integrated produces the same irradiance. This triangulation is arbitrary, which means that their method works with any sample distributions without having to re-derive it as I did in [my previous article](http://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/). Moreover, this new formulation enables them to evaluate not just the irradiance gradients, but also the Hessian, and that allows them to guide the record placement based on second order differences directly, instead of a correction or refinement of the original distribution as I did in my implementation.",
+      "zh": "这篇论文提出了一个计算半球积分、求解辐照度梯度的新表述。它的核心思想是把半球采样（颜色和深度）转换成一个三角化的环境，对这个环境积分得到的就是同样的辐照度。这个三角化是任意的，也就是说他们的方法适用于任何采样分布，不必像我[上一篇文章](http://www.ludicon.com/castano/blog/articles/irradiance-caching-part-1/)里那样重新推导一遍。此外，这个新表述让他们不只能求辐照度梯度，还能求 Hessian 矩阵，于是可以直接依据二阶差来引导记录的放置，而不像我实现里那样，只是对原有分布做修正和细化。"
+    },
+    {
+      "type": "p",
+      "en": "As much as I’d like to play with this approach, the truth is that our method works well enough, and we cannot justify the effort it would take to switch to the better one. If a reference implementation were available, that would possibly be a different story. So, with that in mind, we are releasing [the source code of our implementation](https://gist.github.com/castano/5f7c8847f82e45cb56d0).",
+      "zh": "虽然我很想玩玩这个新方法，但事实是我们的方法已经足够好用，我们也没法为切换到更好方法所需要付出的工作量找到正当理由。如果有一个参考实现可用，那也许就是另一回事了。所以考虑到这一点，我们把[自己实现的源码](https://gist.github.com/castano/5f7c8847f82e45cb56d0)公开了。"
+    },
+    {
+      "type": "p",
+      "en": "In [hemicube.h](https://gist.github.com/castano/5f7c8847f82e45cb56d0#file-hemicube-h) you can see the data structures that hold the precomputed data used to speed up the hemicube integration, [hemicube.cpp](https://gist.github.com/castano/5f7c8847f82e45cb56d0#file-hemicube-cpp) shows how this data is calculated, and finally [hemicube_integrate.cpp](https://gist.github.com/castano/5f7c8847f82e45cb56d0#file-hemicube_integrate-cpp) shows how to use the precomputed data to perform the hemicube integration and compute the irradiance gradients efficiently.",
+      "zh": "在 [hemicube.h](https://gist.github.com/castano/5f7c8847f82e45cb56d0#file-hemicube-h) 里可以看到存放预计算数据的数据结构，这些数据用来加速半立方体积分；[hemicube.cpp](https://gist.github.com/castano/5f7c8847f82e45cb56d0#file-hemicube-cpp) 展示了这些数据是怎么算出来的；最后 [hemicube_integrate.cpp](https://gist.github.com/castano/5f7c8847f82e45cb56d0#file-hemicube_integrate-cpp) 展示了如何用这些预计算数据来完成半立方体积分，并高效地计算辐照度梯度。"
+    }
+  ]
+}

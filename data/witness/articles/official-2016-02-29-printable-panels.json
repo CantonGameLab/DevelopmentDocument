@@ -1,0 +1,143 @@
+{
+  "id": "official-2016-02-29-printable-panels",
+  "title": { "zh": "可打印的面板！", "en": "Printable Panels!" },
+  "subtitle": {
+    "en": "Releasing for free the artwork we used to print the framed panels hanging in our office.",
+    "zh": "把我们用来印办公室墙上那些装裱面板的图免费放出来。"
+  },
+  "translator": {
+    "note": "「面板」保留原文 panel 的说法，指游戏里那种带图形的方形板。原文此处是 21 张图片的图集，这里按顺序逐张收录为占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/IMG_4442-512x227.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Hey there! Lately I've been seeing a lot of requests from people who want to buy framed panels, like the ones we have hanging in our office. We talked a little bit about how we might sell these with Jon, but decided it would be best to just release the images we used to print ours for free, and that way peeps can print their own however they like.",
+      "zh": "大家好！最近我看到很多人来问，想买装裱好的面板，就像我们办公室墙上挂的那种。我们和 Jon 稍微聊过要不要卖这些，但最后决定，最好的做法就是直接把我们印自己那批所用的图片免费放出来，这样大家就能按自己喜欢的方式自己打印。"
+    },
+    {
+      "type": "p",
+      "en": "An important suggestion would be to print these on semi-glossy or glossy paper, as the colors tend to turn out completely faded on regular paper. Back when we were printing these, Luis tweaked the colors for some so they look better printed, so they might not be completely accurate on a monitor, but should look nice on paper.",
+      "zh": "一个重要建议：用半光面或光面纸来印，因为在普通纸上颜色通常会变得灰扑扑的。当初我们印这些的时候，Luis 给其中一些调过颜色，让它们印出来更好看，所以它们在显示器上可能不完全准确，但印在纸上应该很好看。"
+    },
+    {
+      "type": "p",
+      "en": "Also, we just went to a nearby art store and picked out a bunch of square frames. We got mostly 8x8 inch and a couple of 12x12 inch ones. Most of the frames were just minimal black plastic, and only cost about $6, if I remember correctly, but we got nicer ones for a couple of the 12x12 ones, like the boat panel. You could probably even make Witness monitor style frames for them if you are crazy enough, that would be fun to see!",
+      "zh": "另外，我们就是去了附近一家美术用品店，挑了一堆方形画框。大多是 8x8 英寸的，还有两个 12x12 英寸的。多数画框就是最朴素的黑色塑料框，如果我没记错，只要 6 美元左右，不过其中几个 12x12 的我们配了更好的框，比如那张船的面板。如果你够疯，甚至可以做《The Witness》显示器风格的画框，那看起来一定很好玩！"
+    },
+    {
+      "type": "p",
+      "en": "Here are the files we used:",
+      "zh": "下面是我们用到的文件："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_16.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_7.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_6.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_19.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_3.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_4.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_5.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_10.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_17.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_15.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_14.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_13.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_12.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_11.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_9.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_8.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_18.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_20.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/02/Panels_Map.jpg)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

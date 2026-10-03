@@ -1,0 +1,1576 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Engine Tech: Concurrent world editing &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Engine Tech: Concurrent world editing Comments Feed" href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2842,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_05.png","alt":"","desc":"","caption":"Banner_05","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_05-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/1429" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=1429' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2011%2F12%2Fengine-tech-concurrent-world-editing%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=FA94805A99F918D12EFBE0A1D4274012');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_05.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-1429 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-1429" class="post-1429 post type-post status-publish format-standard hentry category-engine-tech">
+					<h1 class="entry-title">Engine Tech: Concurrent world editing</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/jon/" title="View all posts by Jonathan Blow">Jonathan Blow</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2011-12-25T15:39:32-07:00">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/" rel="bookmark">December 25, 2011</a>
+				</time>
+			   </span><time class="updated"  datetime="2011-12-26T16:39:42-07:00">December 26, 2011</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/engine-tech/" rel="tag">Engine Tech</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<h2>Summary</h2>
+<p>A small team with limited manpower, we wanted a low-effort way to use our existing version control system (svn) to facilitate concurrent world editing for our open-world 3D game (i.e. we desire that multiple users can edit the world at the same time and merge their changes).  We developed a system wherein the data for each entity is stored as an individual text file.  This sounds crazy, but it works well: the use of individual files gives us robustness in the face of merge conflicts, and despite the large number of files, the game starts up quickly.  Entities are identified using integer serial numbers.  We have a scheme for allocating ranges of these numbers to individual users so there is no overlap (though this scheme could certainly be better).  The system seems now to be robust enough to last us through shipping the game, with seven people and one automated build process concurrently editing the world across 18 different computers.</p>
+<p>We don't know whether this method would work for AAA-sized teams, though it seems that it might with some straightforward extensions.  But for us the method works surprisingly well, given how low-tech it is.</p>
+<p><span id="more-1429"></span></p>
+<h2>About the Game</h2>
+<p>We have been developing a 3D open-world game called <a href="http://the-witness.net">The Witness</a> since late 2008.  For much of that time, development happened in a preproduction kind of way, where not many people were working on the game.  Recently, though, we went into more of a shipping mode, so the number of developers has grown: we're up to about 10 or 11 people now (pretty big for a non-high-budget, independent game).  Not all of these people directly touch the game data, but about 7 do now, and this number will rise to 9 in the near future.</p>
+<p>The design of the game requires the world to be spatially compact, relative to other open-world games, so it is far from Skyrim-esque in terms of area or number of entities.  At the time of this writing, there are 10,422 entities in the game world.  I expect this number to grow before the game is done, but probably not by more than 2x or 3x the current amount.</p>
+<p>Because the world is not too big, and some game-level events require entities to coordinate across the length of the world, it makes sense to keep all the entities in one space, that is to say, there is no zoning of the world or partitioning of it into separate sets of data.  This makes the engine simpler, and it reduces the number of implementation details that we need to think about when editing the world.  It also introduces a bit of a challenge, because it requires us to support concurrent editing of the world without an explicit control structure governing who can edit what.  One such control structure might be: if you imagine the world were divided into a 10x10 grid; so there are 100 different zones; and where anyone editing the world must lock whatever zones they want to edit, make their changes, check them in, then unlock those zones; this would provide a very clear method of ordering world edits.  (Because of the locking mechanism, two people would not be able to change the same world entity at the same time, so there doesn't have to be any resolution process to decide whose changes are authoritative). However, the straightforward implementation of such a control scheme would make for inconvenient workflow, as it is tedious to lock and unlock things.  Even with further implementation work and a well-streamlined UI, there would still be big inconveniences (I really want to finish building a particular puzzle right now, but a corner of that puzzle just borders on some region that a different user has locked, and he is sick this week so he probably won't finish his work and unlock it until next week.  Or, if my network connection is flaky then I may not be able to edit; if I am off the net then I definitely could not edit.)</p>
+<p>Thus, rather than implementing some kind of manual locking, I found it preferable to envision a system that Just Magically Works.  Since we already used the Subversion source-control system to manage source code and binary source assets such as texture maps and meshes, it didn't seem like too big of a stretch for Subversion to handle entity data as well.</p>
+<h2>The World Editor and Entity Data</h2>
+<p>Our world editor is built into the game; you press a key to open it at any time.  Here's what it looks like:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2011/12/editor_shot.png"><img class="aligncenter size-large wp-image-1430" title="editor_shot" src="http://the-witness.net/news/wp-content/uploads/2011/12/editor_shot-512x288.png" alt="" width="512" height="288" /></a></p>
+<p>The editor view is rendered in exactly the same way as the gameplay view, but you fly the camera around and select entities (I have selected the red metal door at the center of the scene, so it is surrounded by a violet wireframe).  In the upper right, I have a panel where I can edit all the relevant properties of this Door; the properties are organized into four tabs and here you can see only one, the "Common" properties.</p>
+<p>These properties, which you can edit by typing into the fields of this Entity panel, are all that the game needs to instantiate and render this particular entity (apart from heavier-weight shared assets like meshes and texture maps).  If you serialize all these fields, then you can unserialize them and generate a duplicate of this Door.  That's how the editor saves the world state: serialize every entity, and for each entity, serialize all fields.</p>
+<p>Originally, the game saved all entities into one file in a binary format.  This is most efficient, CPU-performance-wise, and the natural thing that most performance-minded programmers would do first.  Unfortunately, though, svn can't make sense of such a file, so if two people make edits, even to disjoint parts of the world, svn is likely to produce a conflict; once that happens, it's basically impossible to resolve the situation without throwing away someone's changes or taking drastic data recovery steps.</p>
+<p>Our natural first step was to change this file from binary into a textual format.  Originally I had worries about the load-time performance of parsing a textual file, but this turned out not to be an issue.  I decided to use a custom file format, because the demands in this case are very simple, and we have maximum control over the format and can modify it to suit our tastes.</p>
+<p>Many modern programmers seem to have some kind of knee-jerk inclination to use XML whenever a textual format is desired, but I think XML is one of the worst file formats ever created, and I have no idea why anyone uses it for anything at all, except that perhaps they drank the XML Kool-Aid or have XML Stockholm Syndrome.  Yes, there are XML-specific tools out there in the world, and whatever, but I didn't see how any such tool would be of practical use to us.  One of our primary concerns is human-readability, so that people can make intelligent decisions when attempting to resolve revision control conflicts.  XML is not particularly readable, but we can modify our own format to be as readable as it needs to be in response to whatever real-world problems arise.  You'll see a snippet below of the format we use.</p>
+<h2>Evolution of the Textual Format</h2>
+<p>The first version of our textual format was a straightforward adaptation of our binary format.  The gameplay-level code that saves and loads entities is the same for either format; the only difference is just a boolean parameter, choosing textual or binary, which is passed to the lower-level buffering code.  After the buffer is done being packed, it's written to a file.</p>
+<p>In our engine, entities are generally referenced using integer serial numbers (that act as handles).  These numbers are the same when serialized as they are at runtime.  Originally, in the binary file, the order in which the entities were written didn't matter.  But if we want to handle concurrent edits, we want to make merging as easy as possible for the source control system, so we sort entities by serial number, writing them into the file in increasing order.  Thus we didn't generate any spurious file changes due to haphazardly-changing serialization order.</p>
+<p>In theory, Subversion could now handle simultaneous world edits and just merge them, the same way it does with our source code.  Unsurprisingly, though, this initial attempt was not sufficient.  Though the file was now textual, it contained a bare minimum of annotations and concessions to readability.  Though I knew I would eventually want to add more annotations, I didn't want to go overboard if it wasn't necessary, because these inflate the file size and the time required to parse the files (though I never measured by how much, so it's likely the increases are negligible performance-wise and I was engaging in classic premature optimization).  As it happens, the kind of redundant information that increases human-readability also helps the source control system understand file changes unambiguously, so as we made the format more-readable, the number of conflicts fell.</p>
+<p>Here's what our file format currently looks like, for entity #6555 (the Door we had selected in the editor screenshot).</p>
+<pre style="padding-left: 30px;">Door
+72
+6555
+; position
+    46.103531 : 42386a04
+    108.079681 : 42d828cc
+    8.694907 : 410b1e57
+; orientation
+    0.000000 : 0
+    0.000000 : 0
+    -0.069125 : bd8d9184
+    0.997608 : 3f7f633d
+; entity_flags
+    160
+; entity_name
+    !
+; group_id
+    4059
+; mount_parent_id
+    6554
+; mount_position
+    0.035274 : 3d107ba5
+    0.006069 : 3bc6e19c
+    0.000038 : 381ffffc
+; mount_orientation
+    0.000000 : 0
+    0.000000 : 0
+    0.000027 : 37e5f004
+    1.000000 : 3f800000</pre>
+<p>(The first line, "Door", is the type name; 72 is the entity data version, which is used to load older versions of entities as their properties change over time; 6555 is the entity's ID.  root_z and cluster_id (seen in the screenshot) are not saved into the file, because these properties have metadata that say they are only saved or loaded under certain conditions which are not true here.  For the sake of making the listing short, I've shown only the properties listed on that first tab in the screenshot.)<br />
+You'll note that the floating-point numbers are written out a bit oddly, as in this first line under 'position':</p>
+<pre style="padding-left: 30px;">    46.103531 : 42386a04</pre>
+<p>This is how we preserve the exact values of floating-point numbers despite saving and loading them in a text file.  If you do not take some kind of precaution, and use naive string formatting and parsing, your floating-point values are likely to change by an LSB or two, which can be troublesome.</p>
+<p>The number on the left is a straightforward decimal representation of the value, written with a reasonable number of digits.  The : tells us that we have another representation to look at; the number on the right, which the : introduces, is the hexadecimal representation of the same number.  The IEEE 754 floating-point standard defines this representation very specifically, so we can use this hexadecimal representation to reproduce the number exactly, even across different hardware platforms.  The decimal representation is mostly just here to aid readability.  However, if we decide we want to hand-edit the file, we can just delete the : and everything after it, changing that first number to a 47.5 or something; seeing no :, the game will parse the decimal representation and use that instead.</p>
+<p>There are other ways to solve this floating-point exactness problem; for example, you can implement an algorithm that reads and writes the decimal representation in a manner that carefully preserves the values.  This is complicated, but if you're interested in that kind of thing, here's what Chris Hecker says:</p>
+<blockquote><p>Everybody just uses David Gay's code:<br />
+<a href="http://www.netlib.org/fp/dtoa.c" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.netlib.org/fp/dtoa.c', 'http://www.netlib.org/fp/dtoa.c\n']);" >http://www.netlib.org/fp/dtoa.c<br />
+</a><a href="http://www.netlib.org/fp/g_fmt.c" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.netlib.org/fp/g_fmt.c', 'http://www.netlib.org/fp/g_fmt.c']);" >http://www.netlib.org/fp/g_fmt.c</a></p>
+<p>You need to get the flags set right on the compiler for it to work. /fp:precise at least, I also do #pragma optimize ("p",on), and make sure you write a test program for it with your compiler settings.</p></blockquote>
+<p>(Twitchy, and look at how much code that is!  What we did is a couple of lines.) In <a href="http://cbloom.com/3d/game_tech_04.zip" onclick="_gaq.push(['_trackEvent','download','http://cbloom.com/3d/game_tech_04.zip']);" >a document</a> on his <a href="http://www.cbloom.com/3d/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.cbloom.com/3d/', 'web site']);" >web site</a>, Charles Bloom discusses a scheme that was in use at Oddworld Inhabitants, similar to what we're doing in The Witness but involving a comparison between the two representations:</p>
+<blockquote><p>... Plain text extraction of floats drifts because of the ASCII conversions; to prevent this, we simply store the binary version in the text file in addition to the human readable version; if they are reasonably close to each other, we use the binary version instead so that floats can be persisted exactly.</p></blockquote>
+<h2>Subversion Confusion</h2>
+<p>After switching to this format, conflicts still happened.  I categorize conflicts into two types: "legitimate", where two people edit the same entity in contradictory ways and the source control system doesn't know who to believe; and "illegitimate", where Subversion was just getting confused.  We did have a number of legitimate conflicts for a while, yet which were not the users' fault, because our world editor tended to do things that are bad in a concurrent-editing environment.  (See the Logistics section at the end of this article for some examples).  But even after we ironed these out, we still found that Subversion was still getting confused.</p>
+<p>Here's an example of a common problem: suppose we start with a world containing data on entities A, B, and D, so our file contains: ABD.  You edit the file and delete entity B.  I edit the file and also delete entity B, but add another entity C.  (That we both deleted B may be a very common use-case, especially if this is due to some automatic editor function).  So, you want to check in a file that just says: ABD - B = AD, so the new result is AD.  I want to check in a file that says: ABD - B + C = ACD (the C goes in the middle, because remember, the entities are sorted!)  In theory this is an easy merge: the correct result is just ACD.  But Subversion would get confused in cases like this, requiring the user to hand-merge the file.</p>
+<p>This is a disaster, because even with a visual merge tool such as the one that comes with TortoiseSVN, you don't want non-engine-programmers trying to merge your entity data file.  Even if that file is extremely readable, at some point someone will make a mistake; the file will fail to parse, and then you have a data recovery problem that requires the attention of an engine programmer.  When this happens it kills the productivity of two people (the engine guy, because he has to merge the data, and also the guy who generated the conflict, because until it gets resolved his game is in an un-runnable state, and anyway, the engine guy has probably commandeered the other guy's computer to fix this).</p>
+<p>After we had this problem a few times too many, Ignacio suggested moving to a more-structured file format like JSON, which, in theory, source-control systems would handle more solidly.  But I thought that this would only reduce the frequency of the problem, but not solve anything fundamental; even if we achieved a situation of only generating legitimate conflicts, each conflict would still be a potential game-crippling disaster.</p>
+<h2>Splitting the File</h2>
+<p>It occurred to me, finally, that it could hardly get cleaner than to store each entity in its own file.  This initial thought might cause a performance-oriented programmer to recoil in horror; we have 10,422 entities right now, and it must be very slow to parse and load 10,000 text files every time the game starts up!</p>
+<p>But I knew that we already had over 4,000 individual files laying around for assets like meshes and texture maps, currently loaded individually, the idea being that at ship time we would combine these into one package so as to avoid extra disk seeks and the like.  But on our development machines, these files still loaded quickly.  I figured that if we can already load 4,000 big files, why not try loading an extra 10,000 small files?  If loading all these files turned out to be slow, we could resort to this only when entity data has changed via a source control update; after loading all the text files, we can save out a single binary file containing all the entity data, which would be much faster to load, just like we used to do before we supported concurrent editing.</p>
+<p>I tried this and it worked great.  So, now we have a data folder called 'entities', which holds one file per serialized entity.  The Door selected in the editor screenshot is stored in a file named after its entity ID, "6555.entity_text", which contains the text you see in the listing above.</p>
+<p>As mentioned, there are currently 10422 entity files; the text files take up about 8MB of space, whereas the binary file is 1.4MB.  We're not making any effort to compress either of these formats; they are very small compared to the rest of our data.</p>
+<p>&nbsp;</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2011/12/dos_box_file_list.png"><img class="aligncenter size-large wp-image-1435" title="dos_box_file_list" src="http://the-witness.net/news/wp-content/uploads/2011/12/dos_box_file_list-512x333.png" alt="" width="512" height="333" /></a></p>
+<p>&nbsp;</p>
+<h2>Benefits of Using Individual Files</h2>
+<p>Storing each entity in a separate file solved our problems with merging: both the illegitimate source control confusions as well as the problems due to hand-guided file merging.</p>
+<p>The illegitimate conflicts go away because transactions become very clear.  If I delete an entity, and you delete an entity, then we both just issue a file delete command, and it's very easy for the source control system to see that we agree on the action.  Furthermore, if we both delete B but I add C, because the change to C is happening in a completely separate file, there is no way for the system to get confused about what happened.</p>
+<p>Legitimate conflicts do still happen, as multiple people edit the same entities, but these cases are much easier to handle than they were before.  The usual response is to either revert one whole entity or stomp it with your own.  Because we usually want to treat individual entities atomically -- using either one person's version of that entity or the other's -- individual files are a great match, because now the usual actions we want to perform are top-level source control commands (usually from the TortoiseSVN pulldown menu); before, this wasn't true, and merging a single entity in an atomic way required careful use of the merge tool.  If an entity ever gets corrupted somehow, for whatever reason, we can just revert that one file, knowing the damage is very limited in scope; before we've reverted it, the worst that can happen is that that single entity will not load; it won't prevent the rest of the entities in the world from loading.</p>
+<p>It would be difficult to overemphasize the robustness gained.  I feel that these sentences do not quite convey the subtle magic; it feels a little like the state change when a material transitions from a liquid to a solid.</p>
+<p>Sometimes, someone will update their game data in a non-vigilant way; not noticing that a conflict happened, so they won't resolve it; and then they will run the game.  Before, this would have been a disaster; Subversion inserts annotations into text files to try to help humans manually resolve conflicts (this is an unfortunate throwback to programs like SCCS), which would have caused much of the world to fail to parse.  Now, though, the damage from these annotations is constrained to individual entities. It's also easier to detect: if there is a conflict in the file for our Door #6555, then in addition to writing these annotations into 6555.entity_text (making it unparseable by the game), Subversion will also write out files 6555.entity_text.mine and 6555.entity_text.theirs, which contain the two intact but conflicting versions of the file.  The game can detect these very straightforwardly, put an error message on the HUD, and even choose one to load by default.  It is all very clean.</p>
+<p>This is one of those interesting cases where reality-in-practice is starkly different from computer-science-in-theory.  In theory, a directory is just a data structure organizing a bunch of black-box data, and we happen to view this organization in a way that looks like a list of files; we could just do the same thing interior to our own file format, and it would be no big deal.  In practice, due to the way our tools work, these two arrangements are tremendously different.  The individual files just feel solid and reliable to work with, whereas one big structured file is always going to be precarious.</p>
+<h2>Startup Procedure</h2>
+<p>When the game starts up, we need to load all the entities from disk.  In the simplest case, this is straightforward: we just iterate through every file in the entities directory and load it.  However, as I mentioned, we wanted to keep a binary version of the entities that is preferred by the game if it exists and is up to date; partly, this might help startup speed a little (we don't have to parse all these strings), but mainly, that is the file format and code path we are going to use when the game ships, and we don't want that code to rot in the meantime.  Using it every day is the best way to prevent it from rotting.</p>
+<p>So: when the game first starts up, we check for the binary entity package.  If it's not there, we load all the individual entities files, then immediately save out the binary package.  (This binary package is a private, local file; if we were to add it to source control, everyone would always conflict with everyone else.)  But suppose we start up and the binary package is already there (which it usually will be).  We need then to determine if any of the textual entities have changed since the binary package was built.  The most-general way to do this is just by looking at the file timestamps; if we were to rely on some other signal being written to the disk that says "hey, entity data has changed," then we would only be allowed to modify the entity files using sanctioned and customized tools; that would be annoying and would cause all kinds of robustness issues.</p>
+<p>In concrete terms: we want to know the timestamp of the newest .entity_text file, inclusive of the directory containing these files (if we just did a Subversion update that only deleted entities, then all the .entity_text timestamps will be old, but the directory timestamp will be new; we want to ensure we properly rebuild the binary file in this case!)  To find the newest timestamp, we just iterate through all the timestamps in a brute-force way:</p>
+<pre style="padding-left: 30px;">bool os_get_newest_file_modification_time(char *input_dir_name, Gamelib_Int64 *file_time_return) {
+    //
+    // We include the modification time of the directory as well.
+    //
+
+    char *dir_name = mprintf("%s/*", input_dir_name);
+    Free_On_Return(dir_name);
+    if (strlen(dir_name) &gt;= MY_MAX_PATH - 5) return false;
+
+    //
+    // best_time starts as the time for the directory (if it exists!)
+    //
+    Gamelib_Int64 best_time = 0;
+    bool success = get_file_modification_time(input_dir_name, &amp;best_time);
+    if (!success) {
+        Log::print("Unable to get modification time for directory '%s'!\n", input_dir_name);
+    }
+
+    //
+    // Now consider the file timestamps.
+    //
+    WIN32_FIND_DATA find_data;
+    HANDLE handle = FindFirstFile(dir_name, &amp;find_data);
+    if (handle == INVALID_HANDLE_VALUE) return false;
+
+    while (1) {
+        if (find_data.dwFileAttributes &amp; FILE_ATTRIBUTE_DIRECTORY) {
+        } else {
+            Gamelib_Int64 file_time = to64(find_data.ftLastWriteTime);
+            if (file_time &gt; best_time) best_time = file_time;
+        }
+
+        BOOL success = FindNextFile(handle, &amp;find_data);
+        if (!success) break;
+    }
+
+    FindClose(handle);
+
+    if (file_time_return) *file_time_return = best_time;
+
+    return true;
+}
+
+bool get_file_modification_time(const char *name, Gamelib_Int64 *result_return) {
+    HANDLE h = CreateFile(name, 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS,
+                          NULL);
+    if (h == INVALID_HANDLE_VALUE) return false;
+
+    FILETIME write_time;
+    GetFileTime(h, NULL, NULL, &amp;write_time);
+    CloseHandle(h);
+
+    if (result_return) *result_return = to64(write_time);
+    return true;
+}</pre>
+<p style="padding-left: 30px;">&nbsp;</p>
+<p>You'll notice that this is Windows-specific code, but we don't have to worry about porting it, because we only run the world editor on Windows.  Fortunately, in Windows, the file timestamp is right there in the directory data, so we don't have to open each file.  (At least in NTFS this is true, rather than being an API illusion; the timestamps are stored in the Master File Table [MFT].)</p>
+<p>What's the performance like?  I typically run the game on two different machines: a high-performance Tower PC (CPU: Intel Core i7-970, hard drive: OCZ Vertex 3 SSD, RAM: 12GB) and a gaming Laptop (CPU: Intel Core i7-2820QM, hard drive: Intel SSD 500 [SSDSC2MH250A2], RAM: 12GB).</p>
+<p>The time spent in os_get_newest_file_modification_time is:  Tower:<strong> .0095 sec, +/- .0015 sec</strong>; Laptop: <strong>.039 sec, +/- .005 sec</strong>.  (Timings were computed by averaging six trials, after a discarded warm-up run.)  This is definitely one of those cases where I'm glad I didn't prematurely optimize, as I would have expected this to be much slower!</p>
+<p>We typically install SSDs in all our work machines, but even when people have home machines that use spinning-platter hard drives, startup times are not much slower (likely due to the MFT data staying in cache).</p>
+<p>If for a large enough number of entities this timestamp-gathering process becomes too slow, we can always write some code to read the timestamps out of the MFT directly, avoiding all the API call overhead, as in <a href="http://www.autoitscript.com/forum/topic/94269-mft-access-reading-parsing-the-master-file-table-on-ntfs-filesystems/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.autoitscript.com/forum/topic/94269-mft-access-reading-parsing-the-master-file-table-on-ntfs-filesystems/', 'this forum posting']);" >this forum posting</a>.  To date we've had no need to do this.</p>
+<p>Some people have reported performance problems when Windows has more than 100,000 files in one directory, but this can be worked around: just make 10 directories, with IDs ending with each digit from 0-9 grouped in common directories.  (Why use the least-significant "ending" digit, rather than the most-significant "starting" digit, which might be the impulsive choice?  Because if you do it that way, <a href="http://en.wikipedia.org/wiki/Benford's_law" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Benford\'s_law', 'Benford\'s Law']);" >Benford's Law</a> says your entities are likely to be unevenly distributed across the directories.  Why not just hash them into a folder?  Because it's useful to be able to manually navigate to the entity you want, without searching.  (However, partitioning by least-significant digit may be inconvenient if you want to manually edit a sequential range of entities for some reason, because that range will span many directories.  If this is an important use case, perhaps there's a good compromise like using the tens digit or hundreds digit -- though I have the itching feeling that a clearly superior solution would exist.))</p>
+<p>As things stand in terms of editing the game world, we are probably not yet at the peak entity count, but there's unlikely to be more than 3x the number of entities we have now.  Given how low the timing measurements are now, it's clear that performance will not be a factor in the ability to use this system up until shipping the game.</p>
+<h2>Partitioning the ID Space</h2>
+<p>As I mentioned, in our engine, entity IDs are integer serial numbers.  We like this because they are easy to type (we have to type them in the editor sometimes) and at runtime, looking up an entity compiles to a fast indexing of a flat array, with a bounds check.</p>
+<p>This introduces another problem for us to deal with in world editing, though: we need to ensure that two users, who are both creating new entities, do not both try to use the same number.  This would result in both users attempting to add completely incompatible .entity_text files with the same name.</p>
+<p>One obvious and bulletproof solution is to have the editor connect to the network and atomically grab an ID from a central server each time one is needed.  But again, we don't want to require users to be on the network in order to edit.</p>
+<p>My solution was a somewhat lazy one: we allocate a range of IDs to each computer that edits the world.  These are kept in a file called "id_ranges"; at startup time, the game queries its machine's MAC address, then looks in the file for the corresponding ID range; if not found, it claims a new range and adds a new line to the file:</p>
+<pre style="padding-left: 30px;"> 6000 10000 BC-AE-C5-66-28-E9 #Jonathan_office
+10000 13000 BC-AE-C5-66-28-48 #Ignacio_office
+13000 16000 00-1C-7B-75-00-D8 #Jonathan_laptop
+16000 19000 BC-AE-C5-66-28-93 #Shannon_office
+19000 22000 BC-AE-C5-56-42-51 #Jonathan_home
+22000 25000 C0-3F-0E-AA-F3-F2 #icastano_home
+25000 28000 F4-6D-04-1F-D4-36 #Shannon_home
+28000 31000 Baker #Baker
+31000 34000 BC-AE-C5-56-43-FE #Misc_PC_office
+34000 37000 00-E0-81-B0-7A-A9 #eaa
+37000 40000 00-21-00-A0-8F-E3 #Orsi
+40000 43000 64-99-5D-FD-97-64 #Jonathan
+43000 46000 08-86-3B-42-0B-8D #Misc
+46000 49000 90-E6-BA-88-9B-B7 #andrewlackey
+49000 52000 48-5B-39-8C-80-5E #eaa
+52000 55000 50-E5-49-55-64-BF #facaelectrica
+55000 58000 00-FF-D4-C7-15-A3 #facaelectrica
+58000 70000 Clusters #Clusters
+71000 75000 Overflow #Overflow
+75000 78000 F4-6D-04-1F-CC-77 #Nacho
+78000 81000 BC-AE-C5-74-7B-A3 #Thekla</pre>
+<p>On each line, everything after the # is just a comment telling us in a human-readable way whose machine is responsible for that range (it defaults to the Windows username, but we can hand-edit that if we want).</p>
+<p>("Baker" is for an automated process, so I made a special case that uses the string "Baker" instead of the MAC address, just to minimize the potential for the build machine to claim a new range without us noticing and failing to check that in; see below.  "Clusters" is for an editor operation that is also run in an automated process, but which can also be done manually by anyone; cluster generation removes all previous clusters from the world, so if clusters didn't have their own space, you would end up frequently deleting entities in other peoples' ranges; this seems like it might be a bad idea, though maybe, in reality, it's fine and there would be no problem.  But as it stands we know that anything in the Clusters range is completely disposable, so if a conflict ever arises there we can just revert or delete those entities without a second thought.)</p>
+<p>This ID space is naturally going to have a lot of big holes in it, but before we ship we will renumber the entities so that we can pack them tightly into an array.  In the meantime, it is sparse but not pathologically so; we can still get away with using a linear array to index the entities, though it will use more memory now than at ship.</p>
+<p>This id_ranges file is a bit of a lazy solution, and it causes a few annoyances.  The most annoying thing is that, any time someone runs the editor for the first time on a new machine, they need to immediately check in the id_ranges file to publish their allocation to the rest of the team; and they need to coordinate so that nobody else is trying to do the same thing.  Because the editor just allocates the next 3000 IDs starting with the highest ID in the file, if two people try to allocate IDs simultaneously, they will both claim the same range.  We could solve this by requiring the editor to hold a source control lock to modify the id_ranges file, but I just haven't gotten around to it, because this hasn't been a big-enough problem.  Furthermore, we could have the editor automatically commit the changes to the file; but currently, nothing is ever published to the rest of the team automatically -- publishing always requires manual action, and this seems like it may be a good thing to preserve.</p>
+<p>But, not having implemented these solutions, we have been taken by surprise a couple of times by interactions with a second lazy choice of this system: the fact that we file only records one MAC address per computer.</p>
+<p>Most modern computers have multiple MAC addresses (for example: if your computer has a Wifi adapter and two Ethernet ports, it's probably got at least 3 MAC addresses).  My lazy code just asks Windows to iterate the MAC addresses and reports the first one for use in the file.  Sometimes, though, the reported address will change, which causes someone's machine to modify the id_ranges file when they didn't expect it; we had this problem once when an audio contractor, who works offsite, installed some VPN software.  If that user is not vigilant about source control (which non-technical people often aren't), it can be a while before this problem is discovered; meanwhile, that user has been creating entities that may conflict with someone else's.</p>
+<p>Most or all occurrences of this problem could be solved by recording all of the user's MAC addresses in the file, instead of one; I just haven't done so.</p>
+<p>If we weren't using integer serial numbers, we wouldn't really need id_ranges at all.  For example, if we looked up entities at runtime by hashing unique string identifiers, then we would only need to ensure that each user has a unique string prefix.  We take a slight overkill approach, where each entity ID is a somewhat long string starting with the user's MAC address; or we could even generate a Windows GUID for each entity.  MAC addresses are 48 bits wide.  If you concatenate the MAC address with a 4-byte integer, that's just 10 bytes per entity ID, which isn't much (we currently use 4, already!).  Of course encoding these as strings and storing them in a hash table is going to require more space, but it isn't ridiculous.  Looking things up in a hash table all the time is slower than indexing a flat array, so we are sticking with the way we do things for now; but this would solve some problems and simplify the overall system, so it sounds like the kind of decision I would change my mind on later, as computers get even faster than they currently are.  So if you implement a scheme like this, you can ignore everything I said about id_ranges.  The biggest problem becomes making it easy to type longer entity IDs into the in-game editor.</p>
+<h2>Logistical Issues in Editor and File Format Design</h2>
+<p>In closing, I want to discuss changes we made to the editor and file format, in order to make them compatible with the paradigm of concurrent editing.</p>
+<h3>Arrays</h3>
+<p>Just about every game wants to serialize arrays into files.  When transitioning from a binary format, the most natural thing for a performance-minded programmer is to write the array length out first, then write each member of the array.  That way, when reading the file back, we know how much memory to allocate, and we avoid all the slow things one has to do when reading an array of unknown length.  However, encoding arrays in this way results in a textual format that always conflicts, because even when people are making compatible edits to an array, nobody is going to agree on what that array count should be; also, it becomes impossible to manually edit conflicts without typing the count in: if two people add elements to an array, the merged array will contain all the items, but neither version of the file will contain the correct count!</p>
+<p>To solve this, of course, we go to the common text-file convention of using a syntactic designation that an array is now over, rather than pre-declaring how many elements there are.  This is obvious, but I mention it here because it is a relatively universal concern.</p>
+<h3>Automatic Changes</h3>
+<p>You will also want to minimize or work around cases where the editor automatically changes entity properties without user intervention, because often these will lead to conflicts.  A simple example from our game world: the sun is represented by a few entities that are instantiated in the world, a glowing disc and a couple of particle systems.  Every frame, the gameplay code positions these entities with respect to the current camera transform so that, when the player moves around the world, the sun will seem to be infinitely far away.  This happens in the editor too, because when editing we want to see the world exactly the way it will look in-game.  So, as soon as we enabled concurrent editing, everyone was checking in different coordinates for the sun (depending on where the camera happened to be when they saved!) and this caused a lot of conflicts.  My first solution was to add a hack that zeroes the position of sun entities when saving, but upon loading, this interacted badly with the way particle systems interpolate their positions.  Instead, I added an entity flag that signifies that an entity's pose doesn't matter, with respect to thinking about whether it has changed or not, so we will only modify the sun's .entity_text files if some more-important properties are modified.  (This article is already long, but I'll say that in general, we detect differences between an entity's current state and its state when it was loaded, and we only write out .entity_text files when properties have changed.)</p>
+<h3>Relative Transforms</h3>
+<p>In our engine, all entities have 'position' and 'orientation' properties, which always represent the entity's frame in worldspace, flat and non-hierarchically.  If we want an entity to be attached to another entity's transform, we set the properties 'mount_parent_id', 'mount_position', and 'mount_orientation' (you can see all these properties in the listing for Door #6555 above); once per frame, the game engine computes the entity's new worldspace transform based on its mount information, properly handling long dependency chains.  Once we started using textual entity files, we found that entities' worldspace coordinates would often differ by an LSB or two, even when their parents had not moved (differences especially happening, for example, between Debug and Release builds of the game).  Even without concurrent editing, it's good to clean this up as a matter of basic hygiene, because otherwise you're checking in spurious changes all the time, increasing load on the source control system and making it harder for a human to see useful information in the change list.  I chose to solve this problem by making the mount-update code more complex: it detects whether an entity has moved of its own accord, and only updates child entities' worldspace positions if the parent entity really moved (or if the child entity really moved!).</p>
+<h3>Terrain Editing</h3>
+<p>There is one piece of editing workflow that used to make sense before concurrent editing, but which now does not.  We have a terrain system wherein we can move control points around in worldspace, then select a terrain entity, which has a height-field mesh, and press a key to recompute that height field with respect to the new control points.  I originally made this recomputation happen only on manually-selected entities, rather than automatically on the entire world, for UI smoothness purposes: the recomputation takes some time.  But when you only recompute one block of terrain and not its neighbors, you get discontinuities in the terrain; the longer things go on, the more discontinuities you get.  Once in a while I would fix this by selecting all terrain entities in the world, recomputing them simultaneously.</p>
+<p><div id="attachment_1454" style="width: 522px" class="wp-caption aligncenter"><a href="http://the-witness.net/news/wp-content/uploads/2011/12/discontinuity.png"><img aria-describedby="caption-attachment-1454" class="size-large wp-image-1454" title="discontinuity" src="http://the-witness.net/news/wp-content/uploads/2011/12/discontinuity-512x322.png" alt="" width="512" height="322" /></a><p id="caption-attachment-1454" class="wp-caption-text">A terrain discontinuity</p></div></p>
+<p>The catch is that when terrain changes, it affects other entities.  We re-plant grass, so that the grass matches the new elevations; we change the positions of trees and rocks and other objects that are rooted to the terrain at a predetermined height.  Whenever you recompute some terrain, we collect all grass/trees/rocks within a conservative bounding radius, as these are all the things that might possibly change.  When dealing with small groups of terrain blocks, this already is a bit of a recipe for trouble (it is not too hard to overlap someone else's edits this way); but it also means that if I recompute the entire terrain to eliminate those discontinuities, I am in turn editing all grass, trees, and rocks in the world, and will inevitably conflict with anyone else who has moved any of them. For now, we simply shy away from this kind of global operation; when you get a conflict in some entity that you probably didn't care about, like grass, it is easy just to accept the remote version of the file.  Long-term, I expect some kind of heavier-weight solution would have to happen here, though I hope it does not involve much locking.</p>
+<h3>Issuing Source Control Commands</h3>
+<p>Our editor automatically issues source control commands when entities are created or destroyed, because it would be extremely tedious and error-prone to expect users to do this.  Initially we had some problems with source control commands unexpectedly failing, which quickly leads to chaos.  After some work, issuing source control commands seems to work with full consistency, but we are still a little wary of it; so we don't, for example, want to issue the commands via a background process, adding more complexity to the system.  The problem with this is that svn commands are a bit slow.  Sometimes when I have been editing the world for a while, it can take 15 to 30 seconds to save my changes, which would have happened instantaneously without the svn commands.</p>
+<h2>Conclusion</h2>
+<p>We've put together a system that lets us concurrently edit an open world, using source control to manage our world edits.  It works well enough for us to ship the game, so I am happy with it.  If the scheme ever fails in some way, or requires heavy modification, I will post an update!</p>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/" title="Permalink to Engine Tech: Concurrent world editing" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2011/12/architecture-in-the-witness/" rel="prev"><i class="meta-nav-prev"></i> Architecture in The Witness</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2012/01/the-trailer-for-dear-esther-is-out-now/" rel="next">The trailer for Dear Esther is out now. <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				45 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-8806">
+		<div id="comment-8806">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/b667dff85b9fc0286902b8e6adff8b90?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/b667dff85b9fc0286902b8e6adff8b90?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.noio.nl' rel='external nofollow ugc' class='url'>Tom</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8806">
+					December 25, 2011 at 5:16 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Interesting article! I&#8217;m definitely remembering that saving your assets/environment data in a source control <em>actually works</em> :). Though I would&#8217;ve always tried to use some existing data format like JSON or YAML, inventing my own has given me too many headaches in the past.</p>
+<p>By the way, did you know that Python&#8217;s repr() function returns your float as a string in exactly as many decimals you need to convert it back to its original float representation? I.e. <code>f == float(repr(f))</code> is guaranteed for all floats f.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8806#respond' data-commentid="8806" data-postid="1429" data-belowelement="comment-8806" data-respondelement="respond" data-replyto="Reply to Tom" aria-label='Reply to Tom'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-8808">
+		<div id="comment-8808">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1d244986a65c15c9b6959c173dde6e35?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">justin</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8808">
+					December 25, 2011 at 6:07 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I didn&#8217;t understand one word&#8230; why are games so difficult? </p>
+<p>But I can tell you try to say things as simple as possible in layman terms, but is still ahrd to follow and get everything.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8808#respond' data-commentid="8808" data-postid="1429" data-belowelement="comment-8808" data-respondelement="respond" data-replyto="Reply to justin" aria-label='Reply to justin'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8811">
+		<div id="comment-8811">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/3ec32ad832fe8704e0e759dbebcbd599?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/3ec32ad832fe8704e0e759dbebcbd599?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Marco Mustapic</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8811">
+					December 25, 2011 at 6:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The first merge situation you describe is one that git or mercurial solve very easily. Except in special cases (editing the same line in a file), the merge works flawlessly. Another advantage of git is that it was designed to be very fast. The downside is that the transition from SVN to any DVCS is not easy.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8811#respond' data-commentid="8811" data-postid="1429" data-belowelement="comment-8811" data-respondelement="respond" data-replyto="Reply to Marco Mustapic" aria-label='Reply to Marco Mustapic'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-8814">
+		<div id="comment-8814">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/248fa332d9538c0cfaa29960a998127e?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/248fa332d9538c0cfaa29960a998127e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">KC</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8814">
+					December 25, 2011 at 8:20 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I agree with you. I have tried quite a few source control systems, each progressively better than the previous (SourceSafe, SVN, hg, git). Now we use git in all team projects and so far <em>all</em> merge conflicts we&#8217;ve encountered are &#8216;legitimate&#8217;. But then again, I haven&#8217;t been doing many projects the same scale as The Witness and might be wrong.</p>
+<p>Also, I agree with the XML bit, though the way you said it was quite funny :).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8814#respond' data-commentid="8814" data-postid="1429" data-belowelement="comment-8814" data-respondelement="respond" data-replyto="Reply to KC" aria-label='Reply to KC'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-odd thread-alt depth-1" id="li-comment-8815">
+		<div id="comment-8815">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8815">
+					December 25, 2011 at 8:27 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The word on the street is that git/mercurial/etc handle binary assets very poorly, and there&#8217;s no way those systems would scale to even a small game like The Witness.  I am given to understand that Kiln is an attempt to fix this but that it doesn&#8217;t work well enough (never tried it myself).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8815#respond' data-commentid="8815" data-postid="1429" data-belowelement="comment-8815" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-8829">
+		<div id="comment-8829">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/18c4b79a7fd7e606866246ff5991c7eb?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/18c4b79a7fd7e606866246ff5991c7eb?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Klaim</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8829">
+					December 26, 2011 at 7:32 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi John,</p>
+<p>you are right about problems with &#8220;big files&#8221; with git and mercurial. However, last version of mercurial tries to fix exactly this problem with providing a default-implementation plug-in that is (if I&#8217;m correct) the same as Kiln&#8217;s plugin. It&#8217;s called largefiles (see <a href="http://mercurial.selenic.com/wiki/LargefilesExtension" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://mercurial.selenic.com/wiki/LargefilesExtension', 'http://mercurial.selenic.com/wiki/LargefilesExtension']);" rel="nofollow ugc">http://mercurial.selenic.com/wiki/LargefilesExtension</a> ).<br />
+As said in the page, it&#8217;s too soon to use it in production, it needs some works, but it&#8217;s a good thing they are working on this problem. I guess some years from now the problem will be solved for us game devs using decentralized tools.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8829#respond' data-commentid="8829" data-postid="1429" data-belowelement="comment-8829" data-respondelement="respond" data-replyto="Reply to Klaim" aria-label='Reply to Klaim'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8820">
+		<div id="comment-8820">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/08cfb70f32d12a81926575e0a3fc2d4e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/08cfb70f32d12a81926575e0a3fc2d4e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://bengarney.com/' rel='external nofollow ugc' class='url'>Ben Garney</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8820">
+					December 25, 2011 at 9:39 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Great writeup. Wonderful insights drawn from a production system.</p>
+<p>Have you thought about how git&#8217;s change-centric model might affect the problems you&#8217;re solving? It seems like some of your pain comes because SVN is state-centric.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8820#respond' data-commentid="8820" data-postid="1429" data-belowelement="comment-8820" data-respondelement="respond" data-replyto="Reply to Ben Garney" aria-label='Reply to Ben Garney'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-8821">
+		<div id="comment-8821">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/08cfb70f32d12a81926575e0a3fc2d4e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/08cfb70f32d12a81926575e0a3fc2d4e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://bengarney.com/' rel='external nofollow ugc' class='url'>Ben Garney</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8821">
+					December 25, 2011 at 9:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Whoops &#8211; my bad, looks like comments covering my question got posted while I was reading. :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8821#respond' data-commentid="8821" data-postid="1429" data-belowelement="comment-8821" data-respondelement="respond" data-replyto="Reply to Ben Garney" aria-label='Reply to Ben Garney'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8822">
+		<div id="comment-8822">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/11f8f8a96311736af7072e1210711ca5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/11f8f8a96311736af7072e1210711ca5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Daniel</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8822">
+					December 25, 2011 at 10:11 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Take a look at using Windows SIDs to uniquely identify the development machines. It&#8217;s kind of ugly but they&#8217;re very sticky and you won&#8217;t run into any of the network interface problems.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8822#respond' data-commentid="8822" data-postid="1429" data-belowelement="comment-8822" data-respondelement="respond" data-replyto="Reply to Daniel" aria-label='Reply to Daniel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-8823">
+		<div id="comment-8823">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6506ed15c81492f6d573d2a49769997c?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6506ed15c81492f6d573d2a49769997c?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Constantine</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8823">
+					December 26, 2011 at 2:34 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>XML part is hilarious :D</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8823#respond' data-commentid="8823" data-postid="1429" data-belowelement="comment-8823" data-respondelement="respond" data-replyto="Reply to Constantine" aria-label='Reply to Constantine'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8825">
+		<div id="comment-8825">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/928632a4940f63d67d24bb792b6b2e87?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Zaphos</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8825">
+					December 26, 2011 at 3:46 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>re the terrain edit causing conflicts &#8212; would that problem go away if you just stored all the object heights as ground-relative values?  So, changing the terrain would implicitly change &#8216;on ground&#8217; objects, but there would be no explicit per-object changes to write/commit?  Just a thought &#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8825#respond' data-commentid="8825" data-postid="1429" data-belowelement="comment-8825" data-respondelement="respond" data-replyto="Reply to Zaphos" aria-label='Reply to Zaphos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor odd alt depth-2" id="li-comment-8839">
+		<div id="comment-8839">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8839">
+					December 26, 2011 at 12:27 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The thing is, we want the majority of objects to be independent of terrain.  So we would have to have some kind of hybrid system about how things are anchored or not, and I just haven&#8217;t put in the time to think about it.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8839#respond' data-commentid="8839" data-postid="1429" data-belowelement="comment-8839" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8827">
+		<div id="comment-8827">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/08c8464ba6f93584e0ce8fb6fd16e40e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/08c8464ba6f93584e0ce8fb6fd16e40e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://gabrielverdon.com' rel='external nofollow ugc' class='url'>Gabriel Verdon</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8827">
+					December 26, 2011 at 6:18 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Thanks for posting this. I love reading about behind-the-scenes insights like this.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8827#respond' data-commentid="8827" data-postid="1429" data-belowelement="comment-8827" data-respondelement="respond" data-replyto="Reply to Gabriel Verdon" aria-label='Reply to Gabriel Verdon'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-8833">
+		<div id="comment-8833">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/63d65848c74ab5fce031f759ccbf185b?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/63d65848c74ab5fce031f759ccbf185b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.bryangale.com' rel='external nofollow ugc' class='url'>Bryan Gale</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8833">
+					December 26, 2011 at 10:22 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This was a really interesting read, thanks for sharing. A lot of these problems sound familiar from the last project I was on.</p>
+<p>Did the ID ranges need to be per-machine rather than per-user? I&#8217;d have thought going off SVN username would be easier than MAC address if not. </p>
+<p>And can you elaborate on what you used the entity data version for? What does that give you on top of what is already held in SVN history?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8833#respond' data-commentid="8833" data-postid="1429" data-belowelement="comment-8833" data-respondelement="respond" data-replyto="Reply to Bryan Gale" aria-label='Reply to Bryan Gale'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor even depth-2" id="li-comment-8838">
+		<div id="comment-8838">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8838">
+					December 26, 2011 at 12:26 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It needed to be per-machine, because something that happens often is, say, I am editing on my computer at home, and I forget to check it in when I go to work; throw a laptop into the mix, and there becomes this whole check-in-management discipline that I would need to maintain.  With per-machine ranges that basically goes away.</p>
+<p>The entity data version is for adding fields to entities.  The game can load an older entity that wasn&#8217;t saved with those fields.  It&#8217;s a completely separate issue from source control, really.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8838#respond' data-commentid="8838" data-postid="1429" data-belowelement="comment-8838" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-8835">
+		<div id="comment-8835">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/88ef015595dd36d6fa6446aba3a82aff?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/88ef015595dd36d6fa6446aba3a82aff?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Chris Boucher</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8835">
+					December 26, 2011 at 10:41 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Thanks for the article, a good read.</p>
+<p>A small correction: TortoiseSVN does include the command line binaries, but they&#8217;re not installed by default, just select them in the installer.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8835#respond' data-commentid="8835" data-postid="1429" data-belowelement="comment-8835" data-respondelement="respond" data-replyto="Reply to Chris Boucher" aria-label='Reply to Chris Boucher'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor even depth-2" id="li-comment-8840">
+		<div id="comment-8840">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8840">
+					December 26, 2011 at 12:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Yeah, someone notified me of this and said it is new as of svn 1.7?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8840#respond' data-commentid="8840" data-postid="1429" data-belowelement="comment-8840" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-8842">
+		<div id="comment-8842">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/88ef015595dd36d6fa6446aba3a82aff?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/88ef015595dd36d6fa6446aba3a82aff?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Chris Boucher</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8842">
+					December 26, 2011 at 1:09 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Could well be, they certainly didn&#8217;t used to, but I don&#8217;t know when that changed. I used to install the command line binaries from somewhere else too, but noticed they were included in Tortoise recently when building a new dev machine.</p>
+<p>BTW, probably not directly useful, but I recently needed to enumerate the MAC addresses of &#8220;physical&#8221; network devices only, ignoring the virtual ones, etc. As far as I could tell, the information returned by GetAdaptersAddresses is insufficient to make this distinction, so I had to combine it with some information from the registry.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8842#respond' data-commentid="8842" data-postid="1429" data-belowelement="comment-8842" data-respondelement="respond" data-replyto="Reply to Chris Boucher" aria-label='Reply to Chris Boucher'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8843">
+		<div id="comment-8843">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4e9e8dde676bd6fcdd6e543145e5353f?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4e9e8dde676bd6fcdd6e543145e5353f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.david-amador.com' rel='external nofollow ugc' class='url'>David Amador</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8843">
+					December 26, 2011 at 2:06 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very informative article, thanks for this.<br />
+Just one thing, SVN? why not use Git?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8843#respond' data-commentid="8843" data-postid="1429" data-belowelement="comment-8843" data-respondelement="respond" data-replyto="Reply to David Amador" aria-label='Reply to David Amador'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor odd alt depth-2" id="li-comment-8847">
+		<div id="comment-8847">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8847">
+					December 26, 2011 at 2:46 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Because git cannot handle game data.  See comments above.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8847#respond' data-commentid="8847" data-postid="1429" data-belowelement="comment-8847" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8861">
+		<div id="comment-8861">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/fce1fc37203a97586da8dc80d66aafad?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/fce1fc37203a97586da8dc80d66aafad?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://playtechs.blogspot.com' rel='external nofollow ugc' class='url'>James McNeill</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8861">
+					December 27, 2011 at 12:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Regarding floating point text representation, have you tried just using printf&#8217;s %g format specifier? That&#8217;s what I use. It&#8217;s not new or unusual by any means (and is probably implemented using that code you linked to). It outputs enough decimal digits to exactly represent the input (so zero is 0, for instance) and switches to scientific notation when that is shorter.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8861#respond' data-commentid="8861" data-postid="1429" data-belowelement="comment-8861" data-respondelement="respond" data-replyto="Reply to James McNeill" aria-label='Reply to James McNeill'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor odd alt depth-2" id="li-comment-8887">
+		<div id="comment-8887">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8887">
+					December 27, 2011 at 7:06 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Right, but %g seems to be mainly a zero-trimming thing, not an exact-transcription thing&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8887#respond' data-commentid="8887" data-postid="1429" data-belowelement="comment-8887" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8868">
+		<div id="comment-8868">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/34ac4cf03cee7c043482c0ed8ac5b095?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/34ac4cf03cee7c043482c0ed8ac5b095?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://eldroidgames.com/' rel='external nofollow ugc' class='url'>elDroid</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8868">
+					December 27, 2011 at 4:46 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Nice article, thank you for sharing!</p>
+<p>I found WinMerge a much better visual merge tool than the one which comes with Tortoise, it handles conflicts better and seems &#8220;smarter&#8221; in interpreting text changes.</p>
+<p>It can set it as default conflicts handler in TortoiseSVN.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8868#respond' data-commentid="8868" data-postid="1429" data-belowelement="comment-8868" data-respondelement="respond" data-replyto="Reply to elDroid" aria-label='Reply to elDroid'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor odd alt depth-2" id="li-comment-8888">
+		<div id="comment-8888">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8888">
+					December 27, 2011 at 7:06 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This is likely true!  It definitely helps to use a better merge program, but part of the point is that whatever merge program you use, at some point someone is going to fail a merge in a way that causes the file to stop parsing.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8888#respond' data-commentid="8888" data-postid="1429" data-belowelement="comment-8888" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8906">
+		<div id="comment-8906">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/786d79116ca19c597593c33e3b4f7991?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/786d79116ca19c597593c33e3b4f7991?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://malcodig.blogspot.com' rel='external nofollow ugc' class='url'>Luis Cabellos</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8906">
+					December 28, 2011 at 6:10 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I understand your  concern about you don’t want to require users to be on the network in order to edit. But you already need to be connected in order to use Subversion commits. And thinking about it, having all connected in edit mode, will it pay to have a database (mysql, postgresql) to save entities during development?</p>
+<p>I think having a database will solve the unique ID issues, format representation issues and most of the conflicts.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8906#respond' data-commentid="8906" data-postid="1429" data-belowelement="comment-8906" data-respondelement="respond" data-replyto="Reply to Luis Cabellos" aria-label='Reply to Luis Cabellos'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor odd alt depth-2" id="li-comment-8911">
+		<div id="comment-8911">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8911">
+					December 28, 2011 at 10:02 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The only thing the database would provide is atomic access, which as I said we can already do just by making that file lockable; we just didn&#8217;t care enough to do it yet.</p>
+<p>Apart from that, keep in mind we already have a database: it&#8217;s called the filesystem.</p>
+<p>But since you are saying &#8220;but you already need to be connected to use commits&#8230; So why not use a database&#8221; it&#8217;s clear that you actually don&#8217;t understand the concern.  That&#8217;s fine, I have no problem with that; just don&#8217;t claim that you do!</p>
+<p>The point is we can edit the world for weeks if we want to, in isolation, then come back on the net and do a commit&#8230; It&#8217;s kind of different!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8911#respond' data-commentid="8911" data-postid="1429" data-belowelement="comment-8911" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-8926">
+		<div id="comment-8926">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/03df1416365f3a3a348255b53150c5ad?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/03df1416365f3a3a348255b53150c5ad?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.metanetsoftware.com/blog' rel='external nofollow ugc' class='url'>raigan</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8926">
+					December 28, 2011 at 6:48 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Does &#8220;75000 78000 F4-6D-04-1F-CC-77 #Nacho&#8221; imply that Nacho Vigalondo is working on The Witness?! </p>
+<p>Has this been previously announced, or did I just scoop everyone? ;)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8926#respond' data-commentid="8926" data-postid="1429" data-belowelement="comment-8926" data-respondelement="respond" data-replyto="Reply to raigan" aria-label='Reply to raigan'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor odd alt depth-2" id="li-comment-8942">
+		<div id="comment-8942">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8942">
+					December 29, 2011 at 12:16 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hahaha no, that is not what that means.  That&#8217;s our main engine programmer!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8942#respond' data-commentid="8942" data-postid="1429" data-belowelement="comment-8942" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-9007">
+		<div id="comment-9007">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d12228523065cd77c377e3cb1a0c6e5d?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d12228523065cd77c377e3cb1a0c6e5d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.tpodhraski.com' rel='external nofollow ugc' class='url'>Tomislav Podhraški</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9007">
+					December 30, 2011 at 5:04 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;ve done a similar thing on a game project I&#8217;m not working on anymore. The project still continues, I don&#8217;t know if any of this was improved&#8230; </p>
+<p>Using file per entity was the first step. I chose binary files, because I didn&#8217;t want to bother with serialization. Merging individual files was not important in this system.</p>
+<p>For handling multiple users we used a simple identifier in editor settings (username). That mapped to a folder where entity files user created were saved. Every new entity file had a number for a name, which increased for each entity.</p>
+<p>Simple rule was applied: &#8220;Only the user can create files in his folder, he can change files in any folder&#8221;.</p>
+<p>I think the last time I was checking the entity count was 300k. We&#8217;ve obviously had problems with this, so a simple hack was used, when user folder had a lot of files in it the username was appended with an number username_1.</p>
+<p>Now for the main difference, we used Dropbox instead of svn. That saved me from doing any work related to syncing/committing files since it was automatic. I don&#8217;t think there is a real need to have a full version history of map, but do make backups.</p>
+<p>Solving conflicts &#8211; we didn&#8217;t! Go work on you part of the map.</p>
+<p>Terrain was a heightfield, chopped up into grid and each grid was a file. Same rules as above, with terrain having been created at start.</p>
+<p>Textures, models, shaders and all other resources were also managed with Dropbox.</p>
+<p>The grand plan was to have every resource automatically synced on every computer and have the tools detect changes and reload them as they happen. You could have an editor open and see the changes other people make. It worked for a while.</p>
+<p>But as with all things, it didn&#8217;t last. With more files in there is started to get slower. I had to work on other parts of the game, and the slowness was compensated with removing features &#8211; automatic resource reloading was gone.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9007#respond' data-commentid="9007" data-postid="1429" data-belowelement="comment-9007" data-respondelement="respond" data-replyto="Reply to Tomislav Podhraški" aria-label='Reply to Tomislav Podhraški'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-9053">
+		<div id="comment-9053">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/838505b44a02cc2af8edd219d01cf109?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/838505b44a02cc2af8edd219d01cf109?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Pritchard</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9053">
+					December 31, 2011 at 3:33 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>This is my favorite post from any of your blogs to date :)</p>
+<p>It&#8217;s a shame I learned so much from reading your article.  That makes your post more valuable, but my formal education less.</p>
+<p>I recently landed my first job as a Software Engineer.  I&#8217;m finding that working full-time for other people is less fulfilling than I&#8217;d hoped.  How will I ever find the time to create awesome things now that I have this commitment? :(</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9053#respond' data-commentid="9053" data-postid="1429" data-belowelement="comment-9053" data-respondelement="respond" data-replyto="Reply to Pritchard" aria-label='Reply to Pritchard'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-9358">
+		<div id="comment-9358">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4e4ae3ebe37b7c5ac2b330bca86c61cf?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4e4ae3ebe37b7c5ac2b330bca86c61cf?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Daniel</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9358">
+					January 5, 2012 at 8:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>&#8220;Many modern programmers seem to have some kind of knee-jerk inclination to use XML whenever a textual format is desired, but I think XML is one of the worst file formats ever created, and I have no idea why anyone uses it for anything at all, except that perhaps they drank the XML Kool-Aid or have XML Stockholm Syndrome.&#8221; &#8211; Jonathan Blow</p>
+<p>Dude&#8230; We have to make custom T-shirts. :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9358#respond' data-commentid="9358" data-postid="1429" data-belowelement="comment-9358" data-respondelement="respond" data-replyto="Reply to Daniel" aria-label='Reply to Daniel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-9480">
+		<div id="comment-9480">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/33536e304f2318595dbd6104fdb0bd4a?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/33536e304f2318595dbd6104fdb0bd4a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://alejandromp.com' rel='external nofollow ugc' class='url'>Alejandro Martinez</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9480">
+					January 9, 2012 at 1:18 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very interesting post! Thanks for the info! ;)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9480#respond' data-commentid="9480" data-postid="1429" data-belowelement="comment-9480" data-respondelement="respond" data-replyto="Reply to Alejandro Martinez" aria-label='Reply to Alejandro Martinez'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-9531">
+		<div id="comment-9531">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a6c5e9b71c67a95050f46dae735f29b?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a6c5e9b71c67a95050f46dae735f29b?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Cristiano Colangelo</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9531">
+					January 11, 2012 at 7:53 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very Good. I want this game!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9531#respond' data-commentid="9531" data-postid="1429" data-belowelement="comment-9531" data-respondelement="respond" data-replyto="Reply to Cristiano Colangelo" aria-label='Reply to Cristiano Colangelo'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-9550">
+		<div id="comment-9550">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9037c64e0a669619be208e4d510891dc?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9037c64e0a669619be208e4d510891dc?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.garygamesoup.blogspot.com' rel='external nofollow ugc' class='url'>Gary Hawkins</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9550">
+					January 11, 2012 at 4:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I didn&#8217;t understand a word of any of that, but&#8230; Jonathan Blow and team FTW? </p>
+<p>I think so :D!</p>
+<p>xx</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9550#respond' data-commentid="9550" data-postid="1429" data-belowelement="comment-9550" data-respondelement="respond" data-replyto="Reply to Gary Hawkins" aria-label='Reply to Gary Hawkins'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-9724">
+		<div id="comment-9724">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0a415706cdd61b7eed8de7bc18b9021c?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0a415706cdd61b7eed8de7bc18b9021c?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Dougie</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9724">
+					January 17, 2012 at 5:33 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Can I preorder somewhere or am i too early?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9724#respond' data-commentid="9724" data-postid="1429" data-belowelement="comment-9724" data-respondelement="respond" data-replyto="Reply to Dougie" aria-label='Reply to Dougie'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-9840">
+		<div id="comment-9840">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/085e5fd8d773943b48cc8d5f2adb137e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/085e5fd8d773943b48cc8d5f2adb137e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jordan</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-9840">
+					January 21, 2012 at 2:44 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>That&#8217;s very interesting to discover your work. Will be there a beta or other solution to help you ?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=9840#respond' data-commentid="9840" data-postid="1429" data-belowelement="comment-9840" data-respondelement="respond" data-replyto="Reply to Jordan" aria-label='Reply to Jordan'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-10890">
+		<div id="comment-10890">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6f0f4f8248ce3b56e97f17ce814bf6dd?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6f0f4f8248ce3b56e97f17ce814bf6dd?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://awevation.com' rel='external nofollow ugc' class='url'>bananaoomarang</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-10890">
+					February 25, 2012 at 10:53 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Extremely interesting! I really appreciate it that you took the time to write this, really awesome of you! </p>
+<p>I would suggest Git, but looks like I would be wrong judging by the commits!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=10890#respond' data-commentid="10890" data-postid="1429" data-belowelement="comment-10890" data-respondelement="respond" data-replyto="Reply to bananaoomarang" aria-label='Reply to bananaoomarang'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-99620">
+		<div id="comment-99620">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f639bbc921a5ae846fd512de2a7e32ed?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f639bbc921a5ae846fd512de2a7e32ed?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://jasonericson.net' rel='external nofollow ugc' class='url'>Jason Ericson</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-99620">
+					November 26, 2012 at 3:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I know this post is old but my question is directly related so I thought this would be an appropriate place.</p>
+<p>I&#8217;m relatively new to building game engines (so forgive my ignorance) and I have some questions about editing game data. I see from this post that you have the ability to save and load from both binary and text files. My main question: what, specifically, is the editor actually editing? Is it editing the binary package, the text files, or is it directly editing the entities themselves in code? If it&#8217;s the last one (I suspect that it is), at what point are you saving out to files? Is there a specific save function or is it automatic?</p>
+<p>Finally, in any case, are there any resources you could point me to on implementing robust serialization and/or reflection in c++? I come from a C# background (don&#8217;t judge me! :) ) where reflection is trivial, so I&#8217;m less familiar with pulling together an entity&#8217;s data in a form useful for serialization.</p>
+<p>Thanks!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=99620#respond' data-commentid="99620" data-postid="1429" data-belowelement="comment-99620" data-respondelement="respond" data-replyto="Reply to Jason Ericson" aria-label='Reply to Jason Ericson'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor even depth-2" id="li-comment-99810">
+		<div id="comment-99810">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-99810">
+					November 26, 2012 at 6:33 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The editor is editing the entities that are loaded into memory. Then when you press the Save button, the entities are serialized into both the text and binary files. </p>
+<p>Serialization is pretty straightforward, it is reflection that is involved. Since C++ does not provide a good way to do this, we create a function for each entity type that registers its members. But this is actually good, because this is also how we handle compatibility as entities change. When you register a member field of an entity, you can specify the per-entity-type revision number at which the field started being valid, or at which it stopped being valid. If you try to use automated reflection provided by the programming language, there isn&#8217;t an obvious way to do this, since if you delete a field it is just gone. (You then probably tend toward a file format that is a little more self-descriptive, though that will be somewhat less space-efficient).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=99810#respond' data-commentid="99810" data-postid="1429" data-belowelement="comment-99810" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-100067">
+		<div id="comment-100067">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f639bbc921a5ae846fd512de2a7e32ed?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f639bbc921a5ae846fd512de2a7e32ed?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://jasonericson.net' rel='external nofollow ugc' class='url'>Jason Ericson</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-100067">
+					November 26, 2012 at 8:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Ah, interesting. I hadn&#8217;t thought about the compatibility issues. So essentially you have to manually update a map of strings to variables (or something to that effect)? That seems manageable. I can look up more info on member fields and the like.</p>
+<p>Also when I said &#8220;entities in code&#8221; I did mean in memory, heh. Whoops. But cool, thanks for the info.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=100067#respond' data-commentid="100067" data-postid="1429" data-belowelement="comment-100067" data-respondelement="respond" data-replyto="Reply to Jason Ericson" aria-label='Reply to Jason Ericson'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-jon bypostauthor even depth-4" id="li-comment-100840">
+		<div id="comment-100840">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-100840">
+					November 27, 2012 at 5:27 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>We define a couple of macros to make it simple, so it looks like&#8230;</p>
+<p>void Entity_Type_Terrain::register_metadata() {<br />
+    NULL_PROXY(e, Entity_Terrain);</p>
+<p>    metadata = make_entity_metadata();</p>
+<p>    Metadata_Item *item;<br />
+    item = Item(e, texture_name);</p>
+<p>    item = Item(e, normal_map_name);<br />
+    item->minimum_revision_number = 25;<br />
+    item->flags |= Metadata_Item::ADJUSTABLE_WITHOUT_RECREATE;</p>
+<p>    item = Item(e, map_size);<br />
+    item->minimum_revision_number = 63;<br />
+    item->maximum_revision_number = 85;<br />
+    item->flags |= Metadata_Item::DO_NOT_DISPLAY_IN_UI;</p>
+<p>&#8230;</p>
+<p>The &#8216;NULL_PROXY&#8217; macro just declares &#8216;e&#8217; as an Entity_Terrain and sets it up in the right way. It&#8217;s an idiom that only exists in that file that you don&#8217;t really have to think about, apart from ensuring it&#8217;s at the top of the function.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=100840#respond' data-commentid="100840" data-postid="1429" data-belowelement="comment-100840" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-5" id="li-comment-103901">
+		<div id="comment-103901">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f639bbc921a5ae846fd512de2a7e32ed?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f639bbc921a5ae846fd512de2a7e32ed?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://jasonericson.net' rel='external nofollow ugc' class='url'>Jason Ericson</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-103901">
+					November 28, 2012 at 3:00 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very cool, I really like the deprecation system. Thanks for the info! I might tromp around your blog again if I have more questions, or do you respond to email?</p>
+			<div class="reply">
+							</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-108072">
+		<div id="comment-108072">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f814654faae23dc2e0d7da97ead044b8?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f814654faae23dc2e0d7da97ead044b8?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://sylvainhb.blogspot.com' rel='external nofollow ugc' class='url'>PypeBros</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-108072">
+					November 30, 2012 at 1:37 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>nice. I&#8217;m eager to see how this will all turn into&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=108072#respond' data-commentid="108072" data-postid="1429" data-belowelement="comment-108072" data-respondelement="respond" data-replyto="Reply to PypeBros" aria-label='Reply to PypeBros'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3009727">
+		<div id="comment-3009727">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/f635684e01136947a0eba111939d55f8?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/f635684e01136947a0eba111939d55f8?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Michael</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-3009727">
+					January 2, 2014 at 10:17 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Are you using a 1.8.*+ version of the TortoiseSVN client?  Not sure how early on you installed TortoiseSVN since 2008, and whether you&#8217;ve updated, but I noticed greatly reduced &#8220;illegitimate&#8221; merge conflicts come 1.8.* of TSVN.  (The client&#8217;s backwards with earlier server versions, and so well worth the update.)</p>
+<p>Here&#8217;s hoping you&#8217;re using a 1.6/1.7 client, and enjoy the merge conflict reduction I&#8217;ve seen.</p>
+<p>Cheers.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=3009727#respond' data-commentid="3009727" data-postid="1429" data-belowelement="comment-3009727" data-respondelement="respond" data-replyto="Reply to Michael" aria-label='Reply to Michael'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-8779897">
+		<div id="comment-8779897">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0f31749786a01a8d66545098434f981f?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0f31749786a01a8d66545098434f981f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='https://www.youtube.com/channel/UCJw8OtXzX2cR75Cis8BghMA/' rel='external nofollow ugc' class='url'>Raphaël</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/#comment-8779897">
+					June 24, 2018 at 4:58 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Jonathan , I have A question , I buyed your game on PC , And I finished it , I LOVED it , but I have a question , after finishing the Two Possibles Ends , the Editor is in the game ? Because I really want to see the world with another angle with the editor , what is the key if the editor still in the game ?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2011/12/engine-tech-concurrent-world-editing/?replytocom=8779897#respond' data-commentid="8779897" data-postid="1429" data-belowelement="comment-8779897" data-respondelement="respond" data-replyto="Reply to Raphaël" aria-label='Reply to Raphaël'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2011/12/engine-tech-concurrent-world-editing/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1429' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6350decb91" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="171"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.237 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:34:27 -->
+
+<!-- super cache -->

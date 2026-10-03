@@ -1,0 +1,74 @@
+{
+  "id": "official-2016-02-02-fun-sales-fakts",
+  "title": { "zh": "有趣的销量 Fakts", "en": "Fun Sales Fakts" },
+  "subtitle": {
+    "en": "A one-week financial summary: first-week revenue, how it compares to Braid, and why that still isn't break-even.",
+    "zh": "发售一周的财务小结：首周收入有多少、和《Braid》怎么比，以及为什么这还谈不上回本。"
+  },
+  "translator": {
+    "note": "标题里的 Fakts 是 Blow 故意把 Facts 拼错，属于他自己的玩笑，翻译时保留了原拼写。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The Witness has now been on sale for a week, so it seems like a good time to post a financial summary. Often, independent developers find these kinds of numbers useful in making their own plans, and the general public can find them interesting too.",
+      "zh": "《The Witness》现在已经发售满一周了，看上去正是发一份财务小结的好时机。独立开发者常常觉得这类数字对自己做规划有用，普通公众也可能觉得有意思。"
+    },
+    {
+      "type": "p",
+      "en": "There is a wrinkle, which is that I can't be too precise about the sales results on specific platforms, because often when we sign a deal with a particular store, we agree not to reveal their sales numbers. I am actually not sure at this time which stores we are allowed to be specific about and which we aren't, and I would have to dig up and sort through a number of contracts to be sure about it; but that is not a good use of time right now, since I am spending most of my day supporting the users who have technical problems (shipping games on PCs these days is really not fun). The situation can be thorny in subtle ways, too, because if I post information about all stores but one, then I am implicitly revealing the sales figures for that last store, which is not allowed.",
+      "zh": "有个麻烦：我没法把各个具体平台的销售结果说得太精确，因为我们在和某家商店签协议时，常常会约定不公开他们的销售数字。实际上我现在也不确定哪些商店允许我明说、哪些不允许，要确定这一点，我得翻出一堆合同来梳理；但现在这么做不划算，因为我一天里大部分时间都在给遇到技术问题的用户做支持（如今在 PC 上发行游戏真的一点都不好玩）。这件事还会以一些微妙的方式变得棘手：如果我把除一家之外所有商店的信息都发出来，那就等于间接透露了最后那家的销售数字，而这是不允许的。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, I want to make clear that we did not make this game in order to make money. We were trying to build a beautiful / interesting / intricate thing, first and foremost. The money just helps us stay in business in order to build new things. It is very easy on the Internet to read a financial posting like this cynically, so I urge folks out there not to do that.",
+      "zh": "最后，我想说清楚：我们做这款游戏不是为了赚钱。我们首先是想造出一个美丽、有趣、精巧的东西。钱只是帮我们把生意维持下去，好继续做新东西。在互联网上，人们很容易用一种犬儒的眼光去读这样一份财务公开，所以我恳请各位不要那样读。"
+    },
+    {
+      "type": "p",
+      "en": "Okay, so here's what I can say:",
+      "zh": "好，下面是我能说的："
+    },
+    {
+      "type": "p",
+      "en": "Across all platforms, The Witness has totalled over $5 million USD gross revenue in the first week, and it has sold substantially more than 100,000 units.",
+      "zh": "在所有平台合计，《The Witness》首周的毛收入超过 500 万美元，销量则明显超过 100,000 份。"
+    },
+    {
+      "type": "p",
+      "en": "This is a good chunk more revenue in one week than Braid made in its entire first year, from August 2008-September 2009. (Braid initially launched on XBLA in August 2008, and it came to Steam in April 2009). Braid was considered a hit independent game at the time.",
+      "zh": "这一周挣到的收入，比《Braid》整个第一年（2008 年 8 月到 2009 年 9 月）的收入还多出一大截。（《Braid》最初于 2008 年 8 月在 XBLA 上线，2009 年 4 月登陆 Steam。）《Braid》在当时被视作一款大卖的独立游戏。"
+    },
+    {
+      "type": "p",
+      "en": "We can also compare sales by units instead of revenue; this is a little more of an apples-to-oranges comparison because The Witness has a higher price than Braid did (Braid launched at $14.99 [$16.50 when inflation-adjusted to 2015 dollars], and The Witness launched at $39.99). By number of units, the first week of each individual platform handily beats Braid's first week of sales. (Witness on PC by itself beat Braid's first week by a decent margin, and Witness on PSN by itself beat Braid's first week by a decent margin, counting only by number of units). This is great because as price goes up, naturally the number of units sold goes down. So the fact that we beat Braid by units, more than doubly, is a really nice success.",
+      "zh": "我们也可以按销量而不是收入来比较；这个比较多少有点像拿苹果跟橘子比，因为《The Witness》的定价比《Braid》高（《Braid》首发价 14.99 美元［按 2015 年美元折算为 16.50 美元］，而《The Witness》首发价 39.99 美元）。按销量算，每一个平台各自的首周都轻松压过《Braid》的首周销量。（单是 PC 上的《The Witness》就以不小的差距超过了《Braid》的首周，单是 PSN 上的《The Witness》也以不小的差距超过了《Braid》的首周，这里只按销量计算。）这很棒，因为价格上去了，销量自然会下来。所以我们在销量上胜过《Braid》，而且是胜出一倍有余，这实在是个很不错的成绩。"
+    },
+    {
+      "type": "p",
+      "en": "The Witness launched on two platforms, PSN and Windows PC. Neither of these platforms dominates our sales; PC is very strong for us, and PSN is very strong for us.",
+      "zh": "《The Witness》在两个平台发售：PSN 与 Windows PC。这两个平台谁也没有压过谁；PC 对我们来说非常强，PSN 对我们来说也非常强。"
+    },
+    {
+      "type": "p",
+      "en": "There are some publicly-available guesstimates for specific platforms on sites such as SteamSpy, but the numbers that SteamSpy is reporting for The Witness are a bit too low (though this is kind of to be expected, I guess, from the way that site works).",
+      "zh": "在 SteamSpy 之类的网站上，有一些针对具体平台、公开可查的估算，但 SteamSpy 报出的《The Witness》数字偏低了一些（不过我想，考虑到那个网站的运作方式，这多少也在意料之中）。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "So, the game is doing great. That doesn't mean we have broken even on our development cost yet! Because our development budget was so high, $5 million in revenue is not enough to recover it yet (because we split that revenue with the storefronts, we have to subtract VAT in Europe, etc). However, it is looking like, as time goes on, we should break even and make a comfortable safety margin on top of that, which will allow us to make more nice games in the future -- unless some kind of world economic disaster happens.",
+      "zh": "所以，这款游戏的表现很好。但这并不意味着我们已经收回了开发成本！因为我们的开发预算太高，500 万美元的收入还不足以回本（因为这笔收入我们要和各家商店分成，在欧洲还得扣掉 VAT，等等）。不过照目前的势头看，随着时间推移，我们应当能回本，并且在那之上还留出一段宽裕的安全边际，这样未来就能做更多好游戏——除非发生某种全球经济灾难。"
+    },
+    {
+      "type": "p",
+      "en": "As I mentioned, right now we are dealing mostly with PC graphics driver problems, and we are also working on adding some features to the game about configurable controls and rendering options, for PC and PS4.",
+      "zh": "就像我提到的，眼下我们主要在应付 PC 上的显卡驱动问题；同时我们也在给游戏加一些功能，涉及可自定义的操作设置和渲染选项，面向 PC 和 PS4。"
+    },
+    {
+      "type": "p",
+      "en": "After this, in the near future, we will start investigating the bringing the game to other platforms. Under serious consideration are: iOS, Android, Xbox One, OS X. We will provide more-concrete information about these as it becomes available!",
+      "zh": "在这之后、不久的将来，我们会开始研究把游戏带到其他平台。正在认真考虑的有：iOS、Android、Xbox One、OS X。一有更具体的信息，我们会随时公布！"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+MIT License
+
+Copyright (c) 2026 The Witness 技术文档整理者
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+这个 MIT 许可只覆盖本仓库作者自己写的部分：
+
+  覆盖范围：
+    · 阅读器代码          index.html / style.css / app.js / serve.mjs
+    · 质检与构建脚本      *.mjs
+    · 中文译文            data/articles/*.json 里的 zh 字段
+    · 章节划分、编者导览、术语表、各类说明文档  *.md
+
+  不覆盖（版权属于各自原作者）：
+    · archive/ 下的英文原文
+      - the-witness.net        © Jonathan Blow / Thekla, Inc.
+      - caseymuratori.com      © Casey Muratori
+      - ludicon.com/castano    © Ignacio Castaño
+    · data/articles/*.json 里的 en / code 字段（同上，是原文的逐字复制）
+    · vendor/katex/           © KaTeX contributors, MIT License
+    · archive/ 下引用的图片   版权属于原始站点
+
+本仓库是个人学习用途的非官方整理，不代表上述任何一方，也没有得到他们的
+授权或背书。英文原文均注明出处链接、未做删改。若权利人要求移除某部分内容，
+删掉对应文件即可，不影响其它部分。引用或转载请回到原文站点并遵守其条款。
+================================================================================

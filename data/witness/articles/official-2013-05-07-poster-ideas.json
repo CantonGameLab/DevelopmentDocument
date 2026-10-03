@@ -1,0 +1,53 @@
+{
+  "id": "official-2013-05-07-poster-ideas",
+  "title": { "zh": "海报方案", "en": "Poster Ideas" },
+  "subtitle": {
+    "en": "Some of the runner-up concepts for a Witness poster, shown while the final pick stays under wraps.",
+    "zh": "几个落选的《The Witness》海报方案——最终选定的那张暂时还留着不发。"
+  },
+  "translator": {
+    "note": "原文没有小标题；插图按源顺序逐张收录为占位段落（其中一行有两张图）。原文未夹带页面部件，无需剔除。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We were kicking around ideas of what a Witness poster would look like if we were to make one. We eventually came up with one that we really liked, and we'll release that at some point in the future. But in the meantime we thought it would be nice to show some of the runner-up concepts.",
+      "zh": "我们一直在琢磨：要是真做一张《The Witness》海报，它会是什么样子。最后我们想出了一张自己非常喜欢的，日后会找时间放出来。不过在那之前，我们觉得先把几个落选方案拿出来给大家看看也不错。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/05/Luis_04.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/05/Luis_10.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/05/Luis_02-259x384.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/05/Luis_11.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/05/Luis_12.jpg)![图](http://the-witness.net/news/wp-content/uploads/2013/05/Luis_03.jpg)",
+      "zh": "（原文此处有两张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/05/Shannon_01.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Feel free to use these as desktop images or whatever. Unfortunately we didn't mock these up at high resolution; what you see is all there is!",
+      "zh": "这些图随便拿去当桌面或者干别的都行。可惜我们当时没做高分辨率的稿子；你看到的就是全部了！"
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "id": "castano-2026-09-17-spark-1-4",
+  "title": {
+    "zh": "Spark 1.4",
+    "en": "Spark 1.4"
+  },
+  "subtitle": {
+    "zh": "Spark 1.4 发布：BC6H 与 ASTC HDR 两个新编解码器，另有 BC1 Ultra、BC7 NRM 和 ASTC 5×5。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文有九处 `cmp-tabs` 图像对比控件被归档压平成「若干页签文字 / 一张图 / 一个当前得分」三部分，译文对照原始 HTML（`archive/raw/castano/html/1871-spark-1-4.json`）还原为「一个 `list`（页签文字）+ 一个图片占位 `p` + 一个得分 `p`」：BC6H 两处（页签 Spark Q1 / Spark Q2 / Narkowicz Q1 / Narkowicz Q2）、ASTC HDR 四处与 ASTC 5×5 三处（页签分别是 Spark / Arm / Basis 与 ASTC 4×4 / ASTC 5×5 / ASTC 6×6）。页签文字与得分数字逐字未改。`#### `、`### ` 级小标题一律降级为 `h2`。源文两处列表项在原始 HTML 里带 `<strong>` 强调，归档 md 已无标记，译文同样以 md 为准（去掉 `**`）；`### Improved GLES mediump support` 一行在 md 里没有反引号，译文也未补回。术语：`endpoint` 作「端点」、`block compression` 作「块压缩」、`partition` 作「分区」、`texel` 作「纹素」、`light probe` 作「光照探针」、`bandwidth` 作「带宽」，`block size` 作「块尺寸」；产品、格式与 API 名（Spark、BC1/BC6H/BC7/ASTC、ASTC HDR、ASTC 4×4/5×5/6×6、RGBM、HDR、LDR、UASTC、SSIMULACRA2、SSIM、astcenc、OodleTex、Adreno、Mali-G715、PowerVR Series D、Vulkan 1.0、GLES、`mediump`、`spirv-opt`、`spirv-cross`、SPIRV-Tools、SPIRV-Cross、PlayStation®5、Pixel 8/10/11、Galaxy S8、`Spark for Unity`、`spark.js`、WebGL、WebGPU、Wookash Podcast、EXR、AVIF、JPEG/R）一律保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’m excited to announce the release of *Spark* 1.4.",
+      "zh": "我很兴奋地宣布 *Spark* 1.4 发布。"
+    },
+    {
+      "type": "p",
+      "en": "*[Spark](https://ludicon.com/spark/)* is a set of real-time GPU texture codecs that produce results competitive with offline encoders while running thousands of times faster, on every GPU from budget phones to high-end PCs and consoles.",
+      "zh": "*[Spark](https://ludicon.com/spark/)* 是一套实时的 GPU 纹理编解码器，它产出的结果可与离线编码器媲美，而运行速度快上几千倍——从入门手机到高端 PC 和主机，各种 GPU 上都能跑。"
+    },
+    {
+      "type": "p",
+      "en": "The highlight of this release is HDR. *Spark* 1.4 adds two new HDR codecs: **BC6H** for desktop and consoles and **ASTC HDR** for mobile, and both deliver quality that matches or exceeds the best offline encoders at real-time speeds.",
+      "zh": "这次发布的重头戏是 HDR。*Spark* 1.4 新增两个 HDR 编解码器：面向桌面与主机的 **BC6H**、面向移动端的 **ASTC HDR**；两者的质量都达到或超过最好的离线编码器，而速度是实时的。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/light_probe_hangar_interior_bc6h_q2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Real-time HDR compression opens up a new range of applications:",
+      "zh": "实时的 HDR 压缩打开了一批新的应用场景："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Light probes and reflection maps that are re-rendered as the scene changes and compressed on the fly.",
+          "zh": "光照探针和反射贴图：随场景变化重新渲染，并即时压缩。"
+        },
+        {
+          "en": "Dynamic lightmaps for time-of-day cycles and destructible environments.",
+          "zh": "动态光照贴图：用于昼夜循环和可破坏环境。"
+        },
+        {
+          "en": "Dynamic skies or any other HDR render target whose contents can be cached across frames.",
+          "zh": "动态天空，或者任何内容可以在多帧之间缓存的 HDR 渲染目标。"
+        },
+        {
+          "en": "HDR images decoded at runtime, from EXR, AVIF or JPEG/R, without the need for an offline pipeline.",
+          "zh": "运行时解码的 HDR 图像：来自 EXR、AVIF 或 JPEG/R，无需离线处理管线。"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "what-s-new-in-spark-1-4",
+      "en": "What’s new in Spark 1.4:",
+      "zh": "Spark 1.4 的新内容："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "New HDR codecs: [BC6H](#bc6h) and [ASTC HDR](#astc-hdr). With offline quality at real-time performance.",
+          "zh": "新的 HDR 编解码器：[BC6H](#bc6h) 和 [ASTC HDR](#astc-hdr)。以实时的性能达到离线的质量。"
+        },
+        {
+          "en": "BC1 Ultra: a new [quality level for BC1](#bc1-ultra) that surpasses the perceptual quality of offline encoders at a fraction of their cost.",
+          "zh": "BC1 Ultra：一个新的 [BC1 质量等级](#bc1-ultra)，在远低于离线编码器的开销下超越其感知质量。"
+        },
+        {
+          "en": "BC7 NRM: a new [BC7 codec for packed material maps](#bc7-nrm) that store normals, roughness and metalness in a single texture.",
+          "zh": "BC7 NRM：一个新的[用于打包材质贴图的 BC7 编解码器](#bc7-nrm)，把法线、粗糙度和金属度存进一张纹理。"
+        },
+        {
+          "en": "ASTC 5×5: a new [block size](#astc-5x5) that fills the gap between our 4×4 and 6×6 codecs.",
+          "zh": "ASTC 5×5：一个新的[块尺寸](#astc-5x5)，填补我们 4×4 与 6×6 编解码器之间的空档。"
+        },
+        {
+          "en": "Broader compatibility: [PowerVR Series D](#broader-compatibility) (Pixel 10), [Vulkan 1.0 devices](#vulkan-1-0), improved [GLES `mediump` support](#gles-mediump), and improved [PlayStation®5 support](#ps5).",
+          "zh": "更广的兼容性：[PowerVR Series D](#broader-compatibility)（Pixel 10）、[Vulkan 1.0 设备](#vulkan-1-0)、改进的 [GLES mediump 支持](#gles-mediump)，以及改进的 [PlayStation®5 支持](#ps5)。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "This release also includes a new Getting Started guide and Performance Guidelines, many new examples, improved regression testing, bug fixes, and many other small quality and performance improvements.",
+      "zh": "这次发布还包括一份新的入门指南和性能指南、许多新示例、改进的回归测试、bug 修复，以及大量其他细小的质量和性能改进。"
+    },
+    {
+      "type": "p",
+      "en": "It’s exciting to see *Spark* gaining momentum and shipping in a wide range of games and applications. Check out our [front page](https://ludicon.com#clients) for the latest additions to our client list.",
+      "zh": "看着 *Spark* 势头渐长、被越来越多的游戏和应用采用，令人振奋。最新的客户名单见我们的[首页](https://ludicon.com#clients)。"
+    },
+    {
+      "type": "h2",
+      "id": "hdr-codecs",
+      "en": "HDR Codecs",
+      "zh": "HDR 编解码器"
+    },
+    {
+      "type": "p",
+      "en": "Until now, *Spark* handled HDR content through our RGBM codecs, which pack an HDR range into an LDR format. RGBM works everywhere, but it requires a decode in the shader and its range is limited. The two new codecs target the native HDR formats instead: the compressed texture is sampled directly and decodes to 16-bit floats, so there’s no color transform and no shader changes on the sampling side.",
+      "zh": "在此之前，*Spark* 通过 RGBM 编解码器来处理 HDR 内容，它把一个 HDR 范围打包进 LDR 格式。RGBM 到处都能用，但它需要在着色器里解码，而且范围有限。两个新编解码器转而面向原生 HDR 格式：压缩纹理被直接采样并解码成 16 位浮点，因此没有颜色变换，采样这一侧也不需要改着色器。"
+    },
+    {
+      "type": "h2",
+      "id": "bc6h",
+      "en": "BC6H",
+      "zh": "BC6H"
+    },
+    {
+      "type": "p",
+      "en": "Our previous codecs deliberately target a subset of their format: the modes and partitions that give the best quality per cycle within a real-time budget. The new BC6H codec breaks from that strategy. It is our first codec that can target the *entire* format: all 14 modes and all 32 partition shapes.",
+      "zh": "我们此前的编解码器都刻意只针对格式的一个子集：在实时预算内每周期质量最好的那些模式和分区。新的 BC6H 编解码器打破了这一策略。它是我们第一个能覆盖*整个*格式的编解码器：全部 14 种模式和全部 32 种分区形状。"
+    },
+    {
+      "type": "p",
+      "en": "Which subset of the format the codec targets is configured at compile time, and we provide four presets. At the lowest level, the codec saturates memory bandwidth just like our other real-time codecs. At the highest level, it produces results that challenge the best offline encoders while running orders of magnitude faster.",
+      "zh": "编解码器针对格式的哪个子集是在编译期配置的，我们提供四档预设。在最低档，编解码器和其他实时编解码器一样把内存带宽跑满；在最高档，它产出的结果足以挑战最好的离线编码器，而运行速度快上几个数量级。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/bc6-ssimu2.png.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This chart shows the [SSIMULACRA2](https://github.com/cloudinary/ssimulacra2) score of each encoder against its throughput on a M4 MacBook Pro, over a set of 27 HDR light probes, lightmaps and photographs. Larger scores are better. *Spark* at its highest quality level scores above every other encoder, and nearly as high as OodleTex, while running 400× faster.",
+      "zh": "这张图展示了在 M4 MacBook Pro 上、针对 27 张 HDR 光照探针、光照贴图和照片，各编码器的 [SSIMULACRA2](https://github.com/cloudinary/ssimulacra2) 得分与其吞吐量的关系。得分越高越好。*Spark* 在最高质量档的得分高于其他所有编码器，几乎与 OodleTex 持平，而速度快 400 倍。"
+    },
+    {
+      "type": "p",
+      "en": "Compared to the existing real-time BC6H encoders, the picture is even clearer:",
+      "zh": "与现有的实时 BC6H 编码器相比，情况更加清楚："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/bc6-rt-ssimu2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "What I find most remarkable is that these results are achieved with a single candidate encoding. There’s no error evaluation and no comparison between multiple candidate encodings: the codec chooses a mode and a partition up front and never looks back. This is what enables these codecs to run well on the GPU.",
+      "zh": "我觉得最了不起的是，这些结果只靠一次候选编码就取得了。没有误差评估，也不在多个候选编码之间做比较：编解码器一开始就选定模式和分区，然后再也不回头。这正是这些编解码器能在 GPU 上跑得好的原因。"
+    },
+    {
+      "type": "p",
+      "en": "Compared with [Krzysztof Narkowicz’s codec](https://github.com/knarkowicz/GPURealTimeBC6H), *Spark* delivers comparable performance while avoiding some of its worst-case artifacts, as the following image comparisons show.",
+      "zh": "与 [Krzysztof Narkowicz 的编解码器](https://github.com/knarkowicz/GPURealTimeBC6H)相比，*Spark* 性能相当，同时避开了一些最坏情况下的瑕疵，如下面的图像对比所示。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Spark Q1",
+          "zh": "Spark Q1"
+        },
+        {
+          "en": "Spark Q2",
+          "zh": "Spark Q2"
+        },
+        {
+          "en": "Narkowicz Q1",
+          "zh": "Narkowicz Q1"
+        },
+        {
+          "en": "Narkowicz Q2",
+          "zh": "Narkowicz Q2"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/sevilla03_spark_bc6h_rgb_q1_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "88.262",
+      "zh": "88.262"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Spark Q1",
+          "zh": "Spark Q1"
+        },
+        {
+          "en": "Spark Q2",
+          "zh": "Spark Q2"
+        },
+        {
+          "en": "Narkowicz Q1",
+          "zh": "Narkowicz Q1"
+        },
+        {
+          "en": "Narkowicz Q2",
+          "zh": "Narkowicz Q2"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/lightsaber_spark_bc6h_rgb_q1_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "88.262",
+      "zh": "88.262"
+    },
+    {
+      "type": "h2",
+      "id": "astc-hdr",
+      "en": "ASTC HDR",
+      "zh": "ASTC HDR"
+    },
+    {
+      "type": "p",
+      "en": "One of the surprises of this release is the new ASTC HDR codec. I did not plan to include it, but the initial results were so promising that I could not stop myself. This first version is intentionally simple: it uses all the HDR endpoint encoding modes, but a single partition and a single weight and endpoint bit distribution.",
+      "zh": "这次发布的惊喜之一是新的 ASTC HDR 编解码器。我本来没打算做它，但最初的结果太有希望，我停不下来。这第一个版本刻意做得简单：它用上了所有 HDR 端点编码模式，但只用单一分区，以及单一权重和端点比特分配。"
+    },
+    {
+      "type": "p",
+      "en": "With these constraints I did not expect great results, but it turns out that the algorithms I developed for BC6H also work exceptionally well with ASTC, and even this first version matches or exceeds the perceptual quality of the existing offline encoders.",
+      "zh": "在这些约束下我并没指望结果有多好，但事实证明我为 BC6H 开发的算法在 ASTC 上也异常有效，即便这第一个版本也已经达到或超过了现有离线编码器的感知质量。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/astc_hdr-offline-ssimu2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "At its highest quality level, *Spark* scores above Arm’s astcenc at its most exhaustive setting and above every UASTC HDR preset except the slowest, while encoding on the GPU thousands of times faster than these CPU encoders on the same machine. The medium quality level matches astcenc’s at the default setting.",
+      "zh": "在最高质量档，*Spark* 的得分高于 Arm 的 astcenc 在最穷尽设置下的得分，也高于除最慢档之外的所有 UASTC HDR 预设，而在同一台机器上，它在 GPU 上编码比这些 CPU 编码器快几千倍。中质量档与 astcenc 在默认设置下相当。"
+    },
+    {
+      "type": "p",
+      "en": "The existing ASTC HDR encoders minimize the mean squared error in the linearized logarithmic space of the format. As a result, they often spend bits on features that are not perceptually noticeable while under-allocating elsewhere, and that results in errors that are visible with the naked eye. *Spark* is optimized for perceptual metrics instead:",
+      "zh": "现有的 ASTC HDR 编码器最小化的是格式的线性化对数空间中的均方误差。结果是，它们经常把比特花在感知上并不明显的特征上，而在别处分配不足，由此产生的误差肉眼可见。*Spark* 则针对感知指标做优化："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Spark",
+          "zh": "Spark"
+        },
+        {
+          "en": "Arm",
+          "zh": "Arm"
+        },
+        {
+          "en": "Basis",
+          "zh": "Basis"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/matas_spark_astc_hdr_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "86.620",
+      "zh": "86.620"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Spark",
+          "zh": "Spark"
+        },
+        {
+          "en": "Arm",
+          "zh": "Arm"
+        },
+        {
+          "en": "Basis",
+          "zh": "Basis"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/sevilla02_spark_astc_hdr_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "86.620",
+      "zh": "86.620"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Spark",
+          "zh": "Spark"
+        },
+        {
+          "en": "Arm",
+          "zh": "Arm"
+        },
+        {
+          "en": "Basis",
+          "zh": "Basis"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/chinese_garden_01_spark_astc_hdr_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "86.620",
+      "zh": "86.620"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "Spark",
+          "zh": "Spark"
+        },
+        {
+          "en": "Arm",
+          "zh": "Arm"
+        },
+        {
+          "en": "Basis",
+          "zh": "Basis"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/industrial01_spark_astc_hdr_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "86.620",
+      "zh": "86.620"
+    },
+    {
+      "type": "p",
+      "en": "As far as I know this is the only real-time ASTC HDR encoder publicly available, so there’s nothing else to compare it against on mobile. Here are the three quality levels on a Pixel 8 (Mali-G715):",
+      "zh": "据我所知，这是目前唯一公开可用的实时 ASTC HDR 编码器，所以在移动端没有别的可比对象。下面是 Pixel 8（Mali-G715）上三个质量档的表现："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/pixel8-astc-hdr-ssimu2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A 1024×512 light probe compresses in 0.5 ms at the highest quality level, and 0.17 ms at the lowest.",
+      "zh": "一张 1024×512 的光照探针在最高质量档下 0.5 ms 压完，最低档 0.17 ms。"
+    },
+    {
+      "type": "p",
+      "en": "Like all of our codecs, I’ve taken special care to ensure the code is fully vectorized for 16-bit arithmetic, and that the resulting code also performs well on Adreno. Even though Adreno does not support packed math instructions, in practice the vectorized variants result in less register shuffling, increased occupancy, and a reduced instruction footprint, so the same shader works well on every mobile GPU.",
+      "zh": "和我们所有的编解码器一样，我特别留意了让代码针对 16 位运算完全向量化，并让生成的代码在 Adreno 上也表现良好。尽管 Adreno 不支持打包数学指令，实践中向量化的版本反而寄存器搬移更少、占用率更高、指令体积更小，所以同一个着色器在每个移动 GPU 上都跑得很好。"
+    },
+    {
+      "type": "p",
+      "en": "Some mobile devices support both ASTC HDR and BC6H. Our BC6H codec was developed with PC and consoles in mind, but at the lower quality levels it also runs great on mobile. The following chart shows both codecs on an Adreno 740:",
+      "zh": "有些移动设备同时支持 ASTC HDR 和 BC6H。我们的 BC6H 编解码器是面向 PC 和主机开发的，但在较低质量档下它在移动端也跑得很好。下图展示了 Adreno 740 上两个编解码器的表现："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/hdr-codecs-a740.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "h2",
+      "id": "bc1-ultra",
+      "en": "BC1 Ultra",
+      "zh": "BC1 Ultra"
+    },
+    {
+      "type": "p",
+      "en": "BC1 is the oldest block compression format we support and the one most encoders have had the most time to mature, so I did not expect much headroom. The new *Ultra* quality level proved me wrong. Modern techniques combined with perceptual quality optimizations result in higher quality than the existing offline encoders, and it still runs orders of magnitude faster than them.",
+      "zh": "BC1 是我们支持的最古老的块压缩格式，也是绝大多数编码器打磨时间最长的格式，所以我没指望还有多少空间。新的 *Ultra* 质量档证明我错了。现代技术加上感知质量优化，产出的质量高于现有的离线编码器，而运行速度仍快上几个数量级。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/bc1-encoders-ssimu2-3.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Three things make the difference: the use of the 3-color mode for blocks with near-black texels, a novel endpoint quantization procedure, and a greedy endpoint refinement.",
+      "zh": "带来差别的是三件事：对接近黑色的纹素块使用 3 色模式、一套新颖的端点量化流程，以及一次贪心的端点精修。"
+    },
+    {
+      "type": "p",
+      "en": "At this quality level it is very difficult to see any difference. The results are nearly indistinguishable from the offline codecs.",
+      "zh": "在这个质量档下很难看出任何差别。结果与离线编解码器几乎无法区分。"
+    },
+    {
+      "type": "h2",
+      "id": "bc7-nrm",
+      "en": "BC7 NRM",
+      "zh": "BC7 NRM"
+    },
+    {
+      "type": "p",
+      "en": "Our existing BC7 codecs are optimized for color images, but BC7 textures are often used to store other material attributes. One of the most common arrangements is to pack two components of the normal in the RG channels and roughness and metalness in the BA channels.",
+      "zh": "我们现有的 BC7 编解码器是为彩色图像优化的，但 BC7 纹理常被用来存储其他材质属性。最常见的排布之一，是把法线的两个分量放进 RG 通道，把粗糙度和金属度放进 BA 通道。"
+    },
+    {
+      "type": "p",
+      "en": "Our color codecs were doing a reasonable job on this kind of data, but it was clear we could do better by tailoring the coding choices to it. Our new codec is optimized for the output of typical shading models, with special attention to smooth normals on glossy surfaces, where a small error in the normal becomes artifacts in the specular highlight.",
+      "zh": "我们的彩色编解码器在这类数据上做得还算合理，但显然可以通过针对它定制编码选择做得更好。我们的新编解码器针对典型着色模型的输出做了优化，特别照顾光滑表面上的平滑法线——那里的法线只要有一点小误差，就会在镜面高光里变成瑕疵。"
+    },
+    {
+      "type": "p",
+      "en": "This codec has mostly been tuned with client assets that I’m not able to share publicly, but at least I can share some numerical results. The chart below measures the quality of the reconstructed normals with SSIM, which correlates much better with the appearance of the shaded surface than the raw error.",
+      "zh": "这个编解码器主要是用客户的资源调优的，那些资源我无法公开分享，但至少可以分享一些数值结果。下图用 SSIM 衡量重建法线的质量——相比原始误差，SSIM 与着色后表面的外观相关性要好得多。"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/bc7_nrm-normal-ssim-1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "h2",
+      "id": "astc-5-5",
+      "en": "ASTC 5×5",
+      "zh": "ASTC 5×5"
+    },
+    {
+      "type": "p",
+      "en": "Targeting large block sizes in GPU encoders is difficult due to the high register pressure. *Spark* 1.2 introduced our first streaming codec with support for ASTC 6×6 blocks. This codec processes one texel at a time, so it does not need to keep all the block colors in registers at the same time. This release refines that strategy and extends it to the 5×5 block size, offering a compression ratio in between the 4×4 and 6×6 codecs and giving developers a finer-grained quality and size tradeoff.",
+      "zh": "在 GPU 编码器里针对大块尺寸很难做，因为寄存器压力很高。*Spark* 1.2 引入了我们第一个流式编解码器，支持 ASTC 6×6 块。这个编解码器一次处理一个纹素，所以不需要同时把所有块的颜色都留在寄存器里。这次发布细化了该策略并把它扩展到 5×5 块尺寸，提供介于 4×4 与 6×6 编解码器之间的压缩比，给开发者更细的质量与体积权衡。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "ASTC 4×4",
+          "zh": "ASTC 4×4"
+        },
+        {
+          "en": "ASTC 5×5",
+          "zh": "ASTC 5×5"
+        },
+        {
+          "en": "ASTC 6×6",
+          "zh": "ASTC 6×6"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/kodim23_astc_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "ASTC 4×4",
+      "zh": "ASTC 4×4"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "ASTC 4×4",
+          "zh": "ASTC 4×4"
+        },
+        {
+          "en": "ASTC 5×5",
+          "zh": "ASTC 5×5"
+        },
+        {
+          "en": "ASTC 6×6",
+          "zh": "ASTC 6×6"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/grass2_astc_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "ASTC 4×4",
+      "zh": "ASTC 4×4"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "ASTC 4×4",
+          "zh": "ASTC 4×4"
+        },
+        {
+          "en": "ASTC 5×5",
+          "zh": "ASTC 5×5"
+        },
+        {
+          "en": "ASTC 6×6",
+          "zh": "ASTC 6×6"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/09/paint_astc_rgb_q2_pair.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "ASTC 4×4",
+      "zh": "ASTC 4×4"
+    },
+    {
+      "type": "p",
+      "en": "Larger blocks reduce bandwidth, but not necessarily the memory footprint. See our previous investigation for the details: [The True Size of ASTC Textures](https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/).",
+      "zh": "更大的块能降低带宽，但不一定降低内存占用。细节见我们之前的调查：[ASTC 纹理的真实大小](https://www.ludicon.com/castano/blog/2026/04/the-true-size-of-astc-textures/)。"
+    },
+    {
+      "type": "h2",
+      "id": "broader-compatibility",
+      "en": "Broader Compatibility",
+      "zh": "更广的兼容性"
+    },
+    {
+      "type": "p",
+      "en": "We continue expanding compatibility in both directions: to new devices as they come to market, such as the Pixel 10 and 11, and to legacy devices, such as Vulkan 1.0 hardware, that we had previously thought non-viable.",
+      "zh": "我们继续朝两个方向扩展兼容性：一是随着新设备上市支持它们，比如 Pixel 10 和 11；二是支持我们此前认为不可行的老设备，比如 Vulkan 1.0 硬件。"
+    },
+    {
+      "type": "h2",
+      "id": "powervr-series-d",
+      "en": "PowerVR Series D",
+      "zh": "PowerVR Series D"
+    },
+    {
+      "type": "p",
+      "en": "I’m excited to see PowerVR making a comeback in Android phones with the Series D GPUs in the Pixel 10. I’m happy to report that *Spark* runs great on this new hardware, and that some outstanding issues from previous devices appear to be fixed and no longer require cumbersome workarounds. Series D is also the first PowerVR generation with ASTC HDR support, so the new codec runs there too.",
+      "zh": "看到 PowerVR 借 Pixel 10 里的 Series D GPU 在 Android 手机上回归，我很兴奋。很高兴能报告：*Spark* 在这套新硬件上跑得很好，而且此前设备上的一些遗留问题似乎已经修好，不再需要那些繁琐的绕行办法。Series D 也是第一代支持 ASTC HDR 的 PowerVR，所以新的编解码器在那里也能跑。"
+    },
+    {
+      "type": "h2",
+      "id": "vulkan-1-0",
+      "en": "Vulkan 1.0",
+      "zh": "Vulkan 1.0"
+    },
+    {
+      "type": "p",
+      "en": "This release adds support for many Vulkan 1.0 devices that I had previously written off as non-viable. This includes many early Arm devices, such as the Galaxy S8, as well as some Adrenos, such as the Adreno 618 in the Pixel 3a. In the past, bugs unrelated to the codecs themselves had prevented my examples, demos and benchmarks from running on these devices, and I had assumed Vulkan 1.0 was simply too unstable to be practical. On closer inspection, it turned out to be possible to work around these issues and prove that the codecs run fine on these devices.",
+      "zh": "这次发布增加了对许多我此前判定为不可行的 Vulkan 1.0 设备的支持，其中包括很多早期的 Arm 设备（比如 Galaxy S8），以及一些 Adreno（比如 Pixel 3a 里的 Adreno 618）。过去，一些与编解码器本身无关的 bug 让我的示例、demo 和基准测试无法在这些设备上运行，我当时以为 Vulkan 1.0 就是太不稳定、没法实用。仔细检查后发现，这些问题其实可以绕开，并证明编解码器在这些设备上跑得没问题。"
+    },
+    {
+      "type": "h2",
+      "id": "improved-gles-mediump-support",
+      "en": "Improved GLES mediump support",
+      "zh": "改进的 GLES mediump 支持"
+    },
+    {
+      "type": "p",
+      "en": "Improving `mediump` support on GLES mostly came down to tracking down and fixing bugs in the `spirv-opt` and `spirv-cross` toolchains, and those fixes have been contributed upstream ([SPIRV-Tools #6690](https://github.com/KhronosGroup/SPIRV-Tools/pull/6690) , [SPIRV-Cross #2633](https://github.com/KhronosGroup/SPIRV-Cross/pull/2633)).",
+      "zh": "改进 GLES 上的 `mediump` 支持，主要就是找出并修掉 `spirv-opt` 与 `spirv-cross` 工具链里的 bug，这些修复已经贡献到了上游（[SPIRV-Tools #6690](https://github.com/KhronosGroup/SPIRV-Tools/pull/6690) 、[SPIRV-Cross #2633](https://github.com/KhronosGroup/SPIRV-Cross/pull/2633)）。"
+    },
+    {
+      "type": "h2",
+      "id": "playstation-5",
+      "en": "PlayStation®5",
+      "zh": "PlayStation®5"
+    },
+    {
+      "type": "p",
+      "en": "The PlayStation®5 codecs have been through extensive testing and a round of optimizations, and the SDK now includes a PlayStation®5 example and integration guidelines with performance results for every codec.",
+      "zh": "PlayStation®5 的编解码器经过了大量测试和一轮优化，SDK 现在包含一个 PlayStation®5 示例，以及带每个编解码器性能数据的集成指南。"
+    },
+    {
+      "type": "h2",
+      "id": "final-words",
+      "en": "Final Words",
+      "zh": "最后的话"
+    },
+    {
+      "type": "p",
+      "en": "Earlier this year I released [*Spark for Unity*](https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/), which brings the codecs to the Unity engine, and [spark.js](https://github.com/ludicon/spark.js) brings them to WebGL and WebGPU. Both will pick up the new codecs in a follow-up release, and the Android and iOS demos will be updated shortly.",
+      "zh": "今年早些时候我发布了 [*Spark for Unity*](https://www.ludicon.com/castano/blog/2026/06/spark-for-unity/)，把编解码器带进 Unity 引擎；而 [spark.js](https://github.com/ludicon/spark.js) 把它们带到 WebGL 和 WebGPU。两者都会在后续版本里跟进新的编解码器，Android 和 iOS 的 demo 也会很快更新。"
+    },
+    {
+      "type": "p",
+      "en": "If you want the longer story behind this work, I recently appeared on the [Wookash Podcast](https://www.youtube.com/watch?v=RgMbrszzpN8), where we talked about texture compression, *Spark*, and much more.",
+      "zh": "如果你想听这项工作背后更长的故事，我最近上了 [Wookash Podcast](https://www.youtube.com/watch?v=RgMbrszzpN8)，我们聊了纹理压缩、*Spark*，还有很多别的。"
+    },
+    {
+      "type": "p",
+      "en": "If you’d like to try the new codecs in your own engine, or for licensing inquiries and anything else, reach out at [spark@ludicon.com](mailto:spark@ludicon.com).",
+      "zh": "如果你想在自己的引擎里试试新的编解码器，或者洽谈授权及其他事宜，请发邮件到 [spark@ludicon.com](mailto:spark@ludicon.com)。"
+    }
+  ]
+}

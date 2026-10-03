@@ -1,0 +1,1130 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Graphics Tech: Multi-lightmaps &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Graphics Tech: Multi-lightmaps Comments Feed" href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2843,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_041.png","alt":"","desc":"","caption":"Banner_04","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_041-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/260" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=260' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2010%2F04%2Fgraphics-tech-multi-lightmaps%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=6B4414068DBCCC84657790B1D69D289B');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_041.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='ngg_trigger_buttons-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/trigger_buttons.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='shutter-0-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/shutter/shutter.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='fontawesome-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/fontawesome/font-awesome.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='nextgen_basic_thumbnails_style-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_basic_gallery/static/thumbnails/nextgen_basic_thumbnails.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='nextgen_pagination_style-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_pagination/static/style.min.css?ver=2.1.31' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='nggallery-css'  href='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/ngglegacy/css/nggallery.css?ver=2.1.31' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-260 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-260" class="post-260 post type-post status-publish format-standard hentry category-uncategorized">
+					<h1 class="entry-title">Graphics Tech: Multi-lightmaps</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/jon/" title="View all posts by Jonathan Blow">Jonathan Blow</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2010-04-12T00:47:26-07:00">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/" rel="bookmark">April 12, 2010</a>
+				</time>
+			   </span><time class="updated"  datetime="2010-04-12T00:47:26-07:00">April 12, 2010</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/uncategorized/" rel="tag">Uncategorized</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>Ignacio has implemented the first version of the handling for light sources that change (doors that open or close, lights that can be switched on or off, etc).  The idea is that we just precompute different lightmaps for each of these cases and blend between them at runtime.  In the future (not the future of this game, but the general computer graphics future) when we have realtime global illumination, this would not be necessary; but for now this is much faster to compute and much easier to implement.  The drawback is that we have to think about the different cases in advance (things can't be <em>too</em> dynamic) and the amount of lightmap storage space grows rapidly as the number of variables grows.</p>
+<p>We don't yet smoothly interpolate between the maps in the shader; we just switch the maps outright.  Interpolation is coming soon.  But in screenshots you can't see changing conditions anyway, so it's time for some screenshots.</p>
+<p>First is the house with the door closed, then with the door open.  After that comes the sculpture room, with two light sources toggled in various ways (see the captions on each picture).  For now you'll have to forgive the light leaking in the corners and the shadow speckles on the walls; they are due to issues with the dynamic shadow system (which is not really related to what is being shown here) and those issues have yet to be resolved!<br />
+<center><br />
+<div
+	class="ngg-galleryoverview ngg-ajax-pagination-none"
+	id="ngg-gallery-382cf352996d8b976585f0cff4016aee-1">
+
+    	<div class="slideshowlink">
+        <a href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/nggallery/slideshow'>[Show as slideshow]</a>
+		
+	</div>
+			<!-- Thumbnails -->
+				<div id="ngg-image-0" class="ngg-gallery-thumbnail-box" >
+				        <div class="ngg-gallery-thumbnail">
+            <a href="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_06__1.jpg"
+               title="House with the door closed."
+               data-src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_06__1.jpg"
+               data-thumbnail="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_06__1.jpg"
+               data-image-id="49"
+               data-title="witness_shot_2010_04_11_16_06__1"
+               data-description="House with the door closed."
+               class="shutterset_382cf352996d8b976585f0cff4016aee">
+                <img
+                    title="witness_shot_2010_04_11_16_06__1"
+                    alt="witness_shot_2010_04_11_16_06__1"
+                    src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_06__1.jpg"
+                    width="340"
+                    height="191"
+                    style="max-width:none;"
+                />
+            </a>
+        </div>
+							</div> 
+			
+        
+				<div id="ngg-image-1" class="ngg-gallery-thumbnail-box" >
+				        <div class="ngg-gallery-thumbnail">
+            <a href="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_07__2.jpg"
+               title="House with the door open.  Note the brighter lighting beneath the table and couch, and the splash of light on the far wall just above the sunlight coming in through the door."
+               data-src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_07__2.jpg"
+               data-thumbnail="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_07__2.jpg"
+               data-image-id="50"
+               data-title="witness_shot_2010_04_11_16_07__2"
+               data-description="House with the door open.  Note the brighter lighting beneath the table and couch, and the splash of light on the far wall just above the sunlight coming in through the door."
+               class="shutterset_382cf352996d8b976585f0cff4016aee">
+                <img
+                    title="witness_shot_2010_04_11_16_07__2"
+                    alt="witness_shot_2010_04_11_16_07__2"
+                    src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_07__2.jpg"
+                    width="340"
+                    height="191"
+                    style="max-width:none;"
+                />
+            </a>
+        </div>
+							</div> 
+			
+        
+				<div id="ngg-image-2" class="ngg-gallery-thumbnail-box" >
+				        <div class="ngg-gallery-thumbnail">
+            <a href="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_26__1.jpg"
+               title="Sculpture room.  The only lighting is the permanently-open skylights (which are not visible in the frame)."
+               data-src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_26__1.jpg"
+               data-thumbnail="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_26__1.jpg"
+               data-image-id="51"
+               data-title="witness_shot_2010_04_11_16_26__1"
+               data-description="Sculpture room.  The only lighting is the permanently-open skylights (which are not visible in the frame)."
+               class="shutterset_382cf352996d8b976585f0cff4016aee">
+                <img
+                    title="witness_shot_2010_04_11_16_26__1"
+                    alt="witness_shot_2010_04_11_16_26__1"
+                    src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_26__1.jpg"
+                    width="340"
+                    height="191"
+                    style="max-width:none;"
+                />
+            </a>
+        </div>
+							</div> 
+			
+        
+				<div id="ngg-image-3" class="ngg-gallery-thumbnail-box" >
+				        <div class="ngg-gallery-thumbnail">
+            <a href="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_27__3.jpg"
+               title="Sculpture room.  Lightbulb is off; window is open."
+               data-src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_27__3.jpg"
+               data-thumbnail="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_27__3.jpg"
+               data-image-id="53"
+               data-title="witness_shot_2010_04_11_16_27__3"
+               data-description="Sculpture room.  Lightbulb is off; window is open."
+               class="shutterset_382cf352996d8b976585f0cff4016aee">
+                <img
+                    title="witness_shot_2010_04_11_16_27__3"
+                    alt="witness_shot_2010_04_11_16_27__3"
+                    src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_27__3.jpg"
+                    width="340"
+                    height="191"
+                    style="max-width:none;"
+                />
+            </a>
+        </div>
+							</div> 
+			
+        
+				<div id="ngg-image-4" class="ngg-gallery-thumbnail-box" >
+				        <div class="ngg-gallery-thumbnail">
+            <a href="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_26__2.jpg"
+               title="Sculpture room.  Lightbulb is on; window is closed."
+               data-src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_26__2.jpg"
+               data-thumbnail="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_26__2.jpg"
+               data-image-id="52"
+               data-title="witness_shot_2010_04_11_16_26__2"
+               data-description="Sculpture room.  Lightbulb is on; window is closed."
+               class="shutterset_382cf352996d8b976585f0cff4016aee">
+                <img
+                    title="witness_shot_2010_04_11_16_26__2"
+                    alt="witness_shot_2010_04_11_16_26__2"
+                    src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_26__2.jpg"
+                    width="340"
+                    height="191"
+                    style="max-width:none;"
+                />
+            </a>
+        </div>
+							</div> 
+			
+        
+				<div id="ngg-image-5" class="ngg-gallery-thumbnail-box" >
+				        <div class="ngg-gallery-thumbnail">
+            <a href="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_27__4.jpg"
+               title="Sculpture room.  Lightbulb is on; window is open."
+               data-src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_27__4.jpg"
+               data-thumbnail="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_27__4.jpg"
+               data-image-id="54"
+               data-title="witness_shot_2010_04_11_16_27__4"
+               data-description="Sculpture room.  Lightbulb is on; window is open."
+               class="shutterset_382cf352996d8b976585f0cff4016aee">
+                <img
+                    title="witness_shot_2010_04_11_16_27__4"
+                    alt="witness_shot_2010_04_11_16_27__4"
+                    src="http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/thumbs/thumbs_witness_shot_2010_04_11_16_27__4.jpg"
+                    width="340"
+                    height="191"
+                    style="max-width:none;"
+                />
+            </a>
+        </div>
+							</div> 
+			
+        
+		
+		<!-- Pagination -->
+	<div class='ngg-clear'></div>	</div>
+<br />
+</center></p>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/" title="Permalink to Graphics Tech: Multi-lightmaps" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/" rel="prev"><i class="meta-nav-prev"></i> Lightmap Parameterization</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2010/04/graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more/" rel="next">Graphics Tech: Shadow Maps (part 2): Save 25% texture memory, and possibly much more. <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				25 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-201">
+		<div id="comment-201">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0ac226f7ea12675d023e040e8871917f?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0ac226f7ea12675d023e040e8871917f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Luiz Damasceno</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-201">
+					April 12, 2010 at 7:17 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Looks great.</p>
+<p>Would you mind telling us a little bit more about the general concept behind The Witness? I don´t want to be spoiled, but  light should play a role similar to Braid´s time in a gameplay perspective?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=201#respond' data-commentid="201" data-postid="260" data-belowelement="comment-201" data-respondelement="respond" data-replyto="Reply to Luiz Damasceno" aria-label='Reply to Luiz Damasceno'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-202">
+		<div id="comment-202">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/cf71b222bd2b61b0c59e483a8db9182d?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/cf71b222bd2b61b0c59e483a8db9182d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://gohnotes.wordpress.com' rel='external nofollow ugc' class='url'>Leonard McCoy</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-202">
+					April 12, 2010 at 8:28 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Very interesting. As an uninitiated to the whole technical side of things, I was wondering why you, too, were using that dither effect at the threshold between light and dark. Is it to smooth out the edges? I&#8217;ve seen this effect in recent games as well like Bad Company 2 (DICE) or Final Fantasy XIII (Square Enix). Is not dithering a thing of the past, as it looks so outdated? (Reminds me of old ink jet printers.)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=202#respond' data-commentid="202" data-postid="260" data-belowelement="comment-202" data-respondelement="respond" data-replyto="Reply to Leonard McCoy" aria-label='Reply to Leonard McCoy'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-203">
+		<div id="comment-203">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/fa2c2310e05336bb98b11a72723a8db5?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/fa2c2310e05336bb98b11a72723a8db5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://sandervanrossen.blogspot.com/' rel='external nofollow ugc' class='url'>Sander van Rossen</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-203">
+					April 12, 2010 at 8:46 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I wonder if there&#8217;s a simple, as in non brute force, way to detect gradients within light-maps?<br />
+If so, you could drastically decrease the storage requirements by storing coordinates with color gradients and only store a block of pixels when there&#8217;s too much variety within it.<br />
+Just my 2cts.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=203#respond' data-commentid="203" data-postid="260" data-belowelement="comment-203" data-respondelement="respond" data-replyto="Reply to Sander van Rossen" aria-label='Reply to Sander van Rossen'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-204">
+		<div id="comment-204">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/fa1512d38160d0546361d2723d0949e4?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/fa1512d38160d0546361d2723d0949e4?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">AlbeyAmakiir</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-204">
+					April 12, 2010 at 11:14 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Could you make it so that the images, when clicked on (or maybe middle-clicked) open up in a new window? It&#8217;s easier to compare images when you can flick through the tabs and only see the changes. With the overlay being slightly larger than my screen, I have to scroll down to click &#8220;next&#8221;, and that makes comparisons difficult.</p>
+<p>These lighting ideas are pretty intelligent. I can&#8217;t wait to see them in motion.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=204#respond' data-commentid="204" data-postid="260" data-belowelement="comment-204" data-respondelement="respond" data-replyto="Reply to AlbeyAmakiir" aria-label='Reply to AlbeyAmakiir'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-205">
+		<div id="comment-205">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/85fae8c14cc0efea23af6093efd2c4fb?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/85fae8c14cc0efea23af6093efd2c4fb?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.type3studios.com' rel='external nofollow ugc' class='url'>vecima</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-205">
+					April 12, 2010 at 1:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hey, congrats on pushing the pre-computed envelope!  I&#8217;m a source engine modder, so battling with the limitations of pre-computed lighting is one of my major headaches.  You&#8217;ve effectively circumnavigated one major limitation &#8211; a certain achievement.  You&#8217;ve left me wishing valve would come up with something like this for source.  Not to take away from what you&#8217;ve done &#8211; truly, I&#8217;m impressed &#8211; but, this seems like it puts a restriction of extra caution in regards to scene lighting complexity.  The sculpture room as you show it requires 4 times as much lighting data as the same room with no &#8220;options&#8221;.  Simply adding a door to get into that room brings the total to 8 times as much data.  Obviously you realize the situation, as you called out in your post, but it has me wondering how game play decisions might be affected by size constraint concerns.</p>
+<p>Another thing I&#8217;m wondering &#8211; Is global illumination really such a far off dream that the only sensible solution is to push pre-computed lighting to new lengths?  I thought some games were already using it, even if in some simplified fashion.  Is it perhaps just too much effort to implement with a small team?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=205#respond' data-commentid="205" data-postid="260" data-belowelement="comment-205" data-respondelement="respond" data-replyto="Reply to vecima" aria-label='Reply to vecima'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-207">
+		<div id="comment-207">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-207">
+					April 12, 2010 at 7:05 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The problem is that there is a practical limit to the resolution of the shadow maps, and it is lower than one would like.  If I took out that dithering then you would see big chunky pixels.  At the same time, though, the dithering causes other visual problems, and is really slow.  So, in general, it&#8217;s an issue.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=207#respond' data-commentid="207" data-postid="260" data-belowelement="comment-207" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor even thread-even depth-1" id="li-comment-208">
+		<div id="comment-208">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-208">
+					April 12, 2010 at 7:16 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>vecima: Because light is additive, we could refactor the system so that it uses only one lightmap per variable, instead of being 2-to-the-n.  Basically you can just subtract out the lightmap with everything turned off / closed from all the other lightmaps; then at runtime, you can add in the other lightmaps as you turn on lights or open windows.  The drawback then is that the shader becomes slower if you have more than 2 sources (because it is blending multiple lightmaps), but this is constrained per-location so it is kind of controllable.  </p>
+<p>In the 2-to-the-n case, you can still control that somewhat by populating the space sparsely&#8230; if there are theoretically 8 lightmaps, maybe you only have 5 or 4, as in general some light sources are going to dominate other ones.</p>
+<p>I don&#8217;t know of any games that are doing realtime high-quality global illumination.  It is generally considered as beyond the current tech horizon.  There are some SDKs you can license</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=208#respond' data-commentid="208" data-postid="260" data-belowelement="comment-208" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-209">
+		<div id="comment-209">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-209">
+					April 12, 2010 at 7:19 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Sander: The question is then how you are supposed to render that quickly on modern graphics hardware.  I suppose you could render a mesh to an alternate render target and then blend with that at runtime&#8230; but that is substantially slower, and it is questionable whether the mesh would provide enough compression (though possibly it would be a lot, for some lighting situations.)  I could see it as a space for experimentation, though.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=209#respond' data-commentid="209" data-postid="260" data-belowelement="comment-209" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-210">
+		<div id="comment-210">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/38e4d9d38b4f0b3da67573b4626f2287?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/38e4d9d38b4f0b3da67573b4626f2287?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Anton Shekhovtsov</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-210">
+					April 12, 2010 at 9:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>How do you specify a range of geometry affected by alternate lightmap?<br />
+With a lot of tiny lightmapped things around it seems tricky.<br />
+And I wonder, where do you cut it to not introduce seams, since GI is inherently not local?<br />
+(Have not tried myself, but when you open a door lighting should subtly change just everywhere).</p>
+<p>I have a somewhat similar lightmap switching. However, I do not even think of interpolating them since I encode dominant direction vector as well as hdr color per pixel, and it takes 64 bits per pixel spread over 3 textures. Quite heavy, so everytime we need to change light something blows to hide the change :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=210#respond' data-commentid="210" data-postid="260" data-belowelement="comment-210" data-respondelement="respond" data-replyto="Reply to Anton Shekhovtsov" aria-label='Reply to Anton Shekhovtsov'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-211">
+		<div id="comment-211">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-211">
+					April 12, 2010 at 10:51 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Anton: Right now the range is somewhat hardcoded, based on the intersection of the bounding volumes, but we will add the option to expand it if necessary. You can currently do that editing a text file, but that&#8217;s obviously not very convenient.</p>
+<p>Transitions are not really correct, but since the results only affect the indirect illumination, I think they are plausible.</p>
+<p>Something you could do is to use dynamic textures and do the interpolation in a separate pass before hand. The problem then is that that doesn&#8217;t allow you to use texture compression, but since transitions are fairly fast, that should not be a major issue. You only have to use an uncompressed lightmap during a short period of time.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=211#respond' data-commentid="211" data-postid="260" data-belowelement="comment-211" data-respondelement="respond" data-replyto="Reply to Ignacio" aria-label='Reply to Ignacio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-212">
+		<div id="comment-212">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-212">
+					April 13, 2010 at 6:14 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>BTW, I would also add that what we are doing is by no means new. Quake 2 already had support for multiple lightmaps per surface. They did it at a much finer granularity. Each brush face could have up to 4 different light &#8220;styles&#8221;. QRAD generated errors if more dynamic lights influenced the same face. That allowed them to have blinking lights or the ability to turn lights on and off. In Q2 dynamic objects never cast shadows, so they didn&#8217;t had to deal with dynamic occlusions.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=212#respond' data-commentid="212" data-postid="260" data-belowelement="comment-212" data-respondelement="respond" data-replyto="Reply to Ignacio" aria-label='Reply to Ignacio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-213">
+		<div id="comment-213">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-213">
+					April 13, 2010 at 10:28 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Luiz: I am sticking to mostly tech updates for now.  We&#8217;ll talk about the gameplay a little later!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=213#respond' data-commentid="213" data-postid="260" data-belowelement="comment-213" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-214">
+		<div id="comment-214">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/6aeb5480a792f57abaceb1530a9a7ce8?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/6aeb5480a792f57abaceb1530a9a7ce8?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Stephan Ahonen</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-214">
+					April 14, 2010 at 10:30 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Have you seen what Geomerics is doing? They have a system that provides real time quasi-GI. From what I can figure out, they&#8217;re doing something like this:</p>
+<p>During scene creation and pre-computation:<br />
+1) Take a static scene as input, split it into patches a-la radiosity<br />
+2) Determine the contribution of reflected light from each patch to the incident light on every other patch. Just the data needed to do a radiosity bounce, no actual light has entered the scene yet.<br />
+In the real-time engine:<br />
+3) Add your dynamic lighting<br />
+4) Sample the dynamic lighting at the location of each patch sample<br />
+5) Do a radiosity bounce on the patches (Should be very fast since it&#8217;s all precomputed!)</p>
+<p>It&#8217;s also storing &#8220;light probe&#8221; samples which are used to light any dynamic objects in the scene.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=214#respond' data-commentid="214" data-postid="260" data-belowelement="comment-214" data-respondelement="respond" data-replyto="Reply to Stephan Ahonen" aria-label='Reply to Stephan Ahonen'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-215">
+		<div id="comment-215">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-215">
+					April 14, 2010 at 11:27 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Yes, I considered licensing their stuff.  However, ultimately it is overkill for what this game is doing (not much in the way of moving light sources) and is more expensive in terms of shader / texture resources.</p>
+<p>If you really want to do live GI though it seems well worth looking into.  Maybe I am biased because I am a Geometric Algebra fan.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=215#respond' data-commentid="215" data-postid="260" data-belowelement="comment-215" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-217">
+		<div id="comment-217">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7bce6ed6ec5c5550a6a3d219b50ea994?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7bce6ed6ec5c5550a6a3d219b50ea994?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Will Middlebrook</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-217">
+					April 15, 2010 at 6:34 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hey Jonathan- loved your last game and was excited to see something about your new project. I was just wondering when you are going to talk more about the concept of the game and gameplay. Looks great so far!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=217#respond' data-commentid="217" data-postid="260" data-belowelement="comment-217" data-respondelement="respond" data-replyto="Reply to Will Middlebrook" aria-label='Reply to Will Middlebrook'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-218">
+		<div id="comment-218">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-218">
+					April 15, 2010 at 7:58 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I don&#8217;t know if I will talk about the gameplay before the game is released.</p>
+<p>Blogging about technical stuff actually serves a purpose (in terms of supporting the dialog, circulating ideas among the community of people working on this stuff).  What good does talking about the gameplay do?  How does it do anything but spoil the game for people who might play it later?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=218#respond' data-commentid="218" data-postid="260" data-belowelement="comment-218" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-219">
+		<div id="comment-219">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/105d79c43c60b464440ff4a7d6bc9312?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/105d79c43c60b464440ff4a7d6bc9312?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Gilson Maciel</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-219">
+					April 16, 2010 at 2:47 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Jonathan, im from brazil and first of all i wanna congratulate you about your game braid. I loved the gameplay, soundtrack and the puzzles. I&#8217;m a developer aswell and im starting in the game business. I wanna ask you something. Your games are all designed using Direct3D, right? </p>
+<p>Would you advise people to use Direct3D instead of OpenGL? Why? Beucase opengl, supports other plataforms, such as linux and its free. That doesnt make a plus by itself? I know opengl used to be better then direct3d but i dont know in wich foot they stand today. Do you think that direct3d would be easier to develop? Or maybe, faster?</p>
+<p>Congratulations for your success, looking forward to see some other games and posts.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=219#respond' data-commentid="219" data-postid="260" data-belowelement="comment-219" data-respondelement="respond" data-replyto="Reply to Gilson Maciel" aria-label='Reply to Gilson Maciel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-jon bypostauthor odd alt thread-odd thread-alt depth-1" id="li-comment-221">
+		<div id="comment-221">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c4fe9b769290c1bc4ff66168984ba300?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jonathan Blow</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-221">
+					April 16, 2010 at 6:48 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>The most important part is to make a good game.  All this other stuff like D3D / OpenGL is just distraction.  It doesn&#8217;t matter very much, because you can change those decisions later on pretty easily.</p>
+<p>To say these games are &#8220;designed using Direct3D&#8221; is an extremely wrong phrase.  The design of the game itself has very, very little to do with what graphics API is involved.  On the tech side, there is a little bit more in the way of decisions made in relation to the specific API, but even there, it is a vast minority.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=221#respond' data-commentid="221" data-postid="260" data-belowelement="comment-221" data-respondelement="respond" data-replyto="Reply to Jonathan Blow" aria-label='Reply to Jonathan Blow'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-222">
+		<div id="comment-222">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/5b511db5a05e6913b39d15943d30fff1?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/5b511db5a05e6913b39d15943d30fff1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Won</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-222">
+					April 16, 2010 at 9:52 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Just wanted to chime in that I&#8217;m also a fan of Geometric Algebra. Representation is half the problem (usually the harder half!).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=222#respond' data-commentid="222" data-postid="260" data-belowelement="comment-222" data-respondelement="respond" data-replyto="Reply to Won" aria-label='Reply to Won'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-223">
+		<div id="comment-223">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7bce6ed6ec5c5550a6a3d219b50ea994?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7bce6ed6ec5c5550a6a3d219b50ea994?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Will Middlebrook</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-223">
+					April 17, 2010 at 3:29 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hey again Jonathan.</p>
+<p>Yeah, I see what ya mean. Thats really interesting approach and makes sense&#8230; all the better when the game is eventually released!</p>
+<p>So I have a random question: What games influence your concept/design and what games would you recommend playing, be they indie or studio made? I&#8217;m not a developer or anything, I just enjoy playing and appreciating well-made games and was interested in what you think!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=223#respond' data-commentid="223" data-postid="260" data-belowelement="comment-223" data-respondelement="respond" data-replyto="Reply to Will Middlebrook" aria-label='Reply to Will Middlebrook'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-259">
+		<div id="comment-259">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/14c088d4738d25c03099bb03d148480a?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/14c088d4738d25c03099bb03d148480a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='https://sites.google.com/site/copypastepixel/home' rel='external nofollow ugc' class='url'>Stefan Kamoda</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-259">
+					April 25, 2010 at 10:58 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Hi Jonathan,</p>
+<p>Looking good!</p>
+<p>I&#8217;ve been working on a GPU lightmap renderer for a while now so I thought I&#8217;d post. I started using a hemicube method similar to yours but recently I&#8217;ve moved to a depth peel method which I&#8217;ve found to be much faster. It was tough getting it up and running but well worth it.  There&#8217;s more info on my site and the blog has the most recent stuff. </p>
+<p><a href="https://sites.google.com/site/copypastepixel/lighttool" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'https://sites.google.com/site/copypastepixel/lighttool', 'https://sites.google.com/site/copypastepixel/lighttool']);" rel="nofollow ugc">https://sites.google.com/site/copypastepixel/lighttool</a><br />
+and<br />
+<a href="https://sites.google.com/site/copypastepixel/blog" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'https://sites.google.com/site/copypastepixel/blog', 'https://sites.google.com/site/copypastepixel/blog']);" rel="nofollow ugc">https://sites.google.com/site/copypastepixel/blog</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=259#respond' data-commentid="259" data-postid="260" data-belowelement="comment-259" data-respondelement="respond" data-replyto="Reply to Stefan Kamoda" aria-label='Reply to Stefan Kamoda'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-castano odd alt thread-odd thread-alt depth-1" id="li-comment-267">
+		<div id="comment-267">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio Castaño</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-267">
+					April 26, 2010 at 9:55 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Interesting stuff Stefan! I suppose your implementation is based on the algorithm described in the GPU Gems 2 article, is that correct? I recently learned that the Ubisoft guys are using that algorithm as well (see their GDC&#8217;10 Splinter Cell presentation). Do you know of any other resources about this method?</p>
+<p>The main reason why I went the more traditional hemicube approach is because it seemed much more straightforward to use a fairly standard method and it required very little changes to the engine.</p>
+<p>Also, I wasn&#8217;t sure it would be possible to obtain production quality results with the depth peeling method, but it looks like you and others had success with it, so maybe my fears were unfounded. </p>
+<p>I suspect the depth peeling method is a bit faster than ours, so I might experiment with that at a later point.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=267#respond' data-commentid="267" data-postid="260" data-belowelement="comment-267" data-respondelement="respond" data-replyto="Reply to Ignacio Castaño" aria-label='Reply to Ignacio Castaño'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-269">
+		<div id="comment-269">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e788d328cef4762c90ac778e877abf15?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Sean Barrett</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-269">
+					April 26, 2010 at 10:16 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I just want to make sure I understand the depth peeling approach&#8230; if you&#8217;re computing the results for N sample locations and D sample directions, hemicube sampling requires rendering N times and computing D pixels for each (and in practice the hemicube rendering requires 5 scene renderings (4 if you use a hemi-octahedron).</p>
+<p>In depth peeling, you&#8217;re computing the results for D sample directions at N sample locations by rendering D scenes, each with K pixels. Each scene rendering requires depth peeling which requires re-rendering the scene L times if the scene has depth complexity of L.</p>
+<p>Does K need to be on the same order of N? Naively, looking at only one direction, it seems like it would have to be, or else you&#8217;re going to get worse results. Indeed, it seems like it has to be larger than N to account for the approximating nature (say, 1.5 or 2). However, that&#8217;s ignoring the depth peeling; you need N sample locations total but some of them will appear at different depths in the same pixel. So maybe you really only need K = N/L or so? Maybe K = 2N/L to compensate for the spatial approximation. But again, this is still only thinking about one direction. Maybe the sloppiness and inaccuracy of the &#8220;shadow map&#8221;iness doesn&#8217;t matter as much as you start averaging over multiple directions, because adjacent sample locations will map differently in the different directions and the artifacts will average out. So maybe K=N/L or even lower?</p>
+<p>So, if we assume K=N/L, the math above is:<br />
+    hemicube: 4N scenes, N*D pixels<br />
+    depth peeling: L*D scenes, L*D*K pixels = N*D pixels</p>
+<p>If pixel shading were dominant, then by this analysis the difference wouldn&#8217;t be that large. It&#8217;s a trivial pixel shader, so I suppose performance is more tied to vertex processing and setup, though?<br />
+The hemicube renderer can frustum cull and the 4N or 5N scenes only actually draw tha average object N or 1.2N or whatever times, so it boils down to rendering scenes N times versus L*D times. </p>
+<p>Where you&#8217;re using 128*128 cube maps, that means your hemicube has 6*128*128/2 = 49,152 directions. I don&#8217;t have any clue what your average L is. 4? 20? Presumably your N is very high, but I don&#8217;t see anything in the blog to get a sense of the size of it. But e.g. 64MB of 16-bit lightmaps is 11 million sample locations.</p>
+<p>So ballparking this as N = 10M, D = 50K, L=20, I get: hemicube = 50M scenes (10-15M scenes per object), and depth peeling = 1M scenes.</p>
+<p>So assuming the math all makes sense, and assuming that ballparking is at all reasonable, there&#8217;s a factor of 50 different in the scene counts. Maybe that D is too high (that was your worst case, you also talk about using 32&#215;32 and 64&#215;64), and the L has absolutely no basis in reality.</p>
+<p>A factor of 50 difference in scene counts is pretty significant, although as I said it depends how those compare to the pixel costs.</p>
+<p>And if there were a significant difference in pixel counts I think maybe that would dominate anyway. As I noted hemicube is strictly N*D pixels, but there are two competing factors on the pixel counts with depth peeling, the loss of quality from using a shadow-map style technology (that may create a pressure to render at a higher resolution) and the hiding of the loss of quality from integrating over a large number of directions (that may make the spatial imprecision less important).</p>
+<p>Does this make sense?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=269#respond' data-commentid="269" data-postid="260" data-belowelement="comment-269" data-respondelement="respond" data-replyto="Reply to Sean Barrett" aria-label='Reply to Sean Barrett'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-273">
+		<div id="comment-273">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9a740f94e6da659e898343d0af1ddf56?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://castano.ludicon.com/blog/' rel='external nofollow ugc' class='url'>Ignacio</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-273">
+					April 27, 2010 at 5:31 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Sean, that makes sense, I&#8217;ve done a similar analysis and my conclusion is that at low resolutions (low N) the depth peeling method will most probably be significantly faster. In this case we are pretty much geometry limited, that is we are limited by the fixed function units of the GPU, while the shading units remain largely unused.</p>
+<p>I&#8217;d like to see how the hemicube method performs on Fermi hardware. Fermi has a distributed geometry processors, so the primitive setup rate is no longer dictated solely by the core frequency, but also by the number of cores. There are some inefficiencies introduced due to the parallelization, but overall geometry performance should be much higher, at least on the high-end chips. However, I&#8217;m afraid that if the geometry bottleneck is removed, the CPU will become the bottleneck and the GPU will still be underfed.</p>
+<p>An advantage of the hemicube method is that it&#8217;s possible to use irradiance caching, while the depth peeling method is more brute force. This reduces the number of samples significantly, how much depends on how much quality degradation are you willing to take. 8x produces only a minimal quality loss, 5x is almost indistinguishable from the original. On the other side this increases the CPU load since it&#8217;s now necessary to insert, lookup and interpolate irradiance records in an octree.</p>
+<p>I haven&#8217;t really profiled the GI at high resolutions such as 128&#215;128, but I expect GPU utilization to be much higher, so the analysis is not that obvious. N and L are scene dependent in the hemicube and depth peeling methods respectively, but in general, as your analysis seems to confirm, I expect the depth peeling method to still be faster.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=273#respond' data-commentid="273" data-postid="260" data-belowelement="comment-273" data-respondelement="respond" data-replyto="Reply to Ignacio" aria-label='Reply to Ignacio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-276">
+		<div id="comment-276">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/14c088d4738d25c03099bb03d148480a?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/14c088d4738d25c03099bb03d148480a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://sites.google.com/site/copypastepixel/blog' rel='external nofollow ugc' class='url'>Stefan Kamoda</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/#comment-276">
+					April 27, 2010 at 11:10 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>That&#8217;s right, it&#8217;s based on the GPU Gems 2 article. I haven&#8217;t read the Splinter Cell presentation yet and I&#8217;m unaware of any other resources for this method. It always struck me as odd that there wasn&#8217;t more info around.</p>
+<p>My development approach hasn&#8217;t been very scientific so I don&#8217;t have much by way of concrete figures. To start with I was using the hemicube method to calculate vertex colours. The largest scene I worked with contained about 90k vertices and it took about 15 minutes I think.  That was the old school sponza scene which you can see on my site. After that I made the switch. So far depth peeling has worked well for me although I&#8217;ve only tried it on room sized scenes. I think that larger scenes with detailed interior and exterior elements may prove difficult to render in one pass.</p>
+<p>I&#8217;ve updated my blog with a sunlit interior scene which may be of interest<br />
+<a href="http://sites.google.com/site/copypastepixel/blog" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://sites.google.com/site/copypastepixel/blog', 'http://sites.google.com/site/copypastepixel/blog']);" rel="nofollow ugc">http://sites.google.com/site/copypastepixel/blog</a></p>
+<p>Also, I don&#8217;t know how much of a difference it makes but I&#8217;m using C# and XNA. C++ and straight DirectX may be faster.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/?replytocom=276#respond' data-commentid="276" data-postid="260" data-belowelement="comment-276" data-respondelement="respond" data-replyto="Reply to Stefan Kamoda" aria-label='Reply to Stefan Kamoda'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2010/04/graphics-tech-multi-lightmaps/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='260' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="5a87e68701" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="152"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' id='photocrati_ajax-js-extra'>
+/* <![CDATA[ */
+var photocrati_ajax = {"url":"http:\/\/the-witness.net\/news\/?photocrati_ajax=1","wp_home_url":"http:\/\/the-witness.net\/news","wp_site_url":"http:\/\/the-witness.net\/news","wp_root_url":"http:\/\/the-witness.net\/news","wp_plugins_url":"http:\/\/the-witness.net\/news\/wp-content\/plugins","wp_content_url":"http:\/\/the-witness.net\/news\/wp-content","wp_includes_url":"http:\/\/the-witness.net\/news\/wp-includes\/","ngg_param_slug":"nggallery"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/ajax/static/ajax.min.js?ver=2.1.31' id='photocrati_ajax-js'></script>
+<script type='text/javascript' id='ngg_common-js-extra'>
+/* <![CDATA[ */
+
+var galleries = {};
+galleries.gallery_382cf352996d8b976585f0cff4016aee = {"id":null,"source":"galleries","container_ids":["5"],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_thumbnails","exclusions":[],"order_by":"sortorder","order_direction":"ASC","image_ids":[],"entity_ids":[],"tagcloud":false,"inner_content":"","returns":"included","slug":null,"display_settings":{"override_thumbnail_settings":"0","thumbnail_width":"100","thumbnail_height":"75","thumbnail_crop":"1","images_per_page":"20","number_of_columns":"0","ajax_pagination":"0","show_all_in_lightbox":"0","use_imagebrowser_effect":"0","show_piclens_link":"0","piclens_link_text":"[Show PicLens]","show_slideshow_link":"1","slideshow_link_text":"[Show as slideshow]","template":"","use_lightbox_effect":true,"display_no_images_error":1,"disable_pagination":0,"thumbnail_quality":"100","thumbnail_watermark":0,"ngg_triggers_display":"never"},"excluded_container_ids":[],"sortorder":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"382cf352996d8b976585f0cff4016aee"};
+galleries.gallery_382cf352996d8b976585f0cff4016aee.wordpress_page_root = "http:\/\/the-witness.net\/news\/2010\/04\/graphics-tech-multi-lightmaps\/";
+var nextgen_lightbox_settings = {"static_path":"http:\/\/the-witness.net\/news\/wp-content\/ngg\/modules","context":"nextgen_images"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/common.min.js?ver=2.1.31' id='ngg_common-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_basic_gallery/static/thumbnails/nextgen_basic_thumbnails.min.js?ver=2.1.31' id='photocrati-nextgen_basic_thumbnails-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/lightbox_context.min.js?ver=2.1.31' id='ngg_lightbox_context-js'></script>
+<script type='text/javascript' id='shutter-0-js-extra'>
+/* <![CDATA[ */
+
+nextgen_shutter_i18n = {"msgLoading":"L O A D I N G","msgClose":"Click to Close"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/shutter/shutter.min.js?ver=2.1.31' id='shutter-0-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/shutter/nextgen_shutter.min.js?ver=2.1.31' id='shutter-1-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.241 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-10-02 18:41:13 -->
+
+<!-- super cache -->

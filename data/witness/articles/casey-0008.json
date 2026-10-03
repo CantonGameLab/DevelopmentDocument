@@ -1,0 +1,239 @@
+{
+  "id": "casey-0008",
+  "title": { "zh": "「plane」在《The Witness》里怎么说？", "en": "How do you say “plane” in The Witness?" },
+  "subtitle": {
+    "en": "The exciting conclusion to the immovable rock mystery.",
+    "zh": "那块不肯动的石头之谜的激动人心的结局。"
+  },
+  "translator": {
+    "note": "归档源码里有两行函数签名被拆到了 cpp 代码块之外（已并回各自的代码块），另有一段正文被误标成 cpp 代码块（已按正文段落译出）；原文插图未收录，按出现顺序以「（原文此处有一张图）」占位。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Just before Christmas break, I [fixed a bug in the transform manipulator](https://caseymuratori.com/blog_0007) and checked it in.  Having a transform manipulator is a nice addition to any editor, and we were all happy to have it working.  But shortly thereafter, I had to leave for a cross-country family Christmas trip.  This meant no more real *Witness* work for about ten days, because my laptop only has Linux on it, and right now the Linux version of [The Witness](http://the-witness.net/news/) is still under construction.",
+      "zh": "就在圣诞假期之前，我[修好了变换操纵器里的一个 bug](https://caseymuratori.com/blog_0007)并提交了。变换操纵器对任何编辑器来说都是个不错的补充，它能用起来我们都很高兴。但没过多久，我就得动身去参加一趟横跨全国的圣诞家庭旅行。这意味着大约十天没法做真正 *Witness* 的工作，因为我的笔记本上只装了 Linux，而《The Witness》的 Linux 版本现在还处在建设中。"
+    },
+    {
+      "type": "p",
+      "en": "This hiatus was the primary motivation behind writing my previous entry as a cliffhanger: although I had fixed the bug, I didn't have time to adequately document the bug via debugger inspection, so it would have been hard to write anything meaningful showing how the bug manifested itself in practice.  I wanted to wait until I had a chance to go through every last little bit of it, so I could be as specific as possible.  In that sense, it was meant to be a bit of a cliffhanger for me as well.",
+      "zh": "这段空档正是我把上一篇写成悬念的主要原因：虽然我已经修好了那个 bug，但我没时间通过调试器检查把它充分地记录下来，所以要写出任何能说明这个 bug 在实践中如何表现的有意义内容都会很难。我想等到有机会把它每一处细节都过一遍，这样才能尽可能具体。从这个意义上说，那篇悬念对我自己来说也是个悬念。"
+    },
+    {
+      "type": "p",
+      "en": "But as it turned out, it was much more of a cliffhanger than I'd originally anticipated.",
+      "zh": "但结果证明，这个悬念比我原先预想的要悬得多。"
+    },
+    { "type": "h2", "id": "good-news", "zh": "好消息，坏消息", "en": "Good News, Bad News" },
+    {
+      "type": "p",
+      "en": "The good news: congratulations to those of you who posted \"floating point precision\" as a suggestion for the cause of the bug.  You aren't any dumber than I am.",
+      "zh": "好消息：恭喜那些发帖说 bug 原因是「浮点精度」的人。你们并不比我笨。"
+    },
+    {
+      "type": "p",
+      "en": "The bad news: we're all dumber than we should be.",
+      "zh": "坏消息：我们所有人都比自己应有的水平要笨。"
+    },
+    {
+      "type": "p",
+      "en": "For those of you who don't already know all about floating point precision problems, I'll explain the problem we all thought we were solving.  The original code, verbatim, looked like this:",
+      "zh": "对那些还不了解浮点精度问题的人，我来解释一下当初我们都以为自己在解决的那个问题。原始代码一字不改地长这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool ray_vs_plane(Vector3 *xpoint, Vector3 const &p0, Vector3 const &dir, Plane3 const &plane)\n{\n Vector3 n = plane.get_normal();\n\nfloat denom = dot_product(n, dir);\n float epsilon = 0.0001f;\n if (fabs(denom) < epsilon) return false;\n\nfloat t = - ((plane.d + dot_product(n, p0)) / denom);\n if (t < 0) return false;\n\n*xpoint = p0 + dir * t;\n return true;\n}"
+    },
+    {
+      "type": "p",
+      "en": "To fix the bug, I wrote a modified version to use for the transform manipulator:",
+      "zh": "为了修掉这个 bug，我写了一个修改版给变换操纵器用："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool ray_vs_plane(Vector3 *xpoint, Vector3 const &p0, Vector3 const &dir, Vector3 const &plane_point, Vector3 const &plane_n)\n{\n Vector3 local_p0 = p0 - plane_point;\n\nfloat denom = dot_product(plane_n, dir);\n float epsilon = 0.0001f;\n if (fabs(denom) < epsilon) return false;\n\nfloat t = - (dot_product(plane_n, local_p0) / denom);\n if (t < 0) return false;\n\n*xpoint = p0 + dir * t;\n return true;\n}"
+    },
+    {
+      "type": "p",
+      "en": "I've done exactly the same operation, but instead of using the d value of the plane equation to solve for t, I just move the ray itself to be centered around a point on the plane, so that the d value is implicitly zero.  My reasoning was very simple: if I subtract two things that I know are close together (the camera location and the picked point on the manipulator), I will have less cancellation error than if I subtract two things that may be wildly different in scale (the d value and the dot product of the camera location and the plane normal).",
+      "zh": "我做的其实是完全相同的运算，只是不用平面方程里的 d 值来解 t，而是直接把射线本身平移到以平面上的某个点为中心，这样 d 值就隐含为零了。我的推理非常简单：如果我把两个我知道彼此很接近的东西相减（摄像机位置和操纵器上被拾取的点），产生的相消误差会比拿两个量级可能相差悬殊的东西相减（d 值，以及摄像机位置与平面法线的点积）更小。"
+    },
+    {
+      "type": "p",
+      "en": "This is pretty weak sauce as far as numerical precision improvements go.  I am far from an expert on the subject (read some [Forman Acton](https://en.wikipedia.org/wiki/Forman_S._Acton), for example, if you want to see how the pros roll).  But, when I did this, it fixed the bug perfectly, so I assumed, at least for the moment, that it must be a reasonable fix.",
+      "zh": "就数值精度的改进而言，这招相当没劲。我离这个领域的专家差得远（比如你要是想看看高手是怎么玩的，可以去读读 [Forman Acton](https://en.wikipedia.org/wiki/Forman_S._Acton)）。但当我这么做之后，bug 被完美修好了，所以我至少在当时认定：这一定是个合理的修法。"
+    },
+    {
+      "type": "p",
+      "en": "But, honestly, I didn't really have a good feeling about it.",
+      "zh": "但老实说，我对它心里并不踏实。"
+    },
+    { "type": "h2", "id": "christmas-stew", "zh": "圣诞节的煎熬", "en": "Christmas Stew" },
+    {
+      "type": "p",
+      "en": "Sometimes, when there's a lot to do, you'll live with a bug fix because it works, rather than because it makes sense.  But invariably, at least for me, I end up going back to look more closely at something if I don't feel like I fully understood it.  I am sure this is mostly just an obsessive personality trait, but regardless, I rarely find the time to be wasted, because I almost always learn something from the process.",
+      "zh": "有时候事情太多，你会容忍一个 bug 修法，只因为它管用，而不是因为它讲得通。但几乎无一例外，至少对我来说，只要我觉得自己没完全弄懂某件事，最后总会回头再仔细看看。我确信这多半只是强迫型的人格特质，但不管怎样，我很少觉得这些时间是浪费的，因为我几乎总能从过程中学到东西。"
+    },
+    {
+      "type": "p",
+      "en": "In this specific case, I didn't have time to look into the problem in depth before I left.  I planned to do so for the eventual writeup, but of course, I couldn't do much without being able to run the code, and while I was on Christmas break, that wasn't an option.  Unfortunately, this meant that I had the entire Christmas break to stew about the bug that I wasn't sure I'd really fixed properly.",
+      "zh": "在这个具体情况下，出发前我没时间深入研究这个问题。我本打算为最终要写的那篇文章去做，但当然，跑不了代码就做不了什么，而圣诞假期期间我也没这个条件。不幸的是，这意味着整个圣诞假期我都在为那个「我不确定是否真的修对了」的 bug 闷着煎熬。"
+    },
+    {
+      "type": "p",
+      "en": "From the beginning, the thing that didn't sit right with me about the fix was that when Jon originally reported the problem to me, he didn't mention anything about it happening more on the outskirts of the island than on the interior.  Jon's a very experienced programmer, so if something like that were happening, he would probably notice and include that in the report, because he'd know it would help me find the bug faster.",
+      "zh": "从一开始，这个修法让我觉得不对劲的地方在于：Jon 最初向我报告这个问题时，完全没有提到它更像是发生在岛的边缘、而不是内部。Jon 是位非常有经验的程序员，所以如果真有这种情况，他大概会注意到，并把它写进报告里，因为他知道这能帮我更快找到 bug。"
+    },
+    {
+      "type": "p",
+      "en": "Instead, it seemed pretty clear that the bug was related more to the camera angle than the position in the world.  While obviously the camera angle affects the input values, and could have a number of effects on the numerical precision of the program, it's not intuitively the kind of thing that I would expect.  If these sorts of algorithms were that sensitive in this way, I would have expected to encounter similar problems with camera-relative plane intersections many times before  —  but I never had.",
+      "zh": "相反，看起来很明显：这个 bug 与摄像机角度的关系比与世界位置的关系更大。摄像机角度显然会影响输入值，也可能对程序的数值精度产生若干影响，但凭直觉这不是我会预期的那种事。如果这类算法真的有这么敏感，我早该在这之前很多次遇到过「与摄像机相关的平面求交」的类似问题了——但我从来没有。"
+    },
+    {
+      "type": "p",
+      "en": "The more I thought about that, the more it gnawed at me that I couldn't go see exactly what was happening and prove to myself why the fix worked.  I did have the game on my laptop, because I'd done some initial Linux porting work, so I realized that maybe, if I was lucky, I could reconstruct the problem without actually being able to load and run the editor.",
+      "zh": "我越是想这件事，就越被「我没法亲眼看清到底发生了什么、没法向自己证明这个修法为什么有效」折磨。我的笔记本上确实有游戏，因为我做过一些最初的 Linux 移植工作，所以我意识到：如果运气好，也许我能在无法真正加载并运行编辑器的情况下，把这个问题重构出来。"
+    },
+    {
+      "type": "p",
+      "en": "That is when I became very thankful that I had been writing these blog entries, because it meant I had stopped to take this screenshot before I left, specifically so I could do the writeup over break:",
+      "zh": "这时我特别庆幸自己一直在写这些博客文章，因为这意味着我在出发前特意停下来截了这张图，就是为了在假期里写文章用："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_yworks_d9b77af3fc80126f.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Do you see what I see?  That lovely entity number up in the corner is pure gold for step one of reconstructing the problem.  Because I could see the entity number, I was able to go into the repository and get the data file that says where that entity is placed in the world.  That let me know the numbers of the center point of the manipulator: -304.114, 193.4923, 4.7582.",
+      "zh": "你看到我看到的东西了吗？角落里那个可爱的实体编号，对重构问题的第一步来说简直是纯金。因为能看到实体编号，我就能进版本库取出那个说明该实体放置在世界何处的数据文件。这让我知道了操纵器中心点的那几个数字：-304.114、193.4923、4.7582。"
+    },
+    {
+      "type": "p",
+      "en": "If you're an experienced 3D programmer, then you probably are thinking the same thing that I was thinking when I saw those: how the hell could I be having numerical precision problems with such low numbers?  [The Witness](http://the-witness.net/news/)'s scale is one unit per meter, which means that, at the scale of the dragging we're talking about, there should be absolutely no problems with solving a single plane equation, regardless of how sloppily you did it.",
+      "zh": "如果你是位有经验的 3D 程序员，那你大概会和我看到这些数字时想的一样：数值这么小，我他妈怎么可能会碰到数值精度问题？《The Witness》的比例尺是每米一个单位，这意味着在我们讨论的这种拖拽尺度下，解一个平面方程绝对不该有任何问题，不管你解得有多糙。"
+    },
+    {
+      "type": "p",
+      "en": "But if that was the case, then how did I fix the bug?  This lead me to step two of reproducing the problem: writing a test program.  I wrote a little C program that would take numbers around that point and, for a large set of programmatically generated planes and rays, perform the intersection using both the old ray intersection routine and my \"improved\" one.",
+      "zh": "但如果是这样，我又是怎么把 bug 修好的呢？这就把我带到了复现问题的第二步：写一个测试程序。我写了个小小的 C 程序，取那个点附近的数字，对一大批由程序生成的平面与射线，分别用旧的射线求交例程和我那个「改进版」来做求交。"
+    },
+    {
+      "type": "p",
+      "en": "Perhaps unsurprisingly, these results reinforced my suspicions that there wasn't enough of a difference between the two routines to account for the original bug.  In all the tests, my \"improved\" routine was no more than one decimal digit more precise; so if the original routine produced intersection points that were actually, say, 0.0001 units away from the plane, the new routine might produce ones that were  0.00001 away.",
+      "zh": "也许并不意外，这些结果强化了我的怀疑：两个例程之间的差异不足以解释最初那个 bug。在所有测试里，我那个「改进版」例程至多精确一个小数位；所以如果原例程算出的交点实际上离平面 0.0001 个单位，新例程算出的可能也就是离平面 0.00001 个单位。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Clearly, the fix just plain shouldn't have worked.  But it did.",
+      "zh": "显然，这个修法根本就不该管用。可它偏偏管用。"
+    },
+    {
+      "type": "p",
+      "en": "Why?",
+      "zh": "为什么？"
+    },
+    { "type": "h2", "id": "wrong-part", "zh": "文章里猜错的那部分", "en": "The Wrong Part of the Post" },
+    {
+      "type": "p",
+      "en": "I would love to be able to say that I guessed the real reason before stepping through the code, but I absolutely didn't.",
+      "zh": "我很想说自己是在单步调试代码之前就猜到了真正的原因，但我完全没有。"
+    },
+    {
+      "type": "p",
+      "en": "When I returned from Christmas break, I eagerly booted up the Witness and stepped through the code very carefully, keeping accurate track of all the numbers as I went, waiting to find that super-elusive numerical thing that I had overlooked.  To my complete surprise, it turned out to have *absolutely nothing to do with precision*.",
+      "zh": "圣诞假期结束后，我迫不及待地启动 *Witness*，非常仔细地单步走了一遍代码，一路准确记录所有数字，等着找到那个极其难以捉摸、被我忽略掉的数值问题。完全出乎我意料的是，它*和精度完全没有任何关系*。"
+    },
+    {
+      "type": "p",
+      "en": "In fact, somehow, although I didn't know it at the time, I actually did write about the root cause of the problem in my original post.  It just wasn't in the part that I thought.  Indeed, rather than \"Always Look Behind You\" foretelling the eventual solution, it was \"Foreign Languages\" that contained the hint: due to my naivete with [The Witness](http://the-witness.net/news/) codebase, I misunderstood what it was doing with planes.  It turns out that this one line from the original routine was the entire culprit:",
+      "zh": "事实上，不知怎么的，虽然我当时并不知道，我其实在最初那篇文章里就已经写到了问题的根本原因。只是它不在我以为的那一部分里。确实，预兆最终解答的不是「记得回头看」，而是「外语」那一节里藏着提示：由于我对《The Witness》代码库的天真理解，我误解了它在平面上做的事情。结果，原例程里的这一行就是全部的罪魁祸首："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Vector3 n = plane.get_normal();"
+    },
+    {
+      "type": "p",
+      "en": "You will notice that it only occurs in the buggy version of the ray intersection code.  In my version, I couldn't use the plane structure, because I didn't want an \"a, b, c, d\" representation of the plane.  I wanted \"a, b, c, p\", if you will, where p is an actual 3D point on the plane.  So I never called get_normal().",
+      "zh": "你会注意到，它只出现在有 bug 的那版射线求交代码里。在我的版本里，我用不了那个平面结构，因为我不想要平面的「a、b、c、d」表示。如果可以这么说的话，我要的是「a、b、c、p」，其中 p 是平面上一个真正的三维点。所以我从来没有调用过 get_normal()。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Why does this matter?  Well, upon stepping through all the code, I realized that get_normal(), being true to its name, takes the step of *normalizing* the a, b, c values of the plane before returning them to you as a vector.  This means that the a, b, c values of the plane that you pass in when you create the plane aren't the ones you get out.",
+      "zh": "这为什么重要？嗯，单步走完所有代码之后，我意识到 get_normal() 名副其实：它在把平面的 a、b、c 值作为向量返回给你之前，会先把它们*归一化*。这意味着你创建平面时传进去的 a、b、c 值，和你取出来的并不是同一组。"
+    },
+    {
+      "type": "p",
+      "en": "That wouldn't be a problem if it weren't for the fact that, when you create one of these planes, it *does not* normalize the values you pass in:",
+      "zh": "要不是因为你创建这种平面时，它*并不会*把你传进去的值归一化，这本来也不是问题："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Vector3 plane_n = cross_product(camera_back, translation_axis);\n plane_n = cross_product(plane_n, translation_axis);\n grabbing_plane = plane_from_point_and_normal(hit_pos, plane_n);"
+    },
+    {
+      "type": "p",
+      "en": "This is my fault on its face, because hey, it *does say normal*, and normals are traditionally supposed to be normalized.  But in keeping with my reference to foreign languages, this is something I really just didn't think about, because I am used to the way I've always done things with planes: nothing is normalized automatically, everything is just left unnormalized, because back in the day, normalization was very expensive and you never did it in a math routine unless it was absolutely necessary.",
+      "zh": "表面上这是我的错，因为嘿，它*确实写着 normal*，而法线按传统就应该是归一化的。但套用我那个「外语」的比喻，这件事我真的就是没想到，因为我习惯了自己一直以来处理平面的方式：什么都不自动归一化，一切都保持未归一化，因为在当年，归一化非常昂贵，除非绝对必要，你从不在数学例程里做它。"
+    },
+    {
+      "type": "p",
+      "en": "So plane_from_point_and_normal was actually doing what I thought it would: it just stored plane_n as the a, b, c values, and computed d with the inner product.  But get_normal() was not doing what I thought it would.  Rather than just returning me the vector {a,b,c}, it was normalizing them before giving them to me, which meant *all* my calculations with them would no longer agree with the d value computed in plane_from_point_and_normal.",
+      "zh": "所以 plane_from_point_and_normal 实际上做的和我想的一样：它只是把 plane_n 存成 a、b、c 值，并用内积算出 d。但 get_normal() 做的并不是我以为它会做的事。它不是把 a、b、c 这三个值原样作为一个向量返回给我，而是在交给我之前把它们归一化了——这意味着我用它们做的*所有*计算，都不再和 plane_from_point_and_normal 里算出的 d 值一致。"
+    },
+    {
+      "type": "p",
+      "en": "And therein, clearly, lies the entirety of the bug.",
+      "zh": "而整个 bug，显然就在于此。"
+    },
+    {
+      "type": "p",
+      "en": "Just to underscore how much of a native language issue this really is, when I showed Jon the preview of this article, he said, \"If you are thinking of the plane as a geometric object, of course the normal is unit length, what else would it be??  But if you are thinking of it as some specific equation all the time, then it is natural to care about the a, b, c, you put in.\"  So I can only assume, were he using my math library, he would've been tripped up by the fact that I *don't* normalize normals automatically, exactly the inverse of the problem I encountered with his.",
+      "zh": "为了强调这真的有多像一个「母语」问题：当我把这篇文章的预览给 Jon 看时，他说：「如果你把平面想成一个几何对象，那法线当然是单位长度，还能是别的什么？但如果你一直把它想成某个具体的方程，那你自然会在意自己传进去的 a、b、c。」所以我只能推断：如果他用的是我的数学库，他也会被我*不*自动归一化法线这件事绊倒——恰好是我用他的库时遇到的问题的反面。"
+    },
+    {
+      "type": "p",
+      "en": "I honestly don't believe that this sort of thing is a case of us being presumptuous or sloppy; it's just the price you have to pay for being able to program complex things at a reasonable speed.  If we constantly have to think about what it means to work with a vector, or a plane, or a quaternion, we're going to be a lot slower.  It's much more efficient to have a consistent perspective, and always rely on it.",
+      "zh": "老实说，我不认为这类事情说明我们自以为是或马虎；这只是为了能以合理速度编写复杂程序所必须付出的代价。如果我们时时刻刻都得去想「操作一个向量、一个平面、或者一个四元数意味着什么」，我们会慢得多。拥有一个一致的视角、并且一直依赖它，效率要高得多。"
+    },
+    {
+      "type": "p",
+      "en": "And of course, the cost is bugs like this  —  but that's a very small cost relative to the benefits.",
+      "zh": "当然，代价就是这样的 bug——但相对于收益，这是非常小的代价。"
+    },
+    { "type": "h2", "id": "partial-credit", "zh": "部分分数", "en": "Partial Credit" },
+    {
+      "type": "p",
+      "en": "So, where does that leave you?",
+      "zh": "那么，这意味着你该得多少分呢？"
+    },
+    {
+      "type": "p",
+      "en": "Clearly, automatic partial credit goes to everyone who wrote in suggesting that numerical precision was the problem.  You came to the same conclusion I did with the information I knew at the time, which was all you had to go on.  You certainly can't be blamed for not finding the real bug since you would have needed the source code to the Witness math library to even see it.  And it is true that the numerical precision of the routine could have been improved, as I believe I was able to verify separately with my test program.",
+      "zh": "显然，所有写信提出「问题是数值精度」的人都自动获得部分分数。你们用我当时掌握的信息得出了和我一样的结论，而那些信息也是你们唯一能依据的东西。你们当然不该因为没找到真正的 bug 而受责备——要看见它，你得先拿到 Witness 数学库的源代码。而且这个例程的数值精度确实是能改进的，我相信这一点我用测试程序单独验证过。"
+    },
+    {
+      "type": "p",
+      "en": "But by the same token, nobody gets automatic full credit.  There were a lot of reasons why, even with only the information in the original article, you could have said, \"I don't think it's numerical precision, Muratori.\"  Maybe I am ascribing overly heroic attributes to the man, but I feel like [Forman Acton](https://en.wikipedia.org/wiki/Forman_S._Acton) would have known, from looking at the plane intersection snippet, that there wasn't any way to lose enough precision in there to account for the bug as I described it, at least not in any way that would have been substantially improved by the suggested fixes people wrote in (or the fix I actually did, for that matter).",
+      "zh": "但同样地，没有人会自动拿到满分。有很多理由说明，即使只有最初那篇文章里的信息，你本可以说出：「Muratori，我不觉得这是数值精度问题。」也许我把这位老先生想得过于英雄了，但我觉得 [Forman Acton](https://en.wikipedia.org/wiki/Forman_S._Acton) 只要看一眼那段平面求交的代码，就会知道那里根本不可能损失足够的精度、以至于能解释我描述的那个 bug——至少不可能以任何「能被读者来信里的建议修法（或者，就这件事来说，我实际用的那个修法）大幅改善」的方式损失。"
+    },
+    {
+      "type": "p",
+      "en": "So in order to actually get full credit, you're going to have to earn it, I think, but on the honor system.  Ask yourself, if you had encountered this bug, and you had \"fixed\" it as I had, would you have gone back and figured out what was really happening before moving on to something else?",
+      "zh": "所以，要想真正拿到满分，我觉得你得靠「荣誉制度」自己挣。问问你自己：如果你遇到这个 bug，并且像我那样把它「修好」了，你会不会在转去做别的事情之前，回头弄清真正发生了什么？"
+    },
+    {
+      "type": "p",
+      "en": "If you can honestly answer yes, then you get full credit, for this is about as good as you can hope to do as a working programmer, I think.  You're no [Forman Acton](https://en.wikipedia.org/wiki/Forman_S._Acton), of course… but then again, who among us is?",
+      "zh": "如果你能诚实地回答「会」，那你就拿到满分——我觉得，作为一名职业程序员，这差不多就是你能期望做到的最好程度了。当然，你并不是 [Forman Acton](https://en.wikipedia.org/wiki/Forman_S._Acton)……不过话说回来，我们当中谁又是呢？"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "official-2016-09-19-the-witness-is-out-on-the-xbox-one",
+  "title": { "zh": "《The Witness》已经在 Xbox One 上架了！", "en": "The Witness is out on the Xbox One!" },
+  "subtitle": {
+    "en": "The game is out on Xbox One, except in Australia and New Zealand where the ratings paperwork is still being pushed through.",
+    "zh": "游戏已在 Xbox One 上架，但澳大利亚和新西兰除外——那里的分级手续还在走。"
+  },
+  "translator": {
+    "note": "原文两段，属于典型的短更新帖。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I should have posted this several days ago, but we have been busy with launch stuff!",
+      "zh": "这条我几天前就该发了，但我们一直忙着发售的一堆事！"
+    },
+    {
+      "type": "p",
+      "en": "If you have an Xbox One, you can play The Witness there! Unless you are in Australia or New Zealand ... in which case we need to get the ratings stuff pushed through. We are working on that.",
+      "zh": "如果你有 Xbox One，就可以在上面玩《The Witness》！除非你在澳大利亚或新西兰……那样的话，我们还得把分级的手续走完。我们正在处理这件事。"
+    }
+  ]
+}

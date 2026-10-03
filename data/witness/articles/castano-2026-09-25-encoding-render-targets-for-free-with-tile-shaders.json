@@ -1,0 +1,218 @@
+{
+  "id": "castano-2026-09-25-encoding-render-targets-for-free-with-tile-shaders",
+  "title": {
+    "zh": "用 tile shader 免费编码渲染目标",
+    "en": "Encoding Render Targets for Free with Tile Shaders"
+  },
+  "subtitle": {
+    "zh": "把 Spark 编解码器搬进 Metal 的 tile shader：直接从图块内存编码，省掉未压缩纹理的写入与回读。",
+    "en": ""
+  },
+  "translator": {
+    "note": "本篇有两处归档压平，均已对照原始 HTML 还原：(1) 设备耗时表在源文里被压成「一行一个单元格」，译文还原为一个 `code` 块（`lang: \"text\"`）、空格对齐列并保留表头行，数值、机型、系统版本逐字未改；(2) 「时间都花在哪里」那张示意图在原始 HTML 里是一段 SVG，归档把它的 18 个标注逐个拆成独立行，译文按图形本身的层次（三条条形：Uncompressed 4 B/pixel、Render + compute 11 B/pixel、Tile shader 3 B/pixel，每条下面挂各自的组成段）重排为一个 `code` 块（`lang: \"text\"`），所有标注文字逐字保留、只调整了顺序与缩进。源文 `#### `、`### ` 级小标题一律降级为 `h2`。代码围栏在源文里没有语言标注，按内容分别标为 `metal`（tile kernel）与 `objc`（Objective-C 侧代码），围栏内容逐字保留、注释也未译；`lang: \"text\"` 的两个块是表格与示意图，不属于源码。术语：`endpoint`/`palette` 未出现，`block` 作「块」、`tile` 作「图块」（但 Metal 的功能名 `tile shader`、`tile kernel`、`imageblock`、`memoryless` 与 API 名 `MTLStorageModeMemoryless`、`MTLTextureDescriptor`、`MTLTileRenderPipelineDescriptor` 等保留英文）、`bandwidth-bound` 作「受带宽限制」、`compute pass` 保留英文、`bitrate` 未出现。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The *Spark* codecs are often bandwidth-bound. The codec usually reads an uncompressed RGBA8 texture and outputs a block-compressed texture that, depending on the format, is 2–8 times smaller. Reading the input is what dominates bandwidth. When bandwidth-bound, execution stalls waiting for input data, while the GPU tries to hide that latency by overlapping loads for some blocks with computation on others.",
+      "zh": "*Spark* 的编解码器往往受带宽限制。它通常读入一张未压缩的 RGBA8 纹理，输出一张块压缩纹理，按格式不同会小 2–8 倍。真正占满带宽的是读取输入。受带宽限制时，执行会因为等待输入数据而停顿，而 GPU 则试图用「为某些块加载数据、同时计算另一些块」的方式把这段延迟藏起来。"
+    },
+    {
+      "type": "p",
+      "en": "Mobile GPUs render one tile at a time and keep its data in on-chip memory to save bandwidth and power. Wouldn’t it be great if our codecs could also use this tile memory as their input? That’s exactly what Metal tile shaders allow us to do.",
+      "zh": "移动 GPU 一次渲染一个图块，并把它的数据留在片上内存里，以节省带宽和功耗。要是我们的编解码器也能把这块图块内存当作输入，那该多好？Metal 的 tile shader 恰好让我们能做到这一点。"
+    },
+    {
+      "type": "p",
+      "en": "When I started working on *Spark* I was very excited about the possibilities of using tile shaders, but when I tried them on an iPhone 12 and M1 MacBook Pro the results were underwhelming. There seemed to be scheduling issues that caused the combined fragment + tile shader to run at a fraction of the speed of the individual shaders.",
+      "zh": "我开始做 *Spark* 的时候，对使用 tile shader 的可能性非常兴奋，但我在 iPhone 12 和 M1 MacBook Pro 上试过之后，结果却很令人失望。似乎存在调度问题，导致合并后的片元着色器 + tile shader 只能跑到各自单独运行时的一小部分速度。"
+    },
+    {
+      "type": "p",
+      "en": "The difficulties were understandable: On Apple GPUs a tile is typically 16×16 to 32×32 pixels, and to encode it we use a single thread for each 4×4 block. The tile dispatch has to wait for that tile’s fragment work to finish, and 16–64 threads is a small threadgroup to hide latency with. In most cases the fragment shader is relatively simple and has high occupancy, while the encoder is much more complex and tends to have lower occupancy. Scheduling that work effectively seemed quite challenging, so my initial excitement faded.",
+      "zh": "这些困难是可以理解的：在 Apple GPU 上，一个图块通常是 16×16 到 32×32 像素，而编码它时我们要为每个 4×4 块用一个线程。tile 派发必须等该图块的片元工作完成，而 16–64 个线程作为线程组太小，不足以隐藏延迟。大多数情况下片元着色器相对简单、占用率高，而编码器复杂得多、占用率往往更低。要高效调度这些工作看起来相当有挑战，所以我起初的兴奋就淡了下去。"
+    },
+    {
+      "type": "p",
+      "en": "However, a few months ago some Apple folks mentioned that the performance of tile shaders had improved in recently. I didn’t have high hopes, but I tested it again on a wider array of devices and to my surprise the results were much better. This could be attributed to many factors: improvements in the codecs, updated compiler, better testing methodology, different architectures, and OS updates.",
+      "zh": "不过几个月前，几位 Apple 的人提到最近 tile shader 的性能有所改善。我并没抱太大希望，但还是在一批更广的设备上又测了一遍，结果好得多，出乎我的意料。这可能有多方面的原因：编解码器的改进、编译器更新、更好的测试方法、不同的架构，以及操作系统更新。"
+    },
+    {
+      "type": "p",
+      "en": "Today the tile path is 1.2–1.7× faster than a separate compute pass, and on most of the iPhones it’s as fast as or faster than writing to the uncompressed texture, essentially making real-time texture encoding free.",
+      "zh": "如今 tile 路径比单独的 compute pass 快 1.2–1.7 倍，而且在大多数 iPhone 上，它与写入未压缩纹理一样快、甚至更快——基本上让实时纹理编码变成了免费的。"
+    },
+    {
+      "type": "p",
+      "en": "The benefits of running the codecs in the tile shader do not end there. Lower bandwidth results in lower power consumption, and the uncompressed render target is never stored, so it can be memoryless, saving the allocation entirely.",
+      "zh": "在图块着色器里跑编解码器带来的好处不止这些。更低的带宽意味着更低的功耗，而且未压缩的渲染目标从不写回内存，因此可以是 memoryless 的，把这块分配整个省掉。"
+    },
+    {
+      "type": "h2",
+      "id": "how-to-use-tile-shaders",
+      "en": "How to use tile shaders?",
+      "zh": "怎么用 tile shader？"
+    },
+    {
+      "type": "p",
+      "en": "In order to use the tile shader in Metal you need a device with at least an Apple4 GPU (A11) or later, running on iOS 11 or macOS 11.",
+      "zh": "要在 Metal 里使用 tile shader，你需要一块至少是 Apple4 GPU（A11）或更新的设备，并且运行 iOS 11 或 macOS 11。"
+    },
+    {
+      "type": "h2",
+      "id": "the-encode-kernel",
+      "en": "1. The encode kernel",
+      "zh": "1. 编码 kernel"
+    },
+    {
+      "type": "p",
+      "en": "Include the single-header *Spark* codec and write a tile kernel. Each thread reads one 4×4 block from the `imageblock` and encodes it:",
+      "zh": "引入单头文件的 *Spark* 编解码器，写一个 tile kernel。每个线程从 `imageblock` 里读出一个 4×4 块并编码它："
+    },
+    {
+      "type": "code",
+      "lang": "metal",
+      "code": "#define SPK_ENABLE_FP16 1\n#define SPK_ENABLE_INT16 1\n#include \"spark_astc.metalh\"\n\nstruct ColorData {\n    half4 color [[color(0)]];\n};\n\nkernel void encode_tile(imageblock<ColorData> img,\n    ushort2 tile_coord  [[thread_position_in_threadgroup]],\n    ushort2 gid         [[thread_position_in_grid]],\n    ushort2 grid_blocks [[threads_per_grid]],\n    device uint4* output [[buffer(0)]])\n{\n    half3 block[16];\n    for (ushort y = 0; y < 4; y++)\n        for (ushort x = 0; x < 4; x++)\n            block[4 * y + x] = img.read(4 * tile_coord + ushort2(x, y)).color.rgb;\n\n    uint idx = uint(gid.y) * grid_blocks.x + gid.x;\n    output[idx] = spark_encode_astc_4x4_rgb(block, /*quality=*/1);\n}"
+    },
+    {
+      "type": "h2",
+      "id": "allocate-a-memoryless-render-target",
+      "en": "2. Allocate a memoryless render target",
+      "zh": "2. 分配一个 memoryless 渲染目标"
+    },
+    {
+      "type": "p",
+      "en": "The render pass needs a color attachment, but its contents never leave tile memory, so use the `MTLStorageModeMemoryless` storage mode to avoid allocating memory for it:",
+      "zh": "渲染通道需要一个颜色附件，但它的内容从不离开图块内存，所以用 `MTLStorageModeMemoryless` 存储模式，避免为它分配内存："
+    },
+    {
+      "type": "code",
+      "lang": "objc",
+      "code": "MTLTextureDescriptor* d = [MTLTextureDescriptor\n\ttexture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:w height:h \n\tmipmapped:NO];\nd.storageMode = MTLStorageModeMemoryless;\nd.usage = MTLTextureUsageRenderTarget;\nid<MTLTexture> tile_target = [device newTextureWithDescriptor:d];"
+    },
+    {
+      "type": "h2",
+      "id": "set-up-the-tile-pipeline",
+      "en": "3. Set up the tile pipeline",
+      "zh": "3. 配置 tile 管线"
+    },
+    {
+      "type": "code",
+      "lang": "objc",
+      "code": "MTLTileRenderPipelineDescriptor* td = [MTLTileRenderPipelineDescriptor new];\ntd.tileFunction = [library newFunctionWithName:@\"encode_tile\"];\n// same format as the attachment\ntd.colorAttachments[0].pixelFormat = MTLPixelFormatRGBA8Unorm;\n// one thread per 4x4 block, not per pixel\ntd.threadgroupSizeMatchesTileSize = NO;\n\nid<MTLRenderPipelineState> tile_pso = [device \n\tnewRenderPipelineStateWithTileDescriptor:td options:0\n    reflection:nil error:&error];"
+    },
+    {
+      "type": "h2",
+      "id": "render-then-encode-in-one-pass",
+      "en": "4. Render, then encode, in one pass",
+      "zh": "4. 在一趟里完成渲染和编码"
+    },
+    {
+      "type": "p",
+      "en": "Draw your content as usual, then dispatch the tile kernel in the same render encoder:",
+      "zh": "像平常一样绘制内容，然后在同一个渲染编码器里派发 tile kernel："
+    },
+    {
+      "type": "code",
+      "lang": "objc",
+      "code": "MTLRenderPassDescriptor* rp = [MTLRenderPassDescriptor renderPassDescriptor];\nrp.colorAttachments[0].texture = tile_target;\nrp.colorAttachments[0].loadAction = MTLLoadActionDontCare;\nrp.colorAttachments[0].storeAction = MTLStoreActionDontCare;  // required for a memoryless target\n\nid<MTLRenderCommandEncoder> enc = [cb renderCommandEncoderWithDescriptor:rp];\n\n// ... draws that fill the color attachment ...\n\n[enc setRenderPipelineState:tile_pso];\n[enc setTileBuffer:output_buffer offset:0 atIndex:0];\n[enc dispatchThreadsPerTile:MTLSizeMake(enc.tileWidth/4, enc.tileHeight/4, 1)];\n[enc endEncoding];"
+    },
+    {
+      "type": "p",
+      "en": "You can force a specific tile size `rp.tileWidth` and `rp.tileHeight`, not specifying them let’s the driver choose it automatically, and you can query the chosen values with `enc.tileWidth` and `enc.tileHeight`.",
+      "zh": "你可以强制指定图块尺寸 `rp.tileWidth` 和 `rp.tileHeight`；不指定的话驱动会自动选择，而你可以用 `enc.tileWidth` 和 `enc.tileHeight` 查询选中的值。"
+    },
+    {
+      "type": "p",
+      "en": "The tile dispatch runs after all earlier draws in the render pass have finished and it processes the final pixels.",
+      "zh": "tile 派发会在渲染通道里此前所有绘制完成之后执行，处理的是最终的像素。"
+    },
+    {
+      "type": "p",
+      "en": "A full example showcasing this is included in the [Spark 1.4](https://www.ludicon.com/castano/blog/2026/09/spark-1-4/) SDK.",
+      "zh": "一个完整的示例包含在 [Spark 1.4](https://www.ludicon.com/castano/blog/2026/09/spark-1-4/) SDK 里。"
+    },
+    {
+      "type": "h2",
+      "id": "what-are-the-results",
+      "en": "What are the results?",
+      "zh": "结果如何？"
+    },
+    {
+      "type": "p",
+      "en": "To benchmark this I generated the render target with three different shaders: a math-heavy procedural texture, a minimal shader with just a simple gradient, and terrain-splatting shaders like those used in virtual texture pipelines. They all behaved similarly, but the gains were largest on the terrain example, which is also the most realistic scenario, so it’s the one I’m presenting here.",
+      "zh": "为了做基准测试，我用三种不同的着色器生成渲染目标：一种是数学密集的程序化纹理，一种只有简单渐变的极简着色器，还有虚拟纹理管线里常用的地形 splatting 着色器。它们表现都差不多，但地形那个例子的收益最大，而且它也是最贴近实际的场景，所以我在这里展示它。"
+    },
+    {
+      "type": "p",
+      "en": "The following are timings in milliseconds of rendering a 1024×1024 terrain texture and encoding it to ASTC 4×4 at medium quality (Q1).",
+      "zh": "以下是渲染一张 1024×1024 的地形纹理、并以中等质量（Q1）把它编码成 ASTC 4×4 的耗时，单位为毫秒。"
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Device                OS            Uncompressed  Compute  Tile   Tile vs Compute\niPhone 8 – A11        iOS 16.7.16   0.839         1.184    0.834  1.42x\niPhone 12 – A14       iOS 26.6.2    0.470         0.782    0.567  1.38x\niPhone 15 Pro – A17   iOS 26.6.1    0.311         0.497    0.301  1.65x\niPhone 16 – A18       iOS 18.7.3    0.332         0.477    0.317  1.50x\nM4 MacBook Pro        macOS 15.7.7  0.073         0.119    0.098  1.21x"
+    },
+    {
+      "type": "p",
+      "en": "To get stable measurements I ran each test 256 times and averaged the results. I also changed the GPU performance state to medium in order to obtain more stable clocks, so these results are not representative of peak performance.",
+      "zh": "为了得到稳定的测量结果，每个测试我都跑了 256 次并取平均。我还把 GPU 性能状态调到中等，以获得更稳定的时钟，所以这些结果并不代表峰值性能。"
+    },
+    {
+      "type": "p",
+      "en": "On every device I measured, the tile path beats the separate compute pass by 1.2–1.7×. On three of the four iPhones (A11, A17, A18), producing the compressed texture in the Tile Shader is as fast or faster than writing the uncompressed one. The MacBook Pro benefits less, probably because it has more bandwidth and larger caches, so the uncompressed store is not the bottleneck. It’s unclear why the A14 lags behind.",
+      "zh": "在我测过的每一台设备上，tile 路径都比单独的 compute pass 快 1.2–1.7 倍。在四台 iPhone 中有三台（A11、A17、A18），用 Tile Shader 生成压缩纹理与写入未压缩纹理一样快、甚至更快。MacBook Pro 的收益较小，大概是因为它带宽更大、缓存也更大，未压缩写入并不是瓶颈。A14 为什么会落后，原因还不清楚。"
+    },
+    {
+      "type": "p",
+      "en": "The following diagram illustrates where the time goes (box lengths are approximate, not to scale):",
+      "zh": "下图展示了时间花在哪里（方块长度是近似的，未按比例）："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "Uncompressed              4 B / pixel\n  Generate texture        4 B write\n\nRender + compute         11 B / pixel\n  Generate texture        4 B write\n  Encode texture          4 B read + 1 B write\n  Copy to texture         1 B read + 1 B write\n\nTile shader               3 B / pixel\n  Generate + encode       1 B write\n  Copy to texture         1 B read + 1 B write"
+    },
+    {
+      "type": "p",
+      "en": "The compute path first writes the uncompressed RGBA8 texture (4 B/pixel), reads it back (4 B/pixel), writes the ASTC output to a buffer (1 B/pixel), and finally copies that buffer into the compressed texture (another 2 B/pixel for the read and write): 11 bytes of memory traffic per pixel.",
+      "zh": "compute 路径首先写入未压缩的 RGBA8 纹理（4 B/像素），再读回来（4 B/像素），把 ASTC 输出写进一个缓冲区（1 B/像素），最后把这个缓冲区拷进压缩纹理（读写各 1 B/像素）：每像素共 11 字节的内存流量。"
+    },
+    {
+      "type": "p",
+      "en": "The tile path eliminates the uncompressed write and read entirely. It encodes directly from tile memory, leaving only the compressed output and its final copy: 3 bytes per pixel. That’s even less traffic than simply writing the 4-byte-per-pixel uncompressed render target, which explains how rendering and encoding together can be as fast as rendering alone.",
+      "zh": "tile 路径完全消除了未压缩的写入和读取。它直接从图块内存编码，只剩压缩输出和它最后那一次拷贝：每像素 3 字节。这甚至比单纯写入每像素 4 字节的未压缩渲染目标流量还少，也就解释了为什么渲染加编码能和只渲染一样快。"
+    },
+    {
+      "type": "p",
+      "en": "These numbers exclude texture sampling, which is identical across all three paths.",
+      "zh": "这些数字不包含纹理采样，三条路径的采样开销完全相同。"
+    },
+    {
+      "type": "p",
+      "en": "I double-buffered the output buffers and render targets so the copy overlaps with the next pass. Writing directly to the compressed texture through heap aliasing, as described in [this earlier post](https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/), would remove the copy and narrow the gap to uncompressed further, but it isn’t officially supported, so I didn’t use it here.",
+      "zh": "我把输出缓冲区和渲染目标都做了双缓冲，让拷贝与下一趟重叠。像[之前那篇文章](https://www.ludicon.com/castano/blog/2026/04/writing-to-compressed-textures-in-metal/)里描述的那样，通过 heap aliasing 直接写入压缩纹理可以省掉这次拷贝、进一步缩小与未压缩路径的差距，但它并未得到官方支持，所以我在这里没有用它。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结语"
+    },
+    {
+      "type": "p",
+      "en": "Tile shaders make runtime texture compression considerably more attractive on Apple GPUs. Instead of rendering an uncompressed texture to memory and reading it back for compression, *Spark* can encode directly from tile memory.",
+      "zh": "tile shader 让运行时纹理压缩在 Apple GPU 上变得有吸引力得多。不用先把未压缩纹理渲染到内存、再读回来做压缩，*Spark* 可以直接从图块内存编码。"
+    },
+    {
+      "type": "p",
+      "en": "That means the usual benefits of compressed textures (lower memory use, lower bandwidth, and faster subsequent rendering) can be obtained without paying a significant runtime encoding cost.",
+      "zh": "这意味着压缩纹理那些常见的好处（更低的内存占用、更低的带宽，以及后续渲染更快）可以在不必付出显著运行时编码代价的情况下拿到。"
+    },
+    {
+      "type": "p",
+      "en": "Tile shaders are not exclusive to Apple hardware. They are also available on Qualcomm GPUs under Vulkan through the [VK_QCOM_tile_shading](https://docs.vulkan.org/refpages/latest/refpages/source/VK_QCOM_tile_shading.html) extension. I haven’t yet experimented with it, but I will as soon as I can get my hands on a device supporting it.",
+      "zh": "tile shader 并非 Apple 硬件独有。在 Vulkan 下，Qualcomm 的 GPU 通过 [VK_QCOM_tile_shading](https://docs.vulkan.org/refpages/latest/refpages/source/VK_QCOM_tile_shading.html) 扩展也提供它。我还没试过，但一旦拿到支持它的设备我就会去试。"
+    }
+  ]
+}

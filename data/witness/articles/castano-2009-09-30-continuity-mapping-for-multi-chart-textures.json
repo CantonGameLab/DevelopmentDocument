@@ -1,0 +1,46 @@
+{
+  "id": "castano-2009-09-30-continuity-mapping-for-multi-chart-textures",
+  "title": {
+    "zh": "多图块纹理的 Continuity Mapping",
+    "en": "Continuity Mapping for Multi-Chart Textures"
+  },
+  "subtitle": {
+    "zh": "评一篇 Siggraph Asia 2009 论文：多图块纹理的 Continuity Mapping，以及它在切线空间法线贴图上说不清的地方。",
+    "en": ""
+  },
+  "translator": {
+    "note": "源文第 2 行是「外链包着图片 + 正文」的混排行：图片外层链向论文页面。按全站图片口径丢掉外层链接、只留图片本身（`![图](…continuity_mapping.jpg)`），图片标记按源顺序内联在段落开头，中文里对应位置写「（原文此处有一张图）」。除此之外源文结构完整，未做其他修复。术语：`chart` 作「图块」、`seam` 作「接缝」、`parameterization` 作「参数化」、`displacement map` 作「位移贴图」、`normal map` 作「法线贴图」、`tangent space` 作「切线空间」、`pixel shader` 作「像素着色器」；论文名与 `Siggraph Asia`、`Siggraph 2008`、`Gamefest` 保留英文，人名 `Naty Hoffman`、`Naty` 保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://castano.ludicon.com/blog/wp-content/uploads/2009/09/continuity_mapping.jpg)[Naty Hoffman](http://www.realtimerendering.com/blog/full-list-of-siggraph-asia-2009-papers/) references a paper from [Siggraph Asia](http://www.siggraph.org/asia2009/index.php) titled [Continuity Mapping for Multi-Chart Textures](http://ima.udg.edu/~gonzalez/continuityMapping/paper1/index.html).",
+      "zh": "（原文此处有一张图）[Naty Hoffman](http://www.realtimerendering.com/blog/full-list-of-siggraph-asia-2009-papers/) 提到了一篇 [Siggraph Asia](http://www.siggraph.org/asia2009/index.php) 的论文，题为 [Continuity Mapping for Multi-Chart Textures](http://ima.udg.edu/~gonzalez/continuityMapping/paper1/index.html)。"
+    },
+    {
+      "type": "p",
+      "en": "The paper provides a solution to a problem that I’ve talked [before](http://castano.ludicon.com/blog/?p=416), that multi-chart parameterizations introduce seams over meshes, and that these seams can produce severe artifacts in some use cases such as displacement mapping. While the solution that I propose removes the cracks in the mesh, it does not eliminate the seams entirely, in only eliminates the holes, so for that reason I still suggested that the use of seamless parameterization remains valuable.",
+      "zh": "这篇论文解决的是我[以前](http://castano.ludicon.com/blog/?p=416)谈过的一个问题：多图块参数化会在网格上引入接缝，而这些接缝在某些用例（比如位移贴图）里会产生严重瑕疵。我提出的方案虽然消除了网格上的裂缝，但并没有完全消除接缝，只是消除了孔洞，所以当时我仍然认为使用无缝参数化是有价值的。"
+    },
+    {
+      "type": "p",
+      "en": "The most interesting thing about the *Continuity Mapping* solution is that it does not require a re-parameterization of the mesh, allowing you to preserve the uv-map created by the modeler, which is sometimes useful. It’s cool that they reference [my presentation at Siggraph 2008](http://developer.nvidia.com/object/siggraph-2008-Subdiv.html), although I first proposed that solution a few months before at [Gamefest](http://developer.nvidia.com/object/gamefest-2008-subdiv.html), and more detailed descriptions of the technique are available in my blog.",
+      "zh": "*Continuity Mapping* 这个方案最有意思的地方在于，它不需要重新参数化网格，因此可以保留建模师做好的 uv 贴图，这一点有时候很有用。他们引用了[我在 Siggraph 2008 的演讲](http://developer.nvidia.com/object/siggraph-2008-Subdiv.html)，这挺酷的——虽然我最早是在几个月前的 [Gamefest](http://developer.nvidia.com/object/gamefest-2008-subdiv.html) 上提出这个方案的，而且我的博客里有更详细的技术描述。"
+    },
+    {
+      "type": "p",
+      "en": "In general, I agree with Naty’s assessment that the technique is likely to be inefficient due to divergent branching. Although it may make sense for some applications, it’s unlikely it will be adopted for use in games. Naty describes some other issues, but one that I think is important as well is that it’s unclear how their sewing technique can handle tangent space normal maps. None of the examples in the paper appear to use normal maps, so I suspect the authors may be aware of the problem.",
+      "zh": "总的来说，我同意 Naty 的评价：由于存在分支发散，这项技术很可能效率不高。虽然对某些应用来说它可能说得通，但不太可能在游戏里被采用。Naty 还描述了另外一些问题，而我认为同样重要的一点是：不清楚他们的缝合技术要如何处理切线空间法线贴图。论文里的例子似乎都没有用到法线贴图，所以我怀疑作者们可能已经意识到了这个问题。"
+    },
+    {
+      "type": "p",
+      "en": "With tangent space normal maps each chart has a different tangent space. Tangent frames are defined at the vertices and interpolated over the triangles, and the tangent spaces do not agree along the seams of the charts.",
+      "zh": "使用切线空间法线贴图时，每个图块都有各自不同的切线空间。切线标架定义在顶点上，再在三角形内部插值，而沿图块的接缝两侧，这些切线空间并不一致。"
+    },
+    {
+      "type": "p",
+      "en": "Per texel normals are then stored with respect to the chart’s tangent space. You cannot interpolate normals that belong to different charts directly. Instead, you have to first transform them to the same space and do the interpolation afterward. That’s generally done in the pixel shader (although it would be more correct to do it before texture filtering). However, their sewing technique introduces new triangles over which the tangent space is simply not well defined since tangent frames at opposite sides of the seam could have completely arbitrary directions and their interpolation would likely result in degenerate frames.",
+      "zh": "之后逐纹素的法线是相对于所在图块的切线空间存储的。你不能直接插值属于不同图块的法线，必须先把它们变换到同一个空间，再做插值。这通常是在像素着色器里完成的（尽管在纹理过滤之前做会更正确）。然而，他们的缝合技术引入了新的三角形，而在这些三角形上切线空间根本没有良定义——因为接缝两侧的切线标架方向可以完全任意，对它们做插值很可能得到退化的标架。"
+    }
+  ]
+}

@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://the-witness.net/news/xmlrpc.php" />
+<title>Finding and Fixing a Five Second Stall &#8211; The Witness</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Feed" href="http://the-witness.net/news/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Comments Feed" href="http://the-witness.net/news/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="The Witness &raquo; Finding and Fixing a Five Second Stall Comments Feed" href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/feed/" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/the-witness.net\/news\/wp-includes\/js\/wp-emoji-release.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://the-witness.net/news/wp-includes/css/dist/block-library/style.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='ye_dynamic-css'  href='http://the-witness.net/news/wp-content/plugins/youtube-embed/css/main.min.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-syntax-css-css'  href='http://the-witness.net/news/wp-content/plugins/wp-syntax/css/wp-syntax.css?ver=1.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-fonts-css'  href='http://the-witness.net/news/wp-content/themes/tempera/fonts/fontfaces.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='tempera-googlefonts-css'  href='//fonts.googleapis.com/css?family=Playfair+Display+SC|PT+Serif' type='text/css' media='screen' />
+<link rel='stylesheet' id='tempera-style-css'  href='http://the-witness.net/news/wp-content/themes/tempera/style.css?ver=1.6.0' type='text/css' media='all' />
+<link rel='stylesheet' id='background-manager-pub-css'  href='http://the-witness.net/news/wp-content/plugins/background-manager/resources/css/pub.dev.css?ver=1.2.5.2' type='text/css' media='all' />
+<!-- This site uses the Google Analytics by MonsterInsights plugin v5.4.8.2 - Universal disabled - https://www.monsterinsights.com/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-23345164-2']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Google Analytics by MonsterInsights -->
+<script type="text/javascript">/* <![CDATA[ */window.background_manager_ajax={"url":"http:\/\/the-witness.net\/news\/wp-admin\/admin-ajax.php","action":"background-manager"};window.pf4wp_log=true;/* ]]> */</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfobject.js?ver=2.2' id='swfobject-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/flash-album-gallery/admin/js/swfaddress.js?ver=2.4' id='swfaddress-js'></script>
+<script type='text/javascript' id='background-manager-functions-js-extra'>
+/* <![CDATA[ */
+var myatu_bgm = {"current_background":{"id":2840,"url":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_021.png","alt":"","desc":"","caption":"Banner_02","link":"","thumb":"http:\/\/the-witness.net\/news\/wp-content\/uploads\/2014\/12\/Banner_021-150x150.png","bg_link":"","transition":"crossfade","transition_speed":0},"change_freq":"0","active_gallery":"2828","is_fullsize":"false","is_preview":"false","initial_ease_in":"true","info_tab_thumb":"true","bg_click_new_window":"false","bg_track_clicks":"false","bg_track_clicks_category":"Background Manager","display_on_mobile":"true"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/functions.dev.js?ver=1.2.5.2' id='background-manager-functions-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/flux.dev.js?ver=1.2.5.2' id='background-manager-flux-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/background-manager/resources/js/pub.dev.js?ver=1.2.5.2' id='background-manager-pub-js'></script>
+<link rel="https://api.w.org/" href="http://the-witness.net/news/wp-json/" /><link rel="alternate" type="application/json" href="http://the-witness.net/news/wp-json/wp/v2/posts/1976" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://the-witness.net/news/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://the-witness.net/news/wp-includes/wlwmanifest.xml" /> 
+
+<link rel="canonical" href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/" />
+<link rel='shortlink' href='http://the-witness.net/news/?p=1976' />
+<link rel="alternate" type="application/json+oembed" href="http://the-witness.net/news/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fthe-witness.net%2Fnews%2F2012%2F12%2Ffinding-and-fixing-a-five-second-stall%2F" />
+<link rel="stylesheet" type="text/css" media="all" href="http://the-witness.net/news/wp-content/plugins/ban-user-by-ip/css/style.css" /><!-- <meta name="NextGEN" version="2.1.31" /> -->
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//the-witness.net/news/?wordfence_lh=1&hid=BDCD72C90CCC8C40F0265624C91DB018');
+</script>
+<!-- <meta name='Grand Flagallery' content='4.39' /> -->
+<link rel="author" href="http://mollyrocket.com/casey"><style type="text/css" media="screen">body.myatu_bgm_body { background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_021.png') !important;background-position: top center !important;background-repeat: repeat-x !important;background-attachment: scroll !important;background-color: #000000 !important; } </style>
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css"> #header, #main, #topbar-inner { max-width: 1150px; } #container.one-column { } #container.two-columns-right #secondary { width:250px; float:right; } #container.two-columns-right #content { width:calc(100% - 290px); float:left; } #container.two-columns-left #primary { width:250px; float:left; } #container.two-columns-left #content { width:calc(100% - 290px); float:right; } #container.three-columns-right .sidey { width:125px; float:left; } #container.three-columns-right #primary { margin-left:20px; margin-right:20px; } #container.three-columns-right #content { width: calc(100% - 290px); float:left;} #container.three-columns-left .sidey { width:125px; float:left; } #container.three-columns-left #secondary {margin-left:20px; margin-right:20px; } #container.three-columns-left #content { width: calc(100% - 290px); float:right; } #container.three-columns-sided .sidey { width:125px; float:left; } #container.three-columns-sided #secondary { float:right; } #container.three-columns-sided #content { width: calc(100% - 330px); float:right; margin: 0 165px 0 -1150px; } body { font-family: Georgia, "Times New Roman", Times, serif; } #content h1.entry-title a, #content h2.entry-title a, #content h1.entry-title , #content h2.entry-title { font-family: "Playfair Display SC"; } .widget-title, .widget-title a { font-family: "PT Serif"; } .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6, #comments #reply-title, .nivo-caption h2, #front-text1 h2, #front-text2 h2, .column-header-image, .column-header-noimage { font-family: "PT Serif"; } #site-title span a { font-family: "PT Serif"; } #access ul li a, #access ul li a span { font-family: "Playfair Display SC"; } body { color: #555555; background-color: } a { color: #D6341D; } a:hover,.entry-meta span a:hover, .comments-link a:hover { color: #444444; } #header { background-color: ; } #site-title span a { color:#ffffff; } #site-description { color:#ffffff; } .socials a { background-color: #D6341D; } .socials-hover { background-color: #444444; } /* Main menu top level */ #access a, #nav-toggle span, li.menu-main-search .searchform input[type="search"] { color: #EEEEEE; } li.menu-main-search .searchform input[type="search"] { background-color: #b53d50; border-left-color: #7f071a; } #access, #nav-toggle {background-color: #9d2538; } #access > .menu > ul > li > a > span { border-color: #7f071a; -webkit-box-shadow: 1px 0 0 #b53d50; box-shadow: 1px 0 0 #b53d50; } /*.rtl #access > .menu > ul > li > a > span { -webkit-box-shadow: -1px 0 0 #b53d50; box-shadow: -1px 0 0 #b53d50; } */ #access a:hover {background-color: #aa3245; } #access ul li.current_page_item > a, #access ul li.current-menu-item > a, #access ul li.current_page_ancestor > a, #access ul li.current-menu-ancestor > a { background-color: #aa3245; } /* Main menu Submenus */ #access > .menu > ul > li > ul:before {border-bottom-color:#333333;} #access ul ul ul li:first-child:before { border-right-color:#333333;} #access ul ul li { background-color:#333333; border-top-color:#414141; border-bottom-color:#282828} #access ul ul li a{color:#DDDDDD} #access ul ul li a:hover{background:#414141} #access ul ul li.current_page_item > a, #access ul ul li.current-menu-item > a, #access ul ul li.current_page_ancestor > a, #access ul ul li.current-menu-ancestor > a { background-color:#414141; } #access ul ul { box-shadow: 3px 3px 0 rgba(221,221,221,0.3); } #topbar { background-color: #fff;border-bottom-color:#ffffff; box-shadow:3px 0 3px #d7d7d7; } .topmenu ul li a, .topmenu .searchsubmit { color: #666666; } .topmenu ul li a:hover, .topmenu .searchform input[type="search"] { color: #888888; border-bottom-color: rgba( 214,52,29, 0.5); } #main { background-color: #FFFFFF; } #author-info, #entry-author-info, #content .page-title { border-color: #D6341D; background: #F7F7F7; } #entry-author-info #author-avatar, #author-info #author-avatar { border-color: #EEEEEE; } .sidey .widget-container { color: #333333; background-color: #e3e3e3; } .sidey .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf;} .sidey .widget-container a {color:;} .sidey .widget-container a:hover {color:;} .entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 { color: #444444; } .sticky .entry-header {border-color:#D6341D } .entry-title, .entry-title a { color: #444444; } .entry-title a:hover { color: #000000; } #content span.entry-format { color: #EEEEEE; background-color: #9d2538; } #footer { color: #AAAAAA; background-color: ; } #footer2 { color: #AAAAAA; background-color: #F7F7F7; } #footer a { color: ; } #footer a:hover { color: ; } #footer2 a, .footermenu ul li:after { color: ; } #footer2 a:hover { color: ; } #footer .widget-container { color: #333333; background-color: ; } #footer .widget-title { color: #666666; background-color: #F7F7F7;border-color:#cfcfcf } a.continue-reading-link, #cryout_ajax_more_trigger { color:#EEEEEE; background:#9d2538; border-bottom-color:#D6341D; } a.continue-reading-link:hover { border-bottom-color:#444444; } a.continue-reading-link i.crycon-right-dir {color:#D6341D} a.continue-reading-link:hover i.crycon-right-dir {color:#444444} .page-link a, .page-link > span > em {border-color:#CCCCCC} .columnmore a {background:#D6341D;color:#F7F7F7} .columnmore a:hover {background:#444444;} .button, #respond .form-submit input#submit, input[type="submit"], input[type="reset"] { background-color: #D6341D; border-color: #CCCCCC; } .button:hover, #respond .form-submit input#submit:hover { background-color: #444444; } .entry-content tr th, .entry-content thead th { color: #444444; } .entry-content fieldset, #content tr td,#content tr th, #content thead th { border-color: #CCCCCC; } #content tr.even td { background-color: #F7F7F7 !important; } hr { background-color: #CCCCCC; } input[type="text"], input[type="password"], input[type="email"], textarea, select, input[type="color"],input[type="date"],input[type="datetime"],input[type="datetime-local"],input[type="month"],input[type="number"],input[type="range"], input[type="search"],input[type="tel"],input[type="time"],input[type="url"],input[type="week"] { background-color: #F7F7F7; border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC; color: #555555; } input[type="submit"], input[type="reset"] { color: #FFFFFF; background-color: #D6341D; border-color: #CCCCCC; } input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, textarea:hover, input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="range"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover { background-color: rgba(247,247,247,0.4); } .entry-content pre { border-color: #CCCCCC; border-bottom-color:#D6341D;} .entry-content code { background-color:#F7F7F7;} .entry-content blockquote { border-color: #EEEEEE; } abbr, acronym { border-color: #555555; } .comment-meta a { color: #555555; } #respond .form-allowed-tags { color: #999999; } .entry-meta .crycon-metas:before {color:#CCCCCC;} .entry-meta span a, .comments-link a, .entry-meta {color:#666666;} .entry-meta span a:hover, .comments-link a:hover {color:;} .nav-next a:hover {} .nav-previous a:hover { } .pagination { border-color:#ededed;} .pagination span, .pagination a { background:#F7F7F7; border-left-color:#dddddd; border-right-color:#ffffff; } .pagination a:hover { background: #ffffff; } #searchform input[type="text"] {color:#999999;} .caption-accented .wp-caption { background-color:rgba(214,52,29,0.8); color:#FFFFFF} .tempera-image-one .entry-content img[class*='align'],.tempera-image-one .entry-summary img[class*='align'], .tempera-image-two .entry-content img[class*='align'],.tempera-image-two .entry-summary img[class*='align'] { border-color:#D6341D;} html { font-size:16px; line-height:1.8; } #content p, #content ul, #content ol, #content, #frontpage blockquote { text-align:Default; } #content p, #content ul, #content ol, #content dl, .widget-area, .widget-area a, table, table td { word-spacing:Default; letter-spacing:Default; } #content h1.entry-title, #content h2.entry-title { font-size:34px ;} .widget-title, .widget-title a { font-size:18px ;} h1 { font-size: 3.1575em;} h2 { font-size: 2.7525em;} h3 { font-size: 2.3475em;} h4 { font-size: 1.9425em;} h5 { font-size: 1.5375em;} h6 { font-size: 1.1325em;} #site-title { font-size:50px ;} #access ul li a, li.menu-main-search .searchform input[type="search"] { font-size:16px ;} .nocomments, .nocomments2 {display:none;} #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { margin-left:20px;} .sticky hgroup { padding-left: 15px;} #header-container > div { margin:150px 0 0 200px;} .page h1.entry-title, .home .page h2.entry-title { display:none; } header.page-header, .archive h1.page-title { display:none; } #content p, #content ul, #content ol, #content dd, #content pre, #content hr { margin-bottom: 1.0em; } #access > .menu > ul { border-left: 1px solid #b53d50; -moz-box-shadow: -1px 0 0 #7f071a; -webkit-box-shadow: -1px 0 0 #7f071a; box-shadow: -1px 0 0 #7f071a; } #toTop {background:#FFFFFF;margin-left:1300px;} #toTop:hover .crycon-back2top:before {color:#444444;} #main {margin-top:0px; } #forbottom {margin-left: 40px; margin-right: 40px;} #header-widget-area { width: 60%; } #branding { height:430px; } </style> 
+<style type="text/css">/* Tempera Custom CSS */
+
+#site-title span a {
+font-size: 70px;
+font-weight: normal;
+letter-spacing: 0.005em;
+display: block;
+} 
+
+#site-description {
+font-size: 20px;
+margin-top: 10px;
+margin-left: 10px;
+padding: 3px 6px 3px 0;
+opacity: 0.85;
+} 
+
+body.myatu_bgm_body {
+//background-image: url('http://the-witness.net/news/wp-content/uploads/2014/12/Banner_03.png') !important;
+//background-color: #c35002!important;
+} 
+
+#access, #nav-toggle {
+background: none;
+}</style>
+<link rel='stylesheet' id='tempera-style-mobile'  href='http://the-witness.net/news/wp-content/themes/tempera/styles/style-mobile.css?ver=1.6.0' type='text/css' media='all' />	<!--[if lt IE 9]>
+	<script>
+	document.createElement('header');
+	document.createElement('nav');
+	document.createElement('section');
+	document.createElement('article');
+	document.createElement('aside');
+	document.createElement('footer');
+	</script>
+	<![endif]-->
+			<style type="text/css" id="wp-custom-css">
+			/*.entry-content * {
+  white-space: initial;
+}*/
+
+.entry-content pre {
+  white-space: pre-wrap;
+}
+
+/*.entry-content {
+  white-space: pre-line;
+}*/		</style>
+		<link rel='stylesheet' id='st-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/style.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-classic-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-style-v2-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+<link rel='stylesheet' id='st-skitter-style-css'  href='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/css/skitter.styles.css?ver=dcbf8718a2d229bd4bb9e70e24502985' type='text/css' media='all' />
+</head>
+<body class="post-template-default single single-post postid-1976 single-format-standard custom-background tempera-image-none caption-simple tempera-menu-center tempera-topbarhide myatu_bgm_body">
+
+
+
+<div id="wrapper" class="hfeed">
+<div id="topbar" ><div id="topbar-inner"> <nav class="topmenu"><ul id="menu-default" class="menu"><li id="menu-item-1158" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1158"><a href="http://the-witness.net/">Home</a></li>
+<li id="menu-item-2800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2800"><a href="http://the-witness.net/news/media/">Media</a></li>
+<li id="menu-item-1157" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1157"><a href="http://the-witness.net/news/about/">About</a></li>
+<li id="menu-item-3484" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3484"><a href="http://the-witness.net/news/support/">Support</a></li>
+<li id="menu-item-3532" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3532"><a href="http://the-witness.net/news/privacy/">Privacy</a></li>
+<li class='menu-header-search'> <i class='search-icon'></i> 
+<form role="search" method="get" class="searchform" action="http://the-witness.net/news/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="s" placeholder="Search" value="" name="s" />
+	</label>
+	<button type="submit" class="searchsubmit"><span class="screen-reader-text">Search</span><i class="crycon-search"></i></button>
+</form>
+</li></ul></nav> </div></div>
+<div class="socials" id="srights">
+			<a  target="_blank"  href="https://www.youtube.com/watch?v=i7h7AleSCF4&#038;list=PLmV5I2fxaiCLgx-S7XY4XCwDC3NDBdOZe"
+			class="socialicons social-YouTube" title="YouTube">
+				<img alt="YouTube" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/YouTube.png" />
+			</a>
+			<a  target="_blank"  href="https://twitter.com/witnessgame"
+			class="socialicons social-Twitter" title="Twitter">
+				<img alt="Twitter" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Twitter.png" />
+			</a>
+			<a  target="_blank"  href="https://www.facebook.com/pages/The-Witness/370086665750"
+			class="socialicons social-Facebook" title="Facebook">
+				<img alt="Facebook" src="http://the-witness.net/news/wp-content/themes/tempera/images/socials/Facebook.png" />
+			</a></div>
+<div id="header-full">
+	<header id="header">
+		<div id="masthead">
+			<div id="branding" role="banner" >
+					<div id="header-container">
+	<div><div id="site-title"><span> <a href="http://the-witness.net/news/" title="The Witness" rel="home">The Witness</a> </span></div><div id="site-description" >Explore an abandoned island.</div></div></div>								<div style="clear:both;"></div>
+			</div><!-- #branding -->
+			<a id="nav-toggle"><span>&nbsp;</span></a>
+			<nav id="access" role="navigation">
+					<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">
+		Skip to content	</a></div>
+	<div id="prime_nav" class="menu"><ul>
+<li ><a href="http://the-witness.net/news/"><span>Home</span></a></li><li class="page_item page-item-2"><a href="http://the-witness.net/news/about/"><span>About</span></a></li>
+<li class="page_item page-item-2758"><a href="http://the-witness.net/news/media/"><span>Media</span></a></li>
+<li class="page_item page-item-3530"><a href="http://the-witness.net/news/privacy/"><span>Privacy</span></a></li>
+<li class="page_item page-item-3480 page_item_has_children"><a href="http://the-witness.net/news/support/"><span>Support</span></a>
+<ul class='children'>
+	<li class="page_item page-item-3485"><a href="http://the-witness.net/news/support/support-faq/"><span>Support FAQ</span></a></li>
+</ul>
+</li>
+</ul></div>
+			</nav><!-- #access -->
+		</div><!-- #masthead -->
+	</header><!-- #header -->
+</div><!-- #header-full -->
+
+<div style="clear:both;height:0;"> </div>
+
+<div id="main" class="main">
+		<div id="toTop"><i class="crycon-back2top"></i> </div>	<div  id="forbottom" >
+		
+		<div style="clear:both;"> </div>
+
+		
+		<section id="container" class="two-columns-right">
+			<div id="content" role="main">
+			
+
+				<div id="post-1976" class="post-1976 post type-post status-publish format-standard has-post-thumbnail hentry category-development">
+					<h1 class="entry-title">Finding and Fixing a Five Second Stall</h1>
+										<div class="entry-meta">
+						<span class="author vcard" ><i class="crycon-author crycon-metas" title="Author "></i>
+					<a class="url fn n" rel="author" href="http://the-witness.net/news/author/casey/" title="View all posts by Casey Muratori">Casey Muratori</a></span><span><i class="crycon-time crycon-metas" title="Date"></i>
+				<time class="onDate date published" datetime="2012-12-18T13:23:22-07:00">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/" rel="bookmark">December 18, 2012</a>
+				</time>
+			   </span><time class="updated"  datetime="2012-12-18T22:13:25-07:00">December 18, 2012</time><span class="bl_categ"><i class="crycon-folder-open crycon-metas" title="Categories"></i><a href="http://the-witness.net/news/category/development/" rel="tag">Development</a></span> 					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p><a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/witness_2_windowskeys/" rel="attachment wp-att-1980"><img src="http://the-witness.net/news/wp-content/uploads/2012/12/witness_2_windowskeys-512x290.jpg" alt="witness_2_windowskeys" width="512" height="290" class="aligncenter size-large wp-image-1980" /></a><br />
+The great thing about programming on Windows is that it is the only commercially viable platform where you can ship software to users without getting approval from a giant bureaucracy (well, perhaps I should say <a href="http://mollyrocket.com/casey/stream_0004.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://mollyrocket.com/casey/stream_0004.html', 'it used to be']);" >it used to be</a>). The not-so-great thing about programming on Windows is that, well, the Windows API is a horrific nightmare.</p>
+<p>Granted, it is not uniformly horrific. It ranges from only slightly scarey (xinput, comdlg32) to full psycho (DirectShow, Event Tracing, TabletPC, etc.). But no matter which part of the spectrum you encounter, programming on Windows tends to be about doing a lot of unnecessary research, experimentation, and debugging due to a confluence of poorly designed APIs.</p>
+<p>Since time spent debugging Windows issues isn’t often chronicled, I thought I’d go ahead and describe my experience this Saturday of tracking down a Windows bug in <i>The Witness</i>.</p>
+<p><span id="more-1976"></span></p>
+<h2>The Symptom</h2>
+<p>Apparently, not everyone on <i>The Witness</i> team was seeing the symptom. But trust me, it was there.</p>
+<p>On both <a href="http://number-none.com/blow" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://number-none.com/blow', 'Jon']);" >Jon</a> and my machines, there was a period during the initial loading of the game where you couldn’t do things like ALT-TAB back to the debugger. If you set a breakpoint then ran the game, when the breakpoint eventually hit and the debugger came to the front, it would wait about five seconds before it allowed you to actually interact with it. Sometimes, in rare cases, it would go into some sort of psycho mode whereby mouse movements stuttered, and the computer would literally beep at you as the mouse moved, for several seconds. Then everything would return to normal.</p>
+<p>While not technically a showstopper, this is the kind of bug that’s worth fixing if you can, because it costs you real development time every day. Five seconds wasted every breakpoint is bad news, and people often underestimate the effects of frustration that can build up over time due to flaky and unpleasant development environments. So I decided to try to track it down.</p>
+<p>Because Windows is a closed-source platform, there’s no great way to track down problems of this nature. However, having programmed on Windows for over twenty years now, I have a nose for it, so I felt like I knew the best place to start: since there was definitely a UI blackout somewhere during startup, there had to be something occurring early in the execution of the program that was causing at least that particular symptom. So before doing anything else, I started stepping through the entire startup sequence of the program to see if anything out of the ordinary struck me.</p>
+<p>I very quickly came upon this code:</p>
+<pre>// @@ The hook appears to install properly, but is never invoked :(
+keyboard_hook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc,
+                                 GetModuleHandle(NULL), 0);</pre>
+<p>Now, I don’t want to make it sound like the “find the source of the problem” phase of Windows debugging is straightforward. It usually takes a very long time, sometimes multiple days. But as luck would have it, this was literally the first piece of code I suspected, and it turned out to be the culprit.</p>
+<p>I commented out the SetWindowsHookEx, ran the program, and poof! All the symptoms were gone.</p>
+<h2>The Problem</h2>
+<p>From experience, I’ve learned that it’s always best to fully understand a problem before you fix it. If you just patch over its symptoms but never figure out what the problem really was, it will often come back to haunt you.</p>
+<p>In this context, that meant two things: first, I should figure out specifically why the keyboard hook was causing the UI stalls; second, I should determine why the code had been trying to call SetWindowsHookEx in the first place, even though apparently it never quite worked (according to the “is never invoked” comment).</p>
+<p>The first part turns out to be obvious in hindsight, but it took me a little while to put all the pieces together and be sure I had a solid explanation for what we were seeing. As with any puzzle, looking at the finished picture is easy, but figuring out what that picture might be when all you have are little pieces coming in one at a time is much more difficult. Here’s the best picture I could come up with, but of course there’s no way to completely verify it external to Microsoft:</p>
+<p>Normal Windows hooks are pieces of code which execute in the address space of the eventual message recipient, not the installer of the hook. It is for this reason that, normally, if you want to install a global hook, you must put the hook code in a DLL, because that DLL must be mapped into the address space of every running executable on the machine that can receive Windows messages.</p>
+<p>But low-level hooks are completely different. A low-level hook like WH_KEYBOARD_LL is a piece of code that resides in only the process that registers the hook. Windows remembers which thread registered the hook, and when any other executable is about to have a hooked message posted to its message queue, Windows actually waits until it can switch contexts back to the hook thread, run the hook in that context, and then finally deliver the message.</p>
+<p>This leads directly to the symptom that we were experiencing. When the game is loading, its main thread isn’t yielding to Windows frequently like it is during normal play. Since the main thread is the one that registered the hook, Windows must wait for that thread to finish all the load-time work it was doing and call a function which yields to Windows in order for Windows to actually call the hook procedure. Since no keyboard processing can occur until the hook procedure has run, the keyboard becomes unresponsive as messages back up waiting to be processed through the hook. This completely explains the UI problems during startup, and fits with the oddity that the mouse never seemed to be affected, just the keyboard.</p>
+<p>When the game hit a breakpoint, the keyboard hook couldn’t execute at all because the debugger had halted the thread required to execute it. This would have meant that keyboard input would be completely halted, and the debugger would never be able to receive keystrokes, if it weren’t for the fact that Windows actually uses a timeout on hook calls. If the timeout value is exceeded waiting for the hook thread to become available, the hooking executable is assumed to have crashed, and it will silently remove that hook and continue with normal operation.</p>
+<p>That timeout value? Five seconds — right in line with our observed pause (technically, it’s whatever is set in the registry under HKEY_LOCAL_MACHINE\Control Panel\Desktop\LowLevelHooksTimeout, but the default is five seconds).</p>
+<p>So, no mystery as to the pathology. But what about the second part? What was the code actually trying to do?</p>
+<h2>The Windows Logo Keys</h2>
+<p>Although SetWindowsHookEx might seem like an odd call to make in a game executable, it’s actually quite common. It’s there to prevent the Windows logo keys on modern keyboards from ruining full-screen games. Because the keys are placed in a location that’s easy to hit by mistake, many gamers would accidentally hit them, causing their games to be instantly deactivated by Windows in favor of bringing up the start menu. So widely acknowledged was this problem that, when these keys were first introduced, Microsoft itself published a recommended work-around. From <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ee416808%28v=vs.85%29.aspx" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://msdn.microsoft.com/en-us/library/windows/desktop/ee416808%28v=vs.85%29.aspx', 'Disabling Shortcut Keys in Games']);" >Disabling Shortcut Keys in Games</a>:</p>
+<blockquote><p>This article describes how to temporarily disable keyboard shortcuts in Microsoft Windows to prevent disruption of game play for full screen games... Use a low-level keyboard hook to filter out the Windows key from being processed.</p></blockquote>
+<p>The article goes on to show sample code that is basically the same code that was being used in <i>The Witness</i>. It’s a simple SetWindowsHookEx call with WH_KEYBOARD_LL whose hook routine does nothing but block VK_LWIN and VK_RWIN keys from being processed. The only difference between the code in <i>The Witness</i> and the code in the sample is that <i>The Witness</i> would conscientiously remove the hook when it no longer had focus, and then reinstall the hook when focus was regained. The sample code, by contrast, just set a global variable.</p>
+<p>So if this was what the code was doing, why the frowny face? If you look back at the comment, it states very clearly that the hook was never being invoked, even though no error message came back from Windows. And, although I normally remap my Windows keys via the registry, I went ahead and mapped them back to see if <i>The Witness</i> was properly blocking their effects.</p>
+<p>Much as the frowny face foretold, it wasn’t.</p>
+<h2>Obeying the Static Discipline</h2>
+<p>I don’t know anything about digital circuit design, but I once watched a lecture by <a href="http://www.darpa.mil/Our_Work/DSO/Personnel/Dr_Gill_Pratt.aspx" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.darpa.mil/Our_Work/DSO/Personnel/Dr_Gill_Pratt.aspx', 'Gill Pratt']);" >Gill Pratt</a> where he explained something called “the static discipline”. In essence, it is the requirement that any component in a circuit must accept voltages with a certain range for “1” and “0”, and then must output its own results in a certain range. These ranges are defined so as to require that components always produce equal or better conditioned voltages than their inputs, thus ensuring that the digital signals being propagated through the circuit don’t degrade into noise due to lots of tiny losses.</p>
+<p>For some reason, I took this concept to heart in a programming sense and have found it is a good rule to code by. My version of the static discipline, adapted for software, is that whenever you are making a modification to a piece of code, you should always leave it in a state of stability equal to or better than how you found it. And preferably the latter.</p>
+<p>All too often, people go in to fix a problem or add a feature to a piece of code, and they just hammer on it until it does that one new thing. The resulting code is then usually more fragile, less well designed, more unnecessarily complex, etc. To try to prevent myself from having this effect, I try to observe the static discipline.</p>
+<p>And so it was with this Windows key situation. I could see what the code was supposed to be doing, and although I could reasonably fix my bug by just commenting out the hook (because it didn’t work), I felt it was the more disciplined thing to do to figure out why the hook wasn’t working, and to implement something that did what it was trying to do. Since there was no obvious bug, I had to start experimenting.</p>
+<p>After adding some debug outputs and running Spy to keep an eye on the window messages, the first thing I tried was removing the part of the code that unregistered the hook when his window lost focus. Since I didn’t know exactly how his windowing code worked at all levels, I figured it wasn’t entirely out of the question that it could be getting disabled prematurely.</p>
+<p>Although that turned out not to be the case, this experiment did pay off unexpectedly (as many do): although the keyboard hook still never got called when <i>The Witness</i> window had focus, the hook did start getting called when it lost focus. Yes, oddly enough, the hook was working just fine for everyone else’s window, but on the one window where it actually needed to work, it wasn’t working.</p>
+<p>This lead to the obvious question, what was <i>The Witness</i> doing differently?</p>
+<h2>Raw Input</h2>
+<p>This was a case where having lots of Windows programming experience probably saved a lot of time. Instead of having to experiment blindly, I knew right off the bat that Windows Raw Input probably had something to do with the situation. I’ve debugged lots of Windows front end code in the past, and any time Raw Input, DirectInput, XInput, or anything else with the word “input” in it is involved, you know that things are going to be going a little haywire.</p>
+<p>I commented out the device registration call for Raw Input, and lo and behold, the hook started working for <i>The Witness</i> window, no problem. So, although I was completely unable to find any documentation on MSDN that discussed what was going on under the hood, it must be the case that Raw Input processing happens before low-level keyboard hook processing in such as way as to prevent the keyboard hook processing from ever seeing keyboard messages on a Raw Input-registered window. Normally, this wouldn’t be a problem, but in our case, the Microsoft-recommended fix for the Windows logo key problem relies on keyboard hooks. <i>The Witness</i> needs Raw Input to get good low-level relative mouse movements, but it also needs to disable the Windows logo keys; sadly, this is the kind of situation that is all too routine for anyone who programs Windows professionally.</p>
+<p>I couldn’t think of any plausible ways that I could convince Raw Input to start using the Windows keyboard hook, since I don’t have access to any of the Windows source code and I have no idea how it works internally. So I focused my efforts on Raw Input.</p>
+<p>I experimented with just about everything I could think of. I tried not calling DefWindowProc on WM_INPUT calls, to see if it was the default window processing that was using the Windows logo key events to switch to the start menu. No such luck. I tried using RIDEV_NOLEGACY during Raw Input initialization to see if preventing keyboard messages from being generated would solve the problem. It didn’t. After many failed attempts, and finding no relevant information on the web, I decided to call it a night and sleep on it.</p>
+<p>When I woke the next morning, for some reason I remembered the most important thing anyone programming Windows must remember: never, ever trust the documentation. It’s always either inaccurate or incomplete. So when I sat down at my keyboard, the first thing I did was try using the RIDEV_NOHOTKEYS flag when initializing Raw Input.</p>
+<p>You see, the previous day I hadn’t bothered to try this flag, because it explicitly says in the documentation that it does not block system-level hotkeys, only application-level hotkeys (like the kind you create yourself with RegisterHotKey). But why was I believing that? That was just something somebody wrote down when they needed to create a documentation page. They probably never even saw the actual code for Raw Input in the first place.</p>
+<p>Surprise surprise, RIDEV_NOHOTKEYS worked. After all the fussing, all that had to be done to make <i>The Witness</i> impervious to Windows Logo keys was one little flag during Raw Input initialization. No keyboard hook necessary.</p>
+<h2>Zero-Sum Game</h2>
+<p>It’s worth taking a step back for a moment and asking the question, why did all of this happen? Why did I have to spend several hours working on code that has nothing to do with my project, is not valuable in any intrinsic way, and whose specifics are relevant only in a fleeting temporal sense (there will be no need to know anything about RIDEV_NOHOTKEYS when the next user input model for Windows is invariably introduced)?</p>
+<p>The answer is the same on Windows as it is on most every other platform that exists today: the platform providers just don’t spend real resources designing and improving their APIs. If there had simply been an API call, WindowIgnoresWindowsLogoKeys(HWND), then everyone would always just call that, and the platform developers and Microsoft could field it and do the right thing, no matter how many times they revised their platform and its infrastructure.</p>
+<p>Better yet, way back when they first started catering to games with Windows 95, they could have introduce a call like BeginFullScreenGame(), and that could have done literally everything for you: initialize the window, set up the input stream, prepare the sound device, etc. Then they wouldn’t have had to ever worry about the Windows logo keys at all, because they would have been automatically disabled in any application that initialized itself with that call.</p>
+<p>But instead of any of these things, Microsoft chose to ship a new feature (the Windows logo hotkey) without ever thinking about the consequences. Then they patched over its problems by telling developers to install a keyboard hook (SetWindowsHookEx), something that has nothing to do with the actual problem but which was the most expedient way for them to get the problem solved without doing any real work on their platform. Then they broke that method, which they’d previously advocated, when they introduce Raw Input, so (presumably) they introduced a new way to do the same thing (RIDEV_NOHOTKEYS), although they failed to document it. Then they didn’t even bother to publish an obvious tech article explaining this change, or even revise their old documents saying that SetWindowsHookEx was the preferred solution.</p>
+<p>As broken as all that sounds, it is absolutely par for the course. On every project, in every discipline, developers just like me spend hundreds of hours doing nothing but diagnosing and repairing problems with the platforms on which we ship our software. It may sound like it’s just “part of the job”, but the pernicious thing about it is that development resources are always finite. External to the platform, development is always a zero-sum game. The hours I spent tracking down this bug were hours that won’t get spent making parts of The Witness better, and there’s nothing me or the team can do about that. If we want to ship a polished project, it’s a sacrifice we have to make.</p>
+<div>
+<p>And it’s a sacrifice that’s not just made by us, but by thousands of teams on thousands of projects every year. The cost of obtuse, easy to misuse APIs is multiplied across all these projects, turning the hundreds of hours we will spend on Witness platform work (across multiple platforms) into hundreds of thousands of hours when you consider that this same work has to be done by every other developer, too. It’s really thousands of zero-sum games being played, all across the industry, and the end result is universally worse software because the underlying platforms take up too much effort.</p>
+<p>But there is a way for this not to be a zero-sum game, and that’s if there’s a shift in thinking internal to the platform providers. If Microsoft, for example, started realizing that software on Windows gets better if their APIs are clear, concise, and difficult to misuse, they might start changing their development processes to make API quality a priority. They might try to hire and cultivate good API designers, and have real, talented developers who do nothing but work on the APIs to the internal systems.</p>
+<p>If that happened, the relatively small amount of hours spent on this endeavor internal to Microsoft (or Sony, or Apple, or Nintendo, or Google) would have a massively leveraged effect. If nobody has to think about things like the Windows keys again, that’s four hours right there that every software project gets back. That is literally thousands of hours, just that. Don’t need to worry about task switching or window minimization? That’s a day, at least — which makes it <i>thousands of days</i> saved. Straightforward user input? Easy access to camera inputs? Each little thing adds up until every developer is getting weeks of their schedule back to devote to working on their actual software, not to mention all the bugs that wouldn’t slip through the cracks because the developers may not have been experienced enough with the particular platform to know to look for them.</p>
+<p>So how do we get there? Honestly, I have no idea. In the meantime, I guess we just keep writing articles like this one that detail the right solutions as we find them, and hope that saves everyone some of the vast amount of time that we all lose to platform-related problems each year. Beyond that, it’s really up to the platform providers to start taking these issues more seriously.</p>
+</div>
+											</div><!-- .entry-content -->
+
+
+					<footer class="entry-meta">
+						<span class="bl_bookmark"><i class="crycon-bookmark crycon-metas" title=" Bookmark the permalink"></i> <a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/" title="Permalink to Finding and Fixing a Five Second Stall" rel="bookmark"> Bookmark</a>.</span>											</footer><!-- .entry-meta -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://the-witness.net/news/2012/12/mapping-the-islands-walkable-surfaces/" rel="prev"><i class="meta-nav-prev"></i> Mapping the Island&#8217;s Walkable Surfaces</a></div>
+					<div class="nav-next"><a href="http://the-witness.net/news/2012/12/a-cliffside-cliffhanger/" rel="next">A Cliffside Cliffhanger <i class="meta-nav-next"></i></a></div>
+				</div><!-- #nav-below -->
+
+				 <div id="comments" class=""> 			<h3 id="comments-title"><i class="crycon-replies" ></i>
+				46 Comments:			</h3>
+	<ol class="commentlist">
+			<li class="comment even thread-even depth-1" id="li-comment-154408">
+		<div id="comment-154408">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7fa55658f24ba80ecddde61250c66419?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7fa55658f24ba80ecddde61250c66419?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Devin Raposo</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154408">
+					December 18, 2012 at 3:12 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Excellent article! Could you explain what you mean by a &#8220;keyboard hook&#8221;? It would help my understanding of some things you mentioned more clear. I am kind of new to *real* software development. Thanks.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154408#respond' data-commentid="154408" data-postid="1976" data-belowelement="comment-154408" data-respondelement="respond" data-replyto="Reply to Devin Raposo" aria-label='Reply to Devin Raposo'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-2" id="li-comment-154410">
+		<div id="comment-154410">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154410">
+					December 18, 2012 at 3:21 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Windows operates partially on a message architecture, where threads in the system have queues of messages that can come from other threads and so on.  These messages are things like WM_MOUSEMOVE, or WM_SIZE, which are messages that tell the thread that one of the windows it has created is having the mouse moved over it, or being resized, respectively.</p>
+<p>Some of these messages, like WM_KEYDOWN, are keyboard events.  Normally they begin life somewhere in a device driver that has actually communicated with a keyboard, and Windows will see to it that the message gets moved from that origination point through to the thread that owns the window that currently has the keyboard focus.  This is the way that input works on Windows, in a nutshell, although the actual chain of command is much more complicated (as you might imagine).</p>
+<p>One of the things Windows lets applications do is to &#8220;hook&#8221; into this chain of events in between where the messages originate and where they eventually end up.  A &#8220;keyboard hook&#8221; is a piece of code that you write that you ask Windows to put _in between_ the originator of a message and its recipient.  So when the user presses a key on the keyboard, and the device driver sees that, and tells Windows that it&#8217;s time to send a keyboard event, instead of Windows putting a WM_KEYDOWN event directly into the queue of some application, it first calls the hook code.  The hook code can look at the event and decide what to do with it.  One of the things it can do, as was the case in the article, is tell windows _not_ to dispatch the event at all.</p>
+<p>In this way, keyboard hooks can effectively suppress keypresses entirely, so that the application with the keyboard focus never actually sees them.</p>
+<p>Does that make sense?</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154410#respond' data-commentid="154410" data-postid="1976" data-belowelement="comment-154410" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-154409">
+		<div id="comment-154409">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/73745bceffd75a7e5a1203d9f0e9fe44?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/73745bceffd75a7e5a1203d9f0e9fe44?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Q</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154409">
+					December 18, 2012 at 3:18 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I have never in my 10 years of PC gaming hit the Windows key by mistake or heard of anybody doing it &#8211; and even so, it wouldn&#8217;t amount to something repeatable often.</p>
+<p>Seems to me a good waste of time. Low level keyboard hooks in games &#8211; now I&#8217;ve seen everything!:)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154409#respond' data-commentid="154409" data-postid="1976" data-belowelement="comment-154409" data-respondelement="respond" data-replyto="Reply to Q" aria-label='Reply to Q'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-2" id="li-comment-154495">
+		<div id="comment-154495">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154495">
+					December 18, 2012 at 5:20 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>If you&#8217;ve never heard of anyone hitting the Windows key by mistake, you probably don&#8217;t read many gaming publications :)</p>
+<p><a href="http://howto.cnet.com/8301-11310_39-20079677-285/how-to-disable-your-keyboard-windows-key/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://howto.cnet.com/8301-11310_39-20079677-285/how-to-disable-your-keyboard-windows-key/', 'http://howto.cnet.com/8301-11310_39-20079677-285/how-to-disable-your-keyboard-windows-key/']);" rel="nofollow ugc">http://howto.cnet.com/8301-11310_39-20079677-285/how-to-disable-your-keyboard-windows-key/</a></p>
+<p><a href="http://forum.worldoftanks.com/index.php?/topic/56287-how-to-disable-the-windows-key/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://forum.worldoftanks.com/index.php?/topic/56287-how-to-disable-the-windows-key/', 'http://forum.worldoftanks.com/index.php?/topic/56287-how-to-disable-the-windows-key/']);" rel="nofollow ugc">http://forum.worldoftanks.com/index.php?/topic/56287-how-to-disable-the-windows-key/</a></p>
+<p><a href="http://forums.totalwar.org/vb/archive/index.php/t-21518.html" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://forums.totalwar.org/vb/archive/index.php/t-21518.html', 'http://forums.totalwar.org/vb/archive/index.php/t-21518.html']);" rel="nofollow ugc">http://forums.totalwar.org/vb/archive/index.php/t-21518.html</a></p>
+<p><a href="http://dev.dota2.com/archive/index.php/t-901.html" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://dev.dota2.com/archive/index.php/t-901.html', 'http://dev.dota2.com/archive/index.php/t-901.html']);" rel="nofollow ugc">http://dev.dota2.com/archive/index.php/t-901.html</a></p>
+<p><a href="http://us.battle.net/wow/en/forum/topic/3393370279" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://us.battle.net/wow/en/forum/topic/3393370279', 'http://us.battle.net/wow/en/forum/topic/3393370279']);" rel="nofollow ugc">http://us.battle.net/wow/en/forum/topic/3393370279</a></p>
+<p><a href="http://webcache.googleusercontent.com/search?q=cache:bdD9fFnHMB0J:boards.cityofheroes.com/archive/index.php/t-132764.html+&#038;cd=7&#038;hl=en&#038;ct=clnk&#038;gl=us" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://webcache.googleusercontent.com/search?q=cache:bdD9fFnHMB0J:boards.cityofheroes.com/archive/index.php/t-132764.html+&#038;cd=7&#038;hl=en&#038;ct=clnk&#038;gl=us', 'http://webcache.googleusercontent.com/search?q=cache:bdD9fFnHMB0J:boards.cityofheroes.com/archive/index.php/t-132764.html+&#038;cd=7&#038;hl=en&#038;ct=clnk&#038;gl=us']);" rel="nofollow ugc">http://webcache.googleusercontent.com/search?q=cache:bdD9fFnHMB0J:boards.cityofheroes.com/archive/index.php/t-132764.html+&#038;cd=7&#038;hl=en&#038;ct=clnk&#038;gl=us</a></p>
+<p><a href="http://www.bytegems.com/ihatethiskeydeluxe.shtml" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://www.bytegems.com/ihatethiskeydeluxe.shtml', 'http://www.bytegems.com/ihatethiskeydeluxe.shtml']);" rel="nofollow ugc">http://www.bytegems.com/ihatethiskeydeluxe.shtml</a></p>
+<p><a href="http://lairoflurdane.wordpress.com/programming/winblocker/" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://lairoflurdane.wordpress.com/programming/winblocker/', 'http://lairoflurdane.wordpress.com/programming/winblocker/']);" rel="nofollow ugc">http://lairoflurdane.wordpress.com/programming/winblocker/</a></p>
+<p>I could go on and on and on, but hopefully that makes the point :)</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154495#respond' data-commentid="154495" data-postid="1976" data-belowelement="comment-154495" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even depth-2" id="li-comment-154547">
+		<div id="comment-154547">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0f7150cb4b54dc0a70d83a7c714d7853?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0f7150cb4b54dc0a70d83a7c714d7853?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">EML</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154547">
+					December 18, 2012 at 6:08 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;ve seen and heard of this time and time again, in ten years of PC gaming — and even done it myself once or twice (usually on a new keyboard). Not all of us have had the privilege of playing only the most well-programmed games. ;)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154547#respond' data-commentid="154547" data-postid="1976" data-belowelement="comment-154547" data-respondelement="respond" data-replyto="Reply to EML" aria-label='Reply to EML'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt depth-2" id="li-comment-154548">
+		<div id="comment-154548">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c993020794a79ef417480191b4da71d6?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c993020794a79ef417480191b4da71d6?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Phil Wilkins</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154548">
+					December 18, 2012 at 6:23 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Probably because every PC game written in the last ten years explicitly disables the windows keys. The key itself must be nearly 20 years old, so you&#8217;d have to have been gaming for at least that long to have gone through the trauma that was losing a game because there&#8217;s now a button of doom between ctrl and alt.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154548#respond' data-commentid="154548" data-postid="1976" data-belowelement="comment-154548" data-respondelement="respond" data-replyto="Reply to Phil Wilkins" aria-label='Reply to Phil Wilkins'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-154411">
+		<div id="comment-154411">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/e140623b88f677b56cde01ff91a7548d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/e140623b88f677b56cde01ff91a7548d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Artfunkel</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154411">
+					December 18, 2012 at 3:24 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I have a pet theory: at least half of the reason .Net exists is the opportunity it provided to Microsoft to create a new, sane Windows API without admitting to the awfulness of the C one.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154411#respond' data-commentid="154411" data-postid="1976" data-belowelement="comment-154411" data-respondelement="respond" data-replyto="Reply to Artfunkel" aria-label='Reply to Artfunkel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-2" id="li-comment-154492">
+		<div id="comment-154492">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154492">
+					December 18, 2012 at 5:11 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>That could certainly be the reason, but unfortunately the .NET one is even worse, because it&#8217;s a poorly designed API _and_ it&#8217;s slower.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154492#respond' data-commentid="154492" data-postid="1976" data-belowelement="comment-154492" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-3" id="li-comment-161245">
+		<div id="comment-161245">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7b04205a83ac314f0641b2e7498513eb?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7b04205a83ac314f0641b2e7498513eb?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.madeofmetaphors.com/' rel='external nofollow ugc' class='url'>Brian Sharp</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-161245">
+					December 20, 2012 at 8:24 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Totally disagree. C# and the .NET framework is the best development environment for a huge range of common software that exists today. We use it for all our internal tools &#8211; including lots of realtime apps doing heavy-duty stuff. I think C# is one of the best-designed languages in the world, and the .NET framework is one of the most expressive and clear standard libraries around. Performance is only really a problem in situations of serious computation &#8211; you wouldn&#8217;t use C# for super heavy-duty number-crunching.</p>
+<p>Some object to both based on &#8220;bloatware&#8221; bugbears but those are irrelevant to anyone who&#8217;s not OCD. Hard drives are massive now and RAM is cheap, and the tradeoff for the development time it buys you back (to your point about that!) is absolutely worth it. Our expert C# devs who have decades of C and C++ experience say that their default is everything not on an embedded platform should be C# unless there&#8217;s a particularly good exceptional reason to use C/C++, and usually there isn&#8217;t.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=161245#respond' data-commentid="161245" data-postid="1976" data-belowelement="comment-161245" data-respondelement="respond" data-replyto="Reply to Brian Sharp" aria-label='Reply to Brian Sharp'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-4" id="li-comment-166786">
+		<div id="comment-166786">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-166786">
+					December 22, 2012 at 10:18 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Alright, hit me.  Post the code sample for C# that disables the Windows keys.  Is it one line like it should be?</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=166786#respond' data-commentid="166786" data-postid="1976" data-belowelement="comment-166786" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-154415">
+		<div id="comment-154415">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/7fa55658f24ba80ecddde61250c66419?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/7fa55658f24ba80ecddde61250c66419?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Devin Raposo</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154415">
+					December 18, 2012 at 3:32 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Yes, I think I understand. Thanks for the quick reply!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154415#respond' data-commentid="154415" data-postid="1976" data-belowelement="comment-154415" data-respondelement="respond" data-replyto="Reply to Devin Raposo" aria-label='Reply to Devin Raposo'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-154416">
+		<div id="comment-154416">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/d0d374bb5e062c8159d7f3f3d62dc964?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/d0d374bb5e062c8159d7f3f3d62dc964?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://www.tinylittlesquare.com/' rel='external nofollow ugc' class='url'>Alex Taylor</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154416">
+					December 18, 2012 at 3:40 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>At work we came across what I think is the same problem and found that <a href="http://msdn.microsoft.com/en-us/library/ms185330.aspx" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://msdn.microsoft.com/en-us/library/ms185330.aspx', 'disabling the Visual Studio debug hosting process']);" rel="nofollow">disabling the Visual Studio debug hosting process</a> fixed the problem. I can&#8217;t say I understand why (I wasn&#8217;t on the project), but those guys haven&#8217;t had a problem since.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154416#respond' data-commentid="154416" data-postid="1976" data-belowelement="comment-154416" data-respondelement="respond" data-replyto="Reply to Alex Taylor" aria-label='Reply to Alex Taylor'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-154417">
+		<div id="comment-154417">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/0ff5a261d2c9f3f5911c8cad03dc9d65?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/0ff5a261d2c9f3f5911c8cad03dc9d65?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Michael Bayne</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154417">
+					December 18, 2012 at 3:41 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Having just shipped a game on both iOS and Android, I have a long list of API/platform annoyances that I had to deal with on Android, which I did not have to deal with on iOS. Whether you like Apple&#8217;s walled garden or not, the APIs on iOS are, by and large, well thought out, do the right thing by default, and usually make it difficult to do the wrong thing. By contrast, many of the APIs on Android are vastly more complex to use, end up doing something annoying for the end user if you don&#8217;t take the time to understand them clearly and research how to make them behave sensibly, and exhibit a great deal more &#8220;accumulated cruft&#8221; as they have evolved over the various Android API revisions. Add to that the annoyance that the two thousand plus devices that are &#8220;supported&#8221; by my game run hundreds of different versions of Android, each of which has its own uniquely buggy implementation of the Android APIs it purports to support, and you have a situation that&#8217;s almost as bad as developing for Windows. :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154417#respond' data-commentid="154417" data-postid="1976" data-belowelement="comment-154417" data-respondelement="respond" data-replyto="Reply to Michael Bayne" aria-label='Reply to Michael Bayne'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-154418">
+		<div id="comment-154418">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/3a92bba1e6cd4cb44efde7378c50a623?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/3a92bba1e6cd4cb44efde7378c50a623?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Seph</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154418">
+					December 18, 2012 at 3:47 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Seeing how much the closed source nature of Windows seems to bother you, how is it on the Linux side of things?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154418#respond' data-commentid="154418" data-postid="1976" data-belowelement="comment-154418" data-respondelement="respond" data-replyto="Reply to Seph" aria-label='Reply to Seph'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor even depth-2" id="li-comment-154493">
+		<div id="comment-154493">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154493">
+					December 18, 2012 at 5:13 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I can&#8217;t really speak to the Linux side of things yet, because I&#8217;ve only just begun to work on that platform.  Talk to me in a few years when I have more Linux experience and I&#8217;ll have a worthwhile perspective on that, hopefully!</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154493#respond' data-commentid="154493" data-postid="1976" data-belowelement="comment-154493" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-155064">
+		<div id="comment-155064">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9f3929b95d9e6bd5ad2e74d12131da4e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9f3929b95d9e6bd5ad2e74d12131da4e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">d</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-155064">
+					December 18, 2012 at 9:01 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>More than anything else I think what&#8217;s crucial to great API design is choosing the perfect amount of abstraction. When you stop and really think about them (or even better, try to design your own in an environment without them) you begin to see that a lot of standard library functions are nothing short of sublime. *nixes have kept a lot of that design philosophy to this day, whereas Windows eschewed it from the start. The more cross-platform development you do, the more this shows.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=155064#respond' data-commentid="155064" data-postid="1976" data-belowelement="comment-155064" data-respondelement="respond" data-replyto="Reply to d" aria-label='Reply to d'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-4" id="li-comment-155065">
+		<div id="comment-155065">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9f3929b95d9e6bd5ad2e74d12131da4e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9f3929b95d9e6bd5ad2e74d12131da4e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">d</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-155065">
+					December 18, 2012 at 9:06 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Eschewed it from the start, that is, apart from implementing the standard library. They didn&#8217;t have a lot of choice there (if they did, I&#8217;m sure we&#8217;d have a read() that took a variable-length context structure with members filled with pointers to an array of fixed-size buffers, or some such nonsense).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=155065#respond' data-commentid="155065" data-postid="1976" data-belowelement="comment-155065" data-respondelement="respond" data-replyto="Reply to d" aria-label='Reply to d'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-154473">
+		<div id="comment-154473">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/26d29fa8d14c186970c18547d6bf6af1?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/26d29fa8d14c186970c18547d6bf6af1?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Simon</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154473">
+					December 18, 2012 at 4:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p><cite>So how do we get there? Honestly, I have no idea.</cite><br />
+I do: Metro apps. (or &#8220;Modern apps&#8221; or &#8220;Windows Store apps&#8221;). They used Win8 to redesign the API (WinRT). And I like the new design way better. Mostly well done API design. Especially that they only support async IO calls. Now if just everybody upgraded to Win8&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154473#respond' data-commentid="154473" data-postid="1976" data-belowelement="comment-154473" data-respondelement="respond" data-replyto="Reply to Simon" aria-label='Reply to Simon'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor even depth-2" id="li-comment-154494">
+		<div id="comment-154494">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154494">
+					December 18, 2012 at 5:14 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I suspect that you an I have very different opinions of what makes a good API if you thnk Windows Run Time (Metro) is a good platform.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154494#respond' data-commentid="154494" data-postid="1976" data-belowelement="comment-154494" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-3" id="li-comment-154549">
+		<div id="comment-154549">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/cd991227ac34793b8bae42972cbb03d6?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/cd991227ac34793b8bae42972cbb03d6?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Alexey</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154549">
+					December 18, 2012 at 6:25 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Casey, could you point to an API that you do consider well-designed?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154549#respond' data-commentid="154549" data-postid="1976" data-belowelement="comment-154549" data-respondelement="respond" data-replyto="Reply to Alexey" aria-label='Reply to Alexey'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor even depth-4" id="li-comment-154781">
+		<div id="comment-154781">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154781">
+					December 18, 2012 at 7:13 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>On the Microsoft side, the one that comes to mind is XInput.  It&#8217;s pretty reasonable.  There&#8217;s probably a few things I&#8217;d do differently, but it&#8217;s not the kind of thing I&#8217;d get in a fuss about.</p>
+<p>The only reason it&#8217;s &#8220;slightly scarey&#8221; (as I said in the article) is not because of the API design, but because it has (had? they may have fixed some in more recent versions) a bad bug in it where if you poll a gamepad that isn&#8217;t connected, it takes a big CPU hit (ie., see my post about it here: <a href="http://mollyrocket.com/forums/viewtopic.php?t=487" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://mollyrocket.com/forums/viewtopic.php?t=487', 'http://mollyrocket.com/forums/viewtopic.php?t=487']);" rel="nofollow ugc">http://mollyrocket.com/forums/viewtopic.php?t=487</a>).</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154781#respond' data-commentid="154781" data-postid="1976" data-belowelement="comment-154781" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-154474">
+		<div id="comment-154474">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/722d2da35782de772bdc907c03c99663?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/722d2da35782de772bdc907c03c99663?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">MondSemmel</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154474">
+					December 18, 2012 at 4:34 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>That comment explains quite a lot of your rants against Windows (and I guess any other OS) on the Jeff &amp; Casey show&#8230;</p>
+<p>That situation is a real annoyance, though it&#8217;s easy to generalize from programming or MS: No matter what environment you work or live in, you are bound by its flaws, problems, and limits &#8211; say politics in general, or tax policy, or (institutionalized or just cultural) racial/gender discrimination, and so on.  Or even pesky natural laws like gravity&#8230;<br />
+But I guess as long as it&#8217;s human-made, we should (and could, in theory if not in practice) try to fix these issues as far as possible.</p>
+<p>But on that point, is there actually any OS that&#8217;s genuinely great and hassle-free to program for? I guess if the answer to that one was universally &#8220;yes&#8221;, then everybody would use it&#8230;</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154474#respond' data-commentid="154474" data-postid="1976" data-belowelement="comment-154474" data-respondelement="respond" data-replyto="Reply to MondSemmel" aria-label='Reply to MondSemmel'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-154565">
+		<div id="comment-154565">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/2b84fb46cb9aa87091fd6fa37bad3173?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/2b84fb46cb9aa87091fd6fa37bad3173?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Aditya</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-154565">
+					December 18, 2012 at 6:29 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Understood a lot about windows hook problem.. thanks for this amazing article.. :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=154565#respond' data-commentid="154565" data-postid="1976" data-belowelement="comment-154565" data-respondelement="respond" data-replyto="Reply to Aditya" aria-label='Reply to Aditya'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-155039">
+		<div id="comment-155039">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/9f3929b95d9e6bd5ad2e74d12131da4e?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/9f3929b95d9e6bd5ad2e74d12131da4e?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">d</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-155039">
+					December 18, 2012 at 8:41 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Pretty much every back-assward thing you find in Windows can be traced back to a pathological need at<br />
+Microsoft to be different from Unix. Why use forward slashes in paths when you can use backslashes? The time wasted on extra keystrokes escaping backslashes in paths could uncharitably be measured in lifetimes.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=155039#respond' data-commentid="155039" data-postid="1976" data-belowelement="comment-155039" data-respondelement="respond" data-replyto="Reply to d" aria-label='Reply to d'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-2" id="li-comment-155066">
+		<div id="comment-155066">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/cd991227ac34793b8bae42972cbb03d6?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/cd991227ac34793b8bae42972cbb03d6?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Alexey</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-155066">
+					December 18, 2012 at 9:17 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>In case of path separators, it was actually Unix that went against the flow. The other OSs of the time used forward slashes for passing arguments to programs, and DOS followed in their footsteps. Windows simply had to be compatible with DOS.</p>
+<p>Really, most backwards things you find in Windows are due to their compatibility efforts.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=155066#respond' data-commentid="155066" data-postid="1976" data-belowelement="comment-155066" data-respondelement="respond" data-replyto="Reply to Alexey" aria-label='Reply to Alexey'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt depth-2" id="li-comment-633858">
+		<div id="comment-633858">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/ad4caa46eebe9347305177fc33468563?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/ad4caa46eebe9347305177fc33468563?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Mike Nelson</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-633858">
+					March 18, 2013 at 9:33 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>So true, d.</p>
+<p># this needs to be escaped 4 times unline the usual 5 times&#8230;<br />
+my_dev_env=c:\\\\\\\\dev\\\\\\\\project</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=633858#respond' data-commentid="633858" data-postid="1976" data-belowelement="comment-633858" data-respondelement="respond" data-replyto="Reply to Mike Nelson" aria-label='Reply to Mike Nelson'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-155179">
+		<div id="comment-155179">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/2fa753d6e5f81881dbd1d437c6ace708?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/2fa753d6e5f81881dbd1d437c6ace708?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">incendiary</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-155179">
+					December 18, 2012 at 10:05 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Are you sure you actually want to disable the Windows key? I use it all the time when playing slow-paced full-screen games to get me back to the desktop while keeping the game running in the background. I can check email or whatever and then get right back to my game. Often it&#8217;s the only thing that works to do so (Alt-Tab sometimes doesn&#8217;t work and it&#8217;s a bit messy when it does).</p>
+<p>I&#8217;m just saying, if the game is slow-paced, and the main controls aren&#8217;t near the Windows key, some people may actually *want* a functioning Windows key (I&#8217;ll accept that I&#8217;m probably in the minority here).</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=155179#respond' data-commentid="155179" data-postid="1976" data-belowelement="comment-155179" data-respondelement="respond" data-replyto="Reply to incendiary" aria-label='Reply to incendiary'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-2" id="li-comment-156520">
+		<div id="comment-156520">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-156520">
+					December 19, 2012 at 9:43 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>While I appreciate the fact that Windows hotkeys tend to be a little obtuse, there are actually already hotkeys that do the same thing as a single press of the Windows key which are not dangerous as far as accidental keystrokes.  CTRL-ESC, for example, brings up the Start menu, just as a single press of the Windows key will, and that key combination will still work in Witness.  But you are unlikely to ever hit it by accident.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=156520#respond' data-commentid="156520" data-postid="1976" data-belowelement="comment-156520" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-155355">
+		<div id="comment-155355">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/b162f2c1968135b0543067572796e9b9?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/b162f2c1968135b0543067572796e9b9?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Ed</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-155355">
+					December 18, 2012 at 11:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Great article!  I noted a poster that said he never had this problem!????  That&#8217;s crazy, I remember hitting the Windows key in a raid and wiped!  I literally removed that key from the keyboard!  You hit the core of the problem, I can relate to so many issues similar to this in Java, thanks for the article.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=155355#respond' data-commentid="155355" data-postid="1976" data-belowelement="comment-155355" data-respondelement="respond" data-replyto="Reply to Ed" aria-label='Reply to Ed'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-156003">
+		<div id="comment-156003">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://0.gravatar.com/avatar/c3087b2619fed929790c54b0a554b375?s=60&#038;d=blank&#038;r=g' srcset='http://0.gravatar.com/avatar/c3087b2619fed929790c54b0a554b375?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Aravind</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-156003">
+					December 19, 2012 at 5:47 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>&#8220;&#8230; whenever you are making a modification to a piece of code, you should always leave it in a state of stability equal to or better than how you found it. And preferably the latter&#8230;&#8230;&#8221;</p>
+<p>Love it!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=156003#respond' data-commentid="156003" data-postid="1976" data-belowelement="comment-156003" data-respondelement="respond" data-replyto="Reply to Aravind" aria-label='Reply to Aravind'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-156033">
+		<div id="comment-156033">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/1738927d749c954c1dd37b14a340fd8a?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/1738927d749c954c1dd37b14a340fd8a?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Vance Renadi</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-156033">
+					December 19, 2012 at 6:36 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I agree with you, the only games where I would see removal of the windows key as a feature rather than a flaw is in highly competitive multiplayer games, and I now realize about half the games I ever played weren&#8217;t &#8216;bugged&#8217; but likely removed the capability to do something I see no reason for them to have done.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=156033#respond' data-commentid="156033" data-postid="1976" data-belowelement="comment-156033" data-respondelement="respond" data-replyto="Reply to Vance Renadi" aria-label='Reply to Vance Renadi'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-157843">
+		<div id="comment-157843">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/5cbe903ebab4911b54d25686cb024128?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/5cbe903ebab4911b54d25686cb024128?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Degg35</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-157843">
+					December 19, 2012 at 3:12 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m not sure I fully understand how this works, but won&#8217;t setting RIDEV_NOHOTKEYS disable *all* of the hotkeys? I.e. will I be stuck in the game unless I exit via the game&#8217;s menu? (I hate Quake 3 for doing that to me.)<br />
+If the game had a bug which prevented me from normally quitting the game (e.g. some sort of freeze without Windows realizing and offering me to close it), will I be stuck and have to use the reset button?</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=157843#respond' data-commentid="157843" data-postid="1976" data-belowelement="comment-157843" data-respondelement="respond" data-replyto="Reply to Degg35" aria-label='Reply to Degg35'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor even depth-2" id="li-comment-158673">
+		<div id="comment-158673">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-158673">
+					December 19, 2012 at 11:47 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>No, RIDEV_NOHOTKEYS does not block CTRL-ALT-DELETE and ALT-TAB, etc., so you still have plenty of ways to get out of the application if for some reason it becomes unresponsive.  It&#8217;s only the Windows logo keys that are being suppressed here.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=158673#respond' data-commentid="158673" data-postid="1976" data-belowelement="comment-158673" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-158004">
+		<div id="comment-158004">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/52b15183376bc21fbf9234e365b9205d?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/52b15183376bc21fbf9234e365b9205d?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Vincent Povirk</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-158004">
+					December 19, 2012 at 5:19 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I was told recently that explorer uses RegisterHotKey to create those windows key shortcuts. I&#8217;m guessing that &#8220;system level hotkeys&#8221; means things like Ctrl+Alt+Delete (though I am not aware of a single other example).</p>
+<p>If my interpretation is correct, this is a case of the MSDN authors including information that would be obvious to most people, while explaining it so badly that it&#8217;s worse than leaving it out. My memories of &#8220;Old New Thing&#8221; suggest they have a tendency to repeat technical explanations that they don&#8217;t fully understand and that weren&#8217;t meant to be documentation.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=158004#respond' data-commentid="158004" data-postid="1976" data-belowelement="comment-158004" data-respondelement="respond" data-replyto="Reply to Vincent Povirk" aria-label='Reply to Vincent Povirk'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-162362">
+		<div id="comment-162362">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/dbf58358a070a0a2bb765d672a0a42c7?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/dbf58358a070a0a2bb765d672a0a42c7?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://speps.fr' rel='external nofollow ugc' class='url'>Remi Gillig</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-162362">
+					December 21, 2012 at 5:49 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>How about documenting this behaviour on the MSDN page then? There is a community additions section and there are usually loads of information on undocumented/misdocumented features. And yes, sometimes the MSDN pages get fixed because of these comments. So that even if you despise the Windows API, you contribute to its progress instead of ranting about it all :)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=162362#respond' data-commentid="162362" data-postid="1976" data-belowelement="comment-162362" data-respondelement="respond" data-replyto="Reply to Remi Gillig" aria-label='Reply to Remi Gillig'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-2" id="li-comment-166785">
+		<div id="comment-166785">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-166785">
+					December 22, 2012 at 10:04 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Because I don&#8217;t get paid to make Microsoft&#8217;s products better?  They are a $231 billion company.  They could hire fifty people to do nothing but search the web for posts like this, check the source code, and update their MSDN pages to have correct information, and it wouldn&#8217;t even make a line item in their quaterly report.</p>
+<p>I, on the other hand, am an independent developer on a independent project that squeaks by on the savings of a principal or two.  If I&#8217;m going to spend my time doing something, it&#8217;s going to be improving the community for The Witness, not improving the community of Microsoft, the company that constantly costs _us_ time and resources because they couldn&#8217;t be bothered to do their job.</p>
+<p>And that&#8217;s why I spend what precious little free time I have writing posts for this blog and answering the comments on it instead of spending my time fixing Microsoft&#8217;s erroneous documentation.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=166785#respond' data-commentid="166785" data-postid="1976" data-belowelement="comment-166785" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-3" id="li-comment-171254">
+		<div id="comment-171254">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/20b4cf605ea0e1c48a75459a7f907f00?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/20b4cf605ea0e1c48a75459a7f907f00?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Chris Subagio</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-171254">
+					December 23, 2012 at 2:31 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>It&#8217;s also worth pointing out that this is a contribution anyway: often a webpage like this comes up when you search for an MS API related problem, and judging by the last decade of MSDN, it&#8217;s also more likely to stick around and be visible.</p>
+<p>I gave up searching MSDN directly years ago; by default I now google search my problems and if a page ranks higher than the MSDN doc page, 90% of the time it&#8217;s a page like this that actually addresses the problem more usefully.</p>
+<p>Thanks for the breakdown, btw. I&#8217;ve run into the problem before and had to go the disable the hook route because I didn&#8217;t have time to dissect it. If I ever see it again, I&#8217;ll know where to come back for reference.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=171254#respond' data-commentid="171254" data-postid="1976" data-belowelement="comment-171254" data-respondelement="respond" data-replyto="Reply to Chris Subagio" aria-label='Reply to Chris Subagio'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-170020">
+		<div id="comment-170020">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/a58f3cfd3e777191d56bf5df462ca4b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/a58f3cfd3e777191d56bf5df462ca4b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Egon Elbre</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-170020">
+					December 23, 2012 at 6:14 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>A tip that a fellow developer gave me for debugging Windows is to use ReactOS/WINE source. The source should have similar behavior and it occasionally has nice comments about weird behaviors.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=170020#respond' data-commentid="170020" data-postid="1976" data-belowelement="comment-170020" data-respondelement="respond" data-replyto="Reply to Egon Elbre" aria-label='Reply to Egon Elbre'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor even depth-2" id="li-comment-171857">
+		<div id="comment-171857">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-171857">
+					December 23, 2012 at 4:26 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Yeah, that seems like a good idea.  If a WINE dev has already gone through this process trying to properly emulate Windows, then you can piggyback on that and save yourself a lot of time I bet&#8230; I should install the WINE source here on my laptop, it&#8217;s a Linux Mint machine.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=171857#respond' data-commentid="171857" data-postid="1976" data-belowelement="comment-171857" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-170108">
+		<div id="comment-170108">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4759387ee902e56b6937367fbfc1d504?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4759387ee902e56b6937367fbfc1d504?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Jake McKenzie</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-170108">
+					December 23, 2012 at 6:45 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I&#8217;m taking my first class in C in the spring at Uni. I found this article to be a really good resource Casey. I lament the future hours I will probably spend going over the same problems you bring up here. I think about all these new things that games have brought that I love in PC gaming like the full screen window, dual monitor support, controller support at the start of the application and it all makes my head spin thinking about how to properly implement it the right way.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=170108#respond' data-commentid="170108" data-postid="1976" data-belowelement="comment-170108" data-respondelement="respond" data-replyto="Reply to Jake McKenzie" aria-label='Reply to Jake McKenzie'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-220265">
+		<div id="comment-220265">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/a56d4ff75efc9a1bddbdc027befd8153?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/a56d4ff75efc9a1bddbdc027befd8153?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Tricia</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-220265">
+					December 31, 2012 at 10:52 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I wanted to put in my two cents on the Windows hotkey. I actually prefer it not to be deactivated. I frequently want to minimize a full screen game that has no built in minimize feature (Guild Wars 2 is an example of a game that has this feature nicely implemented in the pause screen), and I usually use the Windows hotkey for that. I don&#8217;t think I&#8217;ve ever had issues with accidental button presses on that key. With it disabled, I&#8217;m far more likely to have to shut down the entire game just to Google the solution to some in-game problem I&#8217;m facing.</p>
+<p>I realize that accidental presses are an issue for some gamers, but I wanted to suggest that you add a minimize button for convenience&#8217;s sake.</p>
+<p>I also wanted to mention that I find these programming articles to be quite interesting, and that I really appreciated your article about Window&#8217;s monopoly on releases on Windows 8. I was entirely unaware of the new requirements.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=220265#respond' data-commentid="220265" data-postid="1976" data-belowelement="comment-220265" data-respondelement="respond" data-replyto="Reply to Tricia" aria-label='Reply to Tricia'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-casey bypostauthor odd alt depth-2" id="li-comment-290830">
+		<div id="comment-290830">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=60&#038;d=blank&#038;r=g' srcset='http://1.gravatar.com/avatar/4b22573f757cc33ccabc5c5139ca98b5?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://mollyrocket.com/casey' rel='external nofollow ugc' class='url'>Casey Muratori</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-290830">
+					January 7, 2013 at 5:07 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Tricia: You can always use CTRL-ESC, which was the previous way to do this before the Windows key was added to keyboards.  It is a much more sane way for games to allow this behavior, because nobody can really hit CTRL-ESC by accident.  It should work in all games, too, as I don&#8217;t think there are ways to disable it, although admittedly I have never tried.  I, like you, appreciate the need to have a way to switch from a game to the Start menu, and CTRL-ESC seems like a good way to do that, so I would never go out of my way to try to disable it, nor recommend that others do so.</p>
+<p>&#8211; Casey</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=290830#respond' data-commentid="290830" data-postid="1976" data-belowelement="comment-290830" data-respondelement="respond" data-replyto="Reply to Casey Muratori" aria-label='Reply to Casey Muratori'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-264986">
+		<div id="comment-264986">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/215231f6287de6a5cdb9096d635b4998?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/215231f6287de6a5cdb9096d635b4998?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Michael Yacavone</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-264986">
+					January 4, 2013 at 8:19 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I don&#8217;t have experience programming on Windows, but apropos of the comment from &#8220;d&#8221; above, while learning iOS programming in 2012 my brain REALLY liked the level of abstraction in Cocoa. Seems like those NextStep guys took the time to think it through. OTOH, I understand there are plenty of Cocoa APIs that also have teh suck, recently Twitter-elaborated by Wil Shipley: <a href="http://twitter.com/wilshipley/status/277920619893510144" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'http://twitter.com/wilshipley/status/277920619893510144', 'http://twitter.com/wilshipley/status/277920619893510144']);" rel="nofollow ugc">http://twitter.com/wilshipley/status/277920619893510144</a></p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=264986#respond' data-commentid="264986" data-postid="1976" data-belowelement="comment-264986" data-respondelement="respond" data-replyto="Reply to Michael Yacavone" aria-label='Reply to Michael Yacavone'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-525351">
+		<div id="comment-525351">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/8d8b82740cb7ca994449cccd1dfdef5f?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/8d8b82740cb7ca994449cccd1dfdef5f?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn"><a href='http://bre.tc' rel='external nofollow ugc' class='url'>Bret Comnes</a></cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-525351">
+					February 21, 2013 at 9:28 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Another workaround issues with accidentally hitting the windows key is implementing your full screen program in such a way so that accidentally alt-tabbing or windows keying out of the game is a very cheap action.  IE, it happens instantly.  This is commonly achieved using border-less fullscreen.  More games should do it.</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=525351#respond' data-commentid="525351" data-postid="1976" data-belowelement="comment-525351" data-respondelement="respond" data-replyto="Reply to Bret Comnes" aria-label='Reply to Bret Comnes'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-628719">
+		<div id="comment-628719">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/b5b961cc6ef388caa68516c8ac236bd3?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/b5b961cc6ef388caa68516c8ac236bd3?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Carson Kanaan</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-628719">
+					March 17, 2013 at 4:10 am</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>I enjoyed reading this piece, Casey, though I came late to it.</p>
+<p>Your description of how problems germinate in platform vendor&#8217;s product, and then bloom in the work of every developer who works above that level squarely captures the scale of the impact:</p>
+<blockquote><p>
+it’s a sacrifice that’s not just made by us, but by thousands of teams on thousands of projects every year [&#8230;]  when you consider that this same work has to be done by every other developer, too. It’s really thousands of zero-sum games being played, all across the industry, and the end result is universally worse software because the underlying platforms take up too much effort.
+</p></blockquote>
+<p>In a somewhat-related technical context, I was speaking to a sysadmin and former colleague of mine who worked for a large company, where he was part of a team that managed that company&#8217;s 220,000-desktop user base.</p>
+<p>One of their internally-developed frameworks was used by a number of their critical operations management applications, and it had an occasional processing stall that would unreliably surface to impact several thousand users across their global network every couple of weeks.</p>
+<p>People would complain, but because it rarely impacted more than a few persons at a time in any particular local office, no one really had a sense of the scale of the problem across 340 offices on six continents.</p>
+<p>For a long time, it was nearly impossible to focus developer resources on corralling and taming this bug, since the framework was technically nobody&#8217;s responsibility anymore.</p>
+<p>A newer developer with little to do his first few weeks became enamored by the bug and set out to calculate the person-hour  impact to the company from these cumulative stalls. After adding the needed instrumentation wrapper to a key library, he found that in a given month, there were nearly 44 person-days of wasted time caused by this stall&#8211;a staggering amount, and a staggering cost to the company given that some of the people whose work this stall affected were very costly employees.</p>
+<p>After realizing that this was a &#8220;hundred-thousand dollar bug&#8221;, it was relatively easy to get the people who could fix it to fix it. But the practical fact remains that stuck in the low-level framework, out of sight and out of mind of most application developers, it was impactful in non-obvious ways.</p>
+<p>Thanks again for your writeup.</p>
+<p>If you ever find that the talk by Gill Pratt on &#8220;the static discipline&#8221; is online anywhere, I&#8217;d welcome a link. </p>
+<p>(There was a similar concept espoused by early engineers in the Internet community: &#8220;be liberal in what you accept, conservative in what you send out&#8221;, which assured that a broad range of user-level applications on the Internet would just &#8216;work&#8217; despite poorly-formatted messages and protocol violations because even if somebody sent you garbage, it was your responsibility to clean it up before you sent it along to the next recipient.)</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=628719#respond' data-commentid="628719" data-postid="1976" data-belowelement="comment-628719" data-respondelement="respond" data-replyto="Reply to Carson Kanaan" aria-label='Reply to Carson Kanaan'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-8799184">
+		<div id="comment-8799184">
+		<div class="comment-author vcard">
+			<div class='avatar-container' ><img alt='' src='http://2.gravatar.com/avatar/b53a07d929d505df906cf416fcbc5f38?s=60&#038;d=blank&#038;r=g' srcset='http://2.gravatar.com/avatar/b53a07d929d505df906cf416fcbc5f38?s=120&#038;d=blank&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/></div>			<div class="comment-details">
+				<cite class="fn">Robert Muckle-Jones</cite> 				<div class="comment-meta commentmetadata">
+					<a href="http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/#comment-8799184">
+					August 14, 2018 at 2:03 pm</a>				</div><!-- .comment-meta .commentmetadata -->
+			</div> <!-- .comment-details -->
+		</div><!-- .comment-author .vcard -->
+
+		
+
+		<div class="comment-body"><p>Thank you for this article Casey! I have recently started programming in Windows for my job and I am amazed by how unproductive and poorly documented the Windows APIs can be. I come from an Apple background, and I have recently been coding 2D graphics in both Microsofts Direct2D and Apples Quartz2D frameworks and can say categorically that the Apple API is much simpler, better thought out, and ultimately many times more productive than the Windows equivalent. </p>
+<p>I really enjoyed listening to your hilarious rant about Direct2D on the Jeff and Casey show. It was exactly the antidote I needed after struggling to use Direct2D all day to do trivial tasks!</p>
+			<div class="reply">
+				<a rel='nofollow' class='comment-reply-link' href='http://the-witness.net/news/2012/12/finding-and-fixing-a-five-second-stall/?replytocom=8799184#respond' data-commentid="8799184" data-postid="1976" data-belowelement="comment-8799184" data-respondelement="respond" data-replyto="Reply to Robert Muckle-Jones" aria-label='Reply to Robert Muckle-Jones'><i class="crycon-reply"></i>Reply</a>			</div><!-- .reply -->
+		</div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	</ol>
+	
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/news/2012/12/finding-and-fixing-a-five-second-stall/#respond" style="display:none;">Cancel reply</a></small></h3><form action="http://the-witness.net/news/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message" aria-hidden="true">Required fields are marked <span class="required" aria-hidden="true">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment</label><textarea placeholder="Comment" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name<span class="required">*</span></label> <input id="author" placeholder="Name" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email<span class="required">*</span></label> <input id="email" placeholder="Email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" placeholder="Website" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1976' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6b3b3604cf" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="81"/></p></form>	</div><!-- #respond -->
+	</div><!-- #comments -->
+
+
+						</div><!-- #content -->
+			<div id="secondary" class="widget-area sidey" role="complementary">
+		
+			<ul class="xoxo">
+								<li id="recent-comments-4" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link"><a href='https://blog.theprogrammingjunkie.com/' rel='external nofollow ugc' class='url'>Dan Bechard</a></span> on <a href="http://the-witness.net/news/2022/02/a-shader-trick/comment-page-1/#comment-8975822">A Shader Trick</a></li><li class="recentcomments"><span class="comment-author-link">Matthew Haycock</span> on <a href="http://the-witness.net/news/2010/12/cvg-appear-to-be-a-bunch-of-lousy-hacks/comment-page-2/#comment-8966753">CVG appear to be a bunch of lousy hacks.</a></li><li class="recentcomments"><span class="comment-author-link">Chari</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8960566">The Witness is finally on iOS!</a></li><li class="recentcomments"><span class="comment-author-link">Moodie-1</span> on <a href="http://the-witness.net/news/2015/02/thekla/comment-page-1/#comment-8942188">Thekla!</a></li><li class="recentcomments"><span class="comment-author-link">Andreas</span> on <a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/comment-page-1/#comment-8926018">The Witness is finally on iOS!</a></li></ul></li>
+		<li id="recent-posts-3" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+											<li>
+					<a href="http://the-witness.net/news/2022/02/a-shader-trick/">A Shader Trick</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/06/congratulations-to-the-grant-recipients/">Congratulations to the grant recipients!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2018/03/testing-the-jai-compiler/">Testing the Jai Compiler</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/09/the-witness-is-finally-on-ios/">The Witness is finally on iOS!</a>
+									</li>
+											<li>
+					<a href="http://the-witness.net/news/2017/06/macos-system-requirements/">MacOS System Requirements</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-3"><a href="http://the-witness.net/news/category/announcements/">Announcements</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://the-witness.net/news/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://the-witness.net/news/category/engine-tech/">Engine Tech</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://the-witness.net/news/category/ill-advised-rants/">Ill-Advised Rants</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://the-witness.net/news/category/other_games/">Other Games</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://the-witness.net/news/category/progress-shots/">Progress Shots</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://the-witness.net/news/category/special-events/">Special Events</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://the-witness.net/news/category/uncategorized/">Uncategorized</a>
+</li>
+			</ul>
+
+			</li>			</ul>
+
+			
+		</div>
+		</section><!-- #container -->
+
+	<div style="clear:both;"></div>
+	</div> <!-- #forbottom -->
+
+
+	<footer id="footer" role="contentinfo">
+		<div id="colophon">
+		
+			
+			
+		</div><!-- #colophon -->
+
+		<div id="footer2">
+		
+				<span style="display:block;float:right;text-align:right;padding:0 20px 5px;font-size:.9em;">
+	Powered by <a target="_blank" href="http://www.cryoutcreations.eu" title="Tempera Theme by Cryout Creations">Tempera</a> &amp; <a target="_blank" href="http://wordpress.org/"
+			title="Semantic Personal Publishing Platform">  WordPress.		</a>
+	</span><!-- #site-info -->
+				
+		</div><!-- #footer2 -->
+
+	</footer><!-- #footer -->
+
+	</div><!-- #main -->
+</div><!-- #wrapper -->
+
+
+<!-- ngg_resource_manager_marker --><script type='text/javascript' id='tempera-frontend-js-extra'>
+/* <![CDATA[ */
+var tempera_settings = {"mobile":"1","fitvids":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/themes/tempera/js/frontend.js?ver=1.6.0' id='tempera-frontend-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-includes/js/comment-reply.min.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='comment-reply-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/galleria-1.4.2.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-galleria-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/script.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-script-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.skitter.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-jquery-js'></script>
+<script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/st-gallery-wp/js/jquery.easing.1.3.js?ver=dcbf8718a2d229bd4bb9e70e24502985' id='st-skitter-easing-js'></script>
+<script type="text/javascript">(function($){$(document).ready(function(){Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/classic/galleria.classic.js');Galleria.loadTheme('http://the-witness.net/news/wp-content/plugins/st-gallery-wp/themes/v2/theme.js');});})(jQuery);</script>
+<!-- Background Manager Start -->
+
+<!-- Background Manager End -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-dark-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0.49803921568627" /><feFuncG type="table" tableValues="0 0.49803921568627" /><feFuncB type="table" tableValues="0 0.49803921568627" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-grayscale"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.54901960784314 0.98823529411765" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.71764705882353 0.25490196078431" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-red"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 1" /><feFuncG type="table" tableValues="0 0.27843137254902" /><feFuncB type="table" tableValues="0.5921568627451 0.27843137254902" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-midnight"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0 0" /><feFuncG type="table" tableValues="0 0.64705882352941" /><feFuncB type="table" tableValues="0 1" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-magenta-yellow"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.78039215686275 1" /><feFuncG type="table" tableValues="0 0.94901960784314" /><feFuncB type="table" tableValues="0.35294117647059 0.47058823529412" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-purple-green"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.65098039215686 0.40392156862745" /><feFuncG type="table" tableValues="0 1" /><feFuncB type="table" tableValues="0.44705882352941 0.4" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none" style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;" ><defs><filter id="wp-duotone-blue-orange"><feColorMatrix color-interpolation-filters="sRGB" type="matrix" values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 " /><feComponentTransfer color-interpolation-filters="sRGB" ><feFuncR type="table" tableValues="0.098039215686275 1" /><feFuncG type="table" tableValues="0 0.66274509803922" /><feFuncB type="table" tableValues="0.84705882352941 0.41960784313725" /><feFuncA type="table" tableValues="1 1" /></feComponentTransfer><feComposite in2="SourceGraphic" operator="in" /></filter></defs></svg><script type='text/javascript' src='http://the-witness.net/news/wp-content/plugins/akismet/_inc/form.js?ver=3.1.10' id='akismet-form-js'></script>
+<script type="text/javascript">var cryout_global_content_width = 900;var cryout_toTop_offset = 1150;</script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.237 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-09-10 05:37:09 -->
+
+<!-- super cache -->

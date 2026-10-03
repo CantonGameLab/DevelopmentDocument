@@ -1,0 +1,28 @@
+{
+  "id": "castano-2014-12-05-d3dx-uvatlas-released",
+  "title": { "zh": "D3DX UVAtlas 开源", "en": "D3DX UVAtlas released" },
+  "subtitle": {
+    "en": "Microsoft and Xin Huang release the source of the D3DX mesh parameterization library, which improves on Thekla's own clustering and parameterization.",
+    "zh": "Microsoft 和 Xin Huang 放出了 D3DX 网格参数化库的源码，其中的聚类与参数化都比 Thekla 自己的方案更好。"
+  },
+  "translator": {
+    "note": "源文三段，无插图。D3DX、UVAtlas、Microsoft、Thekla 均按专名保留英文；LSCM 按术语表作「最小二乘保角映射（LSCM）」。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I think it’s really awesome that Microsoft and Xin Huang released the [source code of their D3DX mesh parameterization library](https://uvatlas.codeplex.com/). Chuck announced it on [his blog](http://blogs.msdn.com/b/chuckw/archive/2014/11/14/uvatlas-return-of-the-isochart.aspx).",
+      "zh": "Microsoft 和 Xin Huang 放出了 [D3DX 网格参数化库的源码](https://uvatlas.codeplex.com/)，我觉得这真是太棒了。Chuck 在[他的博客](http://blogs.msdn.com/b/chuckw/archive/2014/11/14/uvatlas-return-of-the-isochart.aspx)上公布了这件事。"
+    },
+    {
+      "type": "p",
+      "en": "There’s a lot of good stuff in there, more than in any of the previous D3DX source code releases. I was never too happy with the k-means style clustering that we use in The Witness, top-down spectral clustering seems a much better approach. Also their stretch-minimization parameterization is certainly better than our plain LSCM.",
+      "zh": "里面好东西很多，比以往任何一次 D3DX 源码发布都多。我一直不太满意我们在《The Witness》里用的那种 k-means 式聚类，自顶向下的谱聚类看起来要好得多。另外他们的拉伸最小化参数化肯定也比我们那套朴素的 LSCM 更好。"
+    },
+    {
+      "type": "p",
+      "en": "I wrote about our implementation in [this article](http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/). A few people asked for our code and we released it [here](https://github.com/Thekla/thekla_atlas). However, today I’d recommend using Xin Huang’s as a better starting point.",
+      "zh": "我在[这篇文章](http://the-witness.net/news/2010/03/graphics-tech-texture-parameterization/)里写过我们的实现。有几个人来要代码，我们就把它放在[这里](https://github.com/Thekla/thekla_atlas)发布了。不过今天我会推荐用 Xin Huang 的那份，作为起点更好。"
+    }
+  ]
+}

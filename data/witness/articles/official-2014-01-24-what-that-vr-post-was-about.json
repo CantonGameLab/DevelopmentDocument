@@ -1,0 +1,55 @@
+{
+  "id": "official-2014-01-24-what-that-vr-post-was-about",
+  "title": { "zh": "那篇 VR 帖子是怎么回事", "en": "What that VR post was about" },
+  "subtitle": {
+    "en": "The mysterious November post was indeed about stereoscopic rendering: The Witness is getting support for Valve's VR system.",
+    "zh": "那篇神秘的 11 月帖子确实和立体渲染有关：《The Witness》将支持 Valve 的 VR 系统。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last November I made a [somewhat-mysterious posting](http://the-witness.net/news/2013/11/what-could-it-mean/) which some people speculated was hinting at stereoscopic rendering in The Witness. Indeed it was, and Now It Can Be Told.",
+      "zh": "去年 11 月我发了一篇[有点神秘的帖子](http://the-witness.net/news/2013/11/what-could-it-mean/)，有人猜测它是在暗示《The Witness》会做立体渲染。确实是，而现在可以说了。"
+    },
+    {
+      "type": "p",
+      "en": "Last year I was pessimistic about VR systems in the near future, since the ones I had tried didn't seem to offer much (certainly not enough to justify wearing a bulky headset all the time and fighting back feelings of nausea).",
+      "zh": "去年我对近期的 VR 系统还挺悲观，因为我试过的那些似乎都没什么了不起的（当然不足以让人整天戴着一个笨重的头显、还要强压着恶心感）。"
+    },
+    {
+      "type": "p",
+      "en": "But I was fortunate enough to get a sneak peek at Valve's virtual reality system. It is so much better than anything else I had used that I was instantly very excited by it. Right away I could see games you might design for this system that had been impossible before; so it isn't just a matter of the system being very immersive (which it is) but that it can take video games in general to a new place.",
+      "zh": "但我有幸提前偷看了一眼 Valve 的虚拟现实系统。它比我用过的任何东西都好太多，我立刻就被它点燃了。我马上就能看出，有些以前根本做不出来的游戏，可以为这套系统而设计；所以这不只是「这套系统沉浸感极强」的问题（它确实很强），而是它能把电子游戏整体带到一个新的地方。"
+    },
+    {
+      "type": "p",
+      "en": "We worked with Valve to get support for the system in The Witness, and that's where those screenshots come from (but when I took the shots, an HMD was not plugged in, and as a result what you see is a dummy calibration that does not correspond to any useful image-warping; the screenshot was really more about just being happy about the stereo display capability.) In late November I spent a few days at Valve's offices working with Atman Binstock and Doug Church to adapt the HMD's input system more thoroughly for The Witness and to build a few scenes that are playable on the device.",
+      "zh": "我们和 Valve 合作，让《The Witness》支持这套系统，那些截图就是打这儿来的（不过我截图的时候并没有插上头显（HMD），所以你看到的是一个假校准，它对应的图像变形毫无实际用处；那张截图更多只是想表达我们对立体显示能力的兴奋）。11 月下旬，我在 Valve 的办公室待了几天，和 Atman Binstock、Doug Church 一起把 HMD 的输入系统更彻底地适配到《The Witness》上，并做了几个可以在这台设备上玩的场景。"
+    },
+    {
+      "type": "p",
+      "en": "(In theory the whole game is playable on the device, but when you are rendering for VR the performance demands become much higher, because you are rendering two scenes at higher resolution than you might previously have been rendering one scene. So the full game world with all content currently does not run fast enough for this device, but that is the kind of problem that gets solved over time).",
+      "zh": "（理论上整个游戏都能在这台设备上玩，但为 VR 渲染时性能要求会高得多，因为你要以高于以往渲染单个场景的分辨率，去渲染两个场景。所以目前装着全部内容的完整游戏世界，在这台设备上跑不到足够的帧率，但这类问题会随着时间被解决。）"
+    },
+    {
+      "type": "p",
+      "en": "We had to keep this under wraps, though, because Valve's system was not announced. But this month at Steam Dev Days they revealed details of the system.",
+      "zh": "不过我们一直得把这事捂着，因为 Valve 的系统当时还没公布。而这个月在 Steam Dev Days 上，他们披露了这套系统的细节。"
+    },
+    {
+      "type": "p",
+      "en": "For more details on the Valve system, Lee Vermeulen wrote up a nice post of his impressions:",
+      "zh": "关于 Valve 这套系统的更多细节，Lee Vermeulen 写了一篇挺不错的观感帖："
+    },
+    {
+      "type": "p",
+      "en": "http://www.3delement.com/?p=332",
+      "zh": "http://www.3delement.com/?p=332"
+    },
+    {
+      "type": "p",
+      "en": "So, we will be supporting this device (and any similar devices) with The Witness. But I am really looking forward to see what gets designed specifically for devices like this.",
+      "zh": "所以，《The Witness》会支持这台设备（以及任何类似的设备）。但我真正期待看到的，是专门为这类设备设计出来的东西。"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "castano-2009-09-30-davis-aquatic-masters",
+  "title": { "zh": "Davis Aquatic Masters", "en": "Davis Aquatic Masters" },
+  "subtitle": {
+    "en": "Four months of masters swimming: weight gained, back pain gone, and a right shoulder that turned out to be a problem.",
+    "zh": "四个月的大师游泳：体重上去了，背不疼了，代价是右肩查出了问题。"
+  },
+  "translator": {
+    "note": "原文写的是 Davis 夏天很热、现在凉快一些（~80º F）；华氏度按全站口径保留原文，换算成摄氏约 27 度。术语「masters swimming」指面向成人的游泳俱乐部训练，Davis Aquatic Masters 按专名保留英文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I joined the Davis Aquatic Masters (DAM) about four months ago, and I’ve been swimming almost every day since then, with the only exception of a few weeks that I spent in Spain during the summer.",
+      "zh": "大约四个月前我加入了 Davis Aquatic Masters（DAM），从那以后几乎天天游泳，唯一的例外是夏天在西班牙待的那几周。"
+    },
+    {
+      "type": "p",
+      "en": "I think that’s been helping me a lot. I’ve gained more than 12 lb and I feel in better shape than ever. I’ve been hiking again lately and I’ve started playing soccer with Nachito in the evenings. So far I haven’t noticed any signs of back pain, which means that the herniated disk is probably healing.",
+      "zh": "我觉得这对我帮助很大。我长了 12 磅多，身体状况比以往任何时候都好。最近我又开始徒步了，傍晚还跟 Nachito 踢足球。到目前为止没感觉到任何背痛的迹象，也就是说，椎间盘大概在愈合。"
+    },
+    {
+      "type": "p",
+      "en": "Swimming during the summer was very pleasant; Davis is super hot and jumping into the water at noon was very refreshing. I also have a great tan from swimming under the sun. However, it’s getting a bit chili now (~80º F). I wonder how hard it will be to swim during the winter; hopefully they will adjust the water temperature. In any case, swimming with others is very encouraging, it’s much easier to share the workout with regular lane-mates and a coach to urge you on.",
+      "zh": "夏天游泳很舒服；Davis 特别热，中午跳进水里那叫一个爽。在太阳底下游来游去，我还晒出了一身好肤色。不过现在有点凉了（大约 80º F）。不知道冬天游泳会有多难受，但愿他们会把水温调一调。不管怎么说，跟别人一起游很有激励作用，有固定的泳道伙伴一起分摊训练量、有教练在旁边催你，那就容易多了。"
+    },
+    {
+      "type": "p",
+      "en": "Today we had a physiotherapy assessment test and just learned that my right shoulder is fucked up. It has a much more limited range of motions than the left shoulder and it makes cracking noises when rotating on certain angles. This summer I had a minor injury while swimming at the beach that kept me away from the pool for about one week, but it slowly recovered and after two weeks the pain was gone entirely. However, it’s very likely that I’ll have more problems if I don’t get that fixed. I should be able to change medical plans pretty soon, so hopefully I’ll be able to chose a decent physiotherapist.",
+      "zh": "今天做了物理治疗评估，刚得知我的右肩彻底废了。它的活动范围比左肩小得多，转到某些角度还会咔咔作响。今年夏天我在海滩游泳时受了点小伤，有一个星期没法去泳池，但它慢慢好了，两周后疼痛完全消失。不过这块要是不治好，以后很可能还会有更多麻烦。我应该很快就能换医疗保险方案，所以希望能挑到一个像样的物理治疗师。"
+    }
+  ]
+}

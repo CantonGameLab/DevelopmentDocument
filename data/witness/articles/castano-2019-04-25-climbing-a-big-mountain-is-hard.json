@@ -1,0 +1,121 @@
+{
+  "id": "castano-2019-04-25-climbing-a-big-mountain-is-hard",
+  "title": {
+    "zh": "「爬大山很难」",
+    "en": "“Climbing a big mountain is hard”"
+  },
+  "subtitle": {
+    "zh": "带 Nacho 去爬 Pyramid Peak，在 9000 英尺的地方停下——离山顶不到 1000 英尺。",
+    "en": "Taking Nacho up Pyramid Peak and turning around at 9000 feet, less than 1000 feet below the summit."
+  },
+  "translator": {
+    "note": "个人随笔（登山），按原文的自然语气译。人名、地名、山峰名、品牌名一律保留英文：`Nacho`、`Shasta`、`Pyramid`/`Pyramid Peak`、`Pyramid Creek`、`Trango Tower`、`David Lama`、`East Face couloir`。登山术语按原文保留对应说法：`self belay`（自我保护）、`self arrest`（自我制动）、`third class scramble`（三级地形攀爬）、`cornice`（雪檐）、`moat`（雪桥下的暗缝）、`break trail`（开路/踩雪）、`snow shoes`（雪鞋）、`crampons`（冰爪）、`ice axe`（冰镐）；海拔与距离单位（英尺）保留原文数字。标题是作者儿子的话，英文用弯引号，中文按术语表用「」。源文中三张图的源行是 `- ` 开头的列表项，译文放进 `list` 块，图注行 `OLYMPUS DIGITAL CAMERA`（相机自动写入的说明）按原样保留为独立段落。",
+    "source": "archive/castano-blog/2019-04-25-climbing-a-big-mountain-is-hard.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "That was my son’s conclusion after today’s climb. At 9000 feet his head was aching with that uncomfortable combination of altitude, sun exposure, fatigue, and dehydration that mountaineers are so familiar with. Pyramid would have to wait for us another time. Less than a 1000 feet to reach the summit. So close, but impossibly far at the same time.",
+      "zh": "这是今天爬完之后我儿子得出的结论。在 9000 英尺的高度，他的头在痛——海拔、日晒、疲劳和脱水凑成的那种难受劲儿，登山的人太熟悉了。Pyramid 只能等下一次了。离山顶不到 1000 英尺。那么近，同时又远得不可能。"
+    },
+    {
+      "type": "p",
+      "en": "This Winter I bought Nacho his first pair of mountaineering boots and crampons. He has been practicing self belay and self arrest over the last couple of years, but it was time to take his climbing to the next level. One of our goals is to climb Shasta. This does not only requires competency using crampons and ice axe, but also fitness and endurance to ascend 7000 feet in a couple of days.",
+      "zh": "这个冬天，我给 Nacho 买了他的第一双登山靴和第一副冰爪。过去两年他一直在练自我保护和自我制动，但是时候把他的攀登水平往上提一级了。我们的目标之一是爬 Shasta。那不仅要求能熟练使用冰爪和冰镐，还需要体能和耐力，在两天里爬升 7000 英尺。"
+    },
+    {
+      "type": "p",
+      "en": "With 4000 ft of elevation gain, climbing Pyramid in a day would be a good preparation for that challenge, so last Sunday we woke up at 3:30, loaded up the car and drove to the trailhead to start climbing before sunrise.",
+      "zh": "爬 Pyramid 一天的爬升量是 4000 英尺，正好可以为那个挑战做准备。于是上周日我们 3:30 起床，装好车，开到登山口，赶在日出前开始往上爬。"
+    },
+    {
+      "type": "p",
+      "en": "The first obstacle was the Pyramid Creek headwall. It’s an easy third class scramble that we have climbed several times during the summer, but climbing it in early Spring, with mountaineering boots, and during the first hours of the day is a different story.",
+      "zh": "第一个障碍是 Pyramid Creek 的那面陡壁。那是段不难的三级地形攀爬，夏天我们爬过好几次；但在早春、穿着登山靴、又是在一天里最冷的几个小时去爬，就是另一回事了。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/04/P4213204-edited-150x150.jpeg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/04/P4213203-edited-150x150.jpeg)",
+          "zh": "（原文此处有一张图）"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Hands get cold at the touch of the rock. The melting snow makes the rock wet and slippery. Sometimes it even blocks the route entirely; one of the gullies that we usually climb had become a small waterfall so we had to find an alternate route that was more exposed.",
+      "zh": "手一碰到岩壁就冻得发僵。融化的雪把岩石弄得又湿又滑。有时候它甚至把整条路线都堵死了：我们平时爬的一条沟变成了小瀑布，只好另找一条暴露程度更高的替代路线。"
+    },
+    {
+      "type": "p",
+      "en": "To my delight, Nacho seemed extremely comfortable climbing in boots. He was able to move fast, intuitively, and with confidence. I’m super happy with the  [Trango Tower](https://amzn.to/2W6bML0) boots I purchased (he’s using the women’s version, because I couldn’t get the men’s in his size).",
+      "zh": "让我高兴的是，Nacho 穿登山靴爬得极其自在。他能快速、凭直觉、很有信心地移动。我买的那双 [Trango Tower](https://amzn.to/2W6bML0) 靴子让我非常满意（他穿的是女款，因为我买不到他这个尺码的男款）。"
+    },
+    {
+      "type": "p",
+      "en": "The upper part of the headwall was completely covered in snow. It was still cold and the snow was frozen, so we switched to crampons, but by the time we topped off the headwall the sun was already up and the snow was starting to get soft, so we had to take them off and put snow shoes on.",
+      "zh": "陡壁的上半段完全被雪盖住了。天还冷，雪是冻硬的，于是我们换上冰爪；但等我们爬到陡壁顶上时，太阳已经出来了，雪开始变软，只好脱下冰爪、换上雪鞋。"
+    },
+    {
+      "type": "p",
+      "en": "When we arrived to the south east ridge it became clear it was gonna pose an interesting challenge. The entire ridge was lined with a giant cornice. It appeared to have broken off at several points and the entire slope showed signs of wet avalanche, in particular over the East Face couloir; the route we were planning to take.",
+      "zh": "到了东南山脊，情况就很清楚了：这里会是个有意思的挑战。整条山脊上挂着一道巨大的雪檐。它似乎在好几处已经断裂，整面坡都有湿雪崩的迹象，尤其是 East Face 的雪槽上方——那正是我们打算走的路线。"
+    },
+    {
+      "type": "p",
+      "en": "The gentler slopes north of it didn’t look much better either, so we decided to skirt the ridge to the south until the end of the cornice, probe the snow there, and go back down if the conditions didn’t seem safe. I may have over estimated the risk of avalanche, but the tragic dead of David Lama in an avalanche a few days ago still resonated in my mind so I decided to act conservatively.",
+      "zh": "它北边那些更缓的坡看着也好不到哪去，所以我们决定从南侧绕过山脊、一直绕到雪檐尽头，在那里探一探雪况，如果条件看着不安全就下撤。我可能高估了雪崩的风险，但几天前 David Lama 在雪崩中遇难的事还在我脑子里回响，所以我决定保守行事。"
+    },
+    {
+      "type": "p",
+      "en": "We approached the ridge following what seemed a tree lined ledge and at the end of it we went straight up. The snow was solid and stable enough, but steeper than I had expected; at some point it was nearly 70 degrees. Nacho had never climbed snow so steep, so naturally I was a bit nervous, but he was able to follow me without any problem. I even let him break trail for a while.",
+      "zh": "我们沿着一条看起来两旁有树的岩台靠近山脊，走到岩台尽头就直着往上爬。雪够硬、够稳，但比我预想的陡；有一段几乎到了 70 度。Nacho 从没爬过这么陡的雪坡，我当然有点紧张，但他跟得毫无问题。我甚至让他开路踩了一段雪。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/04/P4213236-edited-150x150.jpeg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "OLYMPUS DIGITAL CAMERA",
+          "zh": "OLYMPUS DIGITAL CAMERA"
+        },
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/04/P4213246-edited-150x150.jpeg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "OLYMPUS DIGITAL CAMERA",
+          "zh": "OLYMPUS DIGITAL CAMERA"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "When he was near the top he stopped and said he could not get a good purchase with his ice axe. I caught up to him to see what was going on and suddenly slipped down a hidden moat that was covered by snow. I fell all the way down to my chest and couldn’t touch the bottom with my feet! I held onto my ice axe, kicked to the sides of the moat and pulled myself up. I wonder how he would have reacted in my situation! but luckily the snow bridge was strong enough to hold his weight.",
+      "zh": "快到顶上时他停下来，说他用冰镐扎不稳。我赶上去看是怎么回事，结果自己突然滑进了一条被雪盖住的暗缝。我一口气陷到胸口，脚完全够不到底！我抓住冰镐，往暗缝两侧踢，把自己撑了上来。要换成他处在我这个位置，不知道会是什么反应！好在雪桥足够结实，撑住了他的体重。"
+    },
+    {
+      "type": "p",
+      "en": "The cornice over the moat was hard and almost vertical, but it was only a few feet tall. I kicked some good steps and built a ladder with our ice axes and we went over it without much trouble.",
+      "zh": "暗缝上方那道雪檐又硬又几乎垂直，不过只有几英尺高。我踢出几个结实的台阶，又用我们的冰镐搭了个梯子，没费多大劲就翻了过去。"
+    },
+    {
+      "type": "p",
+      "en": "Getting over that last obstacle was exhilarating. We were both ecstatic we had made it this far. However, as we continued over the ridge the excitement faded and his energy dwindled. We had to take numerous breaks and it became clear that Nacho was having signs of altitude sickness. At 9000 feet we took a long break, lied on our backpacks, and replenished our energy, but the symptoms didn’t fade and it was getting late (we had been climbing for more than 8 hours), so we decided to call it a day head back down.",
+      "zh": "翻过最后这个障碍让人兴奋不已。我们俩都为走到这里而狂喜。可是继续沿山脊往上，兴奋劲儿消退了，他的体力也在流失。我们不得不频繁休息，很明显 Nacho 出现了高原反应的症状。在 9000 英尺处我们长休了一次，躺在背包上补充能量，但症状没有减轻，时间也越来越晚（我们已经爬了 8 个多小时），于是决定今天到此为止，下撤。"
+    },
+    {
+      "type": "p",
+      "en": "**Lessons learned:** It’s clear that Nacho needs more time for altitude adaptation. If I were to do this again I would travel the night before and sleep at the trailhead. This would also have allowed us to start climbing earlier. Moving in the cold while the snow is hard is faster and safer than over soft snow, and we could have avoided the use of snow shoes. I still have to help Nacho put on his crampons and tighten his snowshoes. These transitions take a long time. He needs to get more practice so that we can do this quicker and in parallel.",
+      "zh": "**教训：** 显然 Nacho 需要更多时间适应海拔。如果再做一次，我会前一晚就出发，睡在登山口。这样也能让我们更早开始爬。趁天冷、雪还硬的时候行进，比在软雪上更快也更安全，还能省掉雪鞋。我现在还得帮 Nacho 穿冰爪、系紧雪鞋。这些转换很费时间。他需要更多练习，这样我们才能更快、并且同时完成这些准备。"
+    }
+  ]
+}

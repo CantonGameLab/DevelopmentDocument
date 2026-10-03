@@ -1,0 +1,261 @@
+{
+  "id": "casey-0007",
+  "title": { "zh": "悬崖边的悬念", "en": "A Cliffside Cliffhanger" },
+  "subtitle": {
+    "en": "A little mystery about a rock that refused to move, that I thought I'd solved but didn't really solve until Part 2.",
+    "zh": "一块死活不肯动的石头引发的小谜案——我以为自己解决了，其实直到下一篇才真正解决。"
+  },
+  "translator": {
+    "note": "归档源码里有一行函数签名被拆到了 cpp 代码块之外（已并回同一个代码块）；原文插图未收录，按出现顺序以「（原文此处有一张图）」占位。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This is a little mystery about a rock that refused to move.  The rock lives off the coast of [The Witness](http://the-witness.net/news/), just beyond the desert cliffs:",
+      "zh": "这是个小小的谜案，主角是一块死活不肯移动的石头。这块石头住在《The Witness》的海岸边，就在沙漠悬崖之外："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_rock_392f54bc164d24c0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I do not know who made this rock or how long it has been there, but when I first happened upon it, I found that it resides in a nicely isolated part of the island where there's nothing else in view, so the frame rate is always high even in full debug mode.  Plus, it's big, unobstructed, and easily pickable in the editor without fear of selecting any other objects.  These properties make it perfect for testing editing features in progress, so the rock and I have become fast friends.",
+      "zh": "我不知道这块石头是谁做的、在那里待了多久，但我第一次碰上它时，发现它待在岛上相当孤立的角落，视野里没有别的东西，所以即使把调试模式全开，帧率也一直很高。再加上它够大、没遮挡，在编辑器里很容易点选，又不用担心误选到别的物体。这些性质让它非常适合用来测试还在开发中的编辑功能，于是我和这块石头很快成了好朋友。"
+    },
+    {
+      "type": "p",
+      "en": "Normally, I do not want large rocks to move around.  If I'm in the game engine, and a giant rock starts moving, I know I'm in for some debugging work.  But if I'm in the editor, and I tell a rock to move, I expect it to move.  That's the whole point of having an editor.  So when this cliffside rock, which otherwise had been so pleasant, decided that it would only move in certain directions, I knew I had a bit of a mystery on my hands, one that eventually forced my brain to remember some very important things it had forgotten in the ten years since I last did any serious 3D graphics programming.",
+      "zh": "通常，我不希望大石头到处乱动。如果我在游戏引擎里，而一块巨石开始移动，我就知道自己有调试工作要干了。但如果我在编辑器里，我让一块石头移动，我就期望它动起来——编辑器存在的全部意义就在于此。所以，当这块悬崖边的石头（它本来一直那么讨人喜欢）决定只肯朝某些方向移动时，我就知道自己碰上了一桩小谜案；它最终逼着我的大脑想起一些非常重要的东西——那些东西在我上一次认真写 3D 图形程序之后的十年里已经被忘掉了。"
+    },
+    { "type": "h2", "id": "foreign-languages", "zh": "外语", "en": "Foreign Languages" },
+    {
+      "type": "p",
+      "en": "Working in someone else's codebase is much like moving to a foreign country that happens to use the same alphabet as you do, but not the same language: technically, you can read, but you don't really have any idea what most things mean.  At first, every little thing you do is a painstaking linguistic procedure, and you have to constantly check and recheck things to make sure you actually know what's going on.  Over time, as you gain more experience, you start to intuit the way things work, and you're able to operate at closer to your full speed.",
+      "zh": "在别人的代码库里干活，很像搬到一个恰好和你使用同一套字母表、但语言完全不同的外国：严格说你能读，但对大多数东西的含义其实毫无概念。起初，你做的每一件小事都是一道费劲的语言工序，你得不断地反复核对，确认自己真的明白发生了什么。随着时间推移、经验增加，你开始能凭直觉理解事物的运作方式，也就能接近全速工作了。"
+    },
+    {
+      "type": "p",
+      "en": "I'm used to the process of working in unfamiliar codebases since I've worked with so many of them over the years.  I tend to approach each new one the same way: first, I write something very isolated, and keep it walled off.  This lets me start making some contributions right away, while I gradually learn how to interface with the rest of the code.  In the case of [The Witness](http://the-witness.net/news/), this was [Walk Monster](https://caseymuratori.com/blog_0005).  Next, I try to do some performance optimization or bug fixing, so I learn to work locally, but directly, with existing code.  That was [fixing the five-second stall](https://caseymuratori.com/blog_0006).  Finally, I start picking real features to add to other people's code, preferably in the systems that I will most likely need to learn well.",
+      "zh": "我已经习惯了在陌生的代码库里工作，这些年我打交道的代码库太多了。我对付每一个新代码库的路子都差不多：先写一些非常孤立、与外界隔开的东西。这样我可以立刻开始做点贡献，同时慢慢学会怎么和其余代码对接。《The Witness》里这个东西就是 [Walk Monster](https://caseymuratori.com/blog_0005)。接下来，我会去做一些性能优化或 bug 修复，从而学会与已有代码近距离、但局部地打交道——那次就是[修掉那个五秒卡顿](https://caseymuratori.com/blog_0006)。最后，我开始从别人的代码里挑出真正的功能来做，最好是我最可能需要学透的那些系统。"
+    },
+    {
+      "type": "p",
+      "en": "Since I'm working on the collision system, and at this point I am certain there will need to be some interactive tools for it, I picked [The Witness](http://the-witness.net/news/) editor as the best place to start adding real features.  After playing with it for a while, I selected two features I thought would be good additions from both the standpoint of learning the code, and for be generally useful for people working on the game.  The first feature was compatible camera controls, and the second was a translation manipulator.",
+      "zh": "由于我在做碰撞系统，而这时我已经确信它一定需要一些交互式工具，我就挑了《The Witness》的编辑器，作为开始添加真实功能的最佳地点。摆弄了一阵之后，我选了两个功能，认为无论从学习代码的角度，还是从对做这个游戏的人普遍有用这一点来看，它们都是不错的补充。第一个功能是兼容的摄像机控制，第二个是平移操纵器。"
+    },
+    {
+      "type": "p",
+      "en": "By \"compatible camera controls\", I mean camera controls that work like common 3D art packages.  My understanding was that [The Witness](http://the-witness.net/news/) team did their modeling in [Maya](https://en.wikipedia.org/wiki/Autodesk_Maya), so I put a toggle in the editor that, when enabled, allowed you to use ALT-drag camera movements that replicate the way Maya moves the camera.  After checking this in, I learned from the artists that some of them prefer [3DSMAX](http://www.autodesk.com/products/autodesk-3ds-max/overview), so I added another button that emulates its camera controls (once you do one, it's very little incremental cost to add others, as they're really all just other sets of bindings for the same movements).  All of this went rather smoothly.",
+      "zh": "所谓「兼容的摄像机控制」，我指的是像常见 3D 美术软件那样工作的摄像机控制。我的理解是《The Witness》团队用 [Maya](https://en.wikipedia.org/wiki/Autodesk_Maya) 建模，所以我在编辑器里加了个开关，启用后可以用 ALT 拖拽来做摄像机运动，复刻 Maya 移动摄像机的方式。提交之后，我从美术那里得知有些人更偏爱 [3DSMAX](http://www.autodesk.com/products/autodesk-3ds-max/overview)，于是我又加了一个按钮来模拟它的摄像机控制（做完第一个之后，再加别的边际成本极小，因为它们其实只是同一套运动的另一组按键绑定）。这一切都相当顺利。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately the second feature, the translation manipulator, did not go so smoothly at all.",
+      "zh": "可惜第二个功能——平移操纵器——一点也不顺利。"
+    },
+    { "type": "h2", "id": "translation-manipulator", "zh": "平移操纵器", "en": "The Translation Manipulator" },
+    {
+      "type": "p",
+      "en": "By \"translation manipulator\", I mean the standard three-axis overlay that modern 3D packages have where you can click and drag on any axis and move your selection along that axis.  Depending on the package, there are also little squares on each plane that allow planar movement.  I chose to include these, but to allow them to be toggled separately since not all packages have them and I didn't want them to be in the way if an artist wasn't accustomed to using them.",
+      "zh": "所谓「平移操纵器」，我指的是现代 3D 软件都有的那种标准三轴叠加控件：你可以在任意一根轴上点击拖拽，把选中的对象沿该轴移动。视软件不同，每个平面上还会有小方块，用来做平面内的移动。我选择把这些方块也做进去，但允许单独开关，因为并非所有软件都有它们，而且如果美术不习惯用，我不想让它们挡事。"
+    },
+    {
+      "type": "p",
+      "en": "Compared to the camera controls, it was moderately more work to understand all the intricacies of the editor code involved with translation.  But I worked my way through it, and eventually I had a translation manipulator working reasonably well in my test world, which was a completely empty world with just a few boxy entities that I could move around to see if everything was working.",
+      "zh": "和摄像机控制相比，要弄清编辑器代码里与平移相关的所有细节，工作量明显更大一些。但我还是一路啃了下来，最终在我的测试世界里让一个平移操纵器运转得还算不错——那是一个完全空的世界，只有几个方块状的实体，我可以随便移动它们，看看一切是否正常工作。"
+    },
+    {
+      "type": "p",
+      "en": "When I was confident everything was solid  —  undo was working, occlusion was working, etc.  —  I tried it out on the full *Witness* island for a bit.  Nothing seemed immediately wrong, so I checked in the feature on a toggle switch that defaulted to \"off\", and asked [Jon](http://number-none.com/blow/) to check it out when he got a chance.  I figured it was better not to check it in enabled by default and have the artists all start using it, only to find out it had some critical bug that would corrupt things in some irreparable way, losing lots of valuable work in the process.  Since Jon does a lot of work in the editor, and he wrote a lot of the editor code originally, I figured he would know the things to try that might break so we could fix them before any real damage was done.",
+      "zh": "当我确信一切都稳固了——撤销能用、遮挡剔除正常，等等——我就在完整的 *Witness* 岛上试了一会儿。看起来没有立刻出错的地方，于是我以默认「关闭」的开关形式提交了这个功能，并请 [Jon](http://number-none.com/blow/) 有空时看看。我觉得最好不要默认启用就提交、让美术们全都开始用它，结果却发现它有某个严重 bug，会以某种无法挽回的方式把东西弄坏、顺带丢掉大量宝贵的工作成果。既然 Jon 在编辑器里干很多活，而且编辑器代码很大一部分原本就是他写的，我想他会知道该试哪些可能出问题的操作，好让我们在造成真正损失之前把它们修掉。"
+    },
+    {
+      "type": "p",
+      "en": "When I heard back from Jon, he said it did seem to be working correctly, but sometimes \"moving along the Z axis wasn't working\".",
+      "zh": "Jon 回话说，它看起来确实工作正常，但有时候「沿 Z 轴移动不管用」。"
+    },
+    { "type": "h2", "id": "movable-rock", "zh": "偶尔肯动的石头", "en": "The Occasionally Movable Rock" },
+    {
+      "type": "p",
+      "en": "I was not at all surprised to hear that Z-axis translation was unreliable.  This was something I was expecting to have happen.  Surely something was broken in the way my code interacted with the existing planar movement constraints, which were buttons the editor had always provided and which were the only way of constraining interactive movement before I added the translation manipulator.  But I checked the code thoroughly, and I just didn't see any way that I could be mishandling the Z axis in the intermittent way Jon had reported.",
+      "zh": "听说 Z 轴平移不可靠，我一点也不意外。这正是我预料中会发生的事。肯定是我代码里与原有平面移动约束交互的地方出了毛病——那些平面约束按钮是编辑器一直就有的，在我加入平移操纵器之前，它们是约束交互式移动的唯一手段。但我把代码仔细查了一遍，实在看不出自己有哪里会以 Jon 描述的那种「时有时无」的方式把 Z 轴处理错。"
+    },
+    {
+      "type": "p",
+      "en": "I tried playing around with movement more in the editor, to see if I could reproduce the problem myself.  Soon, I started to notice that when I played with the solitary rock in the ocean, it wasn't really \"sticking\" to the cursor as well as it should be; the code I had written was supposed to feel as if you had \"grabbed\" the manipulator, and it should follow your cursor rather exactly.  It wasn't doing that.",
+      "zh": "我又在编辑器里多摆弄了一会儿移动，看能不能自己复现这个问题。很快我就注意到，当我折腾海里那块孤零零的石头时，它并没有很好地「粘」在光标上——按我写的代码，手感应该像是你「抓住」了操纵器，它应当相当精确地跟随你的光标。可它并没有做到。"
+    },
+    {
+      "type": "p",
+      "en": "Then I noticed something even stranger.  Depending on how I rotated the camera, I was able to find angles at which Y-axis dragging moved the rock extremely slowly even for large cursor movements.  At one particular camera angle, the rock refused to move along the Y axis at all!  For example, at this angle, I could move the rock along the Y (green) axis, albeit slowly:",
+      "zh": "接着我注意到了更奇怪的事。取决于我怎么旋转摄像机，我能找到一些角度，在这些角度下沿 Y 轴拖拽时，即使光标移动幅度很大，石头也只能极慢地移动。而在某个特定的摄像机角度下，石头完全拒绝沿 Y 轴移动！比如在这个角度下，我还能沿 Y（绿色）轴移动石头，虽然很慢："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_yworks_d9b77af3fc80126f.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "and at this angle, I could not move the rock along the Y axis at all:",
+      "zh": "而在这个角度下，我完全无法让石头沿 Y 轴移动："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_ybroken_d6d165637f59c0a5.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "even though the other two axes worked fine, and from other camera angles the Y axis worked fine, too.  Since the manipulator supported entity-relative axial movement as well as world-relative axial movement, I tried switching to entity-relative axes to test if there was something wrong with the Y axis specifically.  I rotated the rock such that the Z (blue) axis was pointing in the direction that the Y axis pointed previously:",
+      "zh": "尽管另外两根轴都正常，而且在其他摄像机角度下 Y 轴也正常。既然这个操纵器同时支持相对实体的轴向移动和相对世界的轴向移动，我就切换到相对实体的轴，测试是不是 Y 轴本身有问题。我把石头旋转到让 Z（蓝色）轴指向先前 Y 轴所指的方向："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_zbroken_f52d2401f5d12b73.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "To my surprise, it now refused to move along Z!  So it really had nothing to do with which semantic axis you were moving, it seemed to be the direction in the world and the angle of the camera alone that mattered for reproducing the bug.",
+      "zh": "让我意外的是，这下它拒绝沿 Z 移动了！所以这跟你在移动的是哪根「语义上的」轴真的没有关系，看来复现这个 bug 只取决于世界中的方向以及摄像机的角度。"
+    },
+    {
+      "type": "p",
+      "en": "Looking for more ideas about what the bug could be, I tried loading the empty test world again and playing around with the manipulator there.  Again, to my surprise, it was completely impossible to reproduce the bug.  No matter what camera angle I used, or where the axes were pointing, they always dragged perfectly, and seemingly at the correct speed to boot.",
+      "zh": "为了多找些思路、想想这个 bug 可能是什么，我又加载了一次那个空的测试世界，在那里摆弄操纵器。又一次让我意外：这个 bug 完全无法复现。不管我用什么摄像机角度、轴指向哪里，拖拽都完美无缺，而且看起来连速度也是对的。"
+    },
+    {
+      "type": "p",
+      "en": "What on earth was going on?  Clearly, it was time to think more deeply about the code and the behavior it was exhibiting.",
+      "zh": "到底是怎么回事？显然，是时候更深入地想一想这段代码，以及它所表现出的行为了。"
+    },
+    { "type": "h2", "id": "ray-vs-plane", "zh": "射线对平面", "en": "Ray Versus Plane" },
+    {
+      "type": "p",
+      "en": "In most 3D editing operations, you must confront the problem of turning a 2D cursor position into something useful in three dimensions.  Since a 2D point on the screen mathematically represents a ray in three dimensions (everything in the world that is \"under\" that point from the perspective of the user), this typically involves taking the ray and intersecting it with something.  For example, to implement picking of objects in 3D, you typically intersect this 3D ray with the objects in the world, and you see which intersection is closest.  That will be the closest object under the cursor when the user looks at the screen, and therefore the one that they most often expect to pick when they press the mouse button.",
+      "zh": "在大多数 3D 编辑操作里，你都必须面对「把二维光标位置变成三维中有用的东西」这个问题。由于屏幕上的一个二维点在数学上代表三维中的一条射线（也就是从用户视角看、位于该点「下方」的世界里所有东西），这通常意味着拿这条射线去和某个东西求交。比如，要实现 3D 物体的拾取，你通常会拿这条三维射线和世界里的物体求交，看哪个交点最近。那就是用户看向屏幕时位于光标最近处的物体，因此也是他们按下鼠标键时最期望选中的东西。"
+    },
+    {
+      "type": "p",
+      "en": "My translation manipulator also works by intersecting the ray implied by the cursor.  Knowing which axis the user clicks on is analogous to the picking problem, and I essentially implemented it that way: I pretend that there are three long, skinny boxes that align with the axis arrows, and I test to see if the cursor ray intersects them.",
+      "zh": "我的平移操纵器同样是靠与光标所隐含的射线求交来工作的。判断用户点在哪根轴上，这个问题类似于拾取，而我也基本上就是那样实现的：我假装有三根与轴向箭头对齐的细长盒子，然后测试光标射线是否与它们相交。"
+    },
+    {
+      "type": "p",
+      "en": "Picking the axis is straightforward, but things get more complicated once dragging begins.  Although I know which axis the user started dragging, in order to actually move things properly, I have to have a way of computing exactly how far they have dragged the object along the selected axis.  Intuitively you might think well, why not just extend the box used to pick the axis to be infinitely long along the dragging axis, and continue intersecting with it as the user moves the cursor?  That's not a bad idea, and it would work, but it isn't the best solution.",
+      "zh": "拾取轴向很直接，但一旦开始拖拽，事情就复杂起来。虽然我知道用户是从哪根轴开始拖的，但要真正把东西正确地移动起来，我必须有一种办法，精确算出他沿所选轴把这个对象拖了多远。凭直觉你可能会想：那为什么不干脆把用来拾取轴的那个盒子沿拖拽轴延长到无限长，然后在用户移动光标时一直和它求交？这主意不坏，也确实能用，但它不是最好的方案。"
+    },
+    {
+      "type": "p",
+      "en": "The reason is because it doesn't feel very good to use.  Although it will feel fine if the user drags right along the axis in question, a lot of times users don't do that.  They tend to drag erratically, and pay more attention to the object's position than how closely they follow the line implied by the axis.  This quickly moves the cursor off the imaginary box entirely, so the ray implied by the cursor won't intersect it.  This causes the manipulator to stop working until the user moves the cursor back onto the axis, resulting in a sticky and unpleasant user interaction.",
+      "zh": "原因是它用起来手感不太好。如果用户正好沿着那根轴拖拽，感觉还行；但很多时候用户并不是那样。他们往往拖得很随意，更在意物体的位置，而不是自己有多严格地贴着轴所隐含的那条线。这样一来，光标很快就完全跑到了那个假想盒子之外，于是光标隐含的射线就不再与它相交。这会让操纵器停止工作，直到用户把光标移回轴上，造成一种黏滞、难受的交互体验。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "What we'd rather have happen in this case is for the dragging to happen as if the user had moved the mouse to the point on the axis closest to where they actually dragged, even when they've wandered quite far from the axis itself.  To see how to solve this problem geometrically, imagine a user dragging the mouse along the X axis of a 2D plane.  If the user starts dragging erratically, and moves along Y as well, their cursor will end up out in the middle of the plane somewhere.  Figuring out where they would have been on the X axis is quite simple, though: ignore the Y coordinate, and just use the X coordinate.  Nothing could be simpler.",
+      "zh": "在这种情况下，我们更希望拖拽的效果等同于：用户把鼠标移到了轴上离他实际拖拽位置最近的那个点——即使他已经飘得离轴很远。想从几何上看清这个问题怎么解，可以想象用户在一个二维平面上沿 X 轴拖拽鼠标。如果他开始乱拖，同时也在 Y 方向上移动，光标最终会落在平面中间某处。不过，要算出他「本该」在 X 轴的哪个位置非常简单：忽略 Y 坐标，直接用 X 坐标就行。再简单不过了。"
+    },
+    {
+      "type": "p",
+      "en": "But how do we do this operation for an arbitrary 3D axis and a ray extending from the cursor?  It turns out you can do it exactly the same way.  All you have to do is pick a 3D plane that happens to contain the dragging axis, then intersect the cursor ray with that plane.  That gives you a nice 2D coordinate on a 2D plane, where the dragging axis is analogous to the X axis in the simple example.  You then \"throw out the Y\", and are left with a drag that always feels nice in 3D, sticks the object tightly to the cursor, and does not require the user to drag close to the axis.",
+      "zh": "但对任意一条三维轴、以及一条从光标出发的射线，这个操作该怎么做？事实证明，做法完全一样。你要做的只是挑一个恰好包含拖拽轴的平面，然后让光标射线与这个平面求交。这样你就得到了一个平面上的漂亮二维坐标，其中拖拽轴类比于简单例子里的 X 轴。然后你「扔掉 Y」，剩下的拖拽在三维里手感始终很好、把物体紧紧粘在光标上，也不需要用户贴着轴拖拽。"
+    },
+    {
+      "type": "p",
+      "en": "You don't need any fancy math to do this.  It's entirely constructible with simple operations available in any math library: dot product, cross product, and ray-intersects-plane, all three of which were already available in [The Witness](http://the-witness.net/news/) codebase.",
+      "zh": "做这件事不需要任何花哨的数学。它完全可以用任何数学库里都有的简单操作构造出来：点积、叉积、射线与平面求交——这三样在《The Witness》的代码库里本来就已经有了。"
+    },
+    {
+      "type": "p",
+      "en": "So my translation manipulator was built entirely out of the most basic 3D operations in any math library.  Yet somehow it was exhibiting very odd behavior atypical for a simple system.  How could this be?  What was I missing?",
+      "zh": "所以我的平移操纵器完全是用任何数学库里最基础的 3D 操作搭起来的。可它偏偏表现出一个简单系统不该有的古怪行为。这怎么可能？我漏掉了什么？"
+    },
+    { "type": "h2", "id": "debug-rendering", "zh": "调试渲染", "en": "Debug Rendering" },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "My first thought was that I must be picking the dragging plane poorly.  Constructing planes in 3D with only partial information is always a little dicey; you need three non-collinear points to define a plane, but often you want to construct one with only one or two points.  The translation manipulator is a perfect example: it needs a plane to operate, but it only really has a line to work with, which is equivalent to only two points.  There are, in fact, an infinite number of planes that pass through the dragging axis of the translation manipulator.  It's much like a waterwheel: the dragging axis is the center axle, and each blade of the wheel is another valid choice for a plane.",
+      "zh": "我的第一个想法是：我一定是把拖拽平面选坏了。在三维里用不完整的信息构造平面总是有点悬；定义一个平面需要三个不共线的点，但你常常只想用一两个点把它构造出来。平移操纵器就是个绝佳例子：它需要一个平面才能工作，可手头真正能用的只有一条直线，也就是只有两个点。事实上，通过平移操纵器拖拽轴的平面有无穷多个。这很像一架水车：拖拽轴是中心轴，而轮子的每一片叶片都是另一个合法的平面候选。"
+    },
+    {
+      "type": "p",
+      "en": "So how do you pick one?  The best method I've found for translation manipulators is to use the location of the user.  Since we want the user to be able to drag around on this plane easily, it makes sense to say that, of all the planes containing the dragging axis, the best one is the one that is most visible to them.  This avoids the potentially bad cases you can hit if you pick something independent of the user's location, such as the resulting plane being edge-on or nearly edge-on so that the user cannot actually drag along it effectively.",
+      "zh": "那该怎么选一个？我在平移操纵器上找到的最好方法是利用用户所在的位置。既然我们想让用户能在这个平面上轻松拖拽，那么说「在所有包含拖拽轴的平面里，对他最可见的那个最好」就说得通了。这样可以避开「选了与用户位置无关的平面」时可能踩到的坑，比如选出来的平面正好侧对、或几乎侧对视线，导致用户实际上没法在它上面有效地拖拽。"
+    },
+    {
+      "type": "p",
+      "en": "Since even simple 3D math like this can be difficult to verify by inspection alone, my first inclination was to add some debugging rendering to verify that I was picking the dragging plane properly.  Since the camera angle clearly mattered, and the plane was one of the only things dependent on that angle, it seemed like a likely culprit.  So I tried drawing the normal to the plane in yellow at the base of the manipulator:",
+      "zh": "由于这样简单的 3D 数学光靠肉眼检查也很难验证，我的第一反应是加一些调试渲染，确认自己选对了拖拽平面。既然摄像机角度明显有影响，而平面又是少数依赖该角度的东西之一，那它看起来就很像嫌疑人。于是我试着在操纵器底部把平面法线画成黄色："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_dragplane_f5723e7b41b8c4ab.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Even in the cases where the dragging failed, the plane normal looked right.  Maybe the positioning of the plane was wrong?  I tried computing the location of the plane directly, by moving along the normal by the plane constant *d* and drawing the normal there.  This, of course, put the normal nowhere near the manipulator, so I had to look around for it (the plane equation gives you the point closest to the origin, which has no real relationship to where the manipulator might be, other than that they both lie on the same infinite plane).  But once I found it, even though it was far away, looking back toward the manipulator it still did seem like it was the right plane.",
+      "zh": "即使在拖拽失败的那些情况里，平面法线看起来也是对的。也许是平面的位置不对？我试着直接算出平面的位置：沿法线移动平面常数 *d* 那么远，然后在那个位置画法线。这当然会把法线画到离操纵器很远的地方，所以我得四处找它（平面方程给出的是离原点最近的点，它和操纵器在哪其实没有实质关系，除了两者都落在同一个无限平面上）。但等我找到它之后，尽管它离得很远，从操纵器那边朝回看，它看起来仍然是正确的那个平面。"
+    },
+    {
+      "type": "p",
+      "en": "Next I moved onto the intersections.  I tried drawing the intersection point that I had computed when picking the axis in the first place, and also the point that I used to compute the plane constant in the first place.  Both looked correct.",
+      "zh": "接着我转向求交的部分。我试着画出「最初拾取轴时算出的那个交点」，以及「最初用来计算平面常数的那个点」。两者看起来都对。"
+    },
+    {
+      "type": "p",
+      "en": "But then I tried drawing the actual intersection computed at each drag update, and that didn't look correct.  In fact, it didn't really \"look\" at all.  Although I was specifically telling the renderer to draw a white sphere where I'd found the intersection of the cursor line with the plane, no white sphere appeared.  I checked the code again, and it looked correct, so I tried doing a few more test drags, this time from angles that had seemed to be working before.  Now, the sphere showed up, although it was bigger than I thought it should be, which was odd.",
+      "zh": "但接着我试着画出每次拖拽更新时实际算出的交点，那看起来就不对了。事实上，它压根没有「出现」。尽管我明确告诉渲染器在「光标直线与平面的交点」处画一个白色球体，却根本没有白球出现。我又检查了一遍代码，看起来没问题，于是我又做了几次测试拖拽，这次用的是之前似乎正常的那些角度。这回球体出现了，但它比我以为应该有的尺寸更大，这很奇怪。"
+    },
+    {
+      "type": "p",
+      "en": "I tried rotating the camera.  I wrote the code so as to leave the sphere rendering wherever the last dragging intersection occurred, so if I stopped dragging, it just stayed where it was.  This allowed me to rotate the camera and see precisely where the sphere was located, and as I did, I realized that the reason the sphere appeared too large was because it wasn't even close to being on the plane I thought I was using.  It was much closer to the camera.  Weirder still was that, at the buggier camera angles, the sphere was jumping around erratically, and wasn't really sticking to the cursor, which it always should do no matter what plane was being used.  I was, after all, intersecting the cursor line with a plane.  How could the intersection point possibly lie anywhere but directly under the cursor, regardless of the parameters of the plane?",
+      "zh": "我试着旋转摄像机。我把代码写成「球体留在最后一次拖拽交点处」的样子，所以只要我停止拖拽，它就待在原地。这让我能旋转摄像机、精确看清球体的位置；一转我就明白了球体显得过大的原因——它根本不在我以为自己在用的那个平面上，连边都不沾。它离摄像机近得多。更怪的是，在那些更容易出 bug 的摄像机角度下，球体会乱跳，也没有真正粘在光标上——而不管用的是哪个平面，它本该永远粘在光标上。毕竟我是拿光标直线和平面求交。无论平面的参数是什么，交点怎么可能不在光标正下方？"
+    },
+    {
+      "type": "p",
+      "en": "It was at that moment that my math brain finally woke up.  It had been sleeping for about a decade, which is how long it'd been since I'd done any real mathematical programming.  In an instant, I immediately knew both what the problem was and how to fix it.",
+      "zh": "就在那一刻，我那个「数学脑」终于醒了。它睡了大约十年——也就是我上一次做真正的数学编程到现在的时长。一瞬间，我立刻既知道了问题是什么，也知道了该怎么修。"
+    },
+    { "type": "h2", "id": "look-behind", "zh": "记得回头看", "en": "Always Look Behind You" },
+    {
+      "type": "p",
+      "en": "The problem was embarrassingly obvious when you consider the clues I'd been generously given and yet completely ignored.  Remember when I said I drew the plane normal at the location indicated by the plane constant, and I had to look *far away* at the manipulator to see if it looked like it was in line with the plane?  Well if the generally erratic behavior of the manipulator hadn't been telling enough, that little episode should have been the dead giveaway.",
+      "zh": "想想那些被慷慨送到我面前、而我却完全无视的线索，这个问题明显得让人难堪。还记得我说过，我按平面常数指示的位置画了平面法线，结果不得不朝*很远的地方*看向操纵器、才能判断它看起来是否和平面在一条线上吗？如果操纵器总体上的古怪行为还不够说明问题，那么这一小段插曲本该就是那个铁证。"
+    },
+    {
+      "type": "p",
+      "en": "At this point, every serious 3D programmer who hasn't been doing other work for ten years surely knows what the bug was.  But for the sake of people who are less experienced, I decided to end this article with a bit of a cliffhanger.",
+      "zh": "到了这一步，每一个没有转去做别的工作十年的严肃 3D 程序员肯定都知道这个 bug 是什么了。但为了照顾经验没那么丰富的人，我决定用一点悬念来结束这篇文章。"
+    },
+    {
+      "type": "p",
+      "en": "I am going to tell you that you can find the bug by looking at this simplified version of the ray_vs_plane function in [The Witness](http://the-witness.net/news/) that I was calling (the real version does some epsilon checking in case the ray and plane are parallel, but otherwise it is identical):",
+      "zh": "我要告诉你：你可以通过看我调用的这个《The Witness》里 ray_vs_plane 函数的简化版本来找到这个 bug（真正的版本会在射线与平面平行时做一些 epsilon 检查，除此之外完全一样）："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "Vector3 ray_vs_plane(Vector3 ray_origin, Vector3 ray_direction, Vector3 plane_normal, float plane_d)\nfloat denominator = dot_product(plane_normal, ray_direction);\n float numerator = dot_product(plane_normal, ray_origin);\n float t = -((plane_d + numerator) / denominator);\n return ray_origin + t*ray_direction;"
+    },
+    {
+      "type": "p",
+      "en": "And I will also show you this screenshot of what it looks like if you turn around 180 degrees from the rock and look back at the island itself:",
+      "zh": "我还会给你看这张截图：从石头那里转身 180 度、回头望向岛本身时，看到的是这个样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/witness3_island_7238c74056a2bb2c.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "But, until next time, I'm not going to tell you what the bug actually is.  Can you find it, and figure out how to fix it, before then?",
+      "zh": "但是，在下一次之前，我不会告诉你这个 bug 究竟是什么。你能在那之前找到它、并想出怎么修吗？"
+    }
+  ]
+}

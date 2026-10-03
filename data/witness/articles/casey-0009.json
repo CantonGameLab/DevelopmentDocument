@@ -1,0 +1,144 @@
+{
+  "id": "casey-0009",
+  "title": { "zh": "视觉上令人愉悦的分布", "en": "Visually pleasing distributions" },
+  "subtitle": {
+    "en": "An exploration of the grass system in The Witness leads to a discussion about what sorts of “random” distributions look pleasing to the human visual system.",
+    "zh": "从《The Witness》的草地系统出发，聊聊什么样的「随机」分布才让人的视觉系统觉得舒服。"
+  },
+  "translator": {
+    "note": "原文有 2 张示意图，未收录影像，只按原文位置保留占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Early in 2013, in the oddly clandestine fashion now widely expected of high-profile product announcements, Sony offered the Witness team a presentation slot at the PS4 unveiling.  This was great news for the game  —  it's hard to get better advance publicity than having your game shown at a major console announcement.  But it was also stressful news for the team, because it meant they'd have to scramble to produce a high-quality trailer that would look good alongside trailers for games with literally ten times the budget.",
+      "zh": "2013 年初，Sony 以一种如今在重量级产品发布上已被视为惯例的、神神秘秘的方式，给了 The Witness 团队一个在 PS4 发布会上做演示的名额。这对游戏来说是天大的好消息——很难有比「自家游戏在一场主机发布会上亮相」更好的前期宣传了。但这消息对团队来说也很有压力，因为这意味着他们得赶紧赶出一支高质量预告片，还得能跟那些预算整整高出十倍的游戏的预告片摆在一起而不逊色。"
+    },
+    {
+      "type": "p",
+      "en": "Thanks to the talent and dedication of the team, [The Witness](http://the-witness.net/news/) already looked beautiful by any standard, so most of the work necessary to make a great trailer was actually pretty straightforward: pick the shots, clean up some unfinished art, polish some shaders, fix some graphics glitches, etc.  But what definitely wasn't necessary to shoot a great trailer was the thing I happened to be working on: robust collision detection.  So, hoping to help, I asked the team if there was any programming work I could do in short order that would help with shipping the trailer.  One of the answers that came back was \"fix the grass planting system.\"",
+      "zh": "多亏团队的才华与投入，[The Witness](http://the-witness.net/news/) 按任何标准看都已经很漂亮了，所以要做出一支好预告片，大部分工作其实都很直接：挑镜头、收拾一些没做完的美术、打磨一些着色器、修几个图形 bug，等等。但有一件事对拍出一支好预告片绝对不必要，那就是我恰好在做的东西：健壮的碰撞检测。所以，抱着帮上点忙的心思，我问团队有没有什么程序上的活是我能马上做、又能帮着把预告片交付出去的。回来的答案之一是「把草地种植系统修好」。"
+    },
+    { "type": "h2", "id": "huge-gaps", "zh": "巨大的空隙", "en": "Huge Gaps" },
+    {
+      "type": "p",
+      "en": "Those of you who don't do game development for a living might not know what a \"grass planting system\" is, or even why someone needs a \"system\" to plant grass.  After all, in the real world, grass often plants itself.",
+      "zh": "不靠做游戏开发吃饭的人，可能不知道「草地种植系统」是什么，甚至不明白种个草为什么还需要一套「系统」。毕竟在现实世界里，草往往自己就把自己种了。"
+    },
+    {
+      "type": "p",
+      "en": "Well, despite the name, a \"grass planting system\" is a tool designed to give artists a way to quickly scatter geometry in a controlled way, regardless of whether it's grass or not.  It can be used for flora (grass, ferns, weeds, reeds, etc.), but also for anything else that might be scattered around a landscape, like rocks or trash.  The artist typically provides a set of things to scatter, sets some parameters that control how the scattering should look, then uses the tool to scatter instances of those things around some part of the game world.  This is an order of magnitude faster than having the artist place each one by hand, and realistically, things that come in large quantities like grass would be prohibitively expensive to create otherwise.",
+      "zh": "其实，虽然叫这个名字，「草地种植系统」是一类工具，目的是让美术能用可控的方式快速散布几何体，不管撒的是不是草。它可以用来撒植被（草、蕨类、杂草、芦苇等），也可以用来撒任何可能散布在场景里的东西，比如石头或垃圾。美术通常先提供一组要散布的对象、设好一些控制散布外观的参数，然后用这个工具把这些对象的实例撒到游戏世界的某片区域里。这比让美术一个个手动摆放快上一个数量级——而且说实话，像草这种数量庞大的东西，不用工具的话，制作成本高到根本做不起。"
+    },
+    {
+      "type": "p",
+      "en": "There are two distinct flavors of scattering tools that are often used in game development.  One works like painting, where the artist \"paints\" the world with scattered geometry using a stylus to manually brush in geometry where they want it.  The other flavor, which is the kind used in [The Witness](http://the-witness.net/news/), is more automated.  Instead of painting, the artist defines a volume where scattering should happen, then lets the tool scatter geometry inside it.",
+      "zh": "游戏开发里常用的散布工具分两大类。一类像画画：美术用笔刷在世界里「涂抹」散布的几何体，想要的地方就手动刷上去。另一类更自动，[The Witness](http://the-witness.net/news/) 用的就是这一类。美术不再去涂，而是定义一个应该发生散布的体积，然后让工具在里面撒几何体。"
+    },
+    {
+      "type": "p",
+      "en": "As part of fixing [The Witness](http://the-witness.net/news/)'s grass planting system, I received a number of feature requests from the artists, many of which I'll cover in later articles.  But the one I'm going to focus on here was a complaint that the existing system produced distributions of geometry that had \"huge gaps\".",
+      "zh": "在修 [The Witness](http://the-witness.net/news/) 的草地种植系统的过程中，我从美术那边收到了一堆功能需求，其中很多我会在后面的文章里讲。这里我要重点说的是其中一条抱怨：现有系统产出的几何体分布有「巨大的空隙」。"
+    },
+    {
+      "type": "p",
+      "en": "If you've never worked on a geometry distribution system, that statement might sound quite odd.  After all, this system is supposed to be placing things randomly.  Shouldn't a random set of locations naturally produce some large gaps?",
+      "zh": "如果你从没做过几何体分布系统，这句话听起来可能相当奇怪。毕竟这套系统的职责就是随机摆放东西。一组随机的位置，本来就该自然带出一些大空隙吧？"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Well, it depends on what you mean by \"random\".  Different people use \"random\" to mean very different things.  For example, when a cryptographer says they want something \"random\", they mean \"cryptographically strong\", which requires that there aren't hidden mathematical trends in a sequence of numbers that an adversary might exploit to thwart an encryption algorithm.  Likewise, in computer graphics, when we talk about \"randomly\" distributing things or \"randomly\" generating things, we are often talking about something that isn't just any old kind of random.  What we typically want is a visually pleasingly distribution.",
+      "zh": "嗯，这取决于你说的「随机」是什么意思。不同的人用「随机」指代的东西差别很大。比如密码学家说他想要「随机」的东西，指的是「密码学意义上强」，也就是要求一串数字里不存在可被对手利用、用来攻破加密算法的隐藏数学规律。同样，在计算机图形学里，我们谈到「随机」分布或「随机」生成时，说的往往不是随便哪种随机。我们通常想要的，是一种视觉上令人愉悦的分布。"
+    },
+    {
+      "type": "p",
+      "en": "It is a somewhat difficult concept to understand, because it has a lot to do with subtle human perception, but here's an intuitive example: if I ask you to \"randomly\" arrange fifty pennies on a table, chances are you will probably distribute the pennies such that, although they are not in any regular pattern like a grid, they are nonetheless covering the table at a relatively uniform density.  There probably won't be dense clumps of pennies in some areas and very sparse areas elsewhere.",
+      "zh": "这个概念有点难理解，因为它跟人类微妙的感知关系很大。举个直观的例子：如果我让你在桌上「随机」摆五十枚硬币，你多半会摆成——虽然不是网格那样规律的图案，但整体上以相对均匀的密度铺满桌面。大概不会出现某些地方硬币堆得很密、另一些地方稀稀拉拉的情况。"
+    },
+    {
+      "type": "p",
+      "en": "Why do people think of this particular configuration  —  ie., one with a relatively constant density  —  as a proper \"random\" placement of objects?  If you think about it, it is actually less \"random\", in some sense, because pennies placed completely \"at random\" in the conventional sense would be more likely to result in configurations where a few pennies did clump up next to each other, leaving holes in other areas.  Humans are doing something very nonrandom when they place things this way, in fact: they are looking at and considering where each thing is relative to the other things they've already placed.",
+      "zh": "为什么人们会把这种特定的摆放——也就是密度相对恒定的那种——当成「随机」摆放物体的正解？细想一下，从某种意义上说，它其实更不随机：真正按传统意义「完全随机」摆出来的硬币，更容易出现几枚挤在一起、另一些区域留下空洞的排布。事实上，人这么摆的时候，做的是一件非常不随机的事：他们会看着并考虑每一件东西相对于已经摆好的其他东西在哪。"
+    },
+    {
+      "type": "p",
+      "en": "I don't pretend to know why people naturally seem to do this, but I suspect is has a lot to do with people's intuitive observations of natural phenomenon they see around them throughout their lives.  When things are scattered in the world, they are usually subject to a lot of forces that simply aren't that random.  Gravity goes down, liquids and gasses spread out due to molecular forces, resource contention often causes living things to equalize coverage in an area, etc., etc.  So when humans want something \"randomly\" scattered, what they really expect to see is actually a very specific distribution that maintains a relatively constant density.",
+      "zh": "我不敢说自己知道人为什么会自然而然地这么做，但我猜这跟他们一辈子在身边观察到的自然现象的直觉印象关系很大。世界上的东西散开时，通常受制于许多并不那么随机的力：重力向下，液体和气体因分子间作用而铺开，资源竞争往往会让生物在某个区域里把覆盖摊匀，等等等等。所以当人想要什么东西「随机」散布时，他们真正期待看到的，其实是一种非常特定的、保持密度大致恒定的分布。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "And if that's not what they see, they may very well complain that the distribution has \"huge gaps.\"  Unfortunately for the programmer, throwing your hands up and saying, \"but huge gaps can happen in truly random distributions!\" is not generally looked upon as a reasonable response.",
+      "zh": "而如果他们看到的不是这样，很可能就会抱怨这个分布有「巨大的空隙」。可惜对程序员来说，摊手来一句「但真正的随机分布本来就会出现巨大空隙啊！」通常不会被认为是一个合理的回应。"
+    },
+    { "type": "h2", "id": "always-draw-everything", "zh": "永远把一切都画出来", "en": "Always Draw Everything" },
+    {
+      "type": "p",
+      "en": "Naturally, the first thing I did when looking at the \"huge gaps\" problem was to ask the artists for an example of the gaps they found to be \"huge\".  They pointed me to a particular grass system that was meant to distribute small ferns around a forest floor.  The result did, in fact, seem to have gaps that were somewhat huge.  But why?",
+      "zh": "自然，面对「巨大的空隙」这个问题，我做的第一件事是让美术给我一个他们觉得「巨大」的空隙实例。他们指给我看了一套特定的草地系统，那套系统的用途是在林地上散布小蕨类。结果确实看起来有一些相当大的空隙。但为什么呢？"
+    },
+    {
+      "type": "p",
+      "en": "I started playing around with the grass system in question, but I noticed early on that there was really no way to see what it was actually doing.  I'd select it, tell it to \"replant\" (the Witness editor's term for redistributing the geometry), then watch as ferns were freshly scattered around.  But what did the distribution actually look like?  Sure, I could see the end result, but it just looked like a bunch of clumpy ferns.  What I wanted to see was where the system actually thought it was planting the ferns, if for no other reason than to make it easier to assess the quality of the distribution without having to mentally reconstruct it from looking at fern meshes.",
+      "zh": "我开始拿这套草地系统试着玩，但很快就发现根本没法看到它到底在做什么。我会选中它，让它「replant」（Witness 编辑器里对「重新分布几何体」的叫法），然后看着蕨类被重新撒一遍。可这个分布到底长什么样？当然，我能看到最终结果，但那看起来只是一堆扎堆的蕨类。我想看的是系统究竟认为它把蕨类种在了哪里——哪怕只为了不用盯着蕨类的网格模型、在脑子里反推，就能更容易地评估分布的质量。"
+    },
+    {
+      "type": "p",
+      "en": "Instead of stepping through the code or even carefully reading it to see what it was doing, I did what I often do these days and added debug visualization code right away.  I've been through these kinds of problems enough times that I know, more often than not, if you're going to debug one thing in a piece of code, you're going to debug a bunch of things, so you might as well add the debug code early and leverage it throughout the whole process.  Why wait for the really hard bug before adding the debug code?  It takes the same amount of time to write debug code earlier as it does later, but earlier means you can use it to speed debugging of all those not-as-hard bugs along the way.",
+      "zh": "我没有去单步调试、也没有仔细读代码看它在干什么，而是做了我现在经常做的事：马上加上调试可视化代码。这类问题我遇到太多次了，所以我知道：只要你打算调试一段代码里的一个东西，十有八九会接着调试一堆东西，那不如早点把调试代码加上，整个过程中一直用着它。为什么非要等到碰上真正难的 bug 才去加调试代码？调试代码早写和晚写花的时间一样多，但早写意味着你可以用它加速一路上那些没那么难的 bug 的排查。"
+    },
+    {
+      "type": "p",
+      "en": "Thankfully, it was trivial to add some code that drew where the system thought it was planting the ferns, because it already maintained an array of each point it used, since it needed it for its computations.  So all I had to do was draw some bright green markers (without depth occlusion) using that array.  When I looked at the ferns with this debug display enabled, this is what I saw:",
+      "zh": "幸好，加几行「画出系统认为自己在哪儿种蕨类」的代码是件小事，因为它本来就维护着一个包含每个所用点的数组，计算时需要。所以我要做的只是用那个数组画一些亮绿色的标记（不做深度遮挡）。开着这个调试显示去看蕨类时，我看到的是这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_01_00_c01b82934d36b12a.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That's a screenshot taken from underneath the ground, looking up at the ferns, so it's easiest to see where the planting points are relative to the fern geometry.  What jumped out at me right away was that the fern meshes themselves didn't seem to be centered around the points where they were supposedly being placed.  This can make a big difference in terms of perceived \"gaps\" in the geometry, because the meshes are randomly rotated when they are placed.  If the mesh is off-center, then depending on how each fern was randomly rotated, it might take up much more space to its left than to its right, or vice versa.  Thus, a perfectly fine distribution of planting points could look like it had a lot of gaps just because the volumes occupied by the meshes distributed on them were all offset in different directions.",
+      "zh": "这张截图是从地面下方往上拍的蕨类，这样最容易看清种植点相对于蕨类几何体在哪。我一眼就看出来的是：蕨类网格本身似乎并没有以它们「本该」被摆放的那些点为中心。这会极大影响几何体在观感上的「空隙」，因为这些网格摆放时会被随机旋转。如果网格偏离中心，那么根据每株蕨类被随机旋转的角度，它左侧占的空间可能比右侧大得多，反过来也一样。于是，一个完全没问题的种植点分布，看起来却可能有很多空隙——仅仅是因为分布在这些点上的网格所占的体积各自朝着不同方向偏移了。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "If ever there was a tailor-made example of why adding debug drawing code saves a lot of time, this was it.  There had been mails back and forth about this issue for quite some time before I started looking at the problem, and even though the ferns had been specifically discussed, nobody had ever noticed that they were centered incorrectly.  Without enough visual information being displayed, people were free to ascribe problems to the most likely culprits.  Since there were gaps in the appearance of the geometry generated by the grass system, it was only natural for people to assume it to be a problem with the distribution itself.  But once enough intermediate information was displayed, it became obvious that there were other contributing factors at play.",
+      "zh": "如果要找一个「加调试绘制代码能省下大量时间」的现成例子，这就是。在我开始看这个问题之前，关于它的邮件已经来回发了好一阵；尽管蕨类被专门讨论过，却没人注意到它们的中心是错的。在显示的视觉信息不够时，人们可以随便把问题归到最像元凶的地方。既然草地系统生成的几何体外观上有空隙，人们自然就认定是分布本身的问题。可一旦显示出足够多的中间信息，就能看出还有别的因素在起作用。"
+    },
+    {
+      "type": "p",
+      "en": "I reported this problem to the artists, and they confirmed that the mesh had in fact been centered wrong in [Maya](https://en.wikipedia.org/wiki/Autodesk_Maya).  Fixing this improved the problem they were observing with the \"huge gaps\", without me ever even touching the algorithm.  Chalk up another victory to early implementation of debug drawing code.",
+      "zh": "我把这个问题报给了美术，他们确认这个网格在 [Maya](https://en.wikipedia.org/wiki/Autodesk_Maya) 里确实定错了中心。修好之后，他们观察到的「巨大的空隙」问题就有了改善，而我连算法都没碰过。早写调试绘制代码，又赢一局。"
+    },
+    { "type": "h2", "id": "small-gaps", "zh": "小的空隙", "en": "Small Gaps" },
+    {
+      "type": "p",
+      "en": "Unfortunately, even with the ferns properly centered, the distribution was still looking a bit too \"gappy\".  The gaps were no longer \"huge\", but they were there.",
+      "zh": "可惜，即使蕨类的中心修对了，这个分布看起来还是有点太「空」。空隙不再「巨大」，但它们还在。"
+    },
+    {
+      "type": "p",
+      "en": "I set up a grass system in a test area so it was easier to see, since I knew I'd be doing a fair bit of work on the code, and it is always much quicker to iterate on something in a test area than in the full game environment (less load times, faster rendering, etc.).  With the green markers on, a simple distribution with the grass system looked like this:",
+      "zh": "我在一片测试区域里搭了一套草地系统，这样更容易看清，因为我知道自己要在这份代码上干不少活；而且在一小片测试区域里迭代，永远比在完整的游戏环境里快得多（加载更少、渲染更快，等等）。开着绿色标记，用草地系统做的一个简单分布是这样的："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://caseymuratori.com/r/grass_01_01_b32ef03339250422.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, there are a number of places that still look like \"gaps\".  Again, there's nothing inherently nonrandom about these gaps, but they are still problematic for our purposes because, unless you have specifically instructed the grass system to do otherwise, the goal was for it to produce a relatively consistent density of points, and these gaps made the density appear to vary.  So the next thing I had to do was take a good look at how the current scattering algorithm was working, and figure out why it wasn't producing a consistent point density.",
+      "zh": "如你所见，还有不少地方看起来像是「空隙」。再说一次，这些空隙本身并不违背随机；但对我们来说它们仍然是问题，因为除非你明确要求草地系统另做安排，它的目标就是产出相对一致的点密度，而这些空隙让密度看起来忽高忽低。所以接下来我要做的，就是好好看看当前的散布算法是怎么工作的，弄清它为什么没能产出一致的点密度。"
+    },
+    {
+      "type": "p",
+      "en": "And that is where I will pick up this story on the *next* Witness Wednesday.",
+      "zh": "这个故事，我留到*下*一个 Witness Wednesday（每周三连载）接着讲。"
+    }
+  ]
+}

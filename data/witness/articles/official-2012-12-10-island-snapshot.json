@@ -1,0 +1,33 @@
+{
+  "id": "official-2012-12-10-island-snapshot",
+  "title": { "zh": "岛屿快照", "en": "Island Snapshot" },
+  "subtitle": {
+    "en": "Two views of the island as it stands, plus the current puzzle count.",
+    "zh": "岛上当前样子的两张视图，外加目前的谜题数量。"
+  },
+  "translator": {
+    "note": "本篇内容取自归档里的 2012-010-island-snapshot.md，与 manifest 中该条的原文链接（…/2012/12/island-snapshot-7/）一致；2012-003「Island Snapshot two-for-one」是另一篇（另有独立条目）。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "We haven't done one of these in a while. Here's what the island looks like currently:",
+      "zh": "我们有一阵子没发这个了。下面是这座岛现在的样子："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.10__time_17_20_n02.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/12/shot_2012.12.10__time_17_22_n04.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The current puzzle count is 497. (This is lower than last time; last time was an overcount, as we had some temporary duplicates in the world that were being counted mistakenly.)",
+      "zh": "目前的谜题数量是 497 个。（这比上次少；上次是多算了，因为世界里有些临时的重复物件被错误地统计了进去。）"
+    }
+  ]
+}

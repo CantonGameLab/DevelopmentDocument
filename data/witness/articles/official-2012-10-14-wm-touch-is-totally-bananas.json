@@ -1,0 +1,89 @@
+{
+  "id": "official-2012-10-14-wm-touch-is-totally-bananas",
+  "title": { "zh": "WM_TOUCH 简直是疯了。", "en": "WM_TOUCH is totally bananas." },
+  "subtitle": {
+    "en": "Jon sets out to design the touch interface on Windows, and documents the undocumented insanity that is WM_TOUCH.",
+    "zh": "Jon 着手在 Windows 上设计触摸接口，并把这套毫无文档可查的 WM_TOUCH 疯癫行为记录下来。"
+  },
+  "translator": {
+    "note": "归档把两段代码分别用单个反引号包着（而不是代码围栏），第二段代码更是缩进在单反引号之间；译文按代码块还原，代码保持英文原文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The iPad is one of the major platforms The Witness will appear on. Andy has been working on the iPad port and it is coming along. You can't actually play the game yet, but we probably are close to that. The gameplay doesn't know how to respond to a touch interface yet, though. It is important to me that this interface is very good, so I wanted to start designing for it now, to give me time to wrestle with difficult issues. Since the game runs already on Windows, it seemed natural to start designing the touch interface on Windows.",
+      "zh": "iPad 是《The Witness》将要登陆的主要平台之一。Andy 一直在做 iPad 移植，进展还不错。现在其实还玩不了游戏，但大概也快了。不过玩法部分还不知道该怎么响应触摸接口。这个接口必须做得非常好，这对我来说很重要，所以我想现在就动手为它做设计，好给自己留出时间去啃那些棘手的问题。既然游戏已经能在 Windows 上跑起来，那在 Windows 上开始设计触摸接口就是顺理成章的事。"
+    },
+    {
+      "type": "p",
+      "en": "I am not sure that many people are going to use Windows for touch devices, at least in the Windows 8 timeframe. But at least some people will, so it'd be nice to have a high-quality touch interface built into the game on Windows.",
+      "zh": "我不确定会有多少人拿 Windows 当触摸设备用，至少在 Windows 8 这个时间窗口里是这样。但总会有一部分人这么用，所以能在 Windows 版游戏里内置一套高质量的触摸接口是件好事。"
+    },
+    {
+      "type": "p",
+      "en": "With all this in mind, I started working on some Windows 8 touch hardware a couple of days ago. There is a message format that you can use in Windows 8 to get events from the touch hardware, WM_POINTER, but because I want the touch interface to work in Windows 7 as well, I wanted to use WM_TOUCH messages, which were introduced in Windows 7 and are supported in both operating systems.",
+      "zh": "考虑到这些，我几天前开始在一台 Windows 8 触摸硬件上干活。Windows 8 里有种消息格式可以让你从触摸硬件拿到事件，就是 WM_POINTER；但我希望这套触摸接口在 Windows 7 上也能用，所以我打算用 WM_TOUCH 消息——它是 Windows 7 引入的，两个系统都支持。"
+    },
+    {
+      "type": "p",
+      "en": "It look me less than 20 minutes to get WM_POINTER working. It took many, many hours to get WM_TOUCH working, because WM_TOUCH is some kind of fully insane mess. None of the insanity seems to be documented, or discussed on the internet, so I am laying it out here in case anyone in the future stumbles into this same trap.",
+      "zh": "让 WM_POINTER 跑起来，我花了不到 20 分钟。让 WM_TOUCH 跑起来却花了好多好多小时，因为 WM_TOUCH 就是一团彻底疯掉的烂摊子。这些疯癫之处似乎没有任何文档记录，网上也没人讨论，所以我把它写在这里，免得将来有人再栽进同一个坑里。"
+    },
+    {
+      "type": "p",
+      "en": "A WM_TOUCH message will never be returned by PeekMessage. Spy++ will tell you that WM_TOUCH is being sent to your application, but before the message is delivered, it gets stealthily converted into a mouse motion event. The type of this event will vary depending on whether you have raw input selected: if raw input, it will be WM_INPUT (0x00ff); if not, it will be WM_MOUSEMOTION (0x0200).",
+      "zh": "WM_TOUCH 消息永远不会由 PeekMessage 返回。Spy++ 会告诉你 WM_TOUCH 正被发往你的程序，但在消息投递出去之前，它会被偷偷转换成一个鼠标移动事件。这个事件的类型取决于你有没有启用原始输入（raw input）：启用了原始输入，它就是 WM_INPUT（0x00ff）；没启用，它就是 WM_MOUSEMOTION（0x0200）。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "If your application handles these events, you may think it's reasonable to complete the handling without calling DefWindowProc. If you do this, you will never see a WM_TOUCH, because something buried down in DefWindowProc stealthily dispatches a WM_TOUCH to your application's windows when it sees a specially-marked WM_INPUT or WM_MOUSEMOVE.",
+      "zh": "如果你的程序处理了这些事件，你可能会觉得处理完不调用 DefWindowProc 是合理的。真这么做的话，你就永远见不到 WM_TOUCH——因为在 DefWindowProc 深处埋着一段东西，它一看到带特殊标记的 WM_INPUT 或 WM_MOUSEMOVE，就会偷偷往你的窗口派发一个 WM_TOUCH。"
+    },
+    {
+      "type": "p",
+      "en": "*Note that actually, you are supposed to always call DefWindowProc on WM_INPUT (for \"cleanup\" -- I don't know what this means and why they can't just clean it up when you get the next message -- but whatever); but WM_MOUSEMOVE has no such requirement, and if you believe you handled the event, it is natural *not* to call DefWindowProc. This will result in your never seeing WM_TOUCH.* Strictly speaking our game had a bug, in that we were not calling DefWindowProc after WM_INPUT, but the bug was hard to find because it persisted when I tried turning off raw input, because we also were not calling DefWindowProc after WM_MOUSEMOVE (which as I mentioned is, in theory, totally fine.)",
+      "zh": "*注意，其实你本应始终对 WM_INPUT 调用 DefWindowProc（据说是为了「清理」——我不知道这是什么意思，也不知道为什么他们不能在收到下一条消息时顺手清理掉——算了，随便吧）；但 WM_MOUSEMOVE 没有这种要求，而如果你认为自己已经处理完了这个事件，那么不调用 DefWindowProc 是很自然的做法。而这会导致你永远见不到 WM_TOUCH。* 严格来说，我们的游戏确实有个 bug：WM_INPUT 之后我们没有调用 DefWindowProc。但这个 bug 很难找，因为我试着关掉原始输入之后它依然存在——原因是 WM_MOUSEMOVE 之后我们同样没调用 DefWindowProc（而如前所述，理论上这是完全没问题的）。"
+    },
+    {
+      "type": "p",
+      "en": "Important to note: WM_TOUCH gets dispatched to your windows without you dispatching it! You may think that you can log all messages after they come out of PeekMessage, and that you are in control of your entire message stream, but this is apparently not true. WM_TOUCH will just teleport itself into your window.",
+      "zh": "有一点很重要：WM_TOUCH 会在你没有派发它的情况下被派发到你的窗口上！你可能会以为，只要把从 PeekMessage 出来的所有消息都记录下来，你就掌控了自己的整条消息流；但显然并非如此。WM_TOUCH 就这么把自己瞬移进了你的窗口。"
+    },
+    {
+      "type": "p",
+      "en": "In addition to the mouse motion events, your application will get a bunch of other mouse events that are generated by the touch interface, to emulate mouse stuff for programs that don't understand touch. There is no way to tell Windows you don't want these events (unless you do Windows 8 stuff and respond to WM_POINTER; see below). According to Microsoft, the official way you are supposed to detect and ignore these messages is like this:",
+      "zh": "除了鼠标移动事件，触摸接口还会给你的程序生成一堆别的鼠标事件，用来给那些不认识触摸的程序模拟鼠标操作。你没办法告诉 Windows 你不想要这些事件（除非你用 Windows 8 那一套去响应 WM_POINTER，见下文）。按照微软的说法，检测并忽略这些消息的官方做法是这样的："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "#define MOUSEEVENTF_FROMTOUCH 0xFF515700\nif ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) \n        == MOUSEEVENTF_FROMTOUCH) { \n     // Skip message\n}"
+    },
+    {
+      "type": "p",
+      "en": "I wish I were joking. It's been this way for years; [Casey wrote about this in 2008](http://mollyrocket.com/forums/viewtopic.php?p=7496).",
+      "zh": "我真希望这是我在开玩笑。这情况已经持续好几年了；[Casey 在 2008 年就写过这件事](http://mollyrocket.com/forums/viewtopic.php?p=7496)。"
+    },
+    {
+      "type": "p",
+      "en": "This mask works for events like WM_LBUTTONDOWN, but it does not work for the mouse motion events e.g. WM_INPUT. If you want to take input both from touch and the mouse, you need to disambiguate the real WM_INPUTs from the fake ones. Through a process of experimentation with message flags, I landed on this:",
+      "zh": "这个掩码对 WM_LBUTTONDOWN 这类事件有效，但对鼠标移动类事件（比如 WM_INPUT）就没用了。如果你想同时接收触摸和鼠标的输入，就必须把真正来自鼠标的那些 WM_INPUT 和伪造的区分开。经过一番对消息标志位的试验，我最后落在了这个上面："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if ((GetMessageExtraInfo() & 0x82) == 0x82) { /* ignore event */ }"
+    },
+    {
+      "type": "p",
+      "en": "It seems to work for now, but who knows if that will mysteriously break in some future version of windows.",
+      "zh": "目前看来它能用，但谁知道它会不会在将来某个版本的 Windows 里神秘地失效呢。"
+    },
+    {
+      "type": "p",
+      "en": "Nicely, if your application handles WM_POINTER messages, you will not get any of this mouse emulation stuff or WM_TOUCH, so all this ugliness disappears. If it is okay to make Windows 8 your minimum specification, I recommend using WM_POINTER and staying far away from WM_TOUCH.",
+      "zh": "好在，如果你的程序处理 WM_POINTER 消息，就完全不会收到这些鼠标模拟的东西，也不会收到 WM_TOUCH，所有这些丑陋之处都会消失。如果可以把 Windows 8 定为最低配置，我建议用 WM_POINTER，离 WM_TOUCH 越远越好。"
+    }
+  ]
+}

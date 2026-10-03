@@ -1,0 +1,31 @@
+{
+  "id": "light-island-paint-over",
+  "title": {
+    "zh": "岛屿上色初稿",
+    "en": "Island Paint-Over"
+  },
+  "subtitle": {
+    "en": "Shannon's first draft of a paint job on the island terrain is starting to look reasonable.",
+    "zh": "Shannon 给岛屿地形做的第一版上色已经像点样子了。"
+  },
+  "translator": {
+    "note": "48 词的美术进度贴，正文只有两段。插图行按全站口径归一化为 `![图](原图URL)`（丢掉 `-300x168` 缩略图与外层链接）。人名 Shannon 保留英文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Shannon just did our first draft of a paint job on the island terrain.  These are still very much placeholder graphics, but it is starting to look reasonable, with the exception of the ugly green area in the foreground!",
+      "zh": "Shannon 刚给岛屿地形做完了第一版上色。这些还完全算是占位图形，但它开始像点样子了——当然，前景那块难看的绿色区域除外！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/08/shot_2010.08.24__time_22_10_n01-300x168.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We'll be working on that ugly green area soon...",
+      "zh": "那块难看的绿色区域我们很快就会动手……"
+    }
+  ]
+}

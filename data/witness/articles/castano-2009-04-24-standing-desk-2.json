@@ -1,0 +1,33 @@
+{
+  "id": "castano-2009-04-24-standing-desk-2",
+  "title": { "zh": "站立办公桌 2", "en": "Standing Desk 2" },
+  "subtitle": {
+    "en": "A week of full-time standing desk use: sore feet, better sleep, and finally some stronger drugs and physiotherapy for his back.",
+    "zh": "整整一周全时用站立办公桌：脚疼、睡眠变好，以及终于用上了更强的止痛药和物理治疗。"
+  },
+  "translator": {
+    "note": "原文把 Vicodin 在一处拼成了 Vicadin，按「不增不删」在 en 里原样保留，中文里统一按药名 Vicodin 处理。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "So, I finally bought the [Ikea standing desk](http://www.ikea.com/us/en/catalog/products/60111123) and I’ve been using it full time during this week.",
+      "zh": "我终于把[宜家的站立办公桌](http://www.ikea.com/us/en/catalog/products/60111123)买回来了，这一周我全程都在用它。"
+    },
+    {
+      "type": "p",
+      "en": "As many predicted my feet hurt, and at the end of the day I feel extremely tired, almost as if I had been hiking, which is actually quite a nice feeling. For once I now get to sleep before midnight and wake up early in the mornings. I’ve realized I have to do stretching exercises to prevent cramps during the night. I suppose my body will end up getting used to it.",
+      "zh": "正如不少人预料的，我脚疼；一天下来累得不行，几乎像刚徒步回来一样，不过这感觉其实挺好的。至少现在我能赶在午夜前睡觉，早上也能早起了。我发现得做拉伸，不然夜里会抽筋。我想身体最后总会适应的。"
+    },
+    {
+      "type": "p",
+      "en": "My doctor has finally prescribed me some stronger drugs. I’m now taking Prednisone for the inflammation and Vicodin for the pain. During the first few days the Vicadin eliminated the pain entirely; after weeks of constant pain with some acute episodes that was quite a relief. I felt energized and euphoric, suddenly I could walk normally, I could even run, jump, speed up my bike, and get some adrenaline flowing!",
+      "zh": "医生终于给我开了更强效的药。我现在吃 Prednisone 消炎、Vicodin 止痛。头几天 Vicodin 把疼痛彻底压了下去；在连续几周的持续疼痛、还夹着几次急性发作之后，这真是极大的解脱。我觉得浑身是劲、兴奋异常，忽然就能正常走路了，甚至能跑、能跳、能把自行车蹬得飞快，肾上腺素都上来了！"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately the body creates tolerance fairly quickly, so I had to reduce the dose. However, I think the inflammation is finally receding, the pain is still there, but it’s just a mere discomfort. I think the results of the physiotherapy are also starting to show. The S shape of my column has been corrected, it feels much more straight now. My abs are stronger than ever. I’m not sure it has been of any help for the pain, but at least it will hopefully prevent more damage in the future.",
+      "zh": "可惜身体很快就产生耐受，所以我不得不减量。不过我觉得炎症总算在退，疼痛还在，但已经只是轻微的不适了。物理治疗的效果我想也开始显现了：我脊柱的 S 形被纠正过来，现在感觉直了很多，腹肌也比以前任何时候都强。我不确定这对止痛有没有帮助，但至少希望它能防止以后出现更多损伤。"
+    }
+  ]
+}

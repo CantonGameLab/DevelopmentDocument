@@ -1,0 +1,38 @@
+{
+  "id": "official-2013-06-15-heres-that-poster",
+  "title": { "zh": "这就是那张海报", "en": "Here's That Poster" },
+  "subtitle": {
+    "en": "The final poster design — the one that briefly appeared in the PlayStation 4 promotional video.",
+    "zh": "最终定稿的那张海报设计——就是 PlayStation 4 宣传片里短暂露过面的那张。"
+  },
+  "translator": {
+    "note": "原文没有小标题；正文中的插图按源顺序收录为占位段落。原文未夹带页面部件，无需剔除。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In May, we wrote about [a bunch of ideas for posters](http://the-witness.net/news/2013/05/poster-ideas/) for The Witness. We couldn't say so at the time, but we were prompted to do this by the inclusion of such a poster in a PlayStation 4 promotional video. Of all the possibilities we ran through, here's the one we liked the most:",
+      "zh": "5 月的时候，我们写过[一堆《The Witness》的海报方案](http://the-witness.net/news/2013/05/poster-ideas/)。当时还没法说，但促使我们这么做的原因，是 PlayStation 4 的一支宣传片里用到了这样一张海报。在我们过过的所有方案里，最喜欢的是这张："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/WitnessPoster.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "If you watch carefully and don't blink, and look past all the balloons that are blocking it, you can see the poster (in different proportions) starting around 0:57 in this commercial: [http://www.youtube.com/watch?v=QOdW1OuZ1U0](http://www.youtube.com/watch?v=QOdW1OuZ1U0)",
+      "zh": "要是你看得够仔细、不眨眼，还能越过那些挡住它的气球，就能从这支广告大约 0:57 处开始看到那张海报（比例不太一样）：[http://www.youtube.com/watch?v=QOdW1OuZ1U0](http://www.youtube.com/watch?v=QOdW1OuZ1U0)"
+    },
+    {
+      "type": "p",
+      "en": "Hey, it is what it is.",
+      "zh": "唉，就这样吧。"
+    },
+    {
+      "type": "p",
+      "en": "Because we picked this one as the final, we have it in a much higher resolution than the other options. If you like it, feel free to use it as a desktop image, or whatever!",
+      "zh": "因为最终选的是这一张，所以它的分辨率比其他几个方案高得多。如果你喜欢，随便拿去当桌面或者干别的都行！"
+    }
+  ]
+}

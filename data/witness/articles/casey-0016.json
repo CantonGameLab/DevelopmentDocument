@@ -1,0 +1,358 @@
+{
+  "id": "casey-0016",
+  "title": {
+    "zh": "复杂度与粒度",
+    "en": "Complexity and Granularity"
+  },
+  "subtitle": {
+    "en": "An examination of two fundamental principles in effective programming.",
+    "zh": "考察高效编程背后的两条基本原则：复杂度与粒度。"
+  },
+  "translator": {
+    "note": "代码块逐字保留英文原文。文中 *Codielocks and the Three Warez* 是 Goldilocks（金发姑娘）与 warez（盗版软件）的谐音梗，所以 Codielocks 的故事其实是闯进三只熊家里搞渗透测试；Pwnie Express Pwn Plug R2 是现实中一款渗透测试硬件。Stroustrup 的「with Classes」指 C++ 最早的名称「C with Classes」。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Building upon last week's introduction to compression-oriented programming, I'd like to introduce an important concept that is best described by reference to a fairytale I'm sure you will recognize from your childhood.  It's the story of a young girl who comes upon a house in the woods inhabited by three bears, all of whom happen to be out for the day.  I am referring, of course, to *Codielocks and the Three Warez*.",
+      "zh": "在上周对压缩导向编程的介绍之上，我想引出一个重要概念。要说明它，最好的办法是引用一个我确信你小时候就听过的童话：一个小女孩在森林里发现了一间屋子，里面住着三只熊，而它们恰好都出门了。我说的当然是*《Codielocks and the Three Warez》*。"
+    },
+    {
+      "type": "p",
+      "en": "Specifically, I'd like to call your attention to the famous scene where Codielocks discovers the server rack at the center of the three bears' house, and she roots a blade using her[Pwnie Express Pwn Plug R2](https://www.pwnieexpress.com/penetration-testing-vulnerability-assessment-products/sensors/pwn-plug-r2/).  She then looks at the three headers, usr/include/mamabear.h, usr/include/papabear.h, and usr/include/babybear.h.",
+      "zh": "具体来说，请把注意力放到那个著名场景上：Codielocks 在三只熊屋子中央发现了一个机架，然后用她的 [Pwnie Express Pwn Plug R2](https://www.pwnieexpress.com/penetration-testing-vulnerability-assessment-products/sensors/pwn-plug-r2/) 拿下了一台刀片服务器。接着她看了三个头文件：usr/include/mamabear.h、usr/include/papabear.h 和 usr/include/babybear.h。"
+    },
+    {
+      "type": "p",
+      "en": "She tries writing a program using /usr/include/mamabear.h, but finds that her code comes out bloated and contorted.  \"This is too verbose and ill-conceived,\" says Codielocks.  Next she tries writing the same program using /usr/include/papabear.h.  At first it seems easy to use, and she gets her program working very quickly, but then when she goes to polish it and optimize its performance, she finds that there is no way to do most of the things she needs to do.  \"This is too restrictive,\" said Codielocks.",
+      "zh": "她试着用 /usr/include/mamabear.h 写一个程序，却发现写出来的代码臃肿扭曲。「这太啰嗦，设计得也糟糕，」Codielocks 说。接着她用 /usr/include/papabear.h 写同一个程序。一开始它看起来很好用，她很快就让程序跑了起来；可当她想去打磨它、优化它的性能时，却发现大部分她想做的事都做不到。「这限制得太死了，」Codielocks 说。"
+    },
+    {
+      "type": "p",
+      "en": "Finally, Codielocks tries using /usr/include/babybear.h.  \"OMG!\" she exclaims.  \"This is so easy to use, and yet it never gets in my way when I need to do something tricky!\"",
+      "zh": "最后，Codielocks 试着用 /usr/include/babybear.h。「天哪！」她喊道，「它用起来太舒服了，而且我需要做点刁钻的事情时，它从来不会挡我的路！」"
+    },
+    {
+      "type": "p",
+      "en": "Why was Baby Bear able to make his code so that it was \"just right\" for Codielocks, as the story goes?  Well, it's because unlike Mama Bear and Papa Bear, Baby Bear practiced good compression-oriented programming, and understood the importance of *continuous granularity*.",
+      "zh": "按故事里的说法，为什么熊宝宝能把代码做到对 Codielocks 来说「刚刚好」？因为和熊妈妈、熊爸爸不同，熊宝宝践行了良好的压缩导向编程，并且理解*连续粒度*的重要性。"
+    },
+    {
+      "type": "h2",
+      "id": "compression-continued",
+      "zh": "继续压缩",
+      "en": "Compression Continued"
+    },
+    {
+      "type": "p",
+      "en": "To illustrate the concept of granularity, I'd like to continue with the example from last week where I was compressing the code for the Witness Movement Panel.  If you remember last week's starting point, you will recall that there was some code that I never got around to compressing in that article:",
+      "zh": "为了说明粒度这个概念，我想接着上周的例子讲下去——上周我在压缩《The Witness》Movement Panel 的代码。如果你还记得上周的起点，应该会想起那段我在那篇文章里始终没来得及压缩的代码："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{\n y0 -= category_height;\n\nfloat w = my_width / 4.0f;\n float x1 = x0 + w;\n float x2 = x1 + w;\n float x3 = x2 + w;\n\nunsigned long button_color;\n unsigned long button_color_bright;\n unsigned long text_color;\n\nget_button_properties(this, motion_mask_x, &button_color, &button_color_bright, &text_color);\n bool x_pressed = draw_big_text_button(x0, y0, w, category_height, \"X\", button_color, button_color_bright, text_color);\n\nget_button_properties(this, motion_mask_y, &button_color, &button_color_bright, &text_color);\n bool y_pressed = draw_big_text_button(x1, y0, w, category_height, \"Y\", button_color, button_color_bright, text_color);\n\nget_button_properties(this, motion_mask_z, &button_color, &button_color_bright, &text_color);\n bool z_pressed = draw_big_text_button(x2, y0, w, category_height, \"Z\", button_color, button_color_bright, text_color);\n\nget_button_properties(this, motion_local, &button_color, &button_color_bright, &text_color);\n bool local_pressed = draw_big_text_button(x3, y0, w, category_height, \"Local\", button_color, button_color_bright, text_color);\n\nif (x_pressed) motion_mask_x = !motion_mask_x;\n if (y_pressed) motion_mask_y = !motion_mask_y;\n if (z_pressed) motion_mask_z = !motion_mask_z;\n if (local_pressed) motion_local = !motion_local;\n}"
+    },
+    {
+      "type": "p",
+      "en": "This code can't actually call the push_button() that I made for the simpler code to use.  The reason is because push_button() didn't pass the optional parameters to draw_big_text_button() that specify the colors to use to draw the button, and this turns out to be important for the buttons in this snippet because they are \"checkbox\" style buttons: they turn on and off, rather than just doing an operation when clicked like the ones that used push_button().",
+      "zh": "这段代码实际上没法调用我为那些更简单的代码写的 push_button()。原因是 push_button() 不会把「绘制按钮所用的颜色」这类可选参数传给 draw_big_text_button()；而对这些按钮来说这一点很重要，因为它们是「复选框」式按钮：会在开与关之间切换，而不像用 push_button() 的那些按钮，点一下就执行一次操作。"
+    },
+    {
+      "type": "p",
+      "en": "So I needed a second version of push_button(), one that makes a pushable button that can be highlighted:",
+      "zh": "所以我需要 push_button() 的第二个版本，用来生成一个可以被高亮显示的按钮："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool Panel_Layout::push_button(char *text, bool highlight)\n{\n unsigned long button_color;\n unsigned long button_color_bright;\n unsigned long text_color;\n get_button_properties(panel, highlight, &button_color, &button_color_bright, &text_color);\n bool result = panel->draw_big_text_button( at_x, at_y, width, row_height, text, button_color, button_color_bright, text_color);\n return(result);\n}"
+    },
+    {
+      "type": "p",
+      "en": "Now, ordinarily, I might consider trying to compress the two push_button() calls further: what I would do is have the non-highlight one call the highlight one with the highlight parameter being false.  However, in this particular case, that wasn't a good idea, because the underlying UI code that I was wrapping didn't actually draw regular buttons in the same colors as it used for highlightable buttons.  So, in this case, they stayed separate.",
+      "zh": "通常我可能会考虑把两个 push_button() 进一步压缩：让不带高亮的那个去调用带高亮的那个，把高亮参数传 false。但在眼下这个例子里这么做并不好，因为我所封装的那层 UI 代码，绘制普通按钮时用的颜色和绘制可高亮按钮时并不一样。所以这里它们保持各自独立。"
+    },
+    {
+      "type": "p",
+      "en": "Also, as an aside, it is doubtful that I should have called them both push_button().  Perhaps push_button() and highlight_button() might have been better.  But, I prefer to stay true to what actually happened, rather than what should have happened, and what I actually did on [The Witness](http://the-witness.net/news/) was make two functions both called push_button().",
+      "zh": "另外顺便说一句：把它们都叫 push_button() 大概并不妥当，也许叫 push_button() 和 highlight_button() 会更好。但我更愿意忠实于实际发生的事，而不是本该发生的事——我在[《The Witness》](http://the-witness.net/news/)里实际做的，就是写了两个都叫 push_button() 的函数。"
+    },
+    {
+      "type": "p",
+      "en": "OK, so with a second push_button(), I could now compress the original snippet like this:",
+      "zh": "好，有了第二个 push_button()，我现在可以把原来的片段压缩成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{\n layout.row();\n bool x_pressed = layout.push_button(\"X\", motion_mask_x);\n layout.row();\n bool y_pressed = layout.push_button(\"Y\", motion_mask_y);\n layout.row();\n bool z_pressed = layout.push_button(\"Z\", motion_mask_z);\n layout.row();\n bool local_pressed = layout.push_button(\"Local\", motion_mask_local);\n\nif (x_pressed) motion_mask_x = !motion_mask_x;\n if (y_pressed) motion_mask_y = !motion_mask_y;\n if (z_pressed) motion_mask_z = !motion_mask_z;\n if (local_pressed) motion_local = !motion_local;\n}"
+    },
+    {
+      "type": "p",
+      "en": "But this didn't exactly reproduce the original code.  The original code put all the buttons on one row, and this puts each button on a separate row.  So I needed to make the layout code a little more flexible in order to finish the compression properly.",
+      "zh": "但这并没有精确重现原来的代码。原代码把四个按钮放在同一行，而这个版本每个按钮占一行。所以为了把压缩做彻底，我需要让布局代码更灵活一点。"
+    },
+    {
+      "type": "p",
+      "en": "If I was going to allow multiple things to pack themselves into a single row, I needed a way of knowing how the space of the row would be divided up.  The original code just took the number of buttons it knew it was going to use, and divided the width of the row by that so it knew in advance where each button was by just doing the math.  Replicating this behavior was trivial if I forced the user of the code to pass the number of buttons.  With the number of buttons, I could make row() more intelligent so that it used both a width and a column_width, which I added to the Panel_Layout as well as a left_x that stored the starting x so that at_x could be reset on each row:",
+      "zh": "如果我要允许多个东西挤进同一行，就需要有办法知道这一行的空间会怎么划分。原来的代码只是拿它预先知道的按钮数量，用它去除这一行的宽度，于是靠算数就提前知道了每个按钮在哪。如果强制代码的使用者传入按钮数量，要复现这个行为轻而易举。有了按钮数量，我就能让 row() 更聪明一点，同时使用 width 和 column_width——我把它们加进了 Panel_Layout，还加了一个 left_x 用来存起始的 x，这样 at_x 在每一行都能被重置："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void Panel_Layout::row(int column_count = 1)\n{\n at_y -= row_height;\n at_x = left_x;\n assert(column_count >= 1);\n column_width = width / column_count;\n}"
+    },
+    {
+      "type": "p",
+      "en": "And then the push_button() routines could be modified to advance to the next column after drawing a button:",
+      "zh": "然后就可以修改 push_button() 例程，让它在画完一个按钮之后推进到下一列："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool Panel_Layout::push_button(char *text, bool highlight)\n{\n unsigned long button_color;\n unsigned long button_color_bright;\n unsigned long text_color;\n get_button_properties(panel, highlight, &button_color, &button_color_bright, &text_color);\n bool result = panel->draw_big_text_button( at_x, at_y, column_width, row_height, text, button_color, button_color_bright, text_color);\n at_x += column_width;\n return(result);\n}"
+    },
+    {
+      "type": "p",
+      "en": "Now the original snippet can be modified to exactly reproduce the old behavior:",
+      "zh": "现在原来的片段可以改写成精确复现旧行为的样子："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{\n layout.row(4);\n bool x_pressed = layout.push_button(\"X\", motion_mask_x);\n bool y_pressed = layout.push_button(\"Y\", motion_mask_y);\n bool z_pressed = layout.push_button(\"Z\", motion_mask_z);\n bool local_pressed = layout.push_button(\"Local\", motion_mask_local);\n\nif (x_pressed) motion_mask_x = !motion_mask_x;\n if (y_pressed) motion_mask_y = !motion_mask_y;\n if (z_pressed) motion_mask_z = !motion_mask_z;\n if (local_pressed) motion_local = !motion_local;\n}"
+    },
+    {
+      "type": "h2",
+      "id": "avoiding-unnecessary-complexity",
+      "zh": "避免不必要的复杂度",
+      "en": "Avoiding Unnecessary Complexity"
+    },
+    {
+      "type": "p",
+      "en": "If you remember the compressions I did last week, you'll be tempted to look at the integer 4 in that last snippet and try to eliminate it the same way I eliminated the up-front specification of the total number of rows in the original code.  While I applaud that sentiment, I didn't do that.",
+      "zh": "如果你还记得上周我做的那些压缩，看到最后那段代码里的整数 4，你大概会很想用我消除「预先指定总行数」的同样手法把它也消掉。这种心情我很赞赏，但我没有那么做。"
+    },
+    {
+      "type": "p",
+      "en": "The reason I didn't try to eliminate the pre-specification of the number of columns is because the control flow is actually dependent on that number, which was not true for the number of rows.  The number of rows was used solely in a computation that didn't affect any of the subsequent layout operations, so it was trivial to move it to the end where it could be computed automatically.  The number of columns, on the other hand, determines the width of the buttons, and until the width of the buttons is known, hit testing can't be performed.  If hit testing can't be performed, then the push_button() call couldn't return \"true\" in the case when the button was hit, which is necessary for the control flow to work the way it did originally.",
+      "zh": "我没有想办法消掉「预先指定列数」，是因为控制流实际上依赖于这个数字，而行数并非如此。行数只在一处计算里用到，那个计算不影响后续任何布局操作，所以把它挪到最后、让它自动算出来是轻而易举的。但列数不一样：它决定了按钮的宽度，而按钮宽度不知道，命中测试就没法做。命中测试做不了，push_button() 调用就无法在按钮被点中时返回 `true`——而要让控制流按原来的方式走，这一点是必需的。"
+    },
+    {
+      "type": "p",
+      "en": "So, in order to automatically calculate the number of columns from the number of push_button() calls, I would have had to introduce something relatively complicated.  There are many options for this sort of thing  —  one would be a deferred boolean, something that you get back from push_button() and inspect later.  This is error prone, and prevents the clean-looking if(push_button()) style, which was a very nice way to write the code.  Another option would be to move to a unique name or partially retained system, which would introduce a frame of latency to the processing so that hit testing actually reported the results from the previous frame.  Etc., etc.",
+      "zh": "所以，要想从 push_button() 的调用次数自动算出列数，我就得引入一些相对复杂的东西。这类东西有很多选择——一种是延迟布尔值，也就是从 push_button() 拿回一个值，之后再检查它。这很容易出错，而且会毁掉 `if(push_button())` 这种干净利落的写法，而那是非常好的一种写法。另一种选择是改用唯一名字或部分保留的系统，这会给处理引入一帧延迟，让命中测试实际报告的是上一帧的结果。如此等等。"
+    },
+    {
+      "type": "p",
+      "en": "Since specifying the number of columns is very simple, and is impossible to mess up in any catastrophic way (the worst possible outcome is that the buttons are sized wrong until someone notices), I made the judgment call that the more complex options weren't worth it.  These are the kind of tradeoffs that are extremely annoying, and which exist only because the people who write the C++ spec have no idea what production programming is or how to do it properly.  But that's a separate article.  For now, suffice it to say that this is a tradeoff that has very little to do with the nature of programming, and a lot more to do with the fact that C++ hasn't had a qualified language designer on it since… well, since Stroustrup stuck \"with Classes\" on the end of C and starting crapping it up with stuff that mostly made things worse.",
+      "zh": "既然指定列数非常简单，而且不可能搞出什么灾难性后果（最坏的结果无非是按钮尺寸不对，直到有人发现），我判断那些更复杂的方案不值得。这类取舍极其让人恼火，而它们之所以存在，只是因为写 C++ 标准的人根本不知道生产环境里的编程是什么、该怎么写才对。不过那是另一篇文章的话题。眼下只要说这一点就够了：这个取舍和编程的本质几乎没什么关系，更多是因为 C++ 自打……嗯，自打 Stroustrup 在 C 后面接上「with Classes」、并开始往里塞一堆多半让情况更糟的东西之后，就再没有一位合格的语言设计者参与其中了。"
+    },
+    {
+      "type": "p",
+      "en": "Sadly, this kind of tradeoff is still involved in programming of all kinds, whether it's compression-oriented programming or object-oriented programming or anything else.  There may be a very clear way in which you could have expressed what you wanted to express, but the language simply doesn't supply the primitives to do it.  When faced with a problem like this, there is often a strong temptation among programmers (myself included) to try to circumvent the shortcomings of the language and achieve the desired result through a great deal of extra code.  Unfortunately, this is almost always a lose, and so while I can say from the bottom of my heart that I empathize greatly with the folks out there who would try to make seventy layers of templates to solve a problem like pre-specifying the columns, because believe me I've done stuff like that in that past, I'm afraid I have to say from (quite a bit of) experience that it almost never ends up being a win in terms of total time spent, which is really the only thing that matters.",
+      "zh": "遗憾的是，无论你写的是压缩导向编程、面向对象编程还是别的什么，各种编程里都免不了要面对这类取舍。你可能有一种非常清晰的表达方式，只是这门语言根本没有提供做这件事的原语。面对这种问题时，程序员（包括我自己）常常会有一股强烈的冲动：绕过语言的缺陷，靠写一大堆额外代码来达到想要的结果。很不幸，这几乎总是亏的。所以，虽然我可以发自内心地说，我非常理解那些为了「预先指定列数」这种问题去搭七十层模板的人——相信我，我过去也干过这种事——但我恐怕得凭（相当多的）经验说：从总耗时来看，这几乎从来都不是赚的，而总耗时才是唯一真正要紧的东西。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "So although this point has little to do with compression-oriented programming per se, and is more about programming in general, I thought it was an important thing to point out.  It's OK to accept a solution that's a little ugly if the alternatives are uglier.  The important thing to remember is that you must always focus on the end result.  It's easy to fall into the habit of thinking of abstract things like whether code is \"clean\" or whether it is \"elegant\" or god forbid \"exception safe\" or whether it \"obeys RAII\" and all these other things you may have heard about or believe in.  But in the end you have to remember that all of them are just concepts and guidelines that someone made up on the way to achieving a lower total cost for code (as I described in the first article).  So you must always make sure that the primary thing you're evaluating in your head, when you make decisions in places where there are tradeoffs, is the total cost and only the total cost.  Because if the total cost is going to be worse, it really doesn't matter what else you might say about the code philosophically.  You still made the wrong decision.",
+      "zh": "所以，虽然这一点和压缩导向编程本身关系不大，更多是关于一般意义上的编程，我还是觉得它值得指出来：如果替代方案更丑，那么接受一个稍微丑一点的方案是可以的。要记住的是，你始终必须盯着最终结果。人很容易养成一种习惯，去琢磨代码是否「干净」、是否「优雅」，或者天哪，是否「异常安全」、是否「遵守 RAII」，以及你可能听说过或相信的种种其他说法。但最终你必须记住：它们全都只是别人在追求「让代码总成本更低」的路上编出来的概念和准则（正如我在第一篇文章里说的）。所以在有取舍的地方做决定时，你必须确保自己在脑子里评估的首要对象是总成本，而且只有总成本。因为如果总成本会更差，那么你在哲学上还能对这份代码说些什么，其实都不重要。你仍然是做了错误的决定。"
+    },
+    {
+      "type": "h2",
+      "id": "granularity",
+      "zh": "粒度",
+      "en": "Granularity"
+    },
+    {
+      "type": "p",
+      "en": "Getting back to the code at hand, I liked the look of the snippet at this point:",
+      "zh": "回到手上的代码，到这一步我已经挺喜欢这个片段的样子了："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "{\n layout.row(4);\n bool x_pressed = layout.push_button(\"X\", motion_mask_x);\n bool y_pressed = layout.push_button(\"Y\", motion_mask_y);\n bool z_pressed = layout.push_button(\"Z\", motion_mask_z);\n bool local_pressed = layout.push_button(\"Local\", motion_mask_local);\n\nif (x_pressed) motion_mask_x = !motion_mask_x;\n if (y_pressed) motion_mask_y = !motion_mask_y;\n if (z_pressed) motion_mask_z = !motion_mask_z;\n if (local_pressed) motion_local = !motion_local;\n}"
+    },
+    {
+      "type": "p",
+      "en": "But I saw a lot of code like it in the Witness UI system, where there were booleans that were getting toggled, and you constantly saw this pattern of using the boolean for the highlight and also using the result of the push_button() to toggle that same boolean.  So really, the second push_button() call that I made for doing these toggle buttons could be changed to make the code much more compact:",
+      "zh": "但我在《The Witness》的 UI 系统里看到大量类似的代码：有一堆被切换的布尔值，而且你总是看到同一个模式——用这个布尔值决定是否高亮，同时又用 push_button() 的返回值去翻转同一个布尔值。所以老实说，我为这些开关按钮写的第二个 push_button() 可以改一改，让代码紧凑得多："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void Panel_Layout::push_button(char *text, bool *toggle)\n{\n unsigned long button_color;\n unsigned long button_color_bright;\n unsigned long text_color;\n get_button_properties(panel, *toggle, &button_color, &button_color_bright, &text_color);\n if(panel->draw_big_text_button( at_x, at_y, column_width, row_height, text, button_color, button_color_bright, text_color)\n{\n *toggle = !*toggle;\n}\n at_x += column_width;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Now the code snippet could be more compressed:",
+      "zh": "现在这段代码可以压缩得更狠："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "layout.row(4);\n layout.push_button(\"X\", &motion_mask_x);\n layout.push_button(\"Y\", &motion_mask_y);\n layout.push_button(\"Z\", &motion_mask_z);\n layout.push_button(\"Local\", &motion_mask_local);"
+    },
+    {
+      "type": "p",
+      "en": "But that's not what I actually did.  I did something slightly different.  And this is where the concept of granularity comes into play.",
+      "zh": "但我实际并没有那么做。我做的是稍微不同的另一件事。粒度这个概念就是在这里登场的。"
+    },
+    {
+      "type": "p",
+      "en": "See, something subtle but important would have happened had I changed the highlightable push_button() to work this way: I would have created a hole in the API.  With one push_button() call not having any highlight capability, and another push_button() call that supports highlighting but requires a modifiable boolean, I'd have no way to conveniently use the API for something that wanted to be highlighted but that wasn't stored as a toggleable boolean.",
+      "zh": "你看，如果我把那个可高亮的 push_button() 改成这样工作，就会发生一件细微但重要的事：我在 API 上挖了一个洞。一个 push_button() 调用完全没有高亮能力，另一个支持高亮却要求传一个可修改的布尔值——那么，对于「想要高亮、但并不是以可切换布尔值形式存放」的东西，我就没有办法方便地用这套 API 了。"
+    },
+    {
+      "type": "p",
+      "en": "For example, suppose there had been some code that looked like this before I modified the second push_button() (and in fact, there was code that looked like this in other places in The Witness editor):",
+      "zh": "举个例子，假设在我修改第二个 push_button() 之前，有这样的代码（事实上，《The Witness》编辑器里其他地方确实有这种代码）："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if(layout.push_button(\"Foofing\", foofing_is_enabled()))\n{\n set_foofing(!foofing_is_enabled());\n}"
+    },
+    {
+      "type": "p",
+      "en": "With a modified highlightable push_button(), it would have had to change to look like this:",
+      "zh": "如果可高亮的 push_button() 被改成了新版本，上面这段就得改成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "bool foofing = foofing_is_enabled();\n layout.push_button(\"Foofing\", &foofing);\n if(foofing != foofing_is_enabled())\n{\n set_foofing(foofing);\n}"
+    },
+    {
+      "type": "p",
+      "en": "Modifying push_button() would have made the boolean toggle case better, but it would have made this case worse.  That might be a good API tradeoff to make if I'd had to make it (I'd just pick whichever was used more and make that way be the convenient way), but the key here is that I didn't have to make it.",
+      "zh": "修改 push_button() 会让「布尔开关」那种情形变得更好，却会让这种情形变得更糟。如果我非要做这个取舍，那也许还算是笔好买卖（我会挑用得更多的那个，把它做成方便的那种写法）；但关键在于，我并不需要做这个取舍。"
+    },
+    {
+      "type": "p",
+      "en": "Instead, the right solution was to leave both push_button() calls alone, and instead introduce a third call that does the modifiable boolean version as a layer on top of the highlightable push_button():",
+      "zh": "正确的做法是：两个 push_button() 都不动，另外引入第三个调用，把「可修改布尔值」这个版本做成架在可高亮 push_button() 之上的一层："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void Panel_Layout::bool_button(char *text, bool *toggle)\n{\n if(push_button(name, *toggle))\n{\n *toggle = !*toggle;\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "Now, the code snippet could be written compactly, just as before:",
+      "zh": "这样一来，那段代码就能像之前一样紧凑地写出来："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "layout.row(4);\n layout.bool_button(\"X\", &motion_mask_x);\n layout.bool_button(\"Y\", &motion_mask_y);\n layout.bool_button(\"Z\", &motion_mask_z);\n layout.bool_button(\"Local\", &motion_mask_local);"
+    },
+    {
+      "type": "p",
+      "en": "But since I didn't touch the other calls, code that wanted to use the highlightable push_button() directly to do things that are more complicated than a simple modifiable boolean could still be compact, too.",
+      "zh": "而由于我没有动另外那两个调用，那些想直接使用可高亮 push_button() 去做「比简单可修改布尔值更复杂的事」的代码，依然可以写得很紧凑。"
+    },
+    {
+      "type": "p",
+      "en": "This is an extremely simple example of how important it is to maintain continuous granularity when compressing code.  Before I started making Jon's UI system support more compression, it was extremely granular.  Everything was done by hand, so the user of the library had full control, but had to do a lot of work.",
+      "zh": "这是一个极其简单的例子，说明在压缩代码时保持连续粒度有多重要。在我动手让 Jon 的 UI 系统支持更多压缩之前，它的粒度非常细：一切都靠手写，库的使用者拥有完全的控制，但得干很多活。"
+    },
+    {
+      "type": "p",
+      "en": "When I made Panel_Layout and started adding things to it, I was making a less granular way to use the UI system.  The code that uses Panel_Layout makes less calls to it, and does less work, preferring instead to let Panel_Layout do some things automatically.  But obviously anyone who needed full control could always just not use Panel_Layout and call the UI system directly.  This created two levels of granularity, which was nice and flexible.",
+      "zh": "当我做出 Panel_Layout 并开始往上加东西时，我在提供一种粒度更粗的使用 UI 系统的方式。使用 Panel_Layout 的代码调用更少、干的活更少，更愿意让 Panel_Layout 自动处理一些事。但显然，任何需要完全控制的人，都可以干脆不用 Panel_Layout，直接调用 UI 系统。这形成了两级粒度，既好用又灵活。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Adding bool_button(), instead of modifying push_button() was crucial in that it created a third level of granularity.  If you happen to want a toggle boolean, you can call bool_button().  If you want a highlightable button, but don't want a toggle boolean, you can call push_button().  And if you want something else altogether, you can still call the UI system directly.",
+      "zh": "加一个 bool_button()、而不是去修改 push_button()，这一点至关重要，因为它创造出了第三级粒度。如果你想要一个可切换的布尔值，就调用 bool_button()；如果你想要一个可高亮的按钮、但不想要可切换布尔值，就调用 push_button()；而如果你想要的是完全不同的东西，你依然可以直接调用 UI 系统。"
+    },
+    {
+      "type": "p",
+      "en": "If instead I had changed push_button(), I would have created a hole in the second level of granularity, a discontinuity.  If you wanted a toggle boolean, you'd still be OK, because you call the modified push_button().  But if you want a highlightable button that doesn't work with a boolean at all, you either have to go all the way down to the lowest level of granularity and call the UI system directly, or you have to introduce a temporary boolean everywhere in a very inconvenient way so that you can try to use the higher-level call.",
+      "zh": "反过来说，如果我改了 push_button()，我就在第二级粒度上挖了一个洞，造成了一处断裂。如果你想要可切换布尔值，那还没问题，调用改过的 push_button() 就行；但如果你想要一个完全跟布尔值无关的可高亮按钮，你要么得一路降到最细的那一级粒度、直接调用 UI 系统，要么就得用非常别扭的方式到处引入一个临时布尔值，好去用那个更高层的调用。"
+    },
+    {
+      "type": "p",
+      "en": "Hopefully you can see how this extends to more complex situations.  As subsystems and APIs become more complex, continuous granularity can become essential to avoiding very bad situations.  In this simple example, the discontinuous case isn't horrible.  It's not great, but it's not that bad.  In cases where there were more far-reaching effects of a granularity change, things can be much worse.",
+      "zh": "希望你看出这件事会怎么延伸到更复杂的情形。当子系统与 API 变得越来越复杂，连续粒度就可能成为避免糟糕局面的关键。在这个简单例子里，断裂的情形还不算太可怕——谈不上好，但也没那么糟。而在粒度变化影响更深远的情形里，情况可能糟糕得多。"
+    },
+    {
+      "type": "p",
+      "en": "For example, suppose that I had been careless and ended up with a system where the granularity switch had cascading effects.  Suppose that I'd made Panel_Layout's data entirely private and didn't support any way of querying anything in it.  In that case, you would be forced to either use or not use Panel_Layout for everything in a panel.  So if you'd done all your buttons with push_button() and the modified toggle-boolean push_button(), then got to a button that couldn't use one of those, you'd literally be forced to rewrite the entire panel using the low-level UI calls!  As horrible as that sounds, it is actually a very common thing to have happen in APIs these days, many of which are \"designed\" by people who do not actually know anything about API design.",
+      "zh": "举例来说，假设我当初不够仔细，最后搞出一个「粒度切换会层层波及」的系统。假设我把 Panel_Layout 的数据全设成私有的，又不提供任何查询其中内容的方式。那样一来，一个面板里的所有东西，你要么全用 Panel_Layout，要么全不用。于是，如果你已经用 push_button() 和改过的「切换布尔值」版 push_button() 做完了所有按钮，然后遇到一个这两者都用不上的按钮，你就真的被迫用底层 UI 调用把整个面板重写一遍！听上去很可怕，但这在如今的 API 里其实非常常见——其中很多是由对 API 设计根本一无所知的人「设计」出来的。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "It is always important to avoid granularity discontinuities, but fortunately, it is really easy to do if you just remember a simple rule of thumb: never supply a higher-level function that can't be trivially replaced by a few lower-level functions that do the same thing.  This is often a hard rule of thumb to follow if you do object-oriented programming, and is yet another reason that object-oriented programming is a bad idea.  It's something you have to explicitly design into the system of objects a priori, and it is often very difficult to ensure that you have done it correctly, since there are lots of details to get right and lots of circumstances you have to correctly predict (and there's another problem here that deals with opaqueness, but I'm going to cover that in a later article).",
+      "zh": "避免粒度断裂始终很重要，但幸运的是，只要记住一条简单的经验法则，就非常容易做到：绝不要提供一个高层函数，除非它能被几个做同样事情的底层函数轻而易举地替代。"
+    },
+    {
+      "type": "p",
+      "en": "If instead you are following a compression-oriented approach to programming, the rule of thumb is trivial to follow because it is how you made the code in the first place!  It becomes an implicit result of the programming process, rather than an explicit issue you have to deal with.  Since compression-oriented programming means building the code by progressively bundling pieces of code into functions that operate at higher and higher levels, so as long as you just don't delete the smaller pieces as you build bigger ones, you automatically end up avoiding granularity discontinuities.",
+      "zh": "而如果你遵循的是压缩导向的编程方式，这条经验法则跟起来毫不费力，因为这本来就是你写代码的方式！它成了编程过程的一个隐含结果，而不是你必须专门处理的显式问题。既然压缩导向编程意味着把一段段代码逐步打包成一层比一层高的函数来构建代码，那么只要你在搭建更大块的时候不删掉那些小块的，你就自动避开了粒度断裂。"
+    },
+    {
+      "type": "h2",
+      "id": "last-week-and-next-week",
+      "zh": "上周与下周",
+      "en": "Last Week and Next Week"
+    },
+    {
+      "type": "p",
+      "en": "That brings me to the end of this week's Witness Wednesday.  Although I added a bunch more stuff to Panel_Layout (collapsible panels, tooltips, default controls for various things, scrolling, etc.), I can't think of anything particularly special about any of them that warrants detailed coverage.  So next week I will be moving on to \"the main event\" of this series, which is the construction of the new \"Lister Panel\".",
+      "zh": "本周的 Witness Wednesday（每周三连载）就到这里。虽然我往 Panel_Layout 里又加了不少东西（可折叠面板、工具提示、各种默认控件、滚动等等），但我想不出其中哪一个特别值得详细讲。所以下周我会进入这个系列的「正戏」：构建新的「Lister Panel」。"
+    },
+    {
+      "type": "p",
+      "en": "But before I sign off, I wanted to briefly address two types of comments that I received about last week's Witness Wednesday.",
+      "zh": "但在收尾之前，我想简单回应一下上周 Witness Wednesday 之后我收到的两类评论。"
+    },
+    {
+      "type": "p",
+      "en": "First, there seemed to be some confusion about what I meant by \"object-oriented programming\".  Just to clarify, I don't consider object-oriented programming to have anything to do with whether or not there may or may not be things that look like objects existing in the code base.  To me, that would be a very silly way to use that word, because that would imply that, for example, you were doing \"functional programming\" simply because your program happens to have some functions in it that don't have side effects.",
+      "zh": "第一，关于我说的「面向对象编程」是什么意思，似乎有些混淆。澄清一下：我不认为面向对象编程和「代码库里是否存在看起来像对象的东西」有任何关系。在我看来，那样用这个词非常愚蠢，因为那等于说，只要你的程序里恰好有一些没有副作用的函数，你就是在做「函数式编程」。"
+    },
+    {
+      "type": "p",
+      "en": "Rather, when I say \"object-oriented programming\", I mean literally that: you have oriented your programming around the objects.  The objects are the important thing to you, and you are thinking in terms of the objects.  It is the practice of thinking that objects are important (or that they're even worth thinking about at all) that is wrong, and is best avoided.  It is not objects themselves that are bad, because objects are really nothing more than some functions that happen to be strongly associated with some data.  If you happen to end up with that in your programs, there's nothing wrong with that.  Sometimes some functions are very closely related to the data with which they operate, and that's fine.",
+      "zh": "我说的「面向对象编程」就是字面意思：你把编程「朝向」了对象。对象对你来说是重要的东西，你在以对象为单位思考。错的是「认为对象很重要（甚至认为它们值得被考虑）」这种做法本身，最好避开它。糟糕的不是对象本身，因为对象说到底不过是一些碰巧和某些数据紧密关联的函数。如果你的程序里最后变成了那样，没有任何问题。有时候某些函数确实和它们所操作的数据关系极近，这没什么不好。"
+    },
+    {
+      "type": "p",
+      "en": "And to go one further, just to underscore that I'm talking about a way of programming rather than the result of that programming, if for some reason you really absolutely positively need to have a bunch of objects in your code in order for you to sleep soundly at night, as much as I might disagree with that opinion, I would still advocate that you build those objects using a compression-oriented approach!  You would still be much better served to avoid pre-designing your objects, or your hierarchies, or whatever else it is that you want, and instead write the low-level code first and progressively compress it into a suitable set of objects.",
+      "zh": "再说得更进一步，为了强调我谈的是一种编程方式、而不是这种方式的结果：如果你出于某种原因，非得在代码里有一堆对象才能晚上睡得踏实——尽管我可能不同意这种观点——我仍然主张你用压缩导向的方式来构建那些对象！你依然会受益良多：不要预先设计你的对象、你的继承体系，或者你想要的任何别的东西，而是先写底层代码，再逐步把它压缩成一套合适的对象。"
+    },
+    {
+      "type": "p",
+      "en": "Second, after last week's article, multiple people strangely suggested that, for some reason, compression-oriented programming would only work with small numbers of people (perhaps one or two), but is somehow not possible to do or not effective when working on teams (or large teams), and so object-oriented programming must be used.",
+      "zh": "第二，上周那篇文章之后，有好几个人奇怪地提出：出于某种原因，压缩导向编程只在人数很少（也许一两个人）时才管用，而在团队（或者大团队）里就做不了、或者没效果，所以必须用面向对象编程。"
+    },
+    {
+      "type": "p",
+      "en": "I don't really understand this suggestion.  I'd love to discuss it at some point, but honestly, I really just don't even know what the underlying assumptions would be that would cause someone to arrive at this conclusion.  I'm also not sure why they think that it isn't something I've used effectively on projects that involved teams of people (which I actually have).  So until I get a better idea of why someone would think that the number of people involved has anything to do with the efficacy of compression-oriented programming, I'll just say this:",
+      "zh": "我不太理解这个说法。我很愿意找机会讨论它，但老实说，我甚至想不出要有什么样的前提假设，才会让人得出这个结论。我也不明白他们为什么会认为我没有在多人团队的项目里有效地用过它（实际上我用过）。所以在我想清楚「为什么有人会认为参与人数和压缩导向编程的有效性有关系」之前，我只能这么说："
+    },
+    {
+      "type": "p",
+      "en": "Writing code for yourself to use is no different than writing code for someone else to use.  Unless you are some sort of idiot savant who remembers every piece of code they've ever written, it is always in your best interest to write reusable code that presents a nice, usable, hard-to-screw-up interface to the code that uses it, because even if it's only you who's using it, you'll probably have to use it at some point when you've forgotten one or more of its internal details.  Compression-oriented programming isn't some kind of shortcut thing you do when it's just you  —  it's the right way to build code that presents a clean interface to a complex set of operations, which is basically what any non-trivial piece of code needs to do.",
+      "zh": "给自己写代码用，和给别人写代码用，没有任何区别。除非你是某种「白痴天才」，记得自己写过的每一行代码，否则写可复用的代码永远对你有利——它给使用它的代码提供一个好用、难搞砸的接口。因为哪怕只有你在用它，你也总会在某个忘了它一两个内部细节的时刻去用它。压缩导向编程不是什么「只有一个人干活时才用的捷径」，它是构建代码的正确方式，好让一组复杂操作呈现出一个干净的接口——而任何有点分量的代码基本上都需要做到这一点。"
+    },
+    {
+      "type": "p",
+      "en": "I've been on projects where I was the only programmer ([RAD](http://radgametools.com)'s [Granny 3D](http://www.radgametools.com/granny.html)), I've been on projects where there were so many programmers that I didn't even know who they were or how many there were ([Intel](https://www.intel.com)'s [Larrabee](http://www.tomshardware.com/reviews/xeon-phi-larrabee-stampede-hpc,3342.html) project), and I've been on projects where there were just enough programmers to make things interesting, like [The Witness](http://the-witness.net/news/), where there were five (well, seven, technically, but I don't think all seven were ever on the project simultaneously).  Throughout all of this, I have never once found myself thinking that the style of programming should change based on the number of people.  I always adopt a compression-oriented approach, and if I am working on a team, as I get things to a point where I think they will be useful to others, I start putting things in a shared header file for them to use.  That's really all there is to it.",
+      "zh": "我做过只有我一个程序员的项目（[RAD](http://radgametools.com) 的 [Granny 3D](http://www.radgametools.com/granny.html)），也做过程序员多到我既不知道他们是谁、也不知道有多少人的项目（[Intel](https://www.intel.com) 的 [Larrabee](http://www.tomshardware.com/reviews/xeon-phi-larrabee-stampede-hpc,3342.html) 项目），还做过人数刚好足够让事情有意思的项目，比如[《The Witness》](http://the-witness.net/news/)——那里有五个人（严格说是七个，但我不认为这七个人同时都在项目上）。在这一切之中，我从来没有一次觉得编程风格应该随人数而变。我一律采用压缩导向的方式；如果在团队里干活，当我把东西做到我认为对别人有用时，就开始把它放进一个共享头文件供他们使用。真的就这么简单。"
+    },
+    {
+      "type": "p",
+      "en": "But, certainly, if there are a lot of specific issues that people are thinking of in relation to compression-oriented programming and object-oriented programming that vary based on the number of people involved, please write in and let me know what they are.  If I get enough specifics I'll do a whole article talking about them.",
+      "zh": "当然，如果大家在「压缩导向编程 vs 面向对象编程」这件事上，有很多具体的、且会随参与人数变化的问题，请写信告诉我具体是什么。如果具体的点够多，我会专门写一整篇文章来谈。"
+    }
+  ]
+}

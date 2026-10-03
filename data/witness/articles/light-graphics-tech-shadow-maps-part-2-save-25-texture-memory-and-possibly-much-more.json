@@ -1,0 +1,274 @@
+{
+  "id": "light-graphics-tech-shadow-maps-part-2-save-25-texture-memory-and-possibly-much-more",
+  "title": {
+    "zh": "图形技术：阴影贴图（下）：省下 25% 的纹理内存，可能还远不止",
+    "en": "Graphics Tech: Shadow Maps (part 2): Save 25% texture memory, and possibly much more."
+  },
+  "subtitle": {
+    "en": "Rotating each cascade, sliding their bounding rectangles left, and wrapping maps across the atlas: how The Witness reclaimed the texture space that stable cascaded shadow maps waste.",
+    "zh": "把每个级联各自旋转 90 度、把它们的包围矩形向左推、再让贴图在纹理图集里环绕：看《The Witness》如何把稳定的级联阴影贴图浪费掉的纹理空间收回一部分。"
+  },
+  "translator": {
+    "note": "原文小标题在归档 markdown 里是加粗行，按 schema.md 提升为 h2；插图行按全站口径归一化为 `![图](原图URL)`，「缩略图包永久链接」只保留原图。`power-of-two` / `non-power-of-two` 指纹理尺寸必须是 2 的幂次这一限制；`atlas` 按术语表作「图集」，`texel` 作「纹素」。正文中 `Shadow Map 0`、`4.1.2`、`FOV`、`up 向量` 均为原文记号，按原文保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "In [the previous part](http://the-witness.net/news/?p=77), I talked about my reasons for wanting to use Cascading Shadow Maps (one of the biggest: image stability), then said that we had implemented Michal Valient's version of the algorithm, and mostly liked it, but wanted to reduce the memory usage.",
+      "zh": "在[上一部分](http://the-witness.net/news/?p=77)里，我谈了自己想用级联阴影贴图（Cascading Shadow Maps）的理由（其中最大的一条是图像稳定性），然后说到我们实现了 Michal Valient 版本的这个算法，基本上很满意，只是想减少内存占用。"
+    },
+    {
+      "type": "p",
+      "en": "This time I'll show how to reduce the memory usage by 25% on machines that support non-power-of-two textures; or, on machines that don't, how to fit 5 shadow maps in the space previously used for 4.",
+      "zh": "这次我要讲的是：在支持非 2 的幂次尺寸纹理的机器上如何把内存占用减少 25%；而在不支持的机器上，如何把 5 张阴影贴图塞进原先只放 4 张的空间里。"
+    },
+    {
+      "type": "p",
+      "en": "Valient's shadow system generates very stable shadow maps, but this costs a lot of texture memory.  Recall that so much memory is needed because you are inscribing your frustum slice inside a circle, and then inscribing that circle in the texture map:",
+      "zh": "Valient 的阴影系统能生成非常稳定的阴影贴图，但代价是大量纹理内存。回顾一下：之所以需要这么多内存，是因为你要把视锥体切片内接进一个圆，再把这个圆内接进纹理贴图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/1slice.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "When implementing cascading shadow maps, you will be using more than one frustum slice: say, four or five.  Valient's ShaderX 6 paper suggests a way to sample from four different shadow slices quickly in the shader by packing them into an atlas, perhaps like this:",
+      "zh": "实现级联阴影贴图时，你会用到不止一个视锥体切片，比如说四五个。Valient 的 ShaderX 6 文章提出了一种办法：把这些切片打进一张图集（atlas），从而在着色器里快速地从四个不同的阴影切片采样，也许就像这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/thumbs/thumbs_atlas2048x2048.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This was the way we implemented it at first, but very soon after that I was desiring a little more versatility.  If your graphics hardware will do non-power-of-two textures, then you may wish to have the number of shadow slices be an adjustable property; but if the texture maps are packed into a square like that, it's hard to know where to put a fifth one.  So we changed the atlas layout to this:",
+      "zh": "我们最初就是这么实现的，但很快我就想要多一点灵活性。如果你的图形硬件支持非 2 的幂次尺寸纹理，你可能会希望把阴影切片的数量做成一个可调属性；但如果纹理贴图像那样被塞进一个正方形里，就很难知道第五张该往哪儿放。于是我们把图集的排布改成这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/atlas4096x1024.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "This still works on power-of-two hardware (power-of-two textures don't have to be square!), and on more-versatile hardware, we can now easily add new textures onto the end.",
+      "zh": "这在只支持 2 的幂次尺寸的硬件上依然可用（2 的幂次尺寸的纹理不一定是正方形！），而在更灵活的硬件上，我们现在可以轻松地往末尾继续追加新的纹理。"
+    },
+    {
+      "type": "p",
+      "en": "When your atlas is laid out in a line like this, and you add some runtime visualization to your game, it becomes very clear how much texture space is going unused.  Here's a shot from *The Witness*'s shadow maps:",
+      "zh": "当图集像这样排成一条直线，而你又给游戏加了点运行期可视化之后，有多少纹理空间没被用上就变得一目了然。这是《The Witness》阴影贴图的一张截图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/green_frusta_1_0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The frustum slices are shown in green.  Obviously there is a lot of empty space between them.  (For the purposes of visualization, we have left the pixels in the \"empty space\" filled with shadow map data, but anything that is not covered by green will never be visible in-game, so the game will run faster if we cull all that stuff!)",
+      "zh": "视锥体切片用绿色标出。显然它们之间有很多空白。为了可视化的目的，我们把「空白处」的像素留成了填着阴影贴图数据的样子；但任何没有被绿色覆盖的东西在游戏里永远不会可见，所以如果我们把这些东西全都剔除掉，游戏会跑得更快！"
+    },
+    {
+      "type": "p",
+      "en": "Because there's so much empty space, we could move our shadow maps closer together, and use less memory.  But we need to be careful about it, because the whole point of the algorithm is that we need enough shadow map space to handle the worst case.  Indeed, if you turn the camera a bit, you get this:",
+      "zh": "因为有这么多空白，我们本可以把阴影贴图挪得更近、少用些内存。但这事得小心，因为这个算法的关键就在于我们要有足够的阴影贴图空间来应付最坏情况。果然，把相机稍微转一点，你就得到这个："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/green_frusta_2_0.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Now there is very little space between the maps, so you can't squeeze them together.  Instead, all the space is toward the bottom of the atlas, and it is unclear how to use it effectively.",
+      "zh": "现在贴图之间的空隙非常小，你没法把它们挤在一起了。相反，所有空间都跑到了图集的底部，而怎么有效利用它并不清楚。"
+    },
+    {
+      "type": "p",
+      "en": "But there's a trick we can apply.  Even though these shadow maps are all packed into one atlas, they are still indexed as separate units in the shader, which means we can transform them as separate units.  So why don't we just rotate each individual shadow map by 90 degrees?  Here's what happens to the image above when you do that:",
+      "zh": "但我们可以耍个花招。虽然这些阴影贴图都被打进了一张图集，它们在着色器里仍然作为独立单元来索引，也就是说我们可以把它们当成独立单元来做变换。那我们为什么不干脆把每一张阴影贴图各自旋转 90 度呢？这么做了之后，上面那张图就变成了这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/green_frusta_3.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Now there is plenty of horizontal space and we can pack the maps all together!  (Of course we don't need to render our shadow maps at the default orientation and then copy-and-rotate them in a post-pass; we can just rotate the up-vector of the camera used to render the shadow maps, so that we get the rotation for free.)",
+      "zh": "现在横向空间很充裕，我们可以把所有贴图都挤到一起了！（当然，我们不需要先按默认朝向渲染阴影贴图、再在后处理里把它们拷贝并旋转；我们只要旋转用于渲染阴影贴图的相机 up 向量，就白捡了这个旋转。）"
+    },
+    {
+      "type": "p",
+      "en": "When we rotate the shadow maps like this, in order to render properly, our shader needs to realize that they are rotated; but Valient's system already provided a way to transform the shadow map coordinates based on map index, so rotating the maps fits directly into that scheme.  Furthermore, if we are using any filter offsets to index into our shadow map, we need to ensure that those offsets get rotated (by either rotating the constants before uploading them to the shader, or by adding them before doing the map-to-atlas transform, depending on how your system is implemented).",
+      "zh": "当我们这样旋转阴影贴图之后，为了正确渲染，着色器必须知道它们被旋转过；而 Valient 的系统本来就提供了按贴图索引来变换阴影贴图坐标的机制，所以旋转贴图可以直接融进这套机制里。此外，如果我们用任何过滤偏移来索引阴影贴图，就必须确保这些偏移也跟着旋转（要么在上传给着色器之前把常量旋转好，要么在做「贴图坐标到图集坐标」的变换之前把它们加上去，取决于你的系统是怎么实现的）。"
+    },
+    {
+      "type": "p",
+      "en": "So how do we figure out how to pack the frustum slices together?  Our implementation slides them to the left as far as we can make them go.  First, we compute bounding rectangles for the frustum slices (bounding rectangles shown in yellow):",
+      "zh": "那么我们怎么确定视锥体切片该怎么拼到一起？我们的实现是把它们尽量往左推。首先，我们为这些视锥体切片计算包围矩形（包围矩形用黄色标出）："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/yellow_rectangles.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "These rectangles are all oriented in the same direction, so we can just slide them to the left until they nearly touch:",
+      "zh": "这些矩形的朝向全都一样，所以我们只要把它们往左推、推到几乎挨上为止："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/yellow_rectangles_packed.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We figure out the rectangle orientation by performing a brute-force uv-bounding computation on one of the frustum slices, then using that same orientation for all slices.  By \"brute-force uv-bounding computation\" I mean that we just try a whole bunch of different angles and see which one fits the tightest.  In the current implementation we try 100 different orientations spread over 90 degrees, so we find the best angle to within less than 1 degree of accuracy.  (You only need to try 90 degrees, because at that point every angle has been covered by at least one of the sides of your rectangle).",
+      "zh": "我们确定矩形朝向的办法，是对其中一个视锥体切片做一次暴力 uv 包围计算，然后所有切片都用这个朝向。所谓「暴力 uv 包围计算」，就是我们把一大堆不同的角度都试一遍，看哪个包得最紧。在当前实现里，我们在 90 度范围内试 100 个不同朝向，所以找到的最佳角度误差不到 1 度。（你只需要试 90 度，因为到那个范围时，每个角度都至少被矩形的一条边覆盖过了。）"
+    },
+    {
+      "type": "p",
+      "en": "The initial instinct was to use Shadow Map 0 to compute the rectangle orientation, but this didn't quite work out; because of the extreme pointiness of the first frustum slice, we sometimes end up with bounding rectangles that do not suit the other maps.  Using any of the other shadow maps solves this problem (because their near plane tends to create a coherent bounding edge).",
+      "zh": "最初的本能是用 Shadow Map 0 来计算矩形朝向，但结果不太行；由于第一个视锥体切片极其尖，我们有时会得到不适合其他贴图的包围矩形。改用其他任意一张阴影贴图就能解决这个问题（因为它们的近平面往往会形成一条连贯的包围边）。"
+    },
+    {
+      "type": "p",
+      "en": "We're not done moving the shadow maps around.  Besides just shifting the later shadow maps leftward, as above, we save some more space by shifting the first shadow map leftward based on the leftmost vertex in its frustum slice.  (We don't do it based on the yellow rectangle, because that rectangle will almost always be poking outside of the atlas already.  We don't need to make sure the whole yellow rectangle is inside the atlas; just the green frustum slice!  Remember that the rectangles are just a tool to help us know how to pack.)  So then we get this:",
+      "zh": "挪动阴影贴图的工作还没完。除了像上面那样把后面几张阴影贴图向左推，我们还根据第一张阴影贴图视锥体切片里最靠左的顶点，把它也往左推一点，从而再省出一些空间。（我们不按黄色矩形来推，因为那个矩形几乎总是已经戳到图集外面去了。我们不需要保证整个黄色矩形都在图集里，只要绿色的视锥体切片在里面就行！记住，矩形只是个帮我们知道该怎么排布的工具。）于是我们就得到这个："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/yellow_rectangles_packed_left.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "And we can shave off even more space by shifting the rightmost map upward or downward, whichever direction will allow it to slide further to the left (in this case, it's downward:)",
+      "zh": "我们还能再削掉一些空间：把最右边那张贴图往上或往下挪，哪个方向能让它继续往左滑就选哪个（在这个例子里是往下挪：）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/yellow_rectangles_packed_right.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Clearly we've saved a lot of space -- about half for this viewing angle.  But we have to allocate enough texture space for the worst case, and the question is, what is that worst case?  Empirically, for our game's FOV, we find that in this worst-case viewing angle we can chop off 25% of the texture map.",
+      "zh": "显然我们省下了大量空间——在这个视角下大约省了一半。但我们必须为最坏情况分配足够的纹理空间，问题就在于：最坏情况是什么？根据实测，对我们游戏的 FOV 来说，在最坏的视角下我们能砍掉纹理贴图的 25%。"
+    },
+    {
+      "type": "p",
+      "en": "If you're on non-power-of-two texture hardware, you can just cut your map down and you are happy.  If you are power-of-two-only, you can't do that, but you could use five frustum slices in the space that previously held only four.",
+      "zh": "如果你的硬件支持非 2 的幂次尺寸纹理，你直接把这张贴图裁小就皆大欢喜了。如果只支持 2 的幂次尺寸，那就不能这么干，但你可以在原先只放得下四个切片的空间里用上五个视锥体切片。"
+    },
+    {
+      "type": "h2",
+      "id": "dealing-with-overlapping",
+      "zh": "处理重叠",
+      "en": "Dealing with Overlapping"
+    },
+    {
+      "type": "p",
+      "en": "You can pack these rectangular areas together however you want, as long as they don't overlap -- at scene rendering time, your shader doesn't know or care how close these regions are to each other.  Actually building the shadow maps in the first place has become a bit trickier, though.  When each shadow map was in its own self-contained square region, we would just set up a viewport for that square, erase the contents, and render into it.  But now, suppose we are rendering the shadow maps from left to right: while we are rendering the second shadow map, its viewport is going to inevitably overlap the first shadow map.  We have to be careful not to write into the valid region of that first shadow map, or else we'll mess up the scene.",
+      "zh": "这些矩形区域你可以随便拼，只要互不重叠就行——在渲染场景的时候，你的着色器既不知道也不关心这些区域彼此挨得多近。不过，真正去构建这些阴影贴图这件事本身变得麻烦了一些。以前每张阴影贴图都在自己独立的方形区域里时，我们只要为那个正方形设置好视口，清空内容，然后往里渲染就行。但现在，假设我们从左到右依次渲染阴影贴图：渲染第二张的时候，它的视口不可避免地会与第一张阴影贴图重叠。我们必须小心，不要写进第一张阴影贴图的有效区域，否则场景就毁了。"
+    },
+    {
+      "type": "p",
+      "en": "In our current implementation, we use DirectX9's API-provided clipping planes for this purpose.  (The long sides of the yellow rectangles tell us exactly where to put our clipping planes. )  Clipping planes are deprecated in future versions of the API, so we would either switch to stencil testing or else do the clipping ourselves in the shaders.",
+      "zh": "在我们当前的实现里，我们用 DirectX9 的 API 提供的裁剪平面来达到这个目的。（黄色矩形的长边恰好告诉我们该把裁剪平面放在哪里。）裁剪平面在这个 API 的未来版本里已被弃用，所以我们要么改用模板测试，要么自己在着色器里做裁剪。"
+    },
+    {
+      "type": "p",
+      "en": "Here's what the neighborhood of the worst case looks like:",
+      "zh": "最坏情况附近长这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/worst_case.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It happens when you are looking sort-of in the direction of the light vector, but you are turned enough to the side that the view frustum has rotated to be diagonal relative to the axes of the texture map space.  (If you are pointing directly along the light vector, your view frustum extrema are likely to be parallel to the axes of the texture map space.)",
+      "zh": "它出现在你大致朝着光照向量的方向看、但身子转得足够偏的时候，此时视锥体已经旋转到与纹理贴图空间的坐标轴呈对角的位置。（如果你正对着光照向量，视锥体的极值点很可能是与纹理贴图空间的坐标轴平行的。）"
+    },
+    {
+      "type": "h2",
+      "id": "deeper-thinking-not-yet-done",
+      "zh": "更深一层的思考，我们还没做",
+      "en": "Deeper Thinking We Have Not Yet Done"
+    },
+    {
+      "type": "p",
+      "en": "We've saved this texture memory by doing what are essentially image-space operations.  But it seems to me that one could somehow project these operations back to the 3D space that we use to compute the bounding spheres in the first place, and generate smaller spheres.  The operation of rotating our texture maps means that we are folding our output space over on itself, using only half the possible orientations.  The whole point of the bounding sphere is to permit the use of any orientation at all -- which we clearly, in retrospect, do not need.  So it's probably possible to reformulate this algorithm in terms of a bounding hemisphere of some kind (or some shape that is somewhat near a hemisphere but allows frustum corner protrusions to poke out of it).",
+      "zh": "我们省下这些纹理内存，靠的其实是本质上属于图像空间的操作。但在我看来，一个人应该能想办法把这些操作投影回我们最初用来计算包围球的那个三维空间，从而生成更小的球。旋转纹理贴图这个操作意味着我们在把输出空间对折到自己身上，只用到所有可能朝向的一半。包围球存在的全部意义就是允许使用任意朝向——事后看来，我们显然并不需要这个。所以大概可以把这套算法改写成用某种「包围半球」的形式（或者某种接近半球、但允许视锥体角部凸出来的形状）。"
+    },
+    {
+      "type": "h2",
+      "id": "saving-tremendously-more-memory",
+      "zh": "如果你愿意拷贝贴图、或者分多块渲染，还能省下多得多的内存……",
+      "en": "Saving Tremendously More Memory, if you are willing to copy your maps or else render them in multiple pieces..."
+    },
+    {
+      "type": "p",
+      "en": "The reason our system works is that once the shadow maps are packed into an atlas, the shader doesn't know or care where the boundaries of the shadow maps are.  We can address the atlas at will, because in reality it is just one continuous texture map.  This means that we can go even further, and place some of our shadow maps in the atlas in such a way that they cross the boundaries of the atlas and wrap to the other side.  It looks discontinuous, but the shader being run at scene-render time does not care, if the texture is addressed in a wrapping mode.  Here is a messy mock-up (not the output from an actual running version, because we haven't implemented this):",
+      "zh": "我们这套系统能成立的原因在于：一旦阴影贴图被打进图集，着色器就既不知道也不关心阴影贴图的边界在哪里。我们可以随意地对图集寻址，因为它实际上只是一张连续的纹理贴图。这意味着我们还能更进一步：把某些阴影贴图放进图集时，让它们越过图集的边界、环绕到另一侧去。看起来是不连续的，但只要纹理以环绕模式寻址，场景渲染时跑的着色器并不在意。下面是一张很粗糙的示意图（不是实际运行版本的输出，因为我们还没实现这个）："
+    },
+    {
+      "type": "p",
+      "en": "Unwrapped, easy-to-see version of texture space:",
+      "zh": "展开、容易看清楚的纹理空间版本："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/wrap_1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Wrapped vertically:",
+      "zh": "垂直环绕："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/wrap_2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Wrapped horizontally:",
+      "zh": "水平环绕："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/shadow-mapping-2-images/wrap_3.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In my done-by-hand mockup, the result is 46% the size required by the default packing in Valient's original algorithm.  That's a lot of memory savings.",
+      "zh": "在我手工做出来的示意图里，结果只有 Valient 原始算法默认排布所需尺寸的 46%。这省下的内存相当可观。"
+    },
+    {
+      "type": "p",
+      "en": "The catch is that, while it's easy to employ this mapping without additional expense, it's more expensive to generate.  You have to either render a non-wrapped version of each shadow map and then copy it into its multiple destination pieces, or else you have to render each map in multiple passes.  (It's always possible to arrange your maps so that one of them is unsplit, so for 4 frustum slices, you probably need 3 additional passes.  Each pass has fewer objects, though, so maybe it's not too bad.)",
+      "zh": "问题在于：使用这种映射本身不花额外代价，但要生成它就贵了。你要么把每张阴影贴图按不环绕的版本渲染一遍，再把它拷贝到多个目标碎块里；要么就得把每张贴图分多趟渲染。（你总可以安排得让其中一张贴图不被切分，所以对 4 个视锥体切片来说，你大概需要额外 3 趟。不过每趟的物体更少，所以也许还不算太糟。）"
+    },
+    {
+      "type": "p",
+      "en": "If you are using pre-filtered shadow maps, then the filtering step is just a kind of copy anyway, so you would be able to do this packing essentially for free.  We aren't doing any pre-filtering on *The Witness*, but if we do, it is likely we will switch over to this packing scheme.  The memory savings are so huge, how could we not?",
+      "zh": "如果你用的是预过滤的阴影贴图，那么过滤这一步本来就是某种拷贝，所以你可以基本免费地做到这种排布。我们在《The Witness》上没有做任何预过滤，但如果要做，很可能会换成这套排布方案。省下的内存这么多，我们怎么可能不换？"
+    },
+    {
+      "type": "p",
+      "en": "But I'd like to reiterate for clarity that at this time we have not implemented this wrapping-shadow-map scheme, so if there are any hidden gotchas, I don't know.  We have only implemented the above 25% savings scheme (sliding the maps around, no wrapping).",
+      "zh": "不过为了说清楚，我想再强调一遍：到这个时候我们还没有实现这套环绕阴影贴图方案，所以如果里面藏着什么坑，我并不知道。我们只实现了上面那套省 25% 的方案（挪动贴图，不做环绕）。"
+    }
+  ]
+}

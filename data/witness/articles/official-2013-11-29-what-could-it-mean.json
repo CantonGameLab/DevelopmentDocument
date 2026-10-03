@@ -1,0 +1,23 @@
+{
+  "id": "official-2013-11-29-what-could-it-mean",
+  "title": { "zh": "这可能是什么意思？？", "en": "What could it mean??" },
+  "subtitle": {
+    "en": "Two screenshots and no explanation.",
+    "zh": "两张截图，没有任何解释。"
+  },
+  "translator": {
+    "note": "正文没有任何文字，只有两张照片（vr1、vr2），按全站约定各收为一个图片占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/11/vr1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/11/vr2.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

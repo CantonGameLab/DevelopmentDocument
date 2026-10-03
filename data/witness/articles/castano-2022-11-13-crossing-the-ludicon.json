@@ -1,0 +1,37 @@
+{
+  "id": "castano-2022-11-13-crossing-the-ludicon",
+  "title": {
+    "zh": "跨越 Ludicon",
+    "en": "Crossing the Ludicon"
+  },
+  "subtitle": {
+    "zh": "我开公司了：做图形与游戏技术的研究开发，第一个产品是实时 ASTC 编码器。",
+    "en": "Starting my own business for graphics and game technology R&D, with a real-time ASTC encoder as the first product."
+  },
+  "translator": {
+    "note": "这是作者宣布创立自己公司（ludicon.com）的短文。标题 `Crossing the Ludicon` 是作者对自己网站域名的一个谐音玩笑（借用「crossing the Rubicon」的说法），译文按字面译出、不加解释。`ASTC`、`RDO` 保留英文；`texture compression` 作「纹理压缩」，`parameterization` 作「参数化」，`simplification` 作「简化」。",
+    "source": "archive/castano-blog/2022-11-13-crossing-the-ludicon.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I’m excited to announce that I’m starting [my own business](http://www.ludicon.com/) to research and develop graphics and game technologies, with a focus on the texture and mesh processing pipelines.",
+      "zh": "我很兴奋地宣布，我要[自己开公司](http://www.ludicon.com/)了，做图形与游戏技术的研究开发，重点是纹理处理与网格处理管线。"
+    },
+    {
+      "type": "p",
+      "en": "My first product is a real-time ASTC encoder that is orders of magnitude faster than existing offline compressors. It targets a small subset of the available encoding space, but achieves competitive quality through carefully crafted algorithms and creative optimizations.",
+      "zh": "我的第一个产品是一个实时 ASTC 编码器，比现有的离线压缩器快好几个数量级。它只覆盖可用编码空间中的一小部分，但通过精心设计的算法和创造性的优化，达到了有竞争力的质量。"
+    },
+    {
+      "type": "p",
+      "en": "In addition to that I’m exploring middleware products and applications that advance the state of the art in the areas of RDO texture compression, mesh processing algorithms such as simplification and parameterization, and alternative representations for rendering and physical simulation.",
+      "zh": "除此之外，我也在探索中间件产品与应用，在 RDO 纹理压缩、简化与参数化之类的网格处理算法，以及用于渲染和物理模拟的替代表示这几个方向上推进技术水平。"
+    },
+    {
+      "type": "p",
+      "en": "For inquiries, contact me at: [castano@ludicon.com](mailto:castano@ludicon.com)",
+      "zh": "有咨询请写信到：[castano@ludicon.com](mailto:castano@ludicon.com)"
+    }
+  ]
+}

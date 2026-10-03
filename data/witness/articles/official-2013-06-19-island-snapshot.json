@@ -1,0 +1,73 @@
+{
+  "id": "official-2013-06-19-island-snapshot",
+  "title": { "zh": "岛屿快照", "en": "Island Snapshot" },
+  "subtitle": {
+    "en": "An island snapshot with the current puzzle and footstep counts, plus E3 press coverage.",
+    "zh": "一张岛屿快照，附带目前的谜题数与脚步声数，以及 E3 上的一批报道。"
+  },
+  "translator": {
+    "note": "源文件为 2013-017-island-snapshot.md（manifest 里该 id 的 mdPath）。归档里另有多篇同名的 Island Snapshot，内容互不相同。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Once again, we have been mostly working on things you can't see from this angle. The most-visible changes are probably the peninsula on the left in the foreground, which has undergone extensive work lately:",
+      "zh": "又一次，我们做的主要都是从这个角度看不见的东西。最显眼的变化大概是前景左侧那个半岛，它最近被大改过："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/06/shot_2013.06.19__time_18_23_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It's been revamped by Alex, who is new on the team, helping us with the huge amount of modeling we still need to do to finish the game. Hopefully we'll get a bio paragraph for him soon on the About page.",
+      "zh": "它由 Alex 重新改造过。Alex 是团队里的新人，在帮我们处理为了完成游戏还剩下的大量建模工作。希望很快能在 About 页面上看到他的简介段落。"
+    },
+    {
+      "type": "p",
+      "en": "The current puzzle count is 590.",
+      "zh": "目前的谜题数量是 590 个。"
+    },
+    {
+      "type": "p",
+      "en": "The current footstep count is 1756.",
+      "zh": "目前的脚步声数量是 1756 个。"
+    },
+    {
+      "type": "p",
+      "en": "P.S.: Last week we showed The Witness at E3. This was the first time we have ever shown the game running on the PlayStation 4. We got some nice write-ups about the game; here are just a few:",
+      "zh": "附言：上周我们在 E3 上展示了《The Witness》。这是我们第一次把游戏跑在 PlayStation 4 上展示。我们得到了一些不错的报道，下面只列几篇："
+    },
+    {
+      "type": "p",
+      "en": "[Steven Hansen from Destructoid](http://www.destructoid.com/blow-s-enigmatic-the-witness-is-the-highlight-of-the-ps4-256341.phtml) really enjoyed the game!",
+      "zh": "[Destructoid 的 Steven Hansen](http://www.destructoid.com/blow-s-enigmatic-the-witness-is-the-highlight-of-the-ps4-256341.phtml) 非常喜欢这个游戏！"
+    },
+    {
+      "type": "p",
+      "en": "[Tara Long from Revision 3](http://www.youtube.com/watch?v=MHnw7LH1w_Q) really enjoyed the game! (She also gave us an award at the show!)",
+      "zh": "[Revision 3 的 Tara Long](http://www.youtube.com/watch?v=MHnw7LH1w_Q) 也非常喜欢这个游戏！（她还在展会上给我们颁了个奖！）"
+    },
+    {
+      "type": "p",
+      "en": "Darren Franich from Entertainment Weekly put us at [#1 on the list of most exciting games of E3](http://popwatch.ew.com/2013/06/13/best-of-e3-witness-watch-dogs-beyond-titanfall/).",
+      "zh": "Entertainment Weekly 的 Darren Franich 把我们排在了 [E3 最令人兴奋游戏榜单的第 1 名](http://popwatch.ew.com/2013/06/13/best-of-e3-witness-watch-dogs-beyond-titanfall/)。"
+    },
+    {
+      "type": "p",
+      "en": "[Matt Miller of Game Informer seemed to really like the game](http://www.gameinformer.com/games/the_witness/b/playstation4/archive/2013/06/14/five-features-that-define-the-game.aspx), and put together a list of defining features.",
+      "zh": "[Game Informer 的 Matt Miller 似乎真的很喜欢这个游戏](http://www.gameinformer.com/games/the_witness/b/playstation4/archive/2013/06/14/five-features-that-define-the-game.aspx)，还整理了一份定义这款游戏的特征清单。"
+    },
+    {
+      "type": "p",
+      "en": "[Chris Leggett of Gameplanet](http://www.gameplanet.co.nz/playstation-4/previews/1123010.E3-The-Witness-preview/) says The Witness was his personal favorite game of E3. (The folks at Gameplanet who chose the photos to go on the article used some unfortuante, super-old development photos though!)",
+      "zh": "[Gameplanet 的 Chris Leggett](http://www.gameplanet.co.nz/playstation-4/previews/1123010.E3-The-Witness-preview/) 说《The Witness》是他个人在 E3 上最喜欢的游戏。（不过 Gameplanet 那边给文章挑配图的人，用了几张很不巧、超级老的开发期照片！）"
+    },
+    {
+      "type": "p",
+      "en": "[Tom McShea and Shaun McInnis of Gamespot](http://www.gamespot.com/e3/the-witness-what-is-it-i-dont-even-6410248/) gave a video summary from the show, seeming to like the game a lot as well!",
+      "zh": "[Gamespot 的 Tom McShea 和 Shaun McInnis](http://www.gamespot.com/e3/the-witness-what-is-it-i-dont-even-6410248/) 做了一段展会视频总结，看起来也很喜欢这个游戏！"
+    }
+  ]
+}

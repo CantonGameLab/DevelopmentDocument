@@ -1,0 +1,161 @@
+{
+  "id": "castano-2009-03-19-gpu-dxt-decompression",
+  "title": {
+    "zh": "GPU 上的 DXT 解压",
+    "en": "GPU DXT Decompression"
+  },
+  "subtitle": {
+    "zh": "同一份 DXT 数据在不同 GPU 上解压结果并不相同：NVIDIA 的近似公式、D3D10 的误差界，以及单色压缩器为什么会踩到这个坑。",
+    "en": ""
+  },
+  "translator": {
+    "note": "归档 markdown 把源码里的 `<` 当成 HTML 标签吃掉了，导致两个代码块被破坏：`evaluatePaletteNV5x` 里的 `(col0.g << 2) | (col0.g >> 4)` 被压成 `(col0.g > 4)`（共两处），而「计算 ryg 解压查找表」那段代码从 `i < 256; i++` 一直吞到 `err +=`，只剩下三行。译文里的四个代码块**逐字取自原始 HTML**（`archive/raw/castano/html/40-gpu-dxt-decompression.json` 的 `content` 字段），已把其中给 `err += 0.03f * abs(maxe - mine);` 一行加的 `<b>` 强调标记去掉（代码块无法表示粗体），行尾的 `\\r\\n` 统一为 `\\n`。两处截图是「外链包图片」形式，按全站口径丢掉外层链接、只留图片本身；`zh` 里对应写「（原文此处有一张图）」。源文末尾的六条读者评论也在 WordPress 的 `content` 里，归档把它们拆成了「作者 / Posted … | Permalink / 正文」三行，译文按原始 HTML 的一段一条合并回 6 个段落。术语：`palette` 作「调色板」、`bit expand` 作「位扩展」、`dithering` 作「抖动」、`error bounds` 作「误差界」、`endpoint` 作「端点」；`DXT`、`DXT1`、`BC5`、`D3D10`、`GPU`、`API`、`Permalink` 保留英文。原文副标题缺失，`subtitle.zh` 是译者概括的。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Even thought the DXT compression format is widely adopted, most of the hardware implementations use a slightly different decompression algorithm.",
+      "zh": "尽管 DXT 压缩格式被广泛采用，但大多数硬件实现使用的解压算法都略有不同。"
+    },
+    {
+      "type": "p",
+      "en": "The problem is that there never was a specification that described the preferred implementation. The DXT format was first documented by S3 in [US patent 5956431](http://www.google.com/patents?id=QEEZAAAAEBAJ). However, in order to cover all possible implementations the description in the patent is very generic. It does not specify when or whether the colors are bit expanded, or how the palette entries are interpolated. In one of the proposed embodiments they approximate the 1/3 and 2/3 terms as 3/8 and 5/8, which would have been a good idea, if everybody had chosen the same approximation. However, different implementations approximated the expensive division in different ways.",
+      "zh": "问题在于，从来就没有一份规范说明过首选实现应该是什么样。DXT 格式最早由 S3 在[美国专利 5956431](http://www.google.com/patents?id=QEEZAAAAEBAJ) 中记载。但为了覆盖所有可能的实现，专利里的描述非常笼统。它既没有规定颜色何时、或者是否要做位扩展，也没有规定调色板条目如何插值。在其中一个实施例里，他们把 1/3 和 2/3 近似成 3/8 和 5/8——如果所有人都选了同一种近似，这本来是个好主意。可惜不同的实现各用各的办法去近似那次昂贵的除法。"
+    },
+    {
+      "type": "p",
+      "en": "NVIDIA used to perform the [DXT1 interpolation in 16 bits](http://udn.epicgames.com/Two/TextureComparison.html#NVIDIA%20DXT1%20Issue), and in some hardware, to compensate for the quantization artifacts, introduced some dithering patterns that in some cases even worsened the results.",
+      "zh": "NVIDIA 过去用 [16 位做 DXT1 插值](http://udn.epicgames.com/Two/TextureComparison.html#NVIDIA%20DXT1%20Issue)，而且在某些硬件上，为了补偿量化瑕疵还引入了抖动图案，结果在一些情况下反而让效果更糟。"
+    },
+    {
+      "type": "p",
+      "en": "Modern NVIDIA hardware does not have these problems, but it still doesn’t implement the palette evaluation using the exact formula. The approximation used is now documented in [US patent 7385611](http://www.freepatentsonline.com/7385611.html). The document is quite hard to digest, especially without images. So, here’s the code that exactly reproduces the decompression as done by current NVIDIA GPUs:",
+      "zh": "现代 NVIDIA 硬件已经没有这些问题，但它仍然没有用精确公式来做调色板求值。现在所用的近似记录在[美国专利 7385611](http://www.freepatentsonline.com/7385611.html) 里。那份文档相当难读，尤其是在没有配图的情况下。所以，这里是能精确复现当前 NVIDIA GPU 解压行为的代码："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void evaluatePaletteNV5x(Color16 col0, Color16 col1, Color32 palette[4])\n{\n  palette[0].b = (3 * col0.b * 22) / 8;\n  palette[0].g = (col0.g << 2) | (col0.g >> 4);\n  palette[0].r = (3 * col0.r * 22) / 8;\n  palette[0].a = 0xFF;\n\n  palette[1].r = (3 * col1.r * 22) / 8;\n  palette[1].g = (col1.g << 2) | (col1.g >> 4);\n  palette[1].b = (3 * col1.b * 22) / 8;\n  palette[1].a = 0xFF;\n\n  int gdiff = palette[1].g - palette[0].g;\n\n  if (col0.u > col1.u) {\n    palette[2].r = ((2 * col0.r + col1.r) * 22) / 8;\n    palette[2].g = (256 * palette[0].g + gdiff/4 + 128 + gdiff * 80) / 256;\n    palette[2].b = ((2 * col0.b + col1.b) * 22) / 8;\n    palette[2].a = 0xFF;\n\n    palette[3].r = ((2 * col1.r + col0.r) * 22) / 8;\n    palette[3].g = (256 * palette[1].g - gdiff/4 + 128 - gdiff * 80) / 256;\n    palette[3].b = ((2 * col1.b + col0.b) * 22) / 8;\n    palette[3].a = 0xFF;\n  }\n  else {\n    palette[2].r = ((col0.r + col1.r) * 33) / 8;\n    palette[2].g = (256 * palette[0].g + gdiff/4 + 128 + gdiff * 128) / 256;\n    palette[2].b = ((col0.b + col1.b) * 33) / 8;\n    palette[2].a = 0xFF;\n\n    palette[3].r = 0x00;\n    palette[3].g = 0x00;\n    palette[3].b = 0x00;\n    palette[3].a = 0x00;\n  }\n}"
+    },
+    {
+      "type": "p",
+      "en": "The above code doesn’t make too much sense unless you think about it in terms of area savings and reuse of hardware elements.",
+      "zh": "上面这段代码乍看不太说得通，除非你从节省芯片面积、复用硬件单元的角度去想。"
+    },
+    {
+      "type": "p",
+      "en": "Anyway, I think we came to this point, because traditionally graphic APIs had never been very strict with the hardware implementations. However, D3D10 finally introduced some constrains. In particular, it specified a canonical decoder, and provided some error bounds that implementations have to comply with.",
+      "zh": "总之，我认为会走到这一步，是因为传统的图形 API 对硬件实现从来都不太严格。不过 D3D10 终于加了一些约束：它明确指定了一个规范解码器，并给出了实现必须遵守的误差界。"
+    },
+    {
+      "type": "p",
+      "en": "In D3D10, the DXT1 color decompression is specified as follows:",
+      "zh": "在 D3D10 里，DXT1 的颜色解压是这样规定的："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "color_0_p = bitexpand(color_0);\ncolor_1_p = bitexpand(color_1);\nif (color_0 > color_1) {\n   color_2 = (2 * color_0_p + color_1_p) / 3;\n   color_3 = (color_0_p + 2 * color_1_p) / 3;\n} else {\n   color_2 = (color_0_p + color_1_p) / 2;\n   color_3 = 0;\n}"
+    },
+    {
+      "type": "p",
+      "en": "And the allowed error bounds are the following:",
+      "zh": "而允许的误差界是这样的："
+    },
+    {
+      "type": "code",
+      "lang": "text",
+      "code": "|generated – reference| < 1.0 / 255.0 + 0.03 * |color_0_p – color_1_p|"
+    },
+    {
+      "type": "p",
+      "en": "The canonical algorithm is clearly different to what NVIDIA GPUs do, but in most cases the error introduced is very small. In fact, the approximation error is well below the allowed error bounds.",
+      "zh": "这个规范算法显然和 NVIDIA GPU 的做法不同，但在大多数情况下引入的误差都非常小。事实上，近似误差远低于允许的误差界。"
+    },
+    {
+      "type": "p",
+      "en": "But do these small differences really matter?",
+      "zh": "但这些细微差别真的重要吗？"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately in some cases they do. Note, that the magnitude of the allowed error is proportional to the distance between the end points. So, when the distance between the end points is large, the errors introduced can be significant.",
+      "zh": "不幸的是，在某些情况下确实重要。注意，允许误差的大小与两个端点之间的距离成正比。所以当端点相距很远时，引入的误差就可能相当可观。"
+    },
+    {
+      "type": "p",
+      "en": "One of the cases where this bites you very often is in [ryg](http://www.farbrausch.de/~fg/)’s [single color compressor](https://mollyrocket.com/forums/viewtopic.php?t=392) (which is based on [Simon](http://www.sjbrown.co.uk/2006/01/19/dxt-compression-techniques/)’s). In this compressor the optimal end points for a single color block are precomputed using a brute force approach, testing all possible pairs of endpoints for each component, and using the pair that produces the lowest error.",
+      "zh": "最常被这一点坑到的场合之一，是 [ryg](http://www.farbrausch.de/~fg/) 的[单色压缩器](https://mollyrocket.com/forums/viewtopic.php?t=392)（它基于 [Simon](http://www.sjbrown.co.uk/2006/01/19/dxt-compression-techniques/) 的那个）。在这个压缩器里，单色块的最优端点是暴力预计算出来的：对每个分量枚举所有可能的端点对，取误差最小的那一对。"
+    },
+    {
+      "type": "p",
+      "en": "The problem is that sometimes the best endpoints are very far away from each other, and as a result, while the canonical color is approximated accurately, the real color is not. This appears to be [a problem in practice](http://code.google.com/p/nvidia-texture-tools/issues/detail?id=85). Here’s a screenshot that shows artifacts introduced by the single color compressor:",
+      "zh": "问题在于，有时最优的两个端点相距非常远，结果就是：按规范算法算出来的颜色被近似得很准，硬件上真正的颜色却不准。这在[实际使用中确实是个问题](http://code.google.com/p/nvidia-texture-tools/issues/detail?id=85)。下面这张截图展示了单色压缩器引入的瑕疵："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://castano.ludicon.com/blog/wp-content/uploads/2009/03/screenshot_error-500x219.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A simple solution would be to minimize the error with respect to the actual hardware decompression, instead of using the canonical decompression formula. However, favoring some specific hardware would not be fair. Instead, a better approach is to measure the error with respect to the maximum error allowed by Microsoft’s spec. With that in mind, the code to compute ryg’s decompression tables would be as follows:",
+      "zh": "一个简单的办法是：不再按规范解压公式来最小化误差，而是针对实际硬件的解压结果来最小化。但偏袒某一家特定硬件并不公平。更好的做法是，按 Microsoft 规范允许的最大误差来衡量误差。基于这个思路，计算 ryg 解压查找表的代码就变成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "for (int i = 0; i < 256; i++)\n{\n  float bestErr = 256;\n\n  for (int min = 0; min < size; min++) {\n    for (int max = 0; max < size; max++) {\n      int mine = expand[min];\n      int maxe = expand[max];\n      float err = abs(Lerp13(maxe, mine) - i);\n      err += 0.03f * abs(maxe - mine);\n\n      if (err < bestErr) {\n        Table[i*2+0] = max;\n        Table[i*2+1] = min;\n        bestErr = err;\n      }\n    }\n  }\n}"
+    },
+    {
+      "type": "p",
+      "en": "And as seen in the following screenshot that eliminates the artifacts obtained with the original approach:",
+      "zh": "如下面这张截图所示，用原来的做法会出现的瑕疵被消除了："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://castano.ludicon.com/blog/wp-content/uploads/2009/03/screenshot_ok-500x219.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The same idea can also be applied to a general block compressor, but that is left as an exercise.",
+      "zh": "同样的思路也可以用在通用的块压缩器上，不过这就留作练习了。"
+    },
+    {
+      "type": "p",
+      "en": "This problem is fixed in the [NVIDIA Texture Tools](http://code.google.com/p/nvidia-texture-tools/) as of [version 2.0.6](http://code.google.com/p/nvidia-texture-tools/downloads/detail?name=nvidia-texture-tools-2.0.6.tar.gz). I’d like to thank Marco Altomonte for pointing out the issue, and providing data to reproduce it!",
+      "zh": "这个问题从 [2.0.6 版](http://code.google.com/p/nvidia-texture-tools/downloads/detail?name=nvidia-texture-tools-2.0.6.tar.gz)起已经在 [NVIDIA Texture Tools](http://code.google.com/p/nvidia-texture-tools/) 里修好了。我要感谢 Marco Altomonte 指出这个问题，并提供数据让我复现它！"
+    },
+    {
+      "type": "p",
+      "en": "cb Posted 20/3/2009 at 8:12 am | Permalink Great article as usual!",
+      "zh": "cb 发表于 20/3/2009 8:12 am | Permalink 好文章，一如既往！"
+    },
+    {
+      "type": "p",
+      "en": "bitman Posted 29/4/2009 at 3:40 am | Permalink In evaluatePaletteNV5x shouldn’t that be 85 instead of 80?",
+      "zh": "bitman 发表于 29/4/2009 3:40 am | Permalink evaluatePaletteNV5x 里那个数不该是 85 而不是 80 吗？"
+    },
+    {
+      "type": "p",
+      "en": "bitman Posted 29/4/2009 at 4:37 am | Permalink Oh nevermind, it looks like it could actually be on purpose to simplify the hardware multiplication (80 = 64+16), but if you’re deciding to add such huge errors why would you even bother with gdiff/4? Also, the RGB errors look pretty significant in the screenshot (easily over 10 on the green channel, whereas D3D spec only allows 8 and the code you gave only has an error of 6), is there contrast enhancement applied?",
+      "zh": "bitman 发表于 29/4/2009 4:37 am | Permalink 哦算了，看起来那其实是故意的，为的是简化硬件乘法（80 = 64+16）；可既然都决定引入这么大的误差了，那还费劲搞 gdiff/4 干什么？另外，截图里的 RGB 误差看起来相当可观（绿色通道轻松超过 10，而 D3D 规范只允许 8，你给的代码误差只有 6），是加了对比度增强吗？"
+    },
+    {
+      "type": "p",
+      "en": "castano Posted 29/4/2009 at 5:24 am | Permalink Yeah, the constants in the green interpolation look totally awkward to me. It’s straightforward to come up with better values. However, I suppose the are some constraints in oder to share the same hardware for one of the BC5 channels. Yes, contrants is enhanced to make the artifact more obvious. Note that the same could happen on a game due to lighting or blending.",
+      "zh": "castano 发表于 29/4/2009 5:24 am | Permalink 是啊，绿色通道插值里那些常数在我看来完全莫名其妙。想出更好的取值并不难。不过我猜，为了和 BC5 的某一个通道共用同一套硬件，可能存在一些约束。是的，对比度是被增强了，好让瑕疵更明显。注意，在游戏里因为光照或混合，也可能出现同样的情况。"
+    },
+    {
+      "type": "p",
+      "en": "Marco Altomonte Posted 14/5/2009 at 12:09 am | Permalink It’s Altomonte, not Almonte. :) Thanks again for resolving these issues!",
+      "zh": "Marco Altomonte 发表于 14/5/2009 12:09 am | Permalink 是 Altomonte，不是 Almonte。:) 再次感谢你解决了这些问题！"
+    },
+    {
+      "type": "p",
+      "en": "castano Posted 14/5/2009 at 8:22 am | Permalink Whoops! I just fixed the typo. :)",
+      "zh": "castano 发表于 14/5/2009 8:22 am | Permalink 哎呀！我刚把那个笔误改过来了。:)"
+    }
+  ]
+}

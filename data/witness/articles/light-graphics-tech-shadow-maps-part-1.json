@@ -1,0 +1,241 @@
+{
+  "id": "light-graphics-tech-shadow-maps-part-1",
+  "title": {
+    "zh": "图形技术：阴影贴图（上）",
+    "en": "Graphics Tech: Shadow Maps (part 1)"
+  },
+  "subtitle": {
+    "en": "Jonathan Blow on why The Witness needs a shadow system that stays rock-solid under camera motion across a very long view distance, and on what the published literature does not tell you.",
+    "zh": "Jonathan Blow 谈《The Witness》为什么需要一套在相机运动下保持稳定、又能覆盖极远视距的阴影系统，以及已发表的文献不会告诉你的事。"
+  },
+  "translator": {
+    "note": "原文各节标题在归档 markdown 里是加粗行（`**The Literature**` 等），按 schema.md 提升为 h2；插图行按全站口径归一化为 `![图](原图URL)`，「缩略图包永久链接」只保留原图。归档正文的 HTML 实体（`&quot;`、`&amp;`）在源文里已是普通字符。原文里 *The Witness* 的斜体在中文由书名号承担；`bias`、`peter panning` 等惯用词按术语表保留英文原词。正文中 `Figure 4.1.2`、`4.1.2 c and d` 是 Valient 原文的编号，非本篇编号，按原文保留。归档噪音行 `****`（空的加粗行，不含任何文字；fidelity-check 报为「其他」类未覆盖单元的那 1 条）已作为格式噪音丢弃；文末 `**To be continued.**` 是正文里的加粗句子而非小标题，故保留为 p 块。validator 的「shader → 着色器」抽查命中的是书名 [ShaderX 6](http://www.shaderx6.com/)（其中的 `Shader` 子串），不是正文里的 shader 一词；译文里出现「着色器」的段落对应的是原文另一处提到 shader 的正文。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "*The Witness* contains a mixture of indoor and outdoor scenes, but much of the game takes place outdoors with a very long view distance (you can see the entire island at once if you have a good vantage point).  So I wanted to implement a shadow system that would work robustly, provide high visual quality, and allow the player to see everything at once.  I have some experience with shadow systems of this type, but the last one I designed was for computers and graphics cards circa 2004, so I was interested to see how much more would be possible today.",
+      "zh": "《The Witness》里室内和室外场景兼而有之，但游戏的大部分发生在室外，视距非常远（如果站位好，你可以一眼看到整座岛）。所以我想要实现一套阴影系统，它要能稳健工作、提供高画质，还要让玩家能一次看到所有东西。这类阴影系统我有一些经验，但我上一次设计的那套是给 2004 年前后的电脑和显卡用的，所以我很想知道放到今天还能多做出些什么。"
+    },
+    {
+      "type": "p",
+      "en": "We've implemented such a modern shadow map system for *The Witness*.  In the process, we've made some improvements to shadow mapping algorithms beyond anything we've seen published, so we are going to detail the improvements here.  Also, our shadow map system is still being improved, so I'll talk about what we have yet to try and why we think it's a good idea.",
+      "zh": "我们为《The Witness》实现了这样一套现代的阴影贴图系统。在这个过程中，我们对阴影贴图算法做了一些改进，其程度超出了我们见过的任何已发表资料，所以我们要在这里详细讲讲这些改进。另外，我们的阴影贴图系统仍在继续改进，我也会谈谈还有哪些东西我们尚未尝试、以及为什么觉得值得一试。"
+    },
+    {
+      "type": "p",
+      "en": "Before we get to those details, though, I'd like to establish some context so that the motivation for these design decisions is clearly explained.",
+      "zh": "不过，在进入这些细节之前，我想先铺一些背景，好把这些设计决策背后的动机讲清楚。"
+    },
+    {
+      "type": "h2",
+      "id": "the-literature",
+      "zh": "文献",
+      "en": "The Literature"
+    },
+    {
+      "type": "p",
+      "en": "I have a somewhat cynical attitude toward graphics research literature: most of it describes techniques that don't generally work, but the authors of the papers do the best they can to \"sell\" the technique to you anyway (using cherry-picked examples, glossing over or completely ignoring failure cases that would be obvious to anyone who understands the algorithm, etc).  As the reader, eventually you come to understand all the problems, but not after investing a lot of your time and energy (possibly months) implementing and understanding an algorithm that behaves so poorly that you never would have bothered if you had known the truth from the outset.",
+      "zh": "我对图形学研究文献的态度有点犬儒：它们描述的大多数技术其实通常并不好用，但论文作者还是会尽最大努力向你「推销」它（用精心挑选的例子，对任何看懂算法的人都能一眼看出的失败情况一笔带过、甚至完全无视，等等）。作为读者，你最终确实会理解所有这些问题，但那是在投入了大量时间和精力之后（可能要好几个月）：实现并理解一个表现如此糟糕的算法，而如果一开始就知道真相，你根本不会去碰它。"
+    },
+    {
+      "type": "p",
+      "en": "I've had this experience many times, with many different techniques.  Shadow maps, though, have been one of the big ones.  There are many published shadow map techniques that simply don't work well enough to be taken seriously.  And often when I've heard someone say \"so-and-so shadow technique is good,\" it usually turns out they haven't tried it themselves, so it's just hearsay, or else that person has low quality standards.",
+      "zh": "这种经历我有过很多次，涉及很多不同的技术。而阴影贴图是其中最大的几个之一。已发表的阴影贴图技术里，有很多根本不够好用，不值得认真对待。而且我经常听到有人说「某某阴影技术不错」，结果往往是他们自己并没有试过，只是道听途说，要么就是这个人的质量标准太低。"
+    },
+    {
+      "type": "p",
+      "en": "So I'd like to put forth the statement that I have high quality standards and will only endorse things that have been found to robustly function; I will be open and honest about the degree to which things don't work, and what the specific problems are.  In an ideal world this would not be necessary to say, but the situation in the literature today makes it otherwise.",
+      "zh": "所以我想把话说在前面：我的质量标准很高，只会推荐那些被验证过确实能稳健工作的东西；对于它们不好用到了什么程度、以及具体问题出在哪里，我会坦率、诚实地讲出来。在一个理想的世界里，这些话本不必说，但如今文献界的状况让这成了必要。"
+    },
+    {
+      "type": "h2",
+      "id": "quality-goals-previous-system",
+      "zh": "画质目标；之前的系统",
+      "en": "Quality Goals; Previous System"
+    },
+    {
+      "type": "p",
+      "en": "Many shadow map schemes have been developed that try to maximize the effective resolution of shadows in the scene by performing transformations that are heavily view-dependent.  An extreme example of this is Perspective Shadow Maps.  I have learned through experience not to use these techniques.  They cause shadows to swim and flicker in annoying ways, and many of the algorithms break down severely as the player approaches certain viewing angles.",
+      "zh": "人们开发了很多阴影贴图方案，试图通过高度依赖视点的变换来最大化场景中阴影的有效分辨率。Perspective Shadow Maps 就是其中一个极端例子。经验告诉我不要用这类技术。它们会让阴影以恼人的方式游移、闪烁，而且当玩家接近某些特定视角时，很多算法会严重失效。"
+    },
+    {
+      "type": "p",
+      "en": "For [the 2004 system](http://www.number-none.com/happycake/notes_8/index.html), I took as a core design goal that shadows should appear rock-solid on nonmoving objects, regardless of any viewpoint motion.  The clearest way to achieve this was to center the shadow map on the viewpoint at all times, never letting the shadow map scale or rotate.  Because a single shadow map cannot cover the world at high resolution within memory and fill constraints, I used a scheme where 4 or more shadow maps of increasing worldspace size were centered on the viewpoint like square doughnuts.  In order to prevent crawling or shimmering, one just ensures that shadow map worldspace positions are snapped to integer multiples of their texel size.  (A family of related techniques, but which don't necessarily center the maps on the viewpoint, soon came into more-common use and took on the moniker Cascaded Shadow Maps.)",
+      "zh": "[2004 年那套系统](http://www.number-none.com/happycake/notes_8/index.html)，我把「无论视点怎么移动，阴影在不动的物体上都必须看起来坚如磐石」作为核心设计目标。实现这一点最清晰的做法，是始终让阴影贴图以视点为中心，绝不允许阴影贴图缩放或旋转。由于在内存和填充率的限制下，单张阴影贴图无法以高分辨率覆盖整个世界，我用了一套方案：让 4 张或更多世界空间尺寸递增的阴影贴图，像方形的甜甜圈一样以视点为中心套在一起。为了防止爬行或闪烁，只需保证阴影贴图在世界空间中的位置对齐到其纹素尺寸的整数倍。（后来有一系列相关技术流行起来，它们不一定要把贴图对准视点中心，并被冠上了级联阴影贴图（Cascaded Shadow Maps）这个名字。）"
+    },
+    {
+      "type": "p",
+      "en": "On fixed-function pipeline hardware, this scheme was never quite satisfying (I had to use clip planes to render the scene in many slices, and there were small 1-pixel artifacts due to the resulting imprecision; rendering all the slices was a bit slow).  Modern hardware is able to do this kind of thing much  better.  Also, this scheme wastes a large amount of shadow map memory, because with all the shadow maps centered on the viewpoint, most of the map texels are going to be out of view at any given time.",
+      "zh": "在固定功能管线的硬件上，这套方案从来都不太令人满意（我不得不用裁剪平面把场景切成很多片来渲染，由此带来的精度损失又造成 1 像素级别的小瑕疵；把所有切片都渲染一遍还有点慢）。现代硬件做这类事情要好得多。另外，这套方案浪费了大量阴影贴图内存，因为所有阴影贴图都以视点为中心时，大部分贴图纹素在任何时刻都落在视野之外。"
+    },
+    {
+      "type": "p",
+      "en": "Despite the drawbacks, the visual stability of this technique, and its ability to reach across the entire game world, were extremely appealing to me.  Having seen how nicely shadow mapping could behave in practice, this visual stability became a very-high-priority goal in my mind for any future shadow systems.",
+      "zh": "尽管有这些缺点，这项技术在视觉上的稳定性、以及它覆盖整个游戏世界的能力，对我极有吸引力。亲眼见过阴影贴图在实践中能表现得多好之后，视觉稳定性在我心里就成了未来任何阴影系统的最高优先级目标之一。"
+    },
+    {
+      "type": "p",
+      "en": "So, going into this new system, the goals were (listed in approximate order of importance):",
+      "zh": "所以进入这套新系统时，目标有这些（大致按重要性排序）："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "High performance",
+          "zh": "高性能"
+        },
+        {
+          "en": "Complete stability under camera motion",
+          "zh": "相机运动下完全稳定"
+        },
+        {
+          "en": "Long view distance",
+          "zh": "长视距"
+        },
+        {
+          "en": "Visuals can be controlled to suit the style of the game",
+          "zh": "画面效果可控，能配合游戏的风格"
+        },
+        {
+          "en": "Efficient use of texture memory",
+          "zh": "高效利用纹理内存"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "id": "the-new-system",
+      "zh": "新系统",
+      "en": "The New System"
+    },
+    {
+      "type": "p",
+      "en": "I started working on the new system by looking at the 2004 system and trying to make it more memory-efficient.  Most likely this would involve moving the shadow maps around in world space, but it wasn't initially clear to me how to do this without introducing problems.  Ignacio pointed me at Michal Valient's article \"Stable Rendering of Cascaded Shadow Maps\" in [ShaderX 6](http://www.shaderx6.com/), which was exactly what I wanted.  Valient computes bounding spheres around the slices of the view frustum that tell him how much he can move the shadow maps in world space without introducing gaps.",
+      "zh": "我开始做新系统时，先是回看 2004 年那套，想办法让它更省内存。最可能的做法是在世界空间里挪动阴影贴图，但一开始我并不清楚怎样才能不引入问题。Ignacio 给我指出了 Michal Valient 发表在 [ShaderX 6](http://www.shaderx6.com/) 上的文章「Stable Rendering of Cascaded Shadow Maps」，那正是我想要的东西。Valient 会围绕视锥体的各个切片计算包围球，据此得知在世界空间里能把阴影贴图挪多远而不产生空隙。"
+    },
+    {
+      "type": "p",
+      "en": "To illustrate, here are a couple of figures reproduced from his article.  I don't want to unduly step on anyone's copyright, so if you are interested in cutting-edge shadow map techniques, buy ShaderX 6!  *(Click for full size.)*",
+      "zh": "为了说明这一点，这里放两张从他的文章里转载的图。我不想过分侵犯任何人的版权，所以如果你对前沿的阴影贴图技术感兴趣，就去买一本 ShaderX 6！（点击图片看大图。）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/valient-shaderx6-figures/thumbs/thumbs_figure_411.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/valient-shaderx6-figures/thumbs/thumbs_figure_412.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "So basically, you take the a frustum slice in worldspace, ensure that it is completely enclosed in a sphere, and then ensure that the sphere is completely enclosed in a square cylinder; the square is your shadow map.",
+      "zh": "所以基本做法是：在世界空间里取一个视锥体切片，确保它被一个球完全包住，再确保这个球被一个方形柱体完全包住；那个方形就是你的阴影贴图。"
+    },
+    {
+      "type": "p",
+      "en": "You can render multiple frustum slices for multiple shadow maps, so long as the bounding spheres overlap enough to cover the whole frustum when put together (see 4.1.2 c and d).",
+      "zh": "你可以为多张阴影贴图渲染多个视锥体切片，只要这些包围球彼此重叠得足够多，拼起来能覆盖整个视锥体就行（参见 4.1.2 的 c 和 d）。"
+    },
+    {
+      "type": "p",
+      "en": "The reason they are spheres is: because the shadow map is never allowed to change size (we voluntarily imposed that constraint in order to get solid shadows!), then we need to find a shape that conservatively encloses any possible orientation that a frustum slice could occupy as the camera rotates in space.  That's a sphere.  Then we make sure that our shadow map covers that entire sphere, and we have then guaranteed that every point in the view frustum is covered by a valid shadow map  texel.",
+      "zh": "之所以用球，是因为：既然阴影贴图不允许改变尺寸（为了得到扎实的阴影，我们主动给自己加了这个约束！），我们就得找一个形状，能保守地包住相机在空间中旋转时视锥体切片可能占据的任何朝向。这个形状就是球。然后我们确保阴影贴图覆盖整个球，于是也就保证了视锥体中的每一个点都被一个有效的阴影贴图纹素覆盖。"
+    },
+    {
+      "type": "p",
+      "en": "On top of this, Valient suggests the very helpful optimization of packing all your shadow maps into one atlas texture, so that when it's time to render the scene, you can draw all your shadowed objects in one pass without having to sample multiple textures; you just figure out which frustum slice each pixel lands in, then use that information to determine the offset into the atlas, add that offset to your texture coordinates, and sample the texture.  This works great.  Valient suggests a 2x2 arrangement of textures, as this is convenient on a wide variety of hardware, for example, GPUs that only support power-of-two textures.  So if a single shadow map would be 1024x1024, then you can create a 2048x2048 texture map that contains 4 shadow maps packed in a 2x2 array:",
+      "zh": "在此基础上，Valient 还提出了一个非常有用的优化：把所有阴影贴图打进一张图集纹理（atlas texture），这样到渲染场景的时候，你就能在着色器里一趟画完所有带阴影的物体，不必采样多张纹理；你只需判断每个像素落在哪个视锥体切片里，再用这个信息确定它在图集中的偏移，把该偏移加到纹理坐标上，然后采样纹理即可。这招非常好用。Valient 建议采用 2x2 的纹理排布，因为它在各种各样的硬件上都很方便，比如只支持 2 的幂次尺寸纹理的 GPU。所以如果单张阴影贴图是 1024x1024，你就可以创建一张 2048x2048 的纹理贴图，里面按 2x2 的阵列装下 4 张阴影贴图："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/4maps-251x300.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "So my first shot at a new system was basically a reimplementation of everything Valient describes.  It didn't take too long, and when it was done, I was very happy with it -- it was clearly much better than the 2004 system.",
+      "zh": "所以我对新系统的第一次尝试，基本上就是把 Valient 描述的一切重新实现了一遍。没花太久，做完之后我非常满意——它明显比 2004 年那套好得多。"
+    },
+    {
+      "type": "p",
+      "en": "But...",
+      "zh": "但是……"
+    },
+    {
+      "type": "h2",
+      "id": "memory-usage",
+      "zh": "内存占用",
+      "en": "Memory Usage"
+    },
+    {
+      "type": "p",
+      "en": "This technique is still a memory hog.  The image stability constraints, which result in us wrapping the frustum slice in a sphere and then the sphere in a box, add margins of unused and barely-used texture space at each step.  Looking at Figure 4.1.2, you can see that a frustum slice only occupies about 50% or 60% of the area of the square that represents your shadow texture.  This implies that half the square is wasted.  **However, the actual situation is worse than this, because the diagram is misleading.**",
+      "zh": "这项技术仍然很吃内存。为了图像稳定性而加的约束——先把视锥体切片裹进一个球，再把球裹进一个盒子——每一步都会带来用不上或几乎用不上的纹理空间边角。看 Figure 4.1.2 你会发现，一个视锥体切片只占据代表阴影纹理的那个正方形面积的 50% 或 60% 左右。也就是说，正方形的一半都被浪费了。**然而实际情况比这更糟，因为那张示意图有误导性。**"
+    },
+    {
+      "type": "p",
+      "en": "The problem is that the view frustum represented in the diagram is much narrower than the view frustum used in an actual game, and if you re-draw the diagram in realistic proportions, it looks very different.  For an accurate 2D diagram, you are finding a circle that encloses the widest part of your view frustum, which is the 2D trapezoid you get by cutting your frustum in half diagonally (Valient discusses this in his paper as well).  Suppose your game is rendering at a 16:9 aspect ratio, and your field of view is 90 degrees horizontally (this is what we use for *The Witness*currently.)  The vertical field of view is then going to be about 59 degrees, and the diagonal field of view will be about **98 degrees** (click on image below for explanation).",
+      "zh": "问题在于，示意图里画的那个视锥体比真实游戏里用的视锥体窄得多，而如果按真实比例重画，它会显得非常不一样。要画一张准确的二维示意图，你要找的是一个能包住视锥体最宽处的圆，而这个最宽处是把视锥体沿对角线切成两半后得到的二维梯形（Valient 在文章里也讨论了这一点）。假设你的游戏以 16:9 的宽高比渲染，水平视场角是 90 度（这是《The Witness》目前用的值）。那么垂直视场角大约是 59 度，而对角线视场角大约是 **98 度**（点击下面的图看解释）。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/diagonal_fov-300x213.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The frustum slice in Valient's diagram is only about 30 degrees, a huge difference!  So if we have a 98 degree frustum slice, and inscribe that in a circle, and inscribe that circle in a square, what does that look like?  Something like this:",
+      "zh": "Valient 示意图里的视锥体切片只有大约 30 度，差距巨大！那么如果我们有一个 98 度的视锥体切片，把它内接进一个圆，再把这个圆内接进一个正方形，会是什么样子？大概是这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/1slice-300x295.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Recall that the square is your shadow map texture and the innermost trapezoid is your frustum slice (the texels of your texture that may potentially be used).  It covers only a small  area of that square -- and there's no way to make it bigger!  The reason is that for wide frusta like this, the diagonal at the far plane is so long that it dominates the bounding sphere computation, and so the center of the circle has to land on that diagonal so that its diameter can be just barely large enough to enclose it.  (In *The Witness*, our frustum slices are not proportional, and the way we divided them up, this isn't exactly true for the first 2 shadow maps -- but it is very close to true).  The fact that the circle is centered on the far plane means that automatically half the map is wasted at this orientation -- but the wide angle ensures that much of the other half is wasted too!",
+      "zh": "记住，那个正方形就是你的阴影贴图纹理，最里面那个梯形就是你的视锥体切片（你的纹理里可能会被用到的那些纹素）。它只覆盖了正方形的一小块面积——而且你没法把它变大！原因是：对于这么宽的视锥体，远平面上的对角线太长了，以致它主导了包围球的计算，于是圆心必须落在这条对角线上，这样圆的直径才能刚好大到把它包住。（在《The Witness》里，我们的视锥体切片并不成比例，而且按我们的切分方式，对头 2 张阴影贴图来说这并不完全成立——但已经非常接近了。）圆心落在远平面上，意味着在这个朝向下自动就有一半的贴图被浪费掉——而这么宽的夹角又保证了另一半里的大部分同样被浪费！"
+    },
+    {
+      "type": "p",
+      "en": "You can rotate the view frustum to other orientations and make it look like you are covering more of the shadow map... for example, if you orient the frustum so that the view vector is going straight down into the page, then the frustum's projection onto the paper will be a rectangle, and it will appear to cover much more of the square.  But then you have to keep in mind that some of this coverage is worth a lot more than other coverage in terms of impact on the scene: think about how much space is covered by the texels toward the middle of the frustum projection, versus how much is covered toward the edges (almost none!)",
+      "zh": "你可以把视锥体转到别的朝向，让它看起来覆盖了阴影贴图的更多部分……比如，如果把视锥体摆成视线方向垂直扎进纸面，那么视锥体在纸上的投影就是一个矩形，看起来会覆盖正方形的多得多面积。但这时你得记住，就其对场景的影响而言，有一部分覆盖的价值远高于另一部分：想想靠近视锥体投影中部的纹素覆盖了多少空间，而靠近边缘的又覆盖了多少（几乎为零！）"
+    },
+    {
+      "type": "p",
+      "en": "If I add two more frustum slices, so that the total is 3 slices as in 4.1.2, it looks like this:",
+      "zh": "如果我再加两个视锥体切片，凑成像 4.1.2 里那样的 3 个切片，看起来就是这样："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2010/03/3slices-300x295.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "That innermost shadow map is just a tiny smudge (now you know why Valient chose a narrow field of view -- for clarity of his figures!)  But notice what else is going on: each shadow map is fully contained within the next-larger shadow map, as with the concentric-square-doughnut system from 2004!  Valient's scheme is better since it gives you more view distance (the squares are not concentric) -- but it can't give you nearly as much view distance as it would like, due to the wide angle of the frustum.",
+      "zh": "最里面那张阴影贴图只是小小的一抹（现在你知道 Valient 为什么选了个窄视场角了——为了让他那些图看着清楚！）但请注意还发生了什么：每张阴影贴图都完全包含在下一张更大的阴影贴图之内，和 2004 年那套同心方形甜甜圈系统一样！Valient 的方案更好，因为它给了你更远的视距（这些正方形不是同心的）——但由于视锥体的夹角很宽，它能给你的视距远达不到它想要的程度。"
+    },
+    {
+      "type": "h2",
+      "id": "for-next-time",
+      "zh": "下次再说",
+      "en": "For Next Time"
+    },
+    {
+      "type": "p",
+      "en": "So, whereas on one level I was very happy with this shadow system's performance and visual quality, it still seemed somewhat wasteful in terms of memory usage.   Next time I'll talk about how we addressed that problem.  Subsequent postings after that will talk about issues like softening the shadow border, blending between slices, and various other implementation tricks.",
+      "zh": "所以，一方面我对这套阴影系统的性能和画质非常满意，另一方面它在内存占用上仍显得有些浪费。下次我会讲我们是怎么解决这个问题的。再往后的文章会讨论柔化阴影边缘、在切片之间做混合，以及各种其他实现技巧。"
+    },
+    {
+      "type": "p",
+      "en": "**To be continued.**",
+      "zh": "**未完待续。**"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "official-2016-11-02-ps4-pro-patch-update",
+  "title": { "zh": "PS4 Pro 补丁更新", "en": "PS4 Pro patch update" },
+  "subtitle": {
+    "en": "Final specs for the PS4 Pro patch: HDR support, and the resolution and frame-rate modes you can choose from.",
+    "zh": "PS4 Pro 补丁的最终规格：支持 HDR，以及可以挑选的分辨率与帧率模式。"
+  },
+  "translator": {
+    "note": "原文第三段有一处 markdown 粗体标记错位的残留（`PS4.****If`），en 字段原样保留，译文按语义处理。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Previously, I made a post [listing the technical details of the PS4 patch](http://the-witness.net/news/2016/09/were-doing-a-ps4-pro-patch-here-are-the-technical-details/).",
+      "zh": "之前我发过一篇帖子，[列出了 PS4 补丁的技术细节](http://the-witness.net/news/2016/09/were-doing-a-ps4-pro-patch-here-are-the-technical-details/)。"
+    },
+    {
+      "type": "p",
+      "en": "That was a work-in-progress, and I said at the time I'd post final specs as soon as we know them, which we now do.",
+      "zh": "那次的内容还在变动中，当时我说过，一旦确定最终规格就发出来——现在确定了。"
+    },
+    {
+      "type": "p",
+      "en": "**We are definitely supporting HDR,** on both the PS4 Pro and the base model PS4.****If the game detects an HDR TV, it will start in HDR mode. HDR works in all resolutions mentioned below.",
+      "zh": "**我们确定支持 HDR，** PS4 Pro 和基础版 PS4 都支持。如果游戏检测到 HDR 电视，它就会以 HDR 模式启动。HDR 在下面提到的所有分辨率下都可用。"
+    },
+    {
+      "type": "p",
+      "en": "If you have a PS4 Pro, and are outputting to a 1080p TV, **The Witness will render at 1080p, 60fps, 4x MSAA** (which is substantially higher than the base PS4's 900p, 60fps, 2x MSAA). This is the same as we announced in the earlier posting.",
+      "zh": "如果你有 PS4 Pro，并且输出到 1080p 电视，**《The Witness》会以 1080p、60fps、4x MSAA 渲染**（比基础版 PS4 的 900p、60fps、2x MSAA 高出不少）。这和我们之前那篇帖子里的说法一致。"
+    },
+    {
+      "type": "p",
+      "en": "If you have a PS4 Pro, and are outputting to a 4k TV, then you get a choice of two modes from the options menu:",
+      "zh": "如果你有 PS4 Pro，并且输出到 4K 电视，那么你可以在选项菜单里从两种模式中选一种："
+    },
+    {
+      "type": "p",
+      "en": "**(a) 1440p 2x MSAA rendering of the game world, upscaled to 4k, text and UI rendered at 4k, 60fps**",
+      "zh": "**（a）游戏世界以 1440p、2x MSAA 渲染，再放大到 4K；文字与 UI 以 4K 渲染；60fps**"
+    },
+    {
+      "type": "p",
+      "en": "**(b) 4k 2x MSAA rendering for everything, 30fps**",
+      "zh": "**（b）所有内容都以 4K、2x MSAA 渲染；30fps**"
+    },
+    {
+      "type": "p",
+      "en": "We added option (b) because a lot of people seem to want it, and it does look really good!",
+      "zh": "我们加上选项（b），是因为好像有很多人想要它，而且它看起来确实非常棒！"
+    },
+    {
+      "type": "p",
+      "en": "I don't yet know the exact release date for the patch, but it is coming pretty soon, in November sometime. We are now in the process of nailing down all the little details and making sure they are good. As soon as we know the release date I will announce it here.",
+      "zh": "我还不知道补丁确切的上线日期，但它很快就来，就在 11 月的某一天。我们现在正在把所有小细节都敲定下来，确保它们都没问题。一旦知道上线日期，我就会在这里公布。"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "castano-2010-09-29-hemicube-rendering-and-integration",
+  "title": {
+    "zh": "半立方体渲染与积分",
+    "en": "Hemicube Rendering and Integration"
+  },
+  "translator": {
+    "note": "本篇是个人博客上的公告贴，正文见 the-witness.net 同名文章（[The Witness – Hemicube Rendering and Integration](http://the-witness.net/news/?p=244)）。原文只有一段正文加两条链接，译文按原顺序保留为一段加一个列表，指向 the-witness.net 的链接原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I just posted another article about the global illumination solution that I implemented for [The Witness](http://the-witness.net/), the second one in the series:",
+      "zh": "我刚发了另一篇讲我为[《The Witness》](http://the-witness.net/)实现的全局光照方案的文章，这是该系列的第二篇："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[The Witness – Hemicube Rendering and Integration](http://the-witness.net/news/?p=244), September 29, 2010",
+          "zh": "[The Witness – Hemicube Rendering and Integration](http://the-witness.net/news/?p=244)，2010 年 9 月 29 日"
+        },
+        {
+          "en": "[The Witness – Texture Parameterization](http://the-witness.net/news/?p=120), March 30, 2010",
+          "zh": "[The Witness – Texture Parameterization](http://the-witness.net/news/?p=120)，2010 年 3 月 30 日"
+        }
+      ]
+    }
+  ]
+}

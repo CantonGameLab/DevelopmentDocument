@@ -1,0 +1,25 @@
+{
+  "id": "official-2012-11-17-you-know-the-game-is-coming-along",
+  "title": { "zh": "你就知道这游戏进展不错……", "en": "You know the game is coming along…" },
+  "subtitle": {
+    "en": "When even the roughest draft looks worth exploring, plus the current puzzle count.",
+    "zh": "当连最粗糙的草稿都让人觉得值得一逛——外加目前的谜题数量。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "... when even your barest rough drafts seem like they'd be interesting to explore.",
+      "zh": "……当你连最简陋的草稿都让人觉得逛起来会很有意思的时候。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/11/shot_2012.11.17__time_22_12_n02.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Current puzzle count: 528.",
+      "zh": "目前的谜题数量：528。"
+    }
+  ]
+}

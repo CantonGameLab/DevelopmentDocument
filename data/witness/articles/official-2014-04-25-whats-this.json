@@ -1,0 +1,23 @@
+{
+  "id": "official-2014-04-25-whats-this",
+  "title": { "zh": "这是什么？？", "en": "What’s this??" },
+  "subtitle": {
+    "en": "Three screenshots of something that cannot be talked about yet.",
+    "zh": "三张截图，拍的是一件暂时还不能说的事。"
+  },
+  "translator": {
+    "note": "原文出自 Orsi Spanyol。源行是同一条里的三张照片，按全站约定合并为一个图片占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/04/1.png) ![图](http://the-witness.net/news/wp-content/uploads/2014/04/2.png) ![图](http://the-witness.net/news/wp-content/uploads/2014/04/3.png)",
+      "zh": "（原文此处有三张图）"
+    },
+    {
+      "type": "p",
+      "en": "...can't say, but it sure was fun to build!",
+      "zh": "……不能说，但做起来确实很好玩！"
+    }
+  ]
+}

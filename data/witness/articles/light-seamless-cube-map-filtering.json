@@ -1,0 +1,253 @@
+{
+  "id": "light-seamless-cube-map-filtering",
+  "title": {
+    "zh": "无缝的立方体贴图过滤",
+    "en": "Seamless Cube Map Filtering"
+  },
+  "subtitle": {
+    "en": "Instead of relying on texture borders or edge fixups, modify the cube map lookup coordinates at runtime the same way they are modified during offline generation.",
+    "zh": "与其依赖纹理边界或边缘修补，不如在运行期用与离线生成时相同的方式修改立方体贴图的查找坐标。"
+  },
+  "translator": {
+    "note": "`cube map` 按原文保留英文（不写成「立方体映射」）；`texel` 译「纹素」；`face` 译「面」；`LOD`、`FOV`、`BRDF`、`NVTT`、`HLSL` 保留英文。归档把某些行内公式用「单独成行的反引号」包住，这是格式噪音，按已声明口径把围栏去掉、公式原样保留（公式本身不改）。源文里 `dir = normalize(...)` 一行原文就少一个右括号，译文原样保留。三段代码块源文都没标语言，这里按内容推断为 `hlsl`。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Modern GPUs filter seamlessly across cube map faces. This feature is enabled automatically when using Direct3D 10 and 11 and in OpenGL when using the [ARB_seamless_cube_map](http://www.opengl.org/registry/specs/ARB/seamless_cube_map.txt) extension. However, it's not exposed through Direct3D 9 and it's just not available in any of the current generation consoles.",
+      "zh": "现代 GPU 能跨立方体贴图的各个面做无缝过滤。用 Direct3D 10 和 11 时这个特性会自动开启，OpenGL 里则是用 [ARB_seamless_cube_map](http://www.opengl.org/registry/specs/ARB/seamless_cube_map.txt) 扩展时开启。可是它没有通过 Direct3D 9 暴露出来，而在当前这一代主机上则根本没有。"
+    },
+    {
+      "type": "p",
+      "en": "There are several solutions for this problem. Texture borders solve it elegantly, but are not available on all hardware, and only exposed through the OpenGL API (and proprietary APIs in some consoles).",
+      "zh": "这个问题有几种解决办法。纹理边界（texture border）解决得很优雅，但不是所有硬件都有，而且只通过 OpenGL API（以及一些主机上的私有 API）暴露出来。"
+    },
+    {
+      "type": "p",
+      "en": "When textures are static a common solution is to pre-process them in an attempt to eliminate the edge seams. In a short siggraph sketch, John Isidoro [proposed averaging cube map edge texels](http://developer.amd.com/media/gpu_assets/Isidoro-CubeMapFiltering-Sketch-SIG05.pdf) across edges and obscuring the effect of the averaging by adjusting the intensity of the nearby texels using various methods. These methods are implemented in [AMD's CubeMapGen](http://developer.amd.com/archive/gpu/cubemapgen/pages/default.aspx), whose source code is now [publicly available online](http://code.google.com/p/cubemapgen/). While this seems like a good idea, a few minutes experimenting with CubeMapGen make it obvious that it does not always work very well!",
+      "zh": "纹理是静态的时候，一个常见的做法是预处理纹理，试图消掉边缘接缝。在一篇简短的 siggraph sketch 里，John Isidoro [提出把立方体贴图边缘的纹素跨边做平均](http://developer.amd.com/media/gpu_assets/Isidoro-CubeMapFiltering-Sketch-SIG05.pdf)，再用各种方法调整邻近纹素的强度，把平均带来的影响盖住。这些方法都实现在 [AMD 的 CubeMapGen](http://developer.amd.com/archive/gpu/cubemapgen/pages/default.aspx) 里，它的源码现在也[公开在网上](http://code.google.com/p/cubemapgen/)了。这想法听着不错，但拿 CubeMapGen 试几分钟就清楚：它并不总是那么好用！"
+    },
+    {
+      "type": "h2",
+      "id": "embedded-texture-borders",
+      "zh": "内嵌的纹理边界",
+      "en": "Embedded Texture Borders"
+    },
+    {
+      "type": "p",
+      "en": "A very simple solution that even works for dynamic cube maps is to slightly increase the FOV of the perspective projection so that the edges of adjacent faces match up exactly. [Ysaneya shows](http://www.gamedev.net/blog/73/entry-2005516-seamless-filtering-across-faces-of-dynamic-cube-map/) that in order to achieve that, the FOV needs to be tweaked as follows:",
+      "zh": "有一个非常简单的办法，连动态立方体贴图也适用：把透视投影的 FOV 稍微放大一点，让相邻各面的边缘精确对上。[Ysaneya 展示了](http://www.gamedev.net/blog/73/entry-2005516-seamless-filtering-across-faces-of-dynamic-cube-map/)，要做到这一点，FOV 需要这样调整："
+    },
+    {
+      "type": "p",
+      "en": "`fov = 2.0 * atan(n / (n - 0.5))`",
+      "zh": "`fov = 2.0 * atan(n / (n - 0.5))`"
+    },
+    {
+      "type": "p",
+      "en": "where `n` is the resolution of the cube map.",
+      "zh": "其中 `n` 是立方体贴图的分辨率。"
+    },
+    {
+      "type": "p",
+      "en": "What this is essentially doing is to scale down the face images by one texel and padding them with a border of texels that is shared between adjacent faces. Since the texels at the face edges are now identical the seams are gone.",
+      "zh": "它本质上就是把这些面的图像缩小一个纹素，再用一圈在相邻面之间共享的纹素给它们加边。既然面边缘上的纹素现在是一样的，接缝就消失了。"
+    },
+    {
+      "type": "p",
+      "en": "In practice this is much trickier than it sounds. While the fragments at the adjacent face borders should sample the scene in the same direction, rasterization rules do not guarantee that in both cases the rasterized fragments will match.",
+      "zh": "实际上这比听上去要麻烦得多。虽然相邻面边界处的片元本应沿着相同的方向采样场景，但光栅化规则并不保证两种情况下光栅化出来的片元会对得上。"
+    },
+    {
+      "type": "p",
+      "en": "However, if we take this idea to the realm of offline cube map generation, we can easily guarantee exact results. Cube maps are often used to store directional functions. Each texel has an associated uv coordinate within the cube map face, from which we derive a direction vector that is then used to sample our directional function. Examples of such functions include expensive BRDFs that we would like to precompute, or an environment map sampled using angular extent filtering.",
+      "zh": "不过，要是把这个思路搬到离线生成立方体贴图的场景里，我们就能轻易保证结果精确。立方体贴图常被用来存方向函数。每个纹素在立方体贴图的那个面里都有一个对应的 uv 坐标，我们由它导出一个方向向量，再用这个方向向量去采样我们的方向函数。这类函数的例子包括我们想预计算的高开销 BRDF，或者用角度范围过滤（angular extent filtering）采样的环境贴图。"
+    },
+    {
+      "type": "p",
+      "en": "Usually these uv coordinates are computed so that the resulting direction vectors point to the texel centers. For an integer texel coordinate `x` in the `[0,n-1]` range we map it to a floating point coordinate `u` in the `[-1, 1]` range as follows:",
+      "zh": "通常这些 uv 坐标的计算方式会让导出的方向向量指向纹素中心。对于一个落在 `[0,n-1]` 范围内的整数纹素坐标 `x`，我们这样把它映射到 `[-1, 1]` 范围内的浮点坐标 `u`："
+    },
+    {
+      "type": "p",
+      "en": "`map_1(x) = (x + 0.5) * 2 / n - 1`",
+      "zh": "`map_1(x) = (x + 0.5) * 2 / n - 1`"
+    },
+    {
+      "type": "p",
+      "en": "We then obtain the corresponding direction vector as follows:",
+      "zh": "然后这样得到对应的方向向量："
+    },
+    {
+      "type": "p",
+      "en": "`dir = normalize(faceVector + faceU * map_1(x) + faceV * map_1(y)`",
+      "zh": "`dir = normalize(faceVector + faceU * map_1(x) + faceV * map_1(y)`"
+    },
+    {
+      "type": "p",
+      "en": "When doing that, the texels at the borders do not map to `-1` and `1` exactly, but to:",
+      "zh": "这样做的话，边界上的纹素并不会精确映射到 `-1` 和 `1`，而是映射到："
+    },
+    {
+      "type": "p",
+      "en": "```\nmap(0) = -1 + 1/n\nmap(n-1) = 1 - 1/n\n```",
+      "zh": "```\nmap(0) = -1 + 1/n\nmap(n-1) = 1 - 1/n\n```"
+    },
+    {
+      "type": "p",
+      "en": "In our case we want the edges of each face to match up exactly to they result in the same direction vectors. That can be achieved with a function like this:",
+      "zh": "在我们这里，我们希望每个面的边缘精确对上，从而得到相同的方向向量。用这样一个函数就能做到："
+    },
+    {
+      "type": "p",
+      "en": "`map_2(x) = 2 * x / (n - 1) - 1`",
+      "zh": "`map_2(x) = 2 * x / (n - 1) - 1`"
+    },
+    {
+      "type": "p",
+      "en": "If we use this map to sample our directional function, the resulting cube map is seamless, but the face images are scaled down uniformly. In the first case the slope of the map is:",
+      "zh": "如果我们用这个映射去采样方向函数，得到的立方体贴图就是无缝的，但面图像是被均匀缩小的。在第一种情况下，这个映射的斜率是："
+    },
+    {
+      "type": "p",
+      "en": "`map_1'(x) = 2 / n`",
+      "zh": "`map_1'(x) = 2 / n`"
+    },
+    {
+      "type": "p",
+      "en": "but in the second case it is slightly different:",
+      "zh": "而在第二种情况下略有不同："
+    },
+    {
+      "type": "p",
+      "en": "`map_2'(x) = 2 / (n - 1)`",
+      "zh": "`map_2'(x) = 2 / (n - 1)`"
+    },
+    {
+      "type": "p",
+      "en": "This technique works very well at high resolutions. When n is sufficiently high, the change in slope between map_1 and map_2 becomes minimal. However, at low resolutions the stretching on the interior of the face can become noticeable.",
+      "zh": "这个技术在分辨率高时效果很好。当 n 足够大时，map_1 和 map_2 之间的斜率变化就微乎其微了。但在低分辨率下，面内部被拉伸这一点就会变得明显。"
+    },
+    {
+      "type": "p",
+      "en": "A better solution is to stretch the image only in the proximity of the edges. That can be achieved warping the uv face coordinates with a cubic polynomial of this form:",
+      "zh": "更好的办法是只在靠近边缘的地方拉伸图像。可以用这种形式的三次多项式来扭曲面的 uv 坐标："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/02/warp.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "`warp3(x) = ax^3 + x`",
+      "zh": "`warp3(x) = ax^3 + x`"
+    },
+    {
+      "type": "p",
+      "en": "We can compose this function with our original mapping. The result around the origin is close to a linear identity, but we can adjust `a` to stretch the function closer to the face edges. In our case we want the values at `1-1/n` to produce `1` instead, so we can easily determine the value of `a` by solving:",
+      "zh": "我们可以把这个函数和原来的映射复合起来。在原点附近结果近似于线性恒等映射，但我们可以调整 `a`，让函数在靠近面边缘的地方被拉伸。在我们这里，我们希望 `1-1/n` 处的值变成 `1`，于是只要解下面这个式子就能轻松确定 `a`："
+    },
+    {
+      "type": "p",
+      "en": "`warp3(1-1/n) = ax^3 + x = 1`",
+      "zh": "`warp3(1-1/n) = ax^3 + x = 1`"
+    },
+    {
+      "type": "p",
+      "en": "which gives us:",
+      "zh": "由此得到："
+    },
+    {
+      "type": "p",
+      "en": "`a = n^2 / (n-1)^3`",
+      "zh": "`a = n^2 / (n-1)^3`"
+    },
+    {
+      "type": "p",
+      "en": "I implemented the linear stretch and cubic warping methods in [NVTT](http://code.google.com/p/nvidia-texture-tools/) and they often produce better results than the methods available in AMD's CubeMapGen. However, I was not entirely satisfied. While this removed the zero-order discontinuity, it introduced a first-order discontinuity that in some cases was even more noticeable than the artifacts it was intended to remove.",
+      "zh": "我在 [NVTT](http://code.google.com/p/nvidia-texture-tools/) 里实现了线性拉伸和三次扭曲两种方法，它们常常比 AMD 的 CubeMapGen 里现有的方法效果更好。但我并不是完全满意。它虽然消掉了零阶不连续，却引入了一阶不连续，某些情况下这比它本来要消掉的瑕疵还更显眼。"
+    },
+    {
+      "type": "p",
+      "en": "You can hover the cursor over the following image to show how the warp edge fixup method eliminates the discontinuities, but sometimes still results in visible artifacts:",
+      "zh": "把光标悬停在下面这张图上，可以看到扭曲式边缘修补（warp edge fixup）方法是怎么消掉不连续、但有时仍然留下可见瑕疵的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/02/seamless_warp.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/02/seams.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Any edge fixup method is going to force the slope of the color gradient across the edge to be zero, because it needs to duplicate the border texels. The eye seems to be very sensible to this form of discontinuity and it's questionable whether this is better than the original artifact. Maybe other warp functions would make the discontinuity less obvious, or maybe it could be smoothed like Isidoro's method do. At the time I implemented this I thought the remaining artifacts did not deserve more attention and moved on to other tasks.",
+      "zh": "任何边缘修补方法都必然会把跨越边缘的颜色梯度斜率压成零，因为它需要复制边界纹素。眼睛对这类不连续似乎非常敏感，所以这到底比原来的瑕疵更好，是很成疑问的。也许换别的扭曲函数能让不连续没那么明显，也许可以像 Isidoro 的方法那样把它抹平。我实现这个东西的时候觉得剩下的瑕疵不值得再多花精力，就转去做别的任务了。"
+    },
+    {
+      "type": "h2",
+      "id": "modifed-texture-lookup",
+      "zh": "修改后的纹理查找",
+      "en": "Modifed Texture Lookup"
+    },
+    {
+      "type": "p",
+      "en": "However, a few days ago [Sebastien Lagarde](https://twitter.com/#!/SebLagarde) integrated these methods in AMD's CubeMapGen. See [this post](http://seblagarde.wordpress.com/2012/02/26/amd-cubemapgen-for-physically-based-rendering/) for more results and comparisons against other methods. That got me thinking again about this and then I realized that the only thing that needs to be done to avoid the seams is to modify the texture coordinates at runtime the same way we modify them during the offline cube map evaluation. At first I thought that would be impractical, because it would require projecting the texture coordinates onto the cube map faces, but turns out that the resulting math is very simple. In the case of the uniform stretch that I first suggested, the transform required at runtime is just a conditional per-component multiplication:",
+      "zh": "不过，几天前 [Sebastien Lagarde](https://twitter.com/#!/SebLagarde) 把这些方法整合进了 AMD 的 CubeMapGen。更多的结果以及与其他方法的对比见[这篇帖子](http://seblagarde.wordpress.com/2012/02/26/amd-cubemapgen-for-physically-based-rendering/)。这让我又回头琢磨这件事，然后我意识到：要避免接缝，唯一需要做的就是像离线求值立方体贴图时那样，在运行期修改纹理坐标。一开始我以为这不现实，因为那需要把纹理坐标投影到立方体贴图的各个面上，但结果算出来非常简单。在我最初提出的均匀拉伸那个方案里，运行期需要的变换只是一次按分量的条件乘法："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "\nfloat3 fix_cube_lookup(float3 v) {\n   float M = max(max(abs(v.x), abs(v.y)), abs(v.z));\n   float scale = (cube_size - 1) / cube_size;\n   if (abs(v.x) != M) v.x *= scale;\n   if (abs(v.y) != M) v.y *= scale;\n   if (abs(v.z) != M) v.z *= scale;\n   return v;\n}"
+    },
+    {
+      "type": "p",
+      "en": "One problem is that we need to know the size of the cube map face in advance, but every mipmap has a different size and we may not know what mipmap is going to be sampled in advance. So, this method only works when explicit LOD is used.",
+      "zh": "有个问题是我们得提前知道立方体贴图那个面的大小，但每一层 mipmap 的大小都不一样，而我们又未必提前知道会采样哪一层 mipmap。所以这个方法只在显式指定 LOD 时可用。"
+    },
+    {
+      "type": "p",
+      "en": "Another issue is that with trilinear filtering enabled, the hardware samples from two contiguous mipmap levels. Ideally we would have to use a different scale factor for each mipmap level. That could be achieved sampling them separately and combining the result manually, but in practice, using the same scale for both levels seems to produce fairly good results. We can easily find a scale factor that works well for fractional LODs as a function of the LOD value and the size of the top level mipmap:",
+      "zh": "另一个问题是，开启三线性过滤后，硬件会从相邻的两层 mipmap 采样。理想情况下我们得为每一层 mipmap 用不同的缩放系数。这可以通过分别采样、再手工合并结果来实现，但实际上两层用同一个系数似乎效果就相当不错了。我们可以轻松找到一个对分数 LOD 也适用的缩放系数，它是 LOD 值和最高层 mipmap 尺寸的函数："
+    },
+    {
+      "type": "code",
+      "lang": "hlsl",
+      "code": "\nfloat scale = 1 - exp2(lod) / cube_size;\nif (abs(v.x) != M) v.x *= scale;\nif (abs(v.y) != M) v.y *= scale;\nif (abs(v.z) != M) v.z *= scale;"
+    },
+    {
+      "type": "p",
+      "en": "If you are using cube maps to store prefiltered environment maps, chances are you are computing the cube map LOD from the specular power using `log2(specular_power)`. If that's the case, the two transcendental instructions cancel out and the scale becomes a linear function of the specular power.",
+      "zh": "如果你用立方体贴图来存预过滤的环境贴图，那你很可能是在用 `log2(specular_power)` 从高光强度算出立方体贴图的 LOD。如果是这样，那两条超越函数指令会相互抵消，缩放系数就变成高光强度的线性函数。"
+    },
+    {
+      "type": "p",
+      "en": "The images below show the results using the warp filtering method (these were chosen to highlight the artifacts of the warp method). Hover the cursor over the images to visualize the results of the new approach:",
+      "zh": "下面的图展示的是用扭曲过滤（warp filtering）方法得到的结果（这些图是特意挑的，为的是凸显扭曲方法的瑕疵）。把光标悬停在图上，就能看到新做法得到的结果："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/02/examples_warp.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/02/examples_seamless.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I'd like to thank Sebastien Lagarde for his valuable feedback while testing these ideas and for providing the nice images accompanying this article.",
+      "zh": "感谢 Sebastien Lagarde 在测试这些想法时给出的宝贵反馈，也感谢他为这篇文章提供了这些漂亮配图。"
+    },
+    {
+      "type": "p",
+      "en": "*Note: This article is also published at [AltDevBlogADay](http://altdevblogaday.com/2012/02/27/seamless-cube-map-filtering/).*",
+      "zh": "*注：本文也发表在 [AltDevBlogADay](http://altdevblogaday.com/2012/02/27/seamless-cube-map-filtering/) 上。*"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "castano-2009-11-09-new-job",
+  "title": { "zh": "新工作", "en": "New Job" },
+  "subtitle": {
+    "en": "After four years at NVIDIA working on tessellation, Ignacio moves on to work with Jon Blow on The Witness.",
+    "zh": "在 NVIDIA 做了四年多曲面细分之后，他转去和 Jon Blow 一起做《The Witness》。"
+  },
+  "translator": {
+    "note": "只翻译正文，不译评论区：源文正文到「In clockwise order: …Tristan.」为止，紧随其后的「4 Comments」及四条读者留言（Jesús、repi、sam、Greg James，共 14 个源文单元）属于归档附带的评论区，按本批口径不计入正文，也不在译文里；保真核验报出的未覆盖单元全部来自这一段。正文全部覆盖：唯一一处插图按全站口径归一化成图片占位块，丢掉 srcset 与尺寸缩略图后缀。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Last Friday was my last day at NVIDIA. Next Monday I’ll start working with [Jon Blow](http://www.number-none.com/blow/) on [The Witness](http://the-witness.net). I’m excited to get back to the game industry and I’m hoping something really cool will come out of this.",
+      "zh": "上周五是我在 NVIDIA 的最后一天。下周一我就开始和 [Jon Blow](http://www.number-none.com/blow/) 一起做[《The Witness》](http://the-witness.net)了。能回到游戏行业我很兴奋，也希望这件事最后能做出点真正酷的东西。"
+    },
+    {
+      "type": "p",
+      "en": "In any case, I had a great time working at NVIDIA during the last 4+ years; I especially enjoyed the time I spent working on tessellation. I’ll definitely miss the great people that I had the chance to work with. Some of them are in the following picture of my last day at work:",
+      "zh": "总之，在 NVIDIA 这四年多我过得很愉快，尤其是做曲面细分那段时间。我一定会想念那些有机会共事的优秀同事。下面这张我离职那天的合影里就有几位："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2009/11/nvpeople.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In clockwise order: Aravind, James, Tianyun, Eric, Sarah, Ignacio (not me), Cem, Lars, Timothy, Philippe, Matthieu, Paulius and Tristan.",
+      "zh": "按顺时针方向依次是：Aravind、James、Tianyun、Eric、Sarah、Ignacio（不是我）、Cem、Lars、Timothy、Philippe、Matthieu、Paulius 和 Tristan。"
+    }
+  ]
+}

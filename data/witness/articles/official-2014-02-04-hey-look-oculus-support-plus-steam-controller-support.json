@@ -1,0 +1,18 @@
+{
+  "id": "official-2014-02-04-hey-look-oculus-support-plus-steam-controller-support",
+  "title": { "zh": "快看，Oculus 支持*加上* Steam Controller 支持。", "en": "Hey look, Oculus support *plus* Steam Controller support." },
+  "subtitle": {
+    "en": "Two photos: the game running with an Oculus headset and a Steam Controller at the same time.",
+    "zh": "两张照片：游戏同时跑在 Oculus 头显和 Steam Controller 上。"
+  },
+  "translator": {
+    "note": "本篇正文只有一行、两张照片，按全站约定合并为一个图片占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/02/IMG_20140204_1812251-288x384.jpg) ![图](http://the-witness.net/news/wp-content/uploads/2014/02/IMG_20140204_1813521-512x384.jpg)",
+      "zh": "（原文此处有两张图）"
+    }
+  ]
+}

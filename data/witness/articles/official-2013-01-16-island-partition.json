@@ -1,0 +1,50 @@
+{
+  "id": "official-2013-01-16-island-partition",
+  "title": { "zh": "岛屿分区", "en": "Island Partition" },
+  "subtitle": {
+    "en": "Moving into production mode, and using Luis's spoiler-free map to split up the modeling work.",
+    "zh": "进入生产模式，并用 Luis 那张去掉剧透的地图拆分建模工作。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "This week we've been having discussions about how it's almost time to move into full-on Production Mode and start cranking out final-ish 3D models and textures ... following schedules, and all kinds of organized stuff like that.",
+      "zh": "这周我们一直在讨论：差不多该进入全面的生产模式，开始批量产出接近最终版的 3D 模型和贴图了……按排期走，以及各种诸如此类有组织的事。"
+    },
+    {
+      "type": "p",
+      "en": "Up until now we have not been in that kind of work mode, because we were figuring out the game, and in that kind of mode, I find schedules to be anti-quality. But once you have everything figured out and need to produce a volume of work, schedules are pro-quality, since they help you gauge how well you are doing, whether you need a reality check on the rate or quality of things you can produce, etc.",
+      "zh": "到目前为止我们还没进入过那种工作模式，因为那时还在弄清楚这个游戏是什么，而在那种模式下，我觉得排期是反质量的。可一旦你把一切都想清楚了、需要产出成批的工作量，排期就是有利于质量的，因为它能帮你衡量自己干得怎么样、是否需要就自己的产出速度或质量做一次现实校准，等等。"
+    },
+    {
+      "type": "p",
+      "en": "Luis has made this handy map that we are using to partition up modeling tasks, which I have then edited to remove spoilers:",
+      "zh": "Luis 做了这张顺手的地图，我们用它来划分建模任务，之后我编辑了一下，把剧透去掉了："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/01/World_Map_Edited.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I like looking at this map because it reminds me how many distinct areas there are and how they relate to each other.",
+      "zh": "我喜欢看这张地图，因为它让我想起原来有这么多彼此不同的区域，以及它们之间是什么关系。"
+    },
+    {
+      "type": "p",
+      "en": "Today I was showing the game to someone who had not seen it before, and that's always interesting because it helps me see the game through fresh eyes a little. It really feels unlike any other game in the way it is an Open World but also a Small World, where you can be in one location and see several neighboring locations, and that helps keep you oriented, but it also helps you reflect on what you have done and orient on where you are in the course of things you are planning to do.",
+      "zh": "今天我向一个从没见过这游戏的人演示了它，这总是很有意思，因为能帮我用稍微新鲜一点的眼光看这个游戏。它的感觉确实和别的游戏都不一样：它既是开放世界，又是一个小世界——你待在一个地方就能看到邻近的好几个地方，这既帮你保持方向感，也帮你回顾已经做过的事，并在你计划要做的事情序列中认清自己现在所处的位置。"
+    },
+    {
+      "type": "p",
+      "en": "We still have **a ton** of work to do, though, and I was reminded of this as well. Not just in detailing all these areas, but in filling out the story, crafting details that further help the areas relate to each other, etc.",
+      "zh": "不过我们**还有一大堆**活要干，这一点我也被提醒到了。不只是给这些区域做细节，还包括把故事铺满、打磨那些能让区域之间进一步关联起来的细节，等等。"
+    },
+    {
+      "type": "p",
+      "en": "It is going to be an interesting time!",
+      "zh": "接下来会是一段有意思的日子！"
+    }
+  ]
+}

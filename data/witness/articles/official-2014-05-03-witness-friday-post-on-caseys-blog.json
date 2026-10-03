@@ -1,0 +1,25 @@
+{
+  "id": "official-2014-05-03-witness-friday-post-on-caseys-blog",
+  "title": { "zh": "Casey 博客上的 Witness Friday 帖", "en": "Witness Friday post on Casey’s blog" },
+  "subtitle": {
+    "en": "Casey Muratori writes more about planting grass when the quality of the result really matters.",
+    "zh": "Casey Muratori 接着谈种草——当你真的很在意结果质量的时候。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Casey Muratori is back, with [more details about planting grass](http://mollyrocket.com/casey/stream_0015.html) when you really care about how good the results are.",
+      "zh": "Casey Muratori 回来了，[更详细地讲了种草这回事](http://mollyrocket.com/casey/stream_0015.html)——当你真的很在意结果有多好的时候。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://mollyrocket.com/casey/stream_0015.html)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "**Update**: And here's [another post](http://mollyrocket.com/casey/stream_0017.html), complete with a video showing in detail how the grass planting works in the actual game.",
+      "zh": "**更新**：还有[另一篇文章](http://mollyrocket.com/casey/stream_0017.html)，附带一段视频，详细演示了实际游戏里种草是怎么运作的。"
+    }
+  ]
+}

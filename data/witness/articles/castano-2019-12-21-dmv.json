@@ -1,0 +1,43 @@
+{
+  "id": "castano-2019-12-21-dmv",
+  "title": { "zh": "我在 DMV 的经历", "en": "My DMV Experience" },
+  "subtitle": {
+    "en": "Four appointments to fix a name error on a driver's license, and the new one still came back wrong.",
+    "zh": "为了改驾照上的一个姓名错误跑了四趟，结果新驾照寄回来还是错的。"
+  },
+  "translator": {
+    "note": "源文六段，无插图。DMV 是加州车辆管理局，green card 保留英文说法。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "A few years ago I renewed my driver’s license and when the new one arrived I was sad to find it had an error. The first half of my last name had been removed and treated as my middle name.",
+      "zh": "几年前我换了驾照，新证寄到时我很难过地发现上面有个错误：我姓氏的前一半被砍掉了，还被当成了我的中间名。"
+    },
+    {
+      "type": "p",
+      "en": "This is a common mistake that Americans make, but I was unhappy about it and hoped it could be fixed easily, so I made an appointment at the DMV to correct it. I brought my previous license as proof of identification. It had not expired yet, so it seemed to me that it would be a valid proof of identification. However, I was informed that in order to correct the error I would also have to bring my birth certificate.",
+      "zh": "这是美国人常犯的错，但我很不高兴，希望这事能轻松解决，于是预约了 DMV 去更正。我带上了旧驾照作为身份证明。它还没过期，在我看来应该算有效证件。可我被告知，要更正这个错误，我还得带上出生证明。"
+    },
+    {
+      "type": "p",
+      "en": "I then made another appointment and went with my birth certificate. I was born in Spain, so it was a Spanish birth certificate with a certified english translation. Turns out however, that being a foreigner, I would have to bring my passport instead.",
+      "zh": "于是我又预约了一次，带着出生证明去了。我出生在西班牙，所以那是西班牙的出生证明，还附了一份认证过的英文翻译。可结果呢，因为我是外国人，我得改带护照。"
+    },
+    {
+      "type": "p",
+      "en": "Well, one more appointment, and as you may be guessing already, my passport was not enough. I am a permanent resident, so the DMV worker actually needed my green card.",
+      "zh": "好吧，再预约一次。你可能已经猜到了，护照还不够。我是永久居民，所以 DMV 的工作人员其实要的是我的绿卡。"
+    },
+    {
+      "type": "p",
+      "en": "For my last appointment I brought all the requested documents and more, and finally things went smoothly. There was no wait! Employees were polite and helpful! They scanned my documents, and I was able to request a new license with my last name corrected. I was given a temporary license that didn’t have the error, and was told my new license would be mailed in a few weeks. I was impressed!",
+      "zh": "最后一次预约，我把要求的所有文件以及更多东西都带上了，事情终于顺利办完。没有排队！工作人员既客气又热心！他们扫描了我的文件，我也顺利申请到了更正姓氏的新驾照。他们给了我一张没有这个错误的临时驾照，并告诉我新驾照会在几周内寄到。我当时挺佩服的！"
+    },
+    {
+      "type": "p",
+      "en": "A few days ago my new license arrived and my last name still had the same error.",
+      "zh": "几天前新驾照寄到了，我的姓氏还是同样的错误。"
+    }
+  ]
+}

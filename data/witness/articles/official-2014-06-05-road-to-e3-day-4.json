@@ -1,0 +1,69 @@
+{
+  "id": "official-2014-06-05-road-to-e3-day-4",
+  "title": { "zh": "通往 E3 之路 · 第 4 天", "en": "Road to E3 – Day 4" },
+  "subtitle": {
+    "en": "Wrapping up the ruined walls, with a vegetation update from Orsi.",
+    "zh": "废墟墙体收尾，外加 Orsi 的植被进展。"
+  },
+  "translator": {
+    "note": "原文里 “Orsi's Vegetation Update” 是单独一行的粗体小标题，译文按小标题（h2）处理。原文 6 张图；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Getting close to the end of the week.",
+      "zh": "这一周快到头了。"
+    },
+    {
+      "type": "p",
+      "en": "Most of the key detail has been added to the walls and I feel, if we had to send this build to E3, it wouldn't be terrible.",
+      "zh": "墙体的大部分关键细节都加上了，我觉得如果现在就得把这个版本送去 E3，也不算太糟。"
+    },
+    {
+      "type": "p",
+      "en": "We managed to get in some really nice framing details that I won't spoil here but I'm sure players will appreciate them!",
+      "zh": "我们还设法加进了一些非常漂亮的框景细节，这里就不先剧透了，但我相信玩家会喜欢！"
+    },
+    {
+      "type": "p",
+      "en": "Here is a shot showing the ruined walls work.",
+      "zh": "这张截图展示的是废墟墙体的成果。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_18_10_n01.png) Tomorrow I'll make sure I walk around a lot to hunt down any major issues, get the overall color vibe (mostly get more variation on the walls) and any extra details.",
+      "zh": "（原文此处有一张图）明天我会多走走，把大问题揪出来，同时定一下整体的色彩调性（主要是让墙面有更多变化），以及各种额外的细节。"
+    },
+    { "type": "h2", "id": "orsi-vegetation-update", "zh": "Orsi 的植被更新：", "en": "Orsi's Vegetation Update:" },
+    {
+      "type": "p",
+      "en": "To give a little variation to the post today, I thought I would include some things I have been working on as well. While Luis had been working on the structures around the entry yard, I have been placing the vegetation and cables, and re-working some puzzle related things. Laying out the vegetation early on was important to give the place a sense of scale and to get the overall vibe of the place. I am very happy we got an other chance to re-do all of it, because I think it turned out much more magical this time around:",
+      "zh": "为了让今天的帖子有点变化，我想也顺便放一些我自己在做的东西。Luis 在做入口庭院周围的结构时，我在摆植被和线缆，还重做了一些跟谜题有关的东西。早点把植被铺出来很重要，能给这个地方一个尺度感，也能定下它整体的气质。我很高兴我们又有一次机会把它整个重做，因为我觉得这次出来的效果有魔力得多："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_41_n12.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Even though it's a much smaller area than it used to be before, I used a different combination of plants in different areas, so people would be less likely to get lost:",
+      "zh": "虽然这片区域比以前小了很多，但我在不同区域用了不同的植物搭配，这样人们就不那么容易迷路："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_42_n13.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_43_n16.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I still have polish to do, to match everything to the walls Luis finalizes tomorrow, and then we should be ready for E3!",
+      "zh": "我还得再打磨一轮，让所有东西跟 Luis 明天定稿的墙体对上，然后我们就该准备好去 E3 了！"
+    }
+  ]
+}

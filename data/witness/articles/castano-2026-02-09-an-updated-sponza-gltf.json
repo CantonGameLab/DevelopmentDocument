@@ -1,0 +1,263 @@
+{
+  "id": "castano-2026-02-09-an-updated-sponza-gltf",
+  "title": { "zh": "更新过的 Sponza glTF", "en": "An Updated Sponza glTF" },
+  "subtitle": {
+    "en": "The glTF model using KTX ETC1S textures is very compact, but is it worth the dramatic quality reduction?",
+    "zh": "用 KTX ETC1S 纹理的 glTF 模型体积非常小，但画质下降得这么厉害，值得吗？"
+  },
+  "translator": {
+    "note": "原文里两张数据表在归档里被压平成一行一个单元格，译文沿用全站已有做法（见 `light-graphics-tech-lighting-comparison` 一篇）保持一单元格一段落；表格单元格里的数字与算式原样保留。插图按全站口径归一化成「（原文此处有一张图）」占位，其中一张的 alt 原文是「Texture compression comparison」，也一并压平成「图」。原文只有一个标题（归档里是 `###`），译文按本 schema 映射成 `h2`。格式名（KTX、ETC1S、UASTC、AVIF、PNG、JPG、PBR、glTF、GLB、EXT_texture_AVIF）与工具名（`gltf-tex`、`avifenc`、`sharp`、`glTF Transform`、`WebGPUTextureLoader`、`spark.js`、`Spark`）一律保留英文。原文里的笔误（`so I run some quick tests`、`despite of that`）在 `en` 字段中原样保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The other day I was looking at [this clustered shading WebGPU demo](https://toji.github.io/webgpu-clustered-shading) and was surprised by the jarring texture compression artifacts:",
+      "zh": "前几天我在看[这个 clustered shading 的 WebGPU demo](https://toji.github.io/webgpu-clustered-shading)，被那些刺眼的纹理压缩瑕疵惊到了："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/ktx-700x472.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The glTF model using KTX ETC1S textures is very compact, but is it worth the dramatic quality reduction?",
+      "zh": "用 KTX ETC1S 纹理的那个 glTF 模型体积非常小，但画质下降得这么厉害，值得吗？"
+    },
+    {
+      "type": "p",
+      "en": "I wanted to see how this model would look with AVIF and *[Spark](https://ludicon.com/spark/)*, so I went looking for a version of the Sponza model with uncompressed textures that I could use as a baseline for a fair comparison.",
+      "zh": "我想看看这个模型换成 AVIF 加 *[Spark](https://ludicon.com/spark/)* 会是什么样，于是去找一个带未压缩纹理的 Sponza 模型版本，好拿它当基准做公平对比。"
+    },
+    {
+      "type": "p",
+      "en": "The glTF used in the clustered shading demo appears to be based on the [Sponza model in Khronos’ sample model repository](https://github.com/KhronosGroup/glTF-Sample-Models/blob/main/2.0/Sponza/README.md), but neither of these includes uncompressed textures, only JPG and KTX files. [Morgan McGuire’s asset repository](https://casual-effects.com/data/) contains a version of the Sponza model in OBJ format with PNG textures, but it does not include normal maps or other PBR textures. The version published by [Alexandre Pestana](http://www.alexandre-pestana.com/pbr-textures-sponza/) is no longer available online, and downloading the [original Crytek assets (created by Frank Meinl)](https://www.cryengine.com/asset-db/product/crytek/sponza-sample-scene) requires registration and the use of a Windows-only downloader.",
+      "zh": "clustered shading demo 里用的那个 glTF，看起来是基于 [Khronos 示例模型仓库里的 Sponza 模型](https://github.com/KhronosGroup/glTF-Sample-Models/blob/main/2.0/Sponza/README.md) 的，但这两者都不含未压缩纹理，只有 JPG 和 KTX 文件。[Morgan McGuire 的资源仓库](https://casual-effects.com/data/) 里有一个 OBJ 格式、带 PNG 纹理的 Sponza 模型版本，但不含法线贴图或其它 PBR 纹理。[Alexandre Pestana](http://www.alexandre-pestana.com/pbr-textures-sponza/) 发布的那个版本已经无法在线获取，而下载[原始的 Crytek 资源（由 Frank Meinl 制作）](https://www.cryengine.com/asset-db/product/crytek/sponza-sample-scene) 需要注册，还得用一个仅限 Windows 的下载器。"
+    },
+    {
+      "type": "p",
+      "en": "After some digging, I found that Hans-Kristian Arntzen had published [a version with uncompressed PNG textures](https://themaister.net/sponza-gltf-pbr/). However, I ran into issues loading the geometry in some glTF viewers, and the PNG files contained unnecessary alpha channels that inflated the total size and did not follow the glTF PBR texture guidelines.",
+      "zh": "翻找了一阵之后，我发现 Hans-Kristian Arntzen 发布过[一个带未压缩 PNG 纹理的版本](https://themaister.net/sponza-gltf-pbr/)。但我在一些 glTF 查看器里加载它的几何体时遇到了问题，而且那些 PNG 文件带有不必要的 alpha 通道，既把总体积撑大了，也不符合 glTF 的 PBR 纹理规范。"
+    },
+    {
+      "type": "p",
+      "en": "To make the uncompressed version of the model more accessible, I cleaned up the PNGs, replaced the textures in Khronos’ glTF Sponza model with the updated assets, and uploaded the result to the following repository:",
+      "zh": "为了让这个未压缩版本更容易获取，我把那些 PNG 清理了一遍，用更新后的资源替换掉 Khronos glTF Sponza 模型里的纹理，并把结果上传到了下面这个仓库："
+    },
+    {
+      "type": "p",
+      "en": "[https://github.com/ludicon/sponza-gltf](https://github.com/ludicon/sponza-gltf)",
+      "zh": "[https://github.com/ludicon/sponza-gltf](https://github.com/ludicon/sponza-gltf)"
+    },
+    {
+      "type": "p",
+      "en": "The next step was to compress this glTF model using AVIF and compare the resulting size and visual quality.",
+      "zh": "下一步是用 AVIF 压缩这个 glTF 模型，并比较得到的体积和视觉质量。"
+    },
+    {
+      "type": "p",
+      "en": "For this task I had previously experimented with a few ad-hoc scripts built on top of Don McCurdy’s [glTF Transform](https://gltf-transform.dev/) library. To make this workflow easier to reuse and share, I consolidated them into a small command-line tool called `gltf-tex`:",
+      "zh": "为了这件事，我之前基于 Don McCurdy 的 [glTF Transform](https://gltf-transform.dev/) 库试过几个临时脚本。为了让这套工作流更容易复用和分享，我把它们整合成了一个小巧的命令行工具，叫 `gltf-tex`："
+    },
+    {
+      "type": "p",
+      "en": "[https://github.com/ludicon/gltf-tex](https://github.com/ludicon/gltf-tex)",
+      "zh": "[https://github.com/ludicon/gltf-tex](https://github.com/ludicon/gltf-tex)"
+    },
+    {
+      "type": "p",
+      "en": "You can install it in your system with:",
+      "zh": "可以用下面的命令把它装到你的系统里："
+    },
+    {
+      "type": "code",
+      "lang": "console",
+      "code": "git clone https://github.com/ludicon/gltf-tex.git\ncd gltf-tex\nnpm install\nnpm link"
+    },
+    {
+      "type": "p",
+      "en": "And run it as follows:",
+      "zh": "然后这样运行："
+    },
+    {
+      "type": "code",
+      "lang": "console",
+      "code": "gltf-tex avif sponza-png.glb sponza-avif.glb --quality 80 --speed 4"
+    },
+    {
+      "type": "p",
+      "en": "While the glTF Transform command line tool already provides a command to convert textures to AVIF, it treats all images the same way regardless of how they are used. I wanted more control, in particular the ability to specify custom color spaces and linear transfer functions for texture assets that do not represent color images.",
+      "zh": "glTF Transform 的命令行工具虽然已经提供了把纹理转成 AVIF 的命令，但它对所有图像一视同仁，不管它们是怎么用的。我想要更多控制权，特别是能为那些并不表示彩色图像的纹理资源指定自定义色彩空间和线性传递函数。"
+    },
+    {
+      "type": "p",
+      "en": "This was difficult to achieve with glTF Transform because it relies on the [sharp](https://sharp.pixelplumbing.com/) library for image processing. That limits the compression options that can be configured and does not necessarily use the latest versions of the underlying encoders with all the necessary features. In contrast, `gltf-tex` employs the system-provided `avifenc` tool directly.",
+      "zh": "用 glTF Transform 很难做到这一点，因为它的图像处理依赖 [sharp](https://sharp.pixelplumbing.com/) 库。这限制住了可以配置的压缩选项，而且它未必会用到带有全部所需特性的最新版底层编码器。相比之下，`gltf-tex` 直接调用系统提供的 `avifenc` 工具。"
+    },
+    {
+      "type": "p",
+      "en": "Alternatively you may use the `sharp` library as well, but that may result in larger or lower quality textures:",
+      "zh": "你也可以改用 `sharp` 库，但那可能导致纹理体积更大或画质更低："
+    },
+    {
+      "type": "code",
+      "lang": "console",
+      "code": "gltf-tex avif sponza-png.glb sponza-avif.glb --sharp"
+    },
+    {
+      "type": "p",
+      "en": "To speed up asset processing, I run multiple instances of the AVIF encoder in parallel. While the encoder itself is multi-threaded, it rarely saturates all available cores, and some stages are I/O-bound. Running up to four instances in parallel improves overall throughput on my system. This can be configured with the `--concurrency N` command-line option.",
+      "zh": "为了加快资源处理，我会并行跑多个 AVIF 编码器实例。编码器本身是多线程的，但它很少能把所有可用核心吃满，而且有些阶段是受 I/O 限制的。在我的机器上并行跑最多四个实例能提升整体吞吐量。这可以用 `--concurrency N` 命令行选项来配置。"
+    },
+    {
+      "type": "p",
+      "en": "While processing the Sponza model, I also noticed that some of its textures were identical, so I added another tool to eliminate the duplicate images adjusting the corresponding texture references. You can simply run it as follows:",
+      "zh": "处理 Sponza 模型时我还注意到，它有些纹理是完全相同的，于是我又加了一个工具来消除重复图像，并相应调整纹理引用。只要这样运行它："
+    },
+    {
+      "type": "code",
+      "lang": "console",
+      "code": "gltf-tex dedup sponza-png.glb sponza-png-dedup.glb"
+    },
+    {
+      "type": "p",
+      "en": "With these tools in place I produced two additional versions of the Sponza model with AVIF textures at two different quality levels (one using `--quality 80` and the other using `--quality 50`).",
+      "zh": "有了这些工具，我又做出了两个带 AVIF 纹理的 Sponza 模型版本，分别对应两个不同的质量档位（一个用 `--quality 80`，另一个用 `--quality 50`）。"
+    },
+    {
+      "type": "p",
+      "en": "`gltf-tex` also provides the `size` command to inspect and summarize the texture sizes. It displays not only the size on disk, but also the size in video memory with and without run-time compression.",
+      "zh": "`gltf-tex` 还提供 `size` 命令，用来检查和汇总纹理大小。它不仅显示磁盘上的大小，还显示在显存中的大小——包括有运行期压缩和没有运行期压缩两种情况。"
+    },
+    {
+      "type": "code",
+      "lang": "console",
+      "code": "gltf-tex size sponza-avif.glb"
+    },
+    {
+      "type": "p",
+      "en": "The resulting file sizes are as follows:",
+      "zh": "得到的文件大小如下："
+    },
+    { "type": "p", "en": "Model", "zh": "模型" },
+    { "type": "p", "en": "Texture Size on Disk", "zh": "磁盘上的纹理大小" },
+    { "type": "p", "en": "Size in Video Memory", "zh": "显存中的大小" },
+    { "type": "p", "en": "Sponza PNG", "zh": "Sponza PNG" },
+    { "type": "p", "en": "103.3 MB", "zh": "103.3 MB" },
+    { "type": "p", "en": "256 MB (uncompressed)", "zh": "256 MB（未压缩）" },
+    { "type": "p", "en": "Sponza AVIF (high quality)", "zh": "Sponza AVIF（高质量）" },
+    { "type": "p", "en": "17.6 MB", "zh": "17.6 MB" },
+    { "type": "p", "en": "85.3 MB / 58.3 MB", "zh": "85.3 MB / 58.3 MB" },
+    { "type": "p", "en": "Sponza AVIF (low quality)", "zh": "Sponza AVIF（低质量）" },
+    { "type": "p", "en": "6.5 MB", "zh": "6.5 MB" },
+    { "type": "p", "en": "85.3 MB / 58.3 MB", "zh": "85.3 MB / 58.3 MB" },
+    { "type": "p", "en": "Sponza KTX (ETC1S)", "zh": "Sponza KTX（ETC1S）" },
+    { "type": "p", "en": "8.2 MB", "zh": "8.2 MB" },
+    { "type": "p", "en": "44.7 MB", "zh": "44.7 MB" },
+    { "type": "p", "en": "Sponza KTX (UASTC)", "zh": "Sponza KTX（UASTC）" },
+    { "type": "p", "en": "56.7 MB", "zh": "56.7 MB" },
+    { "type": "p", "en": "85.3 MB", "zh": "85.3 MB" },
+    {
+      "type": "p",
+      "en": "Note, the video memory size when using AVIF depends on whether you target 16 or 8 bit per block formats. *Spark* allows you to target both, but always chooses 8 bit formats for occlusion maps and 16 bit formats for normal maps, which is why the video memory size is slightly larger than when using ETC1S.",
+      "zh": "注意，用 AVIF 时的显存大小取决于你目标是每块 16 位还是 8 位的格式。*Spark* 允许你两者都选，但它对遮蔽贴图总是选 8 位格式、对法线贴图总是选 16 位格式，所以这里的显存大小比用 ETC1S 时略大一些。"
+    },
+    {
+      "type": "p",
+      "en": "To see how the quality actually holds up I modified Tojiro’s demo to load and display the new assets. This only required a few minor changes:",
+      "zh": "为了看看画质究竟如何，我修改了 Tojiro 的那个 demo，让它加载并显示新的资源。这只需要几处小改动："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "Adding support for EXT_texture_AVIF in the glTF loader.", "zh": "在 glTF 加载器里加入对 EXT_texture_AVIF 的支持。" },
+        {
+          "en": "Unpacking tangent space normals in the shader (see my [previous post](https://www.ludicon.com/castano/blog/2026/02/normal-map-compression-revisited/) for more details on this).",
+          "zh": "在着色器里解包切线空间法线（更多细节见我[上一篇帖子](https://www.ludicon.com/castano/blog/2026/02/normal-map-compression-revisited/)）。"
+        },
+        { "en": "Loading textures using spark.js instead of the WebGPUTextureLoader.", "zh": "改用 spark.js 加载纹理，而不是 WebGPUTextureLoader。" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The resulting code is available in Ludicon’s fork of the demo:",
+      "zh": "改完的代码在 Ludicon 分叉的这个 demo 里："
+    },
+    {
+      "type": "p",
+      "en": "[https://github.com/Ludicon/webgpu-clustered-shading](https://github.com/Ludicon/webgpu-clustered-shading)",
+      "zh": "[https://github.com/Ludicon/webgpu-clustered-shading](https://github.com/Ludicon/webgpu-clustered-shading)"
+    },
+    {
+      "type": "p",
+      "en": "And here are some screenshots of the results:",
+      "zh": "下面是结果的一些截图："
+    },
+    { "type": "p", "en": "PNG", "zh": "PNG" },
+    { "type": "p", "en": "AVIF HQ + Spark", "zh": "AVIF HQ + Spark" },
+    { "type": "p", "en": "AVIF LQ + Spark", "zh": "AVIF LQ + Spark" },
+    { "type": "p", "en": "KTX ETC1S", "zh": "KTX ETC1S" },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2026/02/png-no-spark.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "p", "en": "103 MB", "zh": "103 MB" },
+    {
+      "type": "p",
+      "en": "Even at the low quality level the results are extremely close to the original. The takeaway for me is that AVIF plus runtime GPU compression offers a much better quality-to-size tradeoff than precompressed KTX, while keeping download sizes much smaller.",
+      "zh": "即便在低质量档位，结果也和原始版本极其接近。我从中得到的结论是：AVIF 加运行期 GPU 压缩，在画质与体积的取舍上比预先压缩好的 KTX 好得多，同时下载体积还小得多。"
+    },
+    { "type": "h2", "id": "addendum", "zh": "附记", "en": "Addendum" },
+    {
+      "type": "p",
+      "en": "I was asked about load time performance, so I run some quick tests locally to get a rough idea of what to expect.",
+      "zh": "有人问我加载时间的性能如何，所以我在本地快速跑了几组测试，大致了解能期待什么。"
+    },
+    {
+      "type": "p",
+      "en": "All measurements were taken on a MacBook Pro M4. My Wi-Fi connection measures around 200 Mbps. The browser cache was disabled to approximate a first-time load. All timings are reported in milliseconds.",
+      "zh": "所有测量都在一台 MacBook Pro M4 上完成。我的 Wi-Fi 连接实测大约 200 Mbps。浏览器缓存被禁用以模拟首次加载。所有计时都以毫秒为单位。"
+    },
+    { "type": "p", "en": "Browser", "zh": "浏览器" },
+    { "type": "p", "en": "KTX ETC1S", "zh": "KTX ETC1S" },
+    { "type": "p", "en": "KTX UASTC", "zh": "KTX UASTC" },
+    { "type": "p", "en": "AVIF LO", "zh": "AVIF LO" },
+    { "type": "p", "en": "AVIF HI", "zh": "AVIF HI" },
+    { "type": "p", "en": "Chrome", "zh": "Chrome" },
+    { "type": "p", "en": "185+102 = 287", "zh": "185+102 = 287" },
+    { "type": "p", "en": "418+230 = 648", "zh": "418+230 = 648" },
+    { "type": "p", "en": "182+130 = 314", "zh": "182+130 = 314" },
+    { "type": "p", "en": "238+177 = 415", "zh": "238+177 = 415" },
+    { "type": "p", "en": "Firefox", "zh": "Firefox" },
+    { "type": "p", "en": "180+939 = 1,119", "zh": "180+939 = 1,119" },
+    { "type": "p", "en": "423+3,246 = 3,669", "zh": "423+3,246 = 3,669" },
+    { "type": "p", "en": "204+430 = 664", "zh": "204+430 = 664" },
+    { "type": "p", "en": "254+460 = 714", "zh": "254+460 = 714" },
+    { "type": "p", "en": "Safari", "zh": "Safari" },
+    { "type": "p", "en": "184+208 = 392", "zh": "184+208 = 392" },
+    { "type": "p", "en": "424+235 = 659", "zh": "424+235 = 659" },
+    { "type": "p", "en": "174+722 = 896", "zh": "174+722 = 896" },
+    { "type": "p", "en": "235+755 = 990", "zh": "235+755 = 990" },
+    {
+      "type": "p",
+      "en": "Each entry shows two timings and their sum. The first number corresponds to downloading and parsing the glTF file; the second measures texture decoding and upload or transcoding. In an ideal implementation, these phases would overlap, you want to start processing textures as soon as the necessary data becomes available. The simple mini-gltf loader used here does not currently do that.",
+      "zh": "每一项给出两个计时以及它们的和。第一个数字对应下载并解析 glTF 文件；第二个测量的是纹理解码以及上传或转码。在理想的实现里，这两个阶段应该重叠——你希望在需要的数据一到位就开始处理纹理。这里用的简易 mini-gltf 加载器目前做不到这一点。"
+    },
+    {
+      "type": "p",
+      "en": "Measuring performance in the browser is inherently tricky. Execution is highly asynchronous, and it is possible that some of these timings include unrelated work.",
+      "zh": "在浏览器里测性能本身就很难。执行是高度异步的，这些计时里有可能把无关的工作也算进去了。"
+    },
+    {
+      "type": "p",
+      "en": "KTX loading performance in Chrome and Safari is fairly similar, while Firefox performs significantly worse. AVIF loading performance varies substantially across browsers. Chrome uses all available CPU threads for image decoding, whereas Firefox decodes images in a single thread. Safari seems to use multiple threads as well, but it’s even slower despite of that.",
+      "zh": "Chrome 和 Safari 的 KTX 加载性能相当接近，而 Firefox 明显更差。AVIF 的加载性能在各浏览器之间差异很大。Chrome 会用上所有可用的 CPU 线程做图像解码，而 Firefox 只用单线程解码图像。Safari 似乎也用了多线程，但尽管这样还是更慢。"
+    },
+    {
+      "type": "p",
+      "en": "Note, these are all CPU timings. Spark runs in the GPU and runs in fractions of a millisecond, so it doesn’t affect performance in a significant way. The CPU timings above are practically the same regardless of whether Spark is enabled or disabled.",
+      "zh": "注意，这些都是 CPU 计时。Spark 跑在 GPU 上，耗时只有零点几毫秒，所以不会对性能造成明显影响。无论 Spark 是启用还是禁用，上面这些 CPU 计时实际上都是一样的。"
+    }
+  ]
+}

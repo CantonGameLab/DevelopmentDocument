@@ -1,0 +1,43 @@
+{
+  "id": "official-2016-01-19-price-and-pre-orders",
+  "title": { "zh": "价格与预购", "en": "Price and Pre-Orders" },
+  "subtitle": {
+    "en": "The price on Steam and PSN, preorders going live, and the Humble Store cut that goes to the Against Malaria Foundation.",
+    "zh": "Steam 与 PSN 上的定价、预购的上线时间，以及 Humble Store 那笔捐给 Against Malaria Foundation 的分成。"
+  },
+  "translator": {
+    "note": "原文第二段之后有一张截图，按本站约定保留为占位段落；图片链接指向原文上传的最大尺寸原图。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "A lot of people have been asking about the price, so: The price of the game on both Steam and PSN will be $39.99 / €36.99 / £29.99.",
+      "zh": "很多人一直在问价格，那么：《The Witness》在 Steam 和 PSN 上的价格都是 $39.99 / €36.99 / £29.99。"
+    },
+    {
+      "type": "p",
+      "en": "A lot of people have been asking about preorders too. Preorders will go live on Steam and the Humble Store (and on this web site) today at noon PST. Unfortunately we won't have preorders on PSN, because apparently developers have to set those up months in advance and we didn't know that!",
+      "zh": "也有很多人问预购的事。预购将在今天太平洋时间中午在 Steam、Humble Store（以及本网站）上线。可惜我们在 PSN 上没法做预购，因为开发者显然得提前好几个月就把预购配好，而我们之前并不知道这回事！"
+    },
+    {
+      "type": "p",
+      "en": "The preorders are regular price! They contain an amazing bonus pack-in: the warm fuzzy feeling that you have pre-ordered the game. (And that's all). So it's exactly the same as buying the game at launch, except earlier.",
+      "zh": "预购就是原价！里面包含一份了不起的附赠内容：你已经预购了这款游戏的那种暖暖的幸福感。（仅此而已。）所以它和发售当天买游戏完全一样，只是更早。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2016/01/shot_2015.09.16__time_13_00_n37.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "If you buy from the Humble Store, 10% of the price goes to the Against Malaria Foundation. For a lot of us in developed nations, malaria seems like a far-away thing that you only think about when you go on a really adventurous trip, but in many parts of the world it's a serious problem. The good news is that we are making great progress in reducing incidence of malaria, [see this report](https://www.givingwhatwecan.org/post/2015/12/bednets-have-prevented-450-million-cases-of-malaria/):",
+      "zh": "如果你在 Humble Store 购买，价格的 10% 会捐给 Against Malaria Foundation。对我们这些发达国家的人来说，疟疾像是一件很遥远的事，只有在去一趟真正有冒险色彩的旅行时才会想到它；但在世界上的许多地方，它是一个严重的问题。好消息是，我们在降低疟疾发病率方面正取得很大进展，[见这份报告](https://www.givingwhatwecan.org/post/2015/12/bednets-have-prevented-450-million-cases-of-malaria/)："
+    },
+    {
+      "type": "p",
+      "en": "The Against Malaria Foundation is rated one of the most cost-effective charities in the world by both Giving What We Can and Givewell, two organizations focused on ensuring that charitable donations do maximum good in the world. Giving What We Can has a good high-level description of [the philosophy behind this movement](https://www.givingwhatwecan.org/get-involved/what-we-can-achieve/).",
+      "zh": "Against Malaria Foundation 被 Giving What We Can 和 Givewell 两家机构评为全世界性价比最高的慈善组织之一，这两家机构都致力于确保慈善捐款在世界上发挥最大的作用。Giving What We Can 对[这场运动背后的理念](https://www.givingwhatwecan.org/get-involved/what-we-can-achieve/)有一份很好的宏观介绍。"
+    }
+  ]
+}

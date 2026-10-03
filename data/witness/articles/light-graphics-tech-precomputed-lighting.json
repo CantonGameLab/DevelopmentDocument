@@ -1,0 +1,128 @@
+{
+  "id": "light-graphics-tech-precomputed-lighting",
+  "title": { "zh": "图形技术：预计算光照", "en": "Graphics Tech: Precomputed Lighting" },
+  "subtitle": {
+    "en": "Why The Witness uses precomputed global illumination instead of a real-time solution, and how the first version of that system was built.",
+    "zh": "《The Witness》为什么不用全实时方案，而选择预计算全局光照，以及这套系统第一版是怎么做出来的。"
+  },
+  "translator": {
+    "note": "原文的 `*The Witness*`、`*Braid*` 按全站基准写作《The Witness》《Braid》。原文插图共 9 张，归档里是「缩略图包永久链接」的形式，已按 schema 归一化为指向原图的 `![图](原图URL)` 占位块。源文归档在正文之后没有评论，本篇为全文翻译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "For the past 15 years or so, graphics technology in games has been driven by shooters.  Most shooters generate visual interest in their scenes by having lots of dynamic lights, with extreme use of bump mapping, and moving shadows, and particle effects.",
+      "zh": "过去大约 15 年里，游戏图形技术一直是被射击游戏推着走的。大多数射击游戏靠在场景里堆大量动态光源、把凹凸贴图用到极致，再加上移动的阴影和粒子效果，来制造视觉上的看点。"
+    },
+    {
+      "type": "p",
+      "en": "For *The Witness*, I wanted to develop a graphical style that values simplicity.   It would be suited to mellower environments, with both indoor and outdoor settings.  Some kind of global illumination solution seemed like the right idea here.  (Global illumination is when you simulate light bouncing around in a scene; the resulting look is usually much richer and subtler than the direct lighting that games usually do.)",
+      "zh": "对《The Witness》，我想做出的是一种看重简洁的美术风格。它要适合更柔和的环境，室内和室外都要能用。在这里，某种全局光照的方案看起来才是对的路子。（全局光照就是模拟光在场景里四处弹射；得到的效果通常比游戏里惯用的直接光照丰富、细腻得多。）"
+    },
+    {
+      "type": "p",
+      "en": "Clearly, full real-time global illumination would be the most versatile solution.  I investigated some licensable packages that provide this, such as [Geomerics' SDK](http://geomerics.com/).  However, these solutions will invariably use a lot of texture space, and consume a bunch of processing time, and they seem like overkill for this game (*The Witness* does not have many moving light sources, relative to other types of games).",
+      "zh": "显然，完整的实时光照会是最万能的方案。我考察过一些能买到授权的、提供这种能力的中间件，比如 [Geomerics 的 SDK](http://geomerics.com/)。但这类方案无一例外都会占用大量纹理空间、吃掉一大堆处理时间，对这个游戏来说有点杀鸡用牛刀（和其他类型的游戏相比，《The Witness》并没有多少会移动的光源）。"
+    },
+    {
+      "type": "p",
+      "en": "So, some form of precomputed global illumination seemed like the right thing.  3D modeling packages have plugins to compute global illumination, but they are very difficult to interface with, and they could not even come close to handling a full game scene.   The only thing that knows where all the objects in the world are at once is the game itself (and the in-game editor), so it seemed appropriate to develop our own in-game system for global illumination.  It could have been radiosity, could have been something like Monte Carlo Path Tracing, but [Charles Bloom](http://www.cbloom.com/) suggested the very simple solution of just rendering the scene for every pixel in a lightmap, and that seemed like a good idea.  With an approach like that, you don't have to do a bunch of monkeying around to make radiosity or ray tracing match the completely different algorithm that is used to render your realtime game scene; light transport is computed by that same algorithm, so it will automatically match unless you mess things up.",
+      "zh": "所以，某种形式的预计算全局光照看起来才是对的做法。3D 建模软件倒是有算全局光照的插件，但它们非常难对接，而且根本谈不上能处理一整个游戏场景。唯一能同时知道世界上所有物体在哪的东西，就是游戏本身（以及游戏内编辑器），所以在游戏里自己搭一套全局光照系统似乎才合适。这本可以是辐射度（radiosity），也可以是蒙特卡洛路径追踪（Monte Carlo Path Tracing）之类的东西，但 [Charles Bloom](http://www.cbloom.com/) 建议了一个非常简单的方案：直接为光照贴图里的每一个像素渲染一遍场景。这主意听起来不错。用这种思路，你不用费劲去让辐射度或者光线追踪跟你实时渲染游戏场景所用的那套完全不同的算法对上；光传输是由同一套算法算出来的，所以除非你自己搞砸了，否则它天然就是一致的。"
+    },
+    {
+      "type": "p",
+      "en": "For several months, [Ignacio Castaño](http://castano.ludicon.com/blog/) has been working on this system.  He is writing up a highly technical explanation of how the system works, which I think he'll be done with in a few days, but in the meantime, here is a lighter-weight overview.",
+      "zh": "这套系统 [Ignacio Castaño](http://castano.ludicon.com/blog/) 已经做了好几个月了。他正在写一篇非常技术性的说明，讲这套系统是怎么工作的，我想他再过几天就能写完；在那之前，这里先给一个轻量一点的概览。"
+    },
+    {
+      "type": "p",
+      "en": "At preprocess time, we just walk a camera over every surface, pointing the camera away from the surface and rendering the game scene into a hemicube in video memory.  The render target textures of a hemicube are packed together into an atlas, and when the atlas fills up, we download it into system memory, integrate the values in each hemicube to find an average light value, and then store that value in the lightmap.  Most of the shots below were generated using 128x128 cube maps and multiple samples per texel.",
+      "zh": "在预处理阶段，我们只是拿一台摄像机走遍每一个表面，让摄像机背对表面，把游戏场景渲染进显存里的一个半立方体（hemicube）。一个半立方体的若干渲染目标纹理会被打包进一张图集（atlas），图集填满后我们就把它下载到系统内存，对每个半立方体里的值做积分求出平均光照值，再把这个值存进光照贴图。下面的截图大多是用 128x128 的立方体贴图、每个纹素多个采样生成的。"
+    },
+    {
+      "type": "p",
+      "en": "Because we are just using our regular rendering code, this precomputation process is hardware-accelerated by default.",
+      "zh": "因为我们用的就是常规的渲染代码，这个预计算过程默认就是硬件加速的。"
+    },
+    {
+      "type": "p",
+      "en": "Note: *In the images below, all geometry and textures are placeholders.* As with Braid, we are using rough-draft versions of all these things while the core gameplay is built.  Bloggers, **these are not to be considered screenshots of the game**.  They aren't supposed to look good yet -- they are just supposed to show the precomputed lighting.",
+      "zh": "注意：*下面这些图里，所有几何体和纹理都是占位素材。*和《Braid》时一样，在核心玩法搭起来的过程中，这些东西我们用的都是粗稿版本。各位博主，**这些不能当作游戏的截图**。它们现在还不需要好看——它们只是用来展示预计算光照。"
+    },
+    {
+      "type": "p",
+      "en": "First, some shots of the house.  The precomputed lighting is responsible for most of the light in the room.  The places where you see sunlight hitting surfaces directly are dynamic; everything else is a static precompute.  (Without the precomputed lighting, the entire room would be black except for the patches of sunlight).",
+      "zh": "先看几张房子的截图。房间里大部分光照都归功于预计算光照。你看到阳光直接照到表面的那些地方是动态的；其他一切都是静态预计算出来的。（要是没有预计算光照，整个房间除了那几块阳光之外都会是黑的。）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/house1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/house2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/house3.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Note the ambient occlusion, soft shadows, and other nice effects that all come naturally from this system.  (In the third image, the picture on the wall hasn't been lightmapped yet, which is why it sticks out so brightly.)",
+      "zh": "注意环境光遮蔽、软阴影，以及其他种种好看的效果——它们都是这套系统自然产生的。（在第三张图里，墙上那幅画还没有做光照贴图，所以它亮得很扎眼。）"
+    },
+    {
+      "type": "p",
+      "en": "Here's a simple bunker interior consisting mostly of a single material and color.",
+      "zh": "下面是一个简单的碉堡内部，基本上只用了一种材质和一种颜色。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/bunker1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/bunker2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/bunker3.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Lastly, the tower:",
+      "zh": "最后是塔楼："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/tower1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/tower2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/gallery/lighting/tower3.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "There are lots of caveats on these images.  The game renders in HDR, but we haven't balanced our lighting constants or done tone mapping yet, so I have gamma-corrected the output images by various amounts.  For now, we are computing only the first lighting bounce.  We'll probably do at least 2 or 3 bounces for the final game, and when we have that running I'll post some comparison images.  I believe our model of sky illumination is still overly simple and wrong (though I'd need to check with Ignacio on that, maybe he has fixed it up).  I haven't played around with the results of the current system in outdoor areas (e.g. lots of small branches and leaves), though if we find that we have too many aliasing problems, we can always make the lightmaps higher-resolution in those areas.",
+      "zh": "这些图有很多需要说明的地方。游戏是用 HDR 渲染的，但我们还没把光照常数调平衡，也还没做色调映射，所以我对输出图按不同幅度做了伽马校正。目前我们只计算第一级光照反弹。正式版里我们大概至少会做到 2 到 3 级反弹，等那套跑起来，我会再贴一些对比图。我认为我们对天空光照的建模还是过于简单、也不正确（不过这点我得跟 Ignacio 确认一下，说不定他已经修好了）。我还没拿当前系统的结果在户外区域试过（比如长着大量小树枝和树叶的地方），不过要是发现锯齿问题太多，我们总可以把那些区域的光照贴图做得更高分辨率。"
+    },
+    {
+      "type": "p",
+      "en": "In areas that have doors or windows that open and close, we are planning on layering a supplemental lightmap that gets scaled by the openness of that light aperture, then added to the base lightmap.  This will provide a pretty good approximation for the way the indirect light in the room changes as the aperture opens and closes.  Direct light will be completely correct since it uses the fully dynamic shadow system.  I'll do a post about that shadow system sometime in the future.",
+      "zh": "对于有能开关的门或窗的区域，我们打算再叠一层补充光照贴图：它按那个采光口的开启程度缩放，然后加到基础光照贴图上。这能相当好地近似出房间里的间接光随采光口开合而变化的方式。直接光则完全正确，因为它走的是全动态的阴影系统。以后我会专门写一篇讲那个阴影系统。"
+    }
+  ]
+}

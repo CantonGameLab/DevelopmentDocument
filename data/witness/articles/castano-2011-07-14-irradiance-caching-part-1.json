@@ -1,0 +1,22 @@
+{
+  "id": "castano-2011-07-14-irradiance-caching-part-1",
+  "title": {
+    "zh": "辐照度缓存（第一部分）",
+    "en": "Irradiance Caching – Part 1"
+  },
+  "translator": {
+    "note": "本篇是个人博客上的公告贴，正文见 the-witness.net 同名文章（[Irradiance Caching – Part 1](http://the-witness.net/news/2011/07/irradiance-caching-part-1/)）。原文是两段简短的通告，译文保持同样的篇幅，指向 the-witness.net 与 AltDevBlogADay 的链接原样保留；`irradiance caching` 按术语表作「辐照度缓存」并保留英文原词，`hemicube` 作「半立方体」。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "I finally finished writing the [next article about the lightmap rendering tech](http://the-witness.net/news/2011/07/irradiance-caching-part-1/) that I did for The Witness. This one is about irradiance caching, and in particular I describe how to estimate irradiance gradients when the irradiance is sampled using a hemicube distribution. I’m afraid the article is a bit too specialized and I suspect it will only be useful to those that are trying to solve this particular problem, but I think it’s good to have this documented anyway.",
+      "zh": "我终于写完了[那篇讲光照贴图渲染技术的下一篇文章](http://the-witness.net/news/2011/07/irradiance-caching-part-1/)，是我为《The Witness》做的。这篇讲的是辐照度缓存（irradiance caching），具体来说，我描述了在辐照度用半立方体分布采样时如何估计辐照度梯度。我担心这篇文章有点太专门了，估计只对正在解决这个特定问题的人有用；不过我觉得，不管怎样把它记录下来总是好的。"
+    },
+    {
+      "type": "p",
+      "en": "This time around we are trying something new and we are cross-posting it on [#AltDevBlogADay](http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/). It seems to me that most of the subscribers to The Witness blog are non-programmers, so this way it may reach a wider audience. Hopefully this will also encourage me to post more regularly!",
+      "zh": "这一回我们在尝试点新东西：把它交叉发布到 [#AltDevBlogADay](http://altdevblogaday.com/2011/07/14/irradiance-caching-part-1/) 上。在我看来，《The Witness》博客的订阅者大多不是程序员，这样或许能触达更广的读者。希望这也能促使我更规律地发帖！"
+    }
+  ]
+}

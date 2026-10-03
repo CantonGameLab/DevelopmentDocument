@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Luis Antonio &#8211; The Witness</title>
+	<atom:link href="http://the-witness.net/news/author/luis/feed/" rel="self" type="application/rss+xml" />
+	<link>http://the-witness.net/news</link>
+	<description>Explore an abandoned island.</description>
+	<lastBuildDate>Wed, 03 Jun 2015 22:11:40 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	
+	<item>
+		<title>Polishing the Architecture</title>
+		<link>http://the-witness.net/news/2015/06/polishing-the-architecture/</link>
+					<comments>http://the-witness.net/news/2015/06/polishing-the-architecture/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Wed, 03 Jun 2015 21:09:37 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2994</guid>
+
+					<description><![CDATA[In the last few weeks we’ve been adding the final art touches to the island. Now that we have all the content locked down, Deanna, one of the architects,  is reviewing all the structures we created and make sure they are as correct as possible. Even though they previously designed …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2015/06/polishing-the-architecture/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p>In the last few weeks we’ve been adding the final art touches to the island.<br />
+Now that we have all the content locked down, Deanna, one of the architects,  is reviewing all the structures we created and make sure they are as correct as possible.<br />
+Even though they previously designed the buildings and we implemented them, there have been many revisions and tweaks  for gameplay that caused deviations from the original concepts, and in some cases, we just had to make stuff up with  the best of our knowledge without ever having the <i>Architect Seal Of Approval</i><i><img src="https://s.w.org/images/core/emoji/13.1.0/72x72/2122.png" alt="™" class="wp-smiley" style="height: 1em; max-height: 1em;" /></i></p>
+<p>Here is an example, a set of stairs added to a roof structure:<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_18_n01.png"><img class="aligncenter size-large wp-image-3000" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_18_n01-512x288.png" alt="shot_2015.06.02__time_21_18_n01" width="512" height="288" /></a></p>
+<p>&nbsp;</p>
+<p>It looks ok, but looking close up you can see how flimsy the roof attachment is:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_19_n02.png"><img class="aligncenter size-large wp-image-2999" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_19_n02-512x288.png" alt="shot_2015.06.02__time_21_19_n02" width="512" height="288" /></a>Or the way the railings are assembled together:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_19_n03.png"><img class="aligncenter size-large wp-image-2998" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_19_n03-512x288.png" alt="shot_2015.06.02__time_21_19_n03" width="512" height="288" /></a></p>
+<p>Deanna showed us that it would make more sense to extend the main roof support to accommodate for the stairs:<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_36_n01.png"><img class="aligncenter size-large wp-image-3001" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_36_n01-512x288.png" alt="shot_2015.06.03__time_13_36_n01" width="512" height="288" /></a></p>
+<p>&nbsp;</p>
+<p>An in the case of the railings, to do a better job showing the assembled pieces, removing the awkward intersections:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_38_n03.png"><img class="aligncenter size-large wp-image-3002" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_38_n03-512x288.png" alt="shot_2015.06.03__time_13_38_n03" width="512" height="288" /></a></p>
+<p>&nbsp;</p>
+<p>Another example is this stone wall door frame. It lacks any assembly detail for its size, making it feel it was made from one single gigantic piece of stone:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_21_n04.png"><img class="aligncenter size-large wp-image-2997" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_21_n04-512x288.png" alt="shot_2015.06.02__time_21_21_n04" width="512" height="288" /></a>And here is the revised version:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_40_n04.png"><img class="aligncenter size-large wp-image-3003" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_40_n04-512x288.png" alt="shot_2015.06.03__time_13_40_n04" width="512" height="288" /></a></p>
+<p>Another type of issue is how two different surfaces meet. The more detailed the island gets, the more these stand out as incomplete. As an example, the way this wood structure connects with the floor:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_24_n05.png"><img class="aligncenter size-large wp-image-2996" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.02__time_21_24_n05-512x288.png" alt="shot_2015.06.02__time_21_24_n05" width="512" height="288" /></a></p>
+<p>And after the revision:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_44_n05.png"><img class="aligncenter size-large wp-image-3004" src="http://the-witness.net/news/wp-content/uploads/2015/06/shot_2015.06.03__time_13_44_n05-512x288.png" alt="shot_2015.06.03__time_13_44_n05" width="512" height="288" /></a></p>
+<p>Some of this work might seem minute but it really makes the whole environment feel more grounded, adding a lot to the experience!</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2015/06/polishing-the-architecture/feed/</wfw:commentRss>
+			<slash:comments>83</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Road to E3 &#8211; Day 5</title>
+		<link>http://the-witness.net/news/2014/06/road-to-e3-day-5/</link>
+					<comments>http://the-witness.net/news/2014/06/road-to-e3-day-5/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Sat, 07 Jun 2014 02:44:05 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2588</guid>
+
+					<description><![CDATA[Final day and a lot more little things to polish than I expected. Every time I got something fixed another problem would pop up. We got everything in a good state for E3 but there are quite a few more ideas we want to try for the castle visuals,  probably 2 or 3 …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2014/06/road-to-e3-day-5/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p>Final day and a lot more little things to polish than I expected. Every time I got something fixed another problem would pop up.<br />
+We got everything in a good state for E3 but there are quite a few more ideas we want to try for the castle visuals,  probably 2 or 3 more days of work .</p>
+<p>Here is a screenshot from another angle:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.06__time_19_11_n01.png"><img class="aligncenter size-large wp-image-2589" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.06__time_19_11_n01-512x288.png" alt="shot_2014.06.06__time_19_11_n01" width="512" height="288" /></a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2014/06/road-to-e3-day-5/feed/</wfw:commentRss>
+			<slash:comments>30</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Road to E3 &#8211; Day 4</title>
+		<link>http://the-witness.net/news/2014/06/road-to-e3-day-4/</link>
+					<comments>http://the-witness.net/news/2014/06/road-to-e3-day-4/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Fri, 06 Jun 2014 01:29:43 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2574</guid>
+
+					<description><![CDATA[Getting close to the end of the week. Most of the key detail has been added to the walls and I feel, if we had to send this build to E3, it wouldn't be terrible. We managed to get in some really nice framing details that I won't spoil here but …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2014/06/road-to-e3-day-4/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p>Getting close to the end of the week.</p>
+<p>Most of the key detail has been added to the walls and I feel, if we had to send this build to E3, it wouldn't be terrible.<br />
+We managed to get in some really nice framing details that I won't spoil here but I'm sure players will appreciate them!<br />
+Here is a shot showing the ruined walls work.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_18_10_n01.png"><img class="aligncenter size-large wp-image-2575" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_18_10_n01-512x288.png" alt="shot_2014.06.05__time_18_10_n01" width="512" height="288" /></a>Tomorrow I'll make sure I walk around a lot to hunt down any major issues, get the overall color vibe (mostly get more variation on the walls) and any extra details.</p>
+<p>&nbsp;</p>
+<p><strong>Orsi's Vegetation Update</strong>:</p>
+<p>To give a little variation to the post today, I thought I would include some things I have been working on as well. While Luis had been working on the structures around the entry yard, I have been placing the vegetation and cables, and re-working some puzzle related things. Laying out the vegetation early on was important to give the place a sense of scale and to get the overall vibe of the place. I am very happy we got an other chance to re-do all of it, because I think it turned out much more magical this time around:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_41_n12.png"><img class="aligncenter size-large wp-image-2576" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_41_n12-512x288.png" alt="shot_2014.06.05__time_17_41_n12" width="512" height="288" /></a></p>
+<p>Even though it's a much smaller area than it used to be before, I used a different combination of plants in different areas, so people would be less likely to get lost:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_42_n13.png"><img class="aligncenter size-large wp-image-2577" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_42_n13-512x288.png" alt="shot_2014.06.05__time_17_42_n13" width="512" height="288" /></a></p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_43_n16.png"><img class="aligncenter size-large wp-image-2579" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.05__time_17_43_n16-512x288.png" alt="shot_2014.06.05__time_17_43_n16" width="512" height="288" /></a></p>
+<p>&nbsp;</p>
+<p>I still have polish to do, to match everything to the walls Luis finalizes tomorrow, and then we should be ready for E3!</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2014/06/road-to-e3-day-4/feed/</wfw:commentRss>
+			<slash:comments>3</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Road to E3 &#8211; Day 3</title>
+		<link>http://the-witness.net/news/2014/06/road-to-e3-day-3/</link>
+					<comments>http://the-witness.net/news/2014/06/road-to-e3-day-3/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Thu, 05 Jun 2014 01:48:31 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2564</guid>
+
+					<description><![CDATA[This was a very productive day but visually less noticeable. A lot of "invisible' stuff got done like collision and occluders to make the area decently playable: The center building is now complete and we got the layout for the ruined walls so the major task for tomorrow is to …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2014/06/road-to-e3-day-3/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p>This was a very productive day but visually less noticeable.<br />
+A lot of "invisible' stuff got done like collision and occluders to make the area decently playable:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_33_n03.png"><img class="aligncenter size-large wp-image-2565" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_33_n03-512x288.png" alt="shot_2014.06.04__time_18_33_n03" width="512" height="288" /></a>The center building is now complete and we got the layout for the ruined walls so the major task for tomorrow is to get them all detailed (very time consuming!)</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_29_n02.png"><img class="aligncenter size-large wp-image-2566" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_29_n02-512x288.png" alt="shot_2014.06.04__time_18_29_n02" width="512" height="288" /></a></p>
+<p>And finally some new interior spaces that you can't really see from the previous angles.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_38_n01.png"><img class="aligncenter size-large wp-image-2567" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.04__time_18_38_n01-512x288.png" alt="shot_2014.06.04__time_18_38_n01" width="512" height="288" /></a></p>
+<p>&nbsp;</p>
+<p>Orsi is in charge of the vegetation (she is amazing at it) so that is one big chunk of work I don't have to worry about!<br />
+I'll be aiming to have everything done by tomorrow so I can use Friday for polishing and any major issues that I might have missed.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2014/06/road-to-e3-day-3/feed/</wfw:commentRss>
+			<slash:comments>5</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Road to E3 &#8211; Day 2</title>
+		<link>http://the-witness.net/news/2014/06/road-to-e3-day-2/</link>
+					<comments>http://the-witness.net/news/2014/06/road-to-e3-day-2/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Wed, 04 Jun 2014 01:29:23 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2554</guid>
+
+					<description><![CDATA[Here is the progress for today. Detail has been added to the rest of the walls and towers as well as windows and other smaller features. We've had some discussions about the style of the battlements so those might change tomorrow or after. Here are the new modular pieces that were …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2014/06/road-to-e3-day-2/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/Pieces.jpg"><br />
+</a>Here is the progress for today. Detail has been added to the rest of the walls and towers as well as windows and other smaller features.<br />
+We've had some discussions about the style of the battlements so those might change tomorrow or after.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.03__time_18_11_n01.png"><img class="aligncenter size-large wp-image-2556" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.03__time_18_11_n01-512x288.png" alt="shot_2014.06.03__time_18_11_n01" width="512" height="288" /></a></p>
+<p>Here are the new modular pieces that were done for detailing:</p>
+<p><img class="aligncenter size-large wp-image-2555" src="http://the-witness.net/news/wp-content/uploads/2014/06/Pieces-512x283.jpg" alt="Pieces" width="512" height="283" /></p>
+<p>&nbsp;</p>
+<p>We just finished the day by meeting with the architects and discussing the interior layout of the space so tomorrow I'll start on the interior building and ruin walls.<br />
+Here is how it currently looks:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.03__time_18_26_n04.png"><img class="aligncenter size-large wp-image-2559" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.03__time_18_26_n04-512x288.png" alt="shot_2014.06.03__time_18_26_n04" width="512" height="288" /></a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2014/06/road-to-e3-day-2/feed/</wfw:commentRss>
+			<slash:comments>3</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Road to E3 &#8211; Day 1</title>
+		<link>http://the-witness.net/news/2014/06/road-to-e3-day-1/</link>
+					<comments>http://the-witness.net/news/2014/06/road-to-e3-day-1/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Tue, 03 Jun 2014 05:00:01 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Progress Shots]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2532</guid>
+
+					<description><![CDATA[Since we have only one week to get the entry area ready before E3 I was thinking it could be interesting to have a post at the end of each day to show how we are progressing. It will balance out the high programming post count we've had the past few days and …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2014/06/road-to-e3-day-1/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p>Since we have only one week to get the entry area ready before E3 I was thinking it could be interesting to have a post at the end of each day to show how we are progressing.<br />
+It will balance out the high programming post count we've had the past few days and hopefully show a bit of how the art team works!</p>
+<p>Last week, as you could see from previous screenshot, we got  a rough layout of the area in the engine and tried to find answers to any remaining issues.</p>
+<p>Today the goal was to sort out the design  and navigation of the main entrance and the small towers.<br />
+This is one of my first mockups that didn't look quite right.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/image.png"><img class="aligncenter size-large wp-image-2538" src="http://the-witness.net/news/wp-content/uploads/2014/06/image-512x287.png" alt="image" width="512" height="287" /></a></p>
+<p>&nbsp;</p>
+<p>The architects took a look at it and provided some 3d models of how castle stairs are usually assembled as well as sketches of how it should look:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/stairs.jpg"><img class="aligncenter size-full wp-image-2542" src="http://the-witness.net/news/wp-content/uploads/2014/06/stairs.jpg" alt="stairs" width="301" height="252" /></a><a href="http://the-witness.net/news/wp-content/uploads/2014/06/EntranceEdits1.jpeg"><img class="aligncenter size-large wp-image-2540" src="http://the-witness.net/news/wp-content/uploads/2014/06/EntranceEdits1-512x288.jpeg" alt="EntranceEdits1" width="512" height="288" /></a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>After, I tried to figure out the details from references and what "pieces" I would need to build the structure.<br />
+Two years ago I went for vacations in Portugal and tried to see some castles. One of them in Guimaraes struck me as very similar to the entry yard. I made sure I got some pictures and now they are proving to be useful with angles that would be hard to get from online research.</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/DSC_0168.jpg"><img class="aligncenter size-large wp-image-2549" src="http://the-witness.net/news/wp-content/uploads/2014/06/DSC_0168-512x342.jpg" alt="DSC_0168" width="512" height="342" /></a></p>
+<p>Here is the current result using different modular stairs/floor/battlement pieces:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.02__time_18_31_n03.png"><img class="aligncenter wp-image-2539 size-large" src="http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.02__time_18_31_n03-512x288.png" alt="shot_2014.06.02__time_18_31_n03" width="512" height="288" /></a></p>
+<p>And the current overall look by the end of today:</p>
+<p><a href="http://the-witness.net/news/wp-content/uploads/2014/06/image2.png"><br />
+</a> <a href="http://the-witness.net/news/wp-content/uploads/2014/06/Day_01.png"><img class="aligncenter size-large wp-image-2536" src="http://the-witness.net/news/wp-content/uploads/2014/06/Day_01-512x288.png" alt="Day_01" width="512" height="288" /></a></p>
+<p>Tomorrow I'll be tackling  the rest of the exterior walls and the 3 other towers.</p>
+<p>&nbsp;</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2014/06/road-to-e3-day-1/feed/</wfw:commentRss>
+			<slash:comments>4</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>The Art of &#8220;The Witness&#8221; &#8211; GDC 2014</title>
+		<link>http://the-witness.net/news/2014/03/the-art-of-the-witness-gdc-2014/</link>
+					<comments>http://the-witness.net/news/2014/03/the-art-of-the-witness-gdc-2014/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Mon, 24 Mar 2014 18:52:13 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Art]]></category>
+		<category><![CDATA[GDC]]></category>
+		<category><![CDATA[Luis Antonio]]></category>
+		<category><![CDATA[Talk]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=2474</guid>
+
+					<description><![CDATA[Last week was the Game Developers Conference (GDC) here in San Francisco and we were invited to talk about the art  of "The Witness". I decided to shift the talk from any technical aspect, since there are already plenty of those, and tried to focus instead on our thought process, …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2014/03/the-art-of-the-witness-gdc-2014/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p>Last week was the Game Developers Conference (GDC) here in San Francisco and we were invited to talk about the art  of "The Witness".<br />
+I decided to shift the talk from any technical aspect, since there are already plenty of those, and tried to focus instead on our thought process, what were the decisions we took that led us to the current art style.</p>
+<p>If you are interested you can take a look at the slides PDF here:<br />
+<a href="http://the-witness.net/news/wp-content/uploads/2014/03/GDC2014_LuisAntonio_TheArtOfTheWitness.pdf">GDC2014_LuisAntonio_TheArtOfTheWitness</a></p>
+<p>Unfortunately the PDF merges animated slides so there is some content that you won't be able to see and you are missing the actual talk but it should be available in a few weeks at the <a href="http://www.gdcvault.com/">GDC Vault</a>!</p>
+<p>&nbsp;</p>
+<p>*UPDATE - The talk is now available at the GDC Vault, you can  check it here:<br />
+<a href="http://www.gdcvault.com/play/1020552/The-Art-of-The">http://www.gdcvault.com/play/1020552/The-Art-of-The</a></p>
+<p>&nbsp;</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2014/03/the-art-of-the-witness-gdc-2014/feed/</wfw:commentRss>
+			<slash:comments>20</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Panel Art Update</title>
+		<link>http://the-witness.net/news/2012/04/panel-art-update/</link>
+					<comments>http://the-witness.net/news/2012/04/panel-art-update/#comments</comments>
+		
+		<dc:creator><![CDATA[Luis Antonio]]></dc:creator>
+		<pubDate>Tue, 17 Apr 2012 20:51:00 +0000</pubDate>
+				<category><![CDATA[Development]]></category>
+		<category><![CDATA[Art]]></category>
+		<guid isPermaLink="false">http://the-witness.net/news/?p=1583</guid>
+
+					<description><![CDATA[It’s now been over 5 months since I joined The Witness team as an artist and I would like to share a bit of my experience on the project coming from a “big studio” as well as the most recent work I’ve done. Just before I left my last job …<p class="continue-reading-button"> <a class="continue-reading-link" href="http://the-witness.net/news/2012/04/panel-art-update/">Continue reading<i class="crycon-right-dir"></i></a></p>]]></description>
+										<content:encoded><![CDATA[<p dir="ltr">It’s now been over 5 months since I joined The Witness team as an artist and I would like to share a bit of my experience on the project coming from a “big studio” as well as the most recent work I’ve done.</p>
+<p dir="ltr">Just before I left my last job I was working as a Lead/Art Director on a marketing driven project focused on selling as many units as possible. On one side I had high level decisions being made by stockholders whose focus is on turning a profit while on the other side there was the development team who truly believed they would be able to make a good game.</p>
+<p dir="ltr">Also I was surrounded by schedules, performance reviews, hierarchical titles, producers, human resources, bonus system and all the other corporate systems that eventually dilute the organic process of doing something creative. While I understand the logic behind it I  realized that is not the reason why I joined the video games industry and that something wasn’t right.</p>
+<p dir="ltr">Now, after these few months, the answers for these questions became clear. Its all based on trust. In this project, all the decisions we arrive at are very organic. Jonathan has a very clear vision of what he wants and the fact that we can see it and believe in it makes it extremely logical and simple.</p>
+<p dir="ltr">Our passion for what we do (and what we would probably be doing on our free time if we weren’t being paid for it) gets distilled directly into the game in a very rewarding process.How much and how we give it depends entirely on us and that creates a natural challenge and pressure that most AAA companies cannot provide.</p>
+<p dir="ltr">This trust leads to respect and it creates a very unique work environment. This is something that I’ve never seen with all the project management, task scheduling and scrum meetings that try to fix an inherently broken game. I don’t think video games can be produced like an assembly line, at least not games that have something meaningful to say, and I’m glad that I found people that are doing it the right way.</p>
+<p dir="ltr">All this may sound trivial but probably 90% of the game developers that I know will understand how big of an issue this is. I still believe big companies can change their ways and make the same profit if not more, but it has to start from the bottom, the people who are hard at work making the games.</p>
+<p dir="ltr">As for the second part, I would like to share what we have been trying to do with the many island panels. As you might already know the player has to solve different puzzles using these panel interfaces scattered around the island.</p>
+<p dir="ltr">I started my research by looking at what materials they could be made of, what technology they would use and how they would be assembled and how all this could relate with the different areas and narrative of the game.</p>
+<p>This first set of images shows some proposals of how the panel screens could possibly look. I tried not to focus so much on the gameplay but more on ideas that could lead to further discussions among the team.</p>
+<p style="text-align: center" dir="ltr"><a href="http://the-witness.net/news/wp-content/uploads/2012/04/Panel_-Concepts.jpg"><img class="aligncenter size-large wp-image-1584" src="http://the-witness.net/news/wp-content/uploads/2012/04/Panel_-Concepts-384x384.jpg" alt="" width="384" height="384" /></a></p>
+<p dir="ltr">After some solid feedback and a couple of art meetings I was able to understand what was working or not and decided to do a new set of proposals. Also this time I tried to focus on the more technical aspect of getting these panels to work in the game and if the effort we would have to put into them would be worthwhile.</p>
+<p style="text-align: center" dir="ltr"><a href="http://the-witness.net/news/wp-content/uploads/2012/04/Panel_-Screens02.jpg"><img class="size-medium wp-image-1585 aligncenter" src="http://the-witness.net/news/wp-content/uploads/2012/04/Panel_-Screens02-300x300.jpg" alt="" width="300" height="300" /></a></p>
+<p dir="ltr">The same amount of work went into the structure of the panels and how they would be assembled. This time, working with the architects gave valuable input into understanding how they would actually be built in the environment and the amount of work required. On this image you can see a screen capture of several prototypes before being tested ingame.</p>
+<p style="text-align: center" dir="ltr"><a href="http://the-witness.net/news/wp-content/uploads/2012/04/Structure_Concept.jpg"><img class="aligncenter size-large wp-image-1586" src="http://the-witness.net/news/wp-content/uploads/2012/04/Structure_Concept-512x286.jpg" alt="" width="512" height="286" /></a></p>
+<p dir="ltr">These are usually modelled very fast with just base colors so I can do several iterations until I find something that I'm happy with.<br />
+And finally here is how some of them are looking in-game. They are still in concept but by placing them in the correct context makes it a lot easier to understand what is working or not.</p>
+<p style="text-align: center" dir="ltr"><a href="http://the-witness.net/news/wp-content/uploads/2012/04/Structure_Ingame2.jpg"><img class="size-medium wp-image-1587 aligncenter" src="http://the-witness.net/news/wp-content/uploads/2012/04/Structure_Ingame2-177x300.jpg" alt="" width="177" height="300" /></a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>http://the-witness.net/news/2012/04/panel-art-update/feed/</wfw:commentRss>
+			<slash:comments>17</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.199 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2026-09-10 05:28:10 -->

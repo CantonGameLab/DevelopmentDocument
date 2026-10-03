@@ -1,0 +1,92 @@
+{
+  "id": "castano-2010-11-30-software-patents-are-programmers-responsibility",
+  "title": {
+    "zh": "软件专利是程序员的责任",
+    "en": "Software Patents are Programmer’s Responsibility"
+  },
+  "subtitle": {
+    "zh": "「他只是个程序员，不该被骂」——这个说法我不认同。没有愿意去申请专利的发明人，就没有专利。",
+    "en": "He is just a programmer, not the lawyers — I don't buy it. There would be no patents without inventors willing to file them."
+  },
+  "translator": {
+    "note": "这是一篇观点文，原文的论辩语气（`I think that’s just wrong`、`you also need inventors`、句末的 `Today, I deeply regret that.`）一律按原样译出，不做软化。源文开头的引语按 schema 放进 `quote` 块。`Dark Shikari`、`x264`、`Lars`、`NVIDIA`、`anti-patents`（作者自造的说法）保留英文；`patent portfolio` 作「专利组合」，`corporate masters` 保留原文的贬义语气，译作「公司主子」。",
+    "source": "archive/castano-blog/2010-11-30-software-patents-are-programmers-responsibility.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The other day I read this [in Dark Shikari’s blog](http://x264dev.multimedia.cx/archives/589) (one of the developers of x264):",
+      "zh": "前几天我在 [Dark Shikari 的博客](http://x264dev.multimedia.cx/archives/589)里读到了这段（他是 x264 的开发者之一）："
+    },
+    {
+      "type": "quote",
+      "en": "Most importantly, stop harassing the guy whose name is on the patent (Lars): he’s just a programmer, not the management or lawyers responsible for filing the patent. This is stupid and unnecessary. I’ve removed the original post because of this; it can be found here for those who want to read it.",
+      "zh": "最重要的是，别再骚扰那个名字挂在专利上的人（Lars）了：他只是个程序员，不是负责申请专利的管理层或律师。这么做很蠢，也没必要。因为这个原因我把原帖删了；想读的人可以在这里找到它。"
+    },
+    {
+      "type": "p",
+      "en": "I don’t know much about this particular case, I don’t know whether Lars came up on his own with the algorithm that is being patented or not, and I’m not really qualified to discuss that.",
+      "zh": "这个具体案子我了解不多，我不知道 Lars 是不是自己想出了那个正在被申请专利的算法，我也没资格讨论这一点。"
+    },
+    {
+      "type": "p",
+      "en": "But that’s not what I want to write about. What really struck me from this post is the idea that programmers are not to blame for filing software patents. I think that’s just wrong.",
+      "zh": "但我想写的不是这个。这篇帖子真正让我在意的是那个说法：程序员不该为申请软件专利承担责任。我认为这完全是错的。"
+    },
+    {
+      "type": "p",
+      "en": "Lawyers alone cannot create patents, you also need inventors, and being just a programmer does not absolve you of your acts. Let me rephrase that: There would be no patents without inventors willing to file them.",
+      "zh": "光有律师是造不出专利的，还需要发明人；而「只是个程序员」并不能让你免除自己的行为责任。换个说法：没有愿意去申请专利的发明人，就不会有专利。"
+    },
+    {
+      "type": "p",
+      "en": "Obviously, corporations provide incentives for employees to file patents, but in most cases it’s not the actual incentives what motivates people to patent their inventions. It’s the benefit of being a good corporate employee, not being considered a trouble maker, not loosing opportunities for promotion, not bringing negative attention to yourself, not going against the tide.",
+      "zh": "公司当然会给申请专利的员工提供奖励，但多数情况下，真正驱使人们去给自己的发明申请专利的并不是那些奖励，而是当一名好员工的收益：不被当成刺头，不丢掉晋升机会，不给自己招来负面关注，不逆着潮流走。"
+    },
+    {
+      "type": "p",
+      "en": "I firmly believe that patents discourage progress and impede the growth of public domain of knowledge. Today patents do not protect the inventor’s interests, but instead promote anti-competitive practices by corporations. Moreover, most software patents are vague, bogus, or trivial, they do not serve any social purpose other than expanding the patent portfolio of your corporate masters.",
+      "zh": "我坚信专利会阻碍进步，妨碍公共知识领域的增长。如今专利保护的不是发明人的利益，而是在助长企业的反竞争行为。更何况，大多数软件专利要么含混、要么站不住脚、要么琐碎无聊，除了给你公司的专利组合添砖加瓦之外，起不到任何社会作用。"
+    },
+    {
+      "type": "p",
+      "en": "You may not agree with all that, but if you do, then don’t excuse yourself blaming the system.",
+      "zh": "你可能并不同意这些，但如果你同意，那就别拿「体制」当借口替自己开脱。"
+    },
+    {
+      "type": "p",
+      "en": "During the 5 years that I worked at NVIDIA I constantly came up with algorithms and software ideas that could be patented. I implemented many of them, others I simply outlined.",
+      "zh": "在 NVIDIA 工作的那 5 年里，我不断想出可以申请专利的算法和软件点子。其中很多我实现了出来，另一些只写了提纲。"
+    },
+    {
+      "type": "p",
+      "en": "So, I started a wiki page in which I documented these ideas. The goal was to prevent others from patenting them. I called them anti-patents. I usually came up with a new one every month, sometimes several.",
+      "zh": "于是我开了一个 wiki 页面，把这些点子记下来。目的是防止别人拿它们去申请专利。我把它们叫做 anti-patents（反专利）。我通常每个月都会想出一个新的，有时是好几个。"
+    },
+    {
+      "type": "p",
+      "en": "This might seem exaggerated, but when you are designing new hardware features that no one has explored, it’s very easy to come up with new things to do with it that nobody has done before. I think this is true for almost any field when you are working on the bleeding edge.",
+      "zh": "这听起来可能有点夸张，但当你在设计没人探索过的新硬件特性时，非常容易想到一些前人没做过的新用法。我认为在任何领域，只要你在最前沿做事，都是这样。"
+    },
+    {
+      "type": "p",
+      "en": "Eventually I stopped maintaing the wiki, it was too much work to describe them in detail, and in many cases I considered them trivial. In spite of that I believe that most of them would have been pursued by NVIDIA if I had chosen to allow it.",
+      "zh": "后来我不再维护那个 wiki 了，把它们详细写清楚太费工夫，而且在很多情况下我觉得它们太平凡。尽管如此，我相信只要我当初点头，其中大部分都会被 NVIDIA 拿去推进。"
+    },
+    {
+      "type": "p",
+      "en": "Over time I ascended in the corporate hierarchy until I became part of a selected group in charge of the design of future GPUs.",
+      "zh": "我在公司的层级里一路往上走，最终成了负责设计未来 GPU 的一个精选小组的成员。"
+    },
+    {
+      "type": "p",
+      "en": "I was working with people much more experienced and smarter than me. I didn’t want to get noticed for causing trouble, but for doing a good work. So, predictably my name ended up in several patent applications.",
+      "zh": "和我共事的人比我经验丰富得多，也比我聪明得多。我不想因为惹麻烦而被注意到，而是想因为做得好。所以，可以预见，我的名字出现在了若干份专利申请里。"
+    },
+    {
+      "type": "p",
+      "en": "Today, I deeply regret that.",
+      "zh": "今天，我为此深感后悔。"
+    }
+  ]
+}

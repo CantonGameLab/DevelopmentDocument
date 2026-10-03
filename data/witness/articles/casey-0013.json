@@ -1,0 +1,241 @@
+{
+  "id": "casey-0013",
+  "title": { "zh": "草地系统的若干功能", "en": "Assorted grass system features" },
+  "subtitle": {
+    "en": "Brief discussions of some of the features of the grass system, and how they were implemented.",
+    "zh": "聊聊草地系统的若干功能，以及它们各自是怎么实现的。"
+  },
+  "translator": {
+    "note": "原文中段那处被围栏包起来的 YouTube 嵌入链接（原文围栏标为 cpp）实为视频嵌入而非代码，这里按段落保留原链接与地址，未当作代码块处理。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Imagine yourself at the point of starvation, blood caking over your lacerated forearms, every muscle in your body begging you to stop as you summon what little strength you have to limp forward through a dark and twisted forest.  You know the end is near.  The trail of red stretching out behind you tells the story, one drop at a time.  Had there been another path for you in life?  Was the sacrifice worth it?  Did it have to end like this?",
+      "zh": "想象你已濒临饿死，血在你布满伤口的双臂上结成硬壳，身上每一块肌肉都在求你别再走了，而你仍拼着仅剩的一点力气，一瘸一拐地穿过一片幽暗扭曲的森林。你知道终点近了。身后拖出的一道血迹，正一点一滴地讲述着这个故事。你这一生是否本有另一条路？这些牺牲值得吗？难道非要这样结束？"
+    },
+    {
+      "type": "p",
+      "en": "But then, just when all hope seems lost, your shaking hand pushes aside the underbrush and there it is, the shining beacon of all that is good and just in the world, the fabled land that rewards the bravest and most noble souls with eternal life and happiness: CaseyTown.  It is a land where the birds sing in emergent counterpoint, where children laugh and play and know nothing of war, where humans live in harmony with nature, where newcomers are greeted with their own personal roasted pig and a crown of rare orchids before being ceremonially plunged into a restorative bath of chocolate milk and rock salt (it exfoliates  —  look it up).",
+      "zh": "可就在这时，就在一切希望仿佛都已失去之际，你颤抖的手拨开灌木丛，它就在那里——世界上一切善与正的耀眼灯塔，那片传说中的土地，用永生与幸福奖赏最勇敢、最高贵灵魂的地方：CaseyTown。那是一片鸟儿以涌现式对位法歌唱的土地，孩子们在那里欢笑玩耍、不知战争为何物，人与大自然和谐共处，新来的人会得到一只专属的烤猪和一顶稀有兰花冠，然后被按仪式浸入巧克力奶与岩盐配成的恢复浴中（它能去角质——自己去查）。"
+    },
+    {
+      "type": "p",
+      "en": "You can rest now, weary one.  Your suffering has ended.",
+      "zh": "现在你可以歇息了，疲惫的人。你的苦难结束了。"
+    },
+    {
+      "type": "p",
+      "en": "Just kidding!  That would all be super cool, but actually CaseyTown is just a test map that I made for [The Witness](http://the-witness.net/news/).  It has none of those things I just mentioned, unfortunately.  I don't even think there is a roasted pig mesh checked into source control, so I couldn't instantiate one in CaseyTown even if I'd wanted to.",
+      "zh": "开玩笑的！那些要是真的可太酷了，但实际上 CaseyTown 只是我为 [The Witness](http://the-witness.net/news/) 做的一张测试地图。可惜，我刚说的那些东西它一样都没有。我甚至觉得版本库里根本没提交过烤猪的网格，所以就算我想，也没法在 CaseyTown 里实例化一只出来。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "I made CaseyTown because I'm a big believer in fast turnaround times.  In my mind, one of the most important things on any project is minimizing the amount of time it takes for a change to be testable.  Ideally, it should take less than ten seconds for a programmer to go from a changed source file to a running executable.  [The Witness](http://the-witness.net/news/), thankfully, has a codebase that compiles very quickly, so it does not take long to make a change and produce a new executable.",
+      "zh": "我做 CaseyTown 是因为我极其看重快速的周转时间。在我看来，任何项目里最重要的事情之一，就是把「一处改动到可以被测试」所需的时间压到最短。最理想的情况是，程序员从一个改好的源文件到一个跑起来的可执行文件，用时不超过十秒。幸好 [The Witness](http://the-witness.net/news/) 的代码库编译得非常快，所以改点东西、产出一个新的可执行文件并不费时。"
+    },
+    {
+      "type": "p",
+      "en": "Running the executable, on the other hand, is a different story.  [The Witness](http://the-witness.net/news/), like many modern games, streams assets continuously as the player moves around.  As such, there are no \"loading screens\" or \"level changes\" when playing [The Witness](http://the-witness.net/news/), just one initial preload when starting a new game (or, equivalently, loading an existing game).  This is great for the player, because loading screens suck and they would mar the wonderful sense of place that [The Witness](http://the-witness.net/news/) creates.  But for the developers, it unfortunately doesn't help because that \"one initial preload\" happens every time you run the executable.  This drastically worsens the turnaround time, and places a nasty overhead on code debugging.",
+      "zh": "但运行可执行文件就是另一回事了。[The Witness](http://the-witness.net/news/) 和许多现代游戏一样，会随着玩家移动持续流式加载资源。因此玩 [The Witness](http://the-witness.net/news/) 时没有「加载画面」或「关卡切换」，只有开始新游戏（或者等价地，读取已有存档）时的一次初始预加载。这对玩家来说是好事，因为加载画面很烂，会破坏 [The Witness](http://the-witness.net/news/) 营造出的那种绝妙的空间感。但对开发者来说，这可就帮不上忙了，因为那次「初始预加载」每次运行可执行文件都会发生。这极大地恶化了周转时间，也给代码调试加上了令人讨厌的开销。"
+    },
+    {
+      "type": "p",
+      "en": "Because of this, when I first started working on [The Witness](http://the-witness.net/news/), I looked for a way to fix this problem.  Startup time seemed dominated by asset checking related to the giant island world on which [The Witness](http://the-witness.net/news/) took place, so I checked for some way I could make a separate world that had almost nothing in it.  This world would load much faster and also have the added benefit that I could construct test cases there without worrying that I might break something in the real game.",
+      "zh": "正因如此，我刚上手 [The Witness](http://the-witness.net/news/) 的时候就在找解决这个问题的办法。启动时间似乎主要被「检查那座巨大岛屿世界（[The Witness](http://the-witness.net/news/) 的舞台）的资源」占掉了，于是我去看有没有办法另做一个几乎空无一物的世界。这个世界加载起来会快得多，还有个额外好处：我可以在里面搭测试用例，而不用担心把真正的游戏弄坏。"
+    },
+    {
+      "type": "p",
+      "en": "Fortunately, [The Witness](http://the-witness.net/news/) engine had originally started as an offshoot of the Braid codebase, and as such, it had the concept of levels built into it.  But unfortunately, the functionality for loading and saving individual levels had atrophied over the years of Witness development, and it was no longer possible to actually load and save worlds other than the main island world.  It took a little digging, poking, and prodding of the world management code, but eventually I was able to restore it to working order, and CaseyTown was born.",
+      "zh": "幸运的是，[The Witness](http://the-witness.net/news/) 引擎最初是从 Braid 的代码库分出来的，所以它内部本来就带有关卡这个概念。但不幸的是，在《The Witness》多年的开发过程中，单独加载和保存关卡的功能已经萎缩掉了，除了主岛世界之外，已经没法真正加载和保存别的世界了。我在世界管理代码里挖了挖、戳了戳、捅了捅，最后把它恢复到了能用的状态，CaseyTown 就这样诞生了。"
+    },
+    {
+      "type": "p",
+      "en": "Nearly everything I did on the Witness happened in CaseyTown first.  The new movement system, all the upgrades to the editor, and of course the grass planting system all happened in CaseyTown before they happened on the Witness island.  And today, for the first time  —  and I urge you, for your own personal safety and health, to not become overexcited at the prospect  —  I would like to take you, dear reader, to the magical land of CaseyTown.",
+      "zh": "我在《The Witness》上做的东西，几乎全都是先在 CaseyTown 里发生的。新的移动系统、编辑器的所有升级，当然还有草地种植系统，都是先在 CaseyTown 里做出来，然后才上 Witness 岛的。而今天，第一次——为了你自身的安全与健康，我劝你别对这件事过度兴奋——亲爱的读者，我想带你去一趟那片神奇的土地：CaseyTown。"
+    },
+    { "type": "h2", "id": "a-trip-to-casetown", "zh": "CaseyTown 之旅", "en": "A Trip to CaseyTown" },
+    {
+      "type": "p",
+      "en": "If you recall the opening section of the very first grass article, you will note that all of this work on grass was done in the run-up to the Sony PS4 announcement.  Time was short, so in order to get everyone up to speed on the grass changes as fast as possible, I loaded up CaseyTown and recorded a short video that explained how everything worked.  Thankfully, I happened to save the video, so I can show you exactly what the grass planting system looks like in action:",
+      "zh": "如果你还记得第一篇草地文章的开头部分，就会注意到这些草地上的工作都是在 Sony PS4 发布会之前的冲刺阶段做的。时间很紧，所以为了让所有人尽快了解草地的改动，我载入 CaseyTown，录了一段短视频来解释各项功能是怎么运作的。幸好我碰巧把这段视频存了下来，所以我可以让你直接看到草地种植系统实际运行起来的样子："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入视频/媒体](https://www.youtube.com/embed/JhvnJWKfELc?t=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3;enablejsapi=1)",
+      "zh": "（此处为视频嵌入：[前往观看](https://www.youtube.com/embed/JhvnJWKfELc?t=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3;enablejsapi=1)）"
+    },
+    {
+      "type": "p",
+      "en": "Now, you may notice that the ground is this ugly red particleboard looking thing, and that the grass is, for some reason, gray.  Why is this?  The answer is because this is what happens when you instantiate a generic inanimate object and a default grass entity.  Look, I said that CaseyTown was a magical place, OK?  I did not say that there was a lot of attention to detail there.",
+      "zh": "现在你可能会注意到，地面是那种难看的、像刨花板一样发红的东西，而草不知为何是灰色的。这是为什么？答案是：当你实例化一个通用的无生命物体和一个默认的草地实体时，就是这个结果。喂，我说过 CaseyTown 是个神奇的地方，对吧？我可没说过那里对细节有多讲究。"
+    },
+    {
+      "type": "p",
+      "en": "Anyway, hopefully the video gives you a good visual picture of the various features the grass system had to support.  In the following two sections, I'll go through each one in detail and talk about how it was implemented.",
+      "zh": "总之，希望这段视频能让你对草地系统需要支持的各种功能有一个直观的印象。接下来两节，我会逐一细讲它们各自是怎么实现的。"
+    },
+    { "type": "h2", "id": "blue-noise-with-varying-minimum-distance", "zh": "最小距离可变的蓝噪声", "en": "Blue Noise with Varying Minimum Distance" },
+    {
+      "type": "p",
+      "en": "If you look back at the second grass article, you'll notice that I always referred to the \"minimum distance\" between points as if this were some consistent thing that was true across the whole pattern.  As you saw in the video, it can be beneficial to think of this distance as varying, both spatially and as a property of the individual things being distributed.",
+      "zh": "回头看第二篇草地文章，你会注意到我一直把点与点之间的「最小距离」当成某种在整个图案上都成立的一致常量。就像你在视频里看到的，把这个距离看作可变的会更有利——它既随空间变化，也随被散布的单个物体本身的属性变化。"
+    },
+    {
+      "type": "p",
+      "en": "But how do blue noise generators work if there is no consistent value for \"minimum distance\"?",
+      "zh": "可如果没有一个一致的「最小距离」取值，蓝噪声生成器该怎么工作呢？"
+    },
+    {
+      "type": "p",
+      "en": "The very first time I wrote code to do this (not in [The Witness](http://the-witness.net/news/), but on a much earlier project), I don't know that there was any official published explanation of how to do it.  So I improvised.  In both the brute force and the neighborhood sampling techniques, you only really need a local notion of what the minimum distance is, so it turns out to be very easy to write the code so that the distance is variable.  Whenever you go to check if a point can be placed somewhere, instead of seeing if it is greater than some fixed minimum distance, you instead check to see if it is greater than the sum of two distances: one for the new point being tested, and one for the existing point against which you are checking it.",
+      "zh": "我最早写这种代码的时候（不是给 [The Witness](http://the-witness.net/news/)，而是更早的一个项目），我不知道当时有没有任何公开的说明文档讲该怎么做。所以我只好自己临场发挥。无论是暴力法还是邻域采样法，你真正需要的都只是「最小距离是多少」的一个局部概念，所以把代码写成距离可变其实非常容易。每次你要检查某个点能不能放在某处时，不再看它是否大于某个固定的最小距离，而是看它是否大于两个距离之和：一个是正在被检验的新点的，另一个是你拿它来做比较的那个已有点的。"
+    },
+    {
+      "type": "p",
+      "en": "In other words, you consider each point to have not just a position, but also a radius.  When you store a new point, you remember both its position and the radius that it had, which you are free to determine via any method you choose  —  randomly varying, varying by the distance from some central point, sampled from a bitmap, etc.  Whenever points are checked for proximity, instead of using some constant minimum distance, you just use the sum of the radii of the two points being checked.",
+      "zh": "换句话说，你把每个点看作除位置之外还带一个半径。存下一个新点时，既记住它的位置，也记住它当时的半径——而这个半径你可以用任何你喜欢的方法定：随机变化、随到某个中心点的距离变化、从一张位图上采样，等等。每当要检查点与点的邻近关系时，不用某个固定的最小距离，只用被检查的两个点的半径之和。"
+    },
+    {
+      "type": "p",
+      "en": "Similarly, in the neighborhood sampling case, when you need to determine how far from a base point you should sample to generate new test points, you simply use the sum of the radii again: the base point's radius plus the radius of the new point you want to place.  This can be a little bit tricky if you are doing something complicated for your radius function, such as sampling from a bitmap, because it does mean that you will have to guess what the radius will be for the test point before you actually compute where the test point will be.  But fortunately, that is not only easy to solve iteratively if you really want to solve it exactly, but also usually unnecessary, as the distribution functions you're likely to want to use are often very smooth, which means you don't need to be exact in your guess.",
+      "zh": "同理，在邻域采样的情况下，当你需要确定「该从基点往外多远去采样、以生成新的测试点」时，你同样只要用半径之和：基点的半径，加上你想放置的那个新点的半径。如果你的半径函数做了些复杂的事，比如从位图里采样，这里就会有点棘手，因为这确实意味着你得在真正算出测试点位置之前，先猜出这个测试点的半径会是多少。但幸好，如果你真的想精确求解，用迭代法很容易解决；而且通常也根本没必要——你大概会用的那些分布函数往往非常平滑，也就是说你的猜测不需要精确。"
+    },
+    {
+      "type": "p",
+      "en": "Again, that was just what I intuitively did the first time I wrote code like this, and it's what I've done ever since, because it is a straightforward way to make varied spacing work with the existing schemes.  More recently, there have been papers that talk about more serious ways to make variable blue noise patterns (for example, see [this paper on multi-class blue noise](http://research.microsoft.com/apps/pubs/default.aspx?id=121821)), so you might want to read up on the newer techniques that are out there just in case they offer better options.  I myself haven't read much in the way of recent blue noise research, so I can't say whether there are significant improvements to be had or whether it's mostly just increased formalism that doesn't actually make a meaningful visual improvement in the resulting pattern.",
+      "zh": "再说一遍，这只是我第一次写这类代码时凭直觉的做法，之后我一直这么干，因为这是在现有方案上实现可变间距的直接办法。近些年出现了一些论文，讨论更严肃的可变蓝噪声图案做法（例如可以看[这篇关于多类蓝噪声的论文](http://research.microsoft.com/apps/pubs/default.aspx?id=121821)），所以你不妨读读新出的技术，万一它们提供了更好的选择呢。我自己没怎么读近期的蓝噪声研究，所以说不好究竟是有了显著的改进，还是多半只是形式化程度提高了、而对产出的图案并没有带来有意义的视觉改善。"
+    },
+    { "type": "h2", "id": "obstacles", "zh": "障碍物", "en": "Obstacles" },
+    {
+      "type": "p",
+      "en": "A lot of the stuff in the video revolved around how obstacles are treated.  There are two separate things happening, both of which are trivial pieces of code, but I'll explain what each one does for clarity.",
+      "zh": "视频里很多内容都围绕障碍物如何处理。这里面有两件互相独立的事，代码都很简单，但为清楚起见，我还是解释一下各自的作用。"
+    },
+    {
+      "type": "p",
+      "en": "The first was a modification to how grass avoided obstacle geometry.  The original grass system used a sphere test to see if grass could be placed at a point without hitting existing world geometry.  The sphere size was based on the size of the grass mesh being placed.  This was causing problems for the artists, because sometimes they wanted the grass to be planted closer to obstacles than that test allowed.  So literally all I did for that was add a parameter that subtracted from the radius of the sphere, so grass could be \"nudged\" closer to obstacle boundaries as necessary.",
+      "zh": "第一件事是修改草地规避障碍几何体的方式。原来的草地系统用一个球体测试来判断某个点上能不能种草、会不会撞到世界里已有的几何体。球的大小基于所放置的草地网格的尺寸。这给美术带来了麻烦，因为有时他们想让草种得比这个测试允许的更靠近障碍物。所以我为此做的事，说白了就是加一个参数、从球体半径里减掉它，这样需要时就能把草「挪近」障碍物的边界。"
+    },
+    {
+      "type": "p",
+      "en": "The second was the addition of a secondary raycast check to handle interiors and overhangs.  The original grass system did one raycast per test point to determine where the ground actually was, since the ground can be uneven terrain made out of multiple meshes and so on.  You can imagine the grass as being random points on a flat plane (at the grass entity's height) that then get projected down onto whatever is beneath them.",
+      "zh": "第二件事是增加一次辅助的射线投射检查，用来处理内部空间和悬挑结构。原来的草地系统对每个测试点做一次射线投射，以确定地面实际在哪，因为地面可能是由多块网格拼成的不平整地形，诸如此类。你可以把草想象成平面上（位于草地实体的高度）的一堆随机点，然后被向下投影到它们下面的东西上。"
+    },
+    {
+      "type": "p",
+      "en": "This meant that, in the original system, if there was a large obstacle that extended above the height at which the grass entity was placed, then the grass would end up planting inside that obstacle.  The reason for this was because the single raycast used to find the ground would only see the ground, and not the obstacle mesh enclosing it.  The workaround for this would be to move the grass entity's position higher in space, so it was above the top of all obstacle meshes, but this seemed clumsy to me and might prove impossible to do in places like narrow canyons with winding ground heights.",
+      "zh": "这意味着在原来的系统里，如果有个大障碍物高过了草地实体所在的高度，草最终就会被种进那个障碍物内部。原因是：用来找地面的那唯一一次射线投射只会看到地面，看不到把地面包在里面的那块障碍物网格。对此的变通办法是把草地实体的位置在空间中抬高，高过所有障碍物网格的顶部，但在我看来这很笨拙，而且在像地面高度蜿蜒曲折的狭窄峡谷这类地方，可能根本做不到。"
+    },
+    {
+      "type": "p",
+      "en": "So I added a second raycast to grass planting.  Once an initial ground point is found, I cast a second ray back upwards and see what the first triangle is that gets hit.  Because [The Witness](http://the-witness.net/news/) uses backface culling, I know that all triangles must have their normals facing outward, which means I can then use the winding of the triangle with respect to the grass point to tell whether the ray is leaving an obstacle or entering it.",
+      "zh": "于是我给草地种植加了第二次射线投射。一旦找到初始的地面点，我就朝上再投一条射线，看第一个被打到的三角形是哪个。因为 [The Witness](http://the-witness.net/news/) 使用背面剔除，我知道所有三角形的法线都必须朝外，这样我就能用三角形相对于草地点的绕序来判断：这条射线是从某个障碍物里出来，还是正要进入它。"
+    },
+    {
+      "type": "p",
+      "en": "If the ray is leaving an obstacle mesh, then the grass point must be inside the mesh, so I discard that point as being interior (and we never want grass to plant inside obstacles, since obviously you could never see the grass there).  If the ray would be entering an obstacle mesh, then that means there's something overhanging the grass, and I check the distance against an artist-specified parameter that says how much headroom grass wants to have in order to grow.  If the headroom is insufficient, I discard the point.",
+      "zh": "如果射线是从某块障碍物网格里出来的，那么这个草地点一定在这块网格内部，所以我把这个点当作「内部点」丢弃（我们从来不想把草种在障碍物内部，因为很显然，那里的草你永远看不到）。如果射线正要进入某块障碍物网格，那说明有东西悬在草的上方，我就把这个距离与一个美术指定的参数作比较——这个参数规定了草要生长需要多少净空高度。净空不够，我就丢弃这个点。"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "Now, I should mention that this technique for testing where something is in the world with respect to enclosures is not foolproof.  Raycasting, as handy as it is, is not exact.  Unless all your meshes are watertight, and your ray-triangle intersection code completely robust (which it rarely is in a game), it is entirely possible for you to raycast right through one side of a solid object without actually hitting anything.  With something like grass planting, where hundreds of thousands of points will be tested over the course of a planting, it is entirely likely that the raycast will fail at some point.",
+      "zh": "这里我得提一句：这种「判断某个东西在世界中相对于包围结构在哪」的技术并非万无一失。射线投射虽然好用，但并不精确。除非你的所有网格都是封闭无缝的、而且你的射线—三角形求交代码完全健壮（这在游戏里很少见），否则你完全有可能一条射线直穿实心物体的一侧却什么都没打到。像草地种植这种一次种植要测试几十万个点的场景，射线投射在某个时刻失败是完全可能的。"
+    },
+    {
+      "type": "p",
+      "en": "This is totally acceptable for grass planting, because the result of a failed enclosure test is minimal.  But it's worth pointing out that, if you need to robustly test whether or not a point is inside an object, you have to be careful about these sorts of things in a way that I was not doing with the grass planting system.  I was just calling the engine's default raycast routine, but I probably would have had to implement something of my own had I needed to ensure that enclosure testing was always accurate.",
+      "zh": "对草地种植来说这完全可以接受，因为包围测试失败的影响很小。但值得指出的是：如果你需要健壮地判断一个点是否在某个物体内部，那你在这些方面就必须小心，而我在草地种植系统里并没有这么做。我只是调用引擎默认的射线投射例程；如果我需要保证包围测试永远准确，大概就得自己实现一套了。"
+    },
+    { "type": "h2", "id": "real-edge-control", "zh": "真正的边缘控制", "en": "Real Edge Control" },
+    {
+      "type": "p",
+      "en": "At this point, I would like to be able to say something very triumphant here, that casts me as the humble hero, saving the day (in a grass sense) for [The Witness](http://the-witness.net/news/) team on the eve of the Sony PS4 announcement.  Certainly that makes for the best story, and everyone knows that when you write programming articles, you are supposed to make yourself sound very smart and capable, carefully omitting all the stupid things you did and the mistakes you made so it sounds as if you just showed up, pulled some spectacular code out of your… pocket… and great celebration ensued.",
+      "zh": "写到这里，我很想说点扬眉吐气的话，把我塑造成一个谦逊的英雄，在 Sony PS4 发布会前夜拯救了 [The Witness](http://the-witness.net/news/) 团队（从草的意义上说）。那样写当然是最好的故事，而且谁都知道，写编程文章时就该把自己写得又聪明又能干，小心地略去自己干过的所有蠢事和犯过的错误，好让故事听起来像是：你只是现身了，从……口袋里……掏出几段惊艳的代码，然后大家就开始热烈庆祝。"
+    },
+    {
+      "type": "p",
+      "en": "Well, Witness Wednesday isn't really that kind of a series.  As you can tell by the fact that I often discuss dozens of things I implemented that didn't work before telling you about the one that did (if one did at all), the heroics are not really forthcoming.  The Sony PS4 announcement situation was no different.",
+      "zh": "不过，Witness Wednesday（每周三连载）并不是那种系列。从这一点就能看出来：我经常先讲我实现过的几十个没成功的东西，才告诉你哪一个成功了（如果有的话）——英雄事迹在这里并不常见。Sony PS4 发布会那件事也不例外。"
+    },
+    {
+      "type": "p",
+      "en": "The actual impact on the PS4 trailer from my upgraded grass system was quite literally non-existent.  Despite the forecast that grass touch-up would be required, it turned out that none of the shots really had any grass problems that were particularly objectionable, and everyone had too much to do to bother playing with the new system anyway.  Cue sad trombone music here.",
+      "zh": "我那套升级后的草地系统对 PS4 预告片的实际影响，确实就是「没有」。尽管之前预计需要修整草地，结果却发现没有一个镜头真有什么特别刺眼的草地问题，而且反正大家手头的事都太多，没空去折腾新系统。此处请配上悲伤的长号音乐。"
+    },
+    {
+      "type": "p",
+      "en": "But it was not all for naught, dear reader.  Happily, a month or two later, the artists did get into the new \"fancy\" grass system and started using it, so now there are quite a few grasses in [The Witness](http://the-witness.net/news/) that are \"fancy\".  So although the fancy grasses were not needed for the trailer, they ended up being a useful addition nonetheless, and that's definitely a good thing.",
+      "zh": "但这一切并非白费，亲爱的读者。令人高兴的是，一两个月后美术真的开始上手那套新的「花哨」草地系统并用了起来，所以现在 [The Witness](http://the-witness.net/news/) 里有不少草是「花哨」的。所以尽管花哨的草对预告片并非必需，它们最终还是成了有用的补充，这绝对是件好事。"
+    },
+    {
+      "type": "p",
+      "en": "Well, OK, it's mostly a good thing.  But there was one catch.  If I'd checked in the grass changes and nobody had ever used them, then that would have been that.  But once the artists started using the new grass features, my code was subject to the scrutiny that only comes from actual production use.  No longer safe in the confines of CaseyTown, where the grasses grow freely and feed the spotted unicorns and their… like… baby spotted unicorns or whatever, the \"fancy\" grass system found out that life on the full Witness island was more demanding.",
+      "zh": "好吧，它多半是件好事。但有个麻烦。如果我把草地改动提交进去后一直没人用，那也就到此为止了。可一旦美术开始用这些新的草地功能，我的代码就要经受那种只有真正投入生产使用才会有的审视了。在那片草自由生长、喂养着斑点独角兽以及它们的……那个……斑点独角兽宝宝的 CaseyTown 里，这套「花哨」草地系统再也待不安稳；它发现，完整 Witness 岛上的生活要苛刻得多。"
+    },
+    {
+      "type": "p",
+      "en": "I believe it was [Orsi Spanyol](http://orsispanyol.com) who ended up explaining to me that when the artists had initially given me their feature requests and said they wanted better control over the behavior of grass at the edges, they weren't just talking about the behavior at the edges of the grass planting region.  What they actually needed was control over grass planting at the fully irregular edges produced by the grass system's obstacle avoidance.  The \"fancy\" grass, much like the previous system, didn't offer any control for this whatsoever.",
+      "zh": "最后是 [Orsi Spanyol](http://orsispanyol.com) 跟我解释的（我记得是她）：美术最初给我提需求、说想要更好地控制草在边缘处的表现时，他们说的并不只是草地种植区域边缘处的表现。他们真正需要的，是控制草在「草地系统规避障碍物之后形成的那种完全不规则的边缘」处如何种植。而这套「花哨」的草地和之前的系统一样，对此完全没有提供任何控制。"
+    },
+    {
+      "type": "p",
+      "en": "And for good reason.  The actual boundary of the planted grass isn't known until after the grass is already planted, so it's a bit difficult to factor that into the distribution.  But, if I was being honest with myself, the quotes were never going to come off \"fancy\" if I couldn't at least give the artists what they'd initially asked for, so I went to fix the problem.",
+      "zh": "而且这情有可原。已种下的草的实际边界，要等草种完之后才知道，所以很难把它纳入分布的考虑之中。但是，如果我对自己诚实一点：要是我连美术最初提的要求都满足不了，那「花哨」二字上的引号就永远摘不掉，所以我还是去解决这个问题了。"
+    },
+    {
+      "type": "p",
+      "en": "The crux is really that, during grass planting, no matter what your algorithm, you always have the information about where the boundary is just a bit too late to do anything with it.  For example, in the neighborhood sampling case, you only know where a boundary is when you attempt to branch out from some base point and find that you cannot place a new point because of an obstacle.  At that time, it's far too late to do anything about the base point, or the points around the base point, which all may potentially need to have their planting distances altered if the artist specified different spacing for the boundary than for the interior.",
+      "zh": "问题的关键其实在于：种草过程中，无论你用的是什么算法，你拿到「边界在哪」这个信息的时机总是稍晚了一点，晚到已经做不了什么。举例来说，在邻域采样的情况下，你只有在试图从某个基点向外分支、发现因为障碍物而不能放置新点时，才知道边界在哪。而那时，再对基点或基点周围的点做任何处理都已经太晚了——如果美术为边界指定了与内部不同的间距，这些点的种植距离可能全都需要改。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Not seeing the potential for anything clever, I decided to fall back on a brutish solution: plant the grass twice.  I figured, if I don't know where the boundary is because I haven't planted the grass yet, the most trivial solution is just to plant the grass a second time once the boundary is known.  But obviously this requires some way of storing the boundary in a prepass, then querying it during the real planting to get a measure of distance.",
+      "zh": "看不到有什么巧妙做法的可能，我决定退回到一个蛮力方案：把草种两遍。我想，既然我不知道边界在哪是因为还没种草，那最省事的办法就是等边界已知之后再种第二遍。但显然，这需要某种方式在预扫描里把边界存下来，然后在真正的种植过程中查询它，以得到一个距离度量。"
+    },
+    {
+      "type": "p",
+      "en": "There was one huge thing working in my favor that made this problem trivial instead of tricky: because the actual grass planting pass would still be checking for obstacles itself, it would always reproduce the boundary exactly.  So I didn't have to be able to recreate the boundary from the first pass, I just had to be able to get some approximate distance metric out of it.",
+      "zh": "有一点对我极为有利，让这个问题从棘手变成了小菜一碟：因为真正的种植那一遍本身仍然会检查障碍物，所以它总能精确地复现出那条边界。因此我不需要能从第一遍里重建出边界，我只需要能从它那里拿到某个近似的距离度量。"
+    },
+    {
+      "type": "p",
+      "en": "This to me screamed \"signed distance field\", or in more practical parlance, \"texture map\".  If you imagine that you magically had a picture where the brightness was the distance to the grass boundary, then obviously you could just sample that picture like a texture map and get the distance everywhere.  It wouldn't be exact, but it would be close enough for driving parameter values, and that was all I needed.",
+      "zh": "这在我眼里简直就是在喊「有符号距离场」——用更实用的说法，就是「贴图」。如果你想象自己神奇地拥有一张图，图上的亮度就是到草地边界的距离，那你显然可以像采样贴图那样采样它，从而得到各处的距离。它不会精确，但对于驱动参数取值来说足够接近了，而我要的就是这个。"
+    },
+    {
+      "type": "p",
+      "en": "So I basically just made that picture.  Because I already had a grid data structure that I'd made for accelerating the point distance queries of the original algorithm, I just added a data member to the grid that was, for each grid point, the minimum distance from that point to the boundary of the grass.  By default these were all initialized to a maximum value, and then I updated them in the grass planting prepass.",
+      "zh": "所以我基本上就是造了那张图。因为我已经有一个为加速原算法的点距离查询而做的网格数据结构，我只要往这个网格里加一个数据成员，对每个网格点记录「该点到草地边界的最小距离」。默认情况下这些值都初始化为一个最大值，然后我在草地种植的预扫描里更新它们。"
+    },
+    {
+      "type": "p",
+      "en": "For the prepass samples, I picked purely random points in the grass planting region (not blue noise, just plain old white noise).  If a sample was a valid place where grass could have been planted, I'd do nothing.  But if a sample hit a place that was obstructed, I would update the distance values in the grid if any of them would be lowered by their distance to the new sample.  Even after a relatively modest number of samples, this produces a totally usable distance grid.",
+      "zh": "预扫描的采样点，我是在草地种植区域里纯随机取的（不是蓝噪声，就是普普通通的老式白噪声）。如果一个采样点是「可以种草」的有效位置，我就什么都不做。但如果采样点打在一个被挡住的地方，我就检查网格里的距离值，凡是会被「到该采样点的距离」压低的，就更新它们。即使采样数量相对有限，这样也能产出一个完全可用的距离网格。"
+    },
+    {
+      "type": "p",
+      "en": "Once I had the grid distances, the rest was trivial.  In the actual grass planting pass, I just bilinearly interpolated the grid distances for the point at which I was planting, and that gave me an approximate distance to the closest grass boundary.  Problem solved.",
+      "zh": "有了网格距离之后，剩下的就很轻松了。在真正的种植那一遍里，我只要对我正在种植的那个点做网格距离的双线性插值，就得到了到最近草地边界的近似距离。问题解决。"
+    },
+    { "type": "h2", "id": "interpolation", "zh": "插值", "en": "Interpolation" },
+    {
+      "type": "p",
+      "en": "You may have noticed that I carefully avoided describing one key aspect of the grass system as shown in the video: parameter interpolation over the pattern.  Although I've talked about how to support the varying parameters once you know what they are, I didn't actually say how you vary them in the first place.",
+      "zh": "你可能已经注意到，我小心翼翼地避开了视频里展示的草地系统的一个关键方面：参数在图案上的插值。虽然我讲了「当你知道了那些可变参数是什么之后，该怎么支持它们」，但我其实并没有说这些参数最初是怎么变化的。"
+    },
+    {
+      "type": "p",
+      "en": "The reason I've been circumscribing that aspect, although it is admittedly a rather trivial piece of code, is because I thought it might be fun to spend a whole Witness Wednesday talking about interpolation in general.  Grizzled game programmer types are likely to know everything there is to know about interpolation, but a lot of other walks of programming don't get much exposure to the breadth and depth of the subject, so it seemed like a good idea to hold off on discussing the grass parameter interpolation until next week when I can have more room to go off on really long meandering tangents.",
+      "zh": "我之所以一直在绕开这个方面（尽管得承认，这是一段相当简单的代码），是因为我觉得用整整一期 Witness Wednesday 来泛泛地讲插值会挺有意思。饱经风霜的游戏程序员大概对插值的方方面面都了如指掌，但其他很多编程领域的人对这门学问的广度和深度接触不多，所以把草地参数插值放到下周再讲似乎是个好主意——那时我能有更多篇幅去跑一些特别长、特别绕的题外话。"
+    },
+    {
+      "type": "p",
+      "en": "And that article, I believe, will mark the conclusion of the grass portion of Witness Wednesday.",
+      "zh": "而那一篇，我想，将会为 Witness Wednesday 的草地部分画上句号。"
+    }
+  ]
+}

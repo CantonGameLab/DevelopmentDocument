@@ -1,0 +1,53 @@
+{
+  "id": "official-2014-06-03-road-to-e3-day-2",
+  "title": { "zh": "通往 E3 之路 · 第 2 天", "en": "Road to E3 – Day 2" },
+  "subtitle": {
+    "en": "Detail goes onto the walls, towers and windows, while the style of the battlements is still being debated.",
+    "zh": "墙体、塔楼和窗户都加上了细节，城垛的风格则还在争论中。"
+  },
+  "translator": {
+    "note": "原文 4 张图；图片链接指向原文上传的原图（其中一张原文未提供更大尺寸）。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Here is the progress for today. Detail has been added to the rest of the walls and towers as well as windows and other smaller features.",
+      "zh": "这是今天的进展。其余的墙体和塔楼都加上了细节，还有窗户和其他更小的构件。"
+    },
+    {
+      "type": "p",
+      "en": "We've had some discussions about the style of the battlements so those might change tomorrow or after.",
+      "zh": "我们就城垛的风格讨论了几次，所以它们明天或者之后再改。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.03__time_18_11_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Here are the new modular pieces that were done for detailing:",
+      "zh": "下面是为做细节新做的模块化部件："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/Pieces-512x283.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "We just finished the day by meeting with the architects and discussing the interior layout of the space so tomorrow I'll start on the interior building and ruin walls.",
+      "zh": "今天我们最后是跟建筑师开了个会，讨论这片空间的内部布局，所以明天我会开始做内部建筑和废墟墙体。"
+    },
+    {
+      "type": "p",
+      "en": "Here is how it currently looks:",
+      "zh": "目前大致是这样的："
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2014/06/shot_2014.06.03__time_18_26_n04.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

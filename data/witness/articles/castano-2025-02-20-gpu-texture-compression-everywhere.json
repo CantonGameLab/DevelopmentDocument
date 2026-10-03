@@ -1,0 +1,423 @@
+{
+  "id": "castano-2025-02-20-gpu-texture-compression-everywhere",
+  "title": {
+    "zh": "GPU 纹理压缩，处处都要能跑",
+    "en": "GPU Texture Compression Everywhere"
+  },
+  "subtitle": {
+    "zh": "一个想法从 2006 年 NVIDIA 的内部推动，一路走到 Vulkan、Direct3D 12 和 Metal 上各不相同、且大多没被实现对的能力。",
+    "en": "One idea, from an internal NVIDIA push in 2006 to a set of Vulkan / Direct3D 12 / Metal capabilities that mostly were not implemented correctly."
+  },
+  "translator": {
+    "note": "原文没有副标题，`subtitle` 是译者按全文主线概括的。插图按全站口径归一化为 `![图](原图URL)`，两张 Android 截图与 adb 抓取的原始 PNG URL 一致、未做缩略图替换。全文 8 个代码块（GLSL / C++ / Swift）逐字保留英文原样，注释也未译；格式名与 API 名（DXT、YCoCg-DXT、ASTC、BC7、PBO、UAV、`rgba16ui`、`rg32ui`、`VK_IMAGE_USAGE_*`、`glCompressedTexSubImage2D`、`vkCmdCopyBufferToImage`、`CreateCommittedResource3`、`MTLSize` 等）一律保留英文。原文把「non-compressed image view」写成粗体强调，中文用**粗体**对应；原文的 `*Rage*`、`*The Witness*` 斜体在中文里分别写作 *Rage* 与《The Witness》。原文一处笔误（`Here’s an usage example:` 应为 `a usage example`）按原样保留，中文按正确含义译。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "When I joined NVIDIA in 2005, one of my main goals was to work on texture and mesh processing tools. The NVIDIA Texture Tools were widely used, and Cem Cebenoyan, Sim Dietrich and Clint Brewer had been doing interesting work on mesh processing and optimization (nvtristrip, nvmeshmender). That was exactly the kind of work I wanted to be involved in.",
+      "zh": "2005 年我加入 NVIDIA 时，主要目标之一就是去做纹理与网格处理工具。NVIDIA Texture Tools 当时被广泛使用，Cem Cebenoyan、Sim Dietrich 和 Clint Brewer 在网格处理与优化上做了一些很有意思的工作（nvtristrip、nvmeshmender）。那正是我想参与的那类工作。"
+    },
+    {
+      "type": "p",
+      "en": "However, the priorities of the tools team were different, and I ended up working on FX Composer instead. I wasn’t particularly excited about that, so in 2006, I switched to the Developer Technology group.",
+      "zh": "但工具团队的优先级不是这些，我最后被安排去做 FX Composer。我对这个并不特别来劲，所以 2006 年我转到了 Developer Technology（开发者技术）组。"
+    },
+    {
+      "type": "p",
+      "en": "At the time, NVIDIA and ATI were competing for dominance in the GPU market. While we had a solid market share, our real goal was to grow the overall market. Expanding the “pie” rather than just our slice of it. If you imagine a gamer with a fixed budget, we wanted him to allocate more of that budget to the GPU rather than the CPU. One way to achieve this was by encouraging developers to shift workloads from the CPU to the GPU.",
+      "zh": "当时 NVIDIA 和 ATI 正在争夺 GPU 市场的主导权。我们的市场份额已经很稳，但真正的目标是把这个市场整体做大——是把「饼」做大，而不是只抢自己那一块。你可以想象一个预算固定的玩家：我们希望他把预算里更多的一部分花在 GPU 上，而不是 CPU 上。达成这一点的一个办法，就是鼓励开发者把工作负载从 CPU 挪到 GPU。"
+    },
+    {
+      "type": "p",
+      "en": "This push was part of the broader GPGPU movement. CUDA had just been released, but it had no integration with graphics APIs, and compute shaders didn’t exist yet. One of the workloads that caught our attention was GPU texture compression. Under the pretext of harnessing the GPU, I found my way back to working on texture compression.",
+      "zh": "这股推动力属于当时更大的 GPGPU 浪潮。CUDA 刚刚发布，但它和图形 API 之间没有任何集成，compute shader（计算着色器）也还不存在。引起我们注意的工作负载之一就是 GPU 纹理压缩。打着「把 GPU 用起来」的旗号，我又绕回了纹理压缩这条路上。"
+    },
+    {
+      "type": "p",
+      "en": "Another idea gaining traction at the time was runtime texture compression.",
+      "zh": "当时另一个正在兴起的想法是运行时纹理压缩。"
+    },
+    {
+      "type": "p",
+      "en": "In April 2004, [Farbrausch](https://en.wikipedia.org/wiki/Farbrausch) released [.kkrieger](https://en.wikipedia.org/wiki/.kkrieger), a first-person shooter that packed all its content into just 96 KB by using procedural generation for levels, models, and textures, but it wasn’t until late into the development of [fr-041: debris](https://www.pouet.net/prod.php?which=30244) in 2007 that they started using runtime DXT compression to reduce GPU memory usage and improve performance.",
+      "zh": "2004 年 4 月，[Farbrausch](https://en.wikipedia.org/wiki/Farbrausch) 发布了 [.kkrieger](https://en.wikipedia.org/wiki/.kkrieger)：一款第一人称射击游戏，靠程序化生成关卡、模型和纹理，把全部内容塞进了 96 KB。但直到 2007 年 [fr-041: debris](https://www.pouet.net/prod.php?which=30244) 开发后期，他们才开始用运行时 DXT 压缩来降低 GPU 内存占用、提升性能。"
+    },
+    {
+      "type": "p",
+      "en": "Around the same time, Allegorithmic was developing ProFX, the predecessor to Substance Designer, a middleware for real-time procedural texturing. ProFX also included a fast DXT encoder, allowing procedural textures to be converted into GPU-friendly formats at load time.",
+      "zh": "差不多同一时期，Allegorithmic 正在开发 ProFX——Substance Designer 的前身，一套用于实时程序化纹理的中间件。ProFX 里也带了一个快速 DXT 编码器，让程序化纹理能在加载时转换成 GPU 友好的格式。"
+    },
+    {
+      "type": "p",
+      "en": "[Simon Brown](https://sjbrown.co.uk/) was working on PlayStation Home, Sony’s 3D social virtual world where players could create and customize their avatars. To support this, he wrote a fast DXT encoder optimized for the PS3’s SPUs, demonstrating the potential of offloading texture compression to parallel processors.",
+      "zh": "[Simon Brown](https://sjbrown.co.uk/) 当时在做 PlayStation Home——索尼那个玩家可以创建并自定义化身的 3D 社交虚拟世界。为了支撑这个项目，他写了一个针对 PS3 的 SPU 优化的快速 DXT 编码器，证明了把纹理压缩卸载到并行处理器上是可行的。"
+    },
+    {
+      "type": "p",
+      "en": "John Carmack had been talking about the megatexture technology for a while, but in 2006, when [Jan Paul van Waveren](https://mrelusive.com/) published the details of their [Real-Time DXT Compression](https://mrelusive.com/publications/papers/Real-Time-Dxt-Compression.pdf) implementation on the Intel Software Network, we at NVIDIA saw a potential problem: if *Rage* ended up CPU-limited, it could push gamers toward CPU upgrades rather than GPUs. That made real-time texture compression in the GPU a strategic priority for us.",
+      "zh": "John Carmack 谈 megatexture 技术已经谈了有一阵，但 2006 年 [Jan Paul van Waveren](https://mrelusive.com/) 在 Intel Software Network 上公开了他们 [Real-Time DXT Compression](https://mrelusive.com/publications/papers/Real-Time-Dxt-Compression.pdf) 实现的细节时，我们 NVIDIA 这边看到了一个潜在问题：如果 *Rage* 最终受限于 CPU，就可能把玩家推向 CPU 升级，而不是 GPU。这让「在 GPU 上做实时纹理压缩」对我们成了一件战略优先级的事。"
+    },
+    {
+      "type": "p",
+      "en": "The first problem we encountered was that in Direct3D 10, updating a DXT texture without transferring data back to the CPU wasn’t possible. Fortunately, OpenGL had recently introduced pixel buffer objects (PBOs). While not designed for this purpose, PBOs provided a workaround: we could render each block to an integer render target, copy the contents to a PBO, and then transfer the compressed data from the PBO to a DXT-compressed texture.",
+      "zh": "我们碰到的第一个问题是：在 Direct3D 10 里，想更新一张 DXT 纹理而不把数据传回 CPU，是做不到的。好在 OpenGL 不久前刚引入了 pixel buffer object（PBO）。PBO 本来不是为这个用途设计的，但它提供了一条绕路：我们可以把每个块渲染到一个整数渲染目标，把内容拷进 PBO，再把压缩数据从 PBO 传进一张 DXT 压缩纹理。"
+    },
+    {
+      "type": "p",
+      "en": "This is the technique that I employed in the examples that accompanied the papers that Jan Paul and I co-authored and that can still be found online:",
+      "zh": "这就是我在 Jan Paul 和我合写的那几篇论文附带的示例里用的技术，这些示例现在还能在网上找到："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "[Compress YCoCg-DXT](https://developer.download.nvidia.com/SDK/10/opengl/samples.html#compress_YCoCgDXT)",
+          "zh": "[Compress YCoCg-DXT](https://developer.download.nvidia.com/SDK/10/opengl/samples.html#compress_YCoCgDXT)"
+        },
+        {
+          "en": "[Compress Normal-DXT](https://developer.download.nvidia.com/SDK/10/opengl/samples.html#compress_NormalDXT)",
+          "zh": "[Compress Normal-DXT](https://developer.download.nvidia.com/SDK/10/opengl/samples.html#compress_NormalDXT)"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "These examples allowed us to demonstrate that GPU texture compression was possible and show its potential.",
+      "zh": "这些示例让我们证明了 GPU 纹理压缩是可行的，也展示了它的潜力。"
+    },
+    {
+      "type": "h2",
+      "id": "direct3d-10",
+      "en": "Direct3D 10",
+      "zh": "Direct3D 10"
+    },
+    {
+      "type": "p",
+      "en": "I then pushed for changes in graphics APIs to better support this use case. The first API to enable direct copies from uncompressed to compressed textures was Direct3D 10.1, which relaxed the restrictions in the [CopyResource](https://learn.microsoft.com/en-us/windows/desktop/api/D3D10/nf-d3d10-id3d10device-copyresource) and [CopySubresourceRegion](https://learn.microsoft.com/en-us/windows/desktop/api/D3D10/nf-d3d10-id3d10device-copysubresourceregion) APIs to allow copies between prestructured-typed textures and block-compressed textures of the same bit width.",
+      "zh": "接下来我推动图形 API 做出改动，以更好地支持这个用例。第一个允许从非压缩纹理直接拷贝到压缩纹理的 API 是 Direct3D 10.1：它放宽了 [CopyResource](https://learn.microsoft.com/en-us/windows/desktop/api/D3D10/nf-d3d10-id3d10device-copyresource) 与 [CopySubresourceRegion](https://learn.microsoft.com/en-us/windows/desktop/api/D3D10/nf-d3d10-id3d10device-copysubresourceregion) 这两个 API 的限制，允许在 prestructured 类型纹理与位宽相同的块压缩纹理之间做拷贝。"
+    },
+    {
+      "type": "p",
+      "en": "For more details see: [Format Conversion Using Direct3D 10.1](https://learn.microsoft.com/en-us/windows/win32/direct3d10/d3d10-graphics-programming-guide-resources-block-compression#format-conversion-using-direct3d-101)",
+      "zh": "更多细节见：[Format Conversion Using Direct3D 10.1](https://learn.microsoft.com/en-us/windows/win32/direct3d10/d3d10-graphics-programming-guide-resources-block-compression#format-conversion-using-direct3d-101)"
+    },
+    {
+      "type": "p",
+      "en": "This functionality was also available on consoles at the time through low-level APIs provided by hardware vendors. In this [GDC talk](https://www.gdcvault.com/play/1012254/Texture-compression-in-real-time), Jason Tranchida from Volition discusses their experience implementing real-time DXT compression using these APIs and Direct3D 10.1.",
+      "zh": "当时在主机上，通过硬件厂商提供的底层 API 也能用上这个功能。在这场 [GDC 演讲](https://www.gdcvault.com/play/1012254/Texture-compression-in-real-time)里，Volition 的 Jason Tranchida 讲了他们用这些 API 加 Direct3D 10.1 实现实时 DXT 压缩的经验。"
+    },
+    {
+      "type": "h2",
+      "id": "opengl",
+      "en": "OpenGL",
+      "zh": "OpenGL"
+    },
+    {
+      "type": "p",
+      "en": "A year later, this feature arrived in OpenGL with [NV_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/NV/NV_copy_image.txt). However, it wasn’t until 2012, six years after its introduction in Direct3D, that it became more widely available via [ARB_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/ARB/ARB_copy_image.txt) and OpenGL 4.3.",
+      "zh": "一年之后，这个功能随 [NV_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/NV/NV_copy_image.txt) 进入了 OpenGL。但直到 2012 年——也就是它在 Direct3D 里出现六年之后——才通过 [ARB_copy_image](https://github.com/KhronosGroup/OpenGL-Registry/blob/main/extensions/ARB/ARB_copy_image.txt) 和 OpenGL 4.3 变得普遍可用。"
+    },
+    {
+      "type": "p",
+      "en": "In OpenGL, the equivalent of D3D’s `CopySubresourceRegion` is [glCopyImageSubData](https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCopyImageSubData.xhtml). Like its Direct3D 10 counterpart, it enables copying data from an uncompressed texture to a block-compressed texture, provided the formats are compatible, which generally means that the texel size matches the block size.",
+      "zh": "在 OpenGL 里，对应 D3D 的 `CopySubresourceRegion` 的是 [glCopyImageSubData](https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCopyImageSubData.xhtml)。和 Direct3D 10 里的对应功能一样，只要格式兼容，它就能把数据从非压缩纹理拷到块压缩纹理；所谓「兼容」通常指纹素尺寸等于块尺寸。"
+    },
+    {
+      "type": "p",
+      "en": "This feature could have facilitated the use of GPU texture compression in id Tech 5, enabling *Rage* to offload more work from the CPU to the GPU. However, *Rage* did not employ GPU texture compression at launch. Instead, it continued relying on the CPU-based approach described in Jan Paul’s paper.",
+      "zh": "这个功能本来可以促成 id Tech 5 用上 GPU 纹理压缩，让 *Rage* 把更多工作从 CPU 挪到 GPU。但 *Rage* 在发售时并没有采用 GPU 纹理压缩，而是继续依赖 Jan Paul 论文里描述的那套基于 CPU 的做法。"
+    },
+    {
+      "type": "p",
+      "en": "At that point I was already working on The Witness, so it was Evan Hart from NVIDIA’s Developer Technology team who revisited this problem and implemented GPU texture compression for id Tech 5, building on the foundations I had put in place, and addressing all the practical challenges that arise when integrating real-time GPU compression into a production engine.",
+      "zh": "那时候我已经在做《The Witness》了，所以是 NVIDIA Developer Technology 团队的 Evan Hart 重新捡起这个问题，在我打下的基础上为 id Tech 5 实现了 GPU 纹理压缩，并解决了把实时 GPU 压缩集成进一个生产级引擎时会遇到的所有实际难题。"
+    },
+    {
+      "type": "h2",
+      "id": "opengl-es",
+      "en": "OpenGL ES",
+      "zh": "OpenGL ES"
+    },
+    {
+      "type": "p",
+      "en": "I didn’t pay much attention to these features again until I started developing [Spark](https://ludicon.com/spark/). Since my focus was on mobile, I was particularly interested in OpenGL ES, which appeared to support the same functionality through the [GL_EXT_copy_image](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_copy_image.txt) extension and had become a core feature in OpenGL ES 3.2.",
+      "zh": "之后我很久没再关注这些功能，直到开始开发 [Spark](https://ludicon.com/spark/)。因为重心在移动端，我特别关心 OpenGL ES——它看起来通过 [GL_EXT_copy_image](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_copy_image.txt) 扩展支持同样的功能，并且在 OpenGL ES 3.2 里成了核心特性。"
+    },
+    {
+      "type": "p",
+      "en": "While testing this feature, I encountered an unexpected limitation: OpenGL ES does not support the `rg32ui` output image layout. Instead, to output 64-bit blocks, you have to use `rgba16ui`:",
+      "zh": "测试这个功能时，我撞上了一个意想不到的限制：OpenGL ES 不支持 `rg32ui` 输出图像布局。想输出 64 位块，你只能用 `rgba16ui`："
+    },
+    {
+      "type": "code",
+      "lang": "glsl",
+      "captionZh": "只能用 rgba16ui 来输出 64 位块",
+      "captionEn": "You have to use rgba16ui to output 64-bit blocks",
+      "code": "layout(rgba16ui) uniform restrict writeonly highp uimage2D dst;"
+    },
+    {
+      "type": "p",
+      "en": "This requires packing the 64-bit `uvec2` block manually before passing it to `imageStore`:",
+      "zh": "这就要求在传给 `imageStore` 之前，先把 64 位的 `uvec2` 块手动打包："
+    },
+    {
+      "type": "code",
+      "lang": "glsl",
+      "captionZh": "手动打包 uvec2",
+      "captionEn": "Packing the uvec2 by hand",
+      "code": "uvec4 pack_uvec2(uvec2 v) {\n    return uvec4(v.x & 0xFFFFu, v.x >> 16, v.y & 0xFFFFu, v.y >> 16);\n}\n...\nimageStore(dst, uv, pack_uvec2(block));"
+    },
+    {
+      "type": "p",
+      "en": "That said, in a world where compute shaders are ubiquitous, there’s now a much simpler way to accomplish the same task. By using a compute shader to write compressed data into a temporary buffer, we can bind that buffer to the `GL_PIXEL_UNPACK_BUFFER` target and source data directly from it using [glCompressedTexSubImage2D](https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCompressedTexSubImage2D.xhtml):",
+      "zh": "话说回来，在 compute shader（计算着色器）已经无处不在的今天，同样的事有简单得多的做法：用 compute shader 把压缩数据写进一个临时 buffer，再把这个 buffer 绑定到 `GL_PIXEL_UNPACK_BUFFER` 目标，然后直接用 [glCompressedTexSubImage2D](https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCompressedTexSubImage2D.xhtml) 从它取数据："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "从 PBO 直接取压缩数据",
+      "captionEn": "Sourcing compressed data straight from the PBO",
+      "code": "glBindBuffer(GL_PIXEL_UNPACK_BUFFER, tmp_buffer);\nglBindTexture(GL_TEXTURE_2D, dst_texture);\nglCompressedTexSubImage2D(GL_TEXTURE_2D, dst_level, dst_x, dst_y, width, height, \n    gl_format, tmp_buffer_size, (const void*)tmp_buffer_offset);"
+    },
+    {
+      "type": "p",
+      "en": "This turned out to work well on all devices and run with similar performance.",
+      "zh": "结果这套做法在所有设备上都跑得很好，性能也相当。"
+    },
+    {
+      "type": "h2",
+      "id": "vulkan",
+      "en": "Vulkan",
+      "zh": "Vulkan"
+    },
+    {
+      "type": "p",
+      "en": "Like OpenGL, Vulkan supports copying data from uncompressed to block-compressed textures. This functionality has been available since Vulkan 1.0 through the [vkCmdCopyImage](https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/vkCmdCopyImage.html) API.",
+      "zh": "和 OpenGL 一样，Vulkan 支持把数据从非压缩纹理拷到块压缩纹理。这个功能从 Vulkan 1.0 起就通过 [vkCmdCopyImage](https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/vkCmdCopyImage.html) API 提供。"
+    },
+    {
+      "type": "p",
+      "en": "So imagine my surprise when I tested it and found that most devices didn’t implement it correctly. The following screenshots show the results on Adreno, PowerVR, and Mali devices. Only Mali produced the correct output!",
+      "zh": "所以当我测了一遍、发现大多数设备根本没把它实现对的时候，你可以想象我有多意外。下面这几张截图是 Adreno、PowerVR 和 Mali 设备上的结果。只有 Mali 给出了正确输出！"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/02/Android-Vulkan-CmdCopyImage-700x581.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "At first, I thought my efforts to bring real-time texture compression to Vulkan on Android were doomed. But there was still some hope. I discovered that the [KHR_maintenance2](https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_maintenance2.html) extension allowed the creation of uncompressed image views of compressed images, eliminating the need for a copy altogether. This feature was later promoted to core in Vulkan 1.1, which happened to be our minimum requirement, so it seemed like a promising solution.",
+      "zh": "起初我以为，我把实时纹理压缩带到 Android 上的 Vulkan 这件事算是没戏了。但还有一线希望。[KHR_maintenance2](https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_KHR_maintenance2.html) 扩展允许为压缩图像创建**非压缩的 image view**，这样连拷贝这一步都不需要了。这个特性后来在 Vulkan 1.1 里升为核心，而 1.1 恰好是我们的最低要求，所以看起来是个很有希望的方案。"
+    },
+    {
+      "type": "p",
+      "en": "Getting this to work, however, was far from straightforward. The documentation was sparse, and initial attempts led to validation errors, but after some effort, I managed to get it running correctly on PC. My optimism was short-lived, though. When I tested on mobile, the results were disastrous. The image below shows the output from two Adreno devices (left) and a PowerVR device (right):",
+      "zh": "但要让它跑起来，远谈不上顺利。文档很稀薄，最初的尝试只换来校验层报错；费了一番功夫，我总算在 PC 上把它跑对了。我的乐观没维持多久——换到移动端一测，结果一塌糊涂。下图左边是两台 Adreno 设备的输出，右边是一台 PowerVR 设备的输出："
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2025/02/Android-Vulkan-RenderToBlockTexelView-700x516.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "By this point, I had been working on Spark for almost 6 months, and it felt like all that work might have been for nothing. And this wasn’t the only problem. Under Vulkan most of my codecs produced incorrect output, failed to compile, or outright crashed the device. Only the simplest kernels worked correctly, and even they ran at much lower performance than their OpenGL ES equivalents.",
+      "zh": "到这一步，我在 Spark 上已经做了将近 6 个月，感觉这些功夫可能全白费了。而且问题不止这一个。在 Vulkan 上，我大多数的编解码器要么输出错误，要么编译不过，要么直接把设备搞崩。只有最简单的 kernel 能正确工作，而即便是它们，性能也远低于对应的 OpenGL ES 版本。"
+    },
+    {
+      "type": "p",
+      "en": "Thankfully, I was stubborn and persevered. I spent the next few months narrowing down every issue, sending repro cases to IHVs, and trying every possible workaround. That effort paid off. A few months later, all Spark codecs were running correctly and performing as well as, or better than, their GLES counterparts.",
+      "zh": "好在我够固执，硬撑了下来。接下来几个月我逐个定位每个问题、给 IHV 提交复现用例、把能试的绕路全试了一遍。这些功夫没有白费：几个月后，Spark 的所有编解码器都跑对了，性能也与 GLES 版本相当、甚至更好。"
+    },
+    {
+      "type": "p",
+      "en": "The root cause of many of these issues was my initial reliance on fragment shaders. At the time, the version of the Hype engine that I was using lacked support for compute shaders, so my first integration experiments ran the codecs using fragment shaders. This meant I couldn’t output compressed blocks to a buffer like in OpenGL, but instead, I had to render to a texture, requiring `vkCmdCopyImage`.",
+      "zh": "这些问题里有很多的根源，是我一开始对 fragment shader（片元着色器）的依赖。当时我在用的那个版本的 Hype 引擎不支持 compute shader，所以我最早的集成实验都是用 fragment shader（片元着色器）跑编解码器。这意味着我没法像在 OpenGL 里那样把压缩块输出到 buffer，只能渲染到一张纹理——于是就必须用 `vkCmdCopyImage`。"
+    },
+    {
+      "type": "p",
+      "en": "However, Vulkan also allows updating block-compressed textures using [vkCmdCopyBufferToImage](https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/vkCmdCopyBufferToImage.html). In fact, this is the same command that you would use to upload block-compressed textures, which means this code path was heavily tested across vendors, and unsurprisingly, it worked flawlessly.",
+      "zh": "不过 Vulkan 也允许用 [vkCmdCopyBufferToImage](https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/vkCmdCopyBufferToImage.html) 更新块压缩纹理。事实上，上传块压缩纹理用的就是这个命令——也就是说，这条代码路径在各家驱动上被大量测过，不出所料，它跑得毫无问题。"
+    },
+    {
+      "type": "p",
+      "en": "It also turned out that the texture corruption issues when using block-texel views were associated to the use of fragment shaders, in particular, to the use of `VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT`. Replacing that flag with `VK_IMAGE_USAGE_STORAGE_BIT` resolved the problems entirely.",
+      "zh": "另外也发现，用 block-texel view 时出现的纹理损坏，和 fragment shader（片元着色器）的使用有关——具体说，是和 `VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT` 这个 flag 的使用有关。把这个 flag 换成 `VK_IMAGE_USAGE_STORAGE_BIT`，问题就彻底消失了。"
+    },
+    {
+      "type": "p",
+      "en": "Getting this to work correctly was challenging, and this was enhanced by the fact that I never knew whether I was doing something wrong and the validation layer was not catching my errors, or whether the hardware or the software was at fault. So, I’m gonna explain this procedure in a bit more detail:",
+      "zh": "要把它弄对很不容易，而更麻烦的是：我始终无法判断到底是我做错了、只是校验层没抓到，还是硬件或软件那边的问题。所以下面我把这套流程讲得细一点："
+    },
+    {
+      "type": "p",
+      "en": "To create block-texel views you first have to create an image with the following flags:",
+      "zh": "要创建 block-texel view，首先得用下面这些 flag 创建图像："
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "EXTENDED_USAGE: This allows creating a block-compressed image with the VK_IMAGE_USAGE_STORAGE_BIT flag, even if that usage isn’t normally supported for compressed formats, as long as it is removed from the block-compressed views.",
+          "zh": "**EXTENDED_USAGE**：允许用 `VK_IMAGE_USAGE_STORAGE_BIT` flag 去创建一张块压缩图像，即使这种 usage 通常不被压缩格式支持——只要它从块压缩视图上被去掉即可。"
+        },
+        {
+          "en": "MUTABLE_FORMAT: This allows us to create image views with different, but compatible formats.",
+          "zh": "**MUTABLE_FORMAT**：允许我们创建格式不同但彼此兼容的 image view。"
+        },
+        {
+          "en": "BLOCK_TEXEL_VIEW_COMPATIBLE: This extends the list of compatible formats to include uncompressed formats where the texel matches the block size.",
+          "zh": "**BLOCK_TEXEL_VIEW_COMPATIBLE**：把兼容格式的清单扩展到「纹素尺寸等于块尺寸」的非压缩格式。"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "Here’s an example:",
+      "zh": "举个例子："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "创建一张可用于 block-texel view 的压缩图像",
+      "captionEn": "Creating a block-compressed image usable for block-texel views",
+      "code": "VkFormat compressed_format = VK_FORMAT_ASTC_4x4_UNORM_BLOCK;\nVkFormat uncompressed_format = VK_FORMAT_R32G32B32A32_UINT;\n\nVkImageCreateInfo image_info = { VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO };\nimage_info.imageType = VK_IMAGE_TYPE_2D;\nimage_info.format = compressed_format;\nimage_info.extent = { w, h, 1 };\nimage_info.mipLevels = 1;\nimage_info.arrayLayers = 1;\nimage_info.samples = VK_SAMPLE_COUNT_1_BIT;\nimage_info.tiling = VK_IMAGE_TILING_OPTIMAL;\nimage_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;\n\n// Note, we create the compressed image with the *STORAGE* usage flag. This is only allowed thanks to EXTENDED_USAGE image flag.\nimage_info.usage = \n    VK_IMAGE_USAGE_SAMPLED_BIT | \n    VK_IMAGE_USAGE_TRANSFER_DST_BIT | \n    VK_IMAGE_USAGE_STORAGE_BIT;\n\n// Provide the required flags:\nimage_info.flags = \n    VK_IMAGE_CREATE_EXTENDED_USAGE_BIT | \n    VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT | \n    VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;"
+    },
+    {
+      "type": "p",
+      "en": "After this you would allocate, create the image, and upload the data as you would do normally.",
+      "zh": "之后照常规流程分配、创建图像、上传数据即可。"
+    },
+    {
+      "type": "p",
+      "en": "In order to create a view for sampling the texture in the shader, you use the compressed format, but for that to succeed you have to explicitly remove the `VK_IMAGE_USAGE_STORAGE_BIT`:",
+      "zh": "要在 shader 里采样这张纹理，就得创建一个压缩格式的 view；而为了让它创建成功，你必须显式把 `VK_IMAGE_USAGE_STORAGE_BIT` 去掉："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "采样用的压缩格式 view",
+      "captionEn": "A compressed-format view for sampling",
+      "code": "VkImageViewCreateInfo sample_view_info = {};\nsample_view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;\nsample_view_info.image = image;\nsample_view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;\nsample_view_info.format = compressed_format;\nsample_view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;\nsample_view_info.subresourceRange.levelCount = 1;\nsample_view_info.subresourceRange.layerCount = 1;\n\n// Remove the STORAGE usage flag from this view.\nVkImageViewUsageCreateInfo sample_view_usage_info = {};\nsample_view_usage_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO;\nsample_view_usage_info.usage = image_info.usage & ~VK_IMAGE_USAGE_STORAGE_BIT;\nsample_view_info.pNext = &sample_view_usage_info;\n\nVkImageView sample_view = VK_NULL_HANDLE;\nvkCreateImageView(device, &sample_view_info, nullptr, &sample_view);"
+    },
+    {
+      "type": "p",
+      "en": "And to create a view to use the texture as storage in the compute shader, you use the uncompressed format. For maximum compatibility you should also remove the `VK_IMAGE_USAGE_SAMPLED_BIT`:",
+      "zh": "而要在 compute shader（计算着色器）里把这张纹理当存储用，就得创建一个非压缩格式的 view。为了最大兼容性，你还应该把 `VK_IMAGE_USAGE_SAMPLED_BIT` 也去掉："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "存储用的纹素 view",
+      "captionEn": "The texel view used for storage",
+      "code": "// Create texel view for storage:\nVkImageViewCreateInfo store_view_info = {};\nstore_view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;\nstore_view_info.image = image;\nstore_view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;\nstore_view_info.format = uncompressed_format;\nstore_view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;\nstore_view_info.subresourceRange.levelCount = 1;\nstore_view_info.subresourceRange.layerCount = 1;\n\n// Remove the SAMPLED usage flag from this view.\nVkImageViewUsageCreateInfo store_view_usage_info = {};\nstore_view_usage_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO;\nstore_view_usage_info.usage = image_info.usage & ~VK_IMAGE_USAGE_SAMPLED_BIT;\nstore_view_info.pNext = &store_view_usage_info;\n\nVkImageView store_view = VK_NULL_HANDLE;\nVK_CHECK(vkCreateImageView(device, &image_view_create_info, nullptr, &store_view));"
+    },
+    {
+      "type": "p",
+      "en": "Vulkan also provides the `KHR_image_format_list` extension, which is promoted to Vulkan 1.2. This allows you to provide a list of compatible formats at creation time. Using this extension is not strictly required, but is recommended as it can be an optimization on some devices.",
+      "zh": "Vulkan 还提供 `KHR_image_format_list` 扩展（已升为 Vulkan 1.2 核心）。它允许你在创建时给出一个兼容格式清单。用这个扩展不是硬性要求，但推荐用——在某些设备上它能变成一种优化。"
+    },
+    {
+      "type": "p",
+      "en": "Here’s an usage example:",
+      "zh": "下面是一个用法示例："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "创建时声明兼容格式清单",
+      "captionEn": "Declaring the compatible format list at creation time",
+      "code": "VkImageFormatListCreateInfo format_list_info = {\n    VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR \n};\n\nVkFormat view_formats[2];\nif (physical_device_properties.apiVersion >= VK_API_VERSION_1_2 || supported_extensions.KHR_image_format_list)\n{\n    view_formats[0] = compressed_format;\n    view_formats[1] = uncompressed_format;\n    format_list_info.viewFormatCount = 2;\n    format_list_info.pViewFormats = view_formats;\n    image_info.pNext = &format_list_info;\n}"
+    },
+    {
+      "type": "p",
+      "en": "You can use this same procedure to create render target textures with the `VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT` flag and then remove it from the corresponding compressed views for sampling. However, as noted earlier, this is known to be broken on many devices. For simplicity, I strongly recommend running the codecs in a compute shader instead.",
+      "zh": "用同一套流程，你也可以创建带 `VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT` flag 的渲染目标纹理，然后从对应的压缩视图上把这个 flag 去掉以便采样。但前面说过，这在很多设备上是已知会坏的。为了简单起见，我强烈建议改成用 compute shader（计算着色器）跑编解码器。"
+    },
+    {
+      "type": "h2",
+      "id": "direct3d-12",
+      "en": "Direct3D 12",
+      "zh": "Direct3D 12"
+    },
+    {
+      "type": "p",
+      "en": "The Direct3D 10.1 `CopyResource` APIs are available in both Direct3D 11 and Direct3D 12, but like Vulkan 1.1, Direct3D 12.1 also offers the possibility of creating a compressed Unordered Access View (UAV) of a block-compressed texture. To use this functionality you first need to check that the device supports the `RelaxedFormatCastingSupported` feature:",
+      "zh": "Direct3D 10.1 的那套 `CopyResource` API 在 Direct3D 11 和 Direct3D 12 里都有；但和 Vulkan 1.1 一样，Direct3D 12.1 还提供了为块压缩纹理创建**压缩 Unordered Access View（UAV）**的可能。要用这个功能，先得确认设备支持 `RelaxedFormatCastingSupported` 特性："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "先查设备是否支持 RelaxedFormatCastingSupported",
+      "captionEn": "Checking for RelaxedFormatCastingSupported first",
+      "code": "D3D12_FEATURE_DATA_D3D12_OPTIONS12 feature_options12 = {};\nhr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS12,\n                                 &feature_options12, sizeof(feature_options12));\nif (SUCCEEDED(hr)) {\n    supports_relaxed_format_casting = feature_options12.RelaxedFormatCastingSupported;\n}"
+    },
+    {
+      "type": "p",
+      "en": "Compared to Vulkan this is refreshingly easy. The only additional requirement is to use the `CreateCommittedResource3` method in `ID3D12Device10` and provide the list of compatible formats up front:",
+      "zh": "和 Vulkan 相比，这件事简单得让人神清气爽。唯一额外的要求是使用 `ID3D12Device10` 上的 `CreateCommittedResource3` 方法，并事先给出兼容格式清单："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "captionZh": "创建时给出格式清单",
+      "captionEn": "Passing the format list up front",
+      "code": "DXGI_FORMAT format_list[2] = {\n    DXGI_FORMAT_BC7_UNORM, DXGI_FORMAT_R32G32B32A32_UINT\n};\nhr = device10->CreateCommittedResource3(\n    &heap_properties,\n    D3D12_HEAP_FLAG_NONE,\n    &texture_desc,\n    D3D12_BARRIER_LAYOUT_COMMON,\n    nullptr,\n    nullptr,\n    countof(format_list),\n    format_list,\n    IID_PPV_ARGS(bc_texture));"
+    },
+    {
+      "type": "p",
+      "en": "After that you simply create the shader resource views and unordered access view using the formats specified on the list and it just works!",
+      "zh": "之后你只要用清单上指定的格式去创建 shader resource view 和 unordered access view，它就直接能用了！"
+    },
+    {
+      "type": "h2",
+      "id": "metal",
+      "en": "Metal",
+      "zh": "Metal"
+    },
+    {
+      "type": "p",
+      "en": "Unlike Vulkan and Direct3D 12, Metal does not support copying data directly from uncompressed to compressed textures. The only available method is to use a compute shader to write the compressed data to a buffer and then use a blit encoder to transfer the buffer contents to the texture:",
+      "zh": "和 Vulkan、Direct3D 12 不同，Metal 不支持把数据从非压缩纹理直接拷到压缩纹理。唯一可行的办法是用 compute shader（计算着色器）把压缩数据写进一个 buffer，再用 blit encoder 把 buffer 内容传到纹理："
+    },
+    {
+      "type": "code",
+      "lang": "swift",
+      "captionZh": "用 blit encoder 把 buffer 传进纹理",
+      "captionEn": "Blitting the buffer into the texture",
+      "code": "let blitEncoder = commandBuffer.makeBlitCommandEncoder()\n\nblitEncoder.copy(\n    from: buffer, \n    sourceOffset: bufferOffset, \n    sourceBytesPerRow: bufferRowLength, \n    sourceBytesPerImage: 0, \n    sourceSize: MTLSize(width:width, height:height, depth:1), \n    to: outputTexture, \n    destinationSlice: 0, \n    destinationLevel: 0, \n    destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))\n\nblitEncoder.endEncoding()"
+    },
+    {
+      "type": "p",
+      "en": "If, for any reason, the encoder outputs compressed data to an uncompressed texture, two additional copies are required: one from the texture to a buffer and another from the buffer to the compressed texture. The recommended approach is to have the encoder write compressed blocks directly to a buffer, so that only a single copy is required.",
+      "zh": "如果因为某些原因，编码器把压缩数据输出到了一张非压缩纹理上，那还需要额外两次拷贝：一次从纹理到 buffer，另一次从 buffer 到压缩纹理。推荐的做法是让编码器直接把压缩块写进 buffer，这样只需要一次拷贝。"
+    },
+    {
+      "type": "p",
+      "en": "It’s a bit disappointing that Metal lacks the resource casting capabilities available in Vulkan and Direct3D 12. However, iOS devices generally perform exceptionally well compared to Android, so in practice, they don’t fall behind despite this limitation. The main challenge is maintaining an efficient cross-API abstraction that achieves optimal performance across platforms, because that requires slightly different code paths and shader variations.",
+      "zh": "Metal 缺少 Vulkan 和 Direct3D 12 里那种资源格式转换能力，这一点有点令人失望。但 iOS 设备整体上表现得比 Android 好得多，所以实际上它们并没有因为这个限制而落后。真正的挑战在于维持一套高效的跨 API 抽象，同时在各平台上都拿到最优性能——因为那需要略微不同的代码路径和 shader 变体。"
+    },
+    {
+      "type": "h2",
+      "id": "conclusions",
+      "en": "Conclusions",
+      "zh": "结论"
+    },
+    {
+      "type": "p",
+      "en": "Getting this to work everywhere was a rollercoaster. If I had been doing this as part of a regular job, it would have been a fun ride, but since I was investing my own resources, it was nerve-wracking. For a long time, it wasn’t even clear whether I’d be able to make Spark work reliably on a sizeable subset of the devices I was targeting.",
+      "zh": "让它到处都能跑起来，整个过程像坐过山车。如果这是本职工作的一部分，那会是一趟好玩的旅程；但因为投的是我自己的资源，就变得非常揪心。有很长一段时间，连「我能不能让 Spark 在目标设备里相当大的一部分上可靠运行」都不清楚。"
+    },
+    {
+      "type": "p",
+      "en": "Initially, I chose to keep these details private, sharing them only with clients to assist their integration efforts. However, I’ve come to realize that many developers don’t fully grasp the immense amount of work that has gone into ensuring Spark runs well across platforms, or the risks I’ve taken to get there.",
+      "zh": "最初我选择把这些细节保密，只分享给客户，帮他们做集成。但我后来意识到，很多开发者并不真正了解为了让 Spark 在各平台上跑好，背后投入了多么巨量的工作，也不了解我为走到这一步承担了哪些风险。"
+    },
+    {
+      "type": "p",
+      "en": "Hopefully, this not only helps others facing similar challenges but also provides a better appreciation for the effort behind Spark.",
+      "zh": "希望这篇不仅能帮到面对类似问题的人，也能让人更充分地体会到 Spark 背后的付出。"
+    }
+  ]
+}

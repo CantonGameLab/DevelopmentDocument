@@ -1,0 +1,96 @@
+{
+  "id": "castano-2014-09-17-first-backpacking-trip",
+  "title": {
+    "zh": "第一次背包徒步",
+    "en": "First Backpacking Trip"
+  },
+  "subtitle": {
+    "zh": "带 Nachito 走 Pacific Crest Trail，从 Echo Lake 到 Lake Aloha——他背睡袋，我背锅。",
+    "en": "Taking Nachito on the Pacific Crest Trail from Echo Lake to Lake Aloha: he carries the sleeping bag, I carry the pot."
+  },
+  "translator": {
+    "note": "个人随笔，不是技术文，语气照原文的自然口吻译，不加术语。人名、地名、步道名一律保留英文：`Nachito`、`Nacho`、`Desolation Wilderness`、`Pacific Crest Trail`、`Echo Lake`/`Echo Lakes`、`Lake Aloha`、`Crystal Range`、`Lake of the Woods`、`Sierra`。源文中 `- ![图](…)` 形式的三图一组共两组（每组的源行是 `- ` 开头的列表项），译文按 schema 放进 `list` 块、每张图一项，与源文逐行对应；开篇那张单图是 `p` 块。保真核验按文件主名比对图片，这些文件名在译文的 `en` 里原样保留。",
+    "source": "archive/castano-blog/2014-09-17-first-backpacking-trip.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140901_091134.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "I finally took Nachito on his first backpacking trip. We went to Desolation Wilderness, and following a friend suggestion we hiked the Pacific Crest Trail from from Echo Lake to Lake Aloha. There’s a boat taxy that takes you from one end of Echo Lakes to the other, and that shortens the hike quite a bit, allowing us to reach a fairly remote location with a real wilderness feel to it without having to walk all the distance.",
+      "zh": "我终于带 Nachito 走了他的第一次背包徒步。我们去了 Desolation Wilderness，听一位朋友的建议，沿 Pacific Crest Trail 从 Echo Lake 走到 Lake Aloha。有一班摆渡船可以把你从 Echo Lakes 的一头送到另一头，这样能省下不少路，让我们不必走完全程就能到一个相当偏僻、真有荒野感的地方。"
+    },
+    {
+      "type": "p",
+      "en": "Echo Lakes are beautiful, they are tucked in a smooth granite valley carved and polished by the force of glaciers. Cabins are splattered along the shoreline, most of them only accessible by boat. It was a nice way to start the day.",
+      "zh": "Echo Lakes 很美，它们藏在一条被冰川之力凿出并磨光的花岗岩山谷里。岸边稀稀落落散布着小木屋，大多只能靠船到达。这一天的开头很不错。"
+    },
+    {
+      "type": "p",
+      "en": "The first hour walking was the most difficult. I was carrying most of the group gear, Nachito only had to carry his sleeping bag, sleeping mat, his own water and an empty pot. It felt pretty lightweight to me, but turned out it was somewhat heavy for him. It didn’t help that the first section of the trail was all uphill and with little shade. He probably asked *“how far are we?”* a hundred times and complained about the weight of his pack every few minutes. I was starting to think this had been a bad idea, but as the trail leveled, we entered the forest, which provided some shade, and enticed by the views of the Crystal Range and the proximity to the lake, the hike became much easier.",
+      "zh": "走路的第一小时最难受。团队的装备大部分由我背着，Nachito 只需要背自己的睡袋、睡垫、他自己的水和一口空锅。对我来说这算很轻了，结果对他来说还是有点重。偏偏这段路一开始就全是上坡，而且没什么树荫。他大概问了上百次*「还有多远啊？」*，每隔几分钟就抱怨一次背包的重量。我开始觉得这主意不太妙，但随着路变平、我们走进林子有了些阴凉，再加上 Crystal Range 的景色和离湖越来越近，徒步一下子轻松多了。"
+    },
+    {
+      "type": "p",
+      "en": "The water level at Lake Aloha was surprisingly low, which increased the number of rock outcroppings above its surface. It was fun to swim from rock to rock and walk along the shorelines, jumping over the straits, trying to find a path without touching the water. After having lunch and taking a long rest, we headed to the northern shore, our final destination, where we set our tent, prepared dinner, watched the sunset, and waited for the night to fall.",
+      "zh": "Lake Aloha 的水位低得出人意料，露出水面的礁石因此多了不少。在一块块石头之间游过去、沿着岸边走、跳过窄窄的水道、试着找一条不沾水的路，很有意思。吃过午饭、休息了很久之后，我们前往北岸——那是我们的终点，在那里搭起帐篷、做晚饭、看日落，等着天黑。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140831_184529.jpg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140831_180446-1.jpg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140831_184650-1.jpg)",
+          "zh": "（原文此处有一张图）"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "This day we walked about 5 miles total. We had dehydrated noodles for dinner, which Nachito devoured. He was starving and ended up eating half of my ration. We spent the rest of the evening telling stories while watching the stars populate the firmament. The night sky in the Sierra is the most beautiful I’ve ever seen, but Nachito was cold and scared of the dark and just wanted to get back inside the tent!",
+      "zh": "这一天我们一共走了大约 5 英里。晚饭是脱水面条，Nachito 一扫而光。他饿坏了，最后吃掉了我一半的口粮。晚上剩下的时间我们一边讲故事，一边看着星星布满夜空。Sierra 的夜空是我见过最美的，但 Nachito 又冷又怕黑，只想赶紧钻回帐篷！"
+    },
+    {
+      "type": "p",
+      "en": "The second day we walked our way back, but to make things a bit more interesting we took a fork of the trail and stopped by Lake of the Woods. At some point we must have missed the main trail, because we got lost, but we navigated our way down to the lake scrambling some rocks.",
+      "zh": "第二天我们往回走，但为了让行程有意思一点，我们拐上了一条岔路，顺道去了 Lake of the Woods。中途我们肯定是错过了主路，因为迷路了，不过我们靠攀爬一些石头自己找路下到了湖边。"
+    },
+    {
+      "type": "p",
+      "en": "Lake of the Woods was gorgeous. Unlike Aloha, the lake was full and the water here was warmer. It’s surrounded by forests, but its shoreline is still spotted by granite boulders from which to jump in the water. This was probably the highlight of our trip.",
+      "zh": "Lake of the Woods 漂亮极了。和 Aloha 不同，这个湖是满的，水也更暖。它四周是森林，但岸上仍然点缀着可以跳水的花岗岩巨石。这大概是我们这趟行程的亮点。"
+    },
+    {
+      "type": "list",
+      "items": [
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140831_184959.jpg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140901_122948-1.jpg)",
+          "zh": "（原文此处有一张图）"
+        },
+        {
+          "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2014/09/IMG_20140901_143318.jpg)",
+          "zh": "（原文此处有一张图）"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "The hike back to the boat was a little longer and we were tired, but most of it was downhill, so it proceeded without difficulties. The trail was fairly busy and Nachito was probably the youngest kid we met. Most hikers were very supportive, cheering him up, giving him chocolates. Overall I think it was a great success. Nachito had a great time, and on the way back he asked: *“Dad, can we do this every weekend?”*",
+      "zh": "走回船上的那段路稍长一些，我们也很累，但大部分是下坡，所以没遇上什么困难。路上人不少，Nachito 大概是我们碰到的最小的孩子。大多数徒步者都很捧场，给他鼓劲、送他巧克力。总的来说我觉得这次非常成功。Nachito 玩得很开心，回程路上他问：*「爸爸，我们每个周末都来好不好？」*"
+    }
+  ]
+}

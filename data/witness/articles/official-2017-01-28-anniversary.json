@@ -1,0 +1,38 @@
+{
+  "id": "official-2017-01-28-anniversary",
+  "title": { "zh": "周年！", "en": "Anniversary!" },
+  "subtitle": {
+    "en": "The Witness turns one, with a Steam sale, plus the MacOS and iOS ports in the works.",
+    "zh": "《The Witness》满一岁：Steam 打折，MacOS 与 iOS 移植也在做。"
+  },
+  "translator": {
+    "note": "原文里的两处购买地址是纯文本 URL，按原样保留在译文中。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The Witness was first released a year ago.",
+      "zh": "《The Witness》第一次发售是在一年前。"
+    },
+    {
+      "type": "p",
+      "en": "To celebrate, the game is on sale for 50% off on Steam, here: http://store.steampowered.com/app/210970/",
+      "zh": "为了庆祝，游戏正在 Steam 上打五折，地址在这里：http://store.steampowered.com/app/210970/"
+    },
+    {
+      "type": "p",
+      "en": "Braid is also on sale, and if you already own it, you get an extra discount on The Witness: http://store.steampowered.com/bundle/2501/",
+      "zh": "《Braid》也在打折，而且如果你已经拥有它，买《The Witness》还能再额外享受一次折扣：http://store.steampowered.com/bundle/2501/"
+    },
+    {
+      "type": "p",
+      "en": "Meanwhile, we are working on The Witness for MacOS, and it should be done pretty soon. iOS is also coming up but is a bit further in the future.",
+      "zh": "与此同时，我们正在做 MacOS 版的《The Witness》，应该很快就会完成。iOS 版也在路上了，但要更晚一些。"
+    },
+    {
+      "type": "p",
+      "en": "Happy 2017!",
+      "zh": "2017 快乐！"
+    }
+  ]
+}

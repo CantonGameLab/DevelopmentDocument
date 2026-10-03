@@ -1,0 +1,66 @@
+{
+  "id": "light-graphics-tech-multi-lightmaps",
+  "title": {
+    "zh": "图形技术：多张光照贴图",
+    "en": "Graphics Tech: Multi-lightmaps"
+  },
+  "subtitle": {
+    "en": "Ignacio adds support for light sources that change: precompute one lightmap per case and swap between them at runtime.",
+    "zh": "Ignacio 加上了对会变化的光源的支持：每个状态各烘一张光照贴图，运行期在它们之间切换。"
+  },
+  "translator": {
+    "note": "本篇是带图集的短进度贴，正文只有三段，其余是画廊部件。图片行按全站口径归一化为 `![图](原图URL)`（丢掉缩略图与外层链接）；画廊部件的「Show as slideshow」链接在译文里作为独立段落保留。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Ignacio has implemented the first version of the handling for light sources that change (doors that open or close, lights that can be switched on or off, etc).  The idea is that we just precompute different lightmaps for each of these cases and blend between them at runtime.  In the future (not the future of this game, but the general computer graphics future) when we have realtime global illumination, this would not be necessary; but for now this is much faster to compute and much easier to implement.  The drawback is that we have to think about the different cases in advance (things can't be *too* dynamic) and the amount of lightmap storage space grows rapidly as the number of variables grows.",
+      "zh": "Ignacio 实现了处理「会变化的光源」的第一版（会开合的门、能开关的灯，等等）。思路就是为每一种情况各预计算一套不同的光照贴图，运行期在它们之间做混合。未来（不是这个游戏的未来，而是整个计算机图形学的未来）等我们有了实时的全局光照，这就不必要了；但眼下这么做计算快得多、实现也容易得多。缺点是我们得提前想到各种情况（东西不能*太*动态），而且随着变量数量增长，光照贴图的存储空间会迅速膨胀。"
+    },
+    {
+      "type": "p",
+      "en": "We don't yet smoothly interpolate between the maps in the shader; we just switch the maps outright.  Interpolation is coming soon.  But in screenshots you can't see changing conditions anyway, so it's time for some screenshots.",
+      "zh": "我们还没在着色器里对这些贴图做平滑插值；我们只是直接整张切换。插值很快就来。不过反正在截图里也看不出变化的过程，所以是时候上几张截图了。"
+    },
+    {
+      "type": "p",
+      "en": "First is the house with the door closed, then with the door open.  After that comes the sculpture room, with two light sources toggled in various ways (see the captions on each picture).  For now you'll have to forgive the light leaking in the corners and the shadow speckles on the walls; they are due to issues with the dynamic shadow system (which is not really related to what is being shown here) and those issues have yet to be resolved!",
+      "zh": "先是门关着的房子，然后是门开着的。接着是雕塑室，两个光源以各种方式切换（见每张图的图注）。眼下墙角漏光和墙上的阴影斑点还请见谅；它们是动态阴影系统的问题造成的（跟这里展示的东西其实没多大关系），而那些问题还没解决！"
+    },
+    {
+      "type": "p",
+      "en": "        [[Show as slideshow]](http://the-witness.net/news/2010/04/graphics-tech-multi-lightmaps/nggallery/slideshow)",
+      "zh": "以幻灯片形式查看"
+    },
+    {
+      "type": "p",
+      "en": "            ![图](http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_06__1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "            ![图](http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_07__2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "            ![图](http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_26__1.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "            ![图](http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_27__3.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "            ![图](http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_26__2.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "            ![图](http://the-witness.net/news/wp-content/gallery/multi-lightmaps-1/witness_shot_2010_04_11_16_27__4.jpg)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

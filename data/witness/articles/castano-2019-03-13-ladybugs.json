@@ -1,0 +1,133 @@
+{
+  "id": "castano-2019-03-13-ladybugs",
+  "title": { "zh": "瓢虫", "en": "Ladybugs" },
+  "subtitle": {
+    "en": "A trip to Feather Falls in search of overwintering ladybug clusters, an explanation involving commercial harvesting, and a surprise at the end.",
+    "zh": "去 Feather Falls 找越冬的瓢虫群，听说它们大多是被商业采集走的，以及结尾处一个意外的惊喜。"
+  },
+  "translator": {
+    "note": "源文里有三张图的图注是相机自动生成的「OLYMPUS DIGITAL CAMERA」，按原文保留为独立段落。第 14 行图注里的年份在归档里是「201*5.*」（斜体标记留在文字中间，后面还跟着两个零宽字符），en 字段逐字保留归档原样，中文按「2015 年」译。两处相册共 6 张图与正文里的 1 张图，按全站口径一律归一化成图片占位块，丢掉 `-150x150`/`-700x467` 缩略图后缀与相册外层链接。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "The ladybug, ladybird beetle, or simply lady beetle, has a special place in our culture: A children’s favorite, loved by gardeners, enemy of aphids, bringer of good fortune. What’s more exciting than finding a ladybug? Finding thousands of them!",
+      "zh": "瓢虫（ladybug、ladybird beetle，或者干脆叫 lady beetle）在我们的文化里有个特殊的位置：孩子的最爱、园丁的好朋友、蚜虫的天敌、好运的使者。还有什么比发现一只瓢虫更让人兴奋的？发现几千只！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/P1070763-700x467.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Maia holds a lone ladybug by the South Yuba in April 201*5.*﻿",
+      "zh": "2015 年 4 月，Maia 在 South Yuba 河边捧着一只孤零零的瓢虫。"
+    },
+    {
+      "type": "p",
+      "en": "Ladybugs are migratory insects. Here in California, during the winter months, they travel from the valley to the foothills and clump together at specific spots, typically sunny areas near water, covering rocks and vegetation in a living red carpet.",
+      "zh": "瓢虫是会迁徙的昆虫。在加州，冬天这几个月它们会从谷地迁往山麓，聚集在特定的地方——通常是靠近水边的向阳处，把岩石和植被盖成一张活的红地毯。"
+    },
+    {
+      "type": "p",
+      "en": "The reason why the ladybugs clump together is not very well understood. Some studies suggest that clumping allows them to retain heat better and that the aggregated odor and color of the clump is a more effective predator deterrent, others argue that it’s also part of their mating ritual. One way or the other it’s a sight to behold.",
+      "zh": "瓢虫为什么要聚成一团，人们还不太清楚。有些研究认为，聚团能让它们更好地保温，而且聚在一起之后的气味和颜色更能吓退天敌；也有人认为这同时也是它们求偶仪式的一部分。不管原因是哪个，那景象都值得一看。"
+    },
+    {
+      "type": "p",
+      "en": "A couple of weekends ago we went to Feather Falls trail in Plumas National Forest hoping to see this curious behavior. While we had seen clumps of ladybugs before, I had heard that their concentration near Frey Creek was remarkably high, so we had some high expectations.",
+      "zh": "两个周末前，我们去了 Plumas 国家森林里的 Feather Falls 步道，希望能看到这种奇特的行为。虽然我们以前也见过聚成团的瓢虫，但我听说 Frey Creek 附近的密度高得惊人，所以期待值拉得挺高。"
+    },
+    {
+      "type": "p",
+      "en": "My previous visit to this area was at the beginning of April and the ladybugs were nowhere to be seen. I assumed it was too late into the spring and that the lady-beetles had left the area already, but surely late February, with fresh snow on the ground, should be wintery enough!",
+      "zh": "我上次来这一带是四月初，那时一只瓢虫都没见到。我以为春天已经太深、瓢虫早就离开了这一带；可二月底地上还有新雪，总该够冬天了吧！"
+    },
+    {
+      "type": "p",
+      "en": "I was a bit disappointed. We did find some ladybugs, but the numbers were not particularly impressive and nowhere near the reports I had heard of. What was going on?",
+      "zh": "我有点失望。我们确实找到了一些瓢虫，但数量并不算惊人，离我听说的差得远。这是怎么回事？"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/IMG_0182-150x150.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/IMG_0184-150x150.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Another popular clumping behavior is that of the Monarch Butterfly. A good spot to see them here in Northern California is in Santa Cruz, at Natural Bridges preserve. However, I’ve heard that lately their populations are dwindling and that this winter the number of butterflies was disturbingly low. Could the same be happening to the ladybugs?",
+      "zh": "另一种为人熟知的聚集行为来自帝王蝶。在北加州，看它们的好去处是 Santa Cruz 的 Natural Bridges 保护区。不过我听说它们的种群近来在减少，今年冬天蝴蝶的数量低得令人不安。瓢虫会不会也在经历同样的事？"
+    },
+    {
+      "type": "p",
+      "en": "After checking with some experts, it turns out that’s not the case. The most likely explanation is human harvesting! Ladybugs are used for pest control in organic gardening and the great majority of these ladybugs are harvested from the wild, from places like this.",
+      "zh": "问过一些专家之后，发现并不是这么回事。最可能的原因是人为采集！有机园艺用瓢虫来防治害虫，而这些瓢虫绝大多数都是从野外、从这样的地方采集来的。"
+    },
+    {
+      "type": "p",
+      "en": "I’m horrified! Not just because many of the ladybugs die during this process, but also, because removing them from the wild and not letting them disperse naturally, makes non-organic farmers even more dependent on pesticides.",
+      "zh": "我震惊了！不只是因为这个过程中会死掉很多瓢虫，还因为把它们从野外带走、不让它们自然扩散，会让非有机农户更加依赖农药。"
+    },
+    {
+      "type": "p",
+      "en": "This weekend the ladybugs were not in my mind anymore. Instead I was hoping to show the kids another curious animal phenomemon: the mating of the California newts. In early Spring the newts come back to the creeks in which they were born in order to mate and subsequently lay eggs. When the females are in heat, they attract large number of males, who clump around her in the hopes of coppulating in what appears to be an amphibian orgy.",
+      "zh": "这个周末我心里想的已经不是瓢虫了，而是想带孩子们看另一种奇怪的动物现象：加州蝾螈的交配。早春时，蝾螈会回到它们出生的溪流里交配、随后产卵。雌性发情时会招来大量雄性，它们围着她挤成一团，都想交配，看上去就像一场两栖动物的狂欢。"
+    },
+    {
+      "type": "p",
+      "en": "A few years ago in early March I encountered several groups of newts mating while I hiked along the South Yuba River, and this weekend we were hoping to find them again.",
+      "zh": "几年前的三月初，我在 South Yuba 河沿岸徒步时遇到过好几群正在交配的蝾螈，这个周末我们希望能再见到它们。"
+    },
+    {
+      "type": "p",
+      "en": "Unfortunately, with the recent rains the water in the creeks was much higher than the last time I was here and it was flowing pretty fast for the newts to be returning to it already. We checked several creeks along a stretch of 4 miles with the same outcome. I was starting to think the trip was going to be another disappointment. However, when reaching our final destination: a particularly dramatic meander in the river where the valley opens up and gets a bit more sun light, we encountered an unexpected surprise: Thousands of ladybugs carpeting the ground!",
+      "zh": "可惜最近下过雨，溪水比我上次来时高得多，流得也急，蝾螈还不到回来的时候。我们沿 4 英里的一段路查了好几条溪，结果都一样。我开始觉得这趟又要白跑了。然而走到终点时——那是河上一个特别壮观的河曲，河谷在这里展开，阳光也多一些——我们撞上了一个意外的惊喜：成千上万只瓢虫铺满了地面！"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/IMG_0304-150x150.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/P3102694-150x150.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "OLYMPUS DIGITAL CAMERA",
+      "zh": "OLYMPUS DIGITAL CAMERA"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/P3102696-150x150.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "OLYMPUS DIGITAL CAMERA",
+      "zh": "OLYMPUS DIGITAL CAMERA"
+    },
+    {
+      "type": "p",
+      "en": "![图](https://www.ludicon.com/castano/blog/wp-content/uploads/2019/03/P3102704-150x150.jpg)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "OLYMPUS DIGITAL CAMERA",
+      "zh": "OLYMPUS DIGITAL CAMERA"
+    },
+    {
+      "type": "p",
+      "en": "Do you know of any other good spot to find overwintering ladybugs? Or of any other insect with a similar behavior? Please, share in the comments!",
+      "zh": "你还知道别的能看越冬瓢虫的好地方吗？或者别的有类似行为的昆虫？欢迎在评论里分享！"
+    }
+  ]
+}

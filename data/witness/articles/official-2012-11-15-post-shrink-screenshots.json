@@ -1,0 +1,30 @@
+{
+  "id": "official-2012-11-15-post-shrink-screenshots",
+  "title": { "zh": "缩小之后的截图", "en": "Post-Shrink Screenshots" },
+  "subtitle": {
+    "en": "What the island looks like after being shrunk a bit.",
+    "zh": "把岛缩小一点之后，它现在是什么样子。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "As mentioned in the previous post, we shrank the island a bit. Here is what things look like now.",
+      "zh": "上一篇里提到过，我们把岛缩小了一点。下面是它现在的样子。"
+    },
+    {
+      "type": "p",
+      "en": "They may not look tremendously different from this off-island vantage point, but when you are down there moving around, the difference is substantial. I feel a lot better about the layout now.",
+      "zh": "从这个岛外的视角看，它们也许显得没有多大不同，但等你真的在下面走动起来，差别是很实在的。我现在对布局的感觉好多了。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/11/shot_2012.11.15__time_13_01_n06.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2012/11/shot_2012.11.15__time_13_00_n04.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "id": "official-2015-11-19-on-music-sound-effects-story",
+  "title": { "zh": "关于音乐、音效与故事", "en": "On Music, Sound Effects, Story" },
+  "subtitle": {
+    "en": "Why The Witness has almost no music, what it takes to make an empty island sound alive, and where localization stands.",
+    "zh": "为什么《The Witness》几乎没有音乐、要让一座空岛听起来有生气需要付出什么，以及本地化的进展。"
+  },
+  "translator": {
+    "note": "原文的小标题是单独一行的粗体文字（如 **Music and Sound Effects**），译文按小标题（h2）处理，去掉粗体标记；文中的 YouTube 视频在归档里只剩占位链接（嵌入媒体）；原文插图未收录，按出现顺序以「（原文此处有一张图）」占位。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/11/record_player.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "music-and-sound-effects", "zh": "音乐与音效", "en": "Music and Sound Effects" },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "Once in a while I get a question, from someone who really liked the music in Braid, what the soundtrack in The Witness is like. The answer to this question is that there isn't one. There is (almost) no music in the game. This is not an arbitrary decision, but is in fact very important to the coherence of the thing we are making.",
+      "zh": "时不时会有人问我——通常是特别喜欢《Braid》音乐的人——问《The Witness》的原声是什么样的。这个问题的答案是：没有原声。游戏里（几乎）没有音乐。这不是一个随意的决定，事实上它对我们正在做的这个东西的整体一致性非常重要。"
+    },
+    {
+      "type": "p",
+      "en": "The Witness is a game about being perceptive: noticing subtleties in the puzzles you find, noticing details in the world around you. If we slather on a layer of music that is just arbitrarily playing, and not really coming from the world, then we're adding a layer of stuff that works against the game. It'd be like a layer of insulation that you have to hear through in order to be more present in the world.",
+      "zh": "《The Witness》是一款关于「察觉」的游戏：察觉你遇到的谜题里的微妙之处，察觉你周围世界里的细节。如果我们糊上一层只是随意播放、并非真正来自这个世界的音乐，那就是加上了一层与游戏作对的东西。它就像一层隔音棉：你得穿透它去听，才能更真切地置身于这个世界之中。"
+    },
+    {
+      "type": "p",
+      "en": "Instead, we put a great deal of care into the sounds of the world around you, in a way that maximizes immersion in the game. This is made trickier by the game's setting: you are alone on this island, and there are not even any other animals. There are no birds in the trees! In everyday life if we imagine the sound of nature, we'll think of some elements that have no place on the island: a forest naturally has the sounds of birds, plains with smaller shrubbery will have crickets, a marsh will have the sounds of many insects. There's none of that in this game because in this game you are really alone, and it has forced us to be very creative with the audio in order to ensure things have depth and texture to them. This work is being done by Wabi Sabi Sound, who did the sound for the very atmospheric Dead Space series, and more recently some smaller, artier games like Ori and the Blind Forest.",
+      "zh": "取而代之的是，我们在你周围世界的声音上花了极大的心思，为的是把游戏中的沉浸感做到最大。游戏的设定让这件事更难：你独自一人待在这座岛上，甚至没有别的动物。树上没有鸟！日常生活里，我们想象大自然的声音时，会想到一些在这座岛上根本不存在的东西：森林自然有鸟鸣，长着低矮灌木的平原会有蟋蟀，沼泽会有许多昆虫的声响。这个游戏里这些全都没有，因为在这个游戏里你是真的孤身一人；这逼着我们在音频上非常有创造力，才能确保各种声音有纵深、有质感。这部分工作由 Wabi Sabi Sound 负责，他们做过氛围感极强的《Dead Space》系列的音效，最近还做过一些体量更小、更有艺术气质的作品，比如《Ori and the Blind Forest》。"
+    },
+    {
+      "type": "p",
+      "en": "We thought it would be fun to release a few more small videos to give you more of a feel of what the world of the game is like, so here's:",
+      "zh": "我们觉得再放出几段小视频会挺有意思，能让你对游戏里的世界多些感觉，所以这里是："
+    },
+    {
+      "type": "p",
+      "en": "[嵌入媒体](https://www.youtube.com/embed/j4PD0skohfM?feature=oembed)",
+      "zh": "（原文此处嵌入一段视频）"
+    },
+    { "type": "h2", "id": "story-and-voicework", "zh": "故事与配音", "en": "Story and Voicework" },
+    {
+      "type": "p",
+      "en": "Lately I have been doing a lot of work on story and voice acting stuff. When wandering around the island, you may find voice recordings that were placed by ... well, at the outset of the game, you don't know who; and as the game goes along, there is an interesting mystery to unfold about who these people are or were. In the game currently we have what is known as \"temp voice\", which is me reading all the parts under very noisy conditions and just getting them into the game so we can make sure the data works properly with the engine, to get all the subtitles into the game and roughly synced with the audio (which we need to do sooner than later so we can give the translators those subtitles, which they will translate into many different languages).",
+      "zh": "最近我在故事和配音方面做了很多工作。在岛上漫步时，你可能会发现一些录音，它们是被……嗯，游戏刚开始时你并不知道是谁放的；随着游戏推进，关于这些人是谁、曾经是谁，会有一个有趣的谜团逐渐展开。目前游戏里用的是所谓的「临时配音」（temp voice），就是我在噪声很大的条件下把所有角色都读了一遍，先把它们弄进游戏里，好确认这些数据能和引擎正常配合，同时把所有字幕放进游戏、并大致与音频同步（这件事我们得尽早做，因为只有这样，才能把字幕交给译者们，让他们翻译成许多种语言）。"
+    },
+    {
+      "type": "p",
+      "en": "We have cast the real actors and starting tomorrow we'll do our first test readings with those actors. We'll use this to get a new layer of temp voice in the game, which will get it closer to final; this will allow me to see how the game really feels with this stuff in there, possibly to adjust the nuances of the way the recordings appear in the game and the way they are played back. When everything feels good we'll do a set of final recording sessions. There's not a whole lot of time until release, and we have several holidays coming up, but we'll get it done!",
+      "zh": "真正的演员我们已经选好了，从明天起就会和他们做第一批试读。我们会借此在游戏里换上一层新的临时配音，让它更接近最终效果；这样我就能看出这些东西放进去之后游戏到底是什么感觉，也许还会调整录音在游戏里出现的方式、以及它们回放方式上的一些细微之处。等一切都感觉对了，我们就做一整套最终录音。离发售时间不多了，接下来还有好几个假期，但我们一定会做完的！"
+    },
+    {
+      "type": "p",
+      "en": "We are working with Warner Brothers Game Audio in Burbank, California to do the voice stuff; they are providing the facilities and voice direction and production assistance. After we do a few recording sessions I will have more details to share in this department.",
+      "zh": "配音这部分我们是在加州的 Burbank 和 Warner Brothers Game Audio 合作；他们提供场地、配音指导和制作协助。等做完几次录音之后，我在这个方向上会有更多细节可以分享。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/11/limited.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    { "type": "h2", "id": "localization", "zh": "本地化", "en": "Localization" },
+    {
+      "type": "p",
+      "en": "Earlier, I mentioned subtitles. As many games do, we will be localizing our game so that people who speak many different languages will be able to understand the words. We are not recording voice acting in different languages, mainly because it is pretty hard to make sure quality is high when you do that. It is hard enough making sure acting is good in just *one* language. We generally seem to feel the same way about movies: a foreign-language dub of a movie is generally considered to be inferior to a subtitled version, because the acting is so important.",
+      "zh": "前面我提到了字幕。和很多游戏一样，我们会把游戏本地化，让说不同语言的人都能看懂文字。我们不会录制不同语言的配音，主要是因为那样做很难保证质量足够高。光是确保*一种*语言里的表演够好就已经很难了。我们对电影大概也是同样的看法：一部电影的外语配音版通常被认为不如字幕版，因为表演实在太重要了。"
+    },
+    {
+      "type": "p",
+      "en": "Our localization efforts will involve menu text and subtitles, just as for a good movie.",
+      "zh": "我们的本地化工作会涵盖菜单文字和字幕，就像一部好电影那样。"
+    },
+    {
+      "type": "p",
+      "en": "This is not 100% final, but here's the list of languages we are planning to have translations for, at launch:",
+      "zh": "这还不是 100% 最终定案，但以下是我们计划在发售时提供翻译的语言列表："
+    },
+    {
+      "type": "list",
+      "items": [
+        { "en": "English", "zh": "英语" },
+        { "en": "Italian", "zh": "意大利语" },
+        { "en": "French", "zh": "法语" },
+        { "en": "German", "zh": "德语" },
+        { "en": "Spanish (Spain)", "zh": "西班牙语（西班牙）" },
+        { "en": "Spanish (Latin America)", "zh": "西班牙语（拉丁美洲）" },
+        { "en": "Portuguese (Portugal)", "zh": "葡萄牙语（葡萄牙）" },
+        { "en": "Portuguese (Brazil)", "zh": "葡萄牙语（巴西）" },
+        { "en": "Arabic", "zh": "阿拉伯语" },
+        { "en": "Russian", "zh": "俄语" },
+        { "en": "Chinese (Simplified)", "zh": "简体中文" },
+        { "en": "Chinese (Traditional)", "zh": "繁体中文" },
+        { "en": "Japanese", "zh": "日语" },
+        { "en": "Korean", "zh": "韩语" },
+        { "en": "Polish", "zh": "波兰语" },
+        { "en": "Indonesian", "zh": "印尼语" }
+      ]
+    },
+    {
+      "type": "p",
+      "en": "We may add more languages later but man this stuff is expensive, so there is a limit to how many languages we can do at once.",
+      "zh": "以后我们可能会加更多语言，但天哪，这玩意儿太贵了，所以一次能做多少种语言是有上限的。"
+    },
+    {
+      "type": "p",
+      "en": "We will have more news for you before too long!",
+      "zh": "不用太久，我们就会有更多消息告诉你们！"
+    }
+  ]
+}

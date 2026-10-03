@@ -1,0 +1,45 @@
+{
+  "id": "official-2013-08-05-more-screenshots",
+  "title": { "zh": "更多截图", "en": "More Screenshots" },
+  "subtitle": {
+    "en": "Instead of an Island Snapshot, screenshots of a central lake and a swampy area that are still in progress.",
+    "zh": "这次不发岛屿快照，改发一片位于中心的湖和一片沼泽区域的截图——两者都还在做。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "It's been a long time since the last posting! Time flies.",
+      "zh": "距上次发帖已经很久了！时间过得真快。"
+    },
+    {
+      "type": "p",
+      "en": "Normally I would post an Island Snapshot, but the viewpoint we have been using for Island Snapshots is a little bit unfortunate lately, since the main thing taking up the view is the mountain, which is an area we haven't worked on modeling-wise lately. (It is a big area so we are going to do a concentrated push on it in a little bit, when some other things get locked down.)",
+      "zh": "通常我会发一张岛屿快照，但最近我们一直用来拍岛屿快照的那个视角有点不巧，因为占满画面的主要是那座山，而这一带我们最近在建模上一直没动。（这是个大区域，所以等别的一些东西定下来之后，我们很快会对它做一次集中的攻坚。）"
+    },
+    {
+      "type": "p",
+      "en": "So, here are some screenshots of other stuff we have been working on lately. Both areas are in progress and will look better than this in the final game!",
+      "zh": "所以，下面是最近我们在忙的其他一些东西的截图。这两个区域都还在做，在最终版游戏里会比现在好看！"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/08/shot_2013.08.05__time_12_14_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A lake that's central to the island...",
+      "zh": "一片位于岛屿中心的湖……"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/08/shot_2013.08.05__time_12_03_n19.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "A swampy area with light buildings and walkways. The vegetation you see here is temporary! But I am happy we are finally starting to work on this area; if you look at it in the trailer, for example, it's obviously very much more temporary.",
+      "zh": "一片沼泽区域，有轻巧的建筑和步道。你在这里看到的植被是临时的！但我很高兴我们终于开始做这个区域了；比如你在预告片里看它，明显要临时得多。"
+    }
+  ]
+}

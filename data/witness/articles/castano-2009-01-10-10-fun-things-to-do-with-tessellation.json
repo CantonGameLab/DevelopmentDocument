@@ -1,0 +1,372 @@
+{
+  "id": "castano-2009-01-10-10-fun-things-to-do-with-tessellation",
+  "title": {
+    "zh": "用曲面细分做的 10 件好玩的事",
+    "en": "10 Fun Things to do with Tessellation"
+  },
+  "subtitle": {
+    "zh": "一份没能在 GDC’09 讲成的提纲：从 PN-Triangles 到头发、地形、全景与非线形投影，硬件曲面细分能拿来干些什么。",
+    "en": "A GDC’09 talk proposal that never happened: PN-Triangles, hair, terrain, panoramas, non-linear projections, and more."
+  },
+  "translator": {
+    "note": "源文正文里的插图已经丢失，归档脚本在每个插图位置留下了标记行：`[missing image]`（无说明，11 处）、`[missing image – xxx]`（带说明，9 处：PN Triangles、Scalar Tagged PN Triangles、phong tessellation、Quake 3 Arena、Saga of Ryzom ×2、nalu、panquake、panorama）、`[missing images]`（复数 1 处）。译文把这些标记行按全站图片口径保留为图片块：`en` 同时保留标记原文与 `![图](占位文件名)`、`zh` 写「（原文此处有一张图）」；复数那处写「（原文此处有多张图）」。占位文件名由标记里的说明补出（无说明的用 `unknown.png`），只是为了对齐重跑时能定位到具体是哪一张，原文并没有文件名。这些占位块与紧随其后的图注行（`(c) Kenneth Scott, id Software`）各占一段，与源文逐行对应。源文小标题在归档里是 `####`，译文按 schema 统一为 `h2`。源文正文之后另有一个 `---` 分隔的评论区（`7 Comments`，含 repi、cb、castano、ren canjiang、sonali joshi、Slawa、Sarah 七条留言与回复），那部分不在「`---` 之后的内容」这个翻译范围内、也不是文章正文，全站既有译文同样未收录评论区，故未译；保真核验会把这些行报为未覆盖单元。术语按表：tessellation 作「曲面细分」、subdivision surface 作「细分曲面」、displacement map 作「位移贴图」、shader 作「着色器」；`Direct3D11`、`Hull Shader`、`Domain Shader`、`Tessellator`、`PN-Triangles`、`Gregory`、`Bezier`、`ZBrush`、`Mudbox`、`Quake 3 Arena`、`Saga of Ryzom`、`Reyes` 保留英文。",
+    "source": "archive/castano-blog/2009-01-10-10-fun-things-to-do-with-tessellation.md"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Hardware tessellation is probably the most notable feature of Direct3D11.",
+      "zh": "硬件曲面细分大概算是 Direct3D11 最受瞩目的特性。"
+    },
+    {
+      "type": "p",
+      "en": "Direct3D11 was announced at the last [Gamefest](http://www.xnagamefest.com/conference_details08.htm) and a technical preview was released in the [November 2008 DirectX SDK](http://msdn.microsoft.com/en-us/directx/aa937788.aspx). Hardware implementations are expected to be available this year.",
+      "zh": "Direct3D11 是在上一次 [Gamefest](http://www.xnagamefest.com/conference_details08.htm) 上公布的，技术预览版随 [2008 年 11 月的 DirectX SDK](http://msdn.microsoft.com/en-us/directx/aa937788.aspx) 发布。预计今年就会有硬件实现上市。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image] ![图](d3d11-tessellation.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Direct3D11 extends the Direct3D10 pipeline with three new stages: Two programmable shader stages (the Hull and Domain Shaders), and a fixed function stage (the Tessellator). More details can be found [here](http://www.realtimerendering.com/blog/direct3d-11-details-part-ii-tessellation/) and [here](http://www.gamasutra.com/view/feature/3759/sponsored_feature_introducing_.php).",
+      "zh": "Direct3D11 在 Direct3D10 的流水线上新增了三个阶段：两个可编程着色器阶段（Hull Shader 与 Domain Shader），以及一个固定功能阶段（Tessellator）。更多细节可以看[这里](http://www.realtimerendering.com/blog/direct3d-11-details-part-ii-tessellation/)和[这里](http://www.gamasutra.com/view/feature/3759/sponsored_feature_introducing_.php)。"
+    },
+    {
+      "type": "p",
+      "en": "Rendering of Catmull-Clark subdivision surfaces is often mentioned as the primary application for the tessellation pipeline, but there are many other interesting uses that have not received that much attention.",
+      "zh": "渲染 Catmull-Clark 细分曲面常常被当作曲面细分流水线的头号应用，但另外还有不少有趣的用法并没有得到那么多关注。"
+    },
+    {
+      "type": "p",
+      "en": "I thought it would be interesting to take a closer look at those other applications, and submitted a proposal to do that at GDC’09. However, it seems that the organizers do not think tessellation is as interesting as I do, or they didn’t like my proposal, or maybe it’s just that they know I’m a lousy speaker. I will never know, because the gracious feedback of the GDC review committee can be represented by a single boolean.",
+      "zh": "我觉得仔细看看这些其它应用会很有意思，就向 GDC’09 投了一份讲这个的提案。不过看来主办方并不像我自己那样觉得曲面细分有意思，要么就是不喜欢我的提案，再或者只是他们知道我讲得很烂。我永远也不会知道答案，因为 GDC 评审委员会给出的亲切反馈可以用一个布尔值来表示。"
+    },
+    {
+      "type": "p",
+      "en": "In any case, here’s a brief overview of the 10 fun things that I was planning to talk about. I don’t get very deep into the technical details, but in future posts I may describe some of these applications more thoroughly. Please, leave your comments if there’s something you would like to learn more about.",
+      "zh": "无论如何，下面就是我当时准备讲的 10 件好玩的事的简要概述。我没有深入技术细节，但以后的帖子可能会把其中一些应用讲得更透。如果有哪一项你想了解更多，欢迎留言。"
+    },
+    {
+      "type": "h2",
+      "id": "pn-triangles",
+      "en": "PN-Triangles",
+      "zh": "PN-Triangles"
+    },
+    {
+      "type": "p",
+      "en": "[Curved PN Triangles](http://www.cise.ufl.edu/research/SurfLab/papers/00ati.pdf) is a triangle interpolation scheme that operates directly on triangle meshes whose vertices are composed of positions and normals (PN stands for Point-Normal).",
+      "zh": "[Curved PN Triangles](http://www.cise.ufl.edu/research/SurfLab/papers/00ati.pdf) 是一种三角形插值方案，直接作用在顶点由位置和法线组成的三角形网格上（PN 是 Point-Normal 的缩写）。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – PN Triangles] ![图](pn-triangles.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It’s an interesting way of improving visual quality that offers a simple migration path, since assets do not need to be heavily modified.",
+      "zh": "这是一种提升画面质量的有趣办法，而且迁移路径很简单，因为美术资源不需要做大幅改动。"
+    },
+    {
+      "type": "p",
+      "en": "The PN Triangle evaluation consists of two steps: First, for every triangle of the input mesh a triangular cubic patch is derived solely from the vertex positions and normals; no adjacency information is required. Then, the resulting patch is subdivided or tessellated for rendering.",
+      "zh": "PN Triangle 的求值分成两步：首先，对输入网格的每个三角形，仅根据顶点位置和法线推导出一个三角形三次面片，不需要邻接信息。然后，把得到的面片做细分或曲面细分后送去渲染。"
+    },
+    {
+      "type": "p",
+      "en": "The resulting surface is smoother than the polygonal surface, but does not have tangent continuity in general, and that results in shading discontinuities. To hide these discontinuities normals are interpolated independently using either linear or quadratic interpolation. These normals are not the true surface normals, but they provide a smooth appearance to the surface.",
+      "zh": "得到的曲面比原来的多边形曲面更平滑，但一般并不具备切线连续性，于是就会产生着色上的不连续。为了掩盖这些不连续，法线会用线性或二次插值单独插出来。这些法线并不是真正的曲面法线，但能让曲面看上去是平滑的。"
+    },
+    {
+      "type": "p",
+      "en": "This two-step evaluation maps very well to the Direct3D11 tessellation pipeline. The evaluation of the control points can be performed in the Hull Shader, the fixed function tessellator can produce a tessellation pattern in the triangle domain, and the actual surface can be evaluated for each of the tessellated vertices in the Domain Shader.",
+      "zh": "这个两步求值的流程和 Direct3D11 的曲面细分流水线贴合得非常好。控制点的求值可以放在 Hull Shader 里做，固定功能的 tessellator 可以在三角形域里生成细分图案，而真正的曲面则可以在 Domain Shader 里对每个细分后的顶点求值。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – Scalar Tagged PN Triangles] ![图](scalar-tagged-pn-triangles.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "In order to support sharp edges a rim of small triangles is added along the edges. That increases the number of patches, and it’s not entirely clear how to properly texture map them. [Scalar Tagged PN-Triangles](http://iparla.labri.fr/publications/2005/BRS05b/) solve that problem in a more elegant way by tagging each crease vertex with three scalar that act as shape controllers and modify the construction of the surface control points. However, this representation does not support crease corners.",
+      "zh": "为了支持锐边，需要沿着边加一圈小三角形。这会增加面片数量，而且怎么给它们正确地做纹理映射也不太明确。[Scalar Tagged PN-Triangles](http://iparla.labri.fr/publications/2005/BRS05b/) 用更优雅的方式解决了这个问题：给每个折痕顶点打上三个标量标记，让它们充当形状控制器，去修改曲面控制点的构造方式。不过这种表示不支持折痕角。"
+    },
+    {
+      "type": "h2",
+      "id": "silhouette-refinement",
+      "en": "Silhouette Refinement",
+      "zh": "轮廓细化"
+    },
+    {
+      "type": "p",
+      "en": "When tessellation is enabled the only supported primitive type is the patch primitive. In Direct3D11 a patch is an abstract primitive with an arbitrary number of vertices. You can use patches to represent traditional primitives (ie. a triangle is just a patch with 3 vertices), but this also enables you to represent other input primitives with arbitrary topology and additional connectivity information.",
+      "zh": "启用曲面细分之后，唯一受支持的图元类型就是 patch 图元。在 Direct3D11 里，patch 是一种顶点数任意的抽象图元。你可以用 patch 来表示传统图元（也就是说，三角形不过是一个有 3 个顶点的 patch），但这同时也让你能表示拓扑任意、还带额外连通信息的其它输入图元。"
+    },
+    {
+      "type": "p",
+      "en": "An interesting extension of of PN-Triangle tessellation is to augment the input triangles with the neighbor vertices in order to perform silhouette refinement.",
+      "zh": "PN-Triangle 曲面细分的一个有趣扩展，是给输入的三角形补上邻居顶点，从而做轮廓细化（silhouette refinement）。"
+    },
+    {
+      "type": "p",
+      "en": "With this additional information it’s possible to compute tessellation factors in he Hull Shader based on whether an edge is on the silhouette or the interior of the mesh. Then the fixed function tessellator uses these edge tessellation factors to produce a semi-regular tessellation pattern and the Domain Shader transforms it to interpolate the surface.",
+      "zh": "有了这些额外信息，就可以在 Hull Shader 里根据一条边位于网格的轮廓上还是内部来计算细分因子。随后固定功能的 tessellator 用这些边细分因子生成半规则的细分图案，再由 Domain Shader 变换它来插值出曲面。"
+    },
+    {
+      "type": "h2",
+      "id": "phong-tessellation",
+      "en": "Phong Tessellation",
+      "zh": "Phong Tessellation"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – phong tessellation] ![图](phong-tessellation.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "[Phong Tessellation](http://user.cs.tu-berlin.de/~boubek/papers/PhongTessellation/) is a geometric version of Phong interpolation, but applied to vertex positions instead of normals.",
+      "zh": "[Phong Tessellation](http://user.cs.tu-berlin.de/~boubek/papers/PhongTessellation/) 是 Phong 插值的几何版本，只不过作用对象是顶点位置而不是法线。"
+    },
+    {
+      "type": "p",
+      "en": "First, points are interpolated linearly over each triangle using its barycentric coordinates, then the points are projected onto the planes defined by the corner position and normal, and finally the result of the three projections is interpolated again.",
+      "zh": "首先，用三角形的重心坐标在三角形上做点的线性插值；然后把这些点投影到由角点位置和法线所定义的平面上；最后，再把三个投影的结果插值一次。"
+    },
+    {
+      "type": "p",
+      "en": "This procedure produces a smooth surface comparable to PN Triangles, but its evaluation is much cheaper, since no additional control points need to be computed.",
+      "zh": "这个流程能产生与 PN Triangles 相当的平滑曲面，但求值要便宜得多，因为不需要计算额外的控制点。"
+    },
+    {
+      "type": "h2",
+      "id": "bezier-surfaces",
+      "en": "Bezier Surfaces",
+      "zh": "Bezier 曲面"
+    },
+    {
+      "type": "p",
+      "en": "Curved surfaces are not only useful for characters, but also for level geometry and objects.",
+      "zh": "曲面不只对角色有用，对关卡几何和物件同样有用。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – Quake 3 Arena] ![图](quake3-arena.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "[id Software](http://www.idsoftware.com/) introduced the use of quadratic Bezier patches for architectural geometry in [Quake 3 Arena](http://www.idsoftware.com/games/quake/quake3-arena/) and has been using them ever since.",
+      "zh": "[id Software](http://www.idsoftware.com/) 在 [Quake 3 Arena](http://www.idsoftware.com/games/quake/quake3-arena/) 里引入了用二次 Bezier 面片做建筑几何的做法，此后一直在用。"
+    },
+    {
+      "type": "p",
+      "en": "Climax Brighton’s [Moto GP](http://www.gamasutra.com/features/20020626/hargreaves_02.htm) used cubic Bezier patches to model the motorcycles.",
+      "zh": "Climax Brighton 的 [Moto GP](http://www.gamasutra.com/features/20020626/hargreaves_02.htm) 则用三次 Bezier 面片来建模摩托车。"
+    },
+    {
+      "type": "p",
+      "en": "Bezier patches can be evaluated very efficiently, because they don’t need any information about the surrounding mesh. As these games show, tessellation hardware is not required to render these surfaces. However, hardware tessellation will allow doing it much more efficiently, and will facilitate the use of these and more complex surfaces.",
+      "zh": "Bezier 面片的求值可以非常高效，因为它们不需要周围网格的任何信息。正如这些游戏所示，渲染这类曲面并不需要曲面细分硬件。不过，硬件曲面细分会让这件事高效得多，也会让这类曲面以及更复杂的曲面更容易用起来。"
+    },
+    {
+      "type": "h2",
+      "id": "approximation-to-subdivision-surfaces",
+      "en": "Approximation to Subdivision Surfaces",
+      "zh": "细分曲面的近似"
+    },
+    {
+      "type": "p",
+      "en": "Rendering of approximated Catmull-Clark subdivision surfaces is probably the most anticipated application of hardware accelerated tessellation. Several approximation methods exist.",
+      "zh": "渲染近似的 Catmull-Clark 细分曲面，大概是硬件加速曲面细分最受期待的应用。现有的近似方法有好几种。"
+    },
+    {
+      "type": "p",
+      "en": "[missing images] ![图](acc-approximation.png)",
+      "zh": "（原文此处有多张图）"
+    },
+    {
+      "type": "p",
+      "en": "Approximating Catmull-Clark Subdivision Surfaces with Bicubic Patches is the most popular one. This approximation constructs a geometry patch and a pair of tangent patches for each quadrilateral face of the control mesh. The geometry patch approximates the shape and silhouette, but does not provide tangent continuity. A smooth normal field is constructed using two additional tangent patches. The approximation supports boundaries and has also been extended to support creases in [Real-Time Creased Approximate Subdivision Surfaces](http://cs.nyu.edu/~kovacs/cgi-bin/moin.cgi/RealTimeCreasedACC).",
+      "zh": "最流行的是用双三次面片来近似 Catmull-Clark 细分曲面。这种近似为控制网格的每个四边形面构造一个几何面片和一对切面片。几何面片近似形状和轮廓，但不提供切线连续性；平滑的法线场则靠另外两个切面片来构造。这种近似支持边界，并且在 [Real-Time Creased Approximate Subdivision Surfaces](http://cs.nyu.edu/~kovacs/cgi-bin/moin.cgi/RealTimeCreasedACC) 里被扩展为支持折痕。"
+    },
+    {
+      "type": "p",
+      "en": "[GPU Smoothing of Quad Meshes](http://www.cise.ufl.edu/research/SurfLab/papers/smi08.pdf) proposes an alternative approximation using piecewise quartic triangular patches that have tangent continuity and do not require additional tangent patches to provide a smooth appearance. In [Fast Parallel Construction of Smooth Surfaces from Meshes with Tri/Quad/Pent Facets](http://www.cise.ufl.edu/research/SurfLab/papers/08poly.pdf) the same approach is extended to approximate triangular and pentagonal faces.",
+      "zh": "[GPU Smoothing of Quad Meshes](http://www.cise.ufl.edu/research/SurfLab/papers/smi08.pdf) 提出了另一种近似：使用分片四次三角形面片，它们本身具备切线连续性，不需要额外的切面片就能给出平滑的外观。在 [Fast Parallel Construction of Smooth Surfaces from Meshes with Tri/Quad/Pent Facets](http://www.cise.ufl.edu/research/SurfLab/papers/08poly.pdf) 里，同样的做法被扩展到近似三角形面和五边形面。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image] ![图](kenneth-scott.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "(c) Kenneth Scott, id Software",
+      "zh": "(c) Kenneth Scott，id Software"
+    },
+    {
+      "type": "p",
+      "en": "Gregory patches are a more compact representation that also provides a very similar approximation, but only support quad and triangle control faces.",
+      "zh": "Gregory 面片是一种更紧凑的表示，也能给出非常相似的近似，但只支持四边形和三角形的控制面。"
+    },
+    {
+      "type": "p",
+      "en": "The availability of sculpting tools like [ZBrush](http://www.pixologic.com/) and [Mudbox](http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=10707763) makes it possible to create highly detailed meshes. Displaced subdivision surfaces provide a compact and efficient representation for these meshes.",
+      "zh": "有了 [ZBrush](http://www.pixologic.com/) 和 [Mudbox](http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=10707763) 这类雕刻工具，就能做出细节极其丰富的网格。位移细分曲面（displaced subdivision surface）为这类网格提供了一种紧凑而高效的表示。"
+    },
+    {
+      "type": "h2",
+      "id": "rendering-geometry-images",
+      "en": "Rendering Geometry Images",
+      "zh": "渲染几何图像"
+    },
+    {
+      "type": "p",
+      "en": "Another approach to render highly detailed surfaces is to use [geometry images](http://research.microsoft.com/~hoppe/gim.pdf). While geometry images can be rendered very efficiently, their video memory requirements are generally higher than displacement maps due to the lack of high precision texture compression formats. Traditional animation algorithms are not possible with this representation, and view dependent tessellation level evaluation is complicated, because geometry information is not directly available at the Hull Shader stage. However, geometry images may be the fastest approach to render small static objects at fixed tessellation levels.",
+      "zh": "渲染高细节曲面的另一种做法是用[几何图像](http://research.microsoft.com/~hoppe/gim.pdf)。几何图像渲染起来可以非常高效，但由于缺少高精度的纹理压缩格式，它们的显存需求通常比位移贴图更高。这种表示没法用传统的动画算法，而且依赖视角的曲面细分层级求值也很麻烦，因为在 Hull Shader 阶段拿不到几何信息。不过，对于以固定细分层级渲染的小型静态物体，几何图像可能是最快的做法。"
+    },
+    {
+      "type": "h2",
+      "id": "terrain-rendering",
+      "en": "Terrain Rendering",
+      "zh": "地形渲染"
+    },
+    {
+      "type": "p",
+      "en": "Terrain rendering is one of the most obvious applications for tessellation. The flexibility of the tessellation pipeline enables the use of [sophisticated algorithms](http://developer.nvidia.com/object/siggraph-2008-terrain.html) to evaluate the level of refinement of the terrain patches, and frees you from having to worry about many of the implementation details.",
+      "zh": "地形渲染是曲面细分最显而易见的应用之一。曲面细分流水线的灵活性让我们能用上[更精巧的算法](http://developer.nvidia.com/object/siggraph-2008-terrain.html)来求地形面片的细化层级，也让你不必再操心许多实现细节。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – Saga of Ryzom] ![图](saga-of-ryzom-1.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "It’s also possible to extend traditional terrain engines with arbitrary topologies. Some MMORPGs are already doing that to create more rich environments.",
+      "zh": "也可以把传统地形引擎扩展成支持任意拓扑。有些 MMORPG 已经在这么做了，为的是做出更丰富的环境。"
+    },
+    {
+      "type": "p",
+      "en": "For example [Saga of Ryzom](http://www.ryzom.com/en/), a game that is based on the Nevrax engine, uses cubic patches to model the terrain, which enables them to create impressive cliffs and overhangs.",
+      "zh": "举个例子，基于 Nevrax 引擎的 [Saga of Ryzom](http://www.ryzom.com/en/) 用三次面片来建模地形，从而做出了令人印象深刻的悬崖和悬岩。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – Saga of Ryzom] ![图](saga-of-ryzom-2.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Tessellation should make it possible to combine regular heightfields, with caves, cliffs, arches, and other interesting rock formations.",
+      "zh": "曲面细分应该能让规则的高度场与洞穴、悬崖、石拱以及其它有趣的岩石构造结合起来。"
+    },
+    {
+      "type": "p",
+      "en": "I think that ZBrush or Mudbox would be excellent tools to create natural looking rugged terrain.",
+      "zh": "我觉得 ZBrush 或 Mudbox 会是制作自然崎岖地形的好工具。"
+    },
+    {
+      "type": "h2",
+      "id": "hair-rendering",
+      "en": "Hair Rendering",
+      "zh": "头发渲染"
+    },
+    {
+      "type": "p",
+      "en": "Efficient hair rendering is one of the most interesting applications of the Direct3D11 tessellation pipeline. In addition to triangular and quad patches the fixed function tessellator can also generate lines, which are very useful for applications like hair and fur rendering.",
+      "zh": "高效的头发渲染是 Direct3D11 曲面细分流水线最有意思的应用之一。除了三角形和四边形面片，固定功能的 tessellator 还能生成线段，这对头发和毛发渲染之类的应用非常有用。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – nalu] ![图](nalu.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The algorithm described in [Hair Animation and Rendering in the Nalu Demo](http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter23.html) maps very well to the tessellation pipeline.",
+      "zh": "[Hair Animation and Rendering in the Nalu Demo](http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter23.html) 里描述的算法和曲面细分流水线贴合得很好。"
+    },
+    {
+      "type": "p",
+      "en": "As shown in [Real-Time Rendering of Realistic Hair](http://developer.nvidia.com/object/siggraph-2008-hair.html), the use of the hardware tessellation pipeline makes it very easy to simulate and render realistic hair with high geometric complexity in real-time.",
+      "zh": "正如 [Real-Time Rendering of Realistic Hair](http://developer.nvidia.com/object/siggraph-2008-hair.html) 所示，用上硬件曲面细分流水线之后，实时模拟并渲染几何复杂度很高的逼真头发变得非常容易。"
+    },
+    {
+      "type": "p",
+      "en": "That’s possible, because the simulation is performed only on a few hundred guide hairs, that are expanded by the tessellator into thousands of hair strands.",
+      "zh": "之所以能做到，是因为模拟只在几百根引导发丝（guide hair）上进行，再由 tessellator 把它们展开成几千根发丝。"
+    },
+    {
+      "type": "h2",
+      "id": "rendering-panoramas",
+      "en": "Rendering Panoramas",
+      "zh": "渲染全景图"
+    },
+    {
+      "type": "p",
+      "en": "Another application for tessellation is to perform arbitrary non linear projections, that is useful, for example, to create real-time panoramas.",
+      "zh": "曲面细分的另一个应用是做任意的非线性投影，比方说，这在制作实时全景图时就很有用。"
+    },
+    {
+      "type": "p",
+      "en": "Since graphics hardware relies on homogeneous linear interpolation for rasterization, arbitrary projections and deformations at the vertex level result in errors unless the surface is sufficiently refined.",
+      "zh": "由于图形硬件的光栅化依赖齐次线性插值，在顶点层面做任意投影和形变都会带来误差，除非曲面被细化得足够充分。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – panquake] ![图](panquake.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The traditional image based approach is to render the scene to a cube map and then perform an arbitrary projection of the cubemap to screenspace relying on texture hardware to do the sampling and interpolation. This was the approach taken in [Fisheye Quake](http://strlen.com/gfxengine/fisheyequake/index.html) and [Pan Quake](http://strlen.com/gfxengine/panquake/).",
+      "zh": "传统的基于图像的做法，是先把场景渲染到一张立方体贴图上，再把这张立方体贴图做任意投影到屏幕空间，靠纹理硬件来完成采样和插值。[Fisheye Quake](http://strlen.com/gfxengine/fisheyequake/index.html) 和 [Pan Quake](http://strlen.com/gfxengine/panquake/) 用的就是这个办法。"
+    },
+    {
+      "type": "p",
+      "en": "While that works well, it requires rendering the scene to the 6 cube faces, and sometimes results in oversampling or undersampling of some areas of the scene.",
+      "zh": "这个办法效果不错，但它要求把场景渲染到立方体的 6 个面上，而且有时会造成场景某些区域被过采样或欠采样。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – panorama] ![图](panorama.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Dynamic Mesh Refinement on GPU using Geometry Shaders proposes the use of the geometry shader to dynamically refine the surfaces to prevent linear interpolation artifacts. However, the Geometry Shader operates sequentially and is not well suited for this task. On the other side, the dynamic mesh refinement algorithm maps well to the Direct3D11 tessellation pipeline.",
+      "zh": "Dynamic Mesh Refinement on GPU using Geometry Shaders 提出用几何着色器动态细化曲面，以避免线性插值造成的瑕疵。但几何着色器是顺序执行的，并不适合这项任务。反过来说，动态网格细化算法倒是和 Direct3D11 的曲面细分流水线很贴合。"
+    },
+    {
+      "type": "h2",
+      "id": "rendering-of-2d-curved-shapes",
+      "en": "Rendering of 2D curved shapes",
+      "zh": "渲染 2D 曲线形状"
+    },
+    {
+      "type": "p",
+      "en": "While GPUs can render simple polygons, they are not able to automatically handle complex concave and curved polygons with overlaps and self intersections, without prior triangulation and tessellation.",
+      "zh": "GPU 能渲染简单的多边形，但没有事先做三角化和曲面细分的话，它们无法自动处理带重叠和自交的复杂凹多边形与曲线多边形。"
+    },
+    {
+      "type": "p",
+      "en": "[missing image – svg tiger] ![图](svg-tiger.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "The Direct3D11 tessellation pipeline is not designed to perform triangulation. However, there’s a well known method to render arbitrary polygons using the stencil buffer that can be used in this case. This method was first described in the [OpenGL Red Book](http://glprogramming.com/red/chapter14.html#name13), but was recently popularized by its [implementation in the Qt graphic library](http://zrusin.blogspot.com/2006/07/hardware-accelerated-polygon-rendering.html).",
+      "zh": "Direct3D11 的曲面细分流水线并不是为做三角化而设计的。不过，这里可以用上一个众所周知的、借助模板缓冲区渲染任意多边形的方法。这个方法最早见于 [OpenGL 红宝书](http://glprogramming.com/red/chapter14.html#name13)，最近又因为它[在 Qt 图形库里的实现](http://zrusin.blogspot.com/2006/07/hardware-accelerated-polygon-rendering.html)而流行起来。"
+    },
+    {
+      "type": "p",
+      "en": "It’s possible to combine this technique with hardware tessellation to render curved tessellated shapes without the need of expensive CPU tessellation and triangulation algorithms.",
+      "zh": "把这项技术与硬件曲面细分结合起来，就能渲染出经曲面细分的曲线形状，而不需要在 CPU 上跑昂贵的曲面细分和三角化算法。"
+    }
+  ]
+}

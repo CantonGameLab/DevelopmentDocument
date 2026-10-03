@@ -1,0 +1,20 @@
+{
+  "id": "official-2013-01-03-island-snapshot",
+  "title": { "zh": "岛屿快照", "en": "Island Snapshot" },
+  "subtitle": {
+    "en": "One view of the island, plus the current puzzle count.",
+    "zh": "岛上的一张视图，外加目前的谜题数量。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2013/01/shot_2013.01.03__time_17_05_n01.png)",
+      "zh": "（原文此处有一张图）"
+    },
+    {
+      "type": "p",
+      "en": "Current puzzle count: 505.",
+      "zh": "目前的谜题数量：505。"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "official-2015-03-25-island-snapshot",
+  "title": { "zh": "岛屿快照", "en": "Island Snapshot" },
+  "subtitle": {
+    "en": "The island is basically settled now, so here is one more look at it.",
+    "zh": "岛上的样子基本定下来了，于是再发一张看看。"
+  },
+  "translator": {
+    "note": "原文出自 Orsi Spanyol。源文件为 2015-003-island-snapshot.md（manifest 里该 id 的 mdPath）。缩略图包链接按全站约定收为图片占位段落。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "It seems like a good time to do one of these, since the island is pretty much all figured out! We have been wrapping up a lot of big tasks, working on some cool effects, and doing a bit of polishing and bugfixing. While we still have some things to finish, the island is probably not going to visibly change much anymore.",
+      "zh": "现在发这么一篇似乎正是时候，因为这座岛基本上已经全部定下来了！我们一直在收尾一大堆大任务、做一些很酷的效果，还做了些打磨和修 bug 的活。虽然还有些东西要收尾，但岛的外观大概不会再有多大变化了。"
+    },
+    {
+      "type": "p",
+      "en": "![图](http://the-witness.net/news/wp-content/uploads/2015/03/shot_2015.03.25__time_14_39_n01.png)",
+      "zh": "（原文此处有一张图）"
+    }
+  ]
+}

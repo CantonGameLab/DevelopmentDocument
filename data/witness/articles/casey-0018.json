@@ -1,0 +1,291 @@
+{
+  "id": "casey-0018",
+  "title": {
+    "zh": "类型过滤",
+    "en": "Type Filtering"
+  },
+  "subtitle": {
+    "en": "Implementing lister panel filtering by primary entity type.",
+    "zh": "实现 Lister Panel 按实体主类型进行过滤。"
+  },
+  "translator": {
+    "note": "代码块逐字保留英文原文。档案转写有两处把正文段落误包进了代码围栏（passes_filter 那一整段，以及「所以我选了固定大小的数组」那一整段），译文按原文还原为正文；另有三处完整代码块被拆散，已按原代码合并。开头那段 Karl 与巫师 Gary 是作者编的「霍比特人＋巫师」段子。"
+  },
+  "blocks": [
+    {
+      "type": "p",
+      "en": "Many of you wrote in to describe the first part of this Lister Panel series as, and I quote, \"A lot like the first book of Lord of the Rings: there's a hobbit and a wizard, which is cool, but mostly everyone just walks around talking about stuff instead of actually fighting.\"  And many of you added, \"I hope the next installment is more like The Two Towers, where there's tons of armies and shit.\"",
+      "zh": "你们当中有很多人来信，说这个 Lister Panel 系列的第一部分——我引述一下——「很像《指环王》的第一部：有个霍比特人和一个巫师，这挺酷，但大部分时间大家都在走来走去聊天，而不是真打。」很多人还补充说：「希望下一篇更像《双塔奇兵》，有铺天盖地的军队和那些玩意儿。」"
+    },
+    {
+      "type": "p",
+      "en": "Well, I never read Lord of the Rings.  Frankly, as soon as a book starts putting apostrophes in the middle of proper names, I'm out.  But in the interest of pleasing all the people all the time, I will absolutely do my best to make sure this article has all the epic battle scenes that you have come to expect from my Witness Wednesday series while still retaining the hobbit/wizard dynamic that made the previous article so approachable for young audiences.",
+      "zh": "呃，我从没读过《指环王》。说实话，一本书只要开始在专有名词中间加撇号，我就退出了。不过为了「时时刻刻取悦所有人」，我一定会尽力保证这篇文章里有你们期待从我的 Witness Wednesday 系列中看到的所有史诗级战斗场面，同时保留那个让上一篇文章对年轻读者如此亲切的「霍比特人／巫师」组合。"
+    },
+    {
+      "type": "p",
+      "en": "So, Karl the Hobbit looked out across the battlefield of… D'ar-gar'ith, let's say… which had a lot of important historical significance which I won't go into it right now but trust me it's wicked intricate, and anyway he saw lots of clashing armies that were totally doing all these badass moves and it was amazing and everyone was casting spells but the good army was losing so Karl said to his wizard friend Gary, \"I must implement the update function for The Lister Panel, or the battle will be lost!\"",
+      "zh": "于是，霍比特人 Karl 眺望着……就说是 D'ar-gar'ith 吧……的战场，那片战场有很多重要的历史意义，我现在不打算细讲，但相信我，它错综复杂得很；总之他看见许多军队在厮杀，招招都帅得不行，场面惊人，所有人都在施法，可是正义一方正在落败。于是 Karl 对他的巫师朋友 Gary 说：「我必须把 The Lister Panel 的 update 函数实现出来，否则这场仗就输了！」"
+    },
+    {
+      "type": "p",
+      "en": "And lo did he then open upeth his Emacs window and starteth typing.",
+      "zh": "于是他便打开了他的 Emacs 窗口，开始敲起字来。"
+    },
+    {
+      "type": "h2",
+      "id": "the-update-function",
+      "zh": "update 函数",
+      "en": "The Update Function"
+    },
+    {
+      "type": "p",
+      "en": "The Lister Panel lists entities.  That's what it does.  So naturally, since I generally try to work from basic implementation upwards as much as possible, the first thing I actually started typing was the function that picks the entities shown in the list.",
+      "zh": "Lister Panel 的工作是列出实体。它干的就是这个。所以很自然，由于我一般都尽量从最基础的实现往上做，我实际动手敲的第一样东西，就是挑选列表里要显示哪些实体的那个函数。"
+    },
+    {
+      "type": "p",
+      "en": "I wasn't sure how many entities would be involved in The Witness by the time it shipped, so it seemed plausible to me that, in an extreme scenario, just filtering the entities might take some time  —  probably not on the order of seconds, but possibly on the order of hundreds of milliseconds, which would drag down the framerate if it was done every frame.  So I wanted to make sure that updating the list of entities wasn't something that had to be done every frame.  At the same time, I had some features I wanted to implement that would actually be much cooler if they did update every frame, so I also wanted to make sure that it could update every frame if you wanted it to and it wasn't too much of a performance hog.",
+      "zh": "我不确定《The Witness》发售时会有多少实体，所以在我看来，极端情况下光是过滤实体就可能要花些时间——大概不会到秒的量级，但可能到几百毫秒的量级；如果每帧都做，就会拖低帧率。所以我希望确保「更新实体列表」不是每帧都必须做的事。与此同时，我还有些想实现的功能，如果能每帧更新反而会酷得多，所以我也希望确保：只要你愿意，它是可以每帧更新的，而且不至于太吃性能。"
+    },
+    {
+      "type": "p",
+      "en": "So I started off by writing a very simple update function:",
+      "zh": "于是我先写了一个非常简单的 update 函数："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "void Lister_Panel::update()\n{\n if(current_settings.update_automatically)\n{\n viewing_ids.reset();\n Foreach(Entity *e, manager->all_entities)\n{\n if(passes_filter(current_settings, e))\n{\n viewing_ids.add(e->portable_id);\n}\n}\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "As you can see, it is a very straightforward function.  If the panel is set to update automatically, then it updates by looping over all the entities and seeing which ones \"pass the filter\".  The results are placed into viewing_ids, a permanently stored array that uses The Witness's standard array storage template.",
+      "zh": "如你所见，这是一个非常直白的函数。如果面板被设为自动更新，它就遍历所有实体，看哪些「通过了过滤器」。结果被放进 viewing_ids，那是一个长期存储的数组，用的是《The Witness》标准的数组存储模板。"
+    },
+    {
+      "type": "p",
+      "en": "Much like I mentioned before regarding the naming of variables and structures, I try to use the utilities that are standard in whatever codebase I'm in unless there is a clear reason not to.  That is also why you see that unusual \"Foreach\" construct: it is how Jon writes his for loops.  It is basically a macro that is designed to automatically loop over the contents of his standard array template, which is also used for the \"all_entities\" array.  I figure, since Jon et al has to maintain this code, using constructs familiar to him makes it a little easier, and that's always a good thing.",
+      "zh": "就像我之前谈变量和结构体命名时说的，除非有明确理由不这么做，我会尽量使用我所在代码库里标准的工具。这也是你会看到那个不寻常的「Foreach」写法的原因：Jon 的 for 循环就是这么写的。它基本上是一个宏，用来自动遍历他那套标准数组模板的内容，「all_entities」数组用的也是这套模板。我想，既然这段代码要由 Jon 等人来维护，用他熟悉的写法会让他稍微省点事，而这总是好事。"
+    },
+    {
+      "type": "p",
+      "en": "One thing that does warrant comment here, though, which has nothing to do with Jon's coding conventions, is the \"current_settings\" bit.  Since the Lister_Panel is a class, as per The Witness's editor architecture (there is one class per panel), I could just shove everything in that class.  But instead of doing that, I instead did this:",
+      "zh": "不过这里有一点值得说一句，而且它和 Jon 的编码习惯毫无关系，那就是 `current_settings` 这一手。按照《The Witness》的编辑器架构，Lister_Panel 是一个类（每个面板一个类），我完全可以把所有东西都塞进那个类里。但我没有那样做，而是这么做了："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "struct Lister_Panel_Settings\n{\n bool update_automatically;\n}"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "class Lister_Panel\n{\n // ...\n\nLister_Panel_Settings current_settings;\n};"
+    },
+    {
+      "type": "p",
+      "en": "Now, I know what you're thinking.  You think I'm so totally crazily against object-oriented programming that I can't even bring myself to store data in something called \"class\", so I have to make my own \"struct\" outside it to hold the data.  But I swear it's not that.",
+      "zh": "我知道你在想什么。你觉得我反面向对象编程反得太疯，以至于连把数据存进一个叫「class」的东西里都受不了，非得在它外面自己弄个「struct」来装数据。但我发誓，不是这么回事。"
+    },
+    {
+      "type": "p",
+      "en": "What I was actually doing was starting to \"bank\" my data.  This is not that common of a thing for me to do in general code, but in editor code, I actually do it fairly frequently.  The idea is that if you have a bunch of variables that determines how a piece of code behaves, sometimes it is useful to be able to switch them around en masse.  In editors this is particularly common because editors often have lots of modal options that are designed to save users time by switching something into one mode, doing a bunch of operations that can be done in that mode quickly, then switching into another mode, and so on.",
+      "zh": "我实际上做的事情，是开始把数据「攒成一组」。在一般代码里我不常这么做，但在编辑器代码里，我做得相当频繁。想法是：如果你有一堆决定某段代码行为的变量，有时候能成批地切换它们会很有用。在编辑器里这尤其常见，因为编辑器往往有很多模态选项，它们的设计目的就是省用户的时间——切进某个模式，快速做一批该模式下能做的操作，再切到另一个模式，如此往复。"
+    },
+    {
+      "type": "p",
+      "en": "So, since I know that the Lister_Panel is going to be the kind of thing that will have lots of modality to it, I just put all the state variables for user-controlled behavior into the Lister_Panel_Settings struct.  Normally, if I wasn't sure about that, I'd just put them directly in the class, and move them out later when it became clear that modality was necessary.  But since I knew it was going to be necessary, I just saved myself some typing and put them in there to begin with.",
+      "zh": "所以，既然我知道 Lister_Panel 会是那种模态性很强的面板，我就把所有「由用户控制的行为」的状态变量都放进了 Lister_Panel_Settings 这个 struct。通常如果我不确定，我会先把它们直接放在类里，等后来明确「模态性是必需的」时再搬出来。但既然我知道它必然会需要，我就省了自己一点打字功夫，一开始就放进去了。"
+    },
+    {
+      "type": "p",
+      "en": "Now, if you look back at the update() code, you may be wondering what \"passes_filter\" does.  So was I at the time I wrote it.  Since I knew the Lister Panel needed to have a variety of ways it could pick which entities it was going to list, I knew there would have to be some concept of filtering, but when I wrote the update function I didn't actually have any idea what that would look like.  So in classic top-down C coding fashion, I just typed \"passes_filter\" and figured I'd pass the setting and the entity and get back a boolean that said whether it should be included.",
+      "zh": "现在，如果你回头看 update() 那段代码，可能会好奇 `passes_filter` 是做什么的。我写它的当时也一样好奇。我知道 Lister Panel 需要多种方式来挑选要列出哪些实体，所以必然要有某种过滤的概念；但写 update 函数的时候，我其实完全不知道那会长什么样。于是我用了经典的 C 语言自顶向下写法：先把 `passes_filter` 敲上去，想着我传进设置和实体，拿回一个布尔值，说明该不该把它包含进来。"
+    },
+    {
+      "type": "p",
+      "en": "So the next step, to get things working, was to write passes_filter():",
+      "zh": "所以为了让东西跑起来，下一步就是写 passes_filter()："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static bool passes_filter(Lister_Panel_Settings &settings, Entity *e)\n{\n bool result = false;\n\nif(e)\n{\n result = settings.include_type[e->portable_type->serial_number_in_memory];\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "Since I knew that I was going to have to emulate the original Lister Panel behavior, the one thing I definitely knew I would have was filtering by type.  I also figured I would want to extend that behavior by allowing filtering by more than one type at a time.  So instead of just having a single selected type, I decided to make an array of booleans, one for each type, so I could just set any arbitrary mask.  If I were concerned about space, or if there had been an existing utility for it in [The Witness](http://the-witness.net/news/) code base, I could have made this a bitfield, but I wasn't, and there wasn't, so I didn't.",
+      "zh": "因为我知道自己必须模拟原来 Lister Panel 的行为，所以我确定无疑会有的一样东西就是「按类型过滤」。我还想到，我会想扩展这个行为，让它能一次按多个类型过滤。所以我没有只存一个「当前选中的类型」，而是决定做一个布尔数组，每个类型一个，这样就可以设置任意掩码。如果我担心空间，或者[《The Witness》](http://the-witness.net/news/)的代码库里已经有一个现成的工具可用，我本可以把它做成位域；但我既不担心，也不存在这样的工具，所以我没做。"
+    },
+    {
+      "type": "p",
+      "en": "Conveniently, The Witness has a unique ID for every type in the system, and more convenient still, they are sequential.  This means that mapping from a type to an element in an array of booleans is trivial, hence the direct usage of serial_number_in_memory as an index into the include_type array.  What is not quite as convenient is the fact that the maximum value of serial_number_in_memory isn't known at compile time.  So in defining the array, I had two options: use a flexibly-sized array that grows to encompass the largest number, and use a fixed-size array and assert if I'm ever out-of-bounds.",
+      "zh": "方便的是，《The Witness》给系统里每个类型都分配了唯一 ID，更方便的是它们是连续的。这意味着「从类型映射到布尔数组里的某个元素」轻而易举——所以我把 serial_number_in_memory 直接当作 include_type 数组的下标。不太方便的一点是：serial_number_in_memory 的最大值在编译期是不知道的。所以定义这个数组时我有两个选项：用一个灵活大小的数组，让它增长到能容纳最大的那个数值；或者用一个固定大小的数组，一旦越界就 assert。"
+    },
+    {
+      "type": "p",
+      "en": "All things being equal, I would usually choose the former.  While I don't love flexibly-sized things in game code, because I find they are usually unnecessary and lead to less predictable behavior, in editors I feel like they are often required because, by definition, when you are editing things, a lot of sizes are in flux and bounds cannot usually be estimated or guaranteed.",
+      "zh": "其他条件相同时，我通常会选前者。虽然我不太喜欢游戏代码里「灵活大小」的东西——我觉得它们通常没必要，而且会让行为变得不那么可预测——但在编辑器里，我觉得它们往往是必需的，因为顾名思义，你在编辑东西的时候，很多东西的尺寸都在变，边界通常无法估计，也无法保证。"
+    },
+    {
+      "type": "p",
+      "en": "That said, in this case I actually didn't choose a flexibly-sized array, I chose a fixed-size array:",
+      "zh": "话虽如此，在这个例子里我实际并没有选灵活大小的数组，而是选了固定大小的数组："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// TODO(casey): These really want to be fixed sizes, because it\n // makes life so much simpler for copying things stress-free.\n // But technically the include_type size is not known at\n // compile time, because the compiler is stupid (it actually\n // should know :( )  So there are simply startup asserts,\n // and they will catch a problem if the sizes grow too large,\n // and you can just bump these numbers at that point.\n bool include_type[256];"
+    },
+    {
+      "type": "p",
+      "en": "with an assert:",
+      "zh": "再加上一个 assert："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "int type_count = shared_globals.portable_type_manager->types.items;\n assert(type_count <= NV_ARRAY_SIZE(this_settings.include_type));"
+    },
+    {
+      "type": "p",
+      "en": "As you can see from the TODO I put in the code, I wasn't super happy with this decision, but I went with it anyway.  Why?",
+      "zh": "从我在代码里留下的 TODO 可以看出，我对这个决定并不太满意，但我还是这么做了。为什么？"
+    },
+    {
+      "type": "p",
+      "en": "The reason is because, frankly, I'm not super comfortable in [The Witness](http://the-witness.net/news/) codebase.  A lot of the stuff is foreign to me, and I don't have total confidence in my ability to predict what is going to happen with various utility classes and so on.  In my own codebase, I know I have options for flexibly-sized array things that can be copied around in predictable ways that will be fast in the ways I need them to be, not leak memory, and will clean themselves up at times I understand and in the ways I want them to.  But in a foreign codebase, where I'm not so well versed, I don't always know what all the assumptions are.  Since this the Lister Panel rewrite was done in a very short amount of time (less than three days, I think), I did not want to be introducing any unknowns.",
+      "zh": "原因很直接：老实说，我在[《The Witness》](http://the-witness.net/news/)的代码库里并不太自在。很多东西对我来说都是陌生的，我也没有十足的信心去预测各种工具类等等会出什么状况。在我自己的代码库里，我知道自己有哪些灵活大小数组的方案：能以可预测的方式复制、在我需要的方面足够快、不漏内存、并在我理解的时机以我想要的方式清理自己。但在一个我不熟的别人的代码库里，我并不总是清楚它都有哪些前提假设。既然这次重写 Lister Panel 是在极短时间里完成的（我想不到三天），我不想引入任何未知因素。"
+    },
+    {
+      "type": "p",
+      "en": "So I opted for the fixed array size.  Fixed arrays have the wonderful benefit that, as long as you know you never write off the end, they are totally foolproof and there are no surprises.  It's just like any other variable.  And, as a bonus, unlike dynamic arrays, it clears to zero with everything else when you do a = {0}, so you don't even have to know about codebase conventions like whether or not the C runtime library will be available or whether memset() is a good idea, etc.  Yes, this is just me being overly cautious, and I'd be totally fine if someone came through and replaced it with one of the utility templates if they were sure it had all the init, copy and shutdown semantics right.  But I didn't really want to be the person to do that, because like I covered in previous articles, [I have been surprised by the way The Witness codebase did things in the past](https://caseymuratori.com/blog_0008).  Unlike the viewing_id array, I knew this array might be copied around, stored to disk, created and destroyed often, and other sorts of things that were more subtle than just a single array that never really needed to be cleaned up or copied at all (panels exist for the lifetime of the app).",
+      "zh": "所以我选了固定大小的数组。固定数组有个绝妙的好处：只要你知道自己绝不会写出边界，它们就完全可靠、不会有任何意外，就像别的普通变量一样。而且还有一点额外的好处：与动态数组不同，当你做 `= {0}` 时，它会和其他所有东西一起被清零，所以你甚至不需要了解代码库的惯例——比如 C 运行时库是否可用、`memset()` 是不是个好主意等等。是的，这只是我过分谨慎；如果某个人过来把它换成某个工具模板，并且确信那个模板的初始化、复制和销毁语义都是对的，我也完全没意见。但我并不想当那个人，因为正如我在之前的文章里讲过的，[我过去曾被《The Witness》代码库的做事方式惊到过](https://caseymuratori.com/blog_0008)。与 viewing_id 数组不同，我知道这个数组可能被到处复制、被存到磁盘、被频繁创建和销毁，还有别的比「一个从不真的需要清理或复制的单个数组」更微妙的事情（面板的寿命与应用一样长）。"
+    },
+    {
+      "type": "p",
+      "en": "With the fixed array in place, and the update function filtering entities by type, I needed a good way to manipulate it.  Compression-oriented programming is always easy when you have a large set of compression options that you've mastered, and a bunch of code that does what you want.  But often times during development, even if you have the former, you don't necessarily have the latter.  A lot of programmers  —  including myself, more times than I care to admit  —  end up plowing through these situations by just guessing at what the interface should be and then moving on.",
+      "zh": "固定数组就位、update 函数也能按类型过滤实体之后，我需要一个好办法来操作它。当你已经掌握了一大批压缩选项、而且手上有一堆正好做你想要的事的代码时，压缩导向编程总是很容易。但在开发中往往是这样：即使你有了前者，也未必有后者。很多程序员——包括我自己，次数多到我不愿承认——碰上这种局面时，就那么猜一下接口该长什么样，然后继续往下走。"
+    },
+    {
+      "type": "callout",
+      "kind": "insight",
+      "en": "The much smarter thing to do is to take the time to actually write usage code if you don't have it available.  It's not as good as actually having a completely working system you can compress, but it's the next best thing, and much better than guessing.  So one thing I often do is just type out what I want it to look like when I do a bunch of things that I might plausibly want to do:",
+      "zh": "更聪明的做法是：如果没有现成的使用代码，就花时间真的把它写出来。这比不上「手上有一套完全能跑、可以直接压缩的系统」，但它是第二好的选择，而且比瞎猜好得多。"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// Clear/Initialize\n set_all_types_to(current_settings, false);\n\n// Allow all types\n set_all_types_to(current_settings, true);\n\n// Add a type\n current_settings.include_type[type] = true;\n\n// Remove a type\n current_settings.include_type[type] = false;\n\n// Toggle a type\n current_settings.include_type[type] = !current_settings.include_type[type];\n\n// Disallow all but one type\n set_all_types_to(current_settings, false);\n current_settings.include_type[type] = true;\n\n// Allow all but one type\n set_all_types_to(current_settings, true);\n current_settings.include_type[type] = false;"
+    },
+    {
+      "type": "p",
+      "en": "Nowadays, I actually do this sort of thing very often.  When I get to a point in the code when I am working on something and I'm breaking it into functions but it's a little too early to really be sure, I just stop and make a bunch of usage code first.  It doesn't take very long, and it forces you to actually think through exactly what you want to do and how you want to do it.  The right thing to do usually just pops right out at you once you take the time to do this.",
+      "zh": "如今，我其实非常频繁地做这种事。当我在写某样东西、开始把它拆成函数、但又还没到能真正确定的时机时，我就会停下来，先写一批使用代码。这不花多少时间，而且它逼着你真的想清楚自己到底想做什么、想怎么做。只要肯花这点时间，正确的做法通常就会自己蹦到你眼前。"
+    },
+    {
+      "type": "p",
+      "en": "So, I was pretty sure all I really needed was something that quickly sets all the types to one value or another, and from that I could build all the operations I needed trivially.  I went ahead and made this a general function:",
+      "zh": "所以我很确定，我真正需要的只是一个能快速把所有类型设成某个值的函数，有了它，我需要的所有操作都能轻而易举地搭出来。于是我就把它做成了一个通用函数："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "static void set_all_types_to(Lister_Panel_Settings &settings, bool value)\n{\n for(int type_index = 0;\n type_index < shared_globals.portable_type_manager->types.items;\n++type_index)\n{\n settings.include_type[type_index] = value;\n}\n}"
+    },
+    {
+      "type": "p",
+      "en": "Very simple, but it's exactly the right thing for me to do everything I might need to do with one or two lines of code.",
+      "zh": "非常简单，但它正好让我能用一两行代码做完我可能需要的所有事情。"
+    },
+    {
+      "type": "p",
+      "en": "Looking at that usage code, it's also worth noting that you might want to do this:",
+      "zh": "看着那段使用代码，还有一点值得注意：你可能会想写成这样："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// Clear/Initialize\n set_all_types_to(current_settings, false);\n\n// Allow all types\n set_all_types_to(current_settings, true);\n\n// Add a type\n set_type_to(current_settings, type, true);\n\n// Remove a type\n set_type_to(current_settings, type, false);\n\n// Toggle a type\n toggle_type(current_settings, type);\n\n// Disallow all but one type\n set_all_types_to(current_settings, false);\n set_type_to(current_settings, type, true);\n\n// Allow all but one type\n set_all_types_to(current_settings, true);\n set_type_to(current_settings, type, false);"
+    },
+    {
+      "type": "p",
+      "en": "or alternatively",
+      "zh": "或者另一种写法"
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "// Clear/Initialize\n set_all_types_to(current_settings, false);\n\n// Allow all types\n set_all_types_to(current_settings, true);\n\n// Add a type\n access_type(current_settings, type) = true;\n\n// Remove a type\n access_type(current_settings, type) = false;\n\n// Toggle a type\n access_type(current_settings, type) = !access_type(current_settings, type);\n\n// Disallow all but one type\n set_all_types_to(current_settings, false);\n access_type(current_settings, type) = true;\n\n// Allow all but one type\n set_all_types_to(current_settings, true);\n access_type(current_settings, type) = false;"
+    },
+    {
+      "type": "callout",
+      "kind": "warning",
+      "en": "These are both just ways of wrapping direct access to the type array.  There's no real point in doing this except for debug checking: if type was negative or greater than the array size, there'd be memory overwrite problems, so wrapping the access in various ways allows for a conveniently-placed assertion that will catch it.  In this case, I opted not to do that because I knew the chance that I would make that mistake was essentially zero, and this wasn't even code that was shipping in the actual game.  But in cases where I was more concerned about mistakes in ranges, I would definitely have wrapped it in an inline function of some kind that would check to make sure the array accesses were safe.  Yes, it is unlikely, but it is usually better to be safe than sorry when you're talking about code that ships to an end user.  So it's definitely something to consider.  And again, in my own codebase, where I am more comfortable with the utilities available, I probably would be using a dynamic thing here that was range-checked automatically anyway.",
+      "zh": "这两种写法都只是在包装对类型数组的直接访问。除了调试检查之外，这么做并没有真正的意义：如果 type 是负数或者大于数组大小，就会出现内存覆写问题，所以用各种方式包装这次访问，就能在方便的位置放一个断言把它抓住。在这个例子里我没有那么做，因为我知道自己犯这个错的概率基本为零，而且这甚至不是会随游戏发布的代码。但在那些我更担心取值范围出错的地方，我肯定会用某种 inline 函数把它包起来，检查数组访问是否安全。是的，这种错误不太可能发生，但当事关会送到最终用户手上的代码时，小心总比后悔好。所以这确实值得考虑。另外再说一次，在我自己的代码库里，因为对可用的工具更熟悉，我大概会在这里用自动做范围检查的动态方案。"
+    },
+    {
+      "type": "h2",
+      "id": "entity-panel-mode",
+      "zh": "Entity Panel 模式",
+      "en": "Entity Panel Mode"
+    },
+    {
+      "type": "p",
+      "en": "At this point, I wrote the UI portion of the code, but for the most part I'm going to skip over UI in this part of the series, because I already showed you how that code works in the previous articles.  Listing all the types so that the user could select which ones to include and exclude was a simple matter of making a bank of boolean toggle buttons  —  just like the previous articles did  —  one for each type in the system.  There was also a row of \"quick\" buttons for doing allow-all or allow-none.  This was all just a few lines of simple code, since the UI system had already been nicely compressed to handle it.  Here is literally all of the UI code for the type filtering:",
+      "zh": "到这里，我写了代码里的 UI 部分，但在这个系列的这一段里，大部分 UI 我会跳过，因为前面几篇文章已经展示过那部分代码怎么工作。把所有类型列出来、让用户勾选包含与排除哪些类型，无非是做一排布尔开关按钮——和前几篇文章一样——系统里每个类型一个。另外还有一行「快捷」按钮，用来全允许或全不允许。这些都只是几行简单代码，因为 UI 系统已经被很好地压缩过、能处理这些了。下面就是类型过滤的全部 UI 代码，一字不差："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if(current_settings.type_mode == LISTER_TYPE_MODE_LIST)\n{\n layout.row(2);\n if(layout.push_button(\"none\"))\n{\n set_all_types_to(current_settings, false);\n}\n if(layout.push_button(\"all\"))\n{\n set_all_types_to(current_settings, true);\n}\n\nlayout.begin_scrollable_section(&included_types_scroll);\n for(int type_index = 0;\n type_index < shared_globals.portable_type_manager->types.items;\n++type_index)\n{\n if((type_index % 2) == 0)\n{\n layout.row(2);\n}\n\nlayout.bool_button((char *)shared_globals.portable_type_manager->types[type_index]->name, &current_settings.include_type[type_index]);\n}\n layout.end_scrollable_section();\n}"
+    },
+    {
+      "type": "p",
+      "en": "Now, if you remember from last week, there's still one more mode I need to implement: LISTER_TYPE_MODE_ENTITY_PANEL.  In LISTER_TYPE_MODE_LIST, I'm listing types based on user-configured types.  But in LISTER_TYPE_MODE_ENTITY_PANEL, I'm supposed to list types based on what is selected in another piece of UI, the Entity Panel.  So, how to support that?",
+      "zh": "现在，如果你还记得上周的内容，我还有一个模式要实现：LISTER_TYPE_MODE_ENTITY_PANEL。在 LISTER_TYPE_MODE_LIST 下，我按用户配置的类型来列出实体；而在 LISTER_TYPE_MODE_ENTITY_PANEL 下，我应该按另一块 UI——Entity Panel——里选中的内容来列出实体。那么，怎么支持它？"
+    },
+    {
+      "type": "p",
+      "en": "Well, since I already have everything written, all I really need to do is, in the update() function, I just make sure I sync the include_type array to whatever the Entity Panel has selected as its current type:",
+      "zh": "既然该写的都已经写好了，我真正要做的只是在 update() 函数里，确保把 include_type 数组同步成 Entity Panel 当前选中的类型："
+    },
+    {
+      "type": "code",
+      "lang": "cpp",
+      "code": "if(current_settings.type_mode == LISTER_TYPE_MODE_ENTITY_PANEL)\n{\n Entity_Panel *ep = ::world_panel->entity_panel;\n set_all_types_to(current_settings, false);\n current_settings.include_type[ep->current_type] = true;\n}"
+    },
+    {
+      "type": "p",
+      "en": "And that's all there is to it.",
+      "zh": "就这样，没有别的了。"
+    },
+    {
+      "type": "h2",
+      "id": "layers",
+      "zh": "图层",
+      "en": "Layers"
+    },
+    {
+      "type": "p",
+      "en": "OK, so, even though we're only a few lines of code in, the Lister Panel is already half way to doing what it used to do, and it has gained some new features along the way.  Next week, I'll continue building out the system to support the other thing the original system did: layer listing.",
+      "zh": "好，那么，虽然我们才写了没几行代码，Lister Panel 已经完成了一半旧面板做过的事，还顺带获得了一些新功能。下周我会继续把这套系统做下去，支持原系统做过的另一件事：图层列表。"
+    },
+    {
+      "type": "p",
+      "en": "At this point, I feel like I speak for everyone when I say that this was, as the preamble implied, an epic battle featuring thousands of orcs and demons and elves and shit.  Anyone who was not satisfied with the level of pure adrenaline present in the previous article will surely have been satisfied by this week's riveting, fast-paced action scenes that really brought the visceral combat of [Middle Earth](https://en.wikipedia.org/wiki/Middle-earth) to life.",
+      "zh": "到这一步，我觉得我可以代表所有人说：正如开头所暗示的，这是一场史诗级的战斗，有成千上万的半兽人、恶魔、精灵之类的玩意儿。任何对上一篇文章里肾上腺素含量不满意的人，这一周肯定都满足了——本周这些扣人心弦、节奏飞快的动作场面，真真切切地把 [Middle Earth](https://en.wikipedia.org/wiki/Middle-earth) 的血肉厮杀呈现了出来。"
+    },
+    {
+      "type": "p",
+      "en": "Of course, one thing that I've always been a little confused by is why it's called \"[Middle Earth](https://en.wikipedia.org/wiki/Middle-earth)\".  I suppose that's the kind of thing you actually have to read the books to know.  In my mind, \"Middle Earth\" suggests that it is inside the Earth somewhere, but I don't know how that's possible because they have a sky and sun and things like this, don't they?  You can't see the sun from inside the Earth, that's just obvious, and I don't know why the book series is so famous if the author couldn't even figure that out.",
+      "zh": "当然，我一直有点困惑的一件事是：它为什么叫「[Middle Earth](https://en.wikipedia.org/wiki/Middle-earth)」。我猜这种事你得真去读书才知道。在我看来，「Middle Earth」暗示的是它位于地球内部的某个地方，但我不明白那怎么可能，因为他们有天空、有太阳之类的，不是吗？从地球内部是看不到太阳的，这是明摆着的事；如果作者连这个都没想明白，我不懂这套书为什么还这么出名。"
+    },
+    {
+      "type": "p",
+      "en": "You know what?  To hell with [Lord of the Rings](https://en.wikipedia.org/wiki/The_Lord_of_the_Rings).  It's obviously not quality fiction.  Next week I will use [The Chronicles of Narnia](https://en.wikipedia.org/wiki/The_Chronicles_of_Narnia) as a metaphor instead, since they at least understand the basics.  Everyone knows you can still see the sun from inside a wardrobe as long as you leave the doors open.",
+      "zh": "你知道吗？去他的[《指环王》](https://en.wikipedia.org/wiki/The_Lord_of_the_Rings)。它显然算不上好小说。下周我改用[《纳尼亚传奇》](https://en.wikipedia.org/wiki/The_Chronicles_of_Narnia)来做比喻，因为那套书至少懂点基本常识。谁都知道，只要把衣柜门开着，从衣柜里面照样能看到太阳。"
+    }
+  ]
+}
